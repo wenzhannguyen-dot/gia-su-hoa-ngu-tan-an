@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiếng Việt cho người Trung Quốc</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            font-size: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border: 2px solid #333;
+        }
+
+        .header {
+            background: #2E7D32;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #333;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: #e0e0e0;
+            padding: 15px 20px;
+            border-bottom: 2px solid #333;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .voice-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .voice-btn {
+            padding: 8px 16px;
+            border: 2px solid #1565C0;
+            background: white;
+            color: #1565C0;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .voice-btn.active {
+            background: #1565C0;
+            color: white;
+        }
+
+        .section-tabs {
+            display: flex;
+            background: #f0f0f0;
+            border-bottom: 2px solid #333;
+        }
+
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-right: 2px solid #333;
+            background: #e0e0e0;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            flex: 1;
+            text-align: center;
+        }
+
+        .tab:last-child {
+            border-right: none;
+        }
+
+        .tab.active {
+            background: #2E7D32;
+            color: white;
+        }
+
+        .content {
+            padding: 0;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            background: #1565C0;
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 2px solid #333;
+        }
+
+        /* TABLE STYLE */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 20px;
+        }
+
+        .data-table th {
+            background: #424242;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #333;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border: 1px solid #999;
+            vertical-align: middle;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        .data-table tr:hover {
+            background: #e8f5e9;
+        }
+
+        .col-stt {
+            width: 60px;
+            text-align: center;
+            font-weight: 600;
+            background: #e0e0e0;
+        }
+
+        .col-audio {
+            width: 50px;
+            text-align: center;
+        }
+
+        .col-viet {
+            width: 45%;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .col-chinese {
+            width: 40%;
+            font-family: 'SimSun', '宋体', serif;
+            font-size: 22px;
+            color: #1565C0;
+            font-weight: 600;
+        }
+
+        .speaker-icon {
+            font-size: 24px;
+            cursor: pointer;
+            color: #2E7D32;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .speaker-icon:hover {
+            color: #1B5E20;
+            transform: scale(1.2);
+        }
+
+        .speaker-icon.playing {
+            color: #1565C0;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Antonyms specific */
+        .col-chinese-1, .col-chinese-2 {
+            font-family: 'SimSun', '宋体', serif;
+            font-size: 22px;
+            color: #1565C0;
+            font-weight: 600;
+            text-align: center;
+            width: 22%;
+        }
+
+        .col-viet-1, .col-viet-2 {
+            width: 22%;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .data-table {
+                font-size: 16px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 8px 10px;
+            }
+
+            .col-chinese, .col-chinese-1, .col-chinese-2 {
+                font-size: 18px;
+            }
+
+            .tab {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .speaker-icon {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tiếng Việt cho người Trung Quốc</h1>
+            <p>越南语学习课程 | 100 Câu giao tiếp - 70 Động từ - 30 Khẩu ngữ - 48 Cặp từ trái nghĩa</p>
+        </div>
+
+        <div class="controls">
+            <div class="voice-selector">
+                <span>Giọng đọc:</span>
+                <button class="voice-btn active" onclick="setVoice('female')" id="btnFemale">Nữ</button>
+                <button class="voice-btn" onclick="setVoice('male')" id="btnMale">Nam</button>
+            </div>
+            <div class="voice-selector">
+                <span>Tốc độ:</span>
+                <input type="range" min="0.5" max="1.5" step="0.1" value="0.9" id="speedSlider" onchange="updateSpeed(this.value)">
+                <span id="speedValue">0.9x</span>
+            </div>
+        </div>
+
+        <div class="section-tabs">
+            <div class="tab active" onclick="showSection('phrases')">100 Câu giao tiếp</div>
+            <div class="tab" onclick="showSection('verbs')">70 Động từ</div>
+            <div class="tab" onclick="showSection('slang')">30 Khẩu ngữ</div>
+            <div class="tab" onclick="showSection('antonyms')">48 Từ trái nghĩa</div>
+        </div>
+
+        <div class="content">
+            <!-- Phrases Section -->
+            <div id="phrases" class="section active">
+                <div class="section-title">100 CÂU GIAO TIẾP CƠ BẢN</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="col-stt">STT</th>
+                            <th class="col-audio">🔊</th>
+                            <th class="col-viet">Tiếng Việt</th>
+                            <th class="col-chinese">中文</th>
+                        </tr>
+                    </thead>
+                    <tbody id="phrasesBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Verbs Section -->
+            <div id="verbs" class="section">
+                <div class="section-title">70 ĐỘNG TỪ THÔNG DỤNG</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="col-stt">STT</th>
+                            <th class="col-audio">🔊</th>
+                            <th class="col-viet">Tiếng Việt</th>
+                            <th class="col-chinese">中文</th>
+                        </tr>
+                    </thead>
+                    <tbody id="verbsBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Slang Section -->
+            <div id="slang" class="section">
+                <div class="section-title">30 CÂU KHẨU NGỮ</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="col-stt">STT</th>
+                            <th class="col-audio">🔊</th>
+                            <th class="col-viet">Tiếng Việt</th>
+                            <th class="col-chinese">中文</th>
+                        </tr>
+                    </thead>
+                    <tbody id="slangBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Antonyms Section -->
+            <div id="antonyms" class="section">
+                <div class="section-title">48 CẶP TỪ TRÁI NGHĨA</div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="col-stt">STT</th>
+                            <th class="col-audio">🔊</th>
+                            <th class="col-viet-1">Tiếng Việt 1</th>
+                            <th class="col-chinese-1">中文 1</th>
+                            <th class="col-chinese-2">中文 2</th>
+                            <th class="col-viet-2">Tiếng Việt 2</th>
+                        </tr>
+                    </thead>
+                    <tbody id="antonymsBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu
+        const phrasesData = [
+            {stt: 1, vi: "Vâng, đúng rồi", cn: "是的"},
+            {stt: 2, vi: "Không phải", cn: "不是"},
+            {stt: 3, vi: "Được, tốt", cn: "好的"},
+            {stt: 4, vi: "Không được", cn: "不行"},
+            {stt: 5, vi: "Có thể", cn: "可以"},
+            {stt: 6, vi: "Không thể", cn: "不可以"},
+            {stt: 7, vi: "Cảm ơn", cn: "谢谢"},
+            {stt: 8, vi: "Không có gì", cn: "不客气"},
+            {stt: 9, vi: "Xin lỗi", cn: "对不起"},
+            {stt: 10, vi: "Không sao", cn: "没关系"},
+            {stt: 11, vi: "Hiểu rồi", cn: "明白了"},
+            {stt: 12, vi: "Không biết", cn: "不知道"},
+            {stt: 13, vi: "Tôi đồng ý", cn: "我同意"},
+            {stt: 14, vi: "Tôi không đồng ý", cn: "我不同意"},
+            {stt: 15, vi: "Tất nhiên", cn: "当然"},
+            {stt: 16, vi: "Tất nhiên là không được", cn: "当然不行"},
+            {stt: 17, vi: "Có lẽ", cn: "也许"},
+            {stt: 18, vi: "Có thể", cn: "可能"},
+            {stt: 19, vi: "Không thể nào", cn: "不可能"},
+            {stt: 20, vi: "Không vấn đề", cn: "没问题"},
+            {stt: 21, vi: "Đợi một chút", cn: "等一下"},
+            {stt: 22, vi: "Ngay lập tức", cn: "马上"},
+            {stt: 23, vi: "Nhanh lên", cn: "快点"},
+            {stt: 24, vi: "Chậm lại", cn: "慢点"},
+            {stt: 25, vi: "Cẩn thận", cn: "小心"},
+            {stt: 26, vi: "Chúc mừng", cn: "恭喜"},
+            {stt: 27, vi: "Chúc bạn vui vẻ", cn: "祝你快乐"},
+            {stt: 28, vi: "Sinh nhật vui vẻ", cn: "生日快乐"},
+            {stt: 29, vi: "Chúc mừng năm mới", cn: "新年快乐"},
+            {stt: 30, vi: "Cạn chén", cn: "干杯"},
+            {stt: 31, vi: "Mời vào", cn: "请进"},
+            {stt: 32, vi: "Mời ngồi", cn: "请坐"},
+            {stt: 33, vi: "Xin cứ tự nhiên", cn: "请便"},
+            {stt: 34, vi: "Nhờ bạn", cn: "拜托"},
+            {stt: 35, vi: "Giúp tôi với", cn: "帮帮我"},
+            {stt: 36, vi: "Tôi đến rồi", cn: "我来了"},
+            {stt: 37, vi: "Tôi đi đây", cn: "我走了"},
+            {stt: 38, vi: "Tạm biệt", cn: "再见"},
+            {stt: 39, vi: "Mai gặp lại", cn: "明天见"},
+            {stt: 40, vi: "Lát nữa gặp", cn: "一会儿见"},
+            {stt: 41, vi: "Ngon", cn: "好吃"},
+            {stt: 42, vi: "Không ngon", cn: "不好吃"},
+            {stt: 43, vi: "Tôi no rồi", cn: "我饱了"},
+            {stt: 44, vi: "Tôi đói rồi", cn: "我饿了"},
+            {stt: 45, vi: "Mệt quá", cn: "好累"},
+            {stt: 46, vi: "Buồn ngủ quá", cn: "好困"},
+            {stt: 47, vi: "Đau quá", cn: "好疼"},
+            {stt: 48, vi: "Thật thú vị", cn: "真有趣"},
+            {stt: 49, vi: "Thật chán", cn: "真无聊"},
+            {stt: 50, vi: "Tùy bạn", cn: "随便"},
+            {stt: 51, vi: "Bạn khỏe không", cn: "你好吗"},
+            {stt: 52, vi: "Tôi rất khỏe", cn: "我很好"},
+            {stt: 53, vi: "Dạo này thế nào", cn: "最近怎么样"},
+            {stt: 54, vi: "Cũng ổn", cn: "还不错"},
+            {stt: 55, vi: "Còn bạn", cn: "你呢"},
+            {stt: 56, vi: "Lâu quá không gặp", cn: "好久不见"},
+            {stt: 57, vi: "Bận không", cn: "忙吗"},
+            {stt: 58, vi: "Khá bận", cn: "挺忙的"},
+            {stt: 59, vi: "Không bận", cn: "不忙"},
+            {stt: 60, vi: "Có rảnh không", cn: "有空吗"},
+            {stt: 61, vi: "Giúp tôi được không", cn: "能帮我吗"},
+            {stt: 62, vi: "Cho mượn một chút được không", cn: "可以借一下吗"},
+            {stt: 63, vi: "Làm phiền bạn rồi", cn: "麻烦你了"},
+            {stt: 64, vi: "Không cần cảm ơn", cn: "不用谢"},
+            {stt: 65, vi: "Đừng khách sáo", cn: "别客气"},
+            {stt: 66, vi: "Giúp tôi một chút", cn: "请帮我一下"},
+            {stt: 67, vi: "Để tôi nghĩ đã", cn: "让我想想"},
+            {stt: 68, vi: "Tôi thử xem", cn: "我试试看"},
+            {stt: 69, vi: "Không vấn đề", cn: "没问题"},
+            {stt: 70, vi: "Thôi bỏ đi", cn: "算了吧"},
+            {stt: 71, vi: "Thật không", cn: "真的吗"},
+            {stt: 72, vi: "Tuyệt quá", cn: "太好了"},
+            {stt: 73, vi: "Quá hay", cn: "太棒了"},
+            {stt: 74, vi: "Tiếc quá", cn: "好可惜"},
+            {stt: 75, vi: "Đừng lo", cn: "别担心"},
+            {stt: 76, vi: "Đừng căng thẳng", cn: "别紧张"},
+            {stt: 77, vi: "Đừng giận", cn: "别生气"},
+            {stt: 78, vi: "Phiền quá", cn: "好烦啊"},
+            {stt: 79, vi: "Vui quá", cn: "好开心"},
+            {stt: 80, vi: "Sợ chết đi được", cn: "吓死我了"},
+            {stt: 81, vi: "Bao nhiêu tiền", cn: "多少钱"},
+            {stt: 82, vi: "Đắt quá", cn: "太贵了"},
+            {stt: 83, vi: "Rẻ chút đi", cn: "便宜点"},
+            {stt: 84, vi: "Có giảm giá không", cn: "可以打折吗"},
+            {stt: 85, vi: "Tôi lấy cái này", cn: "我要这个"},
+            {stt: 86, vi: "Đổi cái khác đi", cn: "换一个吧"},
+            {stt: 87, vi: "Có cái khác không", cn: "有别的吗"},
+            {stt: 88, vi: "Chất lượng thế nào", cn: "质量怎么样"},
+            {stt: 89, vi: "Có miễn phí vận chuyển không", cn: "包邮吗"},
+            {stt: 90, vi: "Thanh toán Alipay được không", cn: "支付宝可以吗"},
+            {stt: 91, vi: "Đi thế nào", cn: "怎么走"},
+            {stt: 92, vi: "Rẽ trái", cn: "往左转"},
+            {stt: 93, vi: "Rẽ phải", cn: "往右转"},
+            {stt: 94, vi: "Đi thẳng", cn: "直走"},
+            {stt: 95, vi: "Có xa không", cn: "远吗"},
+            {stt: 96, vi: "Rất gần", cn: "很近"},
+            {stt: 97, vi: "Bắt taxi đi", cn: "打车吧"},
+            {stt: 98, vi: "Đi tàu điện ngầm", cn: "坐地铁"},
+            {stt: 99, vi: "Tôi bị lạc rồi", cn: "我迷路了"},
+            {stt: 100, vi: "Ở đây này", cn: "在这里"}
+        ];
+
+        const verbsData = [
+            {stt: 1, vi: "là", cn: "是"},
+            {stt: 2, vi: "có", cn: "有"},
+            {stt: 3, vi: "đi", cn: "去"},
+            {stt: 4, vi: "đến", cn: "来"},
+            {stt: 5, vi: "làm", cn: "做"},
+            {stt: 6, vi: "nói", cn: "说"},
+            {stt: 7, vi: "nhìn, xem", cn: "看"},
+            {stt: 8, vi: "nghe", cn: "听"},
+            {stt: 9, vi: "ăn", cn: "吃"},
+            {stt: 10, vi: "uống", cn: "喝"},
+            {stt: 11, vi: "mua", cn: "买"},
+            {stt: 12, vi: "bán", cn: "卖"},
+            {stt: 13, vi: "cho", cn: "给"},
+            {stt: 14, vi: "cầm, lấy", cn: "拿"},
+            {stt: 15, vi: "tìm", cn: "找"},
+            {stt: 16, vi: "hỏi", cn: "问"},
+            {stt: 17, vi: "trả lời", cn: "答"},
+            {stt: 18, vi: "học", cn: "学"},
+            {stt: 19, vi: "dạy", cn: "教"},
+            {stt: 20, vi: "viết", cn: "写"},
+            {stt: 21, vi: "đọc", cn: "读"},
+            {stt: 22, vi: "nhìn thấy", cn: "看见"},
+            {stt: 23, vi: "nghe thấy", cn: "听见"},
+            {stt: 24, vi: "quen biết", cn: "认识"},
+            {stt: 25, vi: "biết", cn: "知道"},
+            {stt: 26, vi: "cảm thấy", cn: "觉得"},
+            {stt: 27, vi: "thích", cn: "喜欢"},
+            {stt: 28, vi: "yêu", cn: "爱"},
+            {stt: 29, vi: "muốn, nghĩ", cn: "想"},
+            {stt: 30, vi: "muốn, cần", cn: "要"},
+            {stt: 31, vi: "có thể", cn: "能"},
+            {stt: 32, vi: "biết kỹ năng", cn: "会"},
+            {stt: 33, vi: "có thể, được phép", cn: "可以"},
+            {stt: 34, vi: "nên", cn: "应该"},
+            {stt: 35, vi: "phải", cn: "必须"},
+            {stt: 36, vi: "bắt đầu", cn: "开始"},
+            {stt: 37, vi: "kết thúc", cn: "结束"},
+            {stt: 38, vi: "chuẩn bị", cn: "准备"},
+            {stt: 39, vi: "giúp", cn: "帮助"},
+            {stt: 40, vi: "đợi", cn: "等"},
+            {stt: 41, vi: "ngồi", cn: "坐"},
+            {stt: 42, vi: "đứng", cn: "站"},
+            {stt: 43, vi: "đi bộ", cn: "走"},
+            {stt: 44, vi: "chạy", cn: "跑"},
+            {stt: 45, vi: "mở, lái", cn: "开"},
+            {stt: 46, vi: "đóng", cn: "关"},
+            {stt: 47, vi: "lên", cn: "上"},
+            {stt: 48, vi: "xuống", cn: "下"},
+            {stt: 49, vi: "vào", cn: "进"},
+            {stt: 50, vi: "ra", cn: "出"},
+            {stt: 51, vi: "trở về", cn: "回"},
+            {stt: 52, vi: "đến", cn: "到"},
+            {stt: 53, vi: "ở, sống", cn: "住"},
+            {stt: 54, vi: "làm việc", cn: "工作"},
+            {stt: 55, vi: "nghỉ ngơi", cn: "休息"},
+            {stt: 56, vi: "chơi", cn: "玩"},
+            {stt: 57, vi: "du lịch", cn: "旅游"},
+            {stt: 58, vi: "rửa, giặt", cn: "洗"},
+            {stt: 59, vi: "mặc", cn: "穿"},
+            {stt: 60, vi: "đổi", cn: "换"},
+            {stt: 61, vi: "mở ra", cn: "打开"},
+            {stt: 62, vi: "đóng lại", cn: "关闭"},
+            {stt: 63, vi: "tham gia", cn: "参加"},
+            {stt: 64, vi: "học tập", cn: "学习"},
+            {stt: 65, vi: "luyện tập", cn: "练习"},
+            {stt: 66, vi: "quyết định", cn: "决定"},
+            {stt: 67, vi: "hy vọng", cn: "希望"},
+            {stt: 68, vi: "quên", cn: "忘记"},
+            {stt: 69, vi: "nhớ", cn: "记得"},
+            {stt: 70, vi: "hiểu", cn: "明白"}
+        ];
+
+        const slangData = [
+            {stt: 1, vi: "không sao", cn: "没关系"},
+            {stt: 2, vi: "không vấn đề", cn: "没问题"},
+            {stt: 3, vi: "thật hả", cn: "真的"},
+            {stt: 4, vi: "vậy à", cn: "是吗"},
+            {stt: 5, vi: "được rồi", cn: "好吧"},
+            {stt: 6, vi: "sao cũng được, tùy", cn: "随便"},
+            {stt: 7, vi: "từ từ thôi", cn: "慢慢来"},
+            {stt: 8, vi: "không vội", cn: "不着急"},
+            {stt: 9, vi: "sao vậy", cn: "怎么了"},
+            {stt: 10, vi: "không có chuyện gì", cn: "没事"},
+            {stt: 11, vi: "tôi hiểu rồi", cn: "我懂了"},
+            {stt: 12, vi: "tôi biết rồi", cn: "我知道了"},
+            {stt: 13, vi: "tôi hiểu rồi", cn: "我明白了"},
+            {stt: 14, vi: "đợi một chút", cn: "等一下"},
+            {stt: 15, vi: "đợi tôi chút", cn: "等我一下"},
+            {stt: 16, vi: "đến ngay", cn: "马上来"},
+            {stt: 17, vi: "không có cách nào", cn: "没办法"},
+            {stt: 18, vi: "thật hay giả vậy", cn: "真的假的"},
+            {stt: 19, vi: "đừng lo", cn: "别担心"},
+            {stt: 20, vi: "đừng nói bậy", cn: "别乱说"},
+            {stt: 21, vi: "tôi không tin", cn: "我不信"},
+            {stt: 22, vi: "tôi thử xem", cn: "我试试"},
+            {stt: 23, vi: "để nói sau đi", cn: "再说吧"},
+            {stt: 24, vi: "thôi bỏ đi", cn: "算了吧"},
+            {stt: 25, vi: "gần gần, gần xong", cn: "差不多"},
+            {stt: 26, vi: "tốt quá", cn: "太好了"},
+            {stt: 27, vi: "rất tốt", cn: "真不错"},
+            {stt: 28, vi: "lâu rồi không gặp", cn: "好久不见"},
+            {stt: 29, vi: "vất vả rồi", cn: "辛苦了"},
+            {stt: 30, vi: "cố lên", cn: "加油"}
+        ];
+
+        const antonymsData = [
+            {stt: 1, vi1: "to", cn1: "大", vi2: "nhỏ", cn2: "小"},
+            {stt: 2, vi1: "nhiều", cn1: "多", vi2: "ít", cn2: "少"},
+            {stt: 3, vi1: "cao", cn1: "高", vi2: "thấp", cn2: "低"},
+            {stt: 4, vi1: "dài", cn1: "长", vi2: "ngắn", cn2: "短"},
+            {stt: 5, vi1: "béo", cn1: "胖", vi2: "gầy", cn2: "瘦"},
+            {stt: 6, vi1: "nhanh", cn1: "快", vi2: "chậm", cn2: "慢"},
+            {stt: 7, vi1: "mới", cn1: "新", vi2: "cũ", cn2: "旧"},
+            {stt: 8, vi1: "tốt", cn1: "好", vi2: "xấu", cn2: "坏"},
+            {stt: 9, vi1: "đúng", cn1: "对", vi2: "sai", cn2: "错"},
+            {stt: 10, vi1: "lạnh", cn1: "冷", vi2: "nóng", cn2: "热"},
+            {stt: 11, vi1: "xa", cn1: "远", vi2: "gần", cn2: "近"},
+            {stt: 12, vi1: "mở", cn1: "开", vi2: "đóng", cn2: "关"},
+            {stt: 13, vi1: "vào", cn1: "进", vi2: "ra", cn2: "出"},
+            {stt: 14, vi1: "đến", cn1: "来", vi2: "đi", cn2: "去"},
+            {stt: 15, vi1: "trên", cn1: "上", vi2: "dưới", cn2: "下"},
+            {stt: 16, vi1: "trước", cn1: "前", vi2: "sau", cn2: "后"},
+            {stt: 17, vi1: "trái", cn1: "左", vi2: "phải", cn2: "右"},
+            {stt: 18, vi1: "sớm", cn1: "早", vi2: "muộn", cn2: "晚"},
+            {stt: 19, vi1: "bận", cn1: "忙", vi2: "rảnh", cn2: "闲"},
+            {stt: 20, vi1: "khó", cn1: "难", vi2: "dễ", cn2: "易"},
+            {stt: 21, vi1: "đen", cn1: "黑", vi2: "trắng", cn2: "白"},
+            {stt: 22, vi1: "sáng", cn1: "亮", vi2: "tối", cn2: "暗"},
+            {stt: 23, vi1: "yêu", cn1: "爱", vi2: "ghét", cn2: "恨"},
+            {stt: 24, vi1: "cười", cn1: "笑", vi2: "khóc", cn2: "哭"},
+            {stt: 25, vi1: "mua", cn1: "买", vi2: "bán", cn2: "卖"},
+            {stt: 26, vi1: "cho", cn1: "给", vi2: "lấy", cn2: "拿"},
+            {stt: 27, vi1: "lên", cn1: "起", vi2: "xuống", cn2: "落"},
+            {stt: 28, vi1: "đầy", cn1: "满", vi2: "rỗng", cn2: "空"},
+            {stt: 29, vi1: "thật", cn1: "真", vi2: "giả", cn2: "假"},
+            {stt: 30, vi1: "mạnh", cn1: "强", vi2: "yếu", cn2: "弱"},
+            {stt: 31, vi1: "giàu", cn1: "富", vi2: "nghèo", cn2: "穷"},
+            {stt: 32, vi1: "dày", cn1: "厚", vi2: "mỏng", cn2: "薄"},
+            {stt: 33, vi1: "ngọt", cn1: "甜", vi2: "đắng", cn2: "苦"},
+            {stt: 34, vi1: "mặn", cn1: "咸", vi2: "nhạt", cn2: "淡"},
+            {stt: 35, vi1: "khô", cn1: "干", vi2: "ướt", cn2: "湿"},
+            {stt: 36, vi1: "mềm", cn1: "软", vi2: "cứng", cn2: "硬"},
+            {stt: 37, vi1: "nhẹ", cn1: "轻", vi2: "nặng", cn2: "重"},
+            {stt: 38, vi1: "rộng", cn1: "宽", vi2: "hẹp", cn2: "窄"},
+            {stt: 39, vi1: "sâu", cn1: "深", vi2: "nông", cn2: "浅"},
+            {stt: 40, vi1: "bắt đầu", cn1: "开头", vi2: "kết thúc", cn2: "结束"},
+            {stt: 41, vi1: "thành công", cn1: "成功", vi2: "thất bại", cn2: "失败"},
+            {stt: 42, vi1: "tăng", cn1: "提高", vi2: "giảm", cn2: "降低"},
+            {stt: 43, vi1: "thích", cn1: "喜欢", vi2: "ghét", cn2: "讨厌"},
+            {stt: 44, vi1: "nhớ", cn1: "记得", vi2: "quên", cn2: "忘记"},
+            {stt: 45, vi1: "đi vào", cn1: "进去", vi2: "đi ra", cn2: "出来"},
+            {stt: 46, vi1: "mở", cn1: "打开", vi2: "đóng", cn2: "关闭"},
+            {stt: 47, vi1: "tăng", cn1: "增加", vi2: "giảm", cn2: "减少"},
+            {stt: 48, vi1: "bắt đầu", cn1: "开始", vi2: "dừng lại", cn2: "停止"}
+        ];
+
+        let currentVoice = 'female';
+        let speechRate = 0.9;
+
+        function setVoice(type) {
+            currentVoice = type;
+            document.getElementById('btnFemale').classList.toggle('active', type === 'female');
+            document.getElementById('btnMale').classList.toggle('active', type === 'male');
+        }
+
+        function updateSpeed(val) {
+            speechRate = parseFloat(val);
+            document.getElementById('speedValue').textContent = val + 'x';
+        }
+
+        function speak(text, btnId) {
+            if (!window.speechSynthesis) {
+                alert('Trình duyệt không hỗ trợ đọc thoại');
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'vi-VN';
+            utterance.rate = speechRate;
+            utterance.pitch = currentVoice === 'female' ? 1.1 : 0.9;
+
+            const icon = document.getElementById(btnId);
+            icon.classList.add('playing');
+
+            utterance.onend = () => {
+                icon.classList.remove('playing');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function renderTable() {
+            // Render phrases
+            document.getElementById('phrasesBody').innerHTML = phrasesData.map(item => `
+                <tr>
+                    <td class="col-stt">${item.stt}</td>
+                    <td class="col-audio">
+                        <span class="speaker-icon" id="p${item.stt}" onclick="speak('${item.vi.replace(/'/g, "\'")}', 'p${item.stt}')">🔊</span>
+                    </td>
+                    <td class="col-viet">${item.vi}</td>
+                    <td class="col-chinese">${item.cn}</td>
+                </tr>
+            `).join('');
+
+            // Render verbs
+            document.getElementById('verbsBody').innerHTML = verbsData.map(item => `
+                <tr>
+                    <td class="col-stt">${item.stt}</td>
+                    <td class="col-audio">
+                        <span class="speaker-icon" id="v${item.stt}" onclick="speak('${item.vi.split(',')[0].replace(/'/g, "\'")}', 'v${item.stt}')">🔊</span>
+                    </td>
+                    <td class="col-viet">${item.vi}</td>
+                    <td class="col-chinese">${item.cn}</td>
+                </tr>
+            `).join('');
+
+            // Render slang
+            document.getElementById('slangBody').innerHTML = slangData.map(item => `
+                <tr>
+                    <td class="col-stt">${item.stt}</td>
+                    <td class="col-audio">
+                        <span class="speaker-icon" id="s${item.stt}" onclick="speak('${item.vi.replace(/'/g, "\'")}', 's${item.stt}')">🔊</span>
+                    </td>
+                    <td class="col-viet">${item.vi}</td>
+                    <td class="col-chinese">${item.cn}</td>
+                </tr>
+            `).join('');
+
+            // Render antonyms
+            document.getElementById('antonymsBody').innerHTML = antonymsData.map(item => `
+                <tr>
+                    <td class="col-stt">${item.stt}</td>
+                    <td class="col-audio">
+                        <span class="speaker-icon" id="a${item.stt}" onclick="speak('${item.vi1.replace(/'/g, "\'")} và ${item.vi2.replace(/'/g, "\'")}', 'a${item.stt}')">🔊</span>
+                    </td>
+                    <td class="col-viet-1">${item.vi1}</td>
+                    <td class="col-chinese-1">${item.cn1}</td>
+                    <td class="col-chinese-2">${item.cn2}</td>
+                    <td class="col-viet-2">${item.vi2}</td>
+                </tr>
+            `).join('');
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>
