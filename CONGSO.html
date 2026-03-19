@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gia Sư Hoa Ngữ Tân An | Giáo trình Tiếng Hoa Công xưởng</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5.0/dist/hanzi-writer.min.js"></script>
+<style>
+/* ── PALETTE ─────────────────────────────────────
+   GREEN  #1b5e20  sidebar/topbar
+   BLUE   #1565c0  chữ Hán, accent
+   ORANGE #e65100  cam, active
+   GRAY-D #4a5568
+   GRAY-M #8a9ab0
+   GRAY-L #d0d8e4
+   BG     #f0f2f5
+   WHITE  #ffffff
+   BLACK  #111111
+   ─────────────────────────────────────────────── */
+:root {
+  --green:   #1b5e20;
+  --green-h: #2e7d32;
+  --green-b: #2d5a30;
+  --blue:    #1565c0;
+  --orange:  #e65100;
+  --gray-d:  #4a5568;
+  --gray-m:  #8a9ab0;
+  --gray-l:  #d0d8e4;
+  --gray-bg: #f0f2f5;
+  --white:   #ffffff;
+  --black:   #111111;
+  --SB: 240px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; }
+
+html, body, button, select, input, textarea {
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+body {
+  background: var(--gray-bg);
+  color: var(--black);
+  min-height: 100%;
+  font-size: 20px;
+}
+
+/* ══ SIDEBAR ══════════════════════════════════
+   Key: position:fixed with px units only.
+   Browser zoom scales the *page* (content area)
+   but fixed elements in px stay at physical px.
+   The sidebar width must ALSO be hardcoded px
+   in #main margin-left — no CSS vars.
+   ══════════════════════════════════════════ */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 240px;
+  height: 100%;
+  background: var(--green);
+  color: var(--white);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+#sidebar::-webkit-scrollbar { width: 3px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--green-b); }
+
+.sb-logo { padding: 18px 16px 14px; border-bottom: 1px solid var(--green-b); }
+.sb-logo-cn {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px; font-weight: 700; color: var(--white); letter-spacing: 1px;
+}
+.sb-logo-vn { font-size: 20px; color: var(--gray-m); margin-top: 3px; line-height: 1.4; }
+.sb-progress { height: 2px; background: var(--green-b); margin-top: 10px; }
+.sb-progress-fill { height: 100%; background: var(--orange); width: 0%; transition: width 0.4s; }
+.sb-section { font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-m); padding: 14px 16px 6px; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px; cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.15s;
+}
+.nav-item:hover { background: var(--green-h); }
+.nav-item.active { background: #0d2010; border-left-color: var(--orange); }
+
+.nav-num {
+  width: 22px; height: 22px; border-radius: 3px;
+  background: var(--green-b); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; color: var(--gray-m);
+}
+.nav-item.active .nav-num { background: var(--orange); color: var(--white); }
+.nav-text { flex: 1; min-width: 0; }
+.nav-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--gray-l); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-item.active .nav-cn { color: var(--white); }
+.nav-vn { font-size: 20px; color: var(--gray-m); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ══ MAIN ════════════════════════════════════ */
+#main {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+
+#topbar {
+  height: 48px; background: var(--green);
+  display: flex; align-items: center; padding: 0 24px;
+  position: sticky; top: 0; z-index: 50;
+  border-bottom: 1px solid var(--green-b);
+}
+#topbar-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px; font-weight: 600; color: var(--white);
+}
+
+#content { padding: 24px 32px; width: 100%; flex: 1; }
+
+/* ══ HOME HERO ═══════════════════════════════ */
+.lesson-hero {
+  background: var(--green); padding: 24px 28px;
+  margin-bottom: 24px; border-radius: 6px;
+}
+.hero-label {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px; font-weight: 700; color: var(--orange);
+  margin-bottom: 4px; line-height: 1.3;
+}
+.hero-cn {
+  font-size: 20px; font-weight: 700; color: var(--white);
+  margin-bottom: 4px; line-height: 1.3;
+}
+.hero-vn { font-size: 20px; color: var(--gray-m); }
+.hero-tags { margin-top: 14px; display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { padding: 2px 8px; border: 1px solid var(--green-b); font-size: 20px; color: var(--gray-m); }
+
+/* ══ SECTION TITLE ═══════════════════════════ */
+.sec-title {
+  font-size: 20px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--blue);
+  border-bottom: 1px solid var(--gray-l);
+  padding-bottom: 6px; margin: 24px 0 14px;
+}
+
+/* ══ VOCAB TABLE ════════════════════════════ */
+.vocab-table { width: 100%; border-collapse: collapse; font-size: 20px; }
+.vocab-table th {
+  background: var(--green); color: var(--gray-l);
+  padding: 9px 14px; text-align: left;
+  font-size: 20px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600;
+}
+.vocab-table td { padding: 11px 14px; border-bottom: 1px solid var(--gray-l); vertical-align: middle; }
+.vocab-table tr:last-child td { border-bottom: none; }
+.vocab-table tr:hover td { background: #e8f5e9; }
+.td-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--blue); }
+.td-py { color: var(--orange); font-style: italic; font-size: 20px; }
+.td-vn { color: var(--gray-d); font-weight: 500; font-size: 20px; }
+.td-ex { color: var(--gray-m); font-family: 'Noto Serif SC', serif; font-size: 20px; }
+
+/* ══ DIALOGUE ════════════════════════════════ */
+.dialogue-box {
+  background: var(--white); border: 1px solid var(--gray-l);
+  border-radius: 6px; margin-bottom: 14px; overflow: hidden;
+}
+.dlg-header {
+  background: var(--green); padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dlg-title { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--white); font-weight: 600; }
+.dlg-title-vn { font-size: 20px; color: var(--gray-m); margin-top: 2px; }
+.dlg-controls { display: flex; gap: 6px; align-items: center; }
+.dlg-btn {
+  padding: 4px 12px; background: var(--blue); color: var(--white);
+  border: none; font-size: 20px; font-weight: 700; cursor: pointer;
+  transition: background 0.15s; border-radius: 3px;
+}
+.dlg-btn:hover { background: var(--orange); }
+.dlg-speed {
+  padding: 4px 8px; background: transparent;
+  border: 1px solid var(--green-b); color: var(--gray-m); font-size: 20px; cursor: pointer;
+}
+.dlg-line {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--gray-l);
+  cursor: pointer; transition: background 0.12s;
+}
+.dlg-line:last-child { border-bottom: none; }
+.dlg-line:hover { background: var(--gray-bg); }
+.dlg-line.playing { background: #e8f5e9; }
+.speaker-badge { min-width: 64px; font-size: 20px; font-weight: 700; text-transform: uppercase; padding-top: 3px; flex-shrink: 0; }
+.speaker-badge.male { color: var(--blue); }
+.speaker-badge.female { color: var(--orange); }
+.dlg-content { flex: 1; }
+.line-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--black); line-height: 1.6; }
+.line-py { font-size: 20px; color: var(--orange); font-style: italic; margin-top: 2px; display: none; }
+.line-vn { font-size: 20px; color: var(--gray-d); margin-top: 4px; line-height: 1.5; }
+.dlg-play-btn { color: var(--gray-l); font-size: 20px; padding-top: 4px; flex-shrink: 0; background: none; border: none; cursor: pointer; }
+.dlg-line:hover .dlg-play-btn { color: var(--blue); }
+.dlg-line.playing .dlg-play-btn { color: var(--orange); }
+
+/* Toggle pinyin */
+.toggle-row { display: flex; align-items: center; gap: 8px; font-size: 20px; color: var(--gray-m); margin-bottom: 8px; }
+.toggle { width: 34px; height: 18px; background: var(--gray-l); border-radius: 9px; cursor: pointer; position: relative; transition: background 0.2s; }
+.toggle.on { background: var(--blue); }
+.toggle::after { content: ''; position: absolute; width: 12px; height: 12px; background: var(--white); border-radius: 50%; top: 3px; left: 3px; transition: left 0.2s; }
+.toggle.on::after { left: 19px; }
+
+/* ══ PATTERNS ════════════════════════════════ */
+.pattern-card { background: var(--white); padding: 14px 16px; margin-bottom: 8px; border: 1px solid var(--gray-l); border-radius: 6px; }
+.pat-num { font-size: 20px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+.pat-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--black); margin-bottom: 3px; }
+.pat-cn span { color: var(--blue); font-weight: 700; }
+.pat-vn { font-size: 20px; color: var(--gray-d); margin-bottom: 8px; }
+.pat-ex { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--gray-d); background: var(--gray-bg); padding: 8px 12px; border-radius: 4px; }
+
+/* ══ EXERCISE ════════════════════════════════ */
+.exercise-box { background: var(--white); border: 1px solid var(--gray-l); border-radius: 6px; padding: 18px 20px; margin-bottom: 10px; }
+.ex-type { font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+.ex-q { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--black); margin-bottom: 14px; line-height: 1.6; }
+.ex-q .blank { display: inline-block; min-width: 60px; border-bottom: 2px solid var(--orange); color: var(--orange); font-weight: 700; text-align: center; }
+.ex-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.ex-opt { padding: 7px 18px; border: 1px solid var(--gray-l); border-radius: 4px; background: var(--white); color: var(--gray-d); font-family: 'Noto Serif SC', serif; font-size: 20px; cursor: pointer; transition: all 0.15s; }
+.ex-opt:hover { border-color: var(--blue); color: var(--blue); }
+.ex-opt.correct { background: #e3f2fd; border-color: var(--blue); color: var(--blue); }
+.ex-opt.wrong { background: #fff3e0; border-color: var(--orange); color: var(--orange); }
+
+/* ══ REPORT ══════════════════════════════════ */
+.report-box { background: var(--green); border: 1px solid var(--green-b); border-radius: 6px; padding: 16px 20px; margin-bottom: 16px; }
+.report-title { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--gray-l); margin-bottom: 12px; font-weight: 600; border-bottom: 1px solid var(--green-b); padding-bottom: 8px; }
+.report-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--green-b); font-size: 20px; color: var(--gray-m); }
+.report-row:last-child { border-bottom: none; }
+.report-val { font-weight: 700; }
+.report-val.good { color: #64b5f6; }
+.report-val.bad { color: var(--orange); }
+
+/* ══ EMAIL ═══════════════════════════════════ */
+.email-box { border: 1px solid var(--gray-l); border-radius: 6px; background: var(--white); overflow: hidden; }
+.email-header { background: var(--green); padding: 10px 16px; }
+.email-meta { font-size: 20px; color: var(--gray-m); margin-bottom: 3px; }
+.email-subject { font-size: 20px; color: var(--white); font-weight: 600; }
+.email-body { padding: 16px 18px; font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--gray-d); line-height: 2; white-space: pre-wrap; }
+
+/* ══ FLOW ════════════════════════════════════ */
+.flow-wrap { background: var(--white); border: 1px solid var(--gray-l); border-radius: 6px; padding: 18px 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 0; }
+.flow-step { text-align: center; }
+.flow-num { width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: var(--white); font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; }
+.flow-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--black); font-weight: 600; }
+.flow-vn { font-size: 20px; color: var(--gray-m); margin-top: 3px; }
+.flow-arrow { color: var(--orange); font-size: 20px; padding: 0 8px; margin-bottom: 12px; }
+
+/* ══ COMMANDS ════════════════════════════════ */
+.cmd-grid { display: flex; flex-wrap: wrap; gap: 1px; background: var(--gray-l); border: 1px solid var(--gray-l); border-radius: 6px; overflow: hidden; }
+.cmd-item { background: var(--white); padding: 14px 16px; cursor: pointer; transition: background 0.12s; flex: 1; min-width: 140px; }
+.cmd-item:hover { background: #e3f2fd; }
+.cmd-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--blue); font-weight: 600; }
+.cmd-vn { font-size: 20px; color: var(--gray-d); margin-top: 5px; }
+
+/* ══ HOME GRID ═══════════════════════════════ */
+.home-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1px; background: var(--gray-l); border: 1px solid var(--gray-l); border-radius: 6px; overflow: hidden; margin-bottom: 20px; }
+.home-card { background: var(--white); padding: 16px 18px; cursor: pointer; transition: background 0.12s; border-top: 2px solid transparent; }
+.home-card:hover { background: #e3f2fd; border-top-color: var(--orange); }
+.home-num { font-size: 20px; font-weight: 500; color: var(--gray-m); margin-bottom: 5px; }
+.home-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+.home-vn { font-size: 20px; color: var(--gray-d); margin-bottom: 10px; }
+.home-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.home-tag { padding: 2px 7px; border: 1px solid var(--gray-l); border-radius: 3px; font-size: 20px; color: var(--gray-m); }
+
+/* ══ APPENDIX ════════════════════════════════ */
+.sign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1px; background: var(--gray-l); border: 1px solid var(--gray-l); border-radius: 6px; overflow: hidden; }
+.sign-card { background: var(--white); padding: 14px 16px; text-align: center; }
+.sign-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 600; color: var(--black); }
+.sign-vn { font-size: 20px; color: var(--gray-d); margin-top: 3px; }
+.sign-loc { font-size: 20px; color: var(--gray-m); margin-top: 4px; }
+.num-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.num-tag { padding: 5px 12px; border: 1px solid var(--gray-l); background: var(--white); font-size: 20px; border-radius: 4px; }
+.num-cn { color: var(--blue); font-family: 'Noto Serif SC', serif; font-size: 20px; }
+.num-vn { color: var(--gray-d); font-size: 20px; }
+.phrase-grid { display: flex; flex-wrap: wrap; gap: 1px; background: var(--gray-l); border: 1px solid var(--gray-l); border-radius: 6px; overflow: hidden; }
+.phrase-item { background: var(--white); padding: 10px 14px; cursor: pointer; transition: background 0.12s; flex: 1; min-width: 160px; }
+.phrase-item:hover { background: #e3f2fd; }
+.phrase-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--blue); }
+.phrase-vn { font-size: 20px; color: var(--gray-m); margin-top: 3px; }
+
+/* ══ HANZI PAGE ══════════════════════════════ */
+.hanzi-section { background: var(--white); border: 1px solid var(--gray-l); border-radius: 6px; padding: 20px; margin-bottom: 14px; }
+.hanzi-char-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
+.hz-btn { font-family: 'Noto Serif SC', serif; font-size: 20px; width: 38px; height: 38px; border: 1px solid var(--gray-l); background: var(--white); color: var(--black); cursor: pointer; transition: all 0.12s; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+.hz-btn:hover { border-color: var(--blue); color: var(--blue); }
+.hz-btn.active { border-color: var(--blue); background: var(--blue); color: var(--white); }
+.hz-btn-action { padding: 6px 14px; border: 1px solid var(--gray-l); background: var(--white); color: var(--gray-d); font-size: 20px; font-weight: 600; cursor: pointer; transition: all 0.12s; border-radius: 4px; }
+.hz-btn-action:hover { background: var(--green); color: var(--white); border-color: var(--green); }
+.hz-btn-action.primary { background: var(--blue); color: var(--white); border-color: var(--blue); }
+.hz-btn-action.accent { background: var(--orange); color: var(--white); border-color: var(--orange); }
+.hz-writer-area { display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap; }
+.hz-info { flex: 1; min-width: 160px; }
+.hz-char-big { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--blue); line-height: 1; margin-bottom: 6px; }
+.hz-controls { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+.hz-hint-text { font-size: 20px; color: var(--gray-d); margin-top: 10px; padding: 8px 10px; border: 1px solid var(--gray-l); border-radius: 4px; background: var(--gray-bg); }
+
+/* ══ AUDIO BAR ═══════════════════════════════ */
+#audio-bar {
+  position: fixed; bottom: 0; left: 240px; right: 0;
+  height: 52px; background: var(--green);
+  border-top: 1px solid var(--green-b);
+  display: flex; align-items: center; padding: 0 20px; gap: 16px;
+  z-index: 200; transform: translateY(100%); transition: transform 0.2s;
+}
+#audio-bar.visible { transform: translateY(0); }
+.ab-text { flex: 1; min-width: 0; }
+.ab-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ab-vn { font-size: 20px; color: var(--gray-m); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ab-progress { width: 160px; height: 2px; background: var(--green-b); flex-shrink: 0; }
+.ab-progress-fill { height: 100%; background: var(--orange); width: 0%; transition: width 0.1s linear; }
+.ab-ctrl { display: flex; gap: 4px; }
+.ab-btn { width: 30px; height: 30px; border: 1px solid var(--green-b); background: transparent; color: var(--gray-m); cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; border-radius: 3px; transition: all 0.15s; }
+.ab-btn:hover { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+details summary { cursor: pointer; font-size: 20px; color: var(--gray-m); padding: 8px 0; list-style: none; display: flex; align-items: center; gap: 5px; }
+details summary::-webkit-details-marker { display: none; }
+details[open] summary { color: var(--blue); }
+
+/* Mobile */
+#menu-btn { display: none; position: fixed; top: 10px; left: 10px; z-index: 300; width: 34px; height: 34px; background: var(--green); border: 1px solid var(--green-b); color: var(--white); font-size: 20px; cursor: pointer; align-items: center; justify-content: center; border-radius: 4px; }
+
+
+/* ═══ PDF / PRINT STYLES ══════════════════════════ */
+@media print {
+  #sidebar, #topbar, #audio-bar, #hz-modal { display: none !important; }
+  #main { margin-left: 0 !important; width: 100% !important; }
+  #content { padding: 0 !important; }
+  .page-content { animation: none !important; }
+  body { background: white !important; font-size: 11pt; }
+  .lesson-hero { background: #1b5e20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
+  .dlg-header { background: #1b5e20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .vocab-table th { background: #1b5e20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .report-box { background: #1b5e20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .email-header { background: #1b5e20 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sec-title { color: #1565c0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .td-cn, .line-cn, .pat-cn, .cmd-cn { font-family: "Noto Serif SC", serif !important; }
+  .dlg-line { page-break-inside: avoid; }
+  .pattern-card, .exercise-box { page-break-inside: avoid; }
+  .dialogue-box { page-break-inside: avoid; margin-bottom: 8pt; }
+  .ex-opts { display: none !important; }
+  h1 { font-size: 18pt; color: #1b5e20; border-bottom: 2pt solid #1b5e20; padding-bottom: 4pt; margin-bottom: 10pt; }
+  h2 { font-size: 14pt; color: #1565c0; margin: 8pt 0 4pt; }
+}
+
+@media (max-width: 720px) {
+  #sidebar { transform: translateX(-100%); transition: transform 0.2s; }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; width: 100%; }
+  #audio-bar { left: 0; }
+  #menu-btn { display: flex; }
+  #content { padding: 14px; padding-top: 62px; }
+  #topbar { padding: 0 14px 0 52px; }
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.page-content { animation: fadeIn 0.2s ease; }
+</style>
+</head>
+<body>
+<button id="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<nav id="sidebar">
+  <div class="sb-logo">
+    <div style="display:flex;justify-content:center;margin-bottom:10px;">
+      <img src="data:image/png;base64,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" style="width:60px;height:60px;border-radius:6px;" alt="Logo">
+    </div>
+    <div style="font-size:13px;color:#8a9ab0;line-height:1.7;border-top:1px solid var(--green-b);padding-top:8px;">
+      <div>9/1 Bạch Văn Tư, Tân An, LA</div>
+      <div>Zalo: 0839 889 772</div>
+    </div>
+    <div class="sb-progress" style="margin-top:10px;"><div class="sb-progress-fill" id="progress-fill"></div></div>
+  </div>
+  <div class="sb-section">Trang chủ</div>
+  <div class="nav-item active" id="nav-home" onclick="showPage('home')"><div class="nav-num">~</div><div class="nav-text"><div class="nav-cn">Tổng quan</div><div class="nav-vn">Giới thiệu</div></div></div>
+  <div class="sb-section">Công xưởng</div>
+  <div class="nav-item" id="nav-l1" onclick="showPage('l1')"><div class="nav-num">1</div><div class="nav-text"><div class="nav-cn">走进工厂</div><div class="nav-vn">Bước vào công xưởng</div></div></div>
+  <div class="nav-item" id="nav-l2" onclick="showPage('l2')"><div class="nav-num">2</div><div class="nav-text"><div class="nav-cn">车间工作</div><div class="nav-vn">Làm việc tại xưởng</div></div></div>
+  <div class="nav-item" id="nav-l3" onclick="showPage('l3')"><div class="nav-num">3</div><div class="nav-text"><div class="nav-cn">生产操作</div><div class="nav-vn">Vận hành sản xuất</div></div></div>
+  <div class="nav-item" id="nav-l4" onclick="showPage('l4')"><div class="nav-num">4</div><div class="nav-text"><div class="nav-cn">设备维护</div><div class="nav-vn">Bảo trì thiết bị</div></div></div>
+  <div class="nav-item" id="nav-l5" onclick="showPage('l5')"><div class="nav-num">5</div><div class="nav-text"><div class="nav-cn">仓库管理</div><div class="nav-vn">Quản lý kho</div></div></div>
+  <div class="nav-item" id="nav-l6" onclick="showPage('l6')"><div class="nav-num">6</div><div class="nav-text"><div class="nav-cn">物流运输</div><div class="nav-vn">Vận tải & Logistics</div></div></div>
+  <div class="sb-section">Văn phòng</div>
+  <div class="nav-item" id="nav-l7" onclick="showPage('l7')"><div class="nav-num">7</div><div class="nav-text"><div class="nav-cn">办公室日常</div><div class="nav-vn">Văn phòng hàng ngày</div></div></div>
+  <div class="nav-item" id="nav-l8" onclick="showPage('l8')"><div class="nav-num">8</div><div class="nav-text"><div class="nav-cn">邮件与文档</div><div class="nav-vn">Email & Tài liệu</div></div></div>
+  <div class="nav-item" id="nav-l9" onclick="showPage('l9')"><div class="nav-num">9</div><div class="nav-text"><div class="nav-cn">人事行政</div><div class="nav-vn">Nhân sự & Hành chính</div></div></div>
+  <div class="nav-item" id="nav-l10" onclick="showPage('l10')"><div class="nav-num">10</div><div class="nav-text"><div class="nav-cn">财务报销</div><div class="nav-vn">Kế toán & Thanh toán</div></div></div>
+  <div class="nav-item" id="nav-l11" onclick="showPage('l11')"><div class="nav-num">11</div><div class="nav-text"><div class="nav-cn">客户沟通</div><div class="nav-vn">Giao tiếp khách hàng</div></div></div>
+  <div class="nav-item" id="nav-l12" onclick="showPage('l12')"><div class="nav-num">12</div><div class="nav-text"><div class="nav-cn">综合应用</div><div class="nav-vn">Tổng hợp ứng dụng</div></div></div>
+  <div class="sb-section">Phụ lục</div>
+  <div class="nav-item" id="nav-appendix" onclick="showPage('appendix')"><div class="nav-num">A</div><div class="nav-text"><div class="nav-cn">附录</div><div class="nav-vn">Biển báo, số đếm, ca</div></div></div>
+  <div class="nav-item" id="nav-hanzi" onclick="showPage('hanzi')"><div class="nav-num">W</div><div class="nav-text"><div class="nav-cn">练习写汉字</div><div class="nav-vn">Luyện viết chữ Hán</div></div></div>
+</nav>
+
+<div id="main">
+  <div id="topbar" style="justify-content:space-between;"><div id="topbar-title">工厂汉语</div><button onclick="exportPDF()" id="pdf-btn" style="padding:5px 16px;background:var(--orange);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;">⬇ Xuất PDF</button></div>
+  <div id="content"></div>
+</div>
+
+<div id="audio-bar">
+  <div class="ab-text"><div class="ab-cn" id="ab-cn">–</div><div class="ab-vn" id="ab-vn">–</div></div>
+  <div class="ab-progress"><div class="ab-progress-fill" id="ab-fill"></div></div>
+  <div class="ab-ctrl">
+    <button class="ab-btn" onclick="prevLine()">⏮</button>
+    <button class="ab-btn" id="ab-play" onclick="togglePause()">⏸</button>
+    <button class="ab-btn" onclick="nextLine()">⏭</button>
+    <button class="ab-btn" onclick="closeBar()">✕</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════
+const LESSONS = {
+  l1:{num:'第1课',cn:'走进工厂',vn:'Bước vào công xưởng',tags:['车间','设备','安全'],
+    vocab:[
+      {cn:'工厂',py:'gōngchǎng',vn:'nhà máy, công xưởng',ex:'这是电子工厂。'},
+      {cn:'车间',py:'chējiān',vn:'xưởng sản xuất',ex:'我在A车间工作。'},
+      {cn:'生产线',py:'shēngchǎn xiàn',vn:'dây chuyền sản xuất',ex:'这条生产线很快。'},
+      {cn:'机器',py:'jīqì',vn:'máy móc',ex:'这台机器是新的。'},
+      {cn:'设备',py:'shèbèi',vn:'thiết bị',ex:'设备需要保养。'},
+      {cn:'安全',py:'ānquán',vn:'an toàn',ex:'安全第一！'},
+      {cn:'危险',py:'wēixiǎn',vn:'nguy hiểm',ex:'这里危险，不要进去。'},
+      {cn:'防护',py:'fánghù',vn:'bảo hộ',ex:'请戴防护眼镜。'},
+    ],
+    dialogues:[
+      {title:'对话1：参观工厂',titleVn:'Tham quan công xưởng',lines:[
+        {speaker:'主管',gender:'male',cn:'小王，这是新来的同事，你带他参观一下车间。',py:'Xiǎo Wáng, zhè shì xīn lái de tóngshì, nǐ dài tā cānguān yīxià chējiān.',vn:'Tiểu Vương, đây là đồng nghiệp mới, cậu dẫn anh ấy tham quan xưởng.'},
+        {speaker:'小王',gender:'female',cn:'好的。这是我们的生产车间，一共有三条生产线。',py:'Hǎo de. Zhè shì wǒmen de shēngchǎn chējiān, yīgòng yǒu sān tiáo shēngchǎn xiàn.',vn:'Được ạ. Đây là xưởng sản xuất, có tổng cộng 3 dây chuyền.'},
+        {speaker:'新员工',gender:'male',cn:'这些机器是做什么的？',py:'Zhèxiē jīqì shì zuò shénme de?',vn:'Mấy cái máy này làm gì vậy?'},
+        {speaker:'小王',gender:'female',cn:'这是组装机器，那边是检测机器。所有的设备都很安全。',py:'Zhè shì zǔzhuāng jīqì, nà biān shì jiǎncè jīqì. Suǒyǒu de shèbèi dōu hěn ānquán.',vn:'Đây là máy lắp ráp, bên kia là máy kiểm tra. Tất cả thiết bị đều rất an toàn.'},
+        {speaker:'新员工',gender:'male',cn:'我需要戴安全帽吗？',py:'Wǒ xūyào dài ānquánmào ma?',vn:'Tôi cần đội mũ bảo hộ không?'},
+        {speaker:'小王',gender:'female',cn:'是的，进入车间必须戴安全帽和穿防护鞋。',py:'Shì de, jìnrù chējiān bìxū dài ānquánmào hé chuān fánghù xié.',vn:'Vâng, vào xưởng bắt buộc phải đội mũ bảo hộ và mang giày bảo hộ.'},
+      ]},
+      {title:'对话2：安全培训',titleVn:'Đào tạo an toàn',lines:[
+        {speaker:'安全员',gender:'male',cn:'大家注意，操作机器前一定要检查设备。',py:'Dàjiā zhùyì, cāozuò jīqì qián yīdìng yào jiǎnchá shèbèi.',vn:'Mọi người chú ý, trước khi vận hành máy nhất định phải kiểm tra thiết bị.'},
+        {speaker:'工人',gender:'female',cn:'如果机器坏了怎么办？',py:'Rúguǒ jīqì huài le zěnme bàn?',vn:'Nếu máy hỏng thì làm sao?'},
+        {speaker:'安全员',gender:'male',cn:'马上停机，通知维修人员。不要自己动手修理。',py:'Mǎshàng tíngjī, tōngzhī wéixiū rényuán. Bùyào zìjǐ dòngshǒu xiūlǐ.',vn:'Lập tức dừng máy, thông báo cho nhân viên bảo trì. Không tự ý sửa chữa.'},
+      ]},
+    ],
+    patterns:[
+      {num:'1',cn:'这是<span>...</span>，那是<span>...</span>',vn:'Đây là..., kia là...',ex:'这是原材料仓库，那是成品仓库。',expy:'Zhè shì yuáncáiliào cāngkù, nà shì chéngpǐn cāngkù.',exvn:'Đây là kho nguyên liệu, kia là kho thành phẩm.'},
+      {num:'2',cn:'<span>一共</span>有...',vn:'Có tổng cộng...',ex:'我们厂一共有五个车间。',expy:'Wǒmen chǎng yīgòng yǒu wǔ gè chējiān.',exvn:'Nhà máy chúng tôi có tổng cộng năm xưởng.'},
+      {num:'3',cn:'<span>必须</span>/<span>一定要</span>...',vn:'Bắt buộc phải...',ex:'进入车间必须穿工作服。',expy:'Jìnrù chējiān bìxū chuān gōngzuòfú.',exvn:'Vào xưởng bắt buộc phải mặc đồng phục.'},
+      {num:'4',cn:'<span>如果</span>...，<span>就</span>...',vn:'Nếu..., thì...',ex:'如果发现问题，就马上报告。',expy:'Rúguǒ fāxiàn wèntí, jiù mǎshàng bàogào.',exvn:'Nếu phát hiện vấn đề, hãy báo cáo ngay.'},
+    ],
+    exercises:[{type:'',q:'这是___，我们在这里生产电子产品。',qvn:'Đây là ___, chúng tôi sản xuất sản phẩm điện tử ở đây.',qpy:'Zhè shì ___, wǒmen zài zhèlǐ shēngchǎn diànzǐ chǎnpǐn.',blank:'___',options:['工厂','仓库','办公室','商店'],answer:'工厂'},{type:'',q:'我在A___工作，每天操作机器。',qvn:'Tôi làm việc ở ___ A, mỗi ngày vận hành máy móc.',qpy:'Wǒ zài A ___ gōngzuò, měitiān cāozuò jīqì.',blank:'___',options:['车间','房间','教室','厨房'],answer:'车间'},{type:'',q:'这条___每天能生产500件产品。',qvn:'___ này mỗi ngày có thể sản xuất 500 sản phẩm.',qpy:'Zhè tiáo ___ měitiān néng shēngchǎn 500 jiàn chǎnpǐn.',blank:'___',options:['生产线','公路','河流','走廊'],answer:'生产线'},{type:'',q:'这台___是新买的，运转很好。',qvn:'___ này mới mua, vận hành rất tốt.',qpy:'Zhè tái ___ shì xīn mǎi de, yùnzhuǎn hěn hǎo.',blank:'___',options:['机器','桌子','椅子','电脑'],answer:'机器'},{type:'',q:'所有的___都需要定期保养。',qvn:'Tất cả ___ đều cần bảo dưỡng định kỳ.',qpy:'Suǒyǒu de ___ dōu xūyào dìngqī bǎoyǎng.',blank:'___',options:['设备','文件','食物','衣服'],answer:'设备'},{type:'',q:'___第一！进入车间必须注意。',qvn:'___ là trên hết! Vào xưởng phải chú ý.',qpy:'___ dì yī! Jìnrù chējiān bìxū zhùyì.',blank:'___',options:['安全','速度','产量','质量'],answer:'安全'},{type:'',q:'这里很___，不要靠近高压电！',qvn:'Nơi này rất ___, đừng lại gần điện cao thế!',qpy:'Zhèlǐ hěn ___, bùyào kào jìn gāoyā diàn!',blank:'___',options:['危险','安全','干净','整洁'],answer:'危险'},{type:'',q:'进入车间必须穿___装备。',qvn:'Vào xưởng bắt buộc phải mặc trang bị ___.',qpy:'Jìnrù chējiān bìxū chuān ___ zhuāngbèi.',blank:'___',options:['防护','普通','运动','休闲'],answer:'防护'},{type:'',q:'进入车间___戴安全帽。',qvn:'Vào xưởng ___ phải đội mũ bảo hộ.',qpy:'Jìnrù chējiān ___ dài ānquánmào.',blank:'___',options:['必须','可以','不要','有时'],answer:'必须'},{type:'',q:'___发现问题，___马上报告给主管。',qvn:'___ phát hiện vấn đề, ___ báo cáo ngay cho chủ quản.',qpy:'___ fāxiàn wèntí, ___ mǎshàng bàogào gěi zhǔguǎn.',blank:'___',options:['如果/就','因为/所以','虽然/但是','不管/都'],answer:'如果/就'}],
+  },
+  l2:{num:'第2课',cn:'车间工作',vn:'Làm việc tại xưởng',tags:['考勤','轮班','打卡'],
+    vocab:[
+      {cn:'上班',py:'shàngbān',vn:'đi làm',ex:'我八点上班。'},
+      {cn:'下班',py:'xiàbān',vn:'tan làm',ex:'五点下班。'},
+      {cn:'加班',py:'jiābān',vn:'tăng ca',ex:'今天需要加班。'},
+      {cn:'轮班',py:'lúnbān',vn:'ca kíp',ex:'轮班制度。'},
+      {cn:'白班',py:'báibān',vn:'ca ngày',ex:'我喜欢上白班。'},
+      {cn:'夜班',py:'yèbān',vn:'ca đêm',ex:'夜班辛苦。'},
+      {cn:'打卡',py:'dǎkǎ',vn:'chấm công',ex:'上班要打卡。'},
+      {cn:'迟到',py:'chídào',vn:'đi muộn',ex:'不能迟到。'},
+      {cn:'早退',py:'zǎotuì',vn:'về sớm',ex:'不可以早退。'},
+      {cn:'请假',py:'qǐngjià',vn:'xin nghỉ',ex:'我要请假一天。'},
+    ],
+    dialogues:[
+      {title:'对话1：考勤问题',titleVn:'Vấn đề chấm công',lines:[
+        {speaker:'工人',gender:'female',cn:'主管，我今天早上打卡没成功。',py:'Zhǔguǎn, wǒ jīntiān zǎoshang dǎkǎ méi chénggōng.',vn:'Chủ quản, sáng nay tôi chấm công không thành công.'},
+        {speaker:'主管',gender:'male',cn:'几点打的卡？',py:'Jǐ diǎn dǎ de kǎ?',vn:'Mấy giờ chấm công?'},
+        {speaker:'工人',gender:'female',cn:'七点五十分，但是机器显示错误。',py:'Qī diǎn wǔshí fēn, dànshì jīqì xiǎnshì cuòwù.',vn:'7 giờ 50, nhưng máy hiển thị lỗi.'},
+        {speaker:'主管',gender:'male',cn:'好的，我帮你手动记录。下次如果打卡有问题，马上告诉我。',py:'Hǎo de, wǒ bāng nǐ shǒudòng jìlù. Xià cì rúguǒ dǎkǎ yǒu wèntí, mǎshàng gàosù wǒ.',vn:'Được, tôi ghi chép thủ công giúp cậu. Lần sau có vấn đề, báo ngay cho tôi.'},
+      ]},
+      {title:'对话2：换班申请',titleVn:'Đăng ký đổi ca',lines:[
+        {speaker:'工人',gender:'female',cn:'主管，我想申请下周换到白班。',py:'Zhǔguǎn, wǒ xiǎng shēnqǐng xià zhōu huàn dào báibān.',vn:'Chủ quản, tôi muốn đăng ký tuần sau đổi sang ca ngày.'},
+        {speaker:'主管',gender:'male',cn:'为什么？你现在不是上夜班吗？',py:'Wèishénme? Nǐ xiànzài bù shì shàng yèbān ma?',vn:'Tại sao? Hiện tại cậu không phải làm ca đêm sao?'},
+        {speaker:'工人',gender:'female',cn:'是的，但是我孩子生病了，晚上需要照顾。',py:'Shì de, dànshì wǒ háizi shēngbìng le, wǎnshàng xūyào zhàogù.',vn:'Vâng, nhưng con tôi bệnh, tối cần chăm sóc.'},
+        {speaker:'主管',gender:'male',cn:'理解。我看看能不能安排。你先填一张换班申请表。',py:'Lǐjiě. Wǒ kànkan néng bu néng ānpái. Nǐ xiān tián yī zhāng huànbān shēnqǐng biǎo.',vn:'Hiểu rồi. Tôi xem có sắp xếp được không. Cậu điền tờ đăng ký đổi ca trước.'},
+      ]},
+    ],
+    patterns:[
+      {num:'1',cn:'<span>需要</span>/要...',vn:'Cần phải...',ex:'今天需要加班两小时。',expy:'Jīntiān xūyào jiābān liǎng gè xiǎoshí.',exvn:'Hôm nay cần tăng ca hai giờ.'},
+      {num:'2',cn:'<span>申请</span>...',vn:'Đăng ký / xin...',ex:'我申请调到白班。',expy:'Wǒ shēnqǐng diào dào báibān.',exvn:'Tôi xin chuyển sang ca ngày.'},
+      {num:'3',cn:'先...，再...',vn:'Trước tiên..., sau đó...',ex:'先打卡，再进入车间。',expy:'Xiān dǎkǎ, zài jìnrù chējiān.',exvn:'Trước tiên chấm công, rồi mới vào xưởng.'},
+    ],
+    commands:[
+      {cn:'开始生产！',py:'Kāishǐ shēngchǎn!',vn:'Bắt đầu sản xuất!'},
+      {cn:'停机检查！',py:'Tíngjī jiǎnchá!',vn:'Dừng máy kiểm tra!'},
+      {cn:'注意安全！',py:'Zhùyì ānquán!',vn:'Chú ý an toàn!'},
+      {cn:'清理现场！',py:'Qīnglǐ xiànchǎng!',vn:'Dọn dẹp hiện trường!'},
+      {cn:'保持清洁！',py:'Bǎochí qīngjié!',vn:'Giữ vệ sinh!'},
+    ],
+    exercises:[{type:'',q:'我每天八点___，五点___。',qvn:'Tôi mỗi ngày 8 giờ ___, 5 giờ ___.',qpy:'Wǒ měitiān bā diǎn ___, wǔ diǎn ___.',blank:'___',options:['上班/下班','下班/上班','打卡/请假','加班/休息'],answer:'上班/下班'},{type:'',q:'订单太多，今天需要___两个小时。',qvn:'Đơn hàng quá nhiều, hôm nay cần ___ thêm hai giờ.',qpy:'Dìngdān tài duō, jīntiān xūyào ___ liǎng gè xiǎoshí.',blank:'___',options:['加班','请假','早退','迟到'],answer:'加班'},{type:'',q:'工厂实行三___制，早中晚各八小时。',qvn:'Nhà máy thực hiện chế độ ba ___, sáng chiều tối mỗi ca tám tiếng.',qpy:'Gōngchǎng shíxíng sān ___ zhì, zǎo zhōng wǎn gè bā xiǎoshí.',blank:'___',options:['轮班','白班','夜班','加班'],answer:'轮班'},{type:'',q:'我更喜欢上___，晚上可以陪家人。',qvn:'Tôi thích làm ___ hơn, tối có thể ở bên gia đình.',qpy:'Wǒ gèng xǐhuān shàng ___, wǎnshàng kěyǐ péi jiārén.',blank:'___',options:['白班','夜班','加班','轮班'],answer:'白班'},{type:'',q:'___太辛苦了，白天睡不好。',qvn:'___ quá vất vả, ban ngày ngủ không được.',qpy:'___ tài xīnkǔ le, báitiān shuì bù hǎo.',blank:'___',options:['夜班','白班','早班','午班'],answer:'夜班'},{type:'',q:'上班一定要___，记录上班时间。',qvn:'Đi làm nhất định phải ___, ghi lại giờ vào làm.',qpy:'Shàngbān yīdìng yào ___, jìlù shàngbān shíjiān.',blank:'___',options:['打卡','请假','早退','加班'],answer:'打卡'},{type:'',q:'不能___，否则会被扣工资。',qvn:'Không được ___, nếu không sẽ bị trừ lương.',qpy:'Bù néng ___, fǒuzé huì bèi kòu gōngzī.',blank:'___',options:['迟到','上班','打卡','轮班'],answer:'迟到'},{type:'',q:'未经批准不可以___，必须等到下班时间。',qvn:'Chưa được phê duyệt không thể ___, phải chờ đến giờ tan làm.',qpy:'Wèijīng pīzhǔn bù kěyǐ ___, bìxū děng dào xiàbān shíjiān.',blank:'___',options:['早退','上班','打卡','加班'],answer:'早退'},{type:'',q:'孩子生病了，需要向主管___三天。',qvn:'Con bệnh rồi, cần xin chủ quản ___ ba ngày.',qpy:'Háizi shēngbìng le, xūyào xiàng zhǔguǎn ___ sān tiān.',blank:'___',options:['请假','加班','打卡','迟到'],answer:'请假'},{type:'',q:'工人打卡没成功，主管说要___记录。',qvn:'Công nhân chấm công không thành công, chủ quản nói cần ghi chép ___.',qpy:'Gōngrén dǎkǎ méi chénggōng, zhǔguǎn shuō yào ___ jìlù.',blank:'___',options:['手动','自动','电脑','机器'],answer:'手动'}],
+  },
+  l3:{num:'第3课',cn:'生产操作',vn:'Vận hành sản xuất',tags:['质量','产量','工序'],
+    vocab:[
+      {cn:'原材料',py:'yuáncáiliào',vn:'nguyên liệu thô',ex:'准备原材料。'},
+      {cn:'半成品',py:'bànchéngpǐn',vn:'bán thành phẩm',ex:'半成品放中间。'},
+      {cn:'成品',py:'chéngpǐn',vn:'thành phẩm',ex:'成品入库。'},
+      {cn:'合格',py:'hégé',vn:'đạt chuẩn',ex:'这批产品合格。'},
+      {cn:'不合格',py:'bùhégé',vn:'không đạt, lỗi',ex:'这个不合格，返工。'},
+      {cn:'返工',py:'fǎngōng',vn:'làm lại',ex:'需要返工处理。'},
+      {cn:'报废',py:'bàofèi',vn:'loại bỏ',ex:'损坏太严重，报废。'},
+      {cn:'产量',py:'chǎnliàng',vn:'sản lượng',ex:'今日产量500件。'},
+      {cn:'质量',py:'zhìliàng',vn:'chất lượng',ex:'质量第一！'},
+      {cn:'效率',py:'xiàolǜ',vn:'hiệu suất',ex:'提高效率。'},
+    ],
+    dialogues:[{title:'对话：质量控制',titleVn:'Kiểm soát chất lượng',lines:[
+      {speaker:'质检员',gender:'female',cn:'这批产品抽检不合格率太高。',py:'Zhè pī chǎnpǐn chōujiǎn bù hégé lǜ tài gāo.',vn:'Tỷ lệ không đạt kiểm tra mẫu lô hàng này quá cao.'},
+      {speaker:'班长',gender:'male',cn:'什么问题？',py:'Shénme wèntí?',vn:'Vấn đề gì?'},
+      {speaker:'质检员',gender:'female',cn:'外观有划痕，尺寸也超差。',py:'Wàiguān yǒu huáhén, chǐcùn yě chāo chā.',vn:'Bề ngoài có vết xước, kích thước cũng sai lệch.'},
+      {speaker:'班长',gender:'male',cn:'我马上让工人检查上一道工序。',py:'Wǒ mǎshàng ràng gōngrén jiǎnchá shàng yī dào gōngxù.',vn:'Tôi lập tức bảo công nhân kiểm tra công đoạn trước.'},
+      {speaker:'质检员',gender:'female',cn:'这批需要返工，不能入库。',py:'Zhè pī xūyào fǎngōng, bù néng rùkù.',vn:'Lô này cần làm lại, không được nhập kho.'},
+      {speaker:'班长',gender:'male',cn:'好的，我们今天下午完成返工。',py:'Hǎo de, wǒmen jīntiān xiàwǔ wánchéng fǎngōng.',vn:'Được, chúng tôi chiều nay hoàn thành làm lại.'},
+    ]}],
+    patterns:[
+      {num:'1',cn:'<span>太</span>...了',vn:'Quá...',ex:'这批产品不合格率太高了。',expy:'Zhè pī chǎnpǐn bù hégé lǜ tài gāo le.',exvn:'Tỷ lệ lỗi lô hàng này quá cao.'},
+      {num:'2',cn:'<span>马上</span>/立刻...',vn:'Lập tức...',ex:'发现问题，马上停机。',expy:'Fāxiàn wèntí, mǎshàng tíngjī.',exvn:'Phát hiện vấn đề, lập tức dừng máy.'},
+      {num:'3',cn:'不能...',vn:'Không được...',ex:'不合格产品不能入库。',expy:'Bù hégé chǎnpǐn bù néng rùkù.',exvn:'Sản phẩm không đạt không được nhập kho.'},
+    ],
+    report:{title:'日报表 — Báo cáo ngày',rows:[
+      {label:'今日产量 Sản lượng',val:'500件',type:'good'},
+      {label:'合格数量 Số lượng đạt',val:'480件',type:'good'},
+      {label:'不良数量 Số lượng lỗi',val:'20件',type:'bad'},
+      {label:'不良率 Tỷ lệ lỗi',val:'4%',type:'bad'},
+      {label:'完成率 Tỷ lệ hoàn thành',val:'95%',type:'good'},
+    ]},
+    exercises:[{type:'',q:'生产前需要检查___是否齐全。',qvn:'Trước khi sản xuất cần kiểm tra ___ có đầy đủ không.',qpy:'Shēngchǎn qián xūyào jiǎnchá ___ shìfǒu qíquán.',blank:'___',options:['原材料','成品','报废品','返工品'],answer:'原材料'},{type:'',q:'___检验合格后才能送到下一道工序。',qvn:'___ kiểm tra đạt chuẩn mới có thể chuyển đến công đoạn tiếp theo.',qpy:'___ jiǎnyàn hégé hòu cái néng sòng dào xià yī dào gōngxù.',blank:'___',options:['半成品','原材料','报废品','废料'],answer:'半成品'},{type:'',q:'质检合格的___才可以入库。',qvn:'___ đạt kiểm tra chất lượng mới được nhập kho.',qpy:'Zhì jiǎn hégé de ___ cái kěyǐ rùkù.',blank:'___',options:['成品','原材料','废料','零件'],answer:'成品'},{type:'',q:'这批产品检验___，可以出货。',qvn:'Lô sản phẩm này kiểm tra ___, có thể xuất hàng.',qpy:'Zhè pī chǎnpǐn jiǎnyàn ___, kěyǐ chūhuò.',blank:'___',options:['合格','不合格','报废','返工'],answer:'合格'},{type:'',q:'外观有划痕，这批产品___，不能出货。',qvn:'Bề ngoài có vết xước, lô sản phẩm này ___, không thể xuất hàng.',qpy:'Wàiguān yǒu huáhén, zhè pī chǎnpǐn ___, bù néng chūhuò.',blank:'___',options:['不合格','合格','完成','入库'],answer:'不合格'},{type:'',q:'尺寸超差的产品需要___，重新加工。',qvn:'Sản phẩm kích thước sai lệch cần ___, gia công lại.',qpy:'Chǐcùn chāo chā de chǎnpǐn xūyào ___, chóngxīn jiāgōng.',blank:'___',options:['返工','报废','入库','出库'],answer:'返工'},{type:'',q:'损坏严重，无法修复，只能___处理。',qvn:'Hỏng hóc nghiêm trọng, không thể sửa, chỉ có thể xử lý ___.',qpy:'Sǔnhuài yánzhòng, wúfǎ xiūfù, zhǐ néng ___ chǔlǐ.',blank:'___',options:['报废','返工','入库','出货'],answer:'报废'},{type:'',q:'今天的___是500件，完成率95%。',qvn:'___ hôm nay là 500 chiếc, tỷ lệ hoàn thành 95%.',qpy:'Jīntiān de ___ shì 500 jiàn, wánchéng lǜ 95%.',blank:'___',options:['产量','质量','效率','报废率'],answer:'产量'},{type:'',q:'产品外观有划痕，不合格。需要___。',qvn:'Bề ngoài sản phẩm có vết xước, không đạt. Cần ___.',qpy:'Chǎnpǐn wàiguān yǒu huáhén, bù hégé. Xūyào ___.',blank:'___',options:['返工','入库','发货','报价'],answer:'返工'},{type:'',q:'提高生产___才能按时完成订单。',qvn:'Nâng cao ___ sản xuất mới có thể hoàn thành đơn hàng đúng hạn.',qpy:'Tígāo shēngchǎn ___ cái néng ànshí wánchéng dìngdān.',blank:'___',options:['效率','产量','质量','速度'],answer:'效率'}],
+  },
+  l4:{num:'第4课',cn:'设备维护',vn:'Bảo trì thiết bị',tags:['保养','维修','故障'],
+    vocab:[
+      {cn:'保养',py:'bǎoyǎng',vn:'bảo dưỡng',ex:'定期保养机器。'},
+      {cn:'维修',py:'wéixiū',vn:'sửa chữa',ex:'需要维修。'},
+      {cn:'故障',py:'gùzhàng',vn:'sự cố, hỏng hóc',ex:'机器发生故障。'},
+      {cn:'零件',py:'língjiàn',vn:'linh kiện',ex:'更换零件。'},
+      {cn:'更换',py:'gēnghuàn',vn:'thay thế',ex:'更换新零件。'},
+      {cn:'润滑',py:'rùnhuá',vn:'bôi trơn',ex:'需要润滑处理。'},
+      {cn:'清洁',py:'qīngjié',vn:'vệ sinh',ex:'保持清洁。'},
+      {cn:'调试',py:'tiáoshì',vn:'hiệu chỉnh',ex:'调试完成。'},
+      {cn:'停机时间',py:'tíngjī shíjiān',vn:'thời gian dừng máy',ex:'减少停机时间。'},
+      {cn:'预防维护',py:'yùfáng wéihù',vn:'bảo trì phòng ngừa',ex:'预防维护很重要。'},
+    ],
+    dialogues:[{title:'对话：设备故障',titleVn:'Sự cố thiết bị',lines:[
+      {speaker:'维修工',gender:'male',cn:'这台机器有什么故障？',py:'Zhè tái jīqì yǒu shénme gùzhàng?',vn:'Máy này có sự cố gì?'},
+      {speaker:'操作工',gender:'female',cn:'声音很大，而且温度很高。',py:'Shēngyīn hěn dà, érqiě wēndù hěn gāo.',vn:'Tiếng rất to, và nhiệt độ rất cao.'},
+      {speaker:'维修工',gender:'male',cn:'我检查一下。可能是轴承需要润滑了。',py:'Wǒ jiǎnchá yīxià. Kěnéng shì zhóuchéng xūyào rùnhuá le.',vn:'Tôi kiểm tra. Có lẽ ổ bi cần bôi trơn.'},
+      {speaker:'操作工',gender:'female',cn:'需要停机多久？',py:'Xūyào tíngjī duōjiǔ?',vn:'Cần dừng máy bao lâu?'},
+      {speaker:'维修工',gender:'male',cn:'大概两个小时，包括更换零件的时间。',py:'Dàgài liǎng gè xiǎoshí, bāokuò gēnghuàn língjiàn de shíjiān.',vn:'Khoảng 2 tiếng, bao gồm thời gian thay linh kiện.'},
+    ]}],
+    patterns:[
+      {num:'1',cn:'可能是...',vn:'Có lẽ là...',ex:'可能是零件坏了。',expy:'Kěnéng shì língjiàn huài le.',exvn:'Có lẽ linh kiện bị hỏng.'},
+      {num:'2',cn:'大概...',vn:'Khoảng...',ex:'大概需要两个小时。',expy:'Dàgài xūyào liǎng gè xiǎoshí.',exvn:'Khoảng cần hai giờ.'},
+    ],
+    exercises:[{type:'',q:'机器需要定期___，才能保持良好状态。',qvn:'Máy móc cần ___ định kỳ mới có thể duy trì trạng thái tốt.',qpy:'Jīqì xūyào dìngqī ___, cái néng bǎochí liánghǎo zhuàngtài.',blank:'___',options:['保养','报废','停机','更换'],answer:'保养'},{type:'',q:'机器坏了需要___，请通知维修部门。',qvn:'Máy hỏng cần ___, vui lòng thông báo bộ phận bảo trì.',qpy:'Jīqì huài le xūyào ___, qǐng tōngzhī wéixiū bùmén.',blank:'___',options:['维修','报废','保养','停机'],answer:'维修'},{type:'',q:'机器发生___，立刻停机检查。',qvn:'Máy xảy ra ___, lập tức dừng máy kiểm tra.',qpy:'Jīqì fāshēng ___, lìkè tíngjī jiǎnchá.',blank:'___',options:['故障','保养','维修','润滑'],answer:'故障'},{type:'',q:'这个___已经磨损，需要更换新的。',qvn:'___ này đã mài mòn, cần thay mới.',qpy:'Zhège ___ yǐjīng mósǔn, xūyào gēnghuàn xīn de.',blank:'___',options:['零件','设备','机器','工具'],answer:'零件'},{type:'',q:'旧零件需要___新的，否则影响生产。',qvn:'Linh kiện cũ cần ___ cái mới, nếu không ảnh hưởng sản xuất.',qpy:'Jiù língjiàn xūyào ___ xīn de, fǒuzé yǐngxiǎng shēngchǎn.',blank:'___',options:['更换','维修','保养','检查'],answer:'更换'},{type:'',q:'轴承需要___，否则会因摩擦过热损坏。',qvn:'Ổ bi cần ___, nếu không sẽ bị hỏng do ma sát quá nhiệt.',qpy:'Zhóuchéng xūyào ___, fǒuzé huì yīn mócā guòrè sǔnhuài.',blank:'___',options:['润滑','维修','更换','检查'],answer:'润滑'},{type:'',q:'每周必须___一次机器，保持良好状态。',qvn:'Mỗi tuần phải ___ máy một lần, giữ trạng thái tốt.',qpy:'Měi zhōu bìxū ___ yī cì jīqì, bǎochí liánghǎo zhuàngtài.',blank:'___',options:['清洁','维修','更换','报废'],answer:'清洁'},{type:'',q:'新机器安装后需要___，确认运行正常。',qvn:'Sau khi lắp đặt máy mới cần ___, xác nhận vận hành bình thường.',qpy:'Xīn jīqì ānzhuāng hòu xūyào ___, quèrèn yùnxíng zhèngcháng.',blank:'___',options:['调试','维修','报废','润滑'],answer:'调试'},{type:'',q:'减少___可以提高生产效率。',qvn:'Giảm ___ có thể nâng cao hiệu suất sản xuất.',qpy:'Jiǎnshǎo ___ kěyǐ tígāo shēngchǎn xiàolǜ.',blank:'___',options:['停机时间','工作时间','加班时间','保养时间'],answer:'停机时间'},{type:'',q:'机器声音很大，可能是轴承需要___。',qvn:'Máy kêu to, có lẽ ổ bi cần ___.',qpy:'Jīqì shēngyīn hěn dà, kěnéng shì zhóuchéng xūyào ___.',blank:'___',options:['润滑','清洁','更换','调试'],answer:'润滑'}],
+  },
+  l5:{num:'第5课',cn:'仓库管理',vn:'Quản lý kho',tags:['入库','出库','盘点'],
+    vocab:[
+      {cn:'入库',py:'rùkù',vn:'nhập kho',ex:'货物入库。'},
+      {cn:'出库',py:'chūkù',vn:'xuất kho',ex:'今天出库50件。'},
+      {cn:'库存',py:'kùcún',vn:'tồn kho',ex:'库存不够了。'},
+      {cn:'盘点',py:'pándiǎn',vn:'kiểm kê',ex:'月底盘点。'},
+      {cn:'货架',py:'huòjià',vn:'kệ hàng',ex:'放在货架上。'},
+      {cn:'叉车',py:'chāchē',vn:'xe nâng',ex:'叉车司机。'},
+      {cn:'物料',py:'wùliào',vn:'vật liệu',ex:'领取物料。'},
+      {cn:'标签',py:'biāoqiān',vn:'nhãn mác',ex:'贴好标签。'},
+      {cn:'批次',py:'pīcì',vn:'lô hàng',ex:'批次号A001。'},
+      {cn:'先进先出',py:'xiānjìn xiānchū',vn:'FIFO — nhập trước xuất trước',ex:'遵守先进先出原则。'},
+    ],
+    dialogues:[{title:'对话：仓库操作',titleVn:'Thao tác kho',lines:[
+      {speaker:'仓管员',gender:'female',cn:'这批原材料什么时候入库的？',py:'Zhè pī yuáncáiliào shénme shíhou rùkù de?',vn:'Lô nguyên liệu này nhập kho khi nào?'},
+      {speaker:'叉车司机',gender:'male',cn:'昨天入库的，批次号是A20240315。',py:'Zuótiān rùkù de, pīcì hào shì A20240315.',vn:'Hôm qua nhập kho, số lô là A20240315.'},
+      {speaker:'仓管员',gender:'female',cn:'放在哪个货架？',py:'Fàng zài nǎge huòjià?',vn:'Để ở kệ nào?'},
+      {speaker:'叉车司机',gender:'male',cn:'B区3号货架。标签已经贴好了。',py:'B qū 3 hào huòjià. Biāoqiān yǐjīng tiē hǎo le.',vn:'Kệ số 3 khu B. Nhãn đã dán xong.'},
+      {speaker:'仓管员',gender:'female',cn:'好的，我系统录入一下。记住要先进先出。',py:'Hǎo de, wǒ xìtǒng lùrù yīxià. Jìzhù yào xiānjìn xiānchū.',vn:'Được, tôi nhập hệ thống. Nhớ nhập trước xuất trước.'},
+    ]}],
+    patterns:[
+      {num:'1',cn:'什么时候...的？',vn:'Khi nào... vậy?',ex:'这批货什么时候入库的？',expy:'Zhè pī huò shénme shíhou rùkù de?',exvn:'Lô hàng này nhập kho khi nào?'},
+      {num:'2',cn:'已经...了',vn:'Đã... rồi',ex:'标签已经贴好了。',expy:'Biāoqiān yǐjīng tiē hǎo le.',exvn:'Nhãn đã dán xong rồi.'},
+      {num:'3',cn:'记住...',vn:'Nhớ phải...',ex:'记住要先进先出。',expy:'Jìzhù yào xiānjìn xiānchū.',exvn:'Nhớ phải nhập trước xuất trước.'},
+    ],
+    exercises:[{type:'',q:'货物到达后需要办理___手续。',qvn:'Sau khi hàng đến cần làm thủ tục ___.',qpy:'Huòwù dàodá hòu xūyào bànlǐ ___ shǒuxù.',blank:'___',options:['入库','出库','盘点','报废'],answer:'入库'},{type:'',q:'客户需要货物，仓库办理___手续发货。',qvn:'Khách hàng cần hàng, kho làm thủ tục ___ để giao hàng.',qpy:'Kèhù xūyào huòwù, cāngkù bànlǐ ___ shǒuxù fāhuò.',blank:'___',options:['出库','入库','盘点','检查'],answer:'出库'},{type:'',q:'仓库___只有200件，不够本次订单需求。',qvn:'___ kho chỉ có 200 chiếc, không đủ nhu cầu đơn hàng lần này.',qpy:'Cāngkù ___ zhǐ yǒu 200 jiàn, bùgòu běncì dìngdān xūqiú.',blank:'___',options:['库存','货架','批次','标签'],answer:'库存'},{type:'',q:'月底需要___，核对实际库存数量。',qvn:'Cuối tháng cần ___, đối chiếu số lượng tồn kho thực tế.',qpy:'Yuè dǐ xūyào ___, hé duì shíjì kùcún shùliàng.',blank:'___',options:['盘点','入库','出库','发货'],answer:'盘点'},{type:'',q:'把货物放在B区3号___上。',qvn:'Để hàng lên ___ số 3 khu B.',qpy:'Bǎ huòwù fàng zài B qū 3 hào ___ shàng.',blank:'___',options:['货架','托盘','叉车','标签'],answer:'货架'},{type:'',q:'___司机把货物搬到指定位置。',qvn:'Tài xế ___ chuyển hàng đến vị trí chỉ định.',qpy:'___ sījī bǎ huòwù bān dào zhǐdìng wèizhì.',blank:'___',options:['叉车','卡车','货车','班车'],answer:'叉车'},{type:'',q:'领取生产所需的___时，需要填写领料单。',qvn:'Khi lĩnh ___ cần thiết cho sản xuất, cần điền phiếu lĩnh vật tư.',qpy:'Lǐngqǔ shēngchǎn suǒxū de ___ shí, xūyào tiánxiě lǐngliào dān.',blank:'___',options:['物料','成品','废料','零件'],answer:'物料'},{type:'',q:'每箱货物都需要贴___，注明品名和数量。',qvn:'Mỗi thùng hàng cần dán ___, ghi rõ tên hàng và số lượng.',qpy:'Měi xiāng huòwù dōu xūyào tiē ___, zhùmíng pǐnmíng hé shùliàng.',blank:'___',options:['标签','发票','合同','单据'],answer:'标签'},{type:'',q:'这批货物的___号是A20240315。',qvn:'Số ___ của lô hàng này là A20240315.',qpy:'Zhè pī huòwù de ___ hào shì A20240315.',blank:'___',options:['批次','货架','库存','标签'],answer:'批次'},{type:'',q:'仓库管理的原则是___。',qvn:'Nguyên tắc quản lý kho là ___.',qpy:'Cāngkù guǎnlǐ de yuánzé shì ___.',blank:'___',options:['先进先出','后进先出','随机出库','按重量'],answer:'先进先出'}],
+  },
+  l6:{num:'第6课',cn:'物流运输',vn:'Vận tải & Logistics',tags:['发货','运输','物流'],
+    vocab:[
+      {cn:'发货',py:'fāhuò',vn:'giao hàng, xuất hàng',ex:'今天发货。'},
+      {cn:'收货',py:'shōuhuò',vn:'nhận hàng',ex:'收货签字。'},
+      {cn:'运输',py:'yùnshū',vn:'vận chuyển',ex:'陆运运输。'},
+      {cn:'物流',py:'wùliú',vn:'logistics',ex:'物流公司。'},
+      {cn:'包装',py:'bāozhuāng',vn:'đóng gói',ex:'仔细包装。'},
+      {cn:'装箱',py:'zhuāngxiāng',vn:'đóng thùng',ex:'装箱完成。'},
+      {cn:'托盘',py:'tuōpán',vn:'pallet',ex:'20托货物。'},
+      {cn:'集装箱',py:'jízhuāngxiāng',vn:'container',ex:'海运用集装箱。'},
+      {cn:'货运单',py:'huòyùndān',vn:'vận đơn',ex:'填写货运单。'},
+      {cn:'签收',py:'qiānshōu',vn:'ký nhận',ex:'请签收。'},
+    ],
+    dialogues:[{title:'对话：物流安排',titleVn:'Sắp xếp logistics',lines:[
+      {speaker:'物流员',gender:'male',cn:'这批货什么时候发？',py:'Zhè pī huò shénme shíhou fā?',vn:'Lô hàng này giao khi nào?'},
+      {speaker:'仓管员',gender:'female',cn:'今天下午发货，明天上午到客户那里。',py:'Jīntiān xiàwǔ fāhuò, míngtiān shàngwǔ dào kèhù nàli.',vn:'Chiều nay giao hàng, sáng mai đến chỗ khách hàng.'},
+      {speaker:'物流员',gender:'male',cn:'用什么运输方式？',py:'Yòng shénme yùnshū fāngshì?',vn:'Dùng phương thức vận chuyển gì?'},
+      {speaker:'仓管员',gender:'female',cn:'陆运，卡车运输。一共20托。',py:'Lùyùn, kǎchē yùnshū. Yīgòng 20 tuō.',vn:'Vận tải đường bộ, xe tải. Tổng cộng 20 pallet.'},
+      {speaker:'物流员',gender:'male',cn:'货运单号给我，我跟踪一下。',py:'Huòyùndān hào gěi wǒ, wǒ gēnzōng yīxià.',vn:'Cho tôi số vận đơn, tôi theo dõi.'},
+    ]}],
+    patterns:[
+      {num:'1',cn:'...方式',vn:'Phương thức...',ex:'用什么运输方式？',expy:'Yòng shénme yùnshū fāngshì?',exvn:'Dùng phương thức vận chuyển gì?'},
+      {num:'2',cn:'一共...',vn:'Tổng cộng...',ex:'一共20托。',expy:'Yīgòng 20 tuō.',exvn:'Tổng cộng 20 pallet.'},
+    ],
+    exercises:[{type:'',q:'产品生产完成，今天下午___给客户。',qvn:'Sản phẩm sản xuất xong, chiều nay ___ cho khách hàng.',qpy:'Chǎnpǐn shēngchǎn wánchéng, jīntiān xiàwǔ ___ gěi kèhù.',blank:'___',options:['发货','收货','入库','盘点'],answer:'发货'},{type:'',q:'货物已到达，请签字___。',qvn:'Hàng đã đến, vui lòng ký ___.',qpy:'Huòwù yǐ dàodá, qǐng qiānzì ___.',blank:'___',options:['收货','发货','出库','入库'],answer:'收货'},{type:'',q:'这批货物通过陆路___，明天到达。',qvn:'Lô hàng này qua đường bộ ___, ngày mai đến nơi.',qpy:'Zhè pī huòwù tōngguò lùlù ___, míngtiān dàodá.',blank:'___',options:['运输','发货','收货','入库'],answer:'运输'},{type:'',q:'我们公司负责整个供应链的___管理。',qvn:'Công ty chúng tôi phụ trách quản lý ___ toàn bộ chuỗi cung ứng.',qpy:'Wǒmen gōngsī fùzé zhěnggè gōngyìng liàn de ___ guǎnlǐ.',blank:'___',options:['物流','仓储','生产','质量'],answer:'物流'},{type:'',q:'产品需要仔细___，防止运输过程中损坏。',qvn:'Sản phẩm cần ___ cẩn thận, tránh hư hỏng trong quá trình vận chuyển.',qpy:'Chǎnpǐn xūyào zǐxì ___, fángzhǐ yùnshū guòchéng zhōng sǔnhuài.',blank:'___',options:['包装','发货','运输','入库'],answer:'包装'},{type:'',q:'将产品放入箱子，完成___工作。',qvn:'Cho sản phẩm vào thùng, hoàn thành công việc ___.',qpy:'Jiāng chǎnpǐn fàng rù xiāngzi, wánchéng ___ gōngzuò.',blank:'___',options:['装箱','发货','打包','入库'],answer:'装箱'},{type:'',q:'仓库里有20个___，每个装500件货物。',qvn:'Trong kho có 20 ___, mỗi cái chứa 500 chiếc hàng.',qpy:'Cāngkù lǐ yǒu 20 gè ___, měi gè zhuāng 500 jiàn huòwù.',blank:'___',options:['托盘','货架','箱子','袋子'],answer:'托盘'},{type:'',q:'海运需要使用___装载货物。',qvn:'Vận tải biển cần dùng ___ để chứa hàng.',qpy:'Hǎiyùn xūyào shǐyòng ___ zhuāngzài huòwù.',blank:'___',options:['集装箱','托盘','货架','箱子'],answer:'集装箱'},{type:'',q:'请将___号发给我，方便追踪货物。',qvn:'Vui lòng gửi cho tôi số ___, tiện theo dõi hàng hóa.',qpy:'Qǐng jiāng ___ hào fā gěi wǒ, fāngbiàn zhuīzōng huòwù.',blank:'___',options:['货运单','发票','合同','订单'],answer:'货运单'},{type:'',q:'今天___，明天上午到客户那里。',qvn:'Hôm nay ___, sáng mai đến chỗ khách hàng.',qpy:'Jīntiān ___, míngtiān shàngwǔ dào kèhù nàlǐ.',blank:'___',options:['下午发货','早上发货','明天发货','后天发货'],answer:'下午发货'}],
+  },
+  l7:{num:'第7课',cn:'办公室日常',vn:'Văn phòng hàng ngày',tags:['电脑','会议','邮件'],
+    vocab:[
+      {cn:'电脑',py:'diànnǎo',vn:'máy tính',ex:'打开电脑。'},
+      {cn:'打印机',py:'dǎyìnjī',vn:'máy in',ex:'打印机没纸了。'},
+      {cn:'复印机',py:'fùyìnjī',vn:'máy photocopy',ex:'去复印机复印。'},
+      {cn:'传真',py:'chuánzhēn',vn:'fax',ex:'发一份传真。'},
+      {cn:'扫描',py:'sǎomiáo',vn:'scan',ex:'扫描文件。'},
+      {cn:'文件',py:'wénjiàn',vn:'tài liệu',ex:'整理文件。'},
+      {cn:'邮件',py:'yóujiàn',vn:'email',ex:'发邮件。'},
+      {cn:'日程',py:'rìchéng',vn:'lịch trình',ex:'查看日程。'},
+      {cn:'会议',py:'huìyì',vn:'cuộc họp',ex:'三点有会议。'},
+      {cn:'通知',py:'tōngzhī',vn:'thông báo',ex:'发通知。'},
+    ],
+    dialogues:[
+      {title:'对话1：设备使用',titleVn:'Sử dụng thiết bị',lines:[
+        {speaker:'员工A',gender:'female',cn:'打印机没有纸了，帮我加一下好吗？',py:'Dǎyìnjī méiyǒu zhǐ le, bāng wǒ jiā yīxià hǎo ma?',vn:'Máy in hết giấy, giúp tôi thêm giấy được không?'},
+        {speaker:'员工B',gender:'male',cn:'好的，A4纸在柜子下面。',py:'Hǎo de, A4 zhǐ zài guìzi xiàmian.',vn:'Được, giấy A4 ở dưới tủ.'},
+        {speaker:'员工A',gender:'female',cn:'还有，这个文件需要扫描发邮件给客户。',py:'Hái yǒu, zhège wénjiàn xūyào sǎomiáo fā yóujiàn gěi kèhù.',vn:'Còn nữa, tài liệu này cần scan gửi email cho khách hàng.'},
+        {speaker:'员工B',gender:'male',cn:'扫描后在桌面，你附件添加就行了。',py:'Sǎomiáo hòu zài zhuōmiàn, nǐ fùjiàn tiānjiā jiù xíng le.',vn:'Scan xong ở desktop, cậu thêm file đính kèm là được.'},
+      ]},
+      {title:'对话2：安排会议',titleVn:'Sắp xếp cuộc họp',lines:[
+        {speaker:'秘书',gender:'female',cn:'经理，今天下午三点有会议。',py:'Jīnglǐ, jīntiān xiàwǔ sān diǎn yǒu huìyì.',vn:'Giám đốc, chiều nay 3 giờ có cuộc họp.'},
+        {speaker:'经理',gender:'male',cn:'什么主题？',py:'Shénme zhǔtí?',vn:'Chủ đề gì?'},
+        {speaker:'秘书',gender:'female',cn:'关于下季度的生产计划。',py:'Guānyú xià jìdù de shēngchǎn jìhuà.',vn:'Về kế hoạch sản xuất quý sau.'},
+        {speaker:'经理',gender:'male',cn:'哪些人参加？',py:'Nǎxiē rén cānjiā?',vn:'Những ai tham dự?'},
+        {speaker:'秘书',gender:'female',cn:'各部门主管和生产经理。',py:'Gè bùmén zhǔguǎn hé shēngchǎn jīnglǐ.',vn:'Các giám sát bộ phận và giám đốc sản xuất.'},
+        {speaker:'经理',gender:'male',cn:'好的，准备一下会议室和资料。',py:'Hǎo de, zhǔnbèi yīxià huìyìshì hé zīliào.',vn:'Được, chuẩn bị phòng họp và tài liệu.'},
+      ]},
+    ],
+    patterns:[
+      {num:'1',cn:'关于...',vn:'Về...',ex:'关于下季度生产计划的会议。',expy:'Guānyú xià jìdù shēngchǎn jìhuà de huìyì.',exvn:'Cuộc họp về kế hoạch sản xuất quý sau.'},
+      {num:'2',cn:'...就行了',vn:'... là được rồi',ex:'添加附件就行了。',expy:'Tiānjiā fùjiàn jiù xíng le.',exvn:'Thêm file đính kèm là được rồi.'},
+    ],
+    exercises:[{type:'',q:'请打开___，查看今天的邮件。',qvn:'Vui lòng mở ___, xem email hôm nay.',qpy:'Qǐng dǎkāi ___, cháchá jīntiān de yóujiàn.',blank:'___',options:['电脑','打印机','复印机','传真'],answer:'电脑'},{type:'',q:'___没有纸了，请补充A4纸。',qvn:'___ hết giấy rồi, vui lòng bổ sung giấy A4.',qpy:'___ méiyǒu zhǐ le, qǐng bǔchōng A4 zhǐ.',blank:'___',options:['打印机','电脑','复印机','传真机'],answer:'打印机'},{type:'',q:'需要多份文件，请用___复制。',qvn:'Cần nhiều bản tài liệu, vui lòng dùng ___ để sao chép.',qpy:'Xūyào duō fèn wénjiàn, qǐng yòng ___ fùzhì.',blank:'___',options:['复印机','打印机','电脑','传真'],answer:'复印机'},{type:'',q:'对方没有电子邮件，请用___发送文件。',qvn:'Đối phương không có email, vui lòng dùng ___ gửi tài liệu.',qpy:'Duìfāng méiyǒu diànzǐ yóujiàn, qǐng yòng ___ fāsòng wénjiàn.',blank:'___',options:['传真','电脑','打印机','复印机'],answer:'传真'},{type:'',q:'请将合同___后发给客户确认。',qvn:'Vui lòng ___ hợp đồng rồi gửi cho khách hàng xác nhận.',qpy:'Qǐng jiāng hétong ___ hòu fā gěi kèhù quèrèn.',blank:'___',options:['扫描','打印','复印','传真'],answer:'扫描'},{type:'',q:'请整理这些___，按日期分类归档。',qvn:'Vui lòng sắp xếp những ___ này, phân loại theo ngày tháng lưu trữ.',qpy:'Qǐng zhěnglǐ zhèxiē ___, àn rìqī fēnlèi guīdàng.',blank:'___',options:['文件','邮件','通知','日程'],answer:'文件'},{type:'',q:'请把报告通过___发给所有部门经理。',qvn:'Vui lòng gửi báo cáo qua ___ đến tất cả giám đốc bộ phận.',qpy:'Qǐng bǎ bàogào tōngguò ___ fā gěi suǒyǒu bùmén jīnglǐ.',blank:'___',options:['邮件','传真','打印','复印'],answer:'邮件'},{type:'',q:'请查看明天的___，确认会议时间。',qvn:'Vui lòng xem ___ ngày mai, xác nhận giờ họp.',qpy:'Qǐng cháchá míngtiān de ___, quèrèn huìyì shíjiān.',blank:'___',options:['日程','邮件','文件','通知'],answer:'日程'},{type:'',q:'下午三点有___，请提前准备资料。',qvn:'Chiều 3 giờ có ___, vui lòng chuẩn bị tài liệu trước.',qpy:'Xiàwǔ sān diǎn yǒu ___, qǐng tíqián zhǔnbèi zīliào.',blank:'___',options:['会议','日程','培训','检查'],answer:'会议'},{type:'',q:'会议主题是关于___。',qvn:'Chủ đề cuộc họp là về ___.',qpy:'Huìyì zhǔtí shì guānyú ___.',blank:'___',options:['下季度生产计划','产品质量','仓库管理','客户投诉'],answer:'下季度生产计划'}],
+  },
+  l8:{num:'第8课',cn:'邮件与文档',vn:'Email & Tài liệu',tags:['邮件','格式','公文'],
+    vocab:[
+      {cn:'主题',py:'zhǔtí',vn:'tiêu đề / chủ đề',ex:'邮件主题。'},
+      {cn:'附件',py:'fùjiàn',vn:'file đính kèm',ex:'发送附件。'},
+      {cn:'收件人',py:'shōujiànrén',vn:'người nhận',ex:'收件人是经理。'},
+      {cn:'发件人',py:'fājiànrén',vn:'người gửi',ex:'发件人是小李。'},
+      {cn:'抄送',py:'chāosòng',vn:'CC (sao gửi)',ex:'抄送部门主管。'},
+      {cn:'回复',py:'huífù',vn:'trả lời',ex:'请及时回复。'},
+      {cn:'批准',py:'pīzhǔn',vn:'phê duyệt',ex:'等待批准。'},
+      {cn:'签字',py:'qiānzì',vn:'ký tên',ex:'请签字确认。'},
+      {cn:'申请',py:'shēnqǐng',vn:'đề nghị, đơn xin',ex:'填写申请表。'},
+      {cn:'通知',py:'tōngzhī',vn:'thông báo',ex:'发出通知。'},
+    ],
+    dialogues:[{title:'对话：邮件沟通',titleVn:'Giao tiếp qua email',lines:[
+      {speaker:'小李',gender:'female',cn:'张经理，关于原材料采购的申请邮件发了吗？',py:'Zhāng jīnglǐ, guānyú yuáncáiliào cǎigòu de shēnqǐng yóujiàn fā le ma?',vn:'Giám đốc Trương, email đề nghị mua nguyên liệu gửi chưa?'},
+      {speaker:'张经理',gender:'male',cn:'收到了，我看了一下，数量没问题。',py:'Shōudào le, wǒ kàn le yīxià, shùliàng méi wèntí.',vn:'Nhận được rồi, tôi xem qua, số lượng không có vấn đề.'},
+      {speaker:'小李',gender:'female',cn:'那可以审批吗？生产计划等着用。',py:'Nà kěyǐ shěnpī ma? Shēngchǎn jìhuà děng zhe yòng.',vn:'Vậy có thể phê duyệt không? Kế hoạch sản xuất đang chờ.'},
+      {speaker:'张经理',gender:'male',cn:'好，我签字批准了。采购部那边你也通知一下。',py:'Hǎo, wǒ qiānzì pīzhǔn le. Cǎigòu bù nà biān nǐ yě tōngzhī yīxià.',vn:'Được, tôi ký phê duyệt rồi. Phòng mua hàng cậu cũng thông báo nhé.'},
+    ]}],
+    patterns:[
+      {num:'1',cn:'关于...的申请',vn:'Đề nghị về...',ex:'关于原材料采购的申请。',expy:'Guānyú yuáncáiliào cǎigòu de shēnqǐng.',exvn:'Đề nghị về mua nguyên liệu.'},
+      {num:'2',cn:'等着...',vn:'Đang chờ...',ex:'生产计划等着用。',expy:'Shēngchǎn jìhuà děng zhe yòng.',exvn:'Kế hoạch sản xuất đang chờ dùng.'},
+    ],
+    emailTemplate:{from:'生产部 小李',to:'采购部 张经理',subject:'关于原材料紧急采购的申请',body:`尊敬的张经理：\n\n因生产需要，我部急需以下原材料：\n1. 电子元件A，数量：1000件\n2. 包装材料B，数量：500套\n\n请尽快安排采购，以免影响生产进度。\n\n此致\n敬礼！\n\n生产部 小李\n2024年3月15日`},
+    exercises:[{type:'',q:'邮件的___要简洁清楚，让对方一眼看懂。',qvn:'___ email phải ngắn gọn rõ ràng để đối phương hiểu ngay.',qpy:'Yóujiàn de ___ yào jiǎnjié qīngchǔ.',blank:'___',options:['主题','附件','收件人','内容'],answer:'主题'},{type:'',q:'报告已经完成，请查收___。',qvn:'Báo cáo đã hoàn thành, vui lòng kiểm tra ___.',qpy:'Bàogào yǐjīng wánchéng, qǐng cháshōu ___.',blank:'___',options:['附件','主题','正文','签名'],answer:'附件'},{type:'',q:'这封邮件的___是采购部张经理。',qvn:'___ của email này là Giám đốc Trương phòng mua hàng.',qpy:'Zhè fēng yóujiàn de ___ shì Zhāng jīnglǐ.',blank:'___',options:['收件人','发件人','抄送','主题'],answer:'收件人'},{type:'',q:'这封邮件是___小李发出的。',qvn:'Email này do ___ Tiểu Lý gửi đi.',qpy:'Zhè fēng yóujiàn shì ___ Xiǎo Lǐ fā chū de.',blank:'___',options:['发件人','收件人','抄送','转发'],answer:'发件人'},{type:'',q:'请把这封邮件___给部门经理，让他知情。',qvn:'Vui lòng ___ email này cho giám đốc bộ phận, để ông ấy biết.',qpy:'Qǐng bǎ zhè fēng yóujiàn ___ gěi bùmén jīnglǐ.',blank:'___',options:['抄送','转发','回复','删除'],answer:'抄送'},{type:'',q:'收到邮件后请尽快___，不要让对方等太久。',qvn:'Sau khi nhận email vui lòng ___ sớm, đừng để đối phương chờ lâu.',qpy:'Shōudào yóujiàn hòu qǐng jǐnkuài ___.',blank:'___',options:['回复','转发','删除','归档'],answer:'回复'},{type:'',q:'采购申请已经提交，等待经理___。',qvn:'Đề nghị mua hàng đã nộp, chờ giám đốc ___.',qpy:'Cǎigòu shēnqǐng yǐjīng tíjiāo, děngdài jīnglǐ ___.',blank:'___',options:['批准','回复','转发','查看'],answer:'批准'},{type:'',q:'合同需要经理___才能生效。',qvn:'Hợp đồng cần giám đốc ___ mới có hiệu lực.',qpy:'Hétong xūyào jīnglǐ ___ cái néng shēngxiào.',blank:'___',options:['签字','批准','回复','确认'],answer:'签字'},{type:'',q:'请填写请假___，经理审批后方可生效。',qvn:'Vui lòng điền ___ xin nghỉ, giám đốc duyệt rồi mới có hiệu lực.',qpy:'Qǐng tiánxiě qǐngjià ___, jīnglǐ shěnpī hòu fāng kě shēngxiào.',blank:'___',options:['申请','邮件','文件','通知'],answer:'申请'},{type:'',q:'邮件写好后要找经理___。',qvn:'Viết xong email phải nhờ giám đốc ___.',qpy:'Yóujiàn xiě hǎo hòu yào zhǎo jīnglǐ ___.',blank:'___',options:['签字批准','打印发送','开会讨论','入库存档'],answer:'签字批准'}],
+  },
+  l9:{num:'第9课',cn:'人事行政',vn:'Nhân sự & Hành chính',tags:['入职','考勤','工资'],
+    vocab:[
+      {cn:'入职',py:'rùzhí',vn:'nhận việc, vào làm',ex:'明天入职。'},
+      {cn:'离职',py:'lízhí',vn:'nghỉ việc',ex:'提前一个月离职。'},
+      {cn:'转正',py:'zhuǎnzhèng',vn:'chính thức (sau thử việc)',ex:'试用期满转正。'},
+      {cn:'调岗',py:'tiáogǎng',vn:'chuyển vị trí',ex:'申请调岗。'},
+      {cn:'晋升',py:'jìnshēng',vn:'thăng chức',ex:'努力才能晋升。'},
+      {cn:'工资',py:'gōngzī',vn:'lương',ex:'月底发工资。'},
+      {cn:'奖金',py:'jiǎngjīn',vn:'thưởng',ex:'年终奖金。'},
+      {cn:'补贴',py:'bǔtiē',vn:'trợ cấp',ex:'交通补贴。'},
+      {cn:'社保',py:'shèbǎo',vn:'bảo hiểm xã hội',ex:'缴纳社保。'},
+      {cn:'合同',py:'hétong',vn:'hợp đồng',ex:'签订劳动合同。'},
+    ],
+    dialogues:[
+      {title:'对话1：请假申请',titleVn:'Đơn xin nghỉ',lines:[
+        {speaker:'员工',gender:'female',cn:'经理，我想请两天假。',py:'Jīnglǐ, wǒ xiǎng qǐng liǎng tiān jià.',vn:'Giám đốc, tôi muốn xin nghỉ 2 ngày.'},
+        {speaker:'经理',gender:'male',cn:'什么原因？',py:'Shénme yuányīn?',vn:'Lý do gì?'},
+        {speaker:'员工',gender:'female',cn:'家里有事，需要回去处理。',py:'Jiā lǐ yǒu shì, xūyào huíqù chǔlǐ.',vn:'Việc gia đình, cần về xử lý.'},
+        {speaker:'经理',gender:'male',cn:'什么时候？',py:'Shénme shíhou?',vn:'Khi nào?'},
+        {speaker:'员工',gender:'female',cn:'下周一和周二。我已经把手头工作交接给小王了。',py:'Xià zhōuyī hé zhōuèr. Wǒ yǐjīng bǎ shǒutóu gōngzuò jiāojiē gěi Xiǎo Wáng le.',vn:'Thứ hai và thứ ba tuần sau. Tôi đã bàn giao công việc cho Tiểu Vương.'},
+        {speaker:'经理',gender:'male',cn:'好的，填一下请假单，我签字。',py:'Hǎo de, tián yīxià qǐngjià dān, wǒ qiānzì.',vn:'Được, điền tờ xin nghỉ, tôi ký.'},
+      ]},
+      {title:'对话2：加班与调休',titleVn:'Tăng ca & Nghỉ bù',lines:[
+        {speaker:'员工',gender:'female',cn:'经理，这个周末我加了两天班。',py:'Jīnglǐ, zhège zhōumò wǒ jiā le liǎng tiān bān.',vn:'Giám đốc, cuối tuần này tôi tăng ca 2 ngày.'},
+        {speaker:'经理',gender:'male',cn:'辛苦了。你想调休还是算加班费？',py:'Xīnkǔ le. Nǐ xiǎng diào xiū háishi suàn jiābān fèi?',vn:'Vất vả rồi. Cậu muốn nghỉ bù hay tính tiền tăng ca?'},
+        {speaker:'员工',gender:'female',cn:'我想调休，下周三休息可以吗？',py:'Wǒ xiǎng diào xiū, xià zhōusān xiūxi kěyǐ ma?',vn:'Tôi muốn nghỉ bù, thứ tư tuần sau nghỉ được không?'},
+        {speaker:'经理',gender:'male',cn:'可以，提前在系统申请一下。',py:'Kěyǐ, tíqián zài xìtǒng shēnqǐng yīxià.',vn:'Được, đăng ký trước trên hệ thống.'},
+      ]},
+    ],
+    patterns:[
+      {num:'1',cn:'我想请...假',vn:'Tôi muốn xin nghỉ...',ex:'我想请两天假。',expy:'Wǒ xiǎng qǐng liǎng tiān jià.',exvn:'Tôi muốn xin nghỉ hai ngày.'},
+      {num:'2',cn:'已经...了',vn:'Đã... rồi',ex:'已经把工作交接好了。',expy:'Yǐjīng bǎ gōngzuò jiāojiē hǎo le.',exvn:'Đã bàn giao công việc xong rồi.'},
+      {num:'3',cn:'...还是...？',vn:'... hay là...?',ex:'你想调休还是算加班费？',expy:'Nǐ xiǎng diào xiū háishi suàn jiābān fèi?',exvn:'Cậu muốn nghỉ bù hay tính tiền tăng ca?'},
+    ],
+    exercises:[{type:'',q:'新员工明天正式___，需要办理相关手续。',qvn:'Nhân viên mới ngày mai chính thức ___, cần làm các thủ tục liên quan.',qpy:'Xīn yuángōng míngtiān zhèngshì ___.',blank:'___',options:['入职','离职','转正','调岗'],answer:'入职'},{type:'',q:'他决定___，提前一个月提交了辞职信。',qvn:'Anh ấy quyết định ___, nộp đơn xin nghỉ trước một tháng.',qpy:'Tā juédìng ___.',blank:'___',options:['离职','入职','转正','晋升'],answer:'离职'},{type:'',q:'试用期三个月后，表现优秀可以___。',qvn:'Sau thử việc ba tháng, biểu hiện xuất sắc có thể ___.',qpy:'Shìyòng qī sān gè yuè hòu, biǎoxiàn yōuxiù kěyǐ ___.',blank:'___',options:['转正','入职','离职','调岗'],answer:'转正'},{type:'',q:'他申请从生产部___到销售部。',qvn:'Anh ấy xin ___ từ phòng sản xuất sang phòng kinh doanh.',qpy:'Tā shēnqǐng cóng shēngchǎn bù ___ dào xiāoshòu bù.',blank:'___',options:['调岗','入职','离职','转正'],answer:'调岗'},{type:'',q:'工作表现优秀，年底有机会___。',qvn:'Biểu hiện công việc xuất sắc, cuối năm có cơ hội ___.',qpy:'Gōngzuò biǎoxiàn yōuxiù, niándǐ yǒu jīhuì ___.',blank:'___',options:['晋升','离职','调岗','转正'],answer:'晋升'},{type:'',q:'每月15号发___，请确认银行账户信息。',qvn:'Ngày 15 hàng tháng phát ___, vui lòng xác nhận thông tin tài khoản ngân hàng.',qpy:'Měi yuè 15 hào fā ___.',blank:'___',options:['工资','奖金','补贴','津贴'],answer:'工资'},{type:'',q:'年终___根据个人绩效发放。',qvn:'___ cuối năm phát theo hiệu suất cá nhân.',qpy:'Niánzhōng ___ gēnjù gèrén jìxiào fāfàng.',blank:'___',options:['奖金','工资','补贴','社保'],answer:'奖金'},{type:'',q:'公司提供交通___，每月300元。',qvn:'Công ty cung cấp ___ giao thông, mỗi tháng 300 tệ.',qpy:'Gōngsī tígōng jiāotōng ___, měi yuè 300 yuán.',blank:'___',options:['补贴','工资','奖金','福利'],answer:'补贴'},{type:'',q:'公司为每位员工缴纳___，保障基本权益。',qvn:'Công ty đóng ___ cho từng nhân viên, bảo đảm quyền lợi cơ bản.',qpy:'Gōngsī wèi měi wèi yuángōng jiǎonà ___.',blank:'___',options:['社保','奖金','补贴','工资'],answer:'社保'},{type:'',q:'员工加班后可以选择调休或者___。',qvn:'Nhân viên tăng ca có thể chọn nghỉ bù hoặc ___.',qpy:'Yuángōng jiābān hòu kěyǐ xuǎnzé diào xiū huòzhě ___.',blank:'___',options:['加班费','奖金','补贴','社保'],answer:'加班费'}],
+  },
+  l10:{num:'第10课',cn:'财务报销',vn:'Kế toán & Thanh toán',tags:['报销','发票','费用'],
+    vocab:[
+      {cn:'报销',py:'bàoxiāo',vn:'thanh toán, hoàn ứng',ex:'申请报销。'},
+      {cn:'发票',py:'fāpiào',vn:'hóa đơn',ex:'开具发票。'},
+      {cn:'收据',py:'shōujù',vn:'biên lai',ex:'保留收据。'},
+      {cn:'预算',py:'yùsuàn',vn:'ngân sách',ex:'在预算内。'},
+      {cn:'费用',py:'fèiyòng',vn:'chi phí',ex:'控制费用。'},
+      {cn:'差旅费',py:'chāilǚfèi',vn:'phí công tác',ex:'报销差旅费。'},
+      {cn:'招待费',py:'zhāodàifèi',vn:'phí tiếp khách',ex:'客户招待费。'},
+      {cn:'审批',py:'shěnpī',vn:'phê duyệt',ex:'等待审批。'},
+      {cn:'转账',py:'zhuǎnzhàng',vn:'chuyển khoản',ex:'银行转账。'},
+      {cn:'现金',py:'xiànjīn',vn:'tiền mặt',ex:'用现金支付。'},
+    ],
+    dialogues:[{title:'对话：报销流程',titleVn:'Quy trình thanh toán',lines:[
+      {speaker:'员工',gender:'female',cn:'会计，我要报销差旅费。',py:'Kuàijì, wǒ yào bàoxiāo chāilǚ fèi.',vn:'Kế toán, tôi cần thanh toán phí công tác.'},
+      {speaker:'会计',gender:'male',cn:'发票和单据带了吗？',py:'Fāpiào hé dānjù dài le ma?',vn:'Mang hóa đơn và chứng từ chưa?'},
+      {speaker:'员工',gender:'female',cn:'带了，这是车票、住宿发票和餐饮收据。',py:'Dài le, zhè shì chēpiào, zhùsù fāpiào hé cānyǐn shōujù.',vn:'Mang rồi, đây là vé xe, hóa đơn lưu trú và biên lai ăn uống.'},
+      {speaker:'会计',gender:'male',cn:'一共多少钱？',py:'Yīgòng duōshao qián?',vn:'Tổng cộng bao nhiêu?'},
+      {speaker:'员工',gender:'female',cn:'一共两千三百五十元。',py:'Yīgòng liǎng qiān sān bǎi wǔshí yuán.',vn:'Tổng cộng 2350 tệ.'},
+      {speaker:'会计',gender:'male',cn:'填一下报销单，找经理签字后给我。',py:'Tián yīxià bàoxiāo dān, zhǎo jīnglǐ qiānzì hòu gěi wǒ.',vn:'Điền phiếu thanh toán, nhờ giám đốc ký rồi đưa tôi.'},
+    ]}],
+    patterns:[
+      {num:'1',cn:'要报销...',vn:'Cần thanh toán...',ex:'我要报销差旅费。',expy:'Wǒ yào bàoxiāo chāilǚ fèi.',exvn:'Tôi cần thanh toán phí công tác.'},
+      {num:'2',cn:'一共...元',vn:'Tổng cộng... tệ',ex:'一共两千三百五十元。',expy:'Yīgòng liǎng qiān sān bǎi wǔshí yuán.',exvn:'Tổng cộng 2350 tệ.'},
+    ],
+    exercises:[{type:'',q:'出差回来需要提交___申请，附上所有票据。',qvn:'Đi công tác về cần nộp đơn xin ___, kèm theo tất cả chứng từ.',qpy:'Chūchāi huílái xūyào tíjiāo ___ shēnqǐng.',blank:'___',options:['报销','申请','签字','审批'],answer:'报销'},{type:'',q:'请保留餐饮收据和住宿___，报销时需要。',qvn:'Vui lòng giữ biên lai ăn uống và ___ lưu trú, cần khi thanh toán.',qpy:'Qǐng bǎoliú cānyǐn shōujù hé zhùsù ___.',blank:'___',options:['发票','合同','文件','单据'],answer:'发票'},{type:'',q:'超市购物没有发票，只有___也可以报销。',qvn:'Mua ở siêu thị không có hóa đơn, chỉ có ___ cũng có thể thanh toán.',qpy:'Chāoshì gòuwù méiyǒu fāpiào, zhǐ yǒu ___ yě kěyǐ bàoxiāo.',blank:'___',options:['收据','合同','申请','单据'],answer:'收据'},{type:'',q:'本次出差___是5000元，请合理安排开支。',qvn:'___ chuyến công tác này là 5000 tệ, vui lòng sắp xếp chi tiêu hợp lý.',qpy:'Běncì chūchāi ___ shì 5000 yuán.',blank:'___',options:['预算','费用','报销','工资'],answer:'预算'},{type:'',q:'所有___必须有票据，否则不予报销。',qvn:'Tất cả ___ phải có chứng từ, nếu không sẽ không được thanh toán.',qpy:'Suǒyǒu ___ bìxū yǒu piàojù, fǒuzé bù yǔ bàoxiāo.',blank:'___',options:['费用','工资','奖金','补贴'],answer:'费用'},{type:'',q:'出差的交通、住宿、餐饮都属于___。',qvn:'Đi lại, lưu trú, ăn uống khi công tác đều thuộc ___.',qpy:'Chūchāi de jiāotōng, zhùsù, cānyǐn dōu shǔyú ___.',blank:'___',options:['差旅费','招待费','办公费','材料费'],answer:'差旅费'},{type:'',q:'请客户吃饭产生的费用属于___。',qvn:'Chi phí mời khách hàng ăn cơm thuộc ___.',qpy:'Qǐng kèhù chīfàn chǎnshēng de fèiyòng shǔyú ___.',blank:'___',options:['招待费','差旅费','办公费','运输费'],answer:'招待费'},{type:'',q:'报销单已填好，等待经理___。',qvn:'Phiếu thanh toán đã điền xong, chờ giám đốc ___.',qpy:'Bàoxiāo dān yǐ tián hǎo, děngdài jīnglǐ ___.',blank:'___',options:['审批','签字','批准','确认'],answer:'审批'},{type:'',q:'费用已___到您的银行账户，请查收。',qvn:'Chi phí đã ___ vào tài khoản ngân hàng của bạn, vui lòng kiểm tra.',qpy:'Fèiyòng yǐ ___ dào nín de yínháng zhànghù.',blank:'___',options:['转账','付款','报销','汇款'],answer:'转账'},{type:'',q:'报销单填好后要找经理___，然后给会计。',qvn:'Điền xong phiếu thanh toán phải nhờ giám đốc ___, rồi đưa cho kế toán.',qpy:'Bàoxiāo dān tián hǎo hòu yào zhǎo jīnglǐ ___, ránhòu gěi kuàijì.',blank:'___',options:['签字','审批','转账','打印'],answer:'签字'}],
+  },
+  l11:{num:'第11课',cn:'客户沟通',vn:'Giao tiếp khách hàng',tags:['订单','投诉','售后'],
+    vocab:[
+      {cn:'客户',py:'kèhù',vn:'khách hàng',ex:'重要客户。'},
+      {cn:'订单',py:'dìngdān',vn:'đơn hàng',ex:'收到订单。'},
+      {cn:'询价',py:'xúnjià',vn:'hỏi giá',ex:'客户询价。'},
+      {cn:'报价',py:'bàojià',vn:'báo giá',ex:'发送报价单。'},
+      {cn:'样品',py:'yàngpǐn',vn:'mẫu hàng',ex:'寄送样品。'},
+      {cn:'交货',py:'jiāohuò',vn:'giao hàng',ex:'按时交货。'},
+      {cn:'延期',py:'yánqī',vn:'gia hạn, trễ hạn',ex:'延期交货。'},
+      {cn:'投诉',py:'tóusù',vn:'khiếu nại',ex:'处理投诉。'},
+      {cn:'售后',py:'shòuhòu',vn:'sau bán hàng',ex:'售后服务。'},
+      {cn:'满意',py:'mǎnyì',vn:'hài lòng',ex:'客户满意。'},
+    ],
+    dialogues:[
+      {title:'对话1：订单确认',titleVn:'Xác nhận đơn hàng',lines:[
+        {speaker:'业务员',gender:'male',cn:'李先生，您下的订单我们收到了。',py:'Lǐ xiānsheng, nín xià de dìngdān wǒmen shōudào le.',vn:'Ông Lý, đơn hàng ông đặt chúng tôi đã nhận được.'},
+        {speaker:'客户',gender:'female',cn:'什么时候能交货？',py:'Shénme shíhou néng jiāohuò?',vn:'Khi nào giao hàng?'},
+        {speaker:'业务员',gender:'male',cn:'正常是15个工作日，但您要的急，我们争取10天交货。',py:'Zhèngcháng shì 15 gè gōngzuò rì, dàn nín yào de jí, wǒmen zhēngqǔ 10 tiān jiāohuò.',vn:'Bình thường 15 ngày làm việc, nhưng ông cần gấp, chúng tôi cố gắng 10 ngày giao.'},
+        {speaker:'客户',gender:'female',cn:'质量要保证，上次那批有点问题。',py:'Zhìliàng yào bǎozhèng, shàng cì nà pī yǒudiǎn wèntí.',vn:'Chất lượng phải đảm bảo, lần trước lô đó có vấn đề.'},
+        {speaker:'业务员',gender:'male',cn:'非常抱歉，上次是我们的疏忽。这次我们加强质检。',py:'Fēicháng bàoqiàn, shàng cì shì wǒmen de shūhū. Zhè cì wǒmen jiāqiáng zhì jiǎn.',vn:'Rất xin lỗi, lần trước là sơ suất của chúng tôi. Lần này chúng tôi tăng cường QC.'},
+      ]},
+      {title:'对话2：处理投诉',titleVn:'Xử lý khiếu nại',lines:[
+        {speaker:'客户',gender:'female',cn:'我要投诉！这批货质量太差了！',py:'Wǒ yào tóusù! Zhè pī huò zhìliàng tài chà le!',vn:'Tôi muốn khiếu nại! Lô hàng này chất lượng quá kém!'},
+        {speaker:'客服',gender:'male',cn:'非常抱歉，请问具体问题是什么？',py:'Fēicháng bàoqiàn, qǐngwèn jùtǐ wèntí shì shénme?',vn:'Rất xin lỗi, cho hỏi cụ thể vấn đề là gì?'},
+        {speaker:'客户',gender:'female',cn:'一半产品都有划痕，根本不能用！',py:'Yī bàn chǎnpǐn dōu yǒu huáhén, gēnběn bù néng yòng!',vn:'Một nửa sản phẩm đều có vết xước, hoàn toàn không dùng được!'},
+        {speaker:'客服',gender:'male',cn:'我理解您的气愤。我们马上安排退换货，并承担运费。',py:'Wǒ lǐjiě nín de qìfèn. Wǒmen mǎshàng ānpái tuìhuàn huò, bìng chéngdān yùnfèi.',vn:'Tôi hiểu sự tức giận của ông. Chúng tôi lập tức sắp xếp đổi trả, và chịu phí vận chuyển.'},
+        {speaker:'客户',gender:'female',cn:'希望不要再有下次！',py:'Xīwàng bùyào zài yǒu xià cì!',vn:'Mong không có lần sau!'},
+        {speaker:'客服',gender:'male',cn:'一定改进，感谢您的反馈。',py:'Yīdìng gǎijìn, gǎnxiè nín de fǎnkuì.',vn:'Nhất định cải thiện, cảm ơn phản hồi của ông.'},
+      ]},
+    ],
+    patterns:[
+      {num:'1',cn:'争取...',vn:'Cố gắng...',ex:'我们争取10天交货。',expy:'Wǒmen zhēngqǔ 10 tiān jiāohuò.',exvn:'Chúng tôi cố gắng giao hàng trong 10 ngày.'},
+      {num:'2',cn:'非常抱歉，...',vn:'Rất xin lỗi,...',ex:'非常抱歉，这是我们的疏忽。',expy:'Fēicháng bàoqiàn, zhè shì wǒmen de shūhū.',exvn:'Rất xin lỗi, đây là sơ suất của chúng tôi.'},
+    ],
+    exercises:[{type:'',q:'这是我们最重要的___，每年采购额超过百万。',qvn:'Đây là ___ quan trọng nhất của chúng tôi, mỗi năm mua hàng trên triệu tệ.',qpy:'Zhè shì wǒmen zuì zhòngyào de ___.',blank:'___',options:['客户','供应商','合作伙伴','代理商'],answer:'客户'},{type:'',q:'客户已下___，数量100件，要求15天交货。',qvn:'Khách hàng đã đặt ___, số lượng 100 chiếc, yêu cầu giao trong 15 ngày.',qpy:'Kèhù yǐ xià ___, shùliàng 100 jiàn.',blank:'___',options:['订单','报价','样品','合同'],answer:'订单'},{type:'',q:'客户来电___，我们需要尽快回复报价单。',qvn:'Khách hàng gọi điện ___, chúng tôi cần sớm trả lời bảng báo giá.',qpy:'Kèhù lái diàn ___, wǒmen xūyào jǐnkuài huífù bàojià dān.',blank:'___',options:['询价','报价','投诉','下单'],answer:'询价'},{type:'',q:'根据客户要求，我们已发出正式___。',qvn:'Theo yêu cầu khách hàng, chúng tôi đã gửi ___ chính thức.',qpy:'Gēnjù kèhù yāoqiú, wǒmen yǐ fā chū zhèngshì ___.',blank:'___',options:['报价','询价','订单','合同'],answer:'报价'},{type:'',q:'客户需要先看___，满意后再下订单。',qvn:'Khách hàng cần xem ___ trước, hài lòng rồi mới đặt hàng.',qpy:'Kèhù xūyào xiān kàn ___, mǎnyì hòu zài xià dìngdān.',blank:'___',options:['样品','报价','合同','发票'],answer:'样品'},{type:'',q:'产品已生产完毕，今天安排___。',qvn:'Sản phẩm đã sản xuất xong, hôm nay sắp xếp ___.',qpy:'Chǎnpǐn yǐ shēngchǎn wánbì, jīntiān ānpái ___.',blank:'___',options:['交货','发货','运输','入库'],answer:'交货'},{type:'',q:'由于原材料短缺，这批订单需要___一周。',qvn:'Do thiếu nguyên liệu, lô đơn hàng này cần ___ thêm một tuần.',qpy:'Yóuyú yuáncáiliào duǎnquē, zhè pī dìngdān xūyào ___ yī zhōu.',blank:'___',options:['延期','取消','减少','退款'],answer:'延期'},{type:'',q:'客户对产品质量不满，提出正式___。',qvn:'Khách hàng không hài lòng về chất lượng sản phẩm, đưa ra ___ chính thức.',qpy:'Kèhù duì chǎnpǐn zhìliàng bù mǎn, tíchū zhèngshì ___.',blank:'___',options:['投诉','退货','换货','索赔'],answer:'投诉'},{type:'',q:'产品售出后，我们提供完善的___服务。',qvn:'Sau khi bán sản phẩm, chúng tôi cung cấp dịch vụ ___ hoàn thiện.',qpy:'Chǎnpǐn shòuchū hòu, wǒmen tígōng wánshàn de ___ fúwù.',blank:'___',options:['售后','维修','保养','检查'],answer:'售后'},{type:'',q:'客户投诉产品有划痕，客服安排___，并承担运费。',qvn:'Khách hàng khiếu nại sản phẩm có vết xước, CSKH sắp xếp ___, và chịu phí vận chuyển.',qpy:'Kèhù tóusù chǎnpǐn yǒu huáhén, kèfú ānpái ___.',blank:'___',options:['退换货','重新生产','赔偿金额','延期发货'],answer:'退换货'}],
+  },
+  l12:{num:'第12课',cn:'综合应用',vn:'Tổng hợp ứng dụng',tags:['跨部门','流程','协作'],
+    vocab:[
+      {cn:'协作',py:'xiézuò',vn:'phối hợp',ex:'各部门协作。'},
+      {cn:'紧急',py:'jǐnjí',vn:'khẩn cấp',ex:'紧急处理。'},
+      {cn:'配合',py:'pèihé',vn:'phối hợp',ex:'请配合工作。'},
+      {cn:'务必',py:'wùbì',vn:'nhất định phải',ex:'务必完成任务。'},
+      {cn:'完成',py:'wánchéng',vn:'hoàn thành',ex:'按时完成。'},
+      {cn:'安排',py:'ānpái',vn:'sắp xếp',ex:'合理安排。'},
+      {cn:'沟通',py:'gōutōng',vn:'giao tiếp, trao đổi',ex:'加强沟通。'},
+      {cn:'流程',py:'liúchéng',vn:'quy trình',ex:'标准流程。'},
+      {cn:'目标',py:'mùbiāo',vn:'mục tiêu',ex:'完成目标。'},
+      {cn:'支持',py:'zhīchí',vn:'hỗ trợ',ex:'感谢支持。'},
+    ],
+    dialogues:[{title:'对话：紧急订单处理',titleVn:'Xử lý đơn hàng khẩn',lines:[
+      {speaker:'销售',gender:'female',cn:'生产部吗？有个紧急订单，客户明天要货！',py:'Shēngchǎn bù ma? Yǒu gè jǐnjí dìngdān, kèhù míngtiān yào huò!',vn:'Phòng sản xuất à? Có đơn hàng khẩn, khách hàng ngày mai cần hàng!'},
+      {speaker:'生产主管',gender:'male',cn:'什么产品？数量多少？',py:'Shénme chǎnpǐn? Shùliàng duōshao?',vn:'Sản phẩm gì? Số lượng bao nhiêu?'},
+      {speaker:'销售',gender:'female',cn:'A产品，100件。库存只有50件。',py:'A chǎnpǐn, 100 jiàn. Kùcún zhǐ yǒu 50 jiàn.',vn:'Sản phẩm A, 100 chiếc. Tồn kho chỉ có 50 chiếc.'},
+      {speaker:'生产主管',gender:'male',cn:'还差50件，今晚加班能做出来吗？',py:'Hái chà 50 jiàn, jīn wǎn jiābān néng zuò chūlái ma?',vn:'Còn thiếu 50 chiếc, tối nay tăng ca làm được không?'},
+      {speaker:'班长',gender:'female',cn:'可以，但是需要仓库准备原材料。',py:'Kěyǐ, dànshì xūyào cāngkù zhǔnbèi yuáncáiliào.',vn:'Được, nhưng cần kho chuẩn bị nguyên liệu.'},
+      {speaker:'仓管员',gender:'male',cn:'原材料够，我马上送到车间。',py:'Yuáncáiliào gòu, wǒ mǎshàng sòng dào chējiān.',vn:'Nguyên liệu đủ, tôi lập tức chuyển đến xưởng.'},
+      {speaker:'生产主管',gender:'male',cn:'好，各部门配合，今晚务必完成！',py:'Hǎo, gè bùmén pèihé, jīn wǎn wùbì wánchéng!',vn:'Tốt, các bộ phận phối hợp, tối nay nhất định phải hoàn thành!'},
+    ]}],
+    patterns:[
+      {num:'1',cn:'<span>还差</span>...',vn:'Còn thiếu...',ex:'还差50件。',expy:'Hái chà 50 jiàn.',exvn:'Còn thiếu 50 chiếc.'},
+      {num:'2',cn:'<span>务必</span>...',vn:'Nhất định phải...',ex:'今晚务必完成！',expy:'Jīn wǎn wùbì wánchéng!',exvn:'Tối nay nhất định phải hoàn thành!'},
+    ],
+    flow:[
+      {cn:'接单',vn:'Nhận đơn'},{cn:'下指令',vn:'Ra lệnh SX'},{cn:'领料',vn:'Lĩnh NVL'},
+      {cn:'生产',vn:'Sản xuất'},{cn:'质检',vn:'QC'},{cn:'入库',vn:'Nhập kho'},{cn:'发货',vn:'Giao hàng'},
+    ],
+    exercises:[{type:'',q:'各部门需要密切___，才能完成紧急订单。',qvn:'Các bộ phận cần ___ chặt chẽ mới có thể hoàn thành đơn hàng khẩn.',qpy:'Gè bùmén xūyào mìqiē ___.',blank:'___',options:['协作','竞争','分工','沟通'],answer:'协作'},{type:'',q:'这是___订单，客户明天就要货！',qvn:'Đây là đơn hàng ___, khách hàng ngày mai đã cần hàng!',qpy:'Zhè shì ___ dìngdān, kèhù míngtiān jiù yào huò!',blank:'___',options:['紧急','普通','长期','小型'],answer:'紧急'},{type:'',q:'请各部门___，今晚务必完成生产任务。',qvn:'Các bộ phận vui lòng ___, tối nay nhất định phải hoàn thành nhiệm vụ sản xuất.',qpy:'Qǐng gè bùmén ___, jīn wǎn wùbì wánchéng shēngchǎn rènwù.',blank:'___',options:['配合','竞争','检查','报告'],answer:'配合'},{type:'',q:'今晚___完成50件产品，不能有任何借口。',qvn:'Tối nay ___ hoàn thành 50 chiếc sản phẩm, không được có bất kỳ lý do gì.',qpy:'Jīn wǎn ___ wánchéng 50 jiàn chǎnpǐn.',blank:'___',options:['务必','可以','尽量','争取'],answer:'务必'},{type:'',q:'各项工作已按时___，请验收确认。',qvn:'Các công việc đã ___ đúng hạn, vui lòng nghiệm thu xác nhận.',qpy:'Gè xiàng gōngzuò yǐ ànshí ___, qǐng yànshōu quèrèn.',blank:'___',options:['完成','开始','检查','报告'],answer:'完成'},{type:'',q:'请合理___今晚的生产任务，确保按时完成。',qvn:'Vui lòng ___ hợp lý nhiệm vụ sản xuất tối nay, đảm bảo hoàn thành đúng hạn.',qpy:'Qǐng hélǐ ___ jīn wǎn de shēngchǎn rènwù.',blank:'___',options:['安排','检查','报告','统计'],answer:'安排'},{type:'',q:'遇到问题要及时___，不要自己解决。',qvn:'Gặp vấn đề phải kịp thời ___, không tự giải quyết.',qpy:'Yù dào wèntí yào jíshí ___.',blank:'___',options:['沟通','报废','停机','检查'],answer:'沟通'},{type:'',q:'标准___是：接单→生产→质检→发货。',qvn:'___ tiêu chuẩn là: nhận đơn → sản xuất → QC → giao hàng.',qpy:'Biāozhǔn ___ shì: jiēdān→shēngchǎn→zhì jiǎn→fāhuò.',blank:'___',options:['流程','程序','步骤','计划'],answer:'流程'},{type:'',q:'本月生产___是1000件，目前完成了800件。',qvn:'___ sản xuất tháng này là 1000 chiếc, hiện đã hoàn thành 800 chiếc.',qpy:'Běn yuè shēngchǎn ___ shì 1000 jiàn.',blank:'___',options:['目标','计划','任务','要求'],answer:'目标'},{type:'',q:'紧急订单库存不足，需要今晚___完成。',qvn:'Đơn hàng khẩn tồn kho không đủ, cần tối nay ___ hoàn thành.',qpy:'Jǐnjí dìngdān kùcún bùzú, xūyào jīn wǎn ___ wánchéng.',blank:'___',options:['加班生产','延期交货','取消订单','减少数量'],answer:'加班生产'}],
+  },
+};
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let globalPinyin = false;
+let speechRate = 0.85;
+let isPlaying = false;
+let dialogueQueue = [];
+let dlgIndex = 0;
+let hanziInst = null;
+let currentHzChar = null;
+let modalWriters = [];
+let fakeProgressTimer = null;
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('active');
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
+  const idx = lessonIds.indexOf(id);
+  document.getElementById('progress-fill').style.width = idx >= 0 ? Math.round((idx+1)/lessonIds.length*100)+'%' : '0%';
+  if (id === 'home') { renderHome(c); document.getElementById('topbar-title').textContent = 'GIA SƯ HOA NGỮ TÂN AN'; }
+  else if (id === 'appendix') { renderAppendix(c); document.getElementById('topbar-title').textContent = '附录'; }
+  else if (id === 'hanzi') { renderHanzi(c); document.getElementById('topbar-title').textContent = '练习写汉字'; }
+  else if (LESSONS[id]) { renderLesson(id, c, LESSONS[id]); document.getElementById('topbar-title').textContent = LESSONS[id].num + ' ' + LESSONS[id].cn; }
+  document.getElementById('sidebar').classList.remove('open');
+}
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+// ══════════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════════
+function renderHome(c) {
+  const list = [
+    ['l1','走进工厂','Bước vào công xưởng',['车间','设备','安全']],
+    ['l2','车间工作','Làm việc tại xưởng',['考勤','轮班','打卡']],
+    ['l3','生产操作','Vận hành sản xuất',['质量','产量','工序']],
+    ['l4','设备维护','Bảo trì thiết bị',['保养','维修','故障']],
+    ['l5','仓库管理','Quản lý kho',['入库','出库','盘点']],
+    ['l6','物流运输','Vận tải & Logistics',['发货','运输','物流']],
+    ['l7','办公室日常','Văn phòng hàng ngày',['电脑','会议','邮件']],
+    ['l8','邮件与文档','Email & Tài liệu',['邮件','格式','公文']],
+    ['l9','人事行政','Nhân sự & Hành chính',['入职','考勤','工资']],
+    ['l10','财务报销','Kế toán & Thanh toán',['报销','发票','费用']],
+    ['l11','客户沟通','Giao tiếp khách hàng',['订单','投诉','售后']],
+    ['l12','综合应用','Tổng hợp ứng dụng',['跨部门','流程','协作']],
+  ];
+  let h = `<div class="page-content">
+    <div class="lesson-hero">
+      <div class="hero-label">工厂与办公室汉语教程</div>
+      <div class="hero-cn">Giáo trình Tiếng Hoa Công xưởng & Văn phòng</div>
+    </div>
+    <div class="sec-title">Danh sách bài học</div>
+    <div class="home-grid">`;
+  list.forEach(([id,cn,vn,tags],i) => {
+    h += `<div class="home-card" onclick="showPage('${id}')">
+      <div class="home-num">Bài ${i+1}</div>
+      <div class="home-cn">${cn}</div>
+      <div class="home-vn">${vn}</div>
+      <div class="home-tags">${tags.map(t=>`<span class="home-tag">${t}</span>`).join('')}</div>
+    </div>`;
+  });
+  h += `</div></div>`;
+  c.innerHTML = h;
+}
+
+// ══════════════════════════════════════════════
+// LESSON
+// ══════════════════════════════════════════════
+function renderLesson(id, c, L) {
+  let h = `<div class="page-content">`;
+  if (L.vocab) {
+    h += `<div class="sec-title">核心词汇 — Từ vựng cốt lõi</div>
+    <div style="overflow-x:auto;border:1px solid var(--gray-l);border-radius:6px;overflow:hidden;">
+    <table class="vocab-table">
+      <thead><tr>
+        <th style="width:44px;text-align:center;">🔊</th>
+        <th>中文</th><th>拼音</th><th>Tiếng Việt</th><th>Ví dụ</th>
+        <th style="width:40px;text-align:right;padding-right:14px;">✍</th>
+      </tr></thead>
+      <tbody>${L.vocab.map((v,i)=>`<tr>
+        <td style="text-align:center;padding:10px 8px;">
+          <button onclick="speak('${esc(v.cn)}','${esc(v.vn)}')" style="border:none;background:none;cursor:pointer;font-size: 20px;color:var(--blue);padding:0;">🔊</button>
+        </td>
+        <td class="td-cn">${v.cn}</td>
+        <td class="td-py">${v.py}</td>
+        <td class="td-vn">${v.vn}</td>
+        <td class="td-ex">${v.ex||''}</td>
+        <td style="text-align:right;padding-right:12px;">
+          <button onclick="showHanziModal('${esc(v.cn)}')" title="Xem thứ tự nét bút" style="border:none;background:none;cursor:pointer;font-size: 20px;color:var(--gray-d);padding:0;">✍</button>
+        </td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  }
+  if (L.dialogues) {
+    h += `<div class="sec-title">实用对话 — Hội thoại thực dụng</div>`;
+    const tId = `tog-${id}`;
+    h += `<div class="toggle-row">Hiện phiên âm 拼音 <div class="toggle" id="${tId}" onclick="toggleDlgPinyin('${tId}','${id}')"></div></div>`;
+    L.dialogues.forEach((d,di) => {
+      h += `<div class="dialogue-box" id="dlg-${id}-${di}">
+        <div class="dlg-header">
+          <div><div class="dlg-title">${d.title}</div><div class="dlg-title-vn">${d.titleVn}</div></div>
+          <div class="dlg-controls">
+            <select class="dlg-speed" onchange="setSpeechRate(this.value)">
+              <option value="0.7">Chậm</option><option value="0.85" selected>Vừa</option><option value="1.0">Nhanh</option>
+            </select>
+            <button class="dlg-btn" onclick="playDialogue('${id}',${di})">▶ Nghe hội thoại</button>
+          </div>
+        </div>
+        <div class="dlg-body">
+          ${d.lines.map((ln,li)=>`
+            <div class="dlg-line ${ln.gender}" id="dl-${id}-${di}-${li}" onclick="speakLine('${id}',${di},${li})">
+              <div class="speaker-badge ${ln.gender}">${ln.speaker}</div>
+              <div class="dlg-content">
+                <div class="line-cn">${ln.cn}</div>
+                <div class="line-py" style="display:none;">${ln.py||''}</div>
+                <div class="line-vn">${ln.vn}</div>
+              </div>
+              <button class="dlg-play-btn">🔊</button>
+            </div>`).join('')}
+        </div>
+      </div>`;
+    });
+  }
+  if (L.commands) {
+    h += `<div class="sec-title">车间常用指令 — Chỉ thị thường dùng</div><div class="cmd-grid">`;
+    L.commands.forEach(cmd => { h += `<div class="cmd-item" onclick="speak('${esc(cmd.cn)}','${cmd.vn}')"><div class="cmd-cn">${cmd.cn}</div>${cmd.py?`<div style='font-size:20px;color:var(--orange);font-style:italic;margin-top:3px;'>${cmd.py}</div>`:''}<div class="cmd-vn">${cmd.vn}</div></div>`; });
+    h += `</div>`;
+  }
+  if (L.report) {
+    h += `<div class="sec-title">生产报表 — Báo cáo sản xuất</div><div class="report-box"><div class="report-title">${L.report.title}</div>`;
+    L.report.rows.forEach(r => { h += `<div class="report-row"><span>${r.label}</span><span class="report-val ${r.type}">${r.val}</span></div>`; });
+    h += `</div>`;
+  }
+  if (L.emailTemplate) {
+    const e = L.emailTemplate;
+    h += `<div class="sec-title">邮件示例 — Mẫu email</div>
+    <div class="email-box">
+      <div class="email-header"><div class="email-meta">发件人：${e.from} &nbsp;|&nbsp; 收件人：${e.to}</div><div class="email-subject">${e.subject}</div></div>
+      <pre class="email-body">${e.body}</pre>
+    </div>`;
+  }
+  if (L.flow) {
+    h += `<div class="sec-title">完整工作流程 — Quy trình làm việc</div><div class="flow-wrap">`;
+    L.flow.forEach((s,i) => {
+      h += `<div class="flow-step"><div class="flow-num">${i+1}</div><div class="flow-cn">${s.cn}</div><div class="flow-vn">${s.vn}</div></div>`;
+      if (i < L.flow.length-1) h += `<div class="flow-arrow">→</div>`;
+    });
+    h += `</div>`;
+  }
+  if (L.patterns) {
+    h += `<div class="sec-title">关键句型 — Mẫu câu then chốt</div>`;
+    L.patterns.forEach(p => {
+      h += `<div class="pattern-card"><div class="pat-num">${p.num}</div><div class="pat-cn">${p.cn}</div><div class="pat-vn">${p.vn}</div><div class="pat-ex">${p.ex}</div>${p.expy?`<div class="pat-expy">${p.expy}</div>`:''}${p.exvn?`<div style='font-size:20px;color:var(--gray-d);margin-top:3px;'>${p.exvn}</div>`:''}</div>`;
+    });
+  }
+  if (L.exercises) {
+    h += `<div class="sec-title">练习 — Luyện tập</div>`;
+    L.exercises.forEach((ex,ei) => {
+      const q = ex.q.replace(ex.blank, `<span class="blank" id="bl-${id}-${ei}">___</span>`);
+      // Shuffle options with Fisher-Yates
+      const opts = [...ex.options];
+      for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+      const optBtns = opts.map(opt => {
+        const safeOpt = opt.replace(/'/g, "\'");
+        const safeAns = ex.answer.replace(/'/g, "\'");
+        return `<button class="ex-opt" onclick="checkAns(this,'${safeOpt}','${safeAns}','bl-${id}-${ei}')">${opt}</button>`;
+      }).join('');
+      const qvnHtml = ex.qvn ? `<div style="font-size:20px;color:var(--gray-d);margin:2px 0 6px;">${ex.qvn.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+      const qpyHtml = ex.qpy ? `<div style="font-size:20px;color:var(--orange);font-style:italic;margin:2px 0 10px;">${ex.qpy.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+      h += `<div class="exercise-box"><div class="ex-q">${q}</div>${qvnHtml}${qpyHtml}<div class="ex-opts">${optBtns}</div></div>`;
+    });
+  }
+  h += `</div>`;
+  c.innerHTML = h;
+}
+
+// ══════════════════════════════════════════════
+// APPENDIX
+// ══════════════════════════════════════════════
+function renderAppendix(c) {
+  const signs = [
+    {cn:'禁止吸烟',vn:'Cấm hút thuốc',loc:'车间入口'},{cn:'必须戴安全帽',vn:'Bắt buộc đội mũ bảo hộ',loc:'生产区'},
+    {cn:'当心触电',vn:'Cẩn thận điện giật',loc:'配电箱'},{cn:'紧急出口',vn:'Lối thoát hiểm',loc:'通道'},
+    {cn:'消防器材',vn:'Thiết bị PCCC',loc:'消防栓旁'},{cn:'禁止明火',vn:'Cấm lửa trần',loc:'危险品区'},
+    {cn:'必须戴护目镜',vn:'Bắt buộc đeo kính bảo hộ',loc:'化学品区'},{cn:'必须穿防护鞋',vn:'Bắt buộc mang giày bảo hộ',loc:'全厂'},
+  ];
+  const counters = [
+    {cn:'个',vn:'cái/chiếc',use:'通用'},{cn:'件',vn:'kiện',use:'衣服、产品'},{cn:'台',vn:'cái',use:'机器'},
+    {cn:'箱',vn:'thùng',use:'包装'},{cn:'托',vn:'pallet',use:'仓储'},{cn:'批',vn:'lô',use:'批次'},
+    {cn:'米',vn:'mét',use:'长度'},{cn:'公斤',vn:'kilogram',use:'重量'},{cn:'升',vn:'lít',use:'容量'},{cn:'平方米',vn:'m²',use:'面积'},
+  ];
+  const phrases = [
+    ['根据订单号安排生产','Theo số đơn sắp xếp SX'],['请核对数量','Vui lòng đối chiếu số lượng'],
+    ['请签字确认','Vui lòng ký xác nhận'],['流程已完成','Quy trình đã hoàn thành'],
+    ['如有问题请告知','Nếu có vấn đề xin thông báo'],['请尽快处理','Xin xử lý sớm'],
+    ['辛苦了！','Cảm ơn đã cố gắng!'],['请多关照！','Xin nhờ chỉ dạy!'],
+  ];
+  let h = `<div class="page-content">
+    <div class="sec-title">车间常用标识 — Biển báo thường dùng</div>
+    <div class="sign-grid">${signs.map(s=>`<div class="sign-card"><div class="sign-cn">${s.cn}</div><div class="sign-vn">${s.vn}</div><div class="sign-loc">${s.loc}</div></div>`).join('')}</div>
+    <div class="sec-title">量词 — Lượng từ</div>
+    <div class="num-grid">${counters.map(ct=>`<div class="num-tag"><span class="num-cn">${ct.cn}</span> <span class="num-vn">(${ct.vn}) — ${ct.use}</span></div>`).join('')}</div>
+    <div class="sec-title">班次时间 — Ca làm việc</div>
+    <div style="display:flex;flex-direction:column;gap:1px;border:1px solid var(--gray-l);border-radius:6px;overflow:hidden;background:var(--gray-l);margin-bottom:20px;">
+      <div style="background:var(--white);padding:12px 16px;display:flex;gap:14px;align-items:center;"><div style="width:8px;height:8px;background:var(--orange);border-radius:2px;flex-shrink:0;"></div><div><div style="font-size: 20px;color:var(--black);"><span style="font-family:'Noto Serif SC',serif;">早班</span> ca sáng</div><div style="font-size: 20px;color:var(--gray-m);">8:00 – 16:00</div></div></div>
+      <div style="background:var(--white);padding:12px 16px;display:flex;gap:14px;align-items:center;"><div style="width:8px;height:8px;background:var(--blue);border-radius:2px;flex-shrink:0;"></div><div><div style="font-size: 20px;color:var(--black);"><span style="font-family:'Noto Serif SC',serif;">中班</span> ca chiều</div><div style="font-size: 20px;color:var(--gray-m);">16:00 – 24:00</div></div></div>
+      <div style="background:var(--white);padding:12px 16px;display:flex;gap:14px;align-items:center;"><div style="width:8px;height:8px;background:var(--gray-d);border-radius:2px;flex-shrink:0;"></div><div><div style="font-size: 20px;color:var(--black);"><span style="font-family:'Noto Serif SC',serif;">夜班</span> ca đêm</div><div style="font-size: 20px;color:var(--gray-m);">00:00 – 8:00</div></div></div>
+    </div>
+    <div class="sec-title">常用表达 — Câu thường dùng</div>
+    <div class="phrase-grid">${phrases.map(([cn,vn])=>`<div class="phrase-item" onclick="speak('${esc(cn)}','${vn}')"><div class="phrase-cn">${cn}</div><div class="phrase-vn">${vn}</div></div>`).join('')}</div>
+  </div>`;
+  c.innerHTML = h;
+}
+
+// ══════════════════════════════════════════════
+// HANZI PAGE
+// ══════════════════════════════════════════════
+const ALL_HZ_CHARS = [...new Set(['工','厂','安','全','危','险','机','器','上','班','加','假','产','量','质','格','返','维','修','故','障','保','养','零','件','入','库','出','发','货','包','装','签','收','电','脑','会','议','文','邮','资','职','同','报','销','票','批','准','客','户','订','单','投','诉','满','协','作','流','程','务','必','完','成'])];
+
+function renderHanzi(c) {
+  const chars = [...new Set(ALL_HZ_CHARS)];
+  const init = chars[0];
+  let h = `<div class="page-content">
+    <div class="sec-title">Chọn chữ để luyện viết</div>
+    <div class="hanzi-section">
+      <div class="hanzi-char-row">${chars.map(ch=>`<button class="hz-btn${ch===init?' active':''}" id="hbtn-${ch}" onclick="selectHz('${ch}')">${ch}</button>`).join('')}</div>
+      <div class="hz-writer-area">
+        <div id="hz-canvas-wrap"></div>
+        <div class="hz-info">
+          <div class="hz-char-big" id="hz-big">${init}</div>
+          <div style="font-size: 20px;color:var(--gray-m);margin-bottom:14px;" id="hz-desc">Nhấn nút bên dưới để bắt đầu</div>
+          <div class="hz-controls">
+            <button class="hz-btn-action primary" onclick="hzAnimate()">▶ Xem nét bút</button>
+            <button class="hz-btn-action" onclick="hzQuiz()">✏️ Tự viết</button>
+            <button class="hz-btn-action" onclick="hzReset()">↺ Xóa</button>
+            <button class="hz-btn-action accent" onclick="speak(currentHzChar,'')">🔊 Nghe</button>
+          </div>
+          <div class="hz-hint-text" id="hz-hint" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  c.innerHTML = h;
+  setTimeout(() => initHz(init), 80);
+}
+
+function initHz(char) {
+  currentHzChar = char;
+  const wrap = document.getElementById('hz-canvas-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const size = Math.min(180, window.innerWidth - 200);
+  const div = document.createElement('div');
+  div.id = 'hz-target';
+  wrap.appendChild(div);
+  const big = document.getElementById('hz-big');
+  if (big) big.textContent = char;
+  try {
+    hanziInst = HanziWriter.create('hz-target', char, {
+      width: size, height: size, padding: 10,
+      strokeWidth: 2, radicalStrokeWidth: 2, outlineWidth: 1,
+      showOutline: true,
+      strokeColor: '#1565c0', outlineColor: '#d0d8e4', drawingColor: '#2e7d32', showCharacter: true,
+      onLoadCharDataError: () => { wrap.innerHTML = `<div style="width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray-l);border-radius:6px;font-family:'Noto Serif SC',serif;font-size: 20px;color:var(--blue);">${char}</div>`; }
+    });
+  } catch(e) {}
+  const hint = document.getElementById('hz-hint');
+  if (hint) hint.style.display = 'none';
+}
+
+function selectHz(char) {
+  document.querySelectorAll('.hz-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('hbtn-' + char);
+  if (btn) btn.classList.add('active');
+  initHz(char);
+}
+function hzAnimate() { if (hanziInst) try { hanziInst.animateCharacter(); } catch(e){} }
+function hzQuiz() {
+  if (!hanziInst) return;
+  const hint = document.getElementById('hz-hint');
+  try {
+    hanziInst.quiz({
+      onMistake: () => { if(hint){hint.style.display='block';hint.style.color='var(--orange)';hint.textContent='Sai nét — thử lại.';} },
+      onCorrectStroke: () => { if(hint){hint.style.display='block';hint.style.color='var(--blue)';hint.textContent='Đúng nét — tiếp tục!';} },
+      onComplete: () => { if(hint){hint.style.display='block';hint.style.color='var(--blue)';hint.textContent='Hoàn thành chữ này!';} }
+    });
+    if(hint){ hint.style.display='block'; hint.style.color='var(--gray-d)'; hint.textContent='Hãy viết từng nét theo thứ tự...'; }
+  } catch(e){}
+}
+function hzReset() {
+  if (hanziInst) try { hanziInst.cancelQuiz(); hanziInst.showCharacter(); } catch(e){}
+  const hint = document.getElementById('hz-hint');
+  if (hint) hint.style.display = 'none';
+}
+
+// ══════════════════════════════════════════════
+// HANZI MODAL — HanziWriter 2.x compatible
+// ══════════════════════════════════════════════
+
+function showHanziModal(word) {
+  // Clean up
+  const old = document.getElementById('hz-modal');
+  if (old) { old.remove(); }
+  modalWriters = [];
+
+  const chars = [...word].filter(c => /[\u4e00-\u9fff]/.test(c));
+  if (!chars.length) return;
+
+  // Build overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'hz-modal';
+  overlay.style.cssText = [
+    'position:fixed', 'top:0', 'left:0', 'right:0', 'bottom:0',
+    'background:rgba(0,0,0,0.6)', 'z-index:9999',
+    'display:flex', 'align-items:center', 'justify-content:center'
+  ].join(';') + ';';
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeHanziModal(); });
+
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:8px;padding:28px 32px;max-width:92vw;';
+
+  // Title
+  const ttl = document.createElement('div');
+  ttl.style.cssText = 'font-family:"Noto Serif SC",serif;font-size:32px;color:#1565c0;margin-bottom:24px;letter-spacing:8px;font-weight:700;';
+  ttl.textContent = word;
+  box.appendChild(ttl);
+
+  // Canvas row — one div per character
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:20px;flex-wrap:wrap;';
+
+  chars.forEach((ch, idx) => {
+    const col = document.createElement('div');
+    col.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:8px;';
+
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'font-family:"Noto Serif SC",serif;font-size:20px;color:#4a5568;';
+    lbl.textContent = ch;
+
+    // Target div — HanziWriter will insert SVG here
+    const target = document.createElement('div');
+    target.id = 'mhz-' + idx;
+    target.style.cssText = 'border:1px solid #d0d8e4;border-radius:6px;background:#f8f8f6;';
+
+    col.appendChild(lbl);
+    col.appendChild(target);
+    row.appendChild(col);
+  });
+  box.appendChild(row);
+
+  // Buttons
+  const ctrl = document.createElement('div');
+  ctrl.style.cssText = 'margin-top:22px;display:flex;gap:10px;';
+  const btnPlay = document.createElement('button');
+  btnPlay.textContent = '▶ Xem lại';
+  btnPlay.style.cssText = 'padding:8px 20px;background:#1565c0;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:20px;font-weight:600;';
+  btnPlay.onclick = () => modalPlayAll();
+  const btnClose = document.createElement('button');
+  btnClose.textContent = '✕ Đóng';
+  btnClose.style.cssText = 'padding:8px 20px;background:#fff;color:#4a5568;border:1px solid #d0d8e4;border-radius:4px;cursor:pointer;font-size:20px;';
+  btnClose.onclick = closeHanziModal;
+  ctrl.appendChild(btnPlay);
+  ctrl.appendChild(btnClose);
+  box.appendChild(ctrl);
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  // Init writers after browser has painted — use 100ms delay
+  setTimeout(() => {
+    let allReady = true;
+    chars.forEach((ch, idx) => {
+      const el = document.getElementById('mhz-' + idx);
+      if (!el) { allReady = false; return; }
+      try {
+        const w = HanziWriter.create('mhz-' + idx, ch, {
+          width: 180,
+          height: 180,
+          padding: 10,
+          strokeWidth: 2,
+          radicalStrokeWidth: 2,
+          outlineWidth: 1,
+          showOutline: true,
+          strokeColor: '#1565c0',
+          outlineColor: '#d0d8e4',
+          radicalColor: '#e65100',
+          showCharacter: true,
+          strokeAnimationSpeed: 1,
+          delayBetweenStrokes: 250,
+          strokeFadeDuration: 300,
+          renderer: 'svg',
+          onLoadCharDataError: function(reason) {
+            const el2 = document.getElementById('mhz-' + idx);
+            if (el2) el2.innerHTML = '<div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center;font-family:Noto Serif SC,serif;font-size:80px;color:#1565c0;">' + ch + '</div>';
+          }
+        });
+        modalWriters.push(w);
+      } catch(err) {
+        modalWriters.push(null);
+      }
+    });
+    // Start animation after writers init
+    setTimeout(modalPlayAll, 400);
+  }, 100);
+}
+
+function modalPlayAll() {
+  let i = 0;
+  function next() {
+    if (i >= modalWriters.length) return;
+    const w = modalWriters[i];
+    i++;
+    if (!w) { next(); return; }
+    try {
+      w.animateCharacter({ onComplete: function() { setTimeout(next, 350); } });
+    } catch(e) { setTimeout(next, 500); }
+  }
+  next();
+}
+
+function closeHanziModal() {
+  const m = document.getElementById('hz-modal');
+  if (m) m.remove();
+  modalWriters = [];
+}
+
+// ══════════════════════════════════════════════
+// SPEECH
+// ══════════════════════════════════════════════
+function setSpeechRate(v) { speechRate = parseFloat(v); }
+
+function speak(cn, vn, speaker, gender) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  isPlaying = false;
+  const u = new SpeechSynthesisUtterance(cn);
+  u.lang = 'zh-CN'; u.rate = speechRate;
+  u.pitch = gender === 'female' ? 1.2 : gender === 'male' ? 0.85 : 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const zh = voices.find(v => v.lang && v.lang.startsWith('zh'));
+  if (zh) u.voice = zh;
+  showBar(cn, vn, speaker);
+  startFakeProgress();
+  u.onend = () => closeBar();
+  window.speechSynthesis.speak(u);
+}
+
+function playDialogue(lessonId, di) {
+  if (!LESSONS[lessonId]) return;
+  window.speechSynthesis.cancel();
+  dialogueQueue = LESSONS[lessonId].dialogues[di].lines.map((l,i) => ({...l, lessonId, di, li: i}));
+  dlgIndex = 0; isPlaying = true;
+  playNext();
+}
+
+function playNext() {
+  if (!isPlaying || dlgIndex >= dialogueQueue.length) { isPlaying = false; closeBar(); return; }
+  const line = dialogueQueue[dlgIndex];
+  document.querySelectorAll('.dlg-line').forEach(el => el.classList.remove('playing'));
+  const el = document.getElementById(`dl-${line.lessonId}-${line.di}-${line.li}`);
+  if (el) { el.classList.add('playing'); el.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+  showBar(line.cn, line.vn, line.speaker);
+  startFakeProgress();
+  if (!window.speechSynthesis) { dlgIndex++; setTimeout(playNext, 700); return; }
+  const u = new SpeechSynthesisUtterance(line.cn);
+  u.lang = 'zh-CN'; u.rate = speechRate;
+  u.pitch = line.gender === 'female' ? 1.2 : 0.85;
+  const voices = window.speechSynthesis.getVoices();
+  const zh = voices.find(v => v.lang && v.lang.startsWith('zh'));
+  if (zh) u.voice = zh;
+  u.onend = () => { dlgIndex++; setTimeout(playNext, 500); };
+  u.onerror = () => { dlgIndex++; setTimeout(playNext, 500); };
+  window.speechSynthesis.speak(u);
+}
+
+function speakLine(lessonId, di, li) {
+  const line = LESSONS[lessonId].dialogues[di].lines[li];
+  window.speechSynthesis.cancel(); isPlaying = false;
+  document.querySelectorAll('.dlg-line').forEach(el => el.classList.remove('playing'));
+  const el = document.getElementById(`dl-${lessonId}-${di}-${li}`);
+  if (el) el.classList.add('playing');
+  speak(line.cn, line.vn, line.speaker, line.gender);
+}
+
+// ══════════════════════════════════════════════
+// AUDIO BAR
+// ══════════════════════════════════════════════
+function showBar(cn, vn, speaker) {
+  document.getElementById('ab-cn').textContent = (speaker ? speaker+'：' : '') + cn;
+  document.getElementById('ab-vn').textContent = vn || '';
+  document.getElementById('audio-bar').classList.add('visible');
+  document.getElementById('ab-play').textContent = '⏸';
+}
+function startFakeProgress() {
+  clearInterval(fakeProgressTimer);
+  let p = 0;
+  const fill = document.getElementById('ab-fill');
+  fill.style.width = '0%';
+  fakeProgressTimer = setInterval(() => { p += 1.5; if (p > 98) { clearInterval(fakeProgressTimer); return; } fill.style.width = p+'%'; }, 80);
+}
+function closeBar() {
+  clearInterval(fakeProgressTimer);
+  document.getElementById('audio-bar').classList.remove('visible');
+  document.getElementById('ab-fill').style.width = '0%';
+  document.querySelectorAll('.dlg-line').forEach(el => el.classList.remove('playing'));
+  isPlaying = false;
+  window.speechSynthesis && window.speechSynthesis.cancel();
+}
+function togglePause() {
+  if (!window.speechSynthesis) return;
+  if (window.speechSynthesis.paused) { window.speechSynthesis.resume(); document.getElementById('ab-play').textContent = '⏸'; }
+  else { window.speechSynthesis.pause(); document.getElementById('ab-play').textContent = '▶'; }
+}
+function prevLine() { if (isPlaying && dlgIndex > 0) { window.speechSynthesis.cancel(); dlgIndex = Math.max(0, dlgIndex-2); setTimeout(playNext, 100); } }
+function nextLine() { if (isPlaying) { window.speechSynthesis.cancel(); dlgIndex++; setTimeout(playNext, 100); } }
+
+// ══════════════════════════════════════════════
+// PINYIN
+// ══════════════════════════════════════════════
+function toggleDlgPinyin(toggleId, lessonId) {
+  const t = document.getElementById(toggleId);
+  t.classList.toggle('on');
+  const on = t.classList.contains('on');
+  document.querySelectorAll(`[id^="dlg-${lessonId}-"]`).forEach(box => {
+    box.querySelectorAll('.line-py').forEach(el => { el.style.display = on ? 'block' : 'none'; });
+  });
+}
+
+// ══════════════════════════════════════════════
+// EXERCISES
+// ══════════════════════════════════════════════
+function checkAns(btn, selected, correct, blankId) {
+  const ok = selected.trim() === correct.trim();
+  btn.classList.add(ok ? 'correct' : 'wrong');
+  if (ok) { const bl = document.getElementById(blankId); if (bl) bl.textContent = correct; }
+  else setTimeout(() => btn.classList.remove('wrong'), 1400);
+}
+
+// ══════════════════════════════════════════════
+// UTIL
+// ══════════════════════════════════════════════
+function esc(s) { return (s||'').replace(/'/g,"\\'"); }
+window.speechSynthesis && window.speechSynthesis.addEventListener('voiceschanged', () => {});
+
+
+// ══════════════════════════════════════════════
+// PDF EXPORT
+// ══════════════════════════════════════════════
+function exportPDF() {
+  const btn = document.getElementById('pdf-btn');
+  if (btn) { btn.textContent = '⏳ Đang tạo...'; btn.disabled = true; }
+
+  const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
+  let tocItems = [];
+  let lessonBlocks = [];
+
+  lessonIds.forEach((id, idx) => {
+    const L = LESSONS[id];
+    if (!L) return;
+    tocItems.push(`<div style="display:flex;justify-content:space-between;padding:4pt 0;border-bottom:0.5pt dotted #ccc;font-size:11pt;">
+      <span><strong>${L.num}</strong>&nbsp;&nbsp;${L.cn}&nbsp;—&nbsp;${L.vn}</span>
+      <span style="color:#888;">Trang ${idx+2}</span>
+    </div>`);
+
+    let block = `<div style="page-break-before:always;padding-top:10pt;">
+      <h1 style="font-family:'Noto Serif SC',serif;font-size:18pt;color:#1b5e20;border-bottom:2pt solid #1b5e20;padding-bottom:5pt;margin-bottom:10pt;">
+        ${L.num}&nbsp;&nbsp;${L.cn}&nbsp;<span style="font-size:12pt;color:#555;font-weight:400;">— ${L.vn}</span>
+      </h1>`;
+
+    if (L.vocab) {
+      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">核心词汇 — Từ vựng cốt lõi</h2>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:10pt;">
+          <thead><tr style="background:#1b5e20;color:white;">
+            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">中文</th>
+            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">拼音</th>
+            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">Tiếng Việt</th>
+            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">Ví dụ</th>
+          </tr></thead><tbody>`;
+      L.vocab.forEach((v,i) => {
+        block += `<tr style="background:${i%2===0?'#f8f9fb':'white'};">
+          <td style="padding:4pt 7pt;font-family:'Noto Serif SC',serif;font-size:13pt;color:#1565c0;">${v.cn}</td>
+          <td style="padding:4pt 7pt;color:#e65100;font-style:italic;font-size:10pt;">${v.py}</td>
+          <td style="padding:4pt 7pt;font-size:10pt;">${v.vn}</td>
+          <td style="padding:4pt 7pt;font-family:'Noto Serif SC',serif;color:#888;font-size:10pt;">${v.ex||''}</td>
+        </tr>`;
+      });
+      block += `</tbody></table>`;
+    }
+
+    if (L.dialogues) {
+      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">实用对话 — Hội thoại thực dụng</h2>`;
+      L.dialogues.forEach(d => {
+        block += `<div style="margin-bottom:8pt;">
+          <div style="background:#1b5e20;color:white;padding:4pt 8pt;font-family:'Noto Serif SC',serif;font-size:11pt;font-weight:700;">${d.title} <span style="font-size:9pt;font-weight:400;opacity:0.85;">— ${d.titleVn}</span></div>
+          <table style="width:100%;border-collapse:collapse;">`;
+        d.lines.forEach((ln,i) => {
+          block += `<tr style="background:${i%2===0?'#f0f7f0':'white'};">
+            <td style="padding:4pt 8pt;font-size:9pt;font-weight:700;color:${ln.gender==='male'?'#1565c0':'#e65100'};width:60pt;vertical-align:top;">${ln.speaker}</td>
+            <td style="padding:4pt 8pt;">
+              <div style="font-family:'Noto Serif SC',serif;font-size:12pt;">${ln.cn}</div>
+              ${ln.py?`<div style="font-size:9pt;color:#e65100;font-style:italic;">${ln.py}</div>`:''}
+              <div style="font-size:9pt;color:#555;">${ln.vn}</div>
+            </td>
+          </tr>`;
+        });
+        block += `</table></div>`;
+      });
+    }
+
+    if (L.patterns) {
+      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">关键句型 — Mẫu câu then chốt</h2>`;
+      L.patterns.forEach(p => {
+        block += `<div style="border:0.5pt solid #d0d8e4;border-radius:3pt;padding:6pt 9pt;margin-bottom:5pt;page-break-inside:avoid;">
+          <div style="font-size:8pt;font-weight:700;color:#e65100;margin-bottom:2pt;">${p.num}</div>
+          <div style="font-family:'Noto Serif SC',serif;font-size:12pt;">${p.cn.replace(/<[^>]+>/g,'')}</div>
+          <div style="font-size:9pt;color:#555;margin:2pt 0 4pt;">${p.vn}</div>
+          <div style="font-family:'Noto Serif SC',serif;font-size:10pt;background:#f5f5f5;padding:4pt 7pt;">${p.ex}</div>
+          ${p.expy?`<div style="font-size:9pt;color:#e65100;font-style:italic;margin-top:2pt;">${p.expy}</div>`:''}
+          ${p.exvn?`<div style="font-size:9pt;color:#666;">${p.exvn}</div>`:''}
+        </div>`;
+      });
+    }
+
+    if (L.exercises) {
+      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">练习 — Luyện tập</h2>`;
+      L.exercises.forEach((ex,i) => {
+        block += `<div style="margin-bottom:6pt;padding:5pt 9pt;border:0.5pt solid #d0d8e4;page-break-inside:avoid;">
+          <div style="font-family:'Noto Serif SC',serif;font-size:11pt;font-weight:700;">${i+1}. ${ex.q}</div>
+          ${ex.qvn?`<div style="font-size:9pt;color:#555;margin:1pt 0;">${ex.qvn}</div>`:''}
+          ${ex.qpy?`<div style="font-size:9pt;color:#e65100;font-style:italic;margin-bottom:3pt;">${ex.qpy}</div>`:''}
+          <div style="display:flex;gap:8pt;flex-wrap:wrap;margin-top:3pt;">
+            ${ex.options.map((opt,oi)=>`<span style="padding:1pt 7pt;border:0.5pt solid #ccc;font-size:9pt;">${String.fromCharCode(65+oi)}. ${opt}</span>`).join('')}
+          </div>
+          <div style="font-size:8pt;color:#27ae60;margin-top:3pt;">✓ ${ex.answer}</div>
+        </div>`;
+      });
+    }
+
+    block += `</div>`;
+    lessonBlocks.push(block);
+  });
+
+  const fullHTML = `<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Giáo trình Tiếng Hoa — Gia Sư Hoa Ngữ Tân An</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'IBM Plex Sans',sans-serif; color:#111; background:white; font-size:10pt; line-height:1.5; }
+@page { margin:15mm 14mm; size:A4; }
+</style>
+</head>
+<body>
+<div style="text-align:center;padding:32pt 0 24pt;border-bottom:3pt solid #1b5e20;margin-bottom:16pt;">
+  <div style="font-family:'Noto Serif SC',serif;font-size:24pt;color:#1b5e20;font-weight:700;margin-bottom:6pt;">工厂与办公室汉语</div>
+  <div style="font-size:14pt;color:#333;margin-bottom:14pt;">Giáo trình Tiếng Hoa Công xưởng & Văn phòng</div>
+  <div style="font-size:11pt;color:#555;line-height:2;">
+    <div style="font-weight:700;font-size:13pt;color:#1b5e20;">GIA SƯ HOA NGỮ TÂN AN</div>
+    <div>9/1 Bạch Văn Tư, Tân An, Long An</div>
+    <div>Zalo: 0839 889 772</div>
+  </div>
+</div>
+<div style="page-break-after:always;padding-top:14pt;">
+  <h1 style="font-size:16pt;color:#1b5e20;border-bottom:2pt solid #1b5e20;padding-bottom:5pt;margin-bottom:10pt;">Mục Lục</h1>
+  ${tocItems.join('')}
+</div>
+${lessonBlocks.join('')}
+</body></html>`;
+
+  // Use hidden iframe — no popup needed
+  let iframe = document.getElementById('pdf-iframe');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'pdf-iframe';
+    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:210mm;height:297mm;border:none;';
+    document.body.appendChild(iframe);
+  }
+
+  iframe.onload = function() {
+    setTimeout(function() {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+      if (btn) { btn.textContent = '⬇ Xuất PDF'; btn.disabled = false; }
+    }, 1500);
+  };
+
+  iframe.srcdoc = fullHTML;
+}
+
+document.addEventListener('DOMContentLoaded', () => showPage('home'));
+</script>
+</body>
+</html>
