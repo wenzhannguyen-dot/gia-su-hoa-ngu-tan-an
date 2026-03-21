@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống 600 Từ Vựng HSK3 - Gia Sư Hoa Ngữ Tân An</title>
+    <script src="https://cdn.tailwindcss.com "></script>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js "></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400 ;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .hanzi-font {
+            font-family: 'SimSun', 'Noto Serif SC', serif;
+            font-weight: normal;
+        }
+        
+        .mizige {
+            background-image: 
+                linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+                linear-gradient(to bottom, #e5e7eb 1px, transparent 1px),
+                linear-gradient(45deg, transparent 49.5%, #e5e7eb 49.5%, #e5e7eb 50.5%, transparent 50.5%),
+                linear-gradient(-45deg, transparent 49.5%, #e5e7eb 49.5%, #e5e7eb 50.5%, transparent 50.5%);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            background-position: center;
+            border: 2px solid #9ca3af;
+        }
+        
+        .table-header {
+            background-color: #7c3aed;
+            color: white;
+        }
+        
+        .btn-green {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .btn-orange {
+            background-color: #f97316;
+            color: white;
+        }
+        
+        .btn-purple {
+            background-color: #7c3aed;
+            color: white;
+        }
+        
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        
+        .stroke-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .char-box {
+            text-align: center;
+        }
+        
+        .char-label {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .audio-btn { background-color: #3b82f6; }
+        .stroke-btn { background-color: #10b981; }
+        .example-btn { background-color: #f97316; }
+        
+        .type-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .type-noun { background: #dbeafe; color: #1e40af; }
+        .type-verb { background: #dcfce7; color: #166534; }
+        .type-adj { background: #fef3c7; color: #92400e; }
+        .type-num { background: #fce7f3; color: #be185d; }
+        .type-measure { background: #f3e8ff; color: #7c3aed; }
+        .type-pronoun { background: #ccfbf1; color: #0f766e; }
+        .type-adv { background: #ffedd5; color: #c2410c; }
+        .type-prep { background: #e0e7ff; color: #4338ca; }
+        .type-conj { background: #fae8ff; color: #a21caf; }
+        .type-particle { background: #f1f5f9; color: #475569; }
+        .type-interj { background: #fecaca; color: #991b1b; }
+        .type-onoma { background: #d1fae5; color: #065f46; }
+
+        /* SIDEBAR STYLES */
+        .sidebar-container {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            height: calc(100vh - 80px);
+            position: fixed;
+            left: 0;
+            top: 80px;
+            overflow-y: auto;
+            z-index: 30;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 100px 20px 20px 20px;
+            position: relative;
+        }
+
+        .category-item {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .category-item.active {
+            background-color: #7c3aed;
+            color: white;
+        }
+
+        .subcategory-item {
+            cursor: pointer;
+            transition: all 0.2s;
+            padding-left: 2rem;
+        }
+
+        .subcategory-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .subcategory-item.active {
+            background-color: #ede9fe;
+            color: #7c3aed;
+            border-right: 3px solid #7c3aed;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar-container {
+                width: 240px;
+            }
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-container {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .sidebar-container.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: #7c3aed;
+            padding: 10px 20px;
+            border-bottom: 2px solid #6d28d9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .fixed-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="bg-gray-50">
+
+    <!-- Fixed Header with Logo and Buttons -->
+    <div class="fixed-header">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div id="logoContainer" class="w-16 h-16 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden">
+                    <span class="text-gray-400 text-xs text-center">Logo<br>HSK3</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white">HỆ THỐNG 600 TỪ VỰNG HSK3</h1>
+                    <p class="text-white font-semibold text-sm">GIA SƯ HOA NGỮ TÂN AN</p>
+                    <p class="text-white text-xs">9/1 BẠCH VĂN TƯ, TÂN AN, LONG AN</p>
+                    <p class="text-white text-xs font-bold">ZALO: 0839 889 772</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-row items-center gap-2">
+                <label class="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <span>📤 Upload Logo</span>
+                    <input type="file" id="logoUpload" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                </label>
+                <button onclick="exportFullHTML()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <span>💾 Lưu trang web</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Original Header (Hidden when fixed) -->
+    <div class="bg-white shadow-sm border-b-4 border-purple-600 relative z-50" style="display: none;">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div id="logoContainer" class="w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden">
+                        <span class="text-gray-400 text-xs text-center">Logo<br>HSK3</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-purple-800">HỆ THỐNG 600 TỪ VỰNG HSK3</h1>
+                        <p class="text-gray-600 text-sm mt-1">Chuẩn Ngữ Pháp Tiếng Hán Hiện Đại | 现代汉语语法标准</p>
+                        <p class="text-purple-600 font-semibold text-lg mt-1">Gia Sư Hoa Ngữ TÂN AN</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-row items-end gap-2 fixed-buttons">
+                    <label class="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        <span>📤 Upload Logo</span>
+                        <input type="file" id="logoUpload" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                    </label>
+                    <button onclick="exportFullHTML()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        <span>💾 Lưu trang web</span>
+                    </button>
+                    <div class="text-right text-sm text-gray-700">
+                        <p class="font-semibold">9/1 BẠCH VĂN TƯ, TÂN AN, LONG AN</p>
+                        <p class="text-purple-600 font-bold">ZALO: 0839 889 772</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu - Dynamic Generated -->
+    <div class="sidebar-container" id="sidebar">
+        <div class="p-4 border-b border-gray-200 bg-purple-50">
+            <h2 class="font-bold text-purple-900 flex items-center gap-2">
+                <span>📚</span>
+                <span>DANH MỤC TỪ LOẠI</span>
+            </h2>
+        </div>
+        <div id="sidebarMenu" class="py-2">
+            <!-- Dynamic content will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Breadcrumb/Current Filter Display -->
+        <div class="fixed flex items-center justify-between bg-white p-4 rounded-lg shadow-md border border-gray-200" style="top: 80px; left: 300px; right: 20px; z-index: 40; position: fixed; backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.95);">
+            <div class="flex items-center gap-2 text-sm">
+                <span class="text-gray-500">Lọc:</span>
+                <span id="currentFilter" class="font-semibold text-purple-700 bg-purple-100 px-3 py-1 rounded-full">Tất cả (600 từ)</span>
+            </div>
+            <button onclick="filterTable('all')" class="text-sm text-gray-600 hover:text-purple-600 underline">
+                Xem tất cả
+            </button>
+        </div>
+
+        <div class="bg-white rounded-lg shadow overflow-hidden" style="position: fixed; top: 140px; left: 300px; right: 20px; bottom: 20px; z-index: 39; overflow-y: auto;">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="table-header text-sm">
+                            <th class="px-3 py-3 text-center w-12">STT</th>
+                            <th class="px-2 py-3 text-center w-12">🔊</th>
+                            <th class="px-4 py-3 text-center w-32">Chữ Hán</th>
+                            <th class="px-2 py-3 text-center w-12">✏</th>
+                            <th class="px-4 py-3 text-left w-32">Pinyin</th>
+                            <th class="px-4 py-3 text-left w-28">Từ loại</th>
+                            <th class="px-4 py-3 text-left w-40">Nhóm nhỏ</th>
+                            <th class="px-4 py-3 text-left">Nghĩa tiếng Việt</th>
+                            <th class="px-2 py-3 text-center w-12">👁</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vocabTableBody" class="text-sm divide-y divide-gray-200">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stroke Order Modal -->
+    <div id="strokeModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="bg-purple-600 text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="text-xl font-bold flex items-center gap-2">
+                    <span>✏</span>
+                    <span>Cách viết: <span id="strokeModalTitle" class="hanzi-font text-2xl"></span></span>
+                </h3>
+                <button onclick="closeStrokeModal()" class="text-white hover:bg-purple-700 rounded-full p-2 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 bg-gray-50">
+                <div id="strokeContainer" class="stroke-container">
+                    <!-- Hanzi writers will be inserted here -->
+                </div>
+            </div>
+            <div class="bg-gray-100 px-6 py-4 flex justify-center gap-4">
+                <button onclick="animateAllStrokes()" class="btn-green px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                    ▶ Viết lại tất cả
+                </button>
+                <button onclick="closeStrokeModal()" class="bg-gray-500 text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example Modal -->
+    <div id="exampleModal" class="fixed inset-0 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="bg-orange-500 text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="text-xl font-bold flex items-center gap-2">
+                    <span>👁</span>
+                    <span>Ví dụ của từ: <span id="exampleModalTitle" class="hanzi-font text-2xl"></span></span>
+                </h3>
+                <button onclick="closeExampleModal()" class="text-white hover:bg-orange-600 rounded-full p-2 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1" id="exampleContent">
+                <!-- Examples will be inserted here -->
+            </div>
+            <div class="bg-gray-100 px-6 py-4 flex justify-center">
+                <button onclick="closeExampleModal()" class="bg-gray-500 text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== DATA: 600 Từ HSK3 Đầy đủ ==========
+        const vocabData = [
+            { stt: 1, hanzi: "阿姨", pinyin: "āyí", type: "名词", subtype: "Danh từ chỉ người", meaning: "Dì, cô, bác gái (vợ của cậu, chú, bác trai)", examples: [{ usage: "Chỉ người phụ nữ lớn tuổi thân thiết", sentence: "我阿姨住在上海。", pinyin: "Wǒ āyí zhù zài Shànghǎi.", meaning: "Dì tôi sống ở Thượng Hải." }, { usage: "Xưng hô với người giúp việc", sentence: "阿姨，请帮我开门。", pinyin: "Āyí, qǐng bāng wǒ kāi mén.", meaning: "Cô ơi, làm ơn mở cửa giúp cháu." }] },
+            { stt: 2, hanzi: "啊", pinyin: "a", type: "叹词", subtype: "-", meaning: "À, ơ, nhỉ (trợ từ cảm thán)", examples: [{ usage: "Biểu thị ngạc nhiên", sentence: "啊！你怎么来了？", pinyin: "A! Nǐ zěnme lái le?", meaning: "À! Sao cậu lại đến?" }, { usage: "Xác nhận thông tin", sentence: "是啊，我也觉得。", pinyin: "Shì a, wǒ yě juéde.", meaning: "Đúng vậy, tôi cũng thấy thế." }] },
+            { stt: 3, hanzi: "矮", pinyin: "ǎi", type: "形容词", subtype: "Tính từ tính chất", meaning: "Thấp (chiều cao)", examples: [{ usage: "Miêu tả chiều cao người", sentence: "他比哥哥矮。", pinyin: "Tā bǐ gēge ǎi.", meaning: "Anh ấy thấp hơn anh trai." }, { usage: "So sánh độ cao", sentence: "这棵树很矮。", pinyin: "Zhè kē shù hěn ǎi.", meaning: "Cái cây này rất thấp." }] },
+            { stt: 4, hanzi: "爱", pinyin: "ài", type: "动词", subtype: "Động từ tâm lý", meaning: "Yêu, thích", examples: [{ usage: "Tình cảm nam nữ", sentence: "我爱你。", pinyin: "Wǒ ài nǐ.", meaning: "Anh yêu em." }, { usage: "Sở thích", sentence: "我爱学习汉语。", pinyin: "Wǒ ài xuéxí Hànyǔ.", meaning: "Tôi yêu thích học tiếng Hán." }] },
+            { stt: 5, hanzi: "爱好", pinyin: "àihào", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Sở thích", examples: [{ usage: "Hoạt động yêu thích", sentence: "我的爱好是游泳。", pinyin: "Wǒ de àihào shì yóuyǒng.", meaning: "Sở thích của tôi là bơi lội." }, { usage: "Hỏi về sở thích", sentence: "你有什么爱好？", pinyin: "Nǐ yǒu shénme àihào?", meaning: "Bạn có sở thích gì?" }] },
+            { stt: 6, hanzi: "安静", pinyin: "ānjìng", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Yên tĩnh, trật tự", examples: [{ usage: "Miêu tả môi trường", sentence: "图书馆很安静。", pinyin: "Túshūguǎn hěn ānjìng.", meaning: "Thư viện rất yên tĩnh." }, { usage: "Yêu cầu trật tự", sentence: "请安静！", pinyin: "Qǐng ānjìng!", meaning: "Làm ơn yên lặng!" }] },
+            { stt: 7, hanzi: "八", pinyin: "bā", type: "数词", subtype: "Số đếm", meaning: "Số 8", examples: [{ usage: "Đếm số", sentence: "我有八本书。", pinyin: "Wǒ yǒu bā běn shū.", meaning: "Tôi có tám quyển sách." }] },
+            { stt: 8, hanzi: "把", pinyin: "bǎ", type: "介词", subtype: "Giới từ đối tượng", meaning: "Cầm, nắm (giới từ)", examples: [{ usage: "Cấu trúc ba đem", sentence: "请把门关上。", pinyin: "Qǐng bǎ mén guān shàng.", meaning: "Làm ơn đóng cửa lại." }] },
+            { stt: 9, hanzi: "爸爸", pinyin: "bàba", type: "名词", subtype: "Danh từ chỉ người", meaning: "Bố, ba", examples: [{ usage: "Xưng hô gia đình", sentence: "我爸爸是医生。", pinyin: "Wǒ bàba shì yīshēng.", meaning: "Bố tôi là bác sĩ." }] },
+            { stt: 10, hanzi: "吧", pinyin: "ba", type: "助词", subtype: "Trợ từ ngữ khí", meaning: "Nhé, đi, thôi (ngữ khí)", examples: [{ usage: "Đề nghị", sentence: "我们走吧！", pinyin: "Wǒmen zǒu ba!", meaning: "Chúng ta đi thôi!" }, { usage: "Phỏng đoán", sentence: "你饿了吧？", pinyin: "Nǐ è le ba?", meaning: "Bạn đói rồi nhỉ?" }] },
+            { stt: 11, hanzi: "白", pinyin: "bái", type: "形容词", subtype: "Tính từ tính chất", meaning: "Màu trắng", examples: [{ usage: "Màu sắc", sentence: "我喜欢白色的衣服。", pinyin: "Wǒ xǐhuan báisè de yīfu.", meaning: "Tôi thích quần áo màu trắng." }] },
+            { stt: 12, hanzi: "百", pinyin: "bǎi", type: "数词", subtype: "Số đếm", meaning: "Trăm", examples: [{ usage: "Số đếm", sentence: "这本书一百块。", pinyin: "Zhè běn shū yībǎi kuài.", meaning: "Quyển sách này một trăm đồng." }] },
+            { stt: 13, hanzi: "班", pinyin: "bān", type: "名词", subtype: "Danh từ chỉ tổ chức", meaning: "Lớp học, ca làm", examples: [{ usage: "Lớp học", sentence: "我在一班。", pinyin: "Wǒ zài yī bān.", meaning: "Tôi ở lớp một." }] },
+            { stt: 14, hanzi: "搬", pinyin: "bān", type: "动词", subtype: "Động từ hành động", meaning: "Chuyển, dọn (nhà)", examples: [{ usage: "Di chuyển đồ đạc", sentence: "我们明天搬家。", pinyin: "Wǒmen míngtiān bān jiā.", meaning: "Ngày mai chúng tôi chuyển nhà." }] },
+            { stt: 15, hanzi: "半", pinyin: "bàn", type: "数词", subtype: "Số đếm", meaning: "Một nửa, rưỡi", examples: [{ usage: "Thời gian", sentence: "现在三点半。", pinyin: "Xiànzài sān diǎn bàn.", meaning: "Bây giờ là ba giờ rưỡi." }] },
+            { stt: 16, hanzi: "办法", pinyin: "bànfǎ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Biện pháp, cách", examples: [{ usage: "Giải pháp", sentence: "我有办法解决这个问题。", pinyin: "Wǒ yǒu bànfǎ jiějué zhège wèntí.", meaning: "Tôi có cách giải quyết vấn đề này." }] },
+            { stt: 17, hanzi: "办公室", pinyin: "bàngōngshì", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Văn phòng làm việc", examples: [{ usage: "Nơi làm việc", sentence: "我的办公室在三楼。", pinyin: "Wǒ de bàngōngshì zài sān lóu.", meaning: "Văn phòng của tôi ở tầng ba." }] },
+            { stt: 18, hanzi: "帮忙", pinyin: "bāngmáng", type: "动词", subtype: "Động từ hành động", meaning: "Giúp đỡ, giúp một tay", examples: [{ usage: "Nhờ giúp đỡ", sentence: "请你帮个忙。", pinyin: "Qǐng nǐ bāng ge máng.", meaning: "Làm ơn bạn giúp tôi một việc." }] },
+            { stt: 19, hanzi: "帮助", pinyin: "bāngzhù", type: "动词", subtype: "Động từ hành động", meaning: "Giúp đỡ", examples: [{ usage: "Việc thiện", sentence: "帮助别人很快乐。", pinyin: "Bāngzhù biérén hěn kuàilè.", meaning: "Giúp đỡ người khác rất vui." }] },
+            { stt: 20, hanzi: "包", pinyin: "bāo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cái túi, cái cặp", examples: [{ usage: "Vật dụng", sentence: "我的包很重。", pinyin: "Wǒ de bāo hěn zhòng.", meaning: "Cặp của tôi nặng quá." }] },
+            { stt: 21, hanzi: "饱", pinyin: "bǎo", type: "形容词", subtype: "Tính từ trạng thái", meaning: "No (ăn no)", examples: [{ usage: "Cảm giác no", sentence: "我吃饱了。", pinyin: "Wǒ chī bǎo le.", meaning: "Tôi ăn no rồi." }] },
+            { stt: 22, hanzi: "报纸", pinyin: "bàozhǐ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Báo giấy", examples: [{ usage: "Phương tiện thông tin", sentence: "爸爸在看报纸。", pinyin: "Bàba zài kàn bàozhǐ.", meaning: "Bố đang đọc báo." }] },
+            { stt: 23, hanzi: "杯子", pinyin: "bēizi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cái ly, cái chén", examples: [{ usage: "Đồ dùng", sentence: "这是一个杯子。", pinyin: "Zhè shì yí ge bēizi.", meaning: "Đây là một cái ly." }] },
+            { stt: 24, hanzi: "北方", pinyin: "běifāng", type: "名词", subtype: "Danh từ phương vị", meaning: "Phương Bắc", examples: [{ usage: "Phương hướng", sentence: "北方很冷。", pinyin: "Běifāng hěn lěng.", meaning: "Phương Bắc rất lạnh." }] },
+            { stt: 25, hanzi: "北京", pinyin: "Běijīng", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Bắc Kinh (thủ đô TQ)", examples: [{ usage: "Địa danh", sentence: "北京是中国的首都。", pinyin: "Běijīng shì Zhōngguó de shǒudū.", meaning: "Bắc Kinh là thủ đô của Trung Quốc." }] },
+            { stt: 26, hanzi: "被", pinyin: "bèi", type: "介词", subtype: "Giới từ đối tượng", meaning: "Bị (cấu trúc bị động)", examples: [{ usage: "Câu bị động", sentence: "杯子被打破了。", pinyin: "Bēizi bèi dǎpò le.", meaning: "Cái ly bị đánh vỡ rồi." }] },
+            { stt: 27, hanzi: "本", pinyin: "běn", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Quyển, cuốn (sách)", examples: [{ usage: "Đếm sách", sentence: "这是一本书。", pinyin: "Zhè shì yī běn shū.", meaning: "Đây là một quyển sách." }] },
+            { stt: 28, hanzi: "鼻子", pinyin: "bízi", type: "名词", subtype: "Danh từ chỉ người", meaning: "Cái mũi", examples: [{ usage: "Bộ phận cơ thể", sentence: "他的鼻子很高。", pinyin: "Tā de bízi hěn gāo.", meaning: "Mũi anh ấy rất cao." }] },
+            { stt: 29, hanzi: "比", pinyin: "bǐ", type: "介词", subtype: "Giới từ đối tượng", meaning: "Hơn, so với", examples: [{ usage: "So sánh", sentence: "我比你高。", pinyin: "Wǒ bǐ nǐ gāo.", meaning: "Tôi cao hơn bạn." }] },
+            { stt: 30, hanzi: "比较", pinyin: "bǐjiào", type: "副词", subtype: "Phó từ mức độ", meaning: "Tương đối, khá là", examples: [{ usage: "So sánh mức độ", sentence: "今天比较冷。", pinyin: "Jīntiān bǐjiào lěng.", meaning: "Hôm nay tương đối lạnh." }] },
+            { stt: 31, hanzi: "比赛", pinyin: "bǐsài", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Cuộc thi, trận đấu", examples: [{ usage: "Thi đấu", sentence: "我们去看比赛吧。", pinyin: "Wǒmen qù kàn bǐsài ba.", meaning: "Chúng ta đi xem trận đấu nhé." }] },
+            { stt: 32, hanzi: "必须", pinyin: "bìxū", type: "副词", subtype: "Phó từ mức độ", meaning: "Phải, nhất thiết", examples: [{ usage: "Bắt buộc", sentence: "你必须努力学习。", pinyin: "Nǐ bìxū nǔlì xuéxí.", meaning: "Bạn phải học tập chăm chỉ." }] },
+            { stt: 33, hanzi: "变化", pinyin: "biànhuà", type: "动词", subtype: "Động từ hành động", meaning: "Thay đổi, biến đổi", examples: [{ usage: "Sự thay đổi", sentence: "这里变化很大。", pinyin: "Zhèlǐ biànhuà hěn dà.", meaning: "Nơi này thay đổi rất nhiều." }] },
+            { stt: 34, hanzi: "表示", pinyin: "biǎoshì", type: "动词", subtype: "Động từ hành động", meaning: "Biểu thị, biểu đạt", examples: [{ usage: "Thể hiện", sentence: "我表示感谢。", pinyin: "Wǒ biǎoshì gǎnxiè.", meaning: "Tôi bày tỏ lòng biết ơn." }] },
+            { stt: 35, hanzi: "表演", pinyin: "biǎoyǎn", type: "动词", subtype: "Động từ hành động", meaning: "Biểu diễn", examples: [{ usage: "Nghệ thuật", sentence: "她在表演舞蹈。", pinyin: "Tā zài biǎoyǎn wǔdǎo.", meaning: "Cô ấy đang biểu diễn múa." }] },
+            { stt: 36, hanzi: "别", pinyin: "bié", type: "副词", subtype: "Phó từ phủ định", meaning: "Đừng", examples: [{ usage: "Cấm chỉ", sentence: "别说话！", pinyin: "Bié shuōhuà!", meaning: "Đừng nói chuyện!" }] },
+            { stt: 37, hanzi: "别人", pinyin: "biérén", type: "代词", subtype: "Đại từ chỉ thị", meaning: "Người khác", examples: [{ usage: "Người ngoài", sentence: "别管别人的事。", pinyin: "Bié guǎn biérén de shì.", meaning: "Đừng xen vào chuyện người khác." }] },
+            { stt: 38, hanzi: "宾馆", pinyin: "bīnguǎn", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Khách sạn, nhà trọ", examples: [{ usage: "Nơi ở tạm", sentence: "我们住在宾馆。", pinyin: "Wǒmen zhù zài bīnguǎn.", meaning: "Chúng tôi ở khách sạn." }] },
+            { stt: 39, hanzi: "冰箱", pinyin: "bīngxiāng", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Tủ lạnh", examples: [{ usage: "Đồ điện gia dụng", sentence: "冰箱里有水果。", pinyin: "Bīngxiāng lǐ yǒu shuǐguǒ.", meaning: "Trong tủ lạnh có trái cây." }] },
+            { stt: 40, hanzi: "不客气", pinyin: "bú kèqi", type: "形容词", subtype: "Tính từ xã giao", meaning: "Khách sáo (không)", examples: [{ usage: "Đáp lại cảm ơn", sentence: "不客气！", pinyin: "Bú kèqi!", meaning: "Không có gì!/Không khách sáo!" }] },
+            { stt: 41, hanzi: "不", pinyin: "bù", type: "副词", subtype: "Phó từ phủ định", meaning: "Không", examples: [{ usage: "Phủ định", sentence: "我不想去。", pinyin: "Wǒ bù xiǎng qù.", meaning: "Tôi không muốn đi." }] },
+            { stt: 42, hanzi: "才", pinyin: "cái", type: "副词", subtype: "Phó từ thời gian", meaning: "Mới (chỉ chậm)", examples: [{ usage: "Muộn hơn dự kiến", sentence: "他才来。", pinyin: "Tā cái lái.", meaning: "Anh ấy mới đến." }] },
+            { stt: 43, hanzi: "菜", pinyin: "cài", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Rau, món ăn", examples: [{ usage: "Thực phẩm", sentence: "这个菜很好吃。", pinyin: "Zhège cài hěn hǎochī.", meaning: "Món này rất ngon." }] },
+            { stt: 44, hanzi: "菜单", pinyin: "càidān", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Thực đơn", examples: [{ usage: "Nhà hàng", sentence: "请给我菜单。", pinyin: "Qǐng gěi wǒ càidān.", meaning: "Làm ơn đưa tôi thực đơn." }] },
+            { stt: 45, hanzi: "参加", pinyin: "cānjiā", type: "动词", subtype: "Động từ hành động", meaning: "Tham gia, dự", examples: [{ usage: "Hoạt động tập thể", sentence: "我要参加比赛。", pinyin: "Wǒ yào cānjiā bǐsài.", meaning: "Tôi muốn tham gia cuộc thi." }] },
+            { stt: 46, hanzi: "草", pinyin: "cǎo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cỏ", examples: [{ usage: "Thực vật", sentence: "草地上有花。", pinyin: "Cǎodì shàng yǒu huā.", meaning: "Trên bãi cỏ có hoa." }] },
+            { stt: 47, hanzi: "层", pinyin: "céng", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Tầng, lớp", examples: [{ usage: "Đếm tầng nhà", sentence: "我家住五层。", pinyin: "Wǒ jiā zhù wǔ céng.", meaning: "Nhà tôi ở tầng năm." }] },
+            { stt: 48, hanzi: "茶", pinyin: "chá", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Trà", examples: [{ usage: "Đồ uống", sentence: "请喝茶。", pinyin: "Qǐng hē chá.", meaning: "Mời uống trà." }] },
+            { stt: 49, hanzi: "差", pinyin: "chà", type: "形容词", subtype: "Tính từ tính chất", meaning: "Kém, tệ", examples: [{ usage: "Chất lượng kém", sentence: "他的成绩很差。", pinyin: "Tā de chéngjì hěn chà.", meaning: "Thành tích của anh ấy rất kém." }] },
+            { stt: 50, hanzi: "长", pinyin: "cháng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Dài", examples: [{ usage: "Kích thước", sentence: "这条路很长。", pinyin: "Zhè tiáo lù hěn cháng.", meaning: "Con đường này rất dài." }] },
+            { stt: 51, hanzi: "唱歌", pinyin: "chànggē", type: "动词", subtype: "Động từ ly hợp", meaning: "Hát", examples: [{ usage: "Ca hát", sentence: "她喜欢唱歌。", pinyin: "Tā xǐhuan chànggē.", meaning: "Cô ấy thích hát." }] },
+            { stt: 52, hanzi: "超市", pinyin: "chāoshì", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Siêu thị", examples: [{ usage: "Mua sắm", sentence: "我去超市买东西。", pinyin: "Wǒ qù chāoshì mǎi dōngxi.", meaning: "Tôi đi siêu thị mua đồ." }] },
+            { stt: 53, hanzi: "衬衫", pinyin: "chènshān", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Áo sơ mi", examples: [{ usage: "Quần áo", sentence: "这件衬衫很漂亮。", pinyin: "Zhè jiàn chènshān hěn piàoliang.", meaning: "Chiếc áo sơ mi này rất đẹp." }] },
+            { stt: 54, hanzi: "成绩", pinyin: "chéngjì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Thành tích, điểm số", examples: [{ usage: "Học tập", sentence: "他的成绩很好。", pinyin: "Tā de chéngjì hěn hǎo.", meaning: "Thành tích của anh ấy rất tốt." }] },
+            { stt: 55, hanzi: "城市", pinyin: "chéngshì", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Thành phố", examples: [{ usage: "Địa lý", sentence: "这是一个大城市。", pinyin: "Zhè shì yí ge dà chéngshì.", meaning: "Đây là một thành phố lớn." }] },
+            { stt: 56, hanzi: "吃", pinyin: "chī", type: "动词", subtype: "Động từ hành động", meaning: "Ăn", examples: [{ usage: "Hành động ăn uống", sentence: "我吃饭了。", pinyin: "Wǒ chī fàn le.", meaning: "Tôi ăn cơm rồi." }] },
+            { stt: 57, hanzi: "迟到", pinyin: "chídào", type: "动词", subtype: "Động từ hành động", meaning: "Đi trễ, muộn", examples: [{ usage: "Thời gian", sentence: "对不起，我迟到了。", pinyin: "Duìbuqǐ, wǒ chídào le.", meaning: "Xin lỗi, tôi đến muộn rồi." }] },
+            { stt: 58, hanzi: "出", pinyin: "chū", type: "动词", subtype: "Động từ xu hướng", meaning: "Ra, đi ra", examples: [{ usage: "Di chuyển ra ngoài", sentence: "请出去。", pinyin: "Qǐng chūqù.", meaning: "Làm ơn ra ngoài." }] },
+            { stt: 59, hanzi: "出现", pinyin: "chūxiàn", type: "动词", subtype: "Động từ tồn tại", meaning: "Xuất hiện", examples: [{ usage: "Hiện ra", sentence: "太阳出现了。", pinyin: "Tàiyáng chūxiàn le.", meaning: "Mặt trời đã xuất hiện." }] },
+            { stt: 60, hanzi: "出租车", pinyin: "chūzūchē", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Xe taxi", examples: [{ usage: "Phương tiện", sentence: "我们坐出租车吧。", pinyin: "Wǒmen zuò chūzūchē ba.", meaning: "Chúng ta đi taxi nhé." }] },
+            { stt: 61, hanzi: "厨房", pinyin: "chúfáng", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Nhà bếp", examples: [{ usage: "Phòng trong nhà", sentence: "妈妈在厨房做饭。", pinyin: "Māma zài chúfáng zuò fàn.", meaning: "Mẹ đang nấu cơm trong bếp." }] },
+            { stt: 62, hanzi: "除了", pinyin: "chúle", type: "介词", subtype: "Giới từ phạm vi", meaning: "Ngoài... ra", examples: [{ usage: "Loại trừ", sentence: "除了我，他们都去了。", pinyin: "Chúle wǒ, tāmen dōu qù le.", meaning: "Ngoài tôi ra, họ đều đi hết rồi." }] },
+            { stt: 63, hanzi: "穿", pinyin: "chuān", type: "动词", subtype: "Động từ hành động", meaning: "Mặc (quần áo)", examples: [{ usage: "Mặc đồ", sentence: "我穿了一件新衬衫。", pinyin: "Wǒ chuān le yí jiàn xīn chènshān.", meaning: "Tôi mặc một chiếc áo sơ mi mới." }] },
+            { stt: 64, hanzi: "船", pinyin: "chuán", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Thuyền, tàu", examples: [{ usage: "Phương tiện đường thủy", sentence: "我们坐船去。", pinyin: "Wǒmen zuò chuán qù.", meaning: "Chúng ta đi bằng thuyền." }] },
+            { stt: 65, hanzi: "春", pinyin: "chūn", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Mùa xuân", examples: [{ usage: "Mùa trong năm", sentence: "春天花开。", pinyin: "Chūntiān huā kāi.", meaning: "Mùa xuân hoa nở." }] },
+            { stt: 66, hanzi: "词语", pinyin: "cíyǔ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Từ ngữ", examples: [{ usage: "Ngôn ngữ học", sentence: "这个词语很难。", pinyin: "Zhège cíyǔ hěn nán.", meaning: "Từ này rất khó." }] },
+            { stt: 67, hanzi: "次", pinyin: "cì", type: "量词", subtype: "Lượng từ động lượng", meaning: "Lần (số lần)", examples: [{ usage: "Đếm số lần", sentence: "我去过一次北京。", pinyin: "Wǒ qùguo yí cì Běijīng.", meaning: "Tôi đã đi Bắc Kinh một lần." }] },
+            { stt: 68, hanzi: "聪明", pinyin: "cōngming", type: "形容词", subtype: "Tính từ tính chất", meaning: "Thông minh", examples: [{ usage: "Trí tuệ", sentence: "这个孩子很聪明。", pinyin: "Zhège háizi hěn cōngming.", meaning: "Đứa trẻ này rất thông minh." }] },
+            { stt: 69, hanzi: "从", pinyin: "cóng", type: "介词", subtype: "Giới từ thời gian", meaning: "Từ", examples: [{ usage: "Thời gian bắt đầu", sentence: "从明天开始。", pinyin: "Cóng míngtiān kāishǐ.", meaning: "Bắt đầu từ ngày mai." }] },
+            { stt: 70, hanzi: "错", pinyin: "cuò", type: "形容词", subtype: "Tính từ tính chất", meaning: "Sai", examples: [{ usage: "Đúng/sai", sentence: "你错了。", pinyin: "Nǐ cuò le.", meaning: "Bạn sai rồi." }] },
+            { stt: 71, hanzi: "打电话", pinyin: "dǎ diànhuà", type: "动词", subtype: "Động từ ly hợp", meaning: "Gọi điện thoại", examples: [{ usage: "Liên lạc", sentence: "我给你打电话。", pinyin: "Wǒ gěi nǐ dǎ diànhuà.", meaning: "Tôi gọi điện cho bạn." }] },
+            { stt: 72, hanzi: "打篮球", pinyin: "dǎ lánqiú", type: "动词", subtype: "Động từ ly hợp", meaning: "Chơi bóng rổ", examples: [{ usage: "Thể thao", sentence: "他喜欢打篮球。", pinyin: "Tā xǐhuan dǎ lánqiú.", meaning: "Anh ấy thích chơi bóng rổ." }] },
+            { stt: 73, hanzi: "打扫", pinyin: "dǎsǎo", type: "动词", subtype: "Động từ hành động", meaning: "Quét dọn, lau chùi", examples: [{ usage: "Dọn dẹp", sentence: "我在打扫房间。", pinyin: "Wǒ zài dǎsǎo fángjiān.", meaning: "Tôi đang dọn phòng." }] },
+            { stt: 74, hanzi: "打算", pinyin: "dǎsuàn", type: "动词", subtype: "Động từ tâm lý", meaning: "Dự định, định", examples: [{ usage: "Kế hoạch", sentence: "我打算去中国。", pinyin: "Wǒ dǎsuàn qù Zhōngguó.", meaning: "Tôi định đi Trung Quốc." }] },
+            { stt: 75, hanzi: "大", pinyin: "dà", type: "形容词", subtype: "Tính từ tính chất", meaning: "To, lớn", examples: [{ usage: "Kích thước", sentence: "这个苹果很大。", pinyin: "Zhège píngguǒ hěn dà.", meaning: "Quả táo này to quá." }] },
+            { stt: 76, hanzi: "大家", pinyin: "dàjiā", type: "代词", subtype: "Đại từ chỉ thị", meaning: "Mọi người", examples: [{ usage: "Tập thể", sentence: "大家好！", pinyin: "Dàjiā hǎo!", meaning: "Chào mọi người!" }] },
+            { stt: 77, hanzi: "带", pinyin: "dài", type: "动词", subtype: "Động từ hành động", meaning: "Mang, dẫn theo", examples: [{ usage: "Mang theo", sentence: "我带了一本书。", pinyin: "Wǒ dài le yì běn shū.", meaning: "Tôi mang theo một quyển sách." }] },
+            { stt: 78, hanzi: "担心", pinyin: "dānxīn", type: "动词", subtype: "Động từ tâm lý", meaning: "Lo lắng", examples: [{ usage: "Tâm trạng", sentence: "妈妈很担心我。", pinyin: "Māma hěn dānxīn wǒ.", meaning: "Mẹ rất lo lắng cho tôi." }] },
+            { stt: 79, hanzi: "蛋糕", pinyin: "dàngāo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Bánh ngọt, bánh kem", examples: [{ usage: "Thực phẩm", sentence: "我喜欢吃蛋糕。", pinyin: "Wǒ xǐhuan chī dàngāo.", meaning: "Tôi thích ăn bánh kem." }] },
+            { stt: 80, hanzi: "但是", pinyin: "dànshì", type: "连词", subtype: "Liên từ đẳng lập", meaning: "Nhưng", examples: [{ usage: "Liên kết đối lập", sentence: "我很累，但是很高兴。", pinyin: "Wǒ hěn lèi, dànshì hěn gāoxìng.", meaning: "Tôi rất mệt, nhưng rất vui." }] },
+            { stt: 81, hanzi: "当然", pinyin: "dāngrán", type: "副词", subtype: "Phó từ xác nhận", meaning: "Tất nhiên, đương nhiên", examples: [{ usage: "Đồng ý", sentence: "当然可以！", pinyin: "Dāngrán kěyǐ!", meaning: "Tất nhiên là được!" }] },
+            { stt: 82, hanzi: "到", pinyin: "dào", type: "动词", subtype: "Động từ xu hướng", meaning: "Đến, tới", examples: [{ usage: "Đến nơi", sentence: "我到了。", pinyin: "Wǒ dào le.", meaning: "Tôi đến rồi." }] },
+            { stt: 83, hanzi: "地", pinyin: "de", type: "助词", subtype: "Trợ từ kết cấu", meaning: "Trợ từ trạng ngữ", examples: [{ usage: "Trước động từ", sentence: "他高兴地笑了。", pinyin: "Tā gāoxìng de xiào le.", meaning: "Anh ấy cười vui vẻ." }] },
+            { stt: 84, hanzi: "的", pinyin: "de", type: "助词", subtype: "Trợ từ kết cấu", meaning: "Của (sở hữu)", examples: [{ usage: "Chỉ sở hữu", sentence: "这是我的书。", pinyin: "Zhè shì wǒ de shū.", meaning: "Đây là sách của tôi." }] },
+            { stt: 85, hanzi: "得", pinyin: "de", type: "助词", subtype: "Trợ từ kết cấu", meaning: "Trợ từ bổ ngữ", examples: [{ usage: "Sau động từ", sentence: "他说得很好。", pinyin: "Tā shuō de hěn hǎo.", meaning: "Anh ấy nói rất hay." }] },
+            { stt: 86, hanzi: "灯", pinyin: "dēng", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Đèn", examples: [{ usage: "Đồ vật", sentence: "请开灯。", pinyin: "Qǐng kāi dēng.", meaning: "Làm ơn bật đèn." }] },
+            { stt: 87, hanzi: "等", pinyin: "děng", type: "动词", subtype: "Động từ hành động", meaning: "Chờ, đợi", examples: [{ usage: "Chờ đợi", sentence: "我等你。", pinyin: "Wǒ děng nǐ.", meaning: "Tôi chờ bạn." }] },
+            { stt: 88, hanzi: "低", pinyin: "dī", type: "形容词", subtype: "Tính từ tính chất", meaning: "Thấp (không cao)", examples: [{ usage: "Chiều cao thấp", sentence: "这个桌子很低。", pinyin: "Zhège zhuōzi hěn dī.", meaning: "Cái bàn này rất thấp." }] },
+            { stt: 89, hanzi: "弟弟", pinyin: "dìdi", type: "名词", subtype: "Danh từ chỉ người", meaning: "Em trai", examples: [{ usage: "Xưng hô gia đình", sentence: "我有一个弟弟。", pinyin: "Wǒ yǒu yí ge dìdi.", meaning: "Tôi có một em trai." }] },
+            { stt: 90, hanzi: "地方", pinyin: "dìfang", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Địa phương, chỗ", examples: [{ usage: "Vị trí", sentence: "这是什么地方？", pinyin: "Zhè shì shénme dìfang?", meaning: "Đây là chỗ nào?" }] },
+            { stt: 91, hanzi: "地铁", pinyin: "dìtiě", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Tàu điện ngầm", examples: [{ usage: "Phương tiện", sentence: "我们坐地铁吧。", pinyin: "Wǒmen zuò dìtiě ba.", meaning: "Chúng ta đi tàu điện ngầm nhé." }] },
+            { stt: 92, hanzi: "地图", pinyin: "dìtú", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Bản đồ", examples: [{ usage: "Công cụ", sentence: "我在看地图。", pinyin: "Wǒ zài kàn dìtú.", meaning: "Tôi đang xem bản đồ." }] },
+            { stt: 93, hanzi: "第一", pinyin: "dì-yī", type: "数词", subtype: "Số thứ tự", meaning: "Thứ nhất", examples: [{ usage: "Thứ tự", sentence: "我是第一名。", pinyin: "Wǒ shì dì yī míng.", meaning: "Tôi là người thứ nhất." }] },
+            { stt: 94, hanzi: "点", pinyin: "diǎn", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Giờ (1 giờ = 1 điểm)", examples: [{ usage: "Thời gian", sentence: "现在八点了。", pinyin: "Xiànzài bā diǎn le.", meaning: "Bây giờ là 8 giờ rồi." }] },
+            { stt: 95, hanzi: "电脑", pinyin: "diànnǎo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Máy tính", examples: [{ usage: "Thiết bị", sentence: "我在用电脑。", pinyin: "Wǒ zài yòng diànnǎo.", meaning: "Tôi đang dùng máy tính." }] },
+            { stt: 96, hanzi: "电视", pinyin: "diànshì", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Ti vi", examples: [{ usage: "Đồ điện tử", sentence: "我在看电视。", pinyin: "Wǒ zài kàn diànshì.", meaning: "Tôi đang xem ti vi." }] },
+            { stt: 97, hanzi: "电梯", pinyin: "diàntī", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Thang máy", examples: [{ usage: "Thiết bị", sentence: "我们坐电梯上去。", pinyin: "Wǒmen zuò diàntī shàngqù.", meaning: "Chúng ta đi thang máy lên." }] },
+            { stt: 98, hanzi: "电影", pinyin: "diànyǐng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Phim điện ảnh", examples: [{ usage: "Giải trí", sentence: "我们去看电影吧。", pinyin: "Wǒmen qù kàn diànyǐng ba.", meaning: "Chúng ta đi xem phim nhé." }] },
+            { stt: 99, hanzi: "电子邮件", pinyin: "diànzǐ yóujiàn", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Email, thư điện tử", examples: [{ usage: "Liên lạc", sentence: "我发电子邮件给你。", pinyin: "Wǒ fā diànzǐ yóujiàn gěi nǐ.", meaning: "Tôi gửi email cho bạn." }] },
+            { stt: 100, hanzi: "东", pinyin: "dōng", type: "名词", subtype: "Danh từ phương vị", meaning: "Đông", examples: [{ usage: "Phương hướng", sentence: "太阳从东方升起。", pinyin: "Tàiyáng cóng dōngfāng shēngqǐ.", meaning: "Mặt trời mọc từ phương Đông." }] },
+            { stt: 101, hanzi: "东西", pinyin: "dōngxi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Đồ vật, thứ gì đó", examples: [{ usage: "Vật phẩm", sentence: "这是什么东西？", pinyin: "Zhè shì shénme dōngxi?", meaning: "Đây là cái gì?" }] },
+            { stt: 102, hanzi: "冬", pinyin: "dōng", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Mùa đông", examples: [{ usage: "Mùa", sentence: "冬天很冷。", pinyin: "Dōngtiān hěn lěng.", meaning: "Mùa đông rất lạnh." }] },
+            { stt: 103, hanzi: "懂", pinyin: "dǒng", type: "动词", subtype: "Động từ tâm lý", meaning: "Hiểu", examples: [{ usage: "Hiểu biết", sentence: "我懂了。", pinyin: "Wǒ dǒng le.", meaning: "Tôi hiểu rồi." }] },
+            { stt: 104, hanzi: "动物", pinyin: "dòngwù", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Động vật", examples: [{ usage: "Sinh vật", sentence: "我喜欢动物。", pinyin: "Wǒ xǐhuan dòngwù.", meaning: "Tôi thích động vật." }] },
+            { stt: 105, hanzi: "都", pinyin: "dōu", type: "副词", subtype: "Phó từ phạm vi", meaning: "Đều", examples: [{ usage: "Toàn bộ", sentence: "我们都很好。", pinyin: "Wǒmen dōu hěn hǎo.", meaning: "Chúng tôi đều khỏe." }] },
+            { stt: 106, hanzi: "读", pinyin: "dú", type: "动词", subtype: "Động từ hành động", meaning: "Đọc", examples: [{ usage: "Đọc sách", sentence: "我在读书。", pinyin: "Wǒ zài dú shū.", meaning: "Tôi đang đọc sách." }] },
+            { stt: 107, hanzi: "短", pinyin: "duǎn", type: "形容词", subtype: "Tính từ tính chất", meaning: "Ngắn", examples: [{ usage: "Chiều dài", sentence: "我的头发很短。", pinyin: "Wǒ de tóufa hěn duǎn.", meaning: "Tóc của tôi rất ngắn." }] },
+            { stt: 108, hanzi: "段", pinyin: "duàn", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Đoạn", examples: [{ usage: "Đoạn văn", sentence: "这是一段对话。", pinyin: "Zhè shì yí duàn duìhuà.", meaning: "Đây là một đoạn hội thoại." }] },
+            { stt: 109, hanzi: "锻炼", pinyin: "duànliàn", type: "动词", subtype: "Động từ hành động", meaning: "Rèn luyện, tập thể dục", examples: [{ usage: "Thể dục", sentence: "我喜欢锻炼身体。", pinyin: "Wǒ xǐhuan duànliàn shēntǐ.", meaning: "Tôi thích rèn luyện thân thể." }] },
+            { stt: 110, hanzi: "对", pinyin: "duì", type: "形容词", subtype: "Tính từ tính chất", meaning: "Đúng", examples: [{ usage: "Đúng/sai", sentence: "你说得对。", pinyin: "Nǐ shuō de duì.", meaning: "Bạn nói đúng." }] },
+            { stt: 111, hanzi: "对不起", pinyin: "duìbuqǐ", type: "形容词", subtype: "Tính từ xã giao", meaning: "Xin lỗi", examples: [{ usage: "Xin lỗi", sentence: "对不起，我迟到了。", pinyin: "Duìbuqǐ, wǒ chídào le.", meaning: "Xin lỗi, tôi đến muộn rồi." }] },
+            { stt: 112, hanzi: "多", pinyin: "duō", type: "形容词", subtype: "Tính từ tính chất", meaning: "Nhiều", examples: [{ usage: "Số lượng", sentence: "人很多。", pinyin: "Rén hěn duō.", meaning: "Người rất nhiều." }] },
+            { stt: 113, hanzi: "多么", pinyin: "duōme", type: "副词", subtype: "Phó từ mức độ", meaning: "Thật là, biết bao (cảm thán)", examples: [{ usage: "Cảm thán", sentence: "多么漂亮啊！", pinyin: "Duōme piàoliang a!", meaning: "Đẹp quá!" }] },
+            { stt: 114, hanzi: "多少", pinyin: "duōshao", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Bao nhiêu", examples: [{ usage: "Hỏi số lượng", sentence: "你有多少钱？", pinyin: "Nǐ yǒu duōshao qián?", meaning: "Bạn có bao nhiêu tiền?" }] },
+            { stt: 115, hanzi: "饿", pinyin: "è", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Đói", examples: [{ usage: "Cảm giác", sentence: "我饿了。", pinyin: "Wǒ è le.", meaning: "Tôi đói rồi." }] },
+            { stt: 116, hanzi: "而且", pinyin: "érqiě", type: "连词", subtype: "Liên từ đẳng lập", meaning: "Hơn nữa, vả lại", examples: [{ usage: "Bổ sung", sentence: "他很聪明，而且很努力。", pinyin: "Tā hěn cōngming, érqiě hěn nǔlì.", meaning: "Anh ấy rất thông minh, hơn nữa còn rất chăm chỉ." }] },
+            { stt: 117, hanzi: "儿子", pinyin: "érzi", type: "名词", subtype: "Danh từ chỉ người", meaning: "Con trai", examples: [{ usage: "Gia đình", sentence: "他有一个儿子。", pinyin: "Tā yǒu yí ge érzi.", meaning: "Anh ấy có một con trai." }] },
+            { stt: 118, hanzi: "耳朵", pinyin: "ěrduo", type: "名词", subtype: "Danh từ chỉ người", meaning: "Cái tai", examples: [{ usage: "Bộ phận cơ thể", sentence: "我的耳朵很大。", pinyin: "Wǒ de ěrduo hěn dà.", meaning: "Tai của tôi to lắm." }] },
+            { stt: 119, hanzi: "二", pinyin: "èr", type: "数词", subtype: "Số đếm", meaning: "Số 2", examples: [{ usage: "Đếm số", sentence: "一加一等于二。", pinyin: "Yī jiā yī děngyú èr.", meaning: "Một cộng một bằng hai." }] },
+            { stt: 120, hanzi: "发烧", pinyin: "fāshāo", type: "动词", subtype: "Động từ hành động", meaning: "Sốt", examples: [{ usage: "Bệnh", sentence: "我发烧了。", pinyin: "Wǒ fāshāo le.", meaning: "Tôi bị sốt rồi." }] },
+            { stt: 121, hanzi: "发现", pinyin: "fāxiàn", type: "动词", subtype: "Động từ tâm lý", meaning: "Phát hiện", examples: [{ usage: "Tìm ra", sentence: "我发现了一个问题。", pinyin: "Wǒ fāxiàn le yí ge wèntí.", meaning: "Tôi phát hiện ra một vấn đề." }] },
+            { stt: 122, hanzi: "饭馆", pinyin: "fànguǎn", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Quán ăn, nhà hàng", examples: [{ usage: "Nơi ăn uống", sentence: "附近有一个饭馆。", pinyin: "Fùjìn yǒu yí ge fànguǎn.", meaning: "Gần đây có một quán ăn." }] },
+            { stt: 123, hanzi: "方便", pinyin: "fāngbiàn", type: "形容词", subtype: "Tính từ tính chất", meaning: "Thuận tiện", examples: [{ usage: "Tiện lợi", sentence: "这里很方便。", pinyin: "Zhèlǐ hěn fāngbiàn.", meaning: "Chỗ này rất thuận tiện." }] },
+            { stt: 124, hanzi: "房间", pinyin: "fángjiān", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Căn phòng", examples: [{ usage: "Không gian", sentence: "我的房间很大。", pinyin: "Wǒ de fángjiān hěn dà.", meaning: "Phòng của tôi rất rộng." }] },
+            { stt: 125, hanzi: "放", pinyin: "fàng", type: "动词", subtype: "Động từ hành động", meaning: "Đặt, thả, để", examples: [{ usage: "Đặt xuống", sentence: "请把书放在桌上。", pinyin: "Qǐng bǎ shū fàng zài zhuō shàng.", meaning: "Làm ơn đặt sách lên bàn." }] },
+            { stt: 126, hanzi: "放心", pinyin: "fàngxīn", type: "动词", subtype: "Động từ tâm lý", meaning: "Yên tâm", examples: [{ usage: "Không lo", sentence: "你放心吧。", pinyin: "Nǐ fàngxīn ba.", meaning: "Bạn yên tâm đi." }] },
+            { stt: 127, hanzi: "非常", pinyin: "fēicháng", type: "副词", subtype: "Phó từ mức độ", meaning: "Rất, vô cùng", examples: [{ usage: "Nhấn mạnh", sentence: "天气非常好。", pinyin: "Tiānqì fēicháng hǎo.", meaning: "Thời tiết rất tốt." }] },
+            { stt: 128, hanzi: "飞机", pinyin: "fēijī", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Máy bay", examples: [{ usage: "Phương tiện", sentence: "我坐飞机去北京。", pinyin: "Wǒ zuò fēijī qù Běijīng.", meaning: "Tôi đi máy bay đến Bắc Kinh." }] },
+            { stt: 129, hanzi: "分", pinyin: "fēn", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Phút", examples: [{ usage: "Thời gian", sentence: "现在十分。", pinyin: "Xiànzài shí fēn.", meaning: "Bây giờ là mười phút." }] },
+            { stt: 130, hanzi: "分钟", pinyin: "fēnzhōng", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Phút (đơn vị)", examples: [{ usage: "Thời gian", sentence: "等我一分钟。", pinyin: "Děng wǒ yì fēnzhōng.", meaning: "Đợi tôi một phút." }] },
+            { stt: 131, hanzi: "服务员", pinyin: "fúwùyuán", type: "名词", subtype: "Danh từ chỉ người", meaning: "Nhân viên phục vụ", examples: [{ usage: "Nghề nghiệp", sentence: "服务员，请结账。", pinyin: "Fúwùyuán, qǐng jiézhàng.", meaning: "Nhân viên ơi, làm ơn tính tiền." }] },
+            { stt: 132, hanzi: "附近", pinyin: "fùjìn", type: "名词", subtype: "Danh từ phương vị", meaning: "Gần đây, lân cận", examples: [{ usage: "Vị trí", sentence: "附近有银行吗？", pinyin: "Fùjìn yǒu yínháng ma?", meaning: "Gần đây có ngân hàng không?" }] },
+            { stt: 133, hanzi: "复习", pinyin: "fùxí", type: "动词", subtype: "Động từ hành động", meaning: "Ôn tập", examples: [{ usage: "Học tập", sentence: "我要复习功课。", pinyin: "Wǒ yào fùxí gōngkè.", meaning: "Tôi phải ôn tập bài vở." }] },
+            { stt: 134, hanzi: "干净", pinyin: "gānjìng", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Sạch sẽ", examples: [{ usage: "Vệ sinh", sentence: "房间很干净。", pinyin: "Fángjiān hěn gānjìng.", meaning: "Phòng rất sạch sẽ." }] },
+            { stt: 135, hanzi: "敢", pinyin: "gǎn", type: "动词", subtype: "Động từ năng nguyện", meaning: "Dám", examples: [{ usage: "Can đảm", sentence: "我不敢去。", pinyin: "Wǒ bù gǎn qù.", meaning: "Tôi không dám đi." }] },
+            { stt: 136, hanzi: "感冒", pinyin: "gǎnmào", type: "动词", subtype: "Động từ hành động", meaning: "Cảm, cúm", examples: [{ usage: "Bệnh", sentence: "我感冒了。", pinyin: "Wǒ gǎnmào le.", meaning: "Tôi bị cảm rồi." }] },
+            { stt: 137, hanzi: "刚才", pinyin: "gāngcái", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Vừa rồi, nãy giờ", examples: [{ usage: "Thời gian vừa qua", sentence: "刚才谁来了？", pinyin: "Gāngcái shéi lái le?", meaning: "Vừa rồi ai đến vậy?" }] },
+            { stt: 138, hanzi: "高", pinyin: "gāo", type: "形容词", subtype: "Tính từ tính chất", meaning: "Cao", examples: [{ usage: "Chiều cao", sentence: "他很高。", pinyin: "Tā hěn gāo.", meaning: "Anh ấy rất cao." }] },
+            { stt: 139, hanzi: "高兴", pinyin: "gāoxìng", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Vui vẻ, vui mừng", examples: [{ usage: "Cảm xúc", sentence: "我很高兴。", pinyin: "Wǒ hěn gāoxìng.", meaning: "Tôi rất vui." }] },
+            { stt: 140, hanzi: "告诉", pinyin: "gàosu", type: "动词", subtype: "Động từ hành động", meaning: "Nói cho biết, báo cho biết", examples: [{ usage: "Thông báo", sentence: "我告诉你一件事。", pinyin: "Wǒ gàosu nǐ yí jiàn shì.", meaning: "Tôi nói cho bạn biết một chuyện." }] },
+            { stt: 141, hanzi: "哥哥", pinyin: "gēge", type: "名词", subtype: "Danh từ chỉ người", meaning: "Anh trai", examples: [{ usage: "Xưng hô", sentence: "我哥哥是老师。", pinyin: "Wǒ gēge shì lǎoshī.", meaning: "Anh trai tôi là giáo viên." }] },
+            { stt: 142, hanzi: "个", pinyin: "ge", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Cái, người (lượng từ chung)", examples: [{ usage: "Đếm chung", sentence: "一个苹果", pinyin: "Yí ge píngguǒ", meaning: "Một quả táo" }] },
+            { stt: 143, hanzi: "给", pinyin: "gěi", type: "动词", subtype: "Động từ hành động", meaning: "Cho, tặng", examples: [{ usage: "Trao tặng", sentence: "我给你一本书。", pinyin: "Wǒ gěi nǐ yì běn shū.", meaning: "Tôi cho bạn một quyển sách." }] },
+            { stt: 144, hanzi: "跟", pinyin: "gēn", type: "介词", subtype: "Giới từ đối tượng", meaning: "Với, cùng", examples: [{ usage: "Cùng với", sentence: "我跟你一起去。", pinyin: "Wǒ gēn nǐ yìqǐ qù.", meaning: "Tôi đi cùng với bạn." }] },
+            { stt: 145, hanzi: "根据", pinyin: "gēnjù", type: "介词", subtype: "Giới từ công cụ", meaning: "Căn cứ vào, theo", examples: [{ usage: "Dựa vào", sentence: "根据天气，我们决定不去。", pinyin: "Gēnjù tiānqì, wǒmen juédìng bú qù.", meaning: "Căn cứ vào thời tiết, chúng tôi quyết định không đi." }] },
+            { stt: 146, hanzi: "更", pinyin: "gèng", type: "副词", subtype: "Phó từ mức độ", meaning: "Hơn (so sánh hơn)", examples: [{ usage: "So sánh hơn", sentence: "今天更冷。", pinyin: "Jīntiān gèng lěng.", meaning: "Hôm nay lạnh hơn." }] },
+            { stt: 147, hanzi: "公共汽车", pinyin: "gōnggòngqìchē", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Xe buýt", examples: [{ usage: "Phương tiện", sentence: "我们坐公共汽车。", pinyin: "Wǒmen zuò gōnggòngqìchē.", meaning: "Chúng ta đi xe buýt." }] },
+            { stt: 148, hanzi: "公斤", pinyin: "gōngjīn", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Kilogram", examples: [{ usage: "Đơn vị khối lượng", sentence: "这个西瓜五公斤。", pinyin: "Zhège xīguā wǔ gōngjīn.", meaning: "Quả dưa hấu này năm ký." }] },
+            { stt: 149, hanzi: "公司", pinyin: "gōngsī", type: "名词", subtype: "Danh từ chỉ tổ chức", meaning: "Công ty", examples: [{ usage: "Tổ chức", sentence: "我在一家公司工作。", pinyin: "Wǒ zài yì jiā gōngsī gōngzuò.", meaning: "Tôi làm việc ở một công ty." }] },
+            { stt: 150, hanzi: "公园", pinyin: "gōngyuán", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Công viên", examples: [{ usage: "Địa điểm", sentence: "我们去公园玩。", pinyin: "Wǒmen qù gōngyuán wán.", meaning: "Chúng ta đi công viên chơi." }] },
+            { stt: 151, hanzi: "工作", pinyin: "gōngzuò", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Công việc", examples: [{ usage: "Nghề nghiệp", sentence: "工作很忙。", pinyin: "Gōngzuò hěn máng.", meaning: "Công việc rất bận." }] },
+            { stt: 152, hanzi: "狗", pinyin: "gǒu", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Con chó", examples: [{ usage: "Động vật", sentence: "我有一只狗。", pinyin: "Wǒ yǒu yì zhī gǒu.", meaning: "Tôi có một con chó." }] },
+            { stt: 153, hanzi: "故事", pinyin: "gùshi", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Câu chuyện", examples: [{ usage: "Kể chuyện", sentence: "奶奶喜欢讲故事。", pinyin: "Nǎinai xǐhuan jiǎng gùshi.", meaning: "Bà thích kể chuyện." }] },
+            { stt: 154, hanzi: "刮风", pinyin: "guā fēng", type: "动词", subtype: "Động từ hành động", meaning: "Có gió, thổi gió", examples: [{ usage: "Thời tiết", sentence: "今天刮风。", pinyin: "Jīntiān guā fēng.", meaning: "Hôm nay có gió." }] },
+            { stt: 155, hanzi: "关", pinyin: "guān", type: "动词", subtype: "Động từ hành động", meaning: "Đóng, tắt", examples: [{ usage: "Đóng cửa", sentence: "请关门。", pinyin: "Qǐng guān mén.", meaning: "Làm ơn đóng cửa." }] },
+            { stt: 156, hanzi: "关系", pinyin: "guānxì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Quan hệ", examples: [{ usage: "Mối quan hệ", sentence: "我们的关系很好。", pinyin: "Wǒmen de guānxì hěn hǎo.", meaning: "Quan hệ của chúng tôi rất tốt." }] },
+            { stt: 157, hanzi: "关心", pinyin: "guānxīn", type: "动词", subtype: "Động từ tâm lý", meaning: "Quan tâm", examples: [{ usage: "Chăm sóc", sentence: "妈妈很关心我。", pinyin: "Māma hěn guānxīn wǒ.", meaning: "Mẹ rất quan tâm đến tôi." }] },
+            { stt: 158, hanzi: "关于", pinyin: "guānyú", type: "介词", subtype: "Giới từ đối tượng", meaning: "Về, liên quan đến", examples: [{ usage: "Chủ đề", sentence: "关于这个问题，我不知道。", pinyin: "Guānyú zhège wèntí, wǒ bù zhīdào.", meaning: "Về vấn đề này, tôi không biết." }] },
+            { stt: 159, hanzi: "贵", pinyin: "guì", type: "形容词", subtype: "Tính từ tính chất", meaning: "Đắt", examples: [{ usage: "Giá cả", sentence: "这个很贵。", pinyin: "Zhège hěn guì.", meaning: "Cái này rất đắt." }] },
+            { stt: 160, hanzi: "国家", pinyin: "guójiā", type: "名词", subtype: "Danh từ chỉ tổ chức", meaning: "Quốc gia", examples: [{ usage: "Địa lý chính trị", sentence: "中国是一个大国。", pinyin: "Zhōngguó shì yí ge dà guó.", meaning: "Trung Quốc là một nước lớn." }] },
+            { stt: 161, hanzi: "果汁", pinyin: "guǒzhī", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Nước ép trái cây", examples: [{ usage: "Đồ uống", sentence: "我要一杯果汁。", pinyin: "Wǒ yào yì bēi guǒzhī.", meaning: "Tôi muốn một ly nước ép." }] },
+            { stt: 162, hanzi: "过去", pinyin: "guòqù", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Quá khứ", examples: [{ usage: "Thời gian đã qua", sentence: "那是过去的事了。", pinyin: "Nà shì guòqù de shì le.", meaning: "Đó là chuyện quá khứ rồi." }] },
+            { stt: 163, hanzi: "过", pinyin: "guo", type: "助词", subtype: "Trợ từ động thái", meaning: "Đã từng (trải nghiệm)", examples: [{ usage: "Kinh nghiệm", sentence: "我去过北京。", pinyin: "Wǒ qùguo Běijīng.", meaning: "Tôi đã từng đi Bắc Kinh." }] },
+            { stt: 164, hanzi: "还", pinyin: "hái", type: "副词", subtype: "Phó từ thời gian", meaning: "Còn, vẫn", examples: [{ usage: "Tiếp tục", sentence: "他还在睡觉。", pinyin: "Tā hái zài shuìjiào.", meaning: "Anh ấy vẫn còn đang ngủ." }] },
+            { stt: 165, hanzi: "还是", pinyin: "háishì", type: "连词", subtype: "Liên từ đẳng lập", meaning: "Hay là (lựa chọn)", examples: [{ usage: "Lựa chọn", sentence: "你喝茶还是咖啡？", pinyin: "Nǐ hē chá háishì kāfēi?", meaning: "Bạn uống trà hay cà phê?" }] },
+            { stt: 166, hanzi: "孩子", pinyin: "háizi", type: "名词", subtype: "Danh từ chỉ người", meaning: "Đứa trẻ, con cái", examples: [{ usage: "Trẻ em", sentence: "这个孩子很聪明。", pinyin: "Zhège háizi hěn cōngming.", meaning: "Đứa trẻ này rất thông minh." }] },
+            { stt: 167, hanzi: "害怕", pinyin: "hàipà", type: "动词", subtype: "Động từ tâm lý", meaning: "Sợ, sợ hãi", examples: [{ usage: "Cảm giác sợ", sentence: "我害怕狗。", pinyin: "Wǒ hàipà gǒu.", meaning: "Tôi sợ chó." }] },
+            { stt: 168, hanzi: "汉语", pinyin: "Hànyǔ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tiếng Hán", examples: [{ usage: "Ngôn ngữ", sentence: "我在学汉语。", pinyin: "Wǒ zài xué Hànyǔ.", meaning: "Tôi đang học tiếng Hán." }] },
+            { stt: 169, hanzi: "好", pinyin: "hǎo", type: "形容词", subtype: "Tính từ tính chất", meaning: "Tốt", examples: [{ usage: "Chất lượng", sentence: "这个很好。", pinyin: "Zhège hěn hǎo.", meaning: "Cái này rất tốt." }] },
+            { stt: 170, hanzi: "好吃", pinyin: "hǎochī", type: "形容词", subtype: "Tính từ tính chất", meaning: "Ngon", examples: [{ usage: "Đồ ăn", sentence: "这个菜很好吃。", pinyin: "Zhège cài hěn hǎochī.", meaning: "Món này rất ngon." }] },
+            { stt: 171, hanzi: "号", pinyin: "hào", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Ngày (trong tháng)", examples: [{ usage: "Ngày tháng", sentence: "今天是十号。", pinyin: "Jīntiān shì shí hào.", meaning: "Hôm nay là ngày mười." }] },
+            { stt: 172, hanzi: "喝", pinyin: "hē", type: "动词", subtype: "Động từ hành động", meaning: "Uống", examples: [{ usage: "Uống nước", sentence: "我想喝水。", pinyin: "Wǒ xiǎng hē shuǐ.", meaning: "Tôi muốn uống nước." }] },
+            { stt: 173, hanzi: "和", pinyin: "hé", type: "连词", subtype: "Liên từ đẳng lập", meaning: "Và", examples: [{ usage: "Kết nối", sentence: "我和你。", pinyin: "Wǒ hé nǐ.", meaning: "Tôi và bạn." }] },
+            { stt: 174, hanzi: "河", pinyin: "hé", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Con sông", examples: [{ usage: "Địa lý", sentence: "这条河很长。", pinyin: "Zhè tiáo hé hěn cháng.", meaning: "Con sông này rất dài." }] },
+            { stt: 175, hanzi: "黑", pinyin: "hēi", type: "形容词", subtype: "Tính từ tính chất", meaning: "Màu đen", examples: [{ usage: "Màu sắc", sentence: "我喜欢黑色。", pinyin: "Wǒ xǐhuan hēisè.", meaning: "Tôi thích màu đen." }] },
+            { stt: 176, hanzi: "黑板", pinyin: "hēibǎn", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Bảng đen", examples: [{ usage: "Dụng cụ học tập", sentence: "老师在黑板上写字。", pinyin: "Lǎoshī zài hēibǎn shàng xiě zì.", meaning: "Thầy giáo viết chữ lên bảng." }] },
+            { stt: 177, hanzi: "很", pinyin: "hěn", type: "副词", subtype: "Phó từ mức độ", meaning: "Rất", examples: [{ usage: "Mức độ", sentence: "很高兴认识你。", pinyin: "Hěn gāoxìng rènshi nǐ.", meaning: "Rất vui được quen bạn." }] },
+            { stt: 178, hanzi: "红", pinyin: "hóng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Màu đỏ", examples: [{ usage: "Màu sắc", sentence: "我喜欢红色。", pinyin: "Wǒ xǐhuan hóngsè.", meaning: "Tôi thích màu đỏ." }] },
+            { stt: 179, hanzi: "后面", pinyin: "hòumiàn", type: "名词", subtype: "Danh từ phương vị", meaning: "Phía sau", examples: [{ usage: "Vị trí", sentence: "我在你后面。", pinyin: "Wǒ zài nǐ hòumiàn.", meaning: "Tôi ở phía sau bạn." }] },
+            { stt: 180, hanzi: "护照", pinyin: "hùzhào", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Hộ chiếu", examples: [{ usage: "Giấy tờ", sentence: "这是我的护照。", pinyin: "Zhè shì wǒ de hùzhào.", meaning: "Đây là hộ chiếu của tôi." }] },
+            { stt: 181, hanzi: "花", pinyin: "huā", type: "动词", subtype: "Động từ hành động", meaning: "Tiêu, xài (tiền)", examples: [{ usage: "Chi tiêu", sentence: "我花了很多钱。", pinyin: "Wǒ huā le hěn duō qián.", meaning: "Tôi đã tiêu rất nhiều tiền." }] },
+            { stt: 182, hanzi: "花园", pinyin: "huāyuán", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Vườn hoa", examples: [{ usage: "Địa điểm", sentence: "花园里很漂亮。", pinyin: "Huāyuán lǐ hěn piàoliang.", meaning: "Trong vườn hoa rất đẹp." }] },
+            { stt: 183, hanzi: "画", pinyin: "huà", type: "动词", subtype: "Động từ hành động", meaning: "Vẽ", examples: [{ usage: "Hội họa", sentence: "我喜欢画画。", pinyin: "Wǒ xǐhuan huà huà.", meaning: "Tôi thích vẽ tranh." }] },
+            { stt: 184, hanzi: "坏", pinyin: "huài", type: "形容词", subtype: "Tính từ tính chất", meaning: "Hỏng, xấu", examples: [{ usage: "Chất lượng kém", sentence: "这个手机坏了。", pinyin: "Zhège shǒujī huài le.", meaning: "Cái điện thoại này hỏng rồi." }] },
+            { stt: 185, hanzi: "欢迎", pinyin: "huānyíng", type: "动词", subtype: "Động từ tâm lý", meaning: "Hoan nghênh, chào đón", examples: [{ usage: "Tiếp đón", sentence: "欢迎你！", pinyin: "Huānyíng nǐ!", meaning: "Hoan nghênh bạn!" }] },
+            { stt: 186, hanzi: "还", pinyin: "huán", type: "动词", subtype: "Động từ hành động", meaning: "Trả lại", examples: [{ usage: "Hoàn trả", sentence: "请还我书。", pinyin: "Qǐng huán wǒ shū.", meaning: "Làm ơn trả lại sách cho tôi." }] },
+            { stt: 187, hanzi: "环境", pinyin: "huánjìng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Môi trường", examples: [{ usage: "Bối cảnh", sentence: "这里环境很好。", pinyin: "Zhèlǐ huánjìng hěn hǎo.", meaning: "Môi trường ở đây rất tốt." }] },
+            { stt: 188, hanzi: "换", pinyin: "huàn", type: "动词", subtype: "Động từ hành động", meaning: "Đổi, thay", examples: [{ usage: "Trao đổi", sentence: "我想换钱。", pinyin: "Wǒ xiǎng huàn qián.", meaning: "Tôi muốn đổi tiền." }] },
+            { stt: 189, hanzi: "黄", pinyin: "huáng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Màu vàng", examples: [{ usage: "Màu sắc", sentence: "这是黄色的。", pinyin: "Zhè shì huángsè de.", meaning: "Đây là màu vàng." }] },
+            { stt: 190, hanzi: "回", pinyin: "huí", type: "动词", subtype: "Động từ xu hướng", meaning: "Trở về", examples: [{ usage: "Quay lại", sentence: "我要回家。", pinyin: "Wǒ yào huí jiā.", meaning: "Tôi muốn về nhà." }] },
+            { stt: 191, hanzi: "回答", pinyin: "huídá", type: "动词", subtype: "Động từ hành động", meaning: "Trả lời", examples: [{ usage: "Đáp lại", sentence: "请回答问题。", pinyin: "Qǐng huídá wèntí.", meaning: "Làm ơn trả lời câu hỏi." }] },
+            { stt: 192, hanzi: "会", pinyin: "huì", type: "动词", subtype: "Động từ năng nguyện", meaning: "Biết, có thể (kỹ năng)", examples: [{ usage: "Khả năng", sentence: "我会游泳。", pinyin: "Wǒ huì yóuyǒng.", meaning: "Tôi biết bơi." }] },
+            { stt: 193, hanzi: "会议", pinyin: "huìyì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Cuộc họp", examples: [{ usage: "Công việc", sentence: "下午有会议。", pinyin: "Xiàwǔ yǒu huìyì.", meaning: "Buổi chiều có cuộc họp." }] },
+            { stt: 194, hanzi: "火车站", pinyin: "huǒchēzhàn", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Ga tàu hỏa", examples: [{ usage: "Giao thông", sentence: "火车站在前面。", pinyin: "Huǒchēzhàn zài qiánmiàn.", meaning: "Ga tàu hỏa ở phía trước." }] },
+            { stt: 195, hanzi: "或者", pinyin: "huòzhě", type: "连词", subtype: "Liên từ đẳng lập", meaning: "Hoặc", examples: [{ usage: "Lựa chọn", sentence: "你可以喝茶或者咖啡。", pinyin: "Nǐ kěyǐ hē chá huòzhě kāfēi.", meaning: "Bạn có thể uống trà hoặc cà phê." }] },
+            { stt: 196, hanzi: "机场", pinyin: "jīchǎng", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Sân bay", examples: [{ usage: "Giao thông", sentence: "机场很远。", pinyin: "Jīchǎng hěn yuǎn.", meaning: "Sân bay rất xa." }] },
+            { stt: 197, hanzi: "鸡蛋", pinyin: "jīdàn", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Trứng gà", examples: [{ usage: "Thực phẩm", sentence: "我要吃鸡蛋。", pinyin: "Wǒ yào chī jīdàn.", meaning: "Tôi muốn ăn trứng." }] },
+            { stt: 198, hanzi: "几乎", pinyin: "jīhū", type: "副词", subtype: "Phó từ phạm vi", meaning: "Gần như, hầu như", examples: [{ usage: "Gần như", sentence: "我几乎完成了。", pinyin: "Wǒ jīhū wánchéng le.", meaning: "Tôi gần như đã hoàn thành." }] },
+            { stt: 199, hanzi: "机会", pinyin: "jīhuì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Cơ hội", examples: [{ usage: "Thời cơ", sentence: "这是一个好机会。", pinyin: "Zhè shì yí ge hǎo jīhuì.", meaning: "Đây là một cơ hội tốt." }] },
+            { stt: 200, hanzi: "极", pinyin: "jí", type: "副词", subtype: "Phó từ mức độ", meaning: "Cực kỳ", examples: [{ usage: "Nhấn mạnh", sentence: "极好", pinyin: "Jí hǎo", meaning: "Cực kỳ tốt" }] },
+            { stt: 201, hanzi: "几", pinyin: "jǐ", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Mấy, bao nhiêu", examples: [{ usage: "Hỏi số lượng nhỏ", sentence: "你有几本书？", pinyin: "Nǐ yǒu jǐ běn shū?", meaning: "Bạn có mấy quyển sách?" }] },
+            { stt: 202, hanzi: "记得", pinyin: "jìde", type: "动词", subtype: "Động từ tâm lý", meaning: "Nhớ", examples: [{ usage: "Trí nhớ", sentence: "我记得你。", pinyin: "Wǒ jìde nǐ.", meaning: "Tôi nhớ bạn." }] },
+            { stt: 203, hanzi: "季节", pinyin: "jìjié", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Mùa (trong năm)", examples: [{ usage: "Thời tiết", sentence: "你最喜欢哪个季节？", pinyin: "Nǐ zuì xǐhuan nǎge jìjié?", meaning: "Bạn thích mùa nào nhất?" }] },
+            { stt: 204, hanzi: "家", pinyin: "jiā", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Nhà, gia đình", examples: [{ usage: "Nơi ở", sentence: "我家在北京。", pinyin: "Wǒ jiā zài Běijīng.", meaning: "Nhà tôi ở Bắc Kinh." }] },
+            { stt: 205, hanzi: "检查", pinyin: "jiǎnchá", type: "动词", subtype: "Động từ hành động", meaning: "Kiểm tra", examples: [{ usage: "Rà soát", sentence: "医生在检查身体。", pinyin: "Yīshēng zài jiǎnchá shēntǐ.", meaning: "Bác sĩ đang kiểm tra thân thể." }] },
+            { stt: 206, hanzi: "简单", pinyin: "jiǎndān", type: "形容词", subtype: "Tính từ tính chất", meaning: "Đơn giản", examples: [{ usage: "Độ khó", sentence: "这个题很简单。", pinyin: "Zhège tí hěn jiǎndān.", meaning: "Câu này rất đơn giản." }] },
+            { stt: 207, hanzi: "件", pinyin: "jiàn", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Cái, chiếc (quần áo, việc)", examples: [{ usage: "Đếm đồ vật", sentence: "一件衣服", pinyin: "Yí jiàn yīfu", meaning: "Một bộ quần áo" }] },
+            { stt: 208, hanzi: "健康", pinyin: "jiànkāng", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Khỏe mạnh", examples: [{ usage: "Sức khỏe", sentence: "祝你健康！", pinyin: "Zhù nǐ jiànkāng!", meaning: "Chúc bạn khỏe mạnh!" }] },
+            { stt: 209, hanzi: "见面", pinyin: "jiànmiàn", type: "动词", subtype: "Động từ ly hợp", meaning: "Gặp mặt", examples: [{ usage: "Gặp gỡ", sentence: "我们明天见面。", pinyin: "Wǒmen míngtiān jiànmiàn.", meaning: "Chúng ta ngày mai gặp mặt." }] },
+            { stt: 210, hanzi: "讲", pinyin: "jiǎng", type: "动词", subtype: "Động từ hành động", meaning: "Nói, kể, giảng", examples: [{ usage: "Diễn đạt", sentence: "老师讲汉语。", pinyin: "Lǎoshī jiǎng Hànyǔ.", meaning: "Thầy giáo giảng tiếng Hán." }] },
+            { stt: 211, hanzi: "教", pinyin: "jiāo", type: "动词", subtype: "Động từ hành động", meaning: "Dạy", examples: [{ usage: "Giảng dạy", sentence: "他教我汉语。", pinyin: "Tā jiāo wǒ Hànyǔ.", meaning: "Anh ấy dạy tôi tiếng Hán." }] },
+            { stt: 212, hanzi: "角", pinyin: "jiǎo", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Hào (1/10 đồng)", examples: [{ usage: "Tiền tệ", sentence: "五角钱", pinyin: "Wǔ jiǎo qián", meaning: "Năm hào tiền" }] },
+            { stt: 213, hanzi: "脚", pinyin: "jiǎo", type: "名词", subtype: "Danh từ chỉ người", meaning: "Cái chân", examples: [{ usage: "Bộ phận cơ thể", sentence: "我的脚很疼。", pinyin: "Wǒ de jiǎo hěn téng.", meaning: "Chân của tôi rất đau." }] },
+            { stt: 214, hanzi: "叫", pinyin: "jiào", type: "动词", subtype: "Động từ hành động", meaning: "Gọi, kêu", examples: [{ usage: "Xưng hô", sentence: "你叫什么？", pinyin: "Nǐ jiào shénme?", meaning: "Bạn tên là gì?" }] },
+            { stt: 215, hanzi: "教室", pinyin: "jiàoshì", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Lớp học, phòng học", examples: [{ usage: "Nơi học", sentence: "教室里有很多人。", pinyin: "Jiàoshì lǐ yǒu hěn duō rén.", meaning: "Trong lớp có rất nhiều người." }] },
+            { stt: 216, hanzi: "接", pinyin: "jiē", type: "动词", subtype: "Động từ hành động", meaning: "Đón, tiếp nhận", examples: [{ usage: "Đón người", sentence: "我去接你。", pinyin: "Wǒ qù jiē nǐ.", meaning: "Tôi đi đón bạn." }] },
+            { stt: 217, hanzi: "街道", pinyin: "jiēdào", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Đường phố", examples: [{ usage: "Thành phố", sentence: "这条街道很干净。", pinyin: "Zhè tiáo jiēdào hěn gānjìng.", meaning: "Con đường này rất sạch." }] },
+            { stt: 218, hanzi: "结婚", pinyin: "jiéhūn", type: "动词", subtype: "Động từ ly hợp", meaning: "Kết hôn", examples: [{ usage: "Hôn nhân", sentence: "他们结婚了。", pinyin: "Tāmen jiéhūn le.", meaning: "Họ đã kết hôn rồi." }] },
+            { stt: 219, hanzi: "结束", pinyin: "jiéshù", type: "动词", subtype: "Động từ hành động", meaning: "Kết thúc", examples: [{ usage: "Hoàn thành", sentence: "会议结束了。", pinyin: "Huìyì jiéshù le.", meaning: "Cuộc họp đã kết thúc." }] },
+            { stt: 220, hanzi: "节目", pinyin: "jiémù", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Chương trình (TV, biểu diễn)", examples: [{ usage: "Giải trí", sentence: "这个节目很好看。", pinyin: "Zhège jiémù hěn hǎokàn.", meaning: "Chương trình này rất hay." }] },
+            { stt: 221, hanzi: "节日", pinyin: "jiérì", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Ngày lễ", examples: [{ usage: "Lễ hội", sentence: "春节是中国节日。", pinyin: "Chūnjié shì Zhōngguó jiérì.", meaning: "Tết Nguyên Đán là ngày lễ Trung Quốc." }] },
+            { stt: 222, hanzi: "姐姐", pinyin: "jiějie", type: "名词", subtype: "Danh từ chỉ người", meaning: "Chị gái", examples: [{ usage: "Xưng hô", sentence: "我姐姐很漂亮。", pinyin: "Wǒ jiějie hěn piàoliang.", meaning: "Chị gái tôi rất đẹp." }] },
+            { stt: 223, hanzi: "解决", pinyin: "jiějué", type: "动词", subtype: "Động từ hành động", meaning: "Giải quyết", examples: [{ usage: "Xử lý", sentence: "我们解决了问题。", pinyin: "Wǒmen jiějué le wèntí.", meaning: "Chúng tôi đã giải quyết vấn đề." }] },
+            { stt: 224, hanzi: "借", pinyin: "jiè", type: "动词", subtype: "Động từ hành động", meaning: "Mượn", examples: [{ usage: "Vay mượn", sentence: "我借了一本书。", pinyin: "Wǒ jièle yì běn shū.", meaning: "Tôi đã mượn một quyển sách." }] },
+            { stt: 225, hanzi: "介绍", pinyin: "jièshào", type: "动词", subtype: "Động từ hành động", meaning: "Giới thiệu", examples: [{ usage: "Giới thiệu", sentence: "请介绍一下。", pinyin: "Qǐng jièshào yíxià.", meaning: "Làm ơn giới thiệu một chút." }] },
+            { stt: 226, hanzi: "今天", pinyin: "jīntiān", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Hôm nay", examples: [{ usage: "Thời gian", sentence: "今天天气很好。", pinyin: "Jīntiān tiānqì hěn hǎo.", meaning: "Hôm nay trời rất đẹp." }] },
+            { stt: 227, hanzi: "进", pinyin: "jìn", type: "动词", subtype: "Động từ xu hướng", meaning: "Vào", examples: [{ usage: "Di chuyển vào", sentence: "请进！", pinyin: "Qǐng jìn!", meaning: "Mời vào!" }] },
+            { stt: 228, hanzi: "近", pinyin: "jìn", type: "形容词", subtype: "Tính từ tính chất", meaning: "Gần", examples: [{ usage: "Khoảng cách", sentence: "我家很近。", pinyin: "Wǒ jiā hěn jìn.", meaning: "Nhà tôi rất gần." }] },
+            { stt: 229, hanzi: "经常", pinyin: "jīngcháng", type: "副词", subtype: "Phó từ thời gian", meaning: "Thường xuyên", examples: [{ usage: "Tần suất", sentence: "我经常去那里。", pinyin: "Wǒ jīngcháng qù nàlǐ.", meaning: "Tôi thường xuyên đến đó." }] },
+            { stt: 230, hanzi: "经过", pinyin: "jīngguò", type: "动词", subtype: "Động từ hành động", meaning: "Đi qua, trải qua", examples: [{ usage: "Trải nghiệm", sentence: "我经过了很多困难。", pinyin: "Wǒ jīngguò le hěn duō kùnnan.", meaning: "Tôi đã trải qua rất nhiều khó khăn." }] },
+            { stt: 231, hanzi: "经理", pinyin: "jīnglǐ", type: "名词", subtype: "Danh từ chỉ người", meaning: "Giám đốc, quản lý", examples: [{ usage: "Chức vụ", sentence: "他是经理。", pinyin: "Tā shì jīnglǐ.", meaning: "Anh ấy là giám đốc." }] },
+            { stt: 232, hanzi: "九", pinyin: "jiǔ", type: "数词", subtype: "Số đếm", meaning: "Số 9", examples: [{ usage: "Con số", sentence: "我有九本书。", pinyin: "Wǒ yǒu jiǔ běn shū.", meaning: "Tôi có chín quyển sách." }] },
+            { stt: 233, hanzi: "久", pinyin: "jiǔ", type: "形容词", subtype: "Tính từ tính chất", meaning: "Lâu", examples: [{ usage: "Thời gian dài", sentence: "很久不见。", pinyin: "Hěn jiǔ bú jiàn.", meaning: "Đã lâu không gặp." }] },
+            { stt: 234, hanzi: "旧", pinyin: "jiù", type: "形容词", subtype: "Tính từ tính chất", meaning: "Cũ", examples: [{ usage: "Mới/cũ", sentence: "这是旧的。", pinyin: "Zhè shì jiù de.", meaning: "Đây là đồ cũ." }] },
+            { stt: 235, hanzi: "就", pinyin: "jiù", type: "副词", subtype: "Phó từ thời gian", meaning: "Liền, ngay", examples: [{ usage: "Ngay lập tức", sentence: "我就来。", pinyin: "Wǒ jiù lái.", meaning: "Tôi liền đến ngay." }] },
+            { stt: 236, hanzi: "举行", pinyin: "jǔxíng", type: "动词", subtype: "Động từ hành động", meaning: "Tổ chức, tiến hành", examples: [{ usage: "Tổ chức sự kiện", sentence: "明天举行会议。", pinyin: "Míngtiān jǔxíng huìyì.", meaning: "Ngày mai tổ chức cuộc họp." }] },
+            { stt: 237, hanzi: "句子", pinyin: "jùzi", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Câu (văn)", examples: [{ usage: "Ngôn ngữ", sentence: "这个句子很难。", pinyin: "Zhège jùzi hěn nán.", meaning: "Câu này rất khó." }] },
+            { stt: 238, hanzi: "觉得", pinyin: "juéde", type: "动词", subtype: "Động từ tâm lý", meaning: "Cảm thấy, cho rằng", examples: [{ usage: "Cảm nhận", sentence: "我觉得很好。", pinyin: "Wǒ juéde hěn hǎo.", meaning: "Tôi cảm thấy rất tốt." }] },
+            { stt: 239, hanzi: "决定", pinyin: "juédìng", type: "动词", subtype: "Động từ tâm lý", meaning: "Quyết định", examples: [{ usage: "Quyết định", sentence: "我决定去中国。", pinyin: "Wǒ juédìng qù Zhōngguó.", meaning: "Tôi quyết định đi Trung Quốc." }] },
+            { stt: 240, hanzi: "咖啡", pinyin: "kāfēi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cà phê", examples: [{ usage: "Đồ uống", sentence: "我要一杯咖啡。", pinyin: "Wǒ yào yì bēi kāfēi.", meaning: "Tôi muốn một ly cà phê." }] },
+            { stt: 241, hanzi: "开", pinyin: "kāi", type: "动词", subtype: "Động từ hành động", meaning: "Mở, lái (xe), bật", examples: [{ usage: "Mở cửa", sentence: "请开门。", pinyin: "Qǐng kāi mén.", meaning: "Làm ơn mở cửa." }] },
+            { stt: 242, hanzi: "开始", pinyin: "kāishǐ", type: "动词", subtype: "Động từ hành động", meaning: "Bắt đầu", examples: [{ usage: "Khởi đầu", sentence: "我们开始上课。", pinyin: "Wǒmen kāishǐ shàngkè.", meaning: "Chúng ta bắt đầu học." }] },
+            { stt: 243, hanzi: "看", pinyin: "kàn", type: "动词", subtype: "Động từ hành động", meaning: "Nhìn, xem, đọc", examples: [{ usage: "Thị giác", sentence: "我在看书。", pinyin: "Wǒ zài kàn shū.", meaning: "Tôi đang đọc sách." }] },
+            { stt: 244, hanzi: "看见", pinyin: "kànjiàn", type: "动词", subtype: "Động từ hành động", meaning: "Nhìn thấy", examples: [{ usage: "Trông thấy", sentence: "我看见他了。", pinyin: "Wǒ kànjiàn tā le.", meaning: "Tôi đã nhìn thấy anh ấy." }] },
+            { stt: 245, hanzi: "考试", pinyin: "kǎoshì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Kỳ thi, bài kiểm tra", examples: [{ usage: "Kiểm tra", sentence: "明天有考试。", pinyin: "Míngtiān yǒu kǎoshì.", meaning: "Ngày mai có bài kiểm tra." }] },
+            { stt: 246, hanzi: "渴", pinyin: "kě", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Khát", examples: [{ usage: "Cảm giác", sentence: "我很渴。", pinyin: "Wǒ hěn kě.", meaning: "Tôi rất khát." }] },
+            { stt: 247, hanzi: "可爱", pinyin: "kě'ài", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Đáng yêu, dễ thương", examples: [{ usage: "Tính cách", sentence: "这个小孩很可爱。", pinyin: "Zhège xiǎohái hěn kě'ài.", meaning: "Đứa trẻ này rất dễ thương." }] },
+            { stt: 248, hanzi: "可能", pinyin: "kěnéng", type: "副词", subtype: "Phó từ mức độ", meaning: "Có thể", examples: [{ usage: "Khả năng", sentence: "明天可能下雨。", pinyin: "Míngtiān kěnéng xià yǔ.", meaning: "Ngày mai có thể mưa." }] },
+            { stt: 249, hanzi: "可以", pinyin: "kěyǐ", type: "动词", subtype: "Động từ năng nguyện", meaning: "Có thể, được phép", examples: [{ usage: "Xin phép", sentence: "我可以进来吗？", pinyin: "Wǒ kěyǐ jìnlái ma?", meaning: "Tôi có thể vào không?" }] },
+            { stt: 250, hanzi: "刻", pinyin: "kè", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Phần tư giờ (15 phút)", examples: [{ usage: "Thời gian", sentence: "一刻钟", pinyin: "Yí kè zhōng", meaning: "Mười lăm phút" }] },
+            { stt: 251, hanzi: "课", pinyin: "kè", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tiết học, bài học", examples: [{ usage: "Giáo dục", sentence: "今天有三节课。", pinyin: "Jīntiān yǒu sān jié kè.", meaning: "Hôm nay có ba tiết học." }] },
+            { stt: 252, hanzi: "客人", pinyin: "kèrén", type: "名词", subtype: "Danh từ chỉ người", meaning: "Khách", examples: [{ usage: "Người đến chơi", sentence: "家里有客人。", pinyin: "Jiā lǐ yǒu kèrén.", meaning: "Nhà có khách." }] },
+            { stt: 253, hanzi: "空调", pinyin: "kōngtiáo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Máy điều hòa", examples: [{ usage: "Đồ điện", sentence: "请开空调。", pinyin: "Qǐng kāi kōngtiáo.", meaning: "Làm ơn bật điều hòa." }] },
+            { stt: 254, hanzi: "口", pinyin: "kǒu", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Miệng (người), cái (đồ ăn)", examples: [{ usage: "Đếm người", sentence: "我家有三口人。", pinyin: "Wǒ jiā yǒu sān kǒu rén.", meaning: "Nhà tôi có ba người." }] },
+            { stt: 255, hanzi: "哭", pinyin: "kū", type: "动词", subtype: "Động từ hành động", meaning: "Khóc", examples: [{ usage: "Biểu cảm", sentence: "孩子在哭。", pinyin: "Háizi zài kū.", meaning: "Đứa trẻ đang khóc." }] },
+            { stt: 256, hanzi: "裤子", pinyin: "kùzi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Quần (tổng quát)", examples: [{ usage: "Quần áo", sentence: "这条裤子很漂亮。", pinyin: "Zhè tiáo kùzi hěn piàoliang.", meaning: "Cái quần này rất đẹp." }] },
+            { stt: 257, hanzi: "块", pinyin: "kuài", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Đồng (tiền), miếng", examples: [{ usage: "Tiền tệ", sentence: "五块钱", pinyin: "Wǔ kuài qián", meaning: "Năm đồng tiền" }] },
+            { stt: 258, hanzi: "快", pinyin: "kuài", type: "形容词", subtype: "Tính từ tính chất", meaning: "Nhanh", examples: [{ usage: "Tốc độ", sentence: "他跑得很快。", pinyin: "Tā pǎo de hěn kuài.", meaning: "Anh ấy chạy rất nhanh." }] },
+            { stt: 259, hanzi: "快乐", pinyin: "kuàilè", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Vui vẻ, hạnh phúc", examples: [{ usage: "Cảm xúc", sentence: "祝你生日快乐！", pinyin: "Zhù nǐ shēngrì kuàilè!", meaning: "Chúc mừng sinh nhật vui vẻ!" }] },
+            { stt: 260, hanzi: "筷子", pinyin: "kuàizi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Đũa", examples: [{ usage: "Đồ dùng ăn uống", sentence: "请用筷子。", pinyin: "Qǐng yòng kuàizi.", meaning: "Làm ơn dùng đũa." }] },
+            { stt: 261, hanzi: "来", pinyin: "lái", type: "动词", subtype: "Động từ xu hướng", meaning: "Đến, tới", examples: [{ usage: "Di chuyển", sentence: "他来了。", pinyin: "Tā lái le.", meaning: "Anh ấy đến rồi." }] },
+            { stt: 262, hanzi: "蓝", pinyin: "lán", type: "形容词", subtype: "Tính từ tính chất", meaning: "Màu xanh da trời", examples: [{ usage: "Màu sắc", sentence: "天很蓝。", pinyin: "Tiān hěn lán.", meaning: "Trời rất xanh." }] },
+            { stt: 263, hanzi: "老", pinyin: "lǎo", type: "形容词", subtype: "Tính từ tính chất", meaning: "Già", examples: [{ usage: "Tuổi tác", sentence: "爷爷很老。", pinyin: "Yéye hěn lǎo.", meaning: "Ông rất già." }] },
+            { stt: 264, hanzi: "老师", pinyin: "lǎoshī", type: "名词", subtype: "Danh từ chỉ người", meaning: "Thầy/cô giáo", examples: [{ usage: "Nghề nghiệp", sentence: "我的老师很好。", pinyin: "Wǒ de lǎoshī hěn hǎo.", meaning: "Thầy giáo của tôi rất tốt." }] },
+            { stt: 265, hanzi: "了", pinyin: "le", type: "助词", subtype: "Trợ từ động thái", meaning: "Đã, rồi (trợ từ)", examples: [{ usage: "Hoàn thành", sentence: "我吃了。", pinyin: "Wǒ chī le.", meaning: "Tôi đã ăn rồi." }] },
+            { stt: 266, hanzi: "累", pinyin: "lèi", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Mệt", examples: [{ usage: "Cảm giác", sentence: "我很累。", pinyin: "Wǒ hěn lèi.", meaning: "Tôi rất mệt." }] },
+            { stt: 267, hanzi: "冷", pinyin: "lěng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Lạnh", examples: [{ usage: "Nhiệt độ", sentence: "今天很冷。", pinyin: "Jīntiān hěn lěng.", meaning: "Hôm nay rất lạnh." }] },
+            { stt: 268, hanzi: "离", pinyin: "lí", type: "介词", subtype: "Giới từ nơi chốn", meaning: "Cách xa, cách", examples: [{ usage: "Khoảng cách", sentence: "我家离学校很近。", pinyin: "Wǒ jiā lí xuéxiào hěn jìn.", meaning: "Nhà tôi cách trường rất gần." }] },
+            { stt: 269, hanzi: "离开", pinyin: "líkāi", type: "动词", subtype: "Động từ hành động", meaning: "Rời khỏi", examples: [{ usage: "Từ biệt", sentence: "我要离开这里。", pinyin: "Wǒ yào líkāi zhèlǐ.", meaning: "Tôi muốn rời khỏi đây." }] },
+            { stt: 270, hanzi: "里", pinyin: "lǐ", type: "名词", subtype: "Danh từ phương vị", meaning: "Trong", examples: [{ usage: "Vị trí", sentence: "在水里", pinyin: "Zài shuǐ lǐ", meaning: "Trong nước" }] },
+            { stt: 271, hanzi: "礼物", pinyin: "lǐwù", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Quà tặng", examples: [{ usage: "Tặng phẩm", sentence: "这是给你的礼物。", pinyin: "Zhè shì gěi nǐ de lǐwù.", meaning: "Đây là quà tặng cho bạn." }] },
+            { stt: 272, hanzi: "历史", pinyin: "lìshǐ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Lịch sử", examples: [{ usage: "Môn học", sentence: "我喜欢历史。", pinyin: "Wǒ xǐhuan lìshǐ.", meaning: "Tôi thích lịch sử." }] },
+            { stt: 273, hanzi: "脸", pinyin: "liǎn", type: "名词", subtype: "Danh từ chỉ người", meaning: "Khuôn mặt", examples: [{ usage: "Bộ phận", sentence: "她的脸很红。", pinyin: "Tā de liǎn hěn hóng.", meaning: "Mặt cô ấy rất đỏ." }] },
+            { stt: 274, hanzi: "练习", pinyin: "liànxí", type: "动词", subtype: "Động từ hành động", meaning: "Luyện tập", examples: [{ usage: "Học tập", sentence: "我要练习写字。", pinyin: "Wǒ yào liànxí xiě zì.", meaning: "Tôi muốn luyện tập viết chữ." }] },
+            { stt: 275, hanzi: "两", pinyin: "liǎng", type: "数词", subtype: "Số đếm", meaning: "Hai (đôi, cặp)", examples: [{ usage: "Số lượng", sentence: "我有两本书。", pinyin: "Wǒ yǒu liǎng běn shū.", meaning: "Tôi có hai quyển sách." }] },
+            { stt: 276, hanzi: "辆", pinyin: "liàng", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Chiếc (xe cộ)", examples: [{ usage: "Đếm xe", sentence: "一辆汽车", pinyin: "Yí liàng qìchē", meaning: "Một chiếc ô tô" }] },
+            { stt: 277, hanzi: "了解", pinyin: "liǎojiě", type: "动词", subtype: "Động từ tâm lý", meaning: "Hiểu biết, nắm bắt", examples: [{ usage: "Biết rõ", sentence: "我了解他。", pinyin: "Wǒ liǎojiě tā.", meaning: "Tôi hiểu anh ấy." }] },
+            { stt: 278, hanzi: "邻居", pinyin: "línjū", type: "名词", subtype: "Danh từ chỉ người", meaning: "Hàng xóm", examples: [{ usage: "Người bên cạnh", sentence: "我的邻居很友好。", pinyin: "Wǒ de línjū hěn yǒuhǎo.", meaning: "Hàng xóm của tôi rất thân thiện." }] },
+            { stt: 279, hanzi: "零", pinyin: "líng", type: "数词", subtype: "Số đếm", meaning: "Số 0, không", examples: [{ usage: "Con số", sentence: "一百零一", pinyin: "Yībǎi líng yī", meaning: "Một trăm linh một" }] },
+            { stt: 280, hanzi: "六", pinyin: "liù", type: "数词", subtype: "Số đếm", meaning: "Số 6", examples: [{ usage: "Đếm số", sentence: "我有六个苹果。", pinyin: "Wǒ yǒu liù ge píngguǒ.", meaning: "Tôi có sáu quả táo." }] },
+            { stt: 281, hanzi: "楼", pinyin: "lóu", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Tòa nhà, tầng", examples: [{ usage: "Kiến trúc", sentence: "我家住二楼。", pinyin: "Wǒ jiā zhù èr lóu.", meaning: "Nhà tôi ở tầng hai." }] },
+            { stt: 282, hanzi: "路", pinyin: "lù", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Con đường", examples: [{ usage: "Giao thông", sentence: "这条路很长。", pinyin: "Zhè tiáo lù hěn cháng.", meaning: "Con đường này rất dài." }] },
+            { stt: 283, hanzi: "旅游", pinyin: "lǚyóu", type: "动词", subtype: "Động từ hành động", meaning: "Du lịch", examples: [{ usage: "Đi chơi", sentence: "我们去旅游吧。", pinyin: "Wǒmen qù lǚyóu ba.", meaning: "Chúng ta đi du lịch nhé." }] },
+            { stt: 284, hanzi: "绿", pinyin: "lǜ", type: "形容词", subtype: "Tính từ tính chất", meaning: "Màu xanh lá", examples: [{ usage: "Màu sắc", sentence: "树是绿的。", pinyin: "Shù shì lǜ de.", meaning: "Cây có màu xanh lá." }] },
+            { stt: 285, hanzi: "妈妈", pinyin: "māma", type: "名词", subtype: "Danh từ chỉ người", meaning: "Mẹ", examples: [{ usage: "Xưng hô", sentence: "我妈妈很爱我。", pinyin: "Wǒ māma hěn ài wǒ.", meaning: "Mẹ tôi rất yêu tôi." }] },
+            { stt: 286, hanzi: "马", pinyin: "mǎ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Con ngựa", examples: [{ usage: "Động vật", sentence: "马跑得很快。", pinyin: "Mǎ pǎo de hěn kuài.", meaning: "Ngựa chạy rất nhanh." }] },
+            { stt: 287, hanzi: "马上", pinyin: "mǎshàng", type: "副词", subtype: "Phó từ thời gian", meaning: "Ngay lập tức", examples: [{ usage: "Ngay", sentence: "我马上就来。", pinyin: "Wǒ mǎshàng jiù lái.", meaning: "Tôi đến ngay đây." }] },
+            { stt: 288, hanzi: "吗", pinyin: "ma", type: "助词", subtype: "Trợ từ ngữ khí", meaning: "Không (câu hỏi)", examples: [{ usage: "Câu hỏi có/không", sentence: "你好吗？", pinyin: "Nǐ hǎo ma?", meaning: "Bạn khỏe không?" }] },
+            { stt: 289, hanzi: "买", pinyin: "mǎi", type: "动词", subtype: "Động từ hành động", meaning: "Mua", examples: [{ usage: "Mua sắm", sentence: "我要买一本书。", pinyin: "Wǒ yào mǎi yì běn shū.", meaning: "Tôi muốn mua một quyển sách." }] },
+            { stt: 290, hanzi: "卖", pinyin: "mài", type: "动词", subtype: "Động từ hành động", meaning: "Bán", examples: [{ usage: "Bán hàng", sentence: "这个商店卖水果。", pinyin: "Zhège shāngdiàn mài shuǐguǒ.", meaning: "Cửa hàng này bán trái cây." }] },
+            { stt: 291, hanzi: "满意", pinyin: "mǎnyì", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Hài lòng", examples: [{ usage: "Cảm xúc", sentence: "我对工作很满意。", pinyin: "Wǒ duì gōngzuò hěn mǎnyì.", meaning: "Tôi rất hài lòng với công việc." }] },
+            { stt: 292, hanzi: "慢", pinyin: "màn", type: "形容词", subtype: "Tính từ tính chất", meaning: "Chậm", examples: [{ usage: "Tốc độ", sentence: "你走得太慢了。", pinyin: "Nǐ zǒu de tài màn le.", meaning: "Bạn đi chậm quá." }] },
+            { stt: 293, hanzi: "忙", pinyin: "máng", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Bận rộn", examples: [{ usage: "Công việc", sentence: "我很忙。", pinyin: "Wǒ hěn máng.", meaning: "Tôi rất bận." }] },
+            { stt: 294, hanzi: "猫", pinyin: "māo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Con mèo", examples: [{ usage: "Động vật", sentence: "我有一只猫。", pinyin: "Wǒ yǒu yì zhī māo.", meaning: "Tôi có một con mèo." }] },
+            { stt: 295, hanzi: "帽子", pinyin: "màozi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cái mũ", examples: [{ usage: "Quần áo", sentence: "这顶帽子很漂亮。", pinyin: "Zhè dǐng màozi hěn piàoliang.", meaning: "Cái mũ này rất đẹp." }] },
+            { stt: 296, hanzi: "没", pinyin: "méi", type: "副词", subtype: "Phó từ phủ định", meaning: "Chưa, không (quá khứ)", examples: [{ usage: "Phủ định quá khứ", sentence: "我没去。", pinyin: "Wǒ méi qù.", meaning: "Tôi chưa đi." }] },
+            { stt: 297, hanzi: "没关系", pinyin: "méi guānxi", type: "形容词", subtype: "Tính từ xã giao", meaning: "Không sao, không có gì", examples: [{ usage: "Đáp lại lời xin lỗi", sentence: "没关系！", pinyin: "Méi guānxi!", meaning: "Không có gì!" }] },
+            { stt: 298, hanzi: "每", pinyin: "měi", type: "代词", subtype: "Đại từ chỉ thị", meaning: "Mỗi", examples: [{ usage: "Tất cả", sentence: "每天", pinyin: "Měi tiān", meaning: "Mỗi ngày" }] },
+            { stt: 299, hanzi: "妹妹", pinyin: "mèimei", type: "名词", subtype: "Danh từ chỉ người", meaning: "Em gái", examples: [{ usage: "Xưng hô", sentence: "我妹妹很可爱。", pinyin: "Wǒ mèimei hěn kě'ài.", meaning: "Em gái tôi rất đáng yêu." }] },
+            { stt: 300, hanzi: "门", pinyin: "mén", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cái cửa", examples: [{ usage: "Vật dụng", sentence: "请开门。", pinyin: "Qǐng kāi mén.", meaning: "Làm ơn mở cửa." }] },
+            { stt: 301, hanzi: "米", pinyin: "mǐ", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Mét", examples: [{ usage: "Đơn vị đo", sentence: "三米高", pinyin: "Sān mǐ gāo", meaning: "Cao ba mét" }] },
+            { stt: 302, hanzi: "米饭", pinyin: "mǐfàn", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cơm", examples: [{ usage: "Thức ăn", sentence: "我吃米饭。", pinyin: "Wǒ chī mǐfàn.", meaning: "Tôi ăn cơm." }] },
+            { stt: 303, hanzi: "面包", pinyin: "miànbāo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Bánh mì", examples: [{ usage: "Thực phẩm", sentence: "这是面包。", pinyin: "Zhè shì miànbāo.", meaning: "Đây là bánh mì." }] },
+            { stt: 304, hanzi: "面条", pinyin: "miàntiáo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Mì sợi", examples: [{ usage: "Đồ ăn", sentence: "我喜欢吃面条。", pinyin: "Wǒ xǐhuan chī miàntiáo.", meaning: "Tôi thích ăn mì." }] },
+            { stt: 305, hanzi: "明白", pinyin: "míngbai", type: "形容词", subtype: "Tính từ tính chất", meaning: "Hiểu rõ", examples: [{ usage: "Hiểu biết", sentence: "我明白了。", pinyin: "Wǒ míngbai le.", meaning: "Tôi hiểu rồi." }] },
+            { stt: 306, hanzi: "明天", pinyin: "míngtiān", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Ngày mai", examples: [{ usage: "Thời gian", sentence: "明天见！", pinyin: "Míngtiān jiàn!", meaning: "Hẹn gặp ngày mai!" }] },
+            { stt: 307, hanzi: "名字", pinyin: "míngzi", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tên", examples: [{ usage: "Danh xưng", sentence: "你叫什么名字？", pinyin: "Nǐ jiào shénme míngzi?", meaning: "Bạn tên là gì?" }] },
+            { stt: 308, hanzi: "拿", pinyin: "ná", type: "动词", subtype: "Động từ hành động", meaning: "Cầm, lấy", examples: [{ usage: "Cầm nắm", sentence: "请拿好。", pinyin: "Qǐng ná hǎo.", meaning: "Làm ơn cầm chặt vào." }] },
+            { stt: 309, hanzi: "哪", pinyin: "nǎ", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Nào (hỏi)", examples: [{ usage: "Hỏi lựa chọn", sentence: "你喜欢哪个？", pinyin: "Nǐ xǐhuan nǎge?", meaning: "Bạn thích cái nào?" }] },
+            { stt: 310, hanzi: "那", pinyin: "nà", type: "代词", subtype: "Đại từ chỉ thị", meaning: "Kia, đó", examples: [{ usage: "Chỉ xa", sentence: "那是我的书。", pinyin: "Nà shì wǒ de shū.", meaning: "Kia là sách của tôi." }] },
+            { stt: 311, hanzi: "奶奶", pinyin: "nǎinai", type: "名词", subtype: "Danh từ chỉ người", meaning: "Bà nội/ngoại", examples: [{ usage: "Xưng hô", sentence: "奶奶很慈祥。", pinyin: "Nǎinai hěn cíxiáng.", meaning: "Bà rất từ ái." }] },
+            { stt: 312, hanzi: "南", pinyin: "nán", type: "名词", subtype: "Danh từ phương vị", meaning: "Nam", examples: [{ usage: "Phương hướng", sentence: "南方很热。", pinyin: "Nánfāng hěn rè.", meaning: "Phương Nam rất nóng." }] },
+            { stt: 313, hanzi: "男人", pinyin: "nánrén", type: "名词", subtype: "Danh từ chỉ người", meaning: "Đàn ông", examples: [{ usage: "Giới tính", sentence: "那个男人很高。", pinyin: "Nàge nánrén hěn gāo.", meaning: "Người đàn ông đó rất cao." }] },
+            { stt: 314, hanzi: "难", pinyin: "nán", type: "形容词", subtype: "Tính từ tính chất", meaning: "Khó", examples: [{ usage: "Độ khó", sentence: "这个问题很难。", pinyin: "Zhège wèntí hěn nán.", meaning: "Vấn đề này rất khó." }] },
+            { stt: 315, hanzi: "难过", pinyin: "nánguò", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Buồn, đau khổ", examples: [{ usage: "Cảm xúc", sentence: "我很难过。", pinyin: "Wǒ hěn nánguò.", meaning: "Tôi rất buồn." }] },
+            { stt: 316, hanzi: "呢", pinyin: "ne", type: "助词", subtype: "Trợ từ ngữ khí", meaning: "Nhỉ, thì (ngữ khí)", examples: [{ usage: "Câu hỏi tu từ", sentence: "你呢？", pinyin: "Nǐ ne?", meaning: "Còn bạn thì sao?" }] },
+            { stt: 317, hanzi: "能", pinyin: "néng", type: "动词", subtype: "Động từ năng nguyện", meaning: "Có thể, có khả năng", examples: [{ usage: "Khả năng", sentence: "我能去吗？", pinyin: "Wǒ néng qù ma?", meaning: "Tôi có thể đi không?" }] },
+            { stt: 318, hanzi: "你", pinyin: "nǐ", type: "代词", subtype: "Đại từ nhân xưng", meaning: "Bạn, anh, chị", examples: [{ usage: "Xưng hô", sentence: "你好吗？", pinyin: "Nǐ hǎo ma?", meaning: "Bạn khỏe không?" }] },
+            { stt: 319, hanzi: "年", pinyin: "nián", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Năm", examples: [{ usage: "Thời gian", sentence: "新年快乐！", pinyin: "Xīnnián kuàilè!", meaning: "Chúc mừng năm mới!" }] },
+            { stt: 320, hanzi: "年级", pinyin: "niánjí", type: "名词", subtype: "Danh từ chỉ tổ chức", meaning: "Niên khóa, lớp", examples: [{ usage: "Học vấn", sentence: "我上三年级。", pinyin: "Wǒ shàng sān niánjí.", meaning: "Tôi học lớp ba." }] },
+            { stt: 321, hanzi: "年轻", pinyin: "niánqīng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Trẻ trung", examples: [{ usage: "Tuổi tác", sentence: "他很年轻。", pinyin: "Tā hěn niánqīng.", meaning: "Anh ấy rất trẻ." }] },
+            { stt: 322, hanzi: "鸟", pinyin: "niǎo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Con chim", examples: [{ usage: "Động vật", sentence: "鸟在天上飞。", pinyin: "Niǎo zài tiānshàng fēi.", meaning: "Chim đang bay trên trời." }] },
+            { stt: 323, hanzi: "您", pinyin: "nín", type: "代词", subtype: "Đại từ nhân xưng", meaning: "Ngài, quý vị (tôn kính)", examples: [{ usage: "Tôn xưng", sentence: "您好！", pinyin: "Nín hǎo!", meaning: "Ngài khỏe ạ!" }] },
+            { stt: 324, hanzi: "牛奶", pinyin: "niúnǎi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Sữa bò", examples: [{ usage: "Đồ uống", sentence: "我喜欢喝牛奶。", pinyin: "Wǒ xǩhuan hē niúnǎi.", meaning: "Tôi thích uống sữa." }] },
+            { stt: 325, hanzi: "努力", pinyin: "nǔlì", type: "形容词", subtype: "Tính từ tính chất", meaning: "Cố gắng, nỗ lực", examples: [{ usage: "Phấn đấu", sentence: "努力学习。", pinyin: "Nǔlì xuéxí.", meaning: "Học tập chăm chỉ." }] },
+            { stt: 326, hanzi: "女儿", pinyin: "nǚ'ér", type: "名词", subtype: "Danh từ chỉ người", meaning: "Con gái", examples: [{ usage: "Con cái", sentence: "他有两个女儿。", pinyin: "Tā yǒu liǎng ge nǚ'ér.", meaning: "Anh ấy có hai con gái." }] },
+            { stt: 327, hanzi: "女人", pinyin: "nǚrén", type: "名词", subtype: "Danh từ chỉ người", meaning: "Người phụ nữ", examples: [{ usage: "Giới tính", sentence: "那个女人很漂亮。", pinyin: "Nàge nǚrén hěn piàoliang.", meaning: "Người phụ nữ đó rất đẹp." }] },
+            { stt: 328, hanzi: "爬山", pinyin: "páshān", type: "动词", subtype: "Động từ ly hợp", meaning: "Leo núi", examples: [{ usage: "Thể thao", sentence: "我们去爬山吧。", pinyin: "Wǒmen qù páshān ba.", meaning: "Chúng ta đi leo núi nhé." }] },
+            { stt: 329, hanzi: "盘子", pinyin: "pánzi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cái đĩa", examples: [{ usage: "Đồ dùng", sentence: "请把菜放在盘子里。", pinyin: "Qǐng bǎ cài fàng zài pánzi lǐ.", meaning: "Làm ơn để đồ ăn vào đĩa." }] },
+            { stt: 330, hanzi: "旁边", pinyin: "pángbiān", type: "名词", subtype: "Danh từ phương vị", meaning: "Bên cạnh", examples: [{ usage: "Vị trí", sentence: "坐在我旁边。", pinyin: "Zuò zài wǒ pángbiān.", meaning: "Ngồi cạnh tôi." }] },
+            { stt: 331, hanzi: "胖", pinyin: "pàng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Béo, mập", examples: [{ usage: "Ngoại hình", sentence: "他有点胖。", pinyin: "Tā yǒudiǎn pàng.", meaning: "Anh ấy hơi mập." }] },
+            { stt: 332, hanzi: "跑步", pinyin: "pǎobù", type: "动词", subtype: "Động từ ly hợp", meaning: "Chạy bộ", examples: [{ usage: "Thể thao", sentence: "我每天早上跑步。", pinyin: "Wǒ měitiān zǎoshang pǎobù.", meaning: "Tôi chạy bộ mỗi sáng." }] },
+            { stt: 333, hanzi: "朋友", pinyin: "péngyou", type: "名词", subtype: "Danh từ chỉ người", meaning: "Bạn bè", examples: [{ usage: "Quan hệ", sentence: "他是我的朋友。", pinyin: "Tā shì wǒ de péngyou.", meaning: "Anh ấy là bạn của tôi." }] },
+            { stt: 334, hanzi: "啤酒", pinyin: "píjiǔ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Bia", examples: [{ usage: "Đồ uống", sentence: "我要一杯啤酒。", pinyin: "Wǒ yào yì bēi píjiǔ.", meaning: "Tôi muốn một ly bia." }] },
+            { stt: 335, hanzi: "便宜", pinyin: "piányi", type: "形容词", subtype: "Tính từ tính chất", meaning: "Rẻ", examples: [{ usage: "Giá cả", sentence: "这个很便宜。", pinyin: "Zhège hěn piányi.", meaning: "Cái này rất rẻ." }] },
+            { stt: 336, hanzi: "票", pinyin: "piào", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Vé", examples: [{ usage: "Giao thông", sentence: "我买一张票。", pinyin: "Wǒ mǎi yì zhāng piào.", meaning: "Tôi mua một vé." }] },
+            { stt: 337, hanzi: "漂亮", pinyin: "piàoliang", type: "形容词", subtype: "Tính từ tính chất", meaning: "Đẹp", examples: [{ usage: "Ngoại hình", sentence: "她很漂亮。", pinyin: "Tā hěn piàoliang.", meaning: "Cô ấy rất đẹp." }] },
+            { stt: 338, hanzi: "苹果", pinyin: "píngguǒ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Quả táo", examples: [{ usage: "Trái cây", sentence: "我吃了一个苹果。", pinyin: "Wǒ chī le yí ge píngguǒ.", meaning: "Tôi đã ăn một quả táo." }] },
+            { stt: 339, hanzi: "葡萄", pinyin: "pútao", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Quả nho", examples: [{ usage: "Hoa quả", sentence: "葡萄很甜。", pinyin: "Pútao hěn tián.", meaning: "Nho rất ngọt." }] },
+            { stt: 340, hanzi: "普通话", pinyin: "pǔtōnghuà", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tiếng Phổ thông", examples: [{ usage: "Ngôn ngữ", sentence: "他说普通话。", pinyin: "Tā shuō pǔtōnghuà.", meaning: "Anh ấy nói tiếng Phổ thông." }] },
+            { stt: 341, hanzi: "七", pinyin: "qī", type: "数词", subtype: "Số đếm", meaning: "Số 7", examples: [{ usage: "Con số", sentence: "我有七本书。", pinyin: "Wǒ yǒu qī běn shū.", meaning: "Tôi có bảy quyển sách." }] },
+            { stt: 342, hanzi: "妻子", pinyin: "qīzi", type: "名词", subtype: "Danh từ chỉ người", meaning: "Vợ", examples: [{ usage: "Gia đình", sentence: "他的妻子很漂亮。", pinyin: "Tā de qīzi hěn piàoliang.", meaning: "Vợ anh ấy rất đẹp." }] },
+            { stt: 343, hanzi: "其实", pinyin: "qíshí", type: "副词", subtype: "Phó từ ngữ khí", meaning: "Thực ra", examples: [{ usage: "Sự thật", sentence: "其实我不想去。", pinyin: "Qíshí wǒ bù xiǎng qù.", meaning: "Thực ra tôi không muốn đi." }] },
+            { stt: 344, hanzi: "其他", pinyin: "qítā", type: "代词", subtype: "Đại từ chỉ thị", meaning: "Khác", examples: [{ usage: "Ngoài ra", sentence: "还有其他人吗？", pinyin: "Hái yǒu qítā rén ma?", meaning: "Còn có người khác không?" }] },
+            { stt: 345, hanzi: "骑", pinyin: "qí", type: "动词", subtype: "Động từ hành động", meaning: "Cưỡi, đi (xe đạp)", examples: [{ usage: "Phương tiện", sentence: "我骑自行车。", pinyin: "Wǒ qí zìxíngchē.", meaning: "Tôi đi xe đạp." }] },
+            { stt: 346, hanzi: "奇怪", pinyin: "qíguài", type: "形容词", subtype: "Tính từ tính chất", meaning: "Lạ, kỳ quặc", examples: [{ usage: "Đặc điểm", sentence: "这很奇怪。", pinyin: "Zhè hěn qíguài.", meaning: "Điều này rất lạ." }] },
+            { stt: 347, hanzi: "起床", pinyin: "qǐchuáng", type: "动词", subtype: "Động từ ly hợp", meaning: "Thức dậy", examples: [{ usage: "Hoạt động buổi sáng", sentence: "我六点起床。", pinyin: "Wǒ liù diǎn qǐchuáng.", meaning: "Tôi dậy lúc sáu giờ." }] },
+            { stt: 348, hanzi: "千", pinyin: "qiān", type: "数词", subtype: "Số đếm", meaning: "Nghìn", examples: [{ usage: "Số đếm", sentence: "一千元", pinyin: "Yī qiān yuán", meaning: "Một nghìn đồng" }] },
+            { stt: 349, hanzi: "铅笔", pinyin: "qiānbǐ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Bút chì", examples: [{ usage: "Dụng cụ học", sentence: "请给我一支铅笔。", pinyin: "Qǐng gěi wǒ yì zhī qiānbǐ.", meaning: "Làm ơn đưa tôi một cây bút chì." }] },
+            { stt: 350, hanzi: "钱", pinyin: "qián", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tiền", examples: [{ usage: "Tiền bạc", sentence: "我没带钱。", pinyin: "Wǒ méi dài qián.", meaning: "Tôi không mang tiền." }] },
+            { stt: 351, hanzi: "前面", pinyin: "qiánmiàn", type: "名词", subtype: "Danh từ phương vị", meaning: "Phía trước", examples: [{ usage: "Vị trí", sentence: "前面有学校。", pinyin: "Qiánmiàn yǒu xuéxiào.", meaning: "Phía trước có trường học." }] },
+            { stt: 352, hanzi: "清楚", pinyin: "qīngchu", type: "形容词", subtype: "Tính từ tính chất", meaning: "Rõ ràng", examples: [{ usage: "Hiểu biết", sentence: "我听清楚了。", pinyin: "Wǒ tīng qīngchu le.", meaning: "Tôi đã nghe rõ rồi." }] },
+            { stt: 353, hanzi: "晴", pinyin: "qíng", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Trời nắng", examples: [{ usage: "Thời tiết", sentence: "今天很晴。", pinyin: "Jīntiān hěn qíng.", meaning: "Hôm nay trời nắng đẹp." }] },
+            { stt: 354, hanzi: "请", pinyin: "qǐng", type: "动词", subtype: "Động từ hành động", meaning: "Mời, làm ơn", examples: [{ usage: "Lịch sự", sentence: "请坐！", pinyin: "Qǐng zuò!", meaning: "Mời ngồi!" }] },
+            { stt: 355, hanzi: "秋", pinyin: "qiū", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Mùa thu", examples: [{ usage: "Mùa", sentence: "秋天很凉快。", pinyin: "Qiūtiān hěn liángkuai.", meaning: "Mùa thu rất mát mẻ." }] },
+            { stt: 356, hanzi: "去", pinyin: "qù", type: "动词", subtype: "Động từ xu hướng", meaning: "Đi (đến)", examples: [{ usage: "Di chuyển", sentence: "我去学校。", pinyin: "Wǒ qù xuéxiào.", meaning: "Tôi đi đến trường." }] },
+            { stt: 357, hanzi: "去年", pinyin: "qùnián", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Năm ngoái", examples: [{ usage: "Thời gian quá khứ", sentence: "去年我在北京。", pinyin: "Qùnián wǒ zài Běijīng.", meaning: "Năm ngoái tôi ở Bắc Kinh." }] },
+            { stt: 358, hanzi: "裙子", pinyin: "qúnzi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Váy", examples: [{ usage: "Quần áo", sentence: "这条裙子很漂亮。", pinyin: "Zhè tiáo qúnzi hěn piàoliang.", meaning: "Cái váy này rất đẹp." }] },
+            { stt: 359, hanzi: "然后", pinyin: "ránhòu", type: "连词", subtype: "Liên từ phụ thuộc", meaning: "Sau đó", examples: [{ usage: "Trình tự", sentence: "先吃饭，然后看电视。", pinyin: "Xiān chī fàn, ránhòu kàn diànshì.", meaning: "Ăn cơm trước, sau đó xem ti vi." }] },
+            { stt: 360, hanzi: "让", pinyin: "ràng", type: "动词", subtype: "Động từ hành động", meaning: "Để cho, cho phép", examples: [{ usage: "Cho phép", sentence: "让我帮你。", pinyin: "Ràng wǒ bāng nǐ.", meaning: "Để tôi giúp bạn." }] },
+            { stt: 361, hanzi: "热", pinyin: "rè", type: "形容词", subtype: "Tính từ tính chất", meaning: "Nóng", examples: [{ usage: "Nhiệt độ", sentence: "今天很热。", pinyin: "Jīntiān hěn rè.", meaning: "Hôm nay rất nóng." }] },
+            { stt: 362, hanzi: "热情", pinyin: "rèqíng", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Nhiệt tình", examples: [{ usage: "Tính cách", sentence: "他很热情。", pinyin: "Tā hěn rèqíng.", meaning: "Anh ấy rất nhiệt tình." }] },
+            { stt: 363, hanzi: "人", pinyin: "rén", type: "名词", subtype: "Danh từ chỉ người", meaning: "Người", examples: [{ usage: "Con người", sentence: "有很多人。", pinyin: "Yǒu hěn duō rén.", meaning: "Có rất nhiều người." }] },
+            { stt: 364, hanzi: "认识", pinyin: "rènshi", type: "动词", subtype: "Động từ tâm lý", meaning: "Quen biết, biết", examples: [{ usage: "Quen người", sentence: "我认识他。", pinyin: "Wǒ rènshi tā.", meaning: "Tôi quen anh ấy." }] },
+            { stt: 365, hanzi: "认为", pinyin: "rènwéi", type: "动词", subtype: "Động từ tâm lý", meaning: "Cho rằng", examples: [{ usage: "Ý kiến", sentence: "我认为很好。", pinyin: "Wǒ rènwéi hěn hǎo.", meaning: "Tôi cho rằng rất tốt." }] },
+            { stt: 366, hanzi: "认真", pinyin: "rènzhēn", type: "形容词", subtype: "Tính từ tính chất", meaning: "Nghiêm túc, chăm chỉ", examples: [{ usage: "Thái độ", sentence: "他很认真。", pinyin: "Tā hěn rènzhēn.", meaning: "Anh ấy rất nghiêm túc." }] },
+            { stt: 367, hanzi: "日", pinyin: "rì", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Ngày, mặt trời", examples: [{ usage: "Ngày tháng", sentence: "日本", pinyin: "Rìběn", meaning: "Nhật Bản" }] },
+            { stt: 368, hanzi: "容易", pinyin: "róngyì", type: "形容词", subtype: "Tính từ tính chất", meaning: "Dễ dàng", examples: [{ usage: "Độ khó", sentence: "这个很容易。", pinyin: "Zhège hěn róngyì.", meaning: "Cái này rất dễ." }] },
+            { stt: 369, hanzi: "如果", pinyin: "rúguǒ", type: "连词", subtype: "Liên từ phụ thuộc", meaning: "Nếu", examples: [{ usage: "Giả thiết", sentence: "如果下雨，我们就不去。", pinyin: "Rúguǒ xià yǔ, wǒmen jiù bú qù.", meaning: "Nếu mưa, chúng tôi sẽ không đi." }] },
+            { stt: 370, hanzi: "三", pinyin: "sān", type: "数词", subtype: "Số đếm", meaning: "Số 3", examples: [{ usage: "Con số", sentence: "我有三本书。", pinyin: "Wǒ yǒu sān běn shū.", meaning: "Tôi có ba quyển sách." }] },
+            { stt: 371, hanzi: "伞", pinyin: "sǎn", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Ô, dù", examples: [{ usage: "Vật dụng", sentence: "我有一把伞。", pinyin: "Wǒ yǒu yì bǎ sǎn.", meaning: "Tôi có một cái ô." }] },
+            { stt: 372, hanzi: "商店", pinyin: "shāngdiàn", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Cửa hàng", examples: [{ usage: "Mua sắm", sentence: "商店里很多人。", pinyin: "Shāngdiàn lǐ hěn duō rén.", meaning: "Trong cửa hàng rất đông người." }] },
+            { stt: 373, hanzi: "上", pinyin: "shàng", type: "名词", subtype: "Danh từ phương vị", meaning: "Trên", examples: [{ usage: "Vị trí", sentence: "在桌子上。", pinyin: "Zài zhuōzi shàng.", meaning: "Trên bàn." }] },
+            { stt: 374, hanzi: "上班", pinyin: "shàngbān", type: "动词", subtype: "Động từ ly hợp", meaning: "Đi làm", examples: [{ usage: "Công việc", sentence: "我九点上班。", pinyin: "Wǒ jiǔ diǎn shàngbān.", meaning: "Tôi đi làm lúc chín giờ." }] },
+            { stt: 375, hanzi: "上网", pinyin: "shàngwǎng", type: "动词", subtype: "Động từ ly hợp", meaning: "Lên mạng", examples: [{ usage: "Internet", sentence: "我喜欢上网。", pinyin: "Wǒ xǐhuan shàngwǎng.", meaning: "Tôi thích lên mạng." }] },
+            { stt: 376, hanzi: "上午", pinyin: "shàngwǔ", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Buổi sáng", examples: [{ usage: "Thời gian", sentence: "上午有课。", pinyin: "Shàngwǔ yǒu kè.", meaning: "Buổi sáng có tiết học." }] },
+            { stt: 377, hanzi: "少", pinyin: "shǎo", type: "形容词", subtype: "Tính từ tính chất", meaning: "Ít", examples: [{ usage: "Số lượng", sentence: "人很少。", pinyin: "Rén hěn shǎo.", meaning: "Người rất ít." }] },
+            { stt: 378, hanzi: "谁", pinyin: "shéi", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Ai", examples: [{ usage: "Hỏi người", sentence: "他是谁？", pinyin: "Tā shì shéi?", meaning: "Anh ấy là ai?" }] },
+            { stt: 379, hanzi: "身体", pinyin: "shēntǐ", type: "名词", subtype: "Danh từ chỉ người", meaning: "Thân thể", examples: [{ usage: "Sức khỏe", sentence: "你身体好吗？", pinyin: "Nǐ shēntǐ hǎo ma?", meaning: "Thân thể bạn khỏe không?" }] },
+            { stt: 380, hanzi: "什么", pinyin: "shénme", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Cái gì", examples: [{ usage: "Hỏi vật", sentence: "这是什么？", pinyin: "Zhè shì shénme?", meaning: "Đây là cái gì?" }] },
+            { stt: 381, hanzi: "生病", pinyin: "shēngbìng", type: "动词", subtype: "Động từ ly hợp", meaning: "Bị bệnh", examples: [{ usage: "Ốm", sentence: "他生病了。", pinyin: "Tā shēngbìng le.", meaning: "Anh ấy bị ốm rồi." }] },
+            { stt: 382, hanzi: "生气", pinyin: "shēngqì", type: "动词", subtype: "Động từ ly hợp", meaning: "Giận, tức giận", examples: [{ usage: "Cảm xúc", sentence: "不要生气。", pinyin: "Bú yào shēngqì.", meaning: "Đừng giận." }] },
+            { stt: 383, hanzi: "生日", pinyin: "shēngrì", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Sinh nhật", examples: [{ usage: "Ngày đặc biệt", sentence: "生日快乐！", pinyin: "Shēngrì kuàilè!", meaning: "Chúc mừng sinh nhật!" }] },
+            { stt: 384, hanzi: "声音", pinyin: "shēngyīn", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Âm thanh, tiếng", examples: [{ usage: "Nghe", sentence: "声音很大。", pinyin: "Shēngyīn hěn dà.", meaning: "Tiếng rất lớn." }] },
+            { stt: 385, hanzi: "十", pinyin: "shí", type: "数词", subtype: "Số đếm", meaning: "Số 10", examples: [{ usage: "Con số", sentence: "我有十块钱。", pinyin: "Wǒ yǒu shí kuài qián.", meaning: "Tôi có mười đồng." }] },
+            { stt: 386, hanzi: "时候", pinyin: "shíhou", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Lúc, khi", examples: [{ usage: "Thời điểm", sentence: "你什么时候来？", pinyin: "Nǐ shénme shíhou lái?", meaning: "Bạn lúc nào đến?" }] },
+            { stt: 387, hanzi: "时间", pinyin: "shíjiān", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Thời gian", examples: [{ usage: "Thời lượng", sentence: "我没有时间。", pinyin: "Wǒ méiyǒu shíjiān.", meaning: "Tôi không có thời gian." }] },
+            { stt: 388, hanzi: "使", pinyin: "shǐ", type: "动词", subtype: "Động từ hành động", meaning: "Làm cho, khiến", examples: [{ usage: "Nhân quả", sentence: "这使我很高兴。", pinyin: "Zhè shǐ wǒ hěn gāoxìng.", meaning: "Điều này làm tôi rất vui." }] },
+            { stt: 389, hanzi: "是", pinyin: "shì", type: "动词", subtype: "Động từ phán đoán", meaning: "Là", examples: [{ usage: "Xác nhận", sentence: "我是学生。", pinyin: "Wǒ shì xuésheng.", meaning: "Tôi là học sinh." }] },
+            { stt: 390, hanzi: "世界", pinyin: "shìjiè", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Thế giới", examples: [{ usage: "Địa lý", sentence: "世界很大。", pinyin: "Shìjiè hěn dà.", meaning: "Thế giới rất lớn." }] },
+            { stt: 391, hanzi: "事情", pinyin: "shìqing", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Việc, chuyện", examples: [{ usage: "Sự việc", sentence: "我有事情要做。", pinyin: "Wǒ yǒu shìqing yào zuò.", meaning: "Tôi có việc phải làm." }] },
+            { stt: 392, hanzi: "手表", pinyin: "shǒubiǎo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Đồng hồ đeo tay", examples: [{ usage: "Phụ kiện", sentence: "我的手表丢了。", pinyin: "Wǒ de shǒubiǎo diū le.", meaning: "Đồng hồ của tôi bị mất rồi." }] },
+            { stt: 393, hanzi: "手机", pinyin: "shǒujī", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Điện thoại di động", examples: [{ usage: "Thiết bị", sentence: "我在用手机。", pinyin: "Wǒ zài yòng shǒujī.", meaning: "Tôi đang dùng điện thoại." }] },
+            { stt: 394, hanzi: "瘦", pinyin: "shòu", type: "形容词", subtype: "Tính từ tính chất", meaning: "Gầy", examples: [{ usage: "Ngoại hình", sentence: "他很瘦。", pinyin: "Tā hěn shòu.", meaning: "Anh ấy rất gầy." }] },
+            { stt: 395, hanzi: "书", pinyin: "shū", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Sách", examples: [{ usage: "Vật phẩm", sentence: "这是一本书。", pinyin: "Zhè shì yì běn shū.", meaning: "Đây là một quyển sách." }] },
+            { stt: 396, hanzi: "舒服", pinyin: "shūfu", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Thoải mái", examples: [{ usage: "Cảm giác", sentence: "这个椅子很舒服。", pinyin: "Zhège yǐzi hěn shūfu.", meaning: "Cái ghế này rất thoải mái." }] },
+            { stt: 397, hanzi: "叔叔", pinyin: "shūshu", type: "名词", subtype: "Danh từ chỉ người", meaning: "Chú, cậu, bác trai", examples: [{ usage: "Xưng hô", sentence: "我叔叔是医生。", pinyin: "Wǒ shūshu shì yīshēng.", meaning: "Chú tôi là bác sĩ." }] },
+            { stt: 398, hanzi: "树", pinyin: "shù", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cây", examples: [{ usage: "Thực vật", sentence: "树很高。", pinyin: "Shù hěn gāo.", meaning: "Cây rất cao." }] },
+            { stt: 399, hanzi: "数学", pinyin: "shùxué", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Toán học", examples: [{ usage: "Môn học", sentence: "我喜欢数学。", pinyin: "Wǒ xǐhuan shùxué.", meaning: "Tôi thích toán học." }] },
+            { stt: 400, hanzi: "刷牙", pinyin: "shuā yá", type: "动词", subtype: "Động từ ly hợp", meaning: "Đánh răng", examples: [{ usage: "Vệ sinh", sentence: "我每天早上刷牙。", pinyin: "Wǒ měitiān zǎoshang shuā yá.", meaning: "Tôi đánh răng mỗi sáng." }] },
+            { stt: 401, hanzi: "双", pinyin: "shuāng", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Đôi", examples: [{ usage: "Đếm đôi", sentence: "一双鞋", pinyin: "Yì shuāng xié", meaning: "Một đôi giày" }] },
+            { stt: 402, hanzi: "水", pinyin: "shuǐ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Nước", examples: [{ usage: "Chất lỏng", sentence: "我想喝水。", pinyin: "Wǒ xiǎng hē shuǐ.", meaning: "Tôi muốn uống nước." }] },
+            { stt: 403, hanzi: "水果", pinyin: "shuǐguǒ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Hoa quả", examples: [{ usage: "Thực phẩm", sentence: "多吃水果。", pinyin: "Duō chī shuǐguǒ.", meaning: "Ăn nhiều hoa quả vào." }] },
+            { stt: 404, hanzi: "水平", pinyin: "shuǐpíng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Trình độ, mức độ", examples: [{ usage: "Năng lực", sentence: "他的水平很高。", pinyin: "Tā de shuǐpíng hěn gāo.", meaning: "Trình độ của anh ấy rất cao." }] },
+            { stt: 405, hanzi: "睡觉", pinyin: "shuìjiào", type: "动词", subtype: "Động từ ly hợp", meaning: "Ngủ", examples: [{ usage: "Nghỉ ngơi", sentence: "我要睡觉了。", pinyin: "Wǒ yào shuìjiào le.", meaning: "Tôi đi ngủ đây." }] },
+            { stt: 406, hanzi: "说话", pinyin: "shuōhuà", type: "动词", subtype: "Động từ ly hợp", meaning: "Nói chuyện", examples: [{ usage: "Giao tiếp", sentence: "请不要说话。", pinyin: "Qǐng bú yào shuōhuà.", meaning: "Làm ơn đừng nói chuyện." }] },
+            { stt: 407, hanzi: "司机", pinyin: "sījī", type: "名词", subtype: "Danh từ chỉ người", meaning: "Tài xế", examples: [{ usage: "Nghề nghiệp", sentence: "他是司机。", pinyin: "Tā shì sījī.", meaning: "Anh ấy là tài xế." }] },
+            { stt: 408, hanzi: "四", pinyin: "sì", type: "数词", subtype: "Số đếm", meaning: "Số 4", examples: [{ usage: "Con số", sentence: "我有四个苹果。", pinyin: "Wǒ yǒu sì ge píngguǒ.", meaning: "Tôi có bốn quả táo." }] },
+            { stt: 409, hanzi: "送", pinyin: "sòng", type: "动词", subtype: "Động từ hành động", meaning: "Tiễn, tặng, đưa", examples: [{ usage: "Tặng quà", sentence: "我送给他一本书。", pinyin: "Wǒ sòng gěi tā yì běn shū.", meaning: "Tôi tặng anh ấy một quyển sách." }] },
+            { stt: 410, hanzi: "虽然", pinyin: "suīrán", type: "连词", subtype: "Liên từ phụ thuộc", meaning: "Tuy rằng", examples: [{ usage: "Mâu thuẫn", sentence: "虽然下雨，但是我们还是去了。", pinyin: "Suīrán xià yǔ, dànshì wǒmen háishì qù le.", meaning: "Tuy trời mưa, nhưng chúng tôi vẫn đi." }] },
+            { stt: 411, hanzi: "岁", pinyin: "suì", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Tuổi", examples: [{ usage: "Tuổi tác", sentence: "我二十岁。", pinyin: "Wǒ èrshí suì.", meaning: "Tôi hai mươi tuổi." }] },
+            { stt: 412, hanzi: "所以", pinyin: "suǒyǐ", type: "连词", subtype: "Liên từ phụ thuộc", meaning: "Vì vậy, cho nên", examples: [{ usage: "Kết luận", sentence: "我很累，所以想睡觉。", pinyin: "Wǒ hěn lèi, suǒyǐ xiǎng shuìjiào.", meaning: "Tôi rất mệt, vì vậy muốn ngủ." }] },
+            { stt: 413, hanzi: "他", pinyin: "tā", type: "代词", subtype: "Đại từ nhân xưng", meaning: "Anh ấy, ông ấy", examples: [{ usage: "Ngôi thứ 3 nam", sentence: "他是我的朋友。", pinyin: "Tā shì wǒ de péngyou.", meaning: "Anh ấy là bạn của tôi." }] },
+            { stt: 414, hanzi: "她", pinyin: "tā", type: "代词", subtype: "Đại từ nhân xưng", meaning: "Cô ấy, bà ấy", examples: [{ usage: "Ngôi thứ 3 nữ", sentence: "她是我姐姐。", pinyin: "Tā shì wǒ jiějie.", meaning: "Cô ấy là chị gái tôi." }] },
+            { stt: 415, hanzi: "它", pinyin: "tā", type: "代词", subtype: "Đại từ nhân xưng", meaning: "Nó (vật)", examples: [{ usage: "Ngôi thứ 3 vật", sentence: "这是一本书，它很有趣。", pinyin: "Zhè shì yì běn shū, tā hěn yǒuqù.", meaning: "Đây là một quyển sách, nó rất thú vị." }] },
+            { stt: 416, hanzi: "抬", pinyin: "tái", type: "动词", subtype: "Động từ hành động", meaning: "Nâng, bê", examples: [{ usage: "Nâng lên", sentence: "请抬头。", pinyin: "Qǐng tái tóu.", meaning: "Làm ơn ngẩng đầu lên." }] },
+            { stt: 417, hanzi: "太", pinyin: "tài", type: "副词", subtype: "Phó từ mức độ", meaning: "Quá", examples: [{ usage: "Nhấn mạnh", sentence: "太好了！", pinyin: "Tài hǎo le!", meaning: "Tuyệt vời quá!" }] },
+            { stt: 418, hanzi: "太阳", pinyin: "tàiyáng", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Mặt trời", examples: [{ usage: "Thiên nhiên", sentence: "太阳从东方升起。", pinyin: "Tàiyáng cóng dōngfāng shēngqǐ.", meaning: "Mặt trời mọc từ phương Đông." }] },
+            { stt: 419, hanzi: "特别", pinyin: "tèbié", type: "形容词", subtype: "Tính từ tính chất", meaning: "Đặc biệt", examples: [{ usage: "Khác thường", sentence: "今天特别热。", pinyin: "Jīntiān tèbié rè.", meaning: "Hôm nay đặc biệt nóng." }] },
+            { stt: 420, hanzi: "疼", pinyin: "téng", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Đau", examples: [{ usage: "Cảm giác", sentence: "我的头很疼。", pinyin: "Wǒ de tóu hěn téng.", meaning: "Đầu tôi đau quá." }] },
+            { stt: 421, hanzi: "踢足球", pinyin: "tī zúqiú", type: "动词", subtype: "Động từ ly hợp", meaning: "Đá bóng", examples: [{ usage: "Thể thao", sentence: "他喜欢踢足球。", pinyin: "Tā xǐhuan tī zúqiú.", meaning: "Anh ấy thích đá bóng." }] },
+            { stt: 422, hanzi: "题", pinyin: "tí", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Đề, bài tập", examples: [{ usage: "Học tập", sentence: "这道题很难。", pinyin: "Zhè dào tí hěn nán.", meaning: "Bài này rất khó." }] },
+            { stt: 423, hanzi: "提高", pinyin: "tígāo", type: "动词", subtype: "Động từ hành động", meaning: "Nâng cao, cải thiện", examples: [{ usage: "Phát triển", sentence: "提高水平。", pinyin: "Tígāo shuǐpíng.", meaning: "Nâng cao trình độ." }] },
+            { stt: 424, hanzi: "体育", pinyin: "tǐyù", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Thể dục thể thao", examples: [{ usage: "Môn học", sentence: "我喜欢体育课。", pinyin: "Wǒ xǐhuan tǐyù kè.", meaning: "Tôi thích môn thể dục." }] },
+            { stt: 425, hanzi: "天气", pinyin: "tiānqì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Thời tiết", examples: [{ usage: "Khí hậu", sentence: "今天天气很好。", pinyin: "Jīntiān tiānqì hěn hǎo.", meaning: "Hôm nay thời tiết rất đẹp." }] },
+            { stt: 426, hanzi: "甜", pinyin: "tián", type: "形容词", subtype: "Tính từ tính chất", meaning: "Ngọt", examples: [{ usage: "Vị giác", sentence: "这个蛋糕很甜。", pinyin: "Zhège dàngāo hěn tián.", meaning: "Bánh này rất ngọt." }] },
+            { stt: 427, hanzi: "条", pinyin: "tiáo", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Cái (dài), con", examples: [{ usage: "Đếm đồ dài", sentence: "一条鱼", pinyin: "Yì tiáo yú", meaning: "Một con cá" }] },
+            { stt: 428, hanzi: "跳舞", pinyin: "tiàowǔ", type: "动词", subtype: "Động từ ly hợp", meaning: "Nhảy múa", examples: [{ usage: "Nghệ thuật", sentence: "她喜欢跳舞。", pinyin: "Tā xǐhuan tiàowǔ.", meaning: "Cô ấy thích nhảy múa." }] },
+            { stt: 429, hanzi: "听", pinyin: "tīng", type: "动词", subtype: "Động từ hành động", meaning: "Nghe", examples: [{ usage: "Thính giác", sentence: "我在听音乐。", pinyin: "Wǒ zài tīng yīnyuè.", meaning: "Tôi đang nghe nhạc." }] },
+            { stt: 430, hanzi: "同事", pinyin: "tóngshì", type: "名词", subtype: "Danh từ chỉ người", meaning: "Đồng nghiệp", examples: [{ usage: "Quan hệ công việc", sentence: "他是我的同事。", pinyin: "Tā shì wǒ de tóngshì.", meaning: "Anh ấy là đồng nghiệp của tôi." }] },
+            { stt: 431, hanzi: "同学", pinyin: "tóngxué", type: "名词", subtype: "Danh từ chỉ người", meaning: "Bạn học", examples: [{ usage: "Quan hệ học tập", sentence: "我和他是同学。", pinyin: "Wǒ hé tā shì tóngxué.", meaning: "Tôi và anh ấy là bạn học." }] },
+            { stt: 432, hanzi: "同意", pinyin: "tóngyì", type: "动词", subtype: "Động từ tâm lý", meaning: "Đồng ý", examples: [{ usage: "Chấp thuận", sentence: "我同意你的意见。", pinyin: "Wǒ tóngyì nǐ de yìjiàn.", meaning: "Tôi đồng ý với ý kiến của bạn." }] },
+            { stt: 433, hanzi: "头发", pinyin: "tóufa", type: "名词", subtype: "Danh từ chỉ người", meaning: "Tóc", examples: [{ usage: "Bộ phận cơ thể", sentence: "她的头发很长。", pinyin: "Tā de tóufa hěn cháng.", meaning: "Tóc cô ấy rất dài." }] },
+            { stt: 434, hanzi: "突然", pinyin: "tūrán", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Đột nhiên", examples: [{ usage: "Bất ngờ", sentence: "突然下雨了。", pinyin: "Tūrán xià yǔ le.", meaning: "Đột nhiên trời mưa." }] },
+            { stt: 435, hanzi: "图书馆", pinyin: "túshūguǎn", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Thư viện", examples: [{ usage: "Nơi học tập", sentence: "我在图书馆学习。", pinyin: "Wǒ zài túshūguǎn xuéxí.", meaning: "Tôi học ở thư viện." }] },
+            { stt: 436, hanzi: "腿", pinyin: "tuǐ", type: "名词", subtype: "Danh từ chỉ người", meaning: "Cái chân", examples: [{ usage: "Bộ phận cơ thể", sentence: "我的腿很疼。", pinyin: "Wǒ de tuǐ hěn téng.", meaning: "Chân tôi đau quá." }] },
+            { stt: 437, hanzi: "外卖", pinyin: "wàimài", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Đồ ăn mang về", examples: [{ usage: "Dịch vụ", sentence: "我们叫外卖吧。", pinyin: "Wǒmen jiào wàimài ba.", meaning: "Chúng ta gọi đồ ăn mang về nhé." }] },
+            { stt: 438, hanzi: "完", pinyin: "wán", type: "动词", subtype: "Động từ tồn tại", meaning: "Xong, hết", examples: [{ usage: "Hoàn thành", sentence: "我吃完饭了。", pinyin: "Wǒ chī wán fàn le.", meaning: "Tôi ăn cơm xong rồi." }] },
+            { stt: 439, hanzi: "完成", pinyin: "wánchéng", type: "动词", subtype: "Động từ hành động", meaning: "Hoàn thành", examples: [{ usage: "Kết thúc", sentence: "完成作业。", pinyin: "Wánchéng zuòyè.", meaning: "Hoàn thành bài tập." }] },
+            { stt: 440, hanzi: "玩", pinyin: "wán", type: "动词", subtype: "Động từ hành động", meaning: "Chơi", examples: [{ usage: "Giải trí", sentence: "我们去公园玩。", pinyin: "Wǒmen qù gōngyuán wán.", meaning: "Chúng ta đi công viên chơi." }] },
+            { stt: 441, hanzi: "晚上", pinyin: "wǎnshang", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Buổi tối", examples: [{ usage: "Thời gian", sentence: "晚上好！", pinyin: "Wǎnshang hǎo!", meaning: "Chào buổi tối!" }] },
+            { stt: 442, hanzi: "碗", pinyin: "wǎn", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Cái bát", examples: [{ usage: "Đồ dùng", sentence: "一碗米饭", pinyin: "Yì wǎn mǐfàn", meaning: "Một bát cơm" }] },
+            { stt: 443, hanzi: "万", pinyin: "wàn", type: "数词", subtype: "Số đếm", meaning: "Vạn, mười nghìn", examples: [{ usage: "Số đếm", sentence: "一万块", pinyin: "Yí wàn kuài", meaning: "Mười nghìn đồng" }] },
+            { stt: 444, hanzi: "往", pinyin: "wǎng", type: "介词", subtype: "Giới từ nơi chốn", meaning: "Về phía, đến", examples: [{ usage: "Phương hướng", sentence: "往前走。", pinyin: "Wǎng qián zǒu.", meaning: "Đi về phía trước." }] },
+            { stt: 445, hanzi: "为什么", pinyin: "wèishénme", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Tại sao", examples: [{ usage: "Hỏi lý do", sentence: "你为什么不来？", pinyin: "Nǐ wèishénme bù lái?", meaning: "Tại sao bạn không đến?" }] },
+            { stt: 446, hanzi: "问", pinyin: "wèn", type: "动词", subtype: "Động từ hành động", meaning: "Hỏi", examples: [{ usage: "Đặt câu hỏi", sentence: "我问老师一个问题。", pinyin: "Wǒ wèn lǎoshī yí ge wèntí.", meaning: "Tôi hỏi thầy giáo một câu hỏi." }] },
+            { stt: 447, hanzi: "问题", pinyin: "wèntí", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Vấn đề, câu hỏi", examples: [{ usage: "Khó khăn", sentence: "这个问题很难。", pinyin: "Zhège wèntí hěn nán.", meaning: "Vấn đề này rất khó." }] },
+            { stt: 448, hanzi: "西瓜", pinyin: "xīguā", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Dưa hấu", examples: [{ usage: "Trái cây", sentence: "西瓜很甜。", pinyin: "Xīguā hěn tián.", meaning: "Dưa hấu rất ngọt." }] },
+            { stt: 449, hanzi: "希望", pinyin: "xīwàng", type: "动词", subtype: "Động từ tâm lý", meaning: "Hy vọng", examples: [{ usage: "Mong muốn", sentence: "我希望你能来。", pinyin: "Wǒ xīwàng nǐ néng lái.", meaning: "Tôi hy vọng bạn có thể đến." }] },
+            { stt: 450, hanzi: "习惯", pinyin: "xíguàn", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Thói quen", examples: [{ usage: "Tập quán", sentence: "早起是我的习惯。", pinyin: "Zǎo qǐ shì wǒ de xíguàn.", meaning: "Dậy sớm là thói quen của tôi." }] },
+            { stt: 451, hanzi: "洗", pinyin: "xǐ", type: "动词", subtype: "Động từ hành động", meaning: "Rửa, giặt", examples: [{ usage: "Vệ sinh", sentence: "我洗衣服。", pinyin: "Wǒ xǐ yīfu.", meaning: "Tôi giặt quần áo." }] },
+            { stt: 452, hanzi: "洗澡", pinyin: "xǐzǎo", type: "动词", subtype: "Động từ ly hợp", meaning: "Tắm", examples: [{ usage: "Vệ sinh cá nhân", sentence: "我每天晚上洗澡。", pinyin: "Wǒ měitiān wǎnshang xǐzǎo.", meaning: "Tôi tắm mỗi tối." }] },
+            { stt: 453, hanzi: "喜欢", pinyin: "xǐhuan", type: "动词", subtype: "Động từ tâm lý", meaning: "Thích", examples: [{ usage: "Sở thích", sentence: "我喜欢汉语。", pinyin: "Wǒ xǐhuan Hànyǔ.", meaning: "Tôi thích tiếng Hán." }] },
+            { stt: 454, hanzi: "下", pinyin: "xià", type: "名词", subtype: "Danh từ phương vị", meaning: "Dưới", examples: [{ usage: "Vị trí", sentence: "在桌子下面。", pinyin: "Zài zhuōzi xiàmiàn.", meaning: "Ở dưới bàn." }] },
+            { stt: 455, hanzi: "下班", pinyin: "xiàbān", type: "动词", subtype: "Động từ ly hợp", meaning: "Tan làm", examples: [{ usage: "Kết thúc làm việc", sentence: "我六点下班。", pinyin: "Wǒ liù diǎn xiàbān.", meaning: "Tôi tan làm lúc sáu giờ." }] },
+            { stt: 456, hanzi: "下次", pinyin: "xiàcì", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Lần sau", examples: [{ usage: "Thời gian tới", sentence: "下次见！", pinyin: "Xiàcì jiàn!", meaning: "Hẹn gặp lần sau!" }] },
+            { stt: 457, hanzi: "下午", pinyin: "xiàwǔ", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Buổi chiều", examples: [{ usage: "Thời gian", sentence: "下午有课。", pinyin: "Xiàwǔ yǒu kè.", meaning: "Buổi chiều có tiết học." }] },
+            { stt: 458, hanzi: "下雨", pinyin: "xià yǔ", type: "动词", subtype: "Động từ ly hợp", meaning: "Mưa", examples: [{ usage: "Thời tiết", sentence: "今天下雨。", pinyin: "Jīntiān xià yǔ.", meaning: "Hôm nay trời mưa." }] },
+            { stt: 459, hanzi: "先", pinyin: "xiān", type: "副词", subtype: "Phó từ thời gian", meaning: "Trước", examples: [{ usage: "Thứ tự", sentence: "你先走。", pinyin: "Nǐ xiān zǒu.", meaning: "Bạn đi trước đi." }] },
+            { stt: 460, hanzi: "先生", pinyin: "xiānsheng", type: "名词", subtype: "Danh từ chỉ người", meaning: "Ông, thầy, anh (lịch sự)", examples: [{ usage: "Xưng hô", sentence: "李先生", pinyin: "Lǐ xiānsheng", meaning: "Ông Lý" }] },
+            { stt: 461, hanzi: "现在", pinyin: "xiànzài", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Bây giờ", examples: [{ usage: "Thời điểm hiện tại", sentence: "现在几点？", pinyin: "Xiànzài jǐ diǎn?", meaning: "Bây giờ mấy giờ?" }] },
+            { stt: 462, hanzi: "相信", pinyin: "xiāngxìn", type: "动词", subtype: "Động từ tâm lý", meaning: "Tin tưởng", examples: [{ usage: "Lòng tin", sentence: "我相信你。", pinyin: "Wǒ xiāngxìn nǐ.", meaning: "Tôi tin bạn." }] },
+            { stt: 463, hanzi: "想", pinyin: "xiǎng", type: "动词", subtype: "Động từ tâm lý", meaning: "Nghĩ, muốn", examples: [{ usage: "Suy nghĩ", sentence: "我想家。", pinyin: "Wǒ xiǎng jiā.", meaning: "Tôi nhớ nhà." }] },
+            { stt: 464, hanzi: "向", pinyin: "xiàng", type: "介词", subtype: "Giới từ nơi chốn", meaning: "Hướng về, về phía", examples: [{ usage: "Phương hướng", sentence: "向右转。", pinyin: "Xiàng yòu zhuǎn.", meaning: "Rẽ phải." }] },
+            { stt: 465, hanzi: "像", pinyin: "xiàng", type: "动词", subtype: "Động từ phán đoán", meaning: "Giống như", examples: [{ usage: "So sánh", sentence: "你像你妈妈。", pinyin: "Nǐ xiàng nǐ māma.", meaning: "Bạn giống mẹ bạn." }] },
+            { stt: 466, hanzi: "小", pinyin: "xiǎo", type: "形容词", subtype: "Tính từ tính chất", meaning: "Nhỏ, bé", examples: [{ usage: "Kích thước", sentence: "这个苹果很小。", pinyin: "Zhège píngguǒ hěn xiǎo.", meaning: "Quả táo này rất nhỏ." }] },
+            { stt: 467, hanzi: "小姐", pinyin: "xiǎojiě", type: "名词", subtype: "Danh từ chỉ người", meaning: "Cô, tiểu thư", examples: [{ usage: "Xưng hô", sentence: "小姐，请问...", pinyin: "Xiǎojiě, qǐngwèn...", meaning: "Cô ơi, cho hỏi..." }] },
+            { stt: 468, hanzi: "小心", pinyin: "xiǎoxīn", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Cẩn thận", examples: [{ usage: "Cảnh báo", sentence: "小心！", pinyin: "Xiǎoxīn!", meaning: "Cẩn thận!" }] },
+            { stt: 469, hanzi: "校长", pinyin: "xiàozhǎng", type: "名词", subtype: "Danh từ chỉ người", meaning: "Hiệu trưởng", examples: [{ usage: "Chức vụ", sentence: "他是校长。", pinyin: "Tā shì xiàozhǎng.", meaning: "Ông ấy là hiệu trưởng." }] },
+            { stt: 470, hanzi: "些", pinyin: "xiē", type: "量词", subtype: "Lượng từ bất định", meaning: "Một số, một ít", examples: [{ usage: "Số lượng không xác định", sentence: "一些人", pinyin: "Yìxiē rén", meaning: "Một số người" }] },
+            { stt: 471, hanzi: "写", pinyin: "xiě", type: "动词", subtype: "Động từ hành động", meaning: "Viết", examples: [{ usage: "Viết chữ", sentence: "我在写字。", pinyin: "Wǒ zài xiě zì.", meaning: "Tôi đang viết chữ." }] },
+            { stt: 472, hanzi: "谢谢", pinyin: "xièxie", type: "动词", subtype: "Động từ xã giao", meaning: "Cảm ơn", examples: [{ usage: "Lịch sự", sentence: "谢谢你！", pinyin: "Xièxie nǐ!", meaning: "Cảm ơn bạn!" }] },
+            { stt: 473, hanzi: "新", pinyin: "xīn", type: "形容词", subtype: "Tính từ tính chất", meaning: "Mới", examples: [{ usage: "Mới/cũ", sentence: "这是新的。", pinyin: "Zhè shì xīn de.", meaning: "Đây là đồ mới." }] },
+            { stt: 474, hanzi: "新闻", pinyin: "xīnwén", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tin tức", examples: [{ usage: "Thông tin", sentence: "看新闻。", pinyin: "Kàn xīnwén.", meaning: "Xem tin tức." }] },
+            { stt: 475, hanzi: "新鲜", pinyin: "xīnxiān", type: "形容词", subtype: "Tính từ tính chất", meaning: "Tươi", examples: [{ usage: "Thực phẩm", sentence: "这个水果很新鲜。", pinyin: "Zhège shuǐguǒ hěn xīnxiān.", meaning: "Trái cây này rất tươi." }] },
+            { stt: 476, hanzi: "信", pinyin: "xìn", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Thư tín", examples: [{ usage: "Liên lạc", sentence: "我收到一封信。", pinyin: "Wǒ shōudào yì fēng xìn.", meaning: "Tôi nhận được một bức thư." }] },
+            { stt: 477, hanzi: "星期", pinyin: "xīngqī", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Tuần, thứ", examples: [{ usage: "Thời gian", sentence: "星期一", pinyin: "Xīngqī yī", meaning: "Thứ hai" }] },
+            { stt: 478, hanzi: "行", pinyin: "xíng", type: "动词", subtype: "Động từ năng nguyện", meaning: "Được, có thể", examples: [{ usage: "Đồng ý", sentence: "行，没问题。", pinyin: "Xíng, méi wèntí.", meaning: "Được, không vấn đề." }] },
+            { stt: 479, hanzi: "幸福", pinyin: "xìngfú", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Hạnh phúc", examples: [{ usage: "Cảm xúc", sentence: "祝你幸福！", pinyin: "Zhù nǐ xìngfú!", meaning: "Chúc bạn hạnh phúc!" }] },
+            { stt: 480, hanzi: "姓", pinyin: "xìng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Họ", examples: [{ usage: "Tên gọi", sentence: "你姓什么？", pinyin: "Nǐ xìng shénme?", meaning: "Bạn họ gì?" }] },
+            { stt: 481, hanzi: "兴趣", pinyin: "xìngqù", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Hứng thú", examples: [{ usage: "Sở thích", sentence: "我对这个有兴趣。", pinyin: "Wǒ duì zhège yǒu xìngqù.", meaning: "Tôi có hứng thú với cái này." }] },
+            { stt: 482, hanzi: "熊猫", pinyin: "xióngmāo", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Gấu trúc", examples: [{ usage: "Động vật", sentence: "熊猫很可爱。", pinyin: "Xióngmāo hěn kě'ài.", meaning: "Gấu trúc rất đáng yêu." }] },
+            { stt: 483, hanzi: "休息", pinyin: "xiūxi", type: "动词", subtype: "Động từ hành động", meaning: "Nghỉ ngơi", examples: [{ usage: "Thư giãn", sentence: "我要休息一下。", pinyin: "Wǒ yào xiūxi yíxià.", meaning: "Tôi muốn nghỉ ngơi một chút." }] },
+            { stt: 484, hanzi: "需要", pinyin: "xūyào", type: "动词", subtype: "Động từ tâm lý", meaning: "Cần", examples: [{ usage: "Nhu cầu", sentence: "我需要帮助。", pinyin: "Wǒ xūyào bāngzhù.", meaning: "Tôi cần giúp đỡ." }] },
+            { stt: 485, hanzi: "许多", pinyin: "xǔduō", type: "形容词", subtype: "Tính từ tính chất", meaning: "Nhiều", examples: [{ usage: "Số lượng", sentence: "这里有许多人。", pinyin: "Zhèlǐ yǒu xǔduō rén.", meaning: "Ở đây có nhiều người." }] },
+            { stt: 486, hanzi: "雪", pinyin: "xuě", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Tuyết", examples: [{ usage: "Thời tiết", sentence: "下雪了。", pinyin: "Xià xuě le.", meaning: "Tuyết rơi rồi." }] },
+            { stt: 487, hanzi: "颜色", pinyin: "yánsè", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Màu sắc", examples: [{ usage: "Màu", sentence: "你喜欢什么颜色？", pinyin: "Nǐ xǐhuan shénme yánsè?", meaning: "Bạn thích màu gì?" }] },
+            { stt: 488, hanzi: "眼睛", pinyin: "yǎnjing", type: "名词", subtype: "Danh từ chỉ người", meaning: "Mắt", examples: [{ usage: "Bộ phận cơ thể", sentence: "她的眼睛很大。", pinyin: "Tā de yǎnjing hěn dà.", meaning: "Mắt cô ấy to lắm." }] },
+            { stt: 489, hanzi: "羊肉", pinyin: "yángròu", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Thịt cừu", examples: [{ usage: "Thực phẩm", sentence: "我喜欢吃羊肉。", pinyin: "Wǒ xǐhuan chī yángròu.", meaning: "Tôi thích ăn thịt cừu." }] },
+            { stt: 490, hanzi: "样子", pinyin: "yàngzi", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Bề ngoài, dáng vẻ", examples: [{ usage: "Hình dáng", sentence: "你穿这件衣服的样子很好看。", pinyin: "Nǐ chuān zhè jiàn yīfu de yàngzi hěn hǎokàn.", meaning: "Bạn mặc bộ đồ này trông đẹp lắm." }] },
+            { stt: 491, hanzi: "要求", pinyin: "yāoqiú", type: "动词", subtype: "Động từ tâm lý", meaning: "Yêu cầu", examples: [{ usage: "Đòi hỏi", sentence: "老师要求我们做作业。", pinyin: "Lǎoshī yāoqiú wǒmen zuò zuòyè.", meaning: "Thầy giáo yêu cầu chúng tôi làm bài tập." }] },
+            { stt: 492, hanzi: "药", pinyin: "yào", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Thuốc", examples: [{ usage: "Y tế", sentence: "我要买药。", pinyin: "Wǒ yào mǎi yào.", meaning: "Tôi muốn mua thuốc." }] },
+            { stt: 493, hanzi: "要", pinyin: "yào", type: "动词", subtype: "Động từ năng nguyện", meaning: "Muốn, cần", examples: [{ usage: "Nhu cầu", sentence: "我要喝水。", pinyin: "Wǒ yào hē shuǐ.", meaning: "Tôi muốn uống nước." }] },
+            { stt: 494, hanzi: "爷爷", pinyin: "yéye", type: "名词", subtype: "Danh từ chỉ người", meaning: "Ông nội/ngoại", examples: [{ usage: "Xưng hô", sentence: "我爷爷很健康。", pinyin: "Wǒ yéye hěn jiànkāng.", meaning: "Ông tôi rất khỏe mạnh." }] },
+            { stt: 495, hanzi: "也", pinyin: "yě", type: "副词", subtype: "Phó từ phạm vi", meaning: "Cũng", examples: [{ usage: "Thêm vào", sentence: "我也是学生。", pinyin: "Wǒ yě shì xuésheng.", meaning: "Tôi cũng là học sinh." }] },
+            { stt: 496, hanzi: "一", pinyin: "yī", type: "数词", subtype: "Số đếm", meaning: "Số 1", examples: [{ usage: "Đếm số", sentence: "一个苹果", pinyin: "Yí ge píngguǒ", meaning: "Một quả táo" }] },
+            { stt: 497, hanzi: "一般", pinyin: "yìbān", type: "形容词", subtype: "Tính từ tính chất", meaning: "Bình thường, thông thường", examples: [{ usage: "Mức độ", sentence: "我一般六点起床。", pinyin: "Wǒ yìbān liù diǎn qǐchuáng.", meaning: "Tôi thường dậy lúc sáu giờ." }] },
+            { stt: 498, hanzi: "一边", pinyin: "yìbiān", type: "副词", subtype: "Phó từ phạm vi", meaning: "Một bên, vừa... vừa...", examples: [{ usage: "Đồng thời", sentence: "一边吃饭一边看电视。", pinyin: "Yìbiān chī fàn yìbiān kàn diànshì.", meaning: "Vừa ăn cơm vừa xem ti vi." }] },
+            { stt: 499, hanzi: "一定", pinyin: "yídìng", type: "副词", subtype: "Phó từ xác nhận", meaning: "Nhất định", examples: [{ usage: "Khẳng định", sentence: "我一定会来。", pinyin: "Wǒ yídìng huì lái.", meaning: "Tôi nhất định sẽ đến." }] },
+            { stt: 500, hanzi: "一共", pinyin: "yígòng", type: "副词", subtype: "Phó từ phạm vi", meaning: "Tổng cộng", examples: [{ usage: "Tính tổng", sentence: "一共多少钱？", pinyin: "Yígòng duōshao qián?", meaning: "Tổng cộng bao nhiêu tiền?" }] },
+            { stt: 501, hanzi: "一会儿", pinyin: "yíhuìr", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Một lát", examples: [{ usage: "Thời gian ngắn", sentence: "等一会儿。", pinyin: "Děng yíhuìr.", meaning: "Đợi một lát." }] },
+            { stt: 502, hanzi: "一样", pinyin: "yíyàng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Giống nhau", examples: [{ usage: "So sánh", sentence: "我们一样大。", pinyin: "Wǒmen yíyàng dà.", meaning: "Chúng tôi bằng tuổi nhau." }] },
+            { stt: 503, hanzi: "一直", pinyin: "yìzhí", type: "副词", subtype: "Phó từ thời gian", meaning: "Luôn luôn, mãi", examples: [{ usage: "Liên tục", sentence: "雨一直下。", pinyin: "Yǔ yìzhí xià.", meaning: "Mưa cứ mãi rơi." }] },
+            { stt: 504, hanzi: "医生", pinyin: "yīshēng", type: "名词", subtype: "Danh từ chỉ người", meaning: "Bác sĩ", examples: [{ usage: "Nghề nghiệp", sentence: "他是医生。", pinyin: "Tā shì yīshēng.", meaning: "Anh ấy là bác sĩ." }] },
+            { stt: 505, hanzi: "医院", pinyin: "yīyuàn", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Bệnh viện", examples: [{ usage: "Y tế", sentence: "我去医院看病。", pinyin: "Wǒ qù yīyuàn kàn bìng.", meaning: "Tôi đi bệnh viện khám bệnh." }] },
+            { stt: 506, hanzi: "椅子", pinyin: "yǐzi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cái ghế", examples: [{ usage: "Đồ vật", sentence: "请坐椅子上。", pinyin: "Qǐng zuò yǐzi shàng.", meaning: "Làm ơn ngồi lên ghế." }] },
+            { stt: 507, hanzi: "已经", pinyin: "yǐjīng", type: "副词", subtype: "Phó từ thời gian", meaning: "Đã", examples: [{ usage: "Hoàn thành", sentence: "我已经吃完了。", pinyin: "Wǒ yǐjīng chī wán le.", meaning: "Tôi đã ăn xong rồi." }] },
+            { stt: 508, hanzi: "以后", pinyin: "yǐhòu", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Sau này, về sau", examples: [{ usage: "Thời gian tương lai", sentence: "以后再说。", pinyin: "Yǐhòu zài shuō.", meaning: "Để sau này hãy nói." }] },
+            { stt: 509, hanzi: "以前", pinyin: "yǐqián", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Trước đây", examples: [{ usage: "Quá khứ", sentence: "我以前住在北京。", pinyin: "Wǒ yǐqián zhù zài Běijīng.", meaning: "Trước đây tôi sống ở Bắc Kinh." }] },
+            { stt: 510, hanzi: "以为", pinyin: "yǐwéi", type: "动词", subtype: "Động từ tâm lý", meaning: "Tưởng rằng, ngỡ rằng", examples: [{ usage: "Sai lầm", sentence: "我以为你走了。", pinyin: "Wǒ yǐwéi nǐ zǒu le.", meaning: "Tôi tưởng bạn đã đi rồi." }] },
+            { stt: 511, hanzi: "艺术", pinyin: "yìshù", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Nghệ thuật", examples: [{ usage: "Văn hóa", sentence: "我喜欢艺术。", pinyin: "Wǒ xǐhuan yìshù.", meaning: "Tôi thích nghệ thuật." }] },
+            { stt: 512, hanzi: "阴", pinyin: "yīn", type: "形容词", subtype: "Tính từ trạng thái", meaning: "Âm u, trời râm", examples: [{ usage: "Thời tiết", sentence: "今天阴天。", pinyin: "Jīntiān yīntiān.", meaning: "Hôm nay trời âm u." }] },
+            { stt: 513, hanzi: "因为", pinyin: "yīnwèi", type: "连词", subtype: "Liên từ phụ thuộc", meaning: "Bởi vì", examples: [{ usage: "Lý do", sentence: "因为下雨，所以我不去。", pinyin: "Yīnwèi xià yǔ, suǒyǐ wǒ bú qù.", meaning: "Vì trời mưa nên tôi không đi." }] },
+            { stt: 514, hanzi: "音乐", pinyin: "yīnyuè", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Âm nhạc", examples: [{ usage: "Nghệ thuật", sentence: "我喜欢听音乐。", pinyin: "Wǒ xǐhuan tīng yīnyuè.", meaning: "Tôi thích nghe nhạc." }] },
+            { stt: 515, hanzi: "银行", pinyin: "yínháng", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Ngân hàng", examples: [{ usage: "Tài chính", sentence: "我去银行取钱。", pinyin: "Wǒ qù yínháng qǔ qián.", meaning: "Tôi đi ngân hàng rút tiền." }] },
+            { stt: 516, hanzi: "应该", pinyin: "yīnggāi", type: "副词", subtype: "Phó từ mức độ", meaning: "Nên", examples: [{ usage: "Lời khuyên", sentence: "你应该休息。", pinyin: "Nǐ yīnggāi xiūxi.", meaning: "Bạn nên nghỉ ngơi." }] },
+            { stt: 517, hanzi: "影响", pinyin: "yǐngxiǎng", type: "动词", subtype: "Động từ hành động", meaning: "Ảnh hưởng", examples: [{ usage: "Tác động", sentence: "天气影响心情。", pinyin: "Tiānqì yǐngxiǎng xīnqíng.", meaning: "Thời tiết ảnh hưởng đến tâm trạng." }] },
+            { stt: 518, hanzi: "用", pinyin: "yòng", type: "动词", subtype: "Động từ hành động", meaning: "Dùng, sử dụng", examples: [{ usage: "Sử dụng", sentence: "我用电脑工作。", pinyin: "Wǒ yòng diànnǎo gōngzuò.", meaning: "Tôi dùng máy tính làm việc." }] },
+            { stt: 519, hanzi: "又", pinyin: "yòu", type: "副词", subtype: "Phó từ phạm vi", meaning: "Lại", examples: [{ usage: "Lặp lại", sentence: "他又来了。", pinyin: "Tā yòu lái le.", meaning: "Anh ấy lại đến nữa rồi." }] },
+            { stt: 520, hanzi: "有", pinyin: "yǒu", type: "动词", subtype: "Động từ tồn tại", meaning: "Có", examples: [{ usage: "Sở hữu", sentence: "我有一本书。", pinyin: "Wǒ yǒu yì běn shū.", meaning: "Tôi có một quyển sách." }] },
+            { stt: 521, hanzi: "有名", pinyin: "yǒumíng", type: "形容词", subtype: "Tính từ tính chất", meaning: "Nổi tiếng", examples: [{ usage: "Danh tiếng", sentence: "他是一位有名的医生。", pinyin: "Tā shì yí wèi yǒumíng de yīshēng.", meaning: "Ông ấy là một bác sĩ nổi tiếng." }] },
+            { stt: 522, hanzi: "有趣", pinyin: "yǒuqù", type: "形容词", subtype: "Tính từ tính chất", meaning: "Thú vị", examples: [{ usage: "Hấp dẫn", sentence: "这本书很有趣。", pinyin: "Zhè běn shū hěn yǒuqù.", meaning: "Quyển sách này rất thú vị." }] },
+            { stt: 523, hanzi: "友好", pinyin: "yǒuhǎo", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Thân thiện", examples: [{ usage: "Quan hệ", sentence: "他们对我们很友好。", pinyin: "Tāmen duì wǒmen hěn yǒuhǎo.", meaning: "Họ rất thân thiện với chúng tôi." }] },
+            { stt: 524, hanzi: "朋友", pinyin: "yǒupiàn", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Bạn bè", examples: [{ usage: "Quan hệ", sentence: "他是我的朋友。", pinyin: "Tā shì wǒ de péngyou.", meaning: "Anh ấy là bạn của tôi." }] },
+            { stt: 525, hanzi: "右", pinyin: "yòu", type: "名词", subtype: "Danh từ phương vị", meaning: "Phải, bên phải", examples: [{ usage: "Phương hướng", sentence: "向右转。", pinyin: "Xiàng yòu zhuǎn.", meaning: "Rẽ phải." }] },
+            { stt: 526, hanzi: "鱼", pinyin: "yú", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cá", examples: [{ usage: "Động vật", sentence: "我喜欢吃鱼。", pinyin: "Wǒ xǐhuan chī yú.", meaning: "Tôi thích ăn cá." }] },
+            { stt: 527, hanzi: "愉快", pinyin: "yúkuài", type: "形容词", subtype: "Tính từ tâm lý", meaning: "Vui vẻ", examples: [{ usage: "Cảm xúc", sentence: "祝你旅途愉快！", pinyin: "Zhù nǐ lǚtú yúkuài!", meaning: "Chúc bạn có chuyến đi vui vẻ!" }] },
+            { stt: 528, hanzi: "雨", pinyin: "yǔ", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Mưa", examples: [{ usage: "Thời tiết", sentence: "下雨了。", pinyin: "Xià yǔ le.", meaning: "Trời mưa rồi." }] },
+            { stt: 529, hanzi: "语法", pinyin: "yǔfǎ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Ngữ pháp", examples: [{ usage: "Ngôn ngữ học", sentence: "汉语语法很难。", pinyin: "Hànyǔ yǔfǎ hěn nán.", meaning: "Ngữ pháp tiếng Hán rất khó." }] },
+            { stt: 530, hanzi: "语言", pinyin: "yǔyán", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Ngôn ngữ", examples: [{ usage: "Giao tiếp", sentence: "学习语言很有趣。", pinyin: "Xuéxí yǔyán hěn yǒuqù.", meaning: "Học ngôn ngữ rất thú vị." }] },
+            { stt: 531, hanzi: "遇到", pinyin: "yùdào", type: "动词", subtype: "Động từ tồn tại", meaning: "Gặp phải", examples: [{ usage: "Gặp gỡ", sentence: "我遇到了一个老朋友。", pinyin: "Wǒ yùdào le yí ge lǎo péngyou.", meaning: "Tôi đã gặp một người bạn cũ." }] },
+            { stt: 532, hanzi: "元", pinyin: "yuán", type: "量词", subtype: "Lượng từ đơn vị", meaning: "Đồng (tiền)", examples: [{ usage: "Tiền tệ", sentence: "十块钱", pinyin: "Shí kuài qián", meaning: "Mười đồng" }] },
+            { stt: 533, hanzi: "愿意", pinyin: "yuànyì", type: "动词", subtype: "Động từ năng nguyện", meaning: "Sẵn lòng, muốn", examples: [{ usage: "Tự nguyện", sentence: "我愿意帮你。", pinyin: "Wǒ yuànyì bāng nǐ.", meaning: "Tôi sẵn lòng giúp bạn." }] },
+            { stt: 534, hanzi: "月", pinyin: "yuè", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Tháng, mặt trăng", examples: [{ usage: "Thời gian", sentence: "一个月", pinyin: "Yí ge yuè", meaning: "Một tháng" }] },
+            { stt: 535, hanzi: "越来越", pinyin: "yuèláiyuè", type: "副词", subtype: "Phó từ mức độ", meaning: "Càng ngày càng", examples: [{ usage: "Tiến triển", sentence: "天气越来越热。", pinyin: "Tiānqì yuèláiyuè rè.", meaning: "Thời tiết càng ngày càng nóng." }] },
+            { stt: 536, hanzi: "运动", pinyin: "yùndòng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Thể thao, vận động", examples: [{ usage: "Hoạt động", sentence: "我喜欢运动。", pinyin: "Wǒ xǐhuan yùndòng.", meaning: "Tôi thích thể thao." }] },
+            { stt: 537, hanzi: "再", pinyin: "zài", type: "副词", subtype: "Phó từ thời gian", meaning: "Lại, nữa", examples: [{ usage: "Lặp lại", sentence: "请再说一遍。", pinyin: "Qǐng zài shuō yí biàn.", meaning: "Làm ơn nói lại một lần nữa." }] },
+            { stt: 538, hanzi: "在", pinyin: "zài", type: "介词", subtype: "Giới từ nơi chốn", meaning: "Ở, tại", examples: [{ usage: "Vị trí", sentence: "我在家。", pinyin: "Wǒ zài jiā.", meaning: "Tôi ở nhà." }] },
+            { stt: 539, hanzi: "早上", pinyin: "zǎoshang", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Buổi sáng", examples: [{ usage: "Thời gian", sentence: "早上好！", pinyin: "Zǎoshang hǎo!", meaning: "Chào buổi sáng!" }] },
+            { stt: 540, hanzi: "怎么", pinyin: "zěnme", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Thế nào, làm sao", examples: [{ usage: "Hỏi cách", sentence: "你怎么去？", pinyin: "Nǐ zěnme qù?", meaning: "Bạn đi thế nào?" }] },
+            { stt: 541, hanzi: "怎么样", pinyin: "zěnmeyàng", type: "代词", subtype: "Đại từ nghi vấn", meaning: "Thế nào, ra sao", examples: [{ usage: "Hỏi ý kiến", sentence: "这个怎么样？", pinyin: "Zhège zěnmeyàng?", meaning: "Cái này thế nào?" }] },
+            { stt: 542, hanzi: "站", pinyin: "zhàn", type: "动词", subtype: "Động từ hành động", meaning: "Đứng", examples: [{ usage: "Tư thế", sentence: "请站起来。", pinyin: "Qǐng zhàn qǐlai.", meaning: "Làm ơn đứng lên." }] },
+            { stt: 543, hanzi: "张", pinyin: "zhāng", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Tờ (giấy), cái (bàn)", examples: [{ usage: "Đếm đồ phẳng", sentence: "一张纸", pinyin: "Yì zhāng zhǐ", meaning: "Một tờ giấy" }] },
+            { stt: 544, hanzi: "长", pinyin: "zhǎng", type: "动词", subtype: "Động từ hành động", meaning: "Mọc, trưởng thành", examples: [{ usage: "Phát triển", sentence: "树长得很快。", pinyin: "Shù zhǎng de hěn kuài.", meaning: "Cây mọc rất nhanh." }] },
+            { stt: 545, hanzi: "丈夫", pinyin: "zhàngfu", type: "名词", subtype: "Danh từ chỉ người", meaning: "Chồng", examples: [{ usage: "Gia đình", sentence: "她的丈夫很帅。", pinyin: "Tā de zhàngfu hěn shuài.", meaning: "Chồng cô ấy rất đẹp trai." }] },
+            { stt: 546, hanzi: "着", pinyin: "zhe", type: "助词", subtype: "Trợ từ động thái", meaning: "Đang (tiếp diễn)", examples: [{ usage: "Tiếp diễn", sentence: "他吃着饭。", pinyin: "Tā chīzhe fàn.", meaning: "Anh ấy đang ăn cơm." }] },
+            { stt: 547, hanzi: "真", pinyin: "zhēn", type: "副词", subtype: "Phó từ xác nhận", meaning: "Thật", examples: [{ usage: "Nhấn mạnh", sentence: "真好！", pinyin: "Zhēn hǎo!", meaning: "Thật tốt quá!" }] },
+            { stt: 548, hanzi: "准备", pinyin: "zhǔnbèi", type: "动词", subtype: "Động từ hành động", meaning: "Chuẩn bị", examples: [{ usage: "Sắp xếp", sentence: "我准备考试。", pinyin: "Wǒ zhǔnbèi kǎoshì.", meaning: "Tôi chuẩn bị thi." }] },
+            { stt: 549, hanzi: "中国", pinyin: "Zhōngguó", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Trung Quốc", examples: [{ usage: "Quốc gia", sentence: "我来自中国。", pinyin: "Wǒ lái zì Zhōngguó.", meaning: "Tôi đến từ Trung Quốc." }] },
+            { stt: 550, hanzi: "中间", pinyin: "zhōngjiān", type: "名词", subtype: "Danh từ phương vị", meaning: "Giữa", examples: [{ usage: "Vị trí", sentence: "坐在中间。", pinyin: "Zuò zài zhōngjiān.", meaning: "Ngồi ở giữa." }] },
+            { stt: 551, hanzi: "中午", pinyin: "zhōngwǔ", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Buổi trưa", examples: [{ usage: "Thời gian", sentence: "中午吃饭。", pinyin: "Zhōngwǔ chī fàn.", meaning: "Buổi trưa ăn cơm." }] },
+            { stt: 552, hanzi: "终于", pinyin: "zhōngyú", type: "副词", subtype: "Phó từ thời gian", meaning: "Cuối cùng", examples: [{ usage: "Kết quả", sentence: "终于到了。", pinyin: "Zhōngyú dào le.", meaning: "Cuối cùng cũng đến rồi." }] },
+            { stt: 553, hanzi: "种", pinyin: "zhǒng", type: "量词", subtype: "Lượng từ danh lượng", meaning: "Loại", examples: [{ usage: "Phân loại", sentence: "这种书", pinyin: "Zhè zhǒng shū", meaning: "Loại sách này" }] },
+            { stt: 554, hanzi: "重要", pinyin: "zhòngyào", type: "形容词", subtype: "Tính từ tính chất", meaning: "Quan trọng", examples: [{ usage: "Mức độ", sentence: "这很重要。", pinyin: "Zhè hěn zhòngyào.", meaning: "Điều này rất quan trọng." }] },
+            { stt: 555, hanzi: "周末", pinyin: "zhōumò", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Cuối tuần", examples: [{ usage: "Thời gian", sentence: "周末快乐！", pinyin: "Zhōumò kuàilè!", meaning: "Chúc cuối tuần vui vẻ!" }] },
+            { stt: 556, hanzi: "主要", pinyin: "zhǔyào", type: "形容词", subtype: "Tính từ tính chất", meaning: "Chủ yếu", examples: [{ usage: "Quan trọng nhất", sentence: "主要原因是...", pinyin: "Zhǔyào yuányīn shì...", meaning: "Lý do chủ yếu là..." }] },
+            { stt: 557, hanzi: "住", pinyin: "zhù", type: "动词", subtype: "Động từ tồn tại", meaning: "Sống, ở", examples: [{ usage: "Cư trú", sentence: "我住在北京。", pinyin: "Wǒ zhù zài Běijīng.", meaning: "Tôi sống ở Bắc Kinh." }] },
+            { stt: 558, hanzi: "注意", pinyin: "zhùyì", type: "动词", subtype: "Động từ tâm lý", meaning: "Chú ý", examples: [{ usage: "Tập trung", sentence: "请注意安全。", pinyin: "Qǐng zhùyì ānquán.", meaning: "Làm ơn chú ý an toàn." }] },
+            { stt: 559, hanzi: "祝", pinyin: "zhù", type: "动词", subtype: "Động từ xã giao", meaning: "Chúc", examples: [{ usage: "Lời chúc", sentence: "祝你生日快乐！", pinyin: "Zhù nǐ shēngrì kuàilè!", meaning: "Chúc mừng sinh nhật!" }] },
+            { stt: 560, hanzi: "装", pinyin: "zhuāng", type: "动词", subtype: "Động từ hành động", meaning: "Mặc (quần áo), đóng gói", examples: [{ usage: "Mặc đồ", sentence: "请装衣服。", pinyin: "Qǐng zhuāng yīfu.", meaning: "Làm ơn cho quần áo vào." }] },
+            { stt: 561, hanzi: "准备", pinyin: "zhǔnbèi", type: "动词", subtype: "Động từ hành động", meaning: "Chuẩn bị", examples: [{ usage: "Sắp xếp", sentence: "我准备吃饭。", pinyin: "Wǒ zhǔnbèi chī fàn.", meaning: "Tôi chuẩn bị ăn cơm." }] },
+            { stt: 562, hanzi: "桌子", pinyin: "zhuōzi", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Cái bàn", examples: [{ usage: "Đồ vật", sentence: "书在桌子上。", pinyin: "Shū zài zhuōzi shàng.", meaning: "Sách ở trên bàn." }] },
+            { stt: 563, hanzi: "自己", pinyin: "zìjǐ", type: "代词", subtype: "Đại từ chỉ thị", meaning: "Tự mình, bản thân", examples: [{ usage: "Phản thân", sentence: "我自己去。", pinyin: "Wǒ zìjǐ qù.", meaning: "Tôi tự đi." }] },
+            { stt: 564, hanzi: "自行车", pinyin: "zìxíngchē", type: "名词", subtype: "Danh từ chỉ vật", meaning: "Xe đạp", examples: [{ usage: "Phương tiện", sentence: "我骑自行车上学。", pinyin: "Wǒ qí zìxíngchē shàngxué.", meaning: "Tôi đi xe đạp đến trường." }] },
+            { stt: 565, hanzi: "字", pinyin: "zì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Chữ, từ", examples: [{ usage: "Văn tự", sentence: "这个字怎么写？", pinyin: "Zhège zì zěnme xiě?", meaning: "Chữ này viết thế nào?" }] },
+            { stt: 566, hanzi: "总", pinyin: "zǒng", type: "副词", subtype: "Phó từ phạm vi", meaning: "Luôn luôn", examples: [{ usage: "Thường xuyên", sentence: "他总是迟到。", pinyin: "Tā zǒng shì chídào.", meaning: "Anh ấy luôn đi muộn." }] },
+            { stt: 567, hanzi: "走", pinyin: "zǒu", type: "动词", subtype: "Động từ xu hướng", meaning: "Đi, chạy", examples: [{ usage: "Di chuyển", sentence: "我们走吧。", pinyin: "Wǒmen zǒu ba.", meaning: "Chúng ta đi thôi." }] },
+            { stt: 568, hanzi: "嘴", pinyin: "zuǐ", type: "名词", subtype: "Danh từ chỉ người", meaning: "Cái miệng", examples: [{ usage: "Bộ phận cơ thể", sentence: "我的嘴很干。", pinyin: "Wǒ de zuǐ hěn gān.", meaning: "Miệng tôi rất khô." }] },
+            { stt: 569, hanzi: "最", pinyin: "zuì", type: "副词", subtype: "Phó từ mức độ", meaning: "Nhất", examples: [{ usage: "So sánh nhất", sentence: "他是最好的。", pinyin: "Tā shì zuì hǎo de.", meaning: "Anh ấy là người tốt nhất." }] },
+            { stt: 570, hanzi: "最近", pinyin: "zuìjìn", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Gần đây", examples: [{ usage: "Thời gian gần", sentence: "你最近好吗？", pinyin: "Nǐ zuìjìn hǎo ma?", meaning: "Dạo này bạn khỏe không?" }] },
+            { stt: 571, hanzi: "昨天", pinyin: "zuótiān", type: "名词", subtype: "Danh từ chỉ thời gian", meaning: "Hôm qua", examples: [{ usage: "Thời gian quá khứ", sentence: "昨天我很忙。", pinyin: "Zuótiān wǒ hěn máng.", meaning: "Hôm qua tôi rất bận." }] },
+            { stt: 572, hanzi: "左", pinyin: "zuǒ", type: "名词", subtype: "Danh từ phương vị", meaning: "Trái, bên trái", examples: [{ usage: "Phương hướng", sentence: "向左转。", pinyin: "Xiàng zuǒ zhuǎn.", meaning: "Rẽ trái." }] },
+            { stt: 573, hanzi: "做", pinyin: "zuò", type: "动词", subtype: "Động từ hành động", meaning: "Làm", examples: [{ usage: "Hành động", sentence: "我在做作业。", pinyin: "Wǒ zài zuò zuòyè.", meaning: "Tôi đang làm bài tập." }] },
+            { stt: 574, hanzi: "坐", pinyin: "zuò", type: "动词", subtype: "Động từ hành động", meaning: "Ngồi", examples: [{ usage: "Tư thế", sentence: "请坐。", pinyin: "Qǐng zuò.", meaning: "Mời ngồi." }] },
+            { stt: 575, hanzi: "作业", pinyin: "zuòyè", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Bài tập", examples: [{ usage: "Học tập", sentence: "我做完了作业。", pinyin: "Wǒ zuò wán le zuòyè.", meaning: "Tôi đã làm xong bài tập." }] },
+            { stt: 576, hanzi: "作用", pinyin: "zuòyòng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tác dụng", examples: [{ usage: "Hiệu quả", sentence: "这个药有作用。", pinyin: "Zhège yào yǒu zuòyòng.", meaning: "Thuốc này có tác dụng." }] },
+            { stt: 577, hanzi: "作家", pinyin: "zuòjiā", type: "名词", subtype: "Danh từ chỉ người", meaning: "Nhà văn", examples: [{ usage: "Nghề nghiệp", sentence: "他是一位著名作家。", pinyin: "Tā shì yí wèi zhùmíng zuòjiā.", meaning: "Ông ấy là một nhà văn nổi tiếng." }] },
+            { stt: 578, hanzi: "文章", pinyin: "wénzhāng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Bài văn, bài báo", examples: [{ usage: "Văn học", sentence: "这篇文章写得很好。", pinyin: "Zhè piān wénzhāng xiě de hěn hǎo.", meaning: "Bài văn này viết rất hay." }] },
+            { stt: 579, hanzi: "文化", pinyin: "wénhuà", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Văn hóa", examples: [{ usage: "Xã hội", sentence: "中国文化很悠久。", pinyin: "Zhōngguó wénhuà hěn yōujiǔ.", meaning: "Văn hóa Trung Quốc rất lâu đời." }] },
+            { stt: 580, hanzi: "节目", pinyin: "jiémù", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Chương trình", examples: [{ usage: "Giải trí", sentence: "电视节目", pinyin: "Diànshì jiémù", meaning: "Chương trình truyền hình" }] },
+            { stt: 581, hanzi: "会议", pinyin: "huìyì", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Cuộc họp", examples: [{ usage: "Công việc", sentence: "参加会议", pinyin: "Cānjiā huìyì", meaning: "Tham gia cuộc họp" }] },
+            { stt: 582, hanzi: "意思", pinyin: "yìsi", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Ý nghĩa", examples: [{ usage: "Nội dung", sentence: "这是什么意思？", pinyin: "Zhè shì shénme yìsi?", meaning: "Cái này có nghĩa là gì?" }] },
+            { stt: 583, hanzi: "看法", pinyin: "kànfǎ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Quan điểm", examples: [{ usage: "Ý kiến", sentence: "你的看法是什么？", pinyin: "Nǐ de kànfǎ shì shénme?", meaning: "Quan điểm của bạn là gì?" }] },
+            { stt: 584, hanzi: "方面", pinyin: "fāngmiàn", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Phương diện", examples: [{ usage: "Lĩnh vực", sentence: "在这方面", pinyin: "Zài zhè fāngmiàn", meaning: "Về phương diện này" }] },
+            { stt: 585, hanzi: "地位", pinyin: "dìwèi", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Địa vị", examples: [{ usage: "Vị trí", sentence: "社会地位", pinyin: "Shèhuì dìwèi", meaning: "Địa vị xã hội" }] },
+            { stt: 586, hanzi: "水平", pinyin: "shuǐpíng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Trình độ", examples: [{ usage: "Năng lực", sentence: "提高水平", pinyin: "Tígāo shuǐpíng", meaning: "Nâng cao trình độ" }] },
+            { stt: 587, hanzi: "区别", pinyin: "qūbié", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Sự khác biệt", examples: [{ usage: "So sánh", sentence: "有什么区别？", pinyin: "Yǒu shénme qūbié?", meaning: "Có gì khác biệt?" }] },
+            { stt: 588, hanzi: "经过", pinyin: "jīngguò", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Quá trình", examples: [{ usage: "Trải nghiệm", sentence: "事情的经过", pinyin: "Shìqing de jīngguò", meaning: "Quá trình sự việc" }] },
+            { stt: 589, hanzi: "经验", pinyin: "jīngyàn", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Kinh nghiệm", examples: [{ usage: "Học hỏi", sentence: "工作经验", pinyin: "Gōngzuò jīngyàn", meaning: "Kinh nghiệm làm việc" }] },
+            { stt: 590, hanzi: "基础", pinyin: "jīchǔ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Cơ sở, nền tảng", examples: [{ usage: "Căn bản", sentence: "打好基础", pinyin: "Dǎhǎo jīchǔ", meaning: "Xây dựng nền tảng tốt" }] },
+            { stt: 591, hanzi: "结果", pinyin: "jiéguǒ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Kết quả", examples: [{ usage: "Kết thúc", sentence: "比赛结果", pinyin: "Bǐsài jiéguǒ", meaning: "Kết quả trận đấu" }] },
+            { stt: 592, hanzi: "原因", pinyin: "yuányīn", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Nguyên nhân", examples: [{ usage: "Lý do", sentence: "什么原因？", pinyin: "Shénme yuányīn?", meaning: "Nguyên nhân gì?" }] },
+            { stt: 593, hanzi: "条件", pinyin: "tiáojiàn", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Điều kiện", examples: [{ usage: "Yêu cầu", sentence: "有利条件", pinyin: "Yǒulì tiáojiàn", meaning: "Điều kiện thuận lợi" }] },
+            { stt: 594, hanzi: "方法", pinyin: "fāngfǎ", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Phương pháp", examples: [{ usage: "Cách làm", sentence: "学习方法", pinyin: "Xuéxí fāngfǎ", meaning: "Phương pháp học tập" }] },
+            { stt: 595, hanzi: "情况", pinyin: "qíngkuàng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tình hình", examples: [{ usage: "Hoàn cảnh", sentence: "实际情况", pinyin: "Shíjì qíngkuàng", meaning: "Tình hình thực tế" }] },
+            { stt: 596, hanzi: "环境", pinyin: "huánjìng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Môi trường", examples: [{ usage: "Bối cảnh", sentence: "保护环境", pinyin: "Bǎohù huánjìng", meaning: "Bảo vệ môi trường" }] },
+            { stt: 597, hanzi: "过程", pinyin: "guòchéng", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Quá trình", examples: [{ usage: "Tiến trình", sentence: "发展过程", pinyin: "Fāzhǎn guòchéng", meaning: "Quá trình phát triển" }] },
+            { stt: 598, hanzi: "好处", pinyin: "hǎochu", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Lợi ích", examples: [{ usage: "Lợi", sentence: "有很多好处", pinyin: "Yǒu hěn duō hǎochu", meaning: "Có nhiều lợi ích" }] },
+            { stt: 599, hanzi: "坏处", pinyin: "huàichu", type: "名词", subtype: "Danh từ trừu tượng", meaning: "Tác hại", examples: [{ usage: "Hại", sentence: "没有坏处", pinyin: "Méiyǒu huàichu", meaning: "Không có tác hại" }] },
+            { stt: 600, hanzi: "地方", pinyin: "dìfang", type: "名词", subtype: "Danh từ chỉ địa điểm", meaning: "Địa phương, chỗ", examples: [{ usage: "Vị trí", sentence: "这是什么地方？", pinyin: "Zhè shì shénme dìfang?", meaning: "Đây là chỗ nào?" }] }
+        ];
+
+        // ========== SIDEBAR MENU DATA ==========
+        const typeCategories = {
+            "名词": ["Danh từ chỉ người", "Danh từ chỉ vật", "Danh từ chỉ địa điểm", "Danh từ chỉ thời gian", "Danh từ phương vị", "Danh từ chỉ tổ chức", "Danh từ trừu tượng"],
+            "动词": ["Động từ hành động", "Động từ tâm lý", "Động từ ly hợp", "Động từ xu hướng", "Động từ tồn tại", "Động từ phán đoán", "Động từ năng nguyện"],
+            "形容词": ["Tính từ tính chất", "Tính từ trạng thái", "Tính từ tâm lý", "Tính từ xã giao"],
+            "代词": ["Đại từ nhân xưng", "Đại từ chỉ thị", "Đại từ nghi vấn"],
+            "数词": ["Số đếm", "Số thứ tự"],
+            "量词": ["Lượng từ danh lượng", "Lượng từ động lượng", "Lượng từ đơn vị", "Lượng từ bất định"],
+            "副词": ["Phó từ mức độ", "Phó từ thời gian", "Phó từ phạm vi", "Phó từ phủ định", "Phó từ xác nhận", "Phó từ ngữ khí"],
+            "介词": ["Giới từ đối tượng", "Giới từ nơi chốn", "Giới từ thời gian", "Giới từ phạm vi", "Giới từ công cụ"],
+            "连词": ["Liên từ đẳng lập", "Liên từ phụ thuộc"],
+            "助词": ["Trợ từ động thái", "Trợ từ kết cấu", "Trợ từ ngữ khí"],
+            "叹词": ["-"]
+        };
+
+        // ========== FUNCTIONS ==========
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+                        renderTable(vocabData);
+            renderSidebar();
+        });
+
+        // Render Table
+        function renderTable(data) {
+            const tbody = document.getElementById('vocabTableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors';
+                
+                // Type badge class
+                let typeClass = 'type-noun';
+                if (item.type === '动词') typeClass = 'type-verb';
+                else if (item.type === '形容词') typeClass = 'type-adj';
+                else if (item.type === '数词') typeClass = 'type-num';
+                else if (item.type === '量词') typeClass = 'type-measure';
+                else if (item.type === '代词') typeClass = 'type-pronoun';
+                else if (item.type === '副词') typeClass = 'type-adv';
+                else if (item.type === '介词') typeClass = 'type-prep';
+                else if (item.type === '连词') typeClass = 'type-conj';
+                else if (item.type === '助词') typeClass = 'type-particle';
+                else if (item.type === '叹词') typeClass = 'type-interj';
+                
+                row.innerHTML = `
+                    <td class="px-3 py-3 text-center text-gray-600">${index + 1}</td>
+                    <td class="px-2 py-3 text-center">
+                        <button onclick="speak('${item.hanzi}')" class="icon-btn audio-btn text-white" title="Phát âm">
+                            🔊
+                        </button>
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="hanzi-font text-xl text-gray-800">${item.hanzi}</span>
+                    </td>
+                    <td class="px-2 py-3 text-center">
+                        <button onclick="showStrokeOrder('${item.hanzi}')" class="icon-btn stroke-btn text-white" title="Xem nét viết">
+                            ✏
+                        </button>
+                    </td>
+                    <td class="px-4 py-3 text-left text-gray-600">${item.pinyin}</td>
+                    <td class="px-4 py-3 text-left">
+                        <span class="type-badge ${typeClass}">${item.type}</span>
+                    </td>
+                    <td class="px-4 py-3 text-left text-gray-600">${item.subtype}</td>
+                    <td class="px-4 py-3 text-left text-gray-800">${item.meaning}</td>
+                    <td class="px-2 py-3 text-center">
+                        <button onclick="showExamples(${item.stt})" class="icon-btn example-btn text-white" title="Xem ví dụ">
+                            👁
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            document.getElementById('currentFilter').textContent = `Đang hiển thị: ${data.length} từ`;
+        }
+
+        // Render Sidebar
+        function renderSidebar() {
+            const sidebar = document.getElementById('sidebarMenu');
+            let html = '';
+            
+            // All items
+            html += `<div class="category-item active px-4 py-2 text-sm font-medium" onclick="filterTable('all')">
+                📋 Tất cả (${vocabData.length} từ)
+            </div>`;
+            
+            // By type
+            for (const [type, subtypes] of Object.entries(typeCategories)) {
+                const count = vocabData.filter(item => item.type === type).length;
+                html += `<div class="category-item px-4 py-2 text-sm font-medium flex justify-between items-center" onclick="filterByType('${type}')">
+                    <span>${type}</span>
+                    <span class="text-xs bg-gray-200 px-2 py-0.5 rounded-full">${count}</span>
+                </div>`;
+                
+                // Subtypes - sắp xếp theo số lượng từ giảm dần
+                const subtypesWithCount = subtypes.map(subtype => {
+                    const subCount = vocabData.filter(item => item.subtype === subtype).length;
+                    return { subtype, subCount };
+                }).filter(item => item.subCount > 0)
+                  .sort((a, b) => b.subCount - a.subCount);
+                
+                subtypesWithCount.forEach(({ subtype, subCount }) => {
+                    // Bỏ tiền tố như "ĐỘNG TỪ", "TÍNH TỪ", "DANH TỪ"
+                    const parts = subtype.split(' ');
+                    const displayName = parts.length > 1 ? parts.slice(1).join(' ') : subtype;
+                    html += `<div class="subcategory-item px-4 py-1.5 text-xs text-gray-600 flex justify-between items-center" onclick="filterBySubtype('${subtype}')">
+                        <span>${displayName.toUpperCase()}</span>
+                        <span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full">${subCount}</span>
+                    </div>`;
+                });
+            }
+            
+            sidebar.innerHTML = html;
+        }
+
+        // Filter Functions
+        function filterTable(filter) {
+            if (filter === 'all') {
+                renderTable(vocabData);
+                updateActiveMenu('all');
+            }
+        }
+
+        function filterByType(type) {
+            const filtered = vocabData.filter(item => item.type === type);
+            renderTable(filtered);
+            updateActiveMenu(type);
+        }
+
+        function filterBySubtype(subtype) {
+            const filtered = vocabData.filter(item => item.subtype === subtype);
+            renderTable(filtered);
+            updateActiveMenu(subtype);
+        }
+
+        function updateActiveMenu(active) {
+            document.querySelectorAll('.category-item, .subcategory-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            event.target.closest('.category-item, .subcategory-item').classList.add('active');
+        }
+
+        // TTS Function
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-CN';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Trình duyệt không hỗ trợ phát âm');
+            }
+        }
+
+        // Stroke Order Modal
+        let currentWriters = [];
+        
+        function showStrokeOrder(hanzi) {
+            const modal = document.getElementById('strokeModal');
+            const container = document.getElementById('strokeContainer');
+            const title = document.getElementById('strokeModalTitle');
+            
+            title.textContent = hanzi;
+            container.innerHTML = '';
+            currentWriters = [];
+            
+            // Split characters
+            const chars = hanzi.split('');
+            chars.forEach((char, index) => {
+                const div = document.createElement('div');
+                div.className = 'char-box';
+                div.id = `char-${index}`;
+                container.appendChild(div);
+                
+                const writer = HanziWriter.create(`char-${index}`, char, {
+                    width: 120,
+                    height: 120,
+                    padding: 5,
+                    strokeColor: '#7c3aed',
+                    radicalColor: '#10b981',
+                    showOutline: true,
+                    showCharacter: false
+                });
+                
+                currentWriters.push(writer);
+                writer.animateCharacter();
+            });
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeStrokeModal() {
+            document.getElementById('strokeModal').classList.add('hidden');
+            currentWriters = [];
+        }
+
+        function animateAllStrokes() {
+            currentWriters.forEach(writer => {
+                writer.animateCharacter();
+            });
+        }
+
+        // Example Modal
+        function showExamples(stt) {
+            const item = vocabData.find(v => v.stt === stt);
+            if (!item || !item.examples) return;
+            
+            const modal = document.getElementById('exampleModal');
+            const content = document.getElementById('exampleContent');
+            const title = document.getElementById('exampleModalTitle');
+            
+            title.textContent = item.hanzi;
+            
+            let html = `<div class="space-y-4">`;
+            item.examples.forEach((ex, idx) => {
+                html += `
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-purple-600 text-white text-xs px-2 py-1 rounded">${idx + 1}</span>
+                            <span class="text-sm text-gray-600">${ex.usage}</span>
+                        </div>
+                        <div class="hanzi-font text-lg text-gray-800 mb-1">${ex.sentence}</div>
+                        <div class="text-sm text-gray-600 mb-1">${ex.pinyin}</div>
+                        <div class="text-sm text-gray-500 italic">${ex.meaning}</div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            
+            content.innerHTML = html;
+            modal.classList.remove('hidden');
+        }
+
+        function closeExampleModal() {
+            document.getElementById('exampleModal').classList.add('hidden');
+        }
+
+        // Logo Upload
+        let uploadedLogoData = null;
+        
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedLogoData = e.target.result;
+                    const container = document.getElementById('logoContainer');
+                    container.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain">`;
+                    container.classList.remove('border-dashed');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Export Full HTML with embedded logo
+        function exportFullHTML() {
+            // Clone the document to modify for export
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = document.documentElement.outerHTML;
+            
+            // Remove the button container from the cloned HTML
+            const buttonContainer = tempDiv.querySelector('.fixed-header .flex.flex-row.items-center.gap-2');
+            if (buttonContainer) {
+                buttonContainer.remove();
+            }
+            
+            // Also remove the original header buttons
+            const originalButtons = tempDiv.querySelector('.fixed-buttons');
+            if (originalButtons) {
+                originalButtons.remove();
+            }
+            
+            // Get the modified HTML content
+            const modifiedHTML = tempDiv.innerHTML;
+            const blob = new Blob([modifiedHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'HSK3_600_Tu_Vung_Gia_Su_Hoa_Ngu_Tan_An.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Close modals on backdrop click
+        document.getElementById('strokeModal').addEventListener('click', function(e) {
+            if (e.target === this) closeStrokeModal();
+        });
+        document.getElementById('exampleModal').addEventListener('click', function(e) {
+            if (e.target === this) closeExampleModal();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeStrokeModal();
+                closeExampleModal();
+            }
+        });
+    </script>
+</body>
+</html>
