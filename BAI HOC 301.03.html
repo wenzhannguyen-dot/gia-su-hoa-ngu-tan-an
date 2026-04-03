@@ -1,0 +1,2258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bài 3: 你工作忙吗? - 301 Tiếng Hán Nhập Môn</title>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
+    <style>
+        :root {
+            --red:    #C0392B;
+            --gold:   #D4A017;
+            --ink:    #1A1A2E;
+            --paper:  #FAF7F2;
+            --cream:  #F5F5F0;
+            --border: #2C2C3E;
+            --green:  #27AE60;
+            --blue:   #1565C0;
+            --orange: #E67E22;
+            --muted:  #5D5D72;
+            --purple: #7B1FA2;
+            --gray:   #666;
+            --light-gray: #E0E0E0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--paper);
+            color: var(--ink);
+            font-size: 20px;
+            line-height: 1.5;
+            touch-action: manipulation;
+        }
+
+        .zh { font-family: SimSun, serif; }
+        .latin { font-family: Arial, sans-serif; }
+
+        .header {
+            background: var(--ink);
+            border-bottom: 2px solid var(--red);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            min-height: 56px;
+        }
+
+        .logo-section { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+        }
+        
+        .logo-section img {
+            width: 36px; 
+            height: 36px;
+            border-radius: 2px;
+            border: 1px solid var(--gold);
+        }
+
+        .brand-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-family: Arial, sans-serif;
+            font-size: 13px; 
+            font-weight: 700;
+            color: #fff; 
+            letter-spacing: 0.5px;
+        }
+
+        .brand-sub {
+            font-family: Arial, sans-serif;
+            font-size: 10px; 
+            color: var(--gold);
+            font-weight: 500; 
+        }
+
+        .editor-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            margin-left: 8px;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        .editor-btn:hover, .editor-btn:active {
+            background: var(--red);
+            border-color: var(--red);
+        }
+
+        .lesson-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .lesson-info .zh {
+            font-family: SimSun, serif;
+            font-size: 22px;
+        }
+
+        .lesson-info .latin {
+            font-family: Arial, sans-serif;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .contact-info {
+            font-family: Arial, sans-serif;
+            text-align: right;
+            font-size: 11px;
+            color: #aaa;
+            line-height: 1.4;
+        }
+
+        .contact-info .phone {
+            font-family: Arial, sans-serif;
+            color: #fff;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .tab-bar {
+            display: flex;
+            overflow-x: auto;
+            background: rgba(0,0,0,0.15);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            scrollbar-width: thin;
+            scrollbar-color: var(--red) transparent;
+            padding: 0 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-bar::-webkit-scrollbar { height: 3px; }
+        .tab-bar::-webkit-scrollbar-thumb { background: var(--red); border-radius: 2px; }
+
+        .tab-btn {
+            font-family: Arial, sans-serif;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+            white-space: nowrap;
+            transition: all 0.2s;
+            position: relative;
+            text-align: center;
+            min-width: auto;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        .tab-btn:hover, .tab-btn:active { 
+            color: #fff; 
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .tab-btn.active { 
+            background: var(--red);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .content-area {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .sub-tab-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 12px;
+        }
+
+        .sub-tab-btn {
+            font-family: Arial, sans-serif;
+            padding: 10px 16px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray);
+            transition: all 0.2s;
+            white-space: nowrap;
+            -webkit-touch-callout: none;
+            user-select: none;
+            min-height: 44px;
+        }
+
+        .sub-tab-btn:hover, .sub-tab-btn:active {
+            border-color: var(--red);
+            color: var(--red);
+            background: #fafafa;
+        }
+
+        .sub-tab-btn.active {
+            background: var(--red);
+            color: #fff;
+            border-color: var(--red);
+        }
+
+        .sub-tab-content { display: none; }
+        .sub-tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--red);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            flex-wrap: wrap;
+            -webkit-touch-callout: none;
+            user-select: none;
+            min-height: 44px;
+        }
+
+        .card-title .hanzi-title {
+            font-family: SimSun, serif;
+            font-size: 24px;
+            color: var(--red);
+        }
+
+        .toggle-bar-inline {
+            display: flex;
+            gap: 6px;
+            margin-left: auto;
+            align-items: center;
+        }
+
+        .toggle-btn-inline {
+            font-family: Arial, sans-serif;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            -webkit-touch-callout: none;
+            user-select: none;
+            min-height: 36px;
+        }
+
+        .toggle-btn-inline:hover, .toggle-btn-inline:active {
+            background: #eee;
+            border-color: #ccc;
+        }
+
+        .toggle-btn-inline.active {
+            background: var(--ink);
+            color: #fff;
+            border-color: var(--ink);
+        }
+
+        .toggle-btn-inline svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .header-audio {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            margin-left: 8px;
+            -webkit-touch-callout: none;
+            user-select: none;
+            position: relative;
+        }
+
+        .header-audio:hover, .header-audio:active { 
+            background: var(--red); 
+            border-color: var(--red);
+            transform: scale(1.1);
+        }
+
+        .header-audio.playing {
+            animation: pulse 1.5s infinite;
+            background: var(--red);
+            border-color: var(--red);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(192, 57, 43, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0); }
+        }
+
+        .audio-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            z-index: 1000;
+            display: none;
+            white-space: nowrap;
+        }
+
+        .audio-toast.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .vocab-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+            background: #fff;
+            transition: all 0.2s;
+            position: relative;
+            -webkit-touch-callout: none;
+        }
+
+        .vocab-card:hover, .vocab-card:active {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: #ccc;
+        }
+
+        .vocab-card.hidden { display: none; }
+
+        .vocab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .vocab-hanzi {
+            font-family: SimSun, serif;
+            font-size: 32px;
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        .vocab-type {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .vocab-type.dongtu { background: #FFF3E0; color: var(--orange); }
+        .vocab-type.tinhtu { background: #E8F5E9; color: var(--green); }
+        .vocab-type.danhtu { background: #FFEBEE; color: var(--red); }
+        .vocab-type.photu { background: #FFF8E1; color: #B8860B; }
+        .vocab-type.trutu { background: #F3E5F5; color: var(--purple); }
+        .vocab-type.sotu { background: #E3F2FD; color: var(--blue); }
+
+        .vocab-pinyin {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: var(--blue);
+            font-style: italic;
+            margin-bottom: 6px;
+        }
+
+        .vocab-meaning {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            color: var(--gray);
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        .stroke-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .stroke-inline {
+            height: 60px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .stroke-inline svg {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+
+        .replay-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            padding: 0;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        .replay-btn:hover, .replay-btn:active {
+            color: var(--red);
+        }
+
+        .dialogue-container { 
+            margin-bottom: 16px; 
+            display: none;
+        }
+        
+        .dialogue-container.active { 
+            display: block; 
+        }
+
+        .dialogue-box {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .dialogue-line {
+            margin: 12px 0;
+            padding: 16px;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e8e8e8;
+            -webkit-touch-callout: none;
+            position: relative;
+        }
+
+        .dialogue-line:hover, .dialogue-line:active {
+            background: #f5f5f5;
+            border-color: #d0d0d0;
+        }
+
+        .dialogue-line.playing {
+            background: #FFF8E1;
+            border-color: var(--gold);
+        }
+
+        .speaker {
+            font-family: Arial, sans-serif;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .chinese-text {
+            font-family: SimSun, serif;
+            font-size: 24px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .pinyin-text {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: var(--blue);
+            font-style: italic;
+            margin-bottom: 6px;
+        }
+
+        .pinyin-text.hidden {
+            display: none;
+        }
+
+        .vietnamese-text {
+            font-family: Arial, sans-serif;
+            color: var(--gray);
+            font-size: 15px;
+            font-style: italic;
+        }
+
+        .vietnamese-text.hidden {
+            display: none;
+        }
+
+        .exercise-item {
+            font-family: Arial, sans-serif;
+            padding: 16px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin: 12px 0;
+        }
+
+        .exercise-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--red);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 12px;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .question-text {
+            color: var(--gray);
+            margin-bottom: 12px;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+
+        .translation-input {
+            flex: 1;
+            min-width: 200px;
+            min-height: 44px;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 20px;
+            font-family: SimSun, serif;
+            -webkit-appearance: none;
+        }
+
+        .translation-input:focus {
+            outline: none;
+            border-color: var(--blue);
+        }
+
+        .translation-input.correct {
+            border-color: var(--green);
+            background: #F1F8E9;
+        }
+
+        .translation-input.wrong {
+            border-color: var(--red);
+            background: #FFEBEE;
+        }
+
+        .check-btn {
+            padding: 10px 20px;
+            background: var(--ink);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            min-height: 44px;
+            -webkit-touch-callout: none;
+            user-select: none;
+            -webkit-appearance: none;
+        }
+
+        .check-btn:hover, .check-btn:active {
+            background: var(--red);
+        }
+
+        .result-msg {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 15px;
+            display: none;
+        }
+
+        .result-msg.show {
+            display: block;
+        }
+
+        .result-msg.correct {
+            color: var(--green);
+            background: #F1F8E9;
+        }
+
+        .result-msg.wrong {
+            color: var(--red);
+            background: #FFEBEE;
+        }
+
+        .phonetic-table {
+            font-family: Arial, sans-serif;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .phonetic-table th, .phonetic-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .phonetic-table th {
+            font-family: Arial, sans-serif;
+            background: var(--cream);
+            font-weight: 700;
+        }
+
+        .phonetic-group {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .phonetic-group-title {
+            font-weight: 700;
+            color: var(--blue);
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .radical-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .radical-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .radical-char {
+            font-family: SimSun, serif;
+            font-size: 36px;
+            color: var(--red);
+            margin-bottom: 8px;
+        }
+
+        .radical-name {
+            font-family: Arial, sans-serif;
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-size: 16px;
+        }
+
+        .radical-desc {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .footer {
+            font-family: Arial, sans-serif;
+            background: var(--ink);
+            color: #888;
+            text-align: center;
+            padding: 16px;
+            font-size: 13px;
+            border-top: 2px solid var(--red);
+            margin-top: 32px;
+        }
+
+        .footer h3 { 
+            font-family: Arial, sans-serif;
+            color: var(--gold); 
+            font-size: 14px; 
+            margin-bottom: 4px; 
+        }
+
+        .editor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .editor-modal.active {
+            display: flex;
+        }
+
+        .editor-container {
+            background: #fff;
+            width: 100%;
+            max-width: 900px;
+            height: 80vh;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            background: var(--ink);
+            color: #fff;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--red);
+        }
+
+        .editor-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .editor-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            -webkit-touch-callout: none;
+        }
+
+        .editor-close:hover, .editor-close:active {
+            background: var(--red);
+        }
+
+        .editor-toolbar {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tool-btn {
+            padding: 8px 12px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--ink);
+            transition: all 0.2s;
+            min-width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-touch-callout: none;
+            user-select: none;
+            -webkit-appearance: none;
+        }
+
+        .tool-btn:hover, .tool-btn:active {
+            background: #e0e0e0;
+            border-color: #999;
+        }
+
+        .tool-btn.active {
+            background: var(--ink);
+            color: #fff;
+            border-color: var(--ink);
+        }
+
+        .tool-separator {
+            width: 1px;
+            height: 24px;
+            background: #ccc;
+            margin: 0 4px;
+        }
+
+        .editor-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.6;
+            outline: none;
+            background: #fff;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .editor-content:focus {
+            background: #fafafa;
+        }
+
+        .editor-footer {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .editor-btn-secondary {
+            padding: 10px 16px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--gray);
+            -webkit-touch-callout: none;
+            -webkit-appearance: none;
+            min-height: 40px;
+        }
+
+        .editor-btn-secondary:hover, .editor-btn-secondary:active {
+            background: #e0e0e0;
+        }
+
+        .editor-btn-primary {
+            padding: 10px 16px;
+            background: var(--ink);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            -webkit-touch-callout: none;
+            -webkit-appearance: none;
+            min-height: 40px;
+        }
+
+        .editor-btn-primary:hover, .editor-btn-primary:active {
+            background: var(--red);
+        }
+
+        select.tool-btn {
+            padding: 6px 8px;
+            height: 36px;
+            min-width: 80px;
+        }
+
+        @media (max-width: 768px) {
+            body { font-size: 16px; }
+            
+            .header-main {
+                padding: 6px 12px;
+                min-height: 52px;
+            }
+            
+            .logo-section img { width: 32px; height: 32px; }
+            .brand-name { font-size: 11px; }
+            .brand-sub { font-size: 9px; }
+            
+            .editor-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+            
+            .lesson-info { font-size: 14px; gap: 6px; }
+            .lesson-info .zh { font-size: 18px; }
+            .lesson-info .latin { font-size: 12px; }
+            
+            .contact-info { display: none; }
+            
+            .tab-btn {
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+            
+            .content-area { padding: 16px 12px; }
+            .card { padding: 16px; margin-bottom: 16px; }
+            
+            .card-title {
+                font-size: 16px;
+                padding-bottom: 8px;
+                min-height: 40px;
+            }
+            .card-title .hanzi-title { font-size: 20px; }
+            
+            .header-audio {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+            
+            .toggle-bar-inline {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 8px;
+            }
+            
+            .toggle-btn-inline {
+                padding: 10px 14px;
+                font-size: 14px;
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .chinese-text { font-size: 22px; }
+            .pinyin-text, .vietnamese-text { font-size: 15px; }
+            
+            .vocab-hanzi { font-size: 28px; }
+            .vocab-pinyin { font-size: 15px; }
+            
+            .dialogue-line {
+                padding: 20px 16px;
+            }
+
+            .editor-container {
+                height: 100vh;
+                border-radius: 0;
+                max-width: 100%;
+            }
+
+            .editor-toolbar {
+                padding: 8px;
+            }
+
+            .tool-btn {
+                padding: 10px;
+                font-size: 15px;
+                height: 40px;
+                min-width: 40px;
+            }
+            
+            .audio-toast {
+                bottom: 20px;
+                font-size: 13px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<!-- Audio Toast Notification -->
+<div class="audio-toast" id="audioToast">Đang phát âm...</div>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-main">
+        <div class="logo-section">
+            <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+            <div class="brand-info">
+                <div class="brand-name">GIA SƯ HOA NGỮ TÂN AN</div>
+                <div class="brand-sub">Giáo trình 301 Câu</div>
+            </div>
+            <button class="editor-btn" onclick="openEditor()" title="Mở trình soạn thảo">✎</button>
+        </div>
+        
+        <div class="lesson-info">
+            <span class="zh">第三课 你工作忙吗?</span>
+            <span class="latin">BÀI 3: CÔNG VIỆC CỦA BẠN BẬN KHÔNG?</span>
+        </div>
+        
+        <div class="contact-info">
+            <div>9/1 Bạch Văn Tư, Tân An</div>
+            <div class="phone">Zalo: 0839.889.772</div>
+        </div>
+    </div>
+    
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="openTab(event,'muctieu')">Mục tiêu</button>
+        <button class="tab-btn" onclick="openTab(event,'tuvung')">Từ vựng</button>
+        <button class="tab-btn" onclick="openTab(event,'maucau')">Mẫu câu</button>
+        <button class="tab-btn" onclick="openTab(event,'damthoai')">Đàm thoại</button>
+        <button class="tab-btn" onclick="openTab(event,'nguphap')">Ngữ pháp</button>
+        <button class="tab-btn" onclick="openTab(event,'baitap')">Bài tập</button>
+        <button class="tab-btn" onclick="openTab(event,'bothu')">Bộ thủ</button>
+    </div>
+</div>
+
+<!-- Editor Modal -->
+<div class="editor-modal" id="editorModal" onclick="if(event.target === this) closeEditor()">
+    <div class="editor-container">
+        <div class="editor-header">
+            <div class="editor-title">
+                <span>✎</span>
+                <span>Soạn thảo văn bản</span>
+            </div>
+            <button class="editor-close" onclick="closeEditor()">×</button>
+        </div>
+        
+        <div class="editor-toolbar">
+            <button class="tool-btn" onclick="formatDoc('bold')" title="In đậm"><b>B</b></button>
+            <button class="tool-btn" onclick="formatDoc('italic')" title="In nghiêng"><i>I</i></button>
+            <button class="tool-btn" onclick="formatDoc('underline')" title="Gạch chân"><u>U</u></button>
+            <button class="tool-btn" onclick="formatDoc('strikeThrough')" title="Gạch ngang"><s>S</s></button>
+            
+            <div class="tool-separator"></div>
+            
+            <select class="tool-btn" onchange="formatDoc('fontSize', this.value); this.value=''" title="Cỡ chữ">
+                <option value="" selected>Cỡ chữ</option>
+                <option value="1">Nhỏ</option>
+                <option value="3">Bình thường</option>
+                <option value="5">Lớn</option>
+                <option value="7">Rất lớn</option>
+            </select>
+            
+            <select class="tool-btn" onchange="formatDoc('foreColor', this.value); this.value=''" title="Màu chữ">
+                <option value="" selected>Màu</option>
+                <option value="#000000">Đen</option>
+                <option value="#C0392B">Đỏ</option>
+                <option value="#1565C0">Xanh</option>
+                <option value="#27AE60">Lá</option>
+                <option value="#E67E22">Cam</option>
+            </select>
+            
+            <div class="tool-separator"></div>
+            
+            <button class="tool-btn" onclick="formatDoc('justifyLeft')" title="Trái">⬅</button>
+            <button class="tool-btn" onclick="formatDoc('justifyCenter')" title="Giữa">↔</button>
+            <button class="tool-btn" onclick="formatDoc('justifyRight')" title="Phải">➡</button>
+            
+            <div class="tool-separator"></div>
+            
+            <button class="tool-btn" onclick="formatDoc('insertUnorderedList')" title="•">•</button>
+            <button class="tool-btn" onclick="formatDoc('insertOrderedList')" title="1.">1.</button>
+            
+            <div class="tool-separator"></div>
+            
+            <button class="tool-btn" onclick="formatDoc('undo')" title="Hoàn tác">↶</button>
+            <button class="tool-btn" onclick="formatDoc('redo')" title="Làm lại">↷</button>
+        </div>
+        
+        <div class="editor-content" id="editorContent" contenteditable="true">
+            <p>Nhập nội dung tại đây...</p>
+        </div>
+        
+        <div class="editor-footer">
+            <span id="wordCount">0 từ</span>
+            <div class="editor-actions">
+                <button class="editor-btn-secondary" onclick="clearEditor()">Xóa</button>
+                <button class="editor-btn-secondary" onclick="copyContent()">Sao chép</button>
+                <button class="editor-btn-primary" onclick="closeEditor()">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-area">
+
+    <!-- MỤC TIÊU -->
+    <div id="muctieu" class="tab-content active">
+        <div class="sub-tab-bar">
+            <button class="sub-tab-btn active" onclick="openSubTab(event, 'mt-target')">Mục tiêu kiến thức</button>
+            <button class="sub-tab-btn" onclick="openSubTab(event, 'mt-difficult')">Điểm quan trọng & khó</button>
+        </div>
+
+        <div id="mt-target" class="sub-tab-content active">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">知识点</span>
+                    <span class="latin">MỤC TIÊU KIẾN THỨC BÀI HỌC</span>
+                </div>
+                <ol class="latin" style="margin-left: 20px; line-height: 1.8; font-size: 16px;">
+                    <li>Phát âm chính xác 11 nguyên âm: <span class="latin">ua, uo, uai, ui/uei, uan, un/uen, uang, ueng, üe, üan, ün</span></li>
+                    <li>Nắm vững cách ghép vần các nguyên âm trên với các phụ âm khác</li>
+                    <li>Phụ âm đi với nguyên âm bắt đầu bằng <span class="latin">ü</span></li>
+                    <li>Nhận biết 16 từ vựng trong bài</li>
+                    <li>Biết sử dụng từ vựng và 4 mẫu câu trong bài để giao tiếp thực</li>
+                </ol>
+            </div>
+        </div>
+
+        <div id="mt-difficult" class="sub-tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">重点难点</span>
+                    <span class="latin">ĐIỂM QUAN TRỌNG VÀ KHÓ</span>
+                </div>
+                <ol class="latin" style="margin-left: 20px; line-height: 1.8; font-size: 16px;">
+                    <li>Khi <span class="latin">ü</span> đi với phụ âm <span class="latin">n, l</span> hai chấm giữ nguyên</li>
+                    <li>Khi <span class="latin">ü</span> đi với phụ âm <span class="latin">j, q, x, y</span> dấu hai chấm bỏ đi</li>
+                    <li>Biến điệu của <span class="latin">yī (一)</span> và <span class="latin">bù (不)</span></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- TỪ VỰNG -->
+    <div id="tuvung" class="tab-content">
+        <div class="card">
+            <div class="card-title" onclick="speakText('工作 忙 呢 不 太 累 哥哥 姐姐 弟弟 妹妹 月 明天 今年 零 年 明年', true)">
+                <span class="hanzi-title zh">生词</span>
+                <span class="latin">TỪ VỰNG</span>
+                <button class="header-audio" data-text="工作 忙 呢 不 太 累 哥哥 姐姐 弟弟 妹妹 月 明天 今年 零 年 明年" data-seq="true" onclick="event.stopPropagation(); speakText('工作 忙 呢 不 太 累 哥哥 姐姐 弟弟 妹妹 月 明天 今年 零 年 明年', true)" title="Phát âm toàn bộ">▶</button>
+            </div>
+
+            <div class="sub-tab-bar">
+                <button class="sub-tab-btn active latin" onclick="filterVocab('all', this)">Tất cả</button>
+                <button class="sub-tab-btn latin" onclick="filterVocab('dongtu', this)">Động/Danh từ</button>
+                <button class="sub-tab-btn latin" onclick="filterVocab('danhtu', this)">Danh từ</button>
+                <button class="sub-tab-btn latin" onclick="filterVocab('tinhtu', this)">Tính từ</button>
+                <button class="sub-tab-btn latin" onclick="filterVocab('photu', this)">Phó từ</button>
+                <button class="sub-tab-btn latin" onclick="filterVocab('trutu', this)">Trợ từ</button>
+                <button class="sub-tab-btn latin" onclick="filterVocab('sotu', this)">Số từ</button>
+            </div>
+
+            <div class="vocab-grid" id="vocabContainer">
+                <div class="vocab-card" data-type="dongtu" data-char="工作" onclick="speakText('工作')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">工作</div>
+                        <span class="vocab-type latin dongtu">Động/Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">gōngzuò</div>
+                    <div class="vocab-meaning latin">Làm việc, công việc</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-工作"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('工作')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="tinhtu" data-char="忙" onclick="speakText('忙')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">忙</div>
+                        <span class="vocab-type latin tinhtu">Tính từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">máng</div>
+                    <div class="vocab-meaning latin">Bận</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-忙"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('忙')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="trutu" data-char="呢" onclick="speakText('呢')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">呢</div>
+                        <span class="vocab-type latin trutu">Trợ từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">ne</div>
+                    <div class="vocab-meaning latin">Đâu, sao, còn... thì sao?</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-呢"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('呢')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="photu" data-char="不" onclick="speakText('不')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">不</div>
+                        <span class="vocab-type latin photu">Phó từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">bù</div>
+                    <div class="vocab-meaning latin">Không</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-不"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('不')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="photu" data-char="太" onclick="speakText('太')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">太</div>
+                        <span class="vocab-type latin photu">Phó từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">tài</div>
+                    <div class="vocab-meaning latin">Quá, lắm</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-太"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('太')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="tinhtu" data-char="累" onclick="speakText('累')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">累</div>
+                        <span class="vocab-type latin tinhtu">Tính từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">lèi</div>
+                    <div class="vocab-meaning latin">Mệt</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-累"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('累')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="哥哥" onclick="speakText('哥哥')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">哥哥</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">gēge</div>
+                    <div class="vocab-meaning latin">Anh trai</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-哥哥"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('哥哥')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="姐姐" onclick="speakText('姐姐')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">姐姐</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">jiějie</div>
+                    <div class="vocab-meaning latin">Chị gái</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-姐姐"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('姐姐')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="弟弟" onclick="speakText('弟弟')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">弟弟</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">dìdi</div>
+                    <div class="vocab-meaning latin">Em trai</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-弟弟"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('弟弟')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="妹妹" onclick="speakText('妹妹')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">妹妹</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">mèimei</div>
+                    <div class="vocab-meaning latin">Em gái</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-妹妹"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('妹妹')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="月" onclick="speakText('月')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">月</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">yuè</div>
+                    <div class="vocab-meaning latin">Tháng, trăng, Nguyệt</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-月"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('月')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="明天" onclick="speakText('明天')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">明天</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">míngtiān</div>
+                    <div class="vocab-meaning latin">Ngày mai</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-明天"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('明天')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="今年" onclick="speakText('今年')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">今年</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">jīnnián</div>
+                    <div class="vocab-meaning latin">Năm nay</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-今年"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('今年')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="sotu" data-char="零" onclick="speakText('零')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">零</div>
+                        <span class="vocab-type latin sotu">Số từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">líng</div>
+                    <div class="vocab-meaning latin">Số không, lẻ</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-零"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('零')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="年" onclick="speakText('年')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">年</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">nián</div>
+                    <div class="vocab-meaning latin">Năm</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-年"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('年')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+
+                <div class="vocab-card" data-type="danhtu" data-char="明年" onclick="speakText('明年')">
+                    <div class="vocab-header">
+                        <div class="vocab-hanzi zh">明年</div>
+                        <span class="vocab-type latin danhtu">Danh từ</span>
+                    </div>
+                    <div class="vocab-pinyin latin">míngnián</div>
+                    <div class="vocab-meaning latin">Năm sau, sang năm</div>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-明年"></div>
+                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke('明年')" title="Xem lại">↺</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MẪU CÂU -->
+    <div id="maucau" class="tab-content">
+        <div class="card">
+            <div class="card-title" onclick="speakText('你工作忙吗 很忙你呢 我不太忙 你爸爸妈妈身体好吗', true)">
+                <span class="hanzi-title zh">句子</span>
+                <span class="latin">MẪU CÂU</span>
+                
+                <div class="toggle-bar-inline">
+                    <button class="toggle-btn-inline active" onclick="toggleVisibility('maucau', 'pinyin', this); event.stopPropagation();">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Phiên âm
+                    </button>
+                    <button class="toggle-btn-inline active" onclick="toggleVisibility('maucau', 'vietnamese', this); event.stopPropagation();">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Nghĩa
+                    </button>
+                </div>
+                
+                <button class="header-audio" data-text="你工作忙吗 很忙你呢 我不太忙 你爸爸妈妈身体好吗" data-seq="true" onclick="event.stopPropagation(); speakText('你工作忙吗 很忙你呢 我不太忙 你爸爸妈妈身体好吗', true)" title="Phát âm tuần tự">▶</button>
+            </div>
+            
+            <div class="dialogue-box" id="boxMauCau">
+                <div class="dialogue-line" data-text="你工作忙吗" onclick="speakFromElement(this)">
+                    <div class="chinese-text zh">9. 你工作忙吗？</div>
+                    <div class="pinyin-text latin">Nǐ gōngzuò máng ma?</div>
+                    <div class="vietnamese-text latin">Công việc bạn bận không?</div>
+                </div>
+                
+                <div class="dialogue-line" data-text="很忙你呢" onclick="speakFromElement(this)">
+                    <div class="chinese-text zh">10. 很忙，你呢？</div>
+                    <div class="pinyin-text latin">Hěn máng, nǐ ne?</div>
+                    <div class="vietnamese-text latin">Rất bận, còn bạn?</div>
+                </div>
+                
+                <div class="dialogue-line" data-text="我不太忙" onclick="speakFromElement(this)">
+                    <div class="chinese-text zh">11. 我不太忙。</div>
+                    <div class="pinyin-text latin">Wǒ bú tài máng.</div>
+                    <div class="vietnamese-text latin">Tôi không bận lắm.</div>
+                </div>
+                
+                <div class="dialogue-line" data-text="你爸爸妈妈身体好吗" onclick="speakFromElement(this)">
+                    <div class="chinese-text zh">12. 你爸爸、妈妈身体好吗？</div>
+                    <div class="pinyin-text latin">Nǐ bàba, māma shēntǐ hǎo ma?</div>
+                    <div class="vietnamese-text latin">Sức khỏe ba mẹ bạn tốt không?</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ĐÀM THOẠI -->
+    <div id="damthoai" class="tab-content">
+        <div class="card">
+            <div class="card-title">
+                <span class="hanzi-title zh">会话</span>
+                <span class="latin">ĐÀM THOẠI</span>
+                
+                <div class="toggle-bar-inline">
+                    <button class="toggle-btn-inline active" onclick="toggleVisibility('damthoai', 'pinyin', this); event.stopPropagation();">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Phiên âm
+                    </button>
+                    <button class="toggle-btn-inline active" onclick="toggleVisibility('damthoai', 'vietnamese', this); event.stopPropagation();">
+                        <svg class="eye-icon" viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                        Nghĩa
+                    </button>
+                </div>
+            </div>
+
+            <div class="sub-tab-bar">
+                <button class="sub-tab-btn active latin" onclick="switchDialogue('dt1', this)">
+                    <span class="zh">会话 1</span> <span class="latin">- Chào hỏi</span>
+                </button>
+                <button class="sub-tab-btn latin" onclick="switchDialogue('dt2', this)">
+                    <span class="zh">会话 2</span> <span class="latin">- Hỏi thăm</span>
+                </button>
+            </div>
+
+            <div class="dialogue-container active" id="dt1" data-dialogue="dt1">
+                <div class="card-title" style="border-bottom-color: var(--blue); margin-top:0;" onclick="speakText('你好 你好 你工作忙吗 很忙你呢 我不太忙', true)">
+                    <span style="color: var(--blue); font-family: SimSun, serif; font-size: 20px;" class="zh">会话 1</span>
+                    <span class="latin">CHÀO HỎI</span>
+                    <button class="header-audio" data-text="你好 你好 你工作忙吗 很忙你呢 我不太忙" data-seq="true" onclick="event.stopPropagation(); speakText('你好 你好 你工作忙吗 很忙你呢 我不太忙', true)" title="Phát âm tuần tự">▶</button>
+                </div>
+                <div class="dialogue-box" id="boxDt1">
+                    <div class="dialogue-line" data-text="你好" onclick="speakFromElement(this)">
+                        <div class="speaker latin">李 (Lǐ):</div>
+                        <div class="chinese-text zh">你好!</div>
+                        <div class="pinyin-text latin">Nǐ hǎo!</div>
+                        <div class="vietnamese-text latin">Chào bạn!</div>
+                    </div>
+                    <div class="dialogue-line" data-text="你好" onclick="speakFromElement(this)">
+                        <div class="speaker latin">张 (Zhāng):</div>
+                        <div class="chinese-text zh">你好!</div>
+                        <div class="pinyin-text latin">Nǐ hǎo!</div>
+                        <div class="vietnamese-text latin">Chào bạn!</div>
+                    </div>
+                    <div class="dialogue-line" data-text="你工作忙吗" onclick="speakFromElement(this)">
+                        <div class="speaker latin">李 (Lǐ):</div>
+                        <div class="chinese-text zh">你工作忙吗？</div>
+                        <div class="pinyin-text latin">Nǐ gōngzuò máng ma?</div>
+                        <div class="vietnamese-text latin">Công việc bạn bận không?</div>
+                    </div>
+                    <div class="dialogue-line" data-text="很忙你呢" onclick="speakFromElement(this)">
+                        <div class="speaker latin">张 (Zhāng):</div>
+                        <div class="chinese-text zh">很忙，你呢？</div>
+                        <div class="pinyin-text latin">Hěn máng, nǐ ne?</div>
+                        <div class="vietnamese-text latin">Rất bận, còn bạn?</div>
+                    </div>
+                    <div class="dialogue-line" data-text="我不太忙" onclick="speakFromElement(this)">
+                        <div class="speaker latin">李 (Lǐ):</div>
+                        <div class="chinese-text zh">我不太忙。</div>
+                        <div class="pinyin-text latin">Wǒ bú tài máng.</div>
+                        <div class="vietnamese-text latin">Tôi không bận lắm.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialogue-container" id="dt2" data-dialogue="dt2">
+                <div class="card-title" style="border-bottom-color: var(--green); margin-top:0;" onclick="speakText('您早 老师好 你们好 老师忙吗 很忙你们呢 我不忙', true)">
+                    <span style="color: var(--green); font-family: SimSun, serif; font-size: 20px;" class="zh">会话 2</span>
+                    <span class="latin">HỎI THĂM</span>
+                    <button class="header-audio" data-text="您早 老师好 你们好 老师忙吗 很忙你们呢 我不忙" data-seq="true" onclick="event.stopPropagation(); speakText('您早 老师好 你们好 老师忙吗 很忙你们呢 我不忙', true)" title="Phát âm tuần tự">▶</button>
+                </div>
+                <div class="dialogue-box" id="boxDt2">
+                    <div class="dialogue-line" data-text="您早" onclick="speakFromElement(this)">
+                        <div class="speaker latin">大卫 (Dàwèi):</div>
+                        <div class="chinese-text zh">您早!</div>
+                        <div class="pinyin-text latin">Nín zǎo!</div>
+                        <div class="vietnamese-text latin">Chào buổi sáng!</div>
+                    </div>
+                    <div class="dialogue-line" data-text="老师好" onclick="speakFromElement(this)">
+                        <div class="speaker latin">玛丽 (Mǎlì):</div>
+                        <div class="chinese-text zh">老师好!</div>
+                        <div class="pinyin-text latin">Lǎoshī hǎo!</div>
+                        <div class="vietnamese-text latin">Chào thầy/cô!</div>
+                    </div>
+                    <div class="dialogue-line" data-text="你们好" onclick="speakFromElement(this)">
+                        <div class="speaker latin">老师 (Lǎoshī):</div>
+                        <div class="chinese-text zh">你们好!</div>
+                        <div class="pinyin-text latin">Nǐmen hǎo!</div>
+                        <div class="vietnamese-text latin">Chào các em!</div>
+                    </div>
+                    <div class="dialogue-line" data-text="老师忙吗" onclick="speakFromElement(this)">
+                        <div class="speaker latin">大卫 (Dàwèi):</div>
+                        <div class="chinese-text zh">老师忙吗？</div>
+                        <div class="pinyin-text latin">Lǎoshī máng ma?</div>
+                        <div class="vietnamese-text latin">Thầy/cô bận không?</div>
+                    </div>
+                    <div class="dialogue-line" data-text="很忙你们呢" onclick="speakFromElement(this)">
+                        <div class="speaker latin">老师 (Lǎoshī):</div>
+                        <div class="chinese-text zh">很忙，你们呢？</div>
+                        <div class="pinyin-text latin">Hěn máng, nǐmen ne?</div>
+                        <div class="vietnamese-text latin">Rất bận, còn các em?</div>
+                    </div>
+                    <div class="dialogue-line" data-text="我不忙" onclick="speakFromElement(this)">
+                        <div class="speaker latin">玛丽 (Mǎlì):</div>
+                        <div class="chinese-text zh">我不忙。</div>
+                        <div class="pinyin-text latin">Wǒ bù máng.</div>
+                        <div class="vietnamese-text latin">Em không bận.</div>
+                    </div>
+                    <div class="dialogue-line" data-text="我也不忙" onclick="speakFromElement(this)">
+                        <div class="speaker latin">大卫 (Dàwèi):</div>
+                        <div class="chinese-text zh">我也不忙。</div>
+                        <div class="pinyin-text latin">Wǒ yě bù máng.</div>
+                        <div class="vietnamese-text latin">Em cũng không bận.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NGỮ PHÁP -->
+    <div id="nguphap" class="tab-content">
+        <div class="sub-tab-bar">
+            <button class="sub-tab-btn active latin" onclick="openSubTab(event, 'np-yunmu')">Vận mẫu</button>
+            <button class="sub-tab-btn latin" onclick="openSubTab(event, 'np-pinyin')">Bảng ghép vần</button>
+            <button class="sub-tab-btn latin" onclick="openSubTab(event, 'np-chuy')">Chú ý viết phiên âm</button>
+            <button class="sub-tab-btn latin" onclick="openSubTab(event, 'np-biendau')">Biến điệu</button>
+        </div>
+
+        <div id="np-yunmu" class="sub-tab-content active">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">韵母</span>
+                    <span class="latin">VẬN MẪU (NGUYÊN ÂM) - 11 ÂM</span>
+                </div>
+                <div class="latin" style="background: var(--ink); color: #fff; padding: 16px; border-radius: 4px; text-align: center; font-family: Arial, sans-serif; font-size: 20px; letter-spacing: 4px; margin: 16px 0;" onclick="speakText('ua uo uai ui uan un uang ueng ue uan un', true)">
+                    ua &nbsp; uo &nbsp; uai &nbsp; ui/uei &nbsp; uan &nbsp; un/uen<br>
+                    uang &nbsp; ueng &nbsp; üe &nbsp; üan &nbsp; ün
+                </div>
+            </div>
+        </div>
+
+        <div id="np-pinyin" class="sub-tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">拼音</span>
+                    <span class="latin">BẢNG GHÉP VẦN</span>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="phonetic-table latin" style="font-size: 13px; min-width: 800px;">
+                        <thead>
+                            <tr>
+                                <th></th><th onclick="speakText('ua')">ua</th><th onclick="speakText('uo')">uo</th><th onclick="speakText('uai')">uai</th><th onclick="speakText('uei')">uei/ui</th><th onclick="speakText('uan')">uan</th><th onclick="speakText('uen')">uen/un</th><th onclick="speakText('uang')">uang</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><th onclick="speakText('d')">d</th><td></td><td onclick="speakText('duo')">duo</td><td></td><td onclick="speakText('dui')">dui</td><td onclick="speakText('duan')">duan</td><td onclick="speakText('dun')">dun</td><td></td></tr>
+                            <tr><th onclick="speakText('t')">t</th><td></td><td onclick="speakText('tuo')">tuo</td><td></td><td onclick="speakText('tui')">tui</td><td onclick="speakText('tuan')">tuan</td><td onclick="speakText('tun')">tun</td><td></td></tr>
+                            <tr><th onclick="speakText('n')">n</th><td></td><td onclick="speakText('nuo')">nuo</td><td></td><td></td><td onclick="speakText('nuan')">nuan</td><td></td><td></td></tr>
+                            <tr><th onclick="speakText('l')">l</th><td></td><td onclick="speakText('luo')">luo</td><td></td><td></td><td onclick="speakText('luan')">luan</td><td onclick="speakText('lun')">lun</td><td></td></tr>
+                            <tr><th onclick="speakText('g')">g</th><td onclick="speakText('gua')">gua</td><td onclick="speakText('guo')">guo</td><td onclick="speakText('guai')">guai</td><td onclick="speakText('gui')">gui</td><td onclick="speakText('guan')">guan</td><td onclick="speakText('gun')">gun</td><td onclick="speakText('guang')">guang</td></tr>
+                            <tr><th onclick="speakText('k')">k</th><td onclick="speakText('kua')">kua</td><td onclick="speakText('kuo')">kuo</td><td onclick="speakText('kuai')">kuai</td><td onclick="speakText('kui')">kui</td><td onclick="speakText('kuan')">kuan</td><td onclick="speakText('kun')">kun</td><td onclick="speakText('kuang')">kuang</td></tr>
+                            <tr><th onclick="speakText('h')">h</th><td onclick="speakText('hua')">hua</td><td onclick="speakText('huo')">huo</td><td onclick="speakText('huai')">huai</td><td onclick="speakText('hui')">hui</td><td onclick="speakText('huan')">huan</td><td onclick="speakText('hun')">hun</td><td onclick="speakText('huang')">huang</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="margin-top: 20px; overflow-x: auto;">
+                    <table class="phonetic-table latin" style="font-size: 13px; min-width: 600px;">
+                        <thead>
+                            <tr>
+                                <th></th><th onclick="speakText('ü')">ü</th><th onclick="speakText('üe')">üe</th><th onclick="speakText('üan')">üan</th><th onclick="speakText('ün')">ün</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><th onclick="speakText('n')">n</th><td onclick="speakText('nü')">nü</td><td onclick="speakText('nüe')">nüe</td><td></td><td></td></tr>
+                            <tr><th onclick="speakText('l')">l</th><td onclick="speakText('lü')">lü</td><td onclick="speakText('lüe')">lüe</td><td></td><td></td></tr>
+                            <tr><th onclick="speakText('j')">j</th><td onclick="speakText('ju')">ju</td><td onclick="speakText('jue')">jue</td><td onclick="speakText('juan')">juan</td><td onclick="speakText('jun')">jun</td></tr>
+                            <tr><th onclick="speakText('q')">q</th><td onclick="speakText('qu')">qu</td><td onclick="speakText('que')">que</td><td onclick="speakText('quan')">quan</td><td onclick="speakText('qun')">qun</td></tr>
+                            <tr><th onclick="speakText('x')">x</th><td onclick="speakText('xu')">xu</td><td onclick="speakText('xue')">xue</td><td onclick="speakText('xuan')">xuan</td><td onclick="speakText('xun')">xun</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="np-chuy" class="sub-tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">注意</span>
+                    <span class="latin">CHÚ Ý VIẾT PHIÊN ÂM</span>
+                </div>
+                <div class="latin" style="background: #fafafa; padding: 20px; margin: 12px 0; border-radius: 6px; font-size: 16px; line-height: 1.8; border-left: 3px solid var(--blue);">
+                    <strong style="color: var(--blue);">1.</strong> Khi <span class="latin">ü</span> tự thành một âm tiết hay đứng đầu một âm tiết, nó được viết thành <span class="latin">yu</span>.<br>
+                    <span style="font-size: 20px;">Ví dụ: Hànyǔ (汉语), yuànzi (院子)</span>
+                </div>
+                <div class="latin" style="background: #fafafa; padding: 20px; margin: 12px 0; border-radius: 6px; font-size: 16px; line-height: 1.8; border-left: 3px solid var(--green);">
+                    <strong style="color: var(--green);">2.</strong> Khi <span class="latin">j q x</span> đi với các nguyên âm <span class="latin">ü üe üan ün</span> thì hai chấm trên <span class="latin">ü</span> được bỏ đi.<br>
+                    <span style="font-size: 20px;">Ví dụ: Jùzi (句子), xuéxí (学习)</span>
+                </div>
+                <div class="latin" style="background: #fafafa; padding: 20px; margin: 12px 0; border-radius: 6px; font-size: 16px; line-height: 1.8; border-left: 3px solid var(--orange);">
+                    <strong style="color: var(--orange);">3.</strong> Khi <span class="latin">uei uen</span> trước có phụ âm thì nguyên âm <span class="latin">e</span> ở giữa được bỏ đi.<br>
+                    <span style="font-size: 20px;">Ví dụ: Huí (回), Dūn (吨)</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="np-biendau" class="sub-tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">变调</span>
+                    <span class="latin">BIẾN ĐIỆU CỦA BÙ (不) VÀ YĪ (一)</span>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: var(--red); margin-bottom: 12px; font-size: 18px;" class="latin">1. 不 (Bù)</h3>
+                    <div class="latin" style="background: #fafafa; padding: 16px; margin: 8px 0; border-radius: 6px; font-size: 15px; line-height: 1.6;">
+                        • Bù đứng trước thanh 1, 2, 3 và thanh nhẹ có gốc thanh 4 đọc thành <strong>bù</strong> (không đổi)<br>
+                        <span style="color: var(--blue);">Ví dụ: bù xīn (不新), bù lái (不来), bù hǎo (不好)</span>
+                    </div>
+                    <div class="latin" style="background: #fafafa; padding: 16px; margin: 8px 0; border-radius: 6px; font-size: 15px; line-height: 1.6;">
+                        • Bù đứng trước thanh 4 đọc thành <strong>bú</strong> (thanh 2)<br>
+                        <span style="color: var(--blue);">Ví dụ: bú lèi (不累), bú tài (不太), bú shì (不是)</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="color: var(--red); margin-bottom: 12px; font-size: 18px;" class="latin">2. 一 (Yī)</h3>
+                    <div class="latin" style="background: #fafafa; padding: 16px; margin: 8px 0; border-radius: 6px; font-size: 15px; line-height: 1.6;">
+                        • Yī đứng trước thanh 1, 2, 3 và thanh nhẹ có gốc thanh 4 đọc thành <strong>yì</strong> (thanh 4)<br>
+                        <span style="color: var(--blue);">Ví dụ: yì tiān (一天), yì nián (一年), yì qǐ (一起)</span>
+                    </div>
+                    <div class="latin" style="background: #fafafa; padding: 16px; margin: 8px 0; border-radius: 6px; font-size: 15px; line-height: 1.6;">
+                        • Yī đứng trước thanh 4 đọc thành <strong>yí</strong> (thanh 2)<br>
+                        <span style="color: var(--blue);">Ví dụ: yí kuài (一块), yí ge (一个)</span>
+                    </div>
+                    <div class="latin" style="background: #FFF8E1; padding: 16px; margin: 8px 0; border-radius: 6px; font-size: 15px; line-height: 1.6; border-left: 3px solid var(--gold);">
+                        <strong>Lưu ý:</strong> Số 1 đọc <strong>yī</strong>. Để tránh nhầm lẫn, đối với số điện thoại, số nhà... TQ đọc số 1 thành <strong>yāo</strong> (幺)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BÀI TẬP -->
+    <div id="baitap" class="tab-content">
+        <div class="sub-tab-bar">
+            <button class="sub-tab-btn active latin" onclick="openSubTab(event, 'bt-nghe')">Nghe thuật lại</button>
+            <button class="sub-tab-btn latin" onclick="openSubTab(event, 'bt-dich')">Luyện dịch Việt-Hoa</button>
+        </div>
+
+        <div id="bt-nghe" class="sub-tab-content active">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">听述</span>
+                    <span class="latin">NGHE THUẬT LẠI</span>
+                </div>
+                <div class="exercise-item latin" style="font-size: 16px;">
+                    <p>Bài này không có bài nghe thuật lại.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="bt-dich" class="sub-tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <span class="hanzi-title zh">越汉翻译</span>
+                    <span class="latin">LUYỆN DỊCH VIỆT-HOA</span>
+                </div>
+                
+                <div class="exercise-item" data-answer="你工作忙吗？">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">1</span>
+                        <div class="question-text">Công việc của bạn có bận không?</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="今天我们都很忙。">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">2</span>
+                        <div class="question-text">Hôm nay chúng tôi đều rất bận.</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="明天我哥哥、姐姐都不来。">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">3</span>
+                        <div class="question-text">Ngày mai anh trai, chị gái tôi đều không đến.</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="明天三月八号。">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">4</span>
+                        <div class="question-text">Ngày mai ngày 8 tháng 3.</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="今年2011年，明年2012年。">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">5</span>
+                        <div class="question-text">Năm nay năm 2011, sang năm năm 2012.</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="今天十二月三十一号，明天一月一号。">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">6</span>
+                        <div class="question-text">Hôm nay ngày 31 tháng 12, ngày mai ngày 1 tháng 1.</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="我妹妹不太忙，我弟弟很忙。">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">7</span>
+                        <div class="question-text">Em gái tôi không bận lắm, em trai tôi rất bận.</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="我身体不太好，你呢？">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">8</span>
+                        <div class="question-text">Tôi không được khỏe lắm. Còn bạn?</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="玛丽不太累，我也不太累。">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">9</span>
+                        <div class="question-text">Mary không mệt lắm, tôi cũng không mệt lắm.</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+
+                <div class="exercise-item" data-answer="你爸爸、妈妈身体好吗？">
+                    <div style="display:flex; align-items:center; margin-bottom:12px;">
+                        <span class="exercise-num">10</span>
+                        <div class="question-text">Ba mẹ bạn khỏe không?</div>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" class="translation-input" placeholder="Nhập tiếng Hán..." onkeypress="if(event.key==='Enter') checkAnswer(this)">
+                        <button class="check-btn" onclick="checkAnswer(this)">Kiểm tra</button>
+                    </div>
+                    <div class="result-msg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BỘ THỦ -->
+    <div id="bothu" class="tab-content">
+        <div class="card">
+            <div class="card-title">
+                <span class="hanzi-title zh">偏旁</span>
+                <span class="latin">BỘ THỦ (8 BỘ)</span>
+            </div>
+            
+            <div class="radical-grid">
+                <div class="radical-box">
+                    <div class="radical-char zh">卩</div>
+                    <div class="radical-name latin">Bộ tiết</div>
+                    <div class="radical-desc latin">Liên quan đến khuất thể hoặc con người</div>
+                </div>
+                
+                <div class="radical-box">
+                    <div class="radical-char zh">忄</div>
+                    <div class="radical-name latin">Bộ tâm</div>
+                    <div class="radical-desc latin">Liên quan đến hoạt động nội tâm</div>
+                </div>
+                
+                <div class="radical-box">
+                    <div class="radical-char zh">小</div>
+                    <div class="radical-name latin">Bộ tiểu</div>
+                    <div class="radical-desc latin">Liên quan đến các việc nhỏ bé</div>
+                </div>
+                
+                <div class="radical-box">
+                    <div class="radical-char zh">工</div>
+                    <div class="radical-name latin">Bộ công</div>
+                    <div class="radical-desc latin">Liên quan đến người thợ, công nhân, công cụ</div>
+                </div>
+                
+                <div class="radical-box">
+                    <div class="radical-char zh">雨</div>
+                    <div class="radical-name latin">Bộ vũ</div>
+                    <div class="radical-desc latin">Liên quan đến các hiện tượng thời tiết như trời mưa</div>
+                </div>
+                
+                <div class="radical-box">
+                    <div class="radical-char zh">大</div>
+                    <div class="radical-name latin">Bộ đại</div>
+                    <div class="radical-desc latin">Liên quan đến người hoặc sự việc to lớn</div>
+                </div>
+                
+                <div class="radical-box">
+                    <div class="radical-char zh">月</div>
+                    <div class="radical-name latin">Bộ nguyệt</div>
+                    <div class="radical-desc latin">Liên quan đến trăng, ánh sáng, thời gian, bộ phận cơ thể</div>
+                </div>
+                
+                <div class="radical-box">
+                    <div class="radical-char zh">田</div>
+                    <div class="radical-name latin">Bộ điền</div>
+                    <div class="radical-desc latin">Liên quan đến ruộng đồng và các hoạt động nhà nông</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <h3 class="latin">GIA SƯ HOA NGỮ TÂN AN</h3>
+    <p class="latin">9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+</div>
+
+<script>
+    const writers = {};
+    let isSpeaking = false;
+    let audioContext = null;
+    
+    function initAudioContext() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+    }
+
+    function speakText(text, isSequential = false) {
+        initAudioContext();
+        
+        if (!('speechSynthesis' in window)) {
+            showToast('Trình duyệt không hỗ trợ phát âm');
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+        
+        document.querySelectorAll('.playing').forEach(el => el.classList.remove('playing'));
+        
+        if (!text || text.trim() === '') return;
+        
+        const texts = isSequential ? text.split(/\s+/) : [text];
+        
+        if (isSequential && texts.length > 1) {
+            speakSequential(texts);
+        } else {
+            speakSingle(text);
+        }
+    }
+
+    function speakSingle(text) {
+        return new Promise((resolve) => {
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'zh-CN';
+            u.rate = 0.8;
+            u.pitch = 1;
+            u.volume = 1;
+            
+            u.onstart = function() {
+                isSpeaking = true;
+                showToast('Đang phát: ' + text);
+            };
+            
+            u.onend = function() {
+                isSpeaking = false;
+                hideToast();
+                resolve();
+            };
+            
+            u.onerror = function(e) {
+                console.error('Speech error:', e);
+                isSpeaking = false;
+                hideToast();
+                if (e.error === 'not-allowed' || e.error === 'interrupted') {
+                    showToast('Vui lòng click để phát âm');
+                }
+                resolve();
+            };
+            
+            const voices = window.speechSynthesis.getVoices();
+            const chineseVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+            if (chineseVoice) {
+                u.voice = chineseVoice;
+            }
+            
+            window.speechSynthesis.speak(u);
+        });
+    }
+
+    async function speakSequential(texts) {
+        showToast('Đang phát âm...');
+        
+        for (let i = 0; i < texts.length; i++) {
+            if (texts[i].trim()) {
+                await speakSingle(texts[i]);
+                if (i < texts.length - 1) {
+                    await new Promise(r => setTimeout(r, 600));
+                }
+            }
+        }
+        
+        hideToast();
+    }
+
+    function speakFromElement(element) {
+        const text = element.getAttribute('data-text');
+        if (text) {
+            element.classList.add('playing');
+            speakText(text).then(() => {
+                setTimeout(() => element.classList.remove('playing'), 500);
+            });
+        }
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('audioToast');
+        toast.textContent = message;
+        toast.classList.add('show');
+    }
+
+    function hideToast() {
+        const toast = document.getElementById('audioToast');
+        toast.classList.remove('show');
+    }
+
+    function openEditor() {
+        document.getElementById('editorModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateWordCount();
+    }
+
+    function closeEditor() {
+        document.getElementById('editorModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function formatDoc(cmd, value = null) {
+        document.execCommand(cmd, false, value);
+        document.getElementById('editorContent').focus();
+    }
+
+    function clearEditor() {
+        if(confirm('Xóa toàn bộ nội dung?')) {
+            document.getElementById('editorContent').innerHTML = '<p><br></p>';
+            updateWordCount();
+        }
+    }
+
+    function copyContent() {
+        const content = document.getElementById('editorContent').innerText;
+        navigator.clipboard.writeText(content).then(() => {
+            alert('Đã sao chép!');
+        }).catch(() => {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('editorContent'));
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            alert('Đã sao chép!');
+        });
+    }
+
+    function updateWordCount() {
+        const text = document.getElementById('editorContent').innerText || '';
+        const count = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+        document.getElementById('wordCount').textContent = count + ' từ';
+    }
+
+    document.getElementById('editorContent').addEventListener('input', updateWordCount);
+
+    function openTab(evt, tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        evt.currentTarget.classList.add('active');
+        
+        if (tabName === 'tuvung') {
+            setTimeout(initVocabStrokes, 100);
+        }
+    }
+
+    function openSubTab(evt, tabName) {
+        const parent = evt.currentTarget.closest('.tab-content');
+        parent.querySelectorAll('.sub-tab-content').forEach(el => el.classList.remove('active'));
+        parent.querySelectorAll('.sub-tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    function filterVocab(type, btn) {
+        document.querySelectorAll('#tuvung .sub-tab-btn').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const cards = document.querySelectorAll('#vocabContainer .vocab-card[data-type]');
+        cards.forEach(card => {
+            if (type === 'all' || card.dataset.type === type) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
+
+    function switchDialogue(dialogueId, btn) {
+        document.querySelectorAll('#damthoai .sub-tab-btn').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        
+        document.querySelectorAll('#damthoai .dialogue-container').forEach(el => {
+            el.classList.remove('active');
+        });
+        
+        document.getElementById(dialogueId).classList.add('active');
+    }
+
+    function toggleVisibility(section, type, btn) {
+        const container = document.getElementById(section);
+        const elements = container.querySelectorAll('.' + type + '-text');
+        
+        const isActive = btn.classList.toggle('active');
+        
+        const svg = btn.querySelector('svg');
+        if (!isActive) {
+            svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+        } else {
+            svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+        }
+        
+        elements.forEach(el => {
+            el.classList.toggle('hidden');
+        });
+    }
+
+    let strokesInitialized = false;
+    
+    function initVocabStrokes() {
+        if (strokesInitialized) return;
+        
+        document.querySelectorAll('.vocab-card[data-char]').forEach(card => {
+            const char = card.dataset.char;
+            const container = card.querySelector('.stroke-inline');
+            if (container) {
+                container.innerHTML = '';
+                
+                const chars = char.split('');
+                chars.forEach((c, index) => {
+                    const div = document.createElement('div');
+                    div.style.width = '60px';
+                    div.style.height = '60px';
+                    div.id = 'stroke-' + char + '-' + index;
+                    container.appendChild(div);
+                    
+                    try {
+                        const writer = HanziWriter.create('stroke-' + char + '-' + index, c, {
+                            width: 60,
+                            height: 60,
+                            padding: 3,
+                            strokeColor: '#C0392B',
+                            radicalColor: '#27AE60',
+                            delayBetweenStrokes: 1000,
+                            strokeAnimationSpeed: 1,
+                            showCharacter: false
+                        });
+                        
+                        if (!writers[char]) writers[char] = [];
+                        writers[char].push(writer);
+                        
+                        writer.animateCharacter();
+                    } catch(e) {
+                        console.log('Error:', c);
+                    }
+                });
+            }
+        });
+        
+        strokesInitialized = true;
+    }
+
+    function replayStroke(char) {
+        if (writers[char] && writers[char].length > 0) {
+            writers[char].forEach(writer => writer.animateCharacter());
+        }
+    }
+
+    function checkAnswer(btn) {
+        const item = btn.closest('.exercise-item');
+        const input = item.querySelector('.translation-input');
+        const resultDiv = item.querySelector('.result-msg');
+        const userAnswer = input.value.trim();
+        const correctAnswer = item.dataset.answer;
+        
+        if (!userAnswer) {
+            resultDiv.textContent = 'Vui lòng nhập đáp án!';
+            resultDiv.className = 'result-msg show wrong';
+            return;
+        }
+        
+        function normalize(str) {
+            return str.replace(/\s+/g, '')
+                     .replace(/[，,。！？：；.!?:;]/g, '');
+        }
+        
+        const normalizedUser = normalize(userAnswer);
+        const normalizedCorrect = normalize(correctAnswer);
+        
+        if (normalizedUser === normalizedCorrect) {
+            input.classList.add('correct');
+            input.classList.remove('wrong');
+            resultDiv.innerHTML = '<strong>✓ Chính xác!</strong> ' + correctAnswer;
+            resultDiv.className = 'result-msg show correct';
+        } else {
+            input.classList.add('wrong');
+            input.classList.remove('correct');
+            resultDiv.innerHTML = '<strong>✗ Sai.</strong> Đáp án: ' + correctAnswer;
+            resultDiv.className = 'result-msg show wrong';
+        }
+    }
+
+    window.speechSynthesis.getVoices();
+    
+    window.onload = function() {
+        if (document.getElementById('tuvung').classList.contains('active')) {
+            initVocabStrokes();
+        }
+    };
+</script>
+
+</body>
+</html>
