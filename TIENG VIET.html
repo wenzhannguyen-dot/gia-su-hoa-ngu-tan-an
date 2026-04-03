@@ -2,7 +2,9 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>越南语学习 - Tiếng Việt</title>
     <style>
         * {
@@ -281,6 +283,13 @@
             padding: 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
         }
 
         .data-table {
@@ -390,45 +399,218 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .tab-container {
+                padding: 0 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .tab-nav {
+                min-width: max-content;
+            }
+
             .tab-button {
-                padding: 14px 20px;
-                font-size: 16px;
+                padding: 12px 16px;
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .content-container {
+                flex-direction: column;
             }
 
             .sidebar {
-                width: 240px;
+                width: 100%;
+                max-height: 200px;
+                border-right: none;
+                border-bottom: 1px solid #e5e5e5;
+            }
+
+            .sidebar-header {
+                padding: 12px 16px;
             }
 
             .sidebar-title {
-                font-size: 20px;
+                font-size: 18px;
             }
 
-            .nav-title-cn {
-                font-size: 20px;
-            }
-
-            .nav-title-vi {
+            .sidebar-subtitle {
                 font-size: 14px;
             }
 
-            .page-title {
-                font-size: 20px;
+            .nav-list {
+                padding: 8px;
+                display: flex;
+                gap: 8px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                flex-direction: row;
+                white-space: nowrap;
             }
 
-            .card-title {
-                font-size: 20px;
+            .nav-item {
+                padding: 10px 14px;
+                margin-bottom: 0;
+                flex-shrink: 0;
+                min-width: 140px;
             }
 
-            .vi-text, .cn-text {
-                font-size: 20px;
-            }
-
-            .pinyin-text {
+            .nav-title-cn {
                 font-size: 16px;
             }
 
-            .data-table th, .data-table td {
-                padding: 16px 20px;
+            .nav-title-vi {
+                font-size: 13px;
+            }
+
+            .sidebar-footer {
+                display: none;
+            }
+
+            .top-bar {
+                padding: 12px 16px;
+                height: auto;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .page-title {
+                font-size: 18px;
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .controls-group {
+                gap: 12px;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .control-item {
+                font-size: 14px;
+            }
+
+            .btn-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            select {
+                font-size: 14px;
+                padding: 5px 8px;
+            }
+
+            .content-scroll {
+                padding: 12px;
+            }
+
+            .content-card {
+                border-radius: 8px;
+            }
+
+            .card-header {
+                padding: 16px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+
+            .card-subtitle {
+                font-size: 14px;
+            }
+
+            .data-table {
+                font-size: 16px;
+                min-width: 100%;
+            }
+
+            .data-table th {
+                padding: 12px 8px;
+                font-size: 13px;
+                position: static;
+            }
+
+            .data-table td {
+                padding: 12px 8px;
+            }
+
+            .col-num {
+                width: 50px;
+                font-size: 14px;
+            }
+
+            .col-audio {
+                width: 50px;
+                padding: 8px !important;
+            }
+
+            .audio-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+
+            .vi-text {
+                font-size: 16px;
+            }
+
+            .cn-text {
+                font-size: 16px;
+            }
+
+            .pinyin-text {
+                font-size: 13px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 480px) {
+            .tab-button {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .data-table {
+                font-size: 15px;
+            }
+
+            .data-table th {
+                padding: 10px 6px;
+                font-size: 12px;
+            }
+
+            .data-table td {
+                padding: 10px 6px;
+            }
+
+            .col-num {
+                width: 40px;
+                font-size: 13px;
+            }
+
+            .col-audio {
+                width: 45px;
+            }
+
+            .audio-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+
+            .vi-text, .cn-text {
+                font-size: 15px;
+            }
+
+            .pinyin-text {
+                font-size: 12px;
             }
         }
     </style>
@@ -928,7 +1110,7 @@
         }
 
         function renderTable(tab, lesson) {
-            let html = '<table class="data-table"><thead><tr>';
+            let html = '<div class="table-wrapper"><table class="data-table"><thead><tr>';
             html += '<th class="col-num">序号</th>';
             html += '<th class="col-audio"></th>';
             html += '<th>越南语</th>';
@@ -960,7 +1142,7 @@
                 html += '</tr>';
             });
             
-            html += '</tbody></table>';
+            html += '</tbody></table></div>';
             document.getElementById(`lessonContent-${tab}`).innerHTML = html;
         }
 
