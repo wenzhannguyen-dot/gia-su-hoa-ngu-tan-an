@@ -1560,7 +1560,7 @@
                                     <span class="word-source" draggable="true" data-word="送外卖">送外卖</span>
                                     <span class="word-source" draggable="true" data-word="真是">真是</span>
                                     <span class="word-source" draggable="true" data-word="太方便了">太方便了</span>
-                                    <span class="word-source" draggable="true" data-word">现在</span>
+                                    <span class="word-source" draggable="true" data-word="现在">现在</span>
                                 </div>
                                 <div class="drop-zone" data-drop="true"></div>
                                 <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
@@ -1884,4 +1884,257 @@
     function filterVocab(category, btn) {
         document.querySelectorAll('.vocab-tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
-        renderVocabulary
+        renderVocabulary(category);
+    }
+
+    function replayAnimation(id) { writers[id]?.animateCharacter(); }
+    function showCharacter(id) { writers[id]?.showCharacter(); }
+
+    function showText(textId, btn) {
+        document.querySelectorAll('.text-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(textId).classList.add('active');
+        document.querySelectorAll('.text-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function showExercise(type, btn) {
+        document.querySelectorAll('.exercise-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(type).classList.add('active');
+        document.querySelectorAll('.exercise-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function checkAnswer(questionName, correctValue, resultId) {
+        const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+        const resultDiv = document.getElementById(resultId);
+        if (!selected) {
+            resultDiv.textContent = 'Vui lòng chọn một đáp án!';
+            resultDiv.className = 'result-message show incorrect';
+            return;
+        }
+        const isCorrect = Array.isArray(correctValue)
+            ? correctValue.includes(selected.value)
+            : selected.value === correctValue;
+        resultDiv.textContent = isCorrect
+            ? '✓ Chính xác!'
+            : `✗ Sai rồi! Đáp án đúng là: ${Array.isArray(correctValue) ? correctValue.join('/') : correctValue}`;
+        resultDiv.className = `result-message show ${isCorrect ? 'correct' : 'incorrect'}`;
+    }
+
+    let draggedElement = null;
+    let draggedFrom = null;
+
+    function initDragAndDrop() {
+        document.querySelectorAll('.word-source').forEach(source => {
+            source.addEventListener('dragstart', handleSourceDragStart);
+            source.addEventListener('dragend', handleDragEnd);
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('drop', handleDrop);
+            zone.addEventListener('dragleave', handleDragLeave);
+        });
+    }
+
+    function handleSourceDragStart(e) {
+        draggedElement = e.target;
+        draggedFrom = 'source';
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData('text/plain', e.target.dataset.word);
+        e.dataTransfer.setData('from', 'source');
+    }
+
+    function handleDragStart(e) {
+        draggedElement = e.target;
+        draggedFrom = 'zone';
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', e.target.dataset.word);
+        e.dataTransfer.setData('from', 'zone');
+        e.target.classList.add('dragging');
+    }
+
+    function handleDragEnd(e) {
+        if (e.target.classList.contains('word-drop')) {
+            e.target.classList.remove('dragging');
+        }
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.classList.remove('drag-over');
+        });
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = draggedFrom === 'source' ? 'copy' : 'move';
+        e.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+        if (e.target.classList.contains('drop-zone')) {
+            e.target.classList.remove('drag-over');
+        }
+    }
+
+    function getDragAfterElement(container, x) {
+        const draggableElements = [...container.querySelectorAll('.word-drop:not(.dragging)')];
+        
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = x - box.left - box.width / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        const zone = e.currentTarget;
+        zone.classList.remove('drag-over');
+        
+        const word = e.dataTransfer.getData('text/plain');
+        const from = e.dataTransfer.getData('from');
+        
+        if (from === 'source') {
+            const existing = [...zone.querySelectorAll('.word-drop')].find(el => el.dataset.word === word);
+            if (!existing) {
+                const newEl = createWordDrop(word);
+                const afterElement = getDragAfterElement(zone, e.clientX);
+                if (afterElement == null) {
+                    zone.appendChild(newEl);
+                } else {
+                    zone.insertBefore(newEl, afterElement);
+                }
+            }
+        } else if (from === 'zone' && draggedElement) {
+            const afterElement = getDragAfterElement(zone, e.clientX);
+            if (afterElement == null) {
+                zone.appendChild(draggedElement);
+            } else {
+                zone.insertBefore(draggedElement, afterElement);
+            }
+        }
+        
+        updateResult(zone);
+    }
+
+    function createWordDrop(word) {
+        const el = document.createElement('span');
+        el.className = 'word-drop';
+        el.dataset.word = word;
+        el.draggable = true;
+        el.textContent = word;
+        
+        const deleteBtn = document.createElement('span');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '×';
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            const parent = el.parentElement;
+            el.remove();
+            updateResult(parent);
+        };
+        el.appendChild(deleteBtn);
+        
+        el.addEventListener('dragstart', handleDragStart);
+        el.addEventListener('dragend', handleDragEnd);
+        
+        return el;
+    }
+
+    function updateResult(dropZone) {
+        const box = dropZone.closest('.arrange-box');
+        const resultArea = box.querySelector('.result-area');
+        const words = [...dropZone.querySelectorAll('.word-drop')].map(el => el.dataset.word);
+        
+        if (words.length === 0) {
+            resultArea.textContent = 'Kết quả sẽ hiển thị ở đây...';
+            resultArea.classList.add('empty');
+        } else {
+            resultArea.textContent = words.join('');
+            resultArea.classList.remove('empty');
+        }
+    }
+
+    function checkArrange(boxId, resultId) {
+        const box = document.getElementById(boxId);
+        const resultDiv = document.getElementById(resultId);
+        const correctAnswer = box.dataset.answer;
+        const dropZone = box.querySelector('.drop-zone');
+        const userAnswer = [...dropZone.querySelectorAll('.word-drop')].map(el => el.dataset.word).join('');
+        
+        if (!userAnswer) {
+            resultDiv.textContent = 'Vui lòng sắp xếp câu trước khi kiểm tra!';
+            resultDiv.className = 'result-message show incorrect';
+            return;
+        }
+        
+        const isCorrect = userAnswer === correctAnswer;
+        resultDiv.textContent = isCorrect 
+            ? `✓ Chính xác! "${correctAnswer}"`
+            : `✗ Chưa đúng! Câu của bạn: "${userAnswer || '(trống)'}" | Đáp án: "${correctAnswer}"`;
+        resultDiv.className = `result-message show ${isCorrect ? 'correct' : 'incorrect'}`;
+    }
+
+    function resetArrange(boxId) {
+        const box = document.getElementById(boxId);
+        const dropZone = box.querySelector('.drop-zone');
+        const resultArea = box.querySelector('.result-area');
+        
+        dropZone.innerHTML = '';
+        resultArea.textContent = 'Kết quả sẽ hiển thị ở đây...';
+        resultArea.classList.add('empty');
+        
+        const resultDiv = document.getElementById(boxId.replace('arrange-', 'result'));
+        if (resultDiv) {
+            resultDiv.classList.remove('show', 'correct', 'incorrect');
+            resultDiv.textContent = '';
+        }
+    }
+
+    function checkCharacter(inputId, correctChar, resultId) {
+        const input = document.getElementById(inputId);
+        const resultDiv = document.getElementById(resultId);
+        const userValue = input.value.trim();
+        if (userValue === correctChar) {
+            resultDiv.textContent = '✓ Chính xác!';
+            resultDiv.className = 'result-message show correct';
+            input.style.borderColor = '#28a745';
+        } else {
+            resultDiv.textContent = `✗ Sai! Đáp án đúng là: ${correctChar}`;
+            resultDiv.className = 'result-message show incorrect';
+            input.style.borderColor = '#dc3545';
+        }
+    }
+
+    function resetExercises() {
+        if (!confirm('Bạn có chắc muốn làm lại tất cả bài tập?')) return;
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        document.querySelectorAll('input[type="text"]').forEach(i => { i.value = ''; i.style.borderColor = ''; });
+        document.querySelectorAll('.result-message').forEach(m => { m.classList.remove('show','correct','incorrect'); m.textContent = ''; });
+        document.querySelectorAll('.arrange-box').forEach(box => resetArrange(box.id));
+    }
+
+    function openNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'block'; document.getElementById('rich-editor').focus(); }
+    function closeNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'none'; }
+    function saveNoteEditor() { alert('Ghi chú đã được lưu tạm thời!'); closeNoteEditor(); }
+    function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
+    function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
+
+    function exportHTML() {
+        let html = document.documentElement.outerHTML;
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'HSK3_Bai02_Export.html';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+        alert('Đã xuất file HTML thành công!');
+    }
+
+    document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
+</script>
+</body>
+</html>
