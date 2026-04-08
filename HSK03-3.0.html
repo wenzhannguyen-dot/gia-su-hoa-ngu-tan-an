@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK3.0- Gia Sư Hoa Ngữ Tân An</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+
+        body { 
+            font-family: Arial, "Helvetica Neue", sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            color: #333; 
+        }
+
+        .header { 
+            position: fixed; top: 0; left: 0; right: 0; height: 80px; 
+            background: linear-gradient(135deg, #dc3545, #c82333); color: white; padding: 10px 20px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.3); 
+        }
+
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-img { 
+            width: 60px; height: 60px; background: white; border-radius: 12px; 
+            padding: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; font-family: Arial, sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .logo-text p { font-size: 13px; opacity: 0.95; font-family: Arial, sans-serif; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+
+        .main-container { 
+            display: flex; flex-direction: column; 
+            min-height: 100vh; 
+            padding: 110px 20px 30px 20px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            gap: 30px; 
+        }
+
+        .title-section {
+            text-align: center; 
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,248,255,0.95)); 
+            padding: 40px 30px; 
+            border-radius: 20px; 
+            backdrop-filter: blur(10px);
+            border: none;
+        }
+
+        .main-title {
+            font-size: 36px; 
+            font-weight: 800; 
+            color: #dc3545; 
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+
+        .subtitle {
+            font-size: 20px; 
+            color: #666; 
+            margin-bottom: 25px;
+            font-family: Arial, sans-serif;
+        }
+
+        .website-info {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 10px; 
+            background: #dc3545; 
+            color: white; 
+            padding: 12px 25px; 
+            border-radius: 30px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(220,53,69,0.3);
+        }
+
+        .website-info:hover {
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(220,53,69,0.4);
+            background: #c82333;
+        }
+
+        .lessons-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .lesson-card { 
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,248,255,0.95)); 
+            border-radius: 16px; 
+            padding: 25px; 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            position: relative; 
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: none;
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, #dc3545, #ed7d31);
+        }
+
+        .lesson-card:hover { 
+            background: linear-gradient(135deg, rgba(255,255,255,1), rgba(240,248,255,1));
+            transform: translateY(-8px); 
+            box-shadow: 0 0 20px rgba(220,53,69,0.3); 
+        }
+
+        .lesson-number { 
+            width: 50px; height: 50px; 
+            background: linear-gradient(135deg, #dc3545, #ed7d31); 
+            color: white; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            font-size: 20px; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+            font-family: Arial, sans-serif;
+        }
+
+        .lesson-title { 
+            font-size: 20px; 
+            font-weight: 700; 
+            color: #333; 
+            margin-bottom: 10px; 
+            font-family: Arial, sans-serif;
+        }
+
+        .lesson-chinese { 
+            font-size: 22px; 
+            font-weight: bold; 
+            color: #dc3545; 
+            margin-bottom: 12px; 
+            font-family: "SimSun", "STSong", serif;
+        }
+
+        .lesson-pinyin { 
+            font-size: 18px; 
+            color: #FF0000; 
+            margin-bottom: 12px; 
+            font-style: italic;
+            font-family: Arial, sans-serif;
+        }
+
+        .lesson-desc { 
+            font-size: 16px; 
+            color: #666; 
+            line-height: 1.6; 
+            margin-bottom: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .lesson-link { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px; 
+            background: linear-gradient(135deg, #6c757d, #495057); 
+            color: white; 
+            padding: 10px 20px; 
+            border-radius: 25px; 
+            text-decoration: none; 
+            font-size: 14px; 
+            font-weight: 600; 
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(108,117,125,0.3);
+        }
+
+        .lesson-link.available { 
+            background: linear-gradient(135deg, #dc3545, #ed7d31); 
+            box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+        }
+
+        .lesson-link:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 16px rgba(108,117,125,0.4);
+        }
+
+        .lesson-link.available:hover { 
+            box-shadow: 0 6px 16px rgba(220,53,69,0.4);
+        }
+
+        .sample-lessons {
+            display: flex; 
+            gap: 25px; 
+            margin-top: 30px; 
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .sample-card {
+            background: rgba(255,255,255,0.95); 
+            border-radius: 16px; 
+            padding: 30px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .sample-badge {
+            background: #ed7d31; 
+            color: white; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            display: inline-block; 
+            margin-bottom: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        .footer {
+            text-align: center; 
+            padding: 30px 20px; 
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(240,248,255,0.95)); 
+            border-radius: 16px; 
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+            border: none;
+        }
+
+        .footer-text {
+            font-size: 16px; 
+            color: #666; 
+            margin-bottom: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        .contact-info {
+            display: flex; 
+            justify-content: center; 
+            gap: 30px; 
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            color: #dc3545; 
+            font-weight: 600;
+            font-family: Arial, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .header { flex-direction: column; height: auto; padding: 15px; }
+            .logo-text h1 { font-size: 16px; }
+            .logo-text p { font-size: 11px; }
+            .main-container { padding: 120px 15px 20px 15px; }
+            .main-title { font-size: 28px; }
+            .subtitle { font-size: 18px; }
+            .lessons-grid { grid-template-columns: 1fr; }
+            .sample-lessons { flex-direction: column; }
+            .contact-info { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <div class="logo-img">
+            <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+        </div>
+        <div class="logo-text">
+            <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+            <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+        </div>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="title-section">
+        <h1 class="main-title">GIÁO TRÌNH HSK 3.0</h1>
+        <p class="subtitle"></p>
+        <a href="http://giasuhoangutanan.com/" target="_blank" class="website-info">
+            <i class="bi bi-globe"></i> Website: giasuhoangutanan.com
+        </a>
+    </div>
+
+    <div class="lessons-grid">
+        <div class="lesson-card">
+            <div class="lesson-number">1</div>
+            <h3 class="lesson-title">Bài 1:我们去机场接你们</h3>
+            <p class="lesson-pinyin">Wǒmen qù jīchǎng jiē nǐmen</p>
+            <p class="lesson-vietnamese">Chúng tôi đi sân bay đón các bạn</p>
+            <a href="HSK3.0 -03.01.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">2</div>
+            <h3 class="lesson-title">Bài 2:我想买一件衣服</h3>
+            <p class="lesson-pinyin">Wǒ xiǎng mǎi yī jiàn yīfu</p>
+            <p class="lesson-vietnamese">Tôi muốn mua một cái áo</p>
+            <a href="HSK3.0 -03.02.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">3</div>
+            <h3 class="lesson-title">Bài 3:我打算去旅行</h3>
+            <p class="lesson-pinyin">Wǒ dǎsuàn qù lǚxíng</p>
+            <p class="lesson-vietnamese">Tôi định đi du lịch</p>
+            <a href="HSK3.0 -03.03.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">4</div>
+            <h3 class="lesson-title">Bài 4:我喜欢吃中国菜</h3>
+            <p class="lesson-pinyin">Wǒ xǐhuān chī zhōngguó cài</p>
+            <p class="lesson-vietnamese">Tôi thích ăn món Trung Quốc</p>
+            <a href="HSK3.0 -03.04.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">5</div>
+            <h3 class="lesson-title">Bài 5:我去银行取钱</h3>
+            <p class="lesson-pinyin">Wǒ qù yínháng qǔ qián</p>
+            <p class="lesson-vietnamese">Tôi đi ngân hàng rút tiền</p>
+            <a href="HSK3.0 -03.05.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">6</div>
+            <h3 class="lesson-title">Bài 6:我生病了</h3>
+            <p class="lesson-pinyin">Wǒ shēngbìng le</p>
+            <p class="lesson-vietnamese">Tôi bị ốm rồi</p>
+            <a href="HSK3.0 -03.06.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">7</div>
+            <h3 class="lesson-title">Bài 7:那条裙子比短裤更好看</h3>
+            <p class="lesson-pinyin">Nà tiáo qúnzi bǐ duǎnkù gèng hǎokàn</p>
+            <p class="lesson-vietnamese">Cái váy kia đẹp hơn quần short</p>
+            <a href="HSK3.0 -03.07.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">8</div>
+            <h3 class="lesson-title">Bài 8:今天我出院了</h3>
+            <p class="lesson-pinyin">Jīntiān wǒ chūyuàn le</p>
+            <p class="lesson-vietnamese">Hôm nay tôi xuất viện</p>
+            <a href="HSK3.0 -03.08.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">9</div>
+            <h3 class="lesson-title">Bài 9:打不好没关系</h3>
+            <p class="lesson-pinyin">Dǎ bù hǎo méi guānxi</p>
+            <p class="lesson-vietnamese">Đánh không tốt không sao</p>
+            <a href="HSK3.0 -03.09.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">10</div>
+            <h3 class="lesson-title">Bài 10:你明天再把书还给我</h3>
+            <p class="lesson-pinyin">Nǐ míngtiān zài bǎ shū huán gěi wǒ</p>
+            <p class="lesson-vietnamese">Ngày mai bạn lại trả sách cho tôi</p>
+            <a href="HSK3.0 -03.10.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">11</div>
+            <h3 class="lesson-title">Bài 11:我在锻炼身体</h3>
+            <p class="lesson-pinyin">Wǒ zài duànliàn shēntǐ</p>
+            <p class="lesson-vietnamese">Tôi đang rèn luyện cơ thể</p>
+            <a href="HSK3.0 -03.11.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">12</div>
+            <h3 class="lesson-title">Bài 12:我在看电影</h3>
+            <p class="lesson-pinyin">Wǒ zài kàn diànyǐng</p>
+            <p class="lesson-vietnamese">Tôi đang xem phim</p>
+            <a href="HSK3.0 -03.12.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">13</div>
+            <h3 class="lesson-title">Bài 13:我在听音乐</h3>
+            <p class="lesson-pinyin">Wǒ zài tīng yīnyuè</p>
+            <p class="lesson-vietnamese">Tôi đang nghe nhạc</p>
+            <a href="HSK3.0 -03.13.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">14</div>
+            <h3 class="lesson-title">Bài 14:我在学电脑</h3>
+            <p class="lesson-pinyin">Wǒ zài xué diànnǎo</p>
+            <p class="lesson-vietnamese">Tôi đang học máy tính</p>
+            <a href="HSK3.0 -03.14.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">15</div>
+            <h3 class="lesson-title">Bài 15:我在养宠物</h3>
+            <p class="lesson-pinyin">Wǒ zài yǎng chǒngwù</p>
+            <p class="lesson-vietnamese">Tôi đang nuôi thú cưng</p>
+            <a href="HSK3.0 -03.15.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">16</div>
+            <h3 class="lesson-title">Bài 16:我在种花</h3>
+            <p class="lesson-pinyin">Wǒ zài zhòng huā</p>
+            <p class="lesson-vietnamese">Tôi đang trồng hoa</p>
+            <a href="HSK3.0 -03.16.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">17</div>
+            <h3 class="lesson-title">Bài 17:我在做家务</h3>
+            <p class="lesson-pinyin">Wǒ zài zuò jiāwù</p>
+            <p class="lesson-vietnamese">Tôi đang làm việc nhà</p>
+            <a href="HSK3.0 -03.17.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+
+        <div class="lesson-card">
+            <div class="lesson-number">18</div>
+            <h3 class="lesson-title">Bài 18:我在准备考试</h3>
+            <p class="lesson-pinyin">Wǒ zài zhǔnbèi kǎoshì</p>
+            <p class="lesson-vietnamese">Tôi đang chuẩn bị thi</p>
+            <a href="HSK3.0 -03.18.html" class="lesson-link available">
+                <i class="bi bi-book"></i> Học bài ngay
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p class="footer-text"> 2025 Gia Sư Hoa Ngữ Tân An - Chuyên đào tạo tiếng Trung mọi trình độ</p>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="bi bi-geo-alt"></i> 9/1 Bạch Văn Tư, Tân An, Long An
+            </div>
+            <div class="contact-item">
+                <i class="bi bi-telephone"></i> Zalo: 0839.889.772
+            </div>
+            <div class="contact-item">
+                <i class="bi bi-globe"></i> giasuhoangutanan.com
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
