@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 7: 那条裙子比短裤更好看 - HSK3</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        body { font-family: Arial, "Helvetica Neue", sans-serif; background: #f5f5f5; min-height: 100vh; color: #333; }
+        .chinese-text, .vocab-chinese, .dialogue-chinese, .text-chinese, .example-chinese, .grammar-structure {
+            font-family: "SimSun", "STSong", "Songti", serif; font-size: 20px;
+        }
+        .pinyin-text, .vocab-pinyin, .dialogue-pinyin, .text-pinyin, .example-pinyin {
+            font-family: Arial, sans-serif; font-style: normal; font-size: 20px;
+        }
+        body.hide-pinyin .dialogue-pinyin { display: none !important; }
+        body.hide-vietnamese .dialogue-vietnamese { display: none !important; }
+        .tool-btn.active-toggle { background: #ffebee; border-color: #dc3545; color: #c62828; font-weight: 600; }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; height: 70px;
+            background: #dc3545; color: white; padding: 10px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-img {
+            width: 50px; height: 50px; background: white; border-radius: 8px;
+            padding: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+        .logo-text p { font-size: 12px; opacity: 0.9; }
+
+        .main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+
+        .sidebar-left {
+            width: 220px; background: white; border: 1px solid #d0d0d0;
+            border-radius: 8px; overflow: hidden; flex-shrink: 0;
+            position: sticky; top: 90px; height: fit-content;
+            max-height: calc(100vh - 105px); overflow-y: auto;
+            display: flex; flex-direction: column;
+        }
+        .nav-section { border-bottom: 1px solid #e0e0e0; }
+        .nav-title {
+            padding: 15px; color: #333; font-size: 14px; font-weight: bold;
+            display: flex; align-items: center; gap: 8px; background: #f8f9fa;
+            border-bottom: 2px solid #dc3545;
+        }
+        .nav-item {
+            padding: 12px 15px; cursor: pointer; display: flex;
+            align-items: center; gap: 10px; color: #555; font-size: 13px; transition: all 0.2s;
+        }
+        .nav-item:hover { background: #ffebee; color: #dc3545; }
+        .nav-item.active { background: #ffebee; color: #c62828; font-weight: 600; }
+        .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+        .tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+        .tool-card {
+            background: white; border: 1px solid #e0e0e0; border-radius: 8px;
+            padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .tool-card:last-child { margin-bottom: 0; }
+        .tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .tool-btn {
+            width: 100%; padding: 8px; border: 1px solid #e0d0d0; border-radius: 5px;
+            background: #f8f9fa; cursor: pointer; font-size: 12px; color: #555;
+            margin-bottom: 6px; display: flex; align-items: center; justify-content: flex-start;
+            gap: 8px; transition: all 0.2s;
+        }
+        .tool-btn:hover { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+        .tool-btn.primary:hover { background: #d66a20; }
+        .tool-btn.success { background: #dc3545; color: white; border-color: #dc3545; font-weight: 600; }
+        .tool-btn.success:hover { background: #c82333; }
+
+        .content-area {
+            flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px;
+            display: flex; flex-direction: column; overflow: hidden; min-width: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .content-header {
+            position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #ffebee);
+            padding: 20px; border-bottom: 2px solid #dc3545; display: flex;
+            justify-content: space-between; align-items: center; z-index: 100;
+        }
+        .section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .section-badge { background: #dc3545; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+
+        .section-content { display: none; animation: fadeIn 0.4s ease; }
+        .section-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .objective-card {
+            background: linear-gradient(to right, #ffebee, #f8f9fa); border-radius: 8px;
+            padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .objective-card i { font-size: 24px; color: #dc3545; margin-bottom: 10px; }
+        .objective-card h3 { font-size: 16px; color: #333; margin-bottom: 8px; }
+        .objective-card p { font-size: 14px; color: #666; line-height: 1.6; }
+
+        .vocab-container { background: white; border-radius: 8px; padding: 20px; }
+        .vocab-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; flex-wrap: wrap; }
+        .vocab-tab {
+            padding: 8px 16px; background: #f5f5f5; border: none; border-radius: 20px;
+            cursor: pointer; font-size: 14px; color: #666; transition: all 0.2s;
+        }
+        .vocab-tab:hover { background: #e0e0e0; }
+        .vocab-tab.active { background: #dc3545; color: white; font-weight: 600; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 20px; }
+        .vocab-card {
+            background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #dc3545;
+            display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden;
+        }
+        .vocab-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(220,53,69,0.15); border-style: solid; }
+        .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .vocab-number {
+            width: 45px; height: 45px; background: #dc3545; color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: bold;
+            font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(220,53,69,0.3);
+        }
+        .vocab-content { flex: 1; }
+        .vocab-chinese { font-size: 32px; font-weight: bold; color: #000; margin-bottom: 6px; letter-spacing: 2px; }
+        .vocab-pinyin { font-size: 20px; color: #FF0000; margin-bottom: 6px; font-weight: 500; }
+        .vocab-meaning { font-size: 20px; color: #666; font-weight: 600; margin-bottom: 6px; }
+        .vocab-pos { font-size: 14px; color: #888; background: #e9ecef; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 6px; }
+        .audio-btn {
+            width: 40px; height: 40px; border-radius: 50%; border: none; background: #ffebee;
+            color: #dc3545; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex-shrink: 0;
+        }
+        .audio-btn:hover { background: #dc3545; color: white; transform: scale(1.1); }
+
+        .text-container { background: white; border-radius: 8px; padding: 30px; }
+        .text-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .text-tab {
+            padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent;
+            border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500;
+        }
+        .text-tab.active { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .text-content { display: none; }
+        .text-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .dialogue-container { margin-bottom: 30px; }
+        .dialogue-header {
+            background: #ed7d31; color: white; padding: 10px 15px;
+            border-radius: 8px 8px 0 0; font-weight: bold; display: flex;
+            align-items: center; justify-content: space-between;
+        }
+        .dialogue-header-left { display: flex; align-items: center; gap: 10px; }
+        .dialogue-audio-all {
+            background: #fff; color: #ed7d31; border: none; padding: 6px 12px;
+            border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: 600;
+            display: flex; align-items: center; gap: 5px; transition: all 0.2s;
+        }
+        .dialogue-audio-all:hover { background: #f5f5f5; transform: scale(1.05); }
+        .dialogue-content { background: #fafafa; padding: 20px; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px; }
+        .dialogue-line {
+            margin-bottom: 15px; padding: 15px; background: #f8f9fa;
+            border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer;
+            transition: all 0.2s; position: relative;
+        }
+        .dialogue-line:hover { background: #ffebee; border-color: #dc3545; transform: translateX(5px); }
+        .dialogue-speaker { font-weight: bold; color: #dc3545; margin-bottom: 8px; font-size: 14px; }
+        .dialogue-chinese { font-size: 20px; color: #000; margin-bottom: 6px; line-height: 1.6; font-family: "SimSun", serif; }
+        .dialogue-pinyin { font-size: 18px; color: #FF0000; margin-bottom: 6px; }
+        .dialogue-vietnamese { font-size: 18px; color: #666; }
+
+        .monologue-line {
+            padding: 20px; background: #fffbe6; border: 1px solid #ffd54f; border-radius: 8px;
+            margin-bottom: 15px; cursor: pointer; transition: all 0.2s;
+        }
+        .monologue-line:hover { background: #fff9c4; border-color: #fbc02d; transform: translateX(5px); }
+
+        .tip-box {
+            background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px;
+            padding: 15px; margin: 10px 0; font-size: 15px; color: #856404;
+            display: flex; gap: 10px;
+        }
+        .tip-box i { color: #ffc107; font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+
+        .grammar-container { background: white; border-radius: 8px; padding: 25px; }
+        .grammar-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .grammar-tab {
+            padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent;
+            border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .grammar-tab:hover { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .grammar-tab.active { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .grammar-panel { display: none; animation: fadeIn 0.35s ease; }
+        .grammar-panel.active { display: block; }
+        .grammar-item { margin-bottom: 30px; border-bottom: 1px solid #e0e0e0; padding-bottom: 25px; }
+        .grammar-item:last-child { border-bottom: none; margin-bottom: 0; }
+        .grammar-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .grammar-number { width: 40px; height: 40px; background: #ed7d31; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; }
+        .grammar-title { font-size: 18px; font-weight: bold; color: #000; }
+        .grammar-structure { background: #ffebee; padding: 15px; border-radius: 8px; font-size: 20px; color: #000; margin-bottom: 15px; border: 1px solid #dc3545; font-family: "SimSun", serif; }
+        .grammar-explanation { font-size: 16px; color: #555; line-height: 1.8; margin-bottom: 15px; }
+        .grammar-example { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e0e0e0; }
+        .example-chinese { font-size: 20px; color: #000; margin-bottom: 6px; font-family: "SimSun", serif; }
+        .example-pinyin { font-size: 18px; color: #FF0000; margin-bottom: 6px; }
+        .example-vietnamese { font-size: 16px; color: #666; }
+
+        .grammar-practice { margin-top: 20px; padding: 20px; background: #fff8e1; border-radius: 8px; border: 1px solid #ffe082; }
+        .practice-title { font-size: 16px; font-weight: bold; color: #e65100; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .practice-question { margin-bottom: 20px; padding: 15px; background: white; border-radius: 5px; border: 1px solid #e0e0e0; }
+        .practice-sentence { font-size: 20px; font-family: "SimSun", serif; line-height: 1.8; margin-bottom: 15px; }
+        .practice-options { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 10px; }
+        .practice-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 18px; font-family: "SimSun", serif; transition: all 0.2s; }
+        .practice-option:hover { color: #dc3545; }
+        .practice-option input[type="radio"] { width: 18px; height: 18px; cursor: pointer; accent-color: #dc3545; }
+
+        .exercise-container { background: white; border-radius: 8px; padding: 25px; }
+        .exercise-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; flex-wrap: wrap; }
+        .exercise-tab {
+            padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent;
+            border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .exercise-tab.active { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .exercise-content { display: none; }
+        .exercise-content.active { display: block; animation: fadeIn 0.3s ease; }
+        .section-header-exercise { background-color: #dc3545; color: white; padding: 15px 20px; margin: 0 0 20px 0; border-radius: 5px; font-weight: bold; font-size: 20px; }
+        .part-header { background-color: #ed7d31; color: white; padding: 10px 15px; margin: 20px 0 15px 0; border-radius: 3px; font-weight: bold; }
+        .question-container { background-color: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
+        .question-text { margin-bottom: 15px; font-size: 20px; font-family: "SimSun", serif; line-height: 1.6; }
+        .radio-group { display: flex; flex-wrap: wrap; gap: 15px; }
+        .radio-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 18px; font-family: "SimSun", serif; }
+        .radio-option input { width: 18px; height: 18px; accent-color: #dc3545; cursor: pointer; }
+        .check-btn { background: #dc3545; color: white; border: none; padding: 10px 25px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 15px; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .check-btn:hover { background: #c82333; transform: translateY(-1px); }
+        .result-message { margin-top: 15px; padding: 12px; border-radius: 6px; font-weight: 500; display: none; font-size: 14px; }
+        .result-message.show { display: block; }
+        .result-message.correct { background: #d4edda; color: #155724; border: 1px solid #28a745; }
+        .result-message.incorrect { background: #f8d7da; color: #721c24; border: 1px solid #dc3545; }
+
+        .fill-input { border: 2px solid #dc3545; border-radius: 4px; padding: 4px 10px; font-size: 18px; font-family: "SimSun", serif; width: 120px; display: inline-block; vertical-align: middle; text-align: center; }
+        .fill-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(220,53,69,0.2); }
+
+        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; padding: 15px; background: #f0f0f0; border-radius: 8px; margin-bottom: 15px; }
+        .word-source { padding: 8px 16px; background: #ffebee; border: 1px solid #dc3545; border-radius: 6px; font-family: "SimSun", serif; font-size: 18px; cursor: grab; color: #dc3545; font-weight: 500; transition: all 0.2s; user-select: none; }
+        .word-source:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .drop-zone { display: flex; flex-wrap: wrap; gap: 10px; min-height: 60px; padding: 15px; background: white; border-radius: 6px; border: 2px dashed #ccc; margin-bottom: 20px; align-items: center; }
+        .drop-zone.drag-over { background: #fff8e1; border-color: #ed7d31; }
+        .word-drop { padding: 8px 16px; background: white; border: 1px solid #999; border-radius: 4px; font-family: "SimSun", serif; font-size: 18px; cursor: grab; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .word-drop:hover { background: #ffebee; border-color: #dc3545; }
+        .word-drop.dragging { opacity: 0.5; }
+        .word-drop .delete-btn { position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; background: #dc3545; color: white; border: none; border-radius: 50%; font-size: 10px; cursor: pointer; display: none; align-items: center; justify-content: center; }
+        .word-drop:hover .delete-btn { display: flex; }
+        .result-area { padding: 15px; background: white; border-radius: 6px; border: 1px solid #ddd; font-family: "SimSun", serif; font-size: 20px; color: #333; min-height: 50px; line-height: 1.6; }
+        .result-area.empty { color: #999; font-style: italic; }
+        .arrange-box { margin-bottom: 25px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; }
+        .arrange-label { font-size: 15px; color: #555; margin-bottom: 12px; }
+
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0; }
+        .nav-btn { padding: 12px 25px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .nav-btn-prev { background: #f5f5f5; color: #666; border: 1px solid #ddd; }
+        .nav-btn-prev:hover { background: #e0e0e0; }
+        .nav-btn-next { background: #dc3545; color: white; }
+        .nav-btn-next:hover { background: #c82333; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        #note-editor-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 9999; animation: fadeIn 0.3s ease;
+        }
+        #note-editor-container {
+            background: white; width: 85%; height: 85%; margin: 5% auto;
+            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        #note-editor-header {
+            background: #dc3545; color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #c82333;
+        }
+        #note-editor-header h3 { font-family: Arial, sans-serif; font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px; }
+        #note-editor-toolbar {
+            background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #e0e0e0;
+            display: flex; gap: 10px; flex-wrap: wrap;
+        }
+        .editor-tool-btn {
+            padding: 6px 12px; border: 1px solid #ddd; background: white;
+            border-radius: 4px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; transition: all 0.2s;
+        }
+        .editor-tool-btn:hover { background: #ffebee; border-color: #dc3545; }
+        #rich-editor { flex: 1; padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; font-family: Arial, sans-serif; background: #fff; }
+        #rich-editor:focus { outline: none; }
+        #note-editor-footer {
+            background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e0e0e0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .editor-btn { padding: 8px 20px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; font-weight: 600; transition: all 0.2s; }
+        .editor-btn-close { background: #f5f5f5; border: 1px solid #ddd; color: #666; }
+        .editor-btn-close:hover { background: #e0e0e0; }
+        .editor-btn-save { background: #dc3545; border: 1px solid #dc3545; color: white; }
+        .editor-btn-save:hover { background: #c82333; }
+
+        @media (max-width: 1024px) {
+            .sidebar-left { width: 60px; }
+            .sidebar-left .tools-section { display: none; }
+            .nav-item span { display: none; }
+            .nav-item { justify-content: center; padding: 15px 10px; }
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; padding-top: 80px; }
+            .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; display: flex; overflow-x: auto; flex-direction: row; }
+            .nav-section { display: flex; border-bottom: none; flex: 1; }
+            .nav-item { white-space: nowrap; }
+            .tools-section { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <div class="logo-img">
+            <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+        </div>
+        <div class="logo-text">
+            <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+            <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+        </div>
+    </div>
+    <div style="flex:1; text-align:center; font-size:18px; font-weight:600; color:white; padding:0 20px;">
+        Bài 7: 那条裙子比短裤更好看 - HSK3
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:13px;">Tốc độ:</span>
+        <select id="audio-speed" onchange="setAudioSpeed(this.value)" style="padding:5px 10px; border-radius:4px; border:none; font-size:13px; cursor:pointer; background:white; color:#dc3545; font-weight:600; outline:none;">
+            <option value="0.5">0.5x</option>
+            <option value="0.7">0.7x</option>
+            <option value="0.8">0.8x</option>
+            <option value="1.0" selected>1.0x</option>
+            <option value="1.2">1.2x</option>
+            <option value="1.5">1.5x</option>
+        </select>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+        <a href="HSK03-3.0.html" style="display:inline-flex; align-items:center; gap:8px; background:#28a745; color:white; padding:8px 16px; border-radius:6px; text-decoration:none; font-size:13px; font-weight:600; transition:all 0.2s;" onmouseover="this.style.background='#218838'" onmouseout="this.style.background='#28a745'">
+            <i class="bi bi-house-door"></i> Trang chủ
+        </a>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="sidebar-left">
+        <div class="nav-section">
+            <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung bài học</span></div>
+            <div class="nav-item active" onclick="showSection('objectives', this)"><i class="bi bi-bullseye"></i><span>Mục tiêu</span></div>
+            <div class="nav-item" onclick="showSection('vocabulary', this)"><i class="bi bi-alphabet"></i><span>Từ vựng</span></div>
+            <div class="nav-item" onclick="showSection('text', this)"><i class="bi bi-book"></i><span>Bài khóa</span></div>
+            <div class="nav-item" onclick="showSection('grammar', this)"><i class="bi bi-diagram-3"></i><span>Ngữ pháp</span></div>
+            <div class="nav-item" onclick="showSection('exercises', this)"><i class="bi bi-pencil-square"></i><span>Bài tập</span></div>
+        </div>
+        <div class="tools-section">
+            <div class="tool-card">
+                <div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+                <button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)"><i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span></button>
+                <button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+                    <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+                </button>
+                <button class="tool-btn primary" onclick="openNoteEditor()">
+                    <i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+                </button>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title"><i class="bi bi-clock-history"></i>Lịch sử</div>
+                <button class="tool-btn primary" onclick="resetExercises()"><i class="bi bi-arrow-clockwise"></i>Làm lại bài tập</button>
+                <button class="tool-btn success" onclick="exportHTML()"><i class="bi bi-download"></i><span>Xuất HTML</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div class="content-header">
+            <div class="section-title">
+                <span id="current-icon"><i class="bi bi-bullseye"></i></span>
+                <span id="section-title-text">Mục tiêu bài học</span>
+                <span class="section-badge" id="section-badge">Phần 1/5</span>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="nav-btn nav-btn-prev" id="btn-prev" onclick="prevSection()" disabled><i class="bi bi-chevron-left"></i> Trước</button>
+                <button class="nav-btn nav-btn-next" id="btn-next" onclick="nextSection()">Tiếp <i class="bi bi-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="content-body">
+
+            <!-- ====== MỤC TIÊU ====== -->
+            <div id="objectives" class="section-content active">
+                <div class="objectives-grid">
+                    <div class="objective-card">
+                        <i class="bi bi-bag-check"></i>
+                        <h3>Kinh nghiệm mua sắm</h3>
+                        <p>Có thể nghe hiểu và giới thiệu kinh nghiệm mua sắm. (能听懂并介绍购物的经历。)</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-star"></i>
+                        <h3>Đặc điểm hàng hóa</h3>
+                        <p>Có thể nghe hiểu và đánh giá đặc điểm của sản phẩm. (能听懂并评价商品的特点。)</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-bar-chart-line"></i>
+                        <h3>Câu so sánh (10)</h3>
+                        <p>Nắm vững cách dùng câu so sánh (10), có thể so sánh các sản phẩm. (掌握比较句(10)的用法，能对商品进行比较。)</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-globe-asia-australia"></i>
+                        <h3>Văn hóa mua sắm</h3>
+                        <p>Hiểu phương thức mua sắm của người Trung Quốc. (了解中国人的购物方式。)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== TỪ VỰNG ====== -->
+            <div id="vocabulary" class="section-content">
+                <div class="vocab-container">
+                    <div class="vocab-tabs">
+                        <button class="vocab-tab active" onclick="showVocabGroup('all', this)">Tất cả (22 từ)</button>
+                        <button class="vocab-tab" onclick="showVocabGroup('g1', this)">Bài khóa 1 (①-⑤)</button>
+                        <button class="vocab-tab" onclick="showVocabGroup('g2', this)">Bài khóa 2 (⑥-⑫)</button>
+                        <button class="vocab-tab" onclick="showVocabGroup('g3', this)">Bài khóa 3 (⑬-㉒)</button>
+                        <button class="vocab-tab" onclick="showVocabGroup('g4', this)">Bài khóa 4 (㉓-㉗)</button>
+                    </div>
+                    <div class="vocab-grid" id="vocab-grid"></div>
+                </div>
+            </div>
+
+            <!-- ====== BÀI KHÓA ====== -->
+            <div id="text" class="section-content">
+                <div class="text-container">
+                    <div class="text-tabs">
+                        <button class="text-tab active" onclick="showText('text1', this)"><i class="bi bi-1-circle"></i> 课文1</button>
+                        <button class="text-tab" onclick="showText('text2', this)"><i class="bi bi-2-circle"></i> 课文2</button>
+                        <button class="text-tab" onclick="showText('text3', this)"><i class="bi bi-3-circle"></i> 课文3</button>
+                        <button class="text-tab" onclick="showText('text4', this)"><i class="bi bi-4-circle"></i> 课文4</button>
+                    </div>
+
+                    <!-- Bài khóa 1 -->
+                    <div id="text1" class="text-content active">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-house"></i> 课文1 - Tại nhà: Vương Nhất Tuyết và Lưu Minh bàn chuyện đi mua sắm</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-line" onclick="speak('这辆自行车是小雪八岁的时候买的，看起来有点儿旧了。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">这辆自行车是小雪八岁的时候买的，看起来有点儿旧了。</div>
+                                    <div class="dialogue-pinyin">Zhè liàng zìxíngchē shì Xiǎo Xuě bā suì de shíhou mǎi de, kàn qǐlái yǒu diǎnr jiù le.</div>
+                                    <div class="dialogue-vietnamese">Chiếc xe đạp này là Tiểu Tuyết mua hồi 8 tuổi, trông có vẻ hơi cũ rồi.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('是啊，她现在长高了，这辆车已经太矮了。')">
+                                    <div class="dialogue-speaker">刘明</div>
+                                    <div class="dialogue-chinese">是啊，她现在长高了，这辆车已经太矮了。</div>
+                                    <div class="dialogue-pinyin">Shì a, tā xiànzài zhǎng gāo le, zhè liàng chē yǐjīng tài ǎi le.</div>
+                                    <div class="dialogue-vietnamese">Đúng vậy, bây giờ cô bé đã cao lên rồi, chiếc xe này đã quá thấp rồi.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('商场里开了一家自行车店，咱们给她买辆新的吧。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">商场里开了一家自行车店，咱们给她买辆新的吧。</div>
+                                    <div class="dialogue-pinyin">Shāngchǎng li kāi le yì jiā zìxíngchē diàn, zánmen gěi tā mǎi liàng xīn de ba.</div>
+                                    <div class="dialogue-vietnamese">Trong trung tâm thương mại mở một cửa hàng xe đạp, chúng ta mua cho cô bé chiếc mới đi nhé.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('好，咱们带小雪一起去，让她试一下。')">
+                                    <div class="dialogue-speaker">刘明</div>
+                                    <div class="dialogue-chinese">好，咱们带小雪一起去，让她试一下。</div>
+                                    <div class="dialogue-pinyin">Hǎo, zánmen dài Xiǎo Xuě yìqǐ qù, ràng tā shì yíxià.</div>
+                                    <div class="dialogue-vietnamese">Được, chúng ta đưa Tiểu Tuyết cùng đi, cho cô bé thử một cái.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('那今天就去吧！我也想再看看衣服。咱们怎么去？')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">那今天就去吧！我也想再看看衣服。咱们怎么去？</div>
+                                    <div class="dialogue-pinyin">Nà jīntiān jiù qù ba! Wǒ yě xiǎng zài kànkan yīfu. Zánmen zěnme qù?</div>
+                                    <div class="dialogue-vietnamese">Thế hôm nay đi luôn đi! Tôi cũng muốn xem thêm quần áo. Chúng ta đi bằng gì?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('商场不远，咱们可以走着去。')">
+                                    <div class="dialogue-speaker">刘明</div>
+                                    <div class="dialogue-chinese">商场不远，咱们可以走着去。</div>
+                                    <div class="dialogue-pinyin">Shāngchǎng bù yuǎn, zánmen kěyǐ zǒuzhe qù.</div>
+                                    <div class="dialogue-vietnamese">Trung tâm thương mại không xa, chúng ta có thể đi bộ đến.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <div><b>Câu hỏi đọc hiểu:</b> (1) Họ vì sao muốn mua xe đạp mới cho Tiểu Tuyết? (2) Họ vì sao muốn đưa Tiểu Tuyết cùng đi? (3) Vương Nhất Tuyết còn muốn mua gì?</div>
+                        </div>
+                    </div>
+
+                    <!-- Bài khóa 2 -->
+                    <div id="text2" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-shop"></i> 课文2 - Tại trung tâm thương mại: mua xong xe đạp, đến chọn quần áo</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="tip-box" style="margin-bottom:15px;">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                    <div><b>Tiểu ngữ:</b> Trong câu so sánh, phó từ "还" hoặc "更" có thể đặt trước tính từ để chỉ mức độ sâu hơn. (比较句中的形容词前面可以用副词"还"或者"更"表示程度加深。)</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('你看我穿这条黄色的短裤好看吗？')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">你看我穿这条黄色的短裤好看吗？</div>
+                                    <div class="dialogue-pinyin">Nǐ kàn wǒ chuān zhè tiáo huángsè de duǎnkù hǎokàn ma?</div>
+                                    <div class="dialogue-vietnamese">Bạn thấy tôi mặc cái quần short màu vàng này có đẹp không?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('大小合适，但我觉得那条裙子比短裤更好看。')">
+                                    <div class="dialogue-speaker">刘明</div>
+                                    <div class="dialogue-chinese">大小合适，但我觉得那条裙子比短裤更好看。</div>
+                                    <div class="dialogue-pinyin">Dàxiǎo héshì, dàn wǒ juéde nà tiáo qúnzi bǐ duǎnkù gèng hǎokàn.</div>
+                                    <div class="dialogue-vietnamese">Kích thước vừa, nhưng tôi thấy cái váy kia còn đẹp hơn quần short.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('裙子比短裤贵一点儿。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">裙子比短裤贵一点儿。</div>
+                                    <div class="dialogue-pinyin">Qúnzi bǐ duǎnkù guì yìdiǎnr.</div>
+                                    <div class="dialogue-vietnamese">Váy đắt hơn quần short một chút.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('贵多少？')">
+                                    <div class="dialogue-speaker">刘明</div>
+                                    <div class="dialogue-chinese">贵多少？</div>
+                                    <div class="dialogue-pinyin">Guì duōshao?</div>
+                                    <div class="dialogue-vietnamese">Đắt hơn bao nhiêu?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('裙子480，短裤400。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">裙子480，短裤400。</div>
+                                    <div class="dialogue-pinyin">Qúnzi sì bǎi bā, duǎnkù sì bǎi.</div>
+                                    <div class="dialogue-vietnamese">Váy 480, quần short 400.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('裙子不比短裤贵多少，还是买裙子吧，你穿裙子更好看。')">
+                                    <div class="dialogue-speaker">刘明</div>
+                                    <div class="dialogue-chinese">裙子不比短裤贵多少，还是买裙子吧，你穿裙子更好看。</div>
+                                    <div class="dialogue-pinyin">Qúnzi bù bǐ duǎnkù guì duōshao, háishi mǎi qúnzi ba, nǐ chuān qúnzi gèng hǎokàn.</div>
+                                    <div class="dialogue-vietnamese">Váy không đắt hơn quần short bao nhiêu, vẫn mua váy đi, bạn mặc váy đẹp hơn.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('我多看看再决定。你看，那边有买二送一！')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">我多看看再决定。你看，那边有买二送一！</div>
+                                    <div class="dialogue-pinyin">Wǒ duō kànkan zài juédìng. Nǐ kàn, nà biān yǒu mǎi èr sòng yī!</div>
+                                    <div class="dialogue-vietnamese">Tôi xem thêm rồi mới quyết định. Bạn xem, bên kia có mua hai tặng một!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <i class="bi bi-lightbulb-fill"></i>
+                            <div><b>Tiểu ngữ:</b> "买二送一" là cách nói phổ biến trong khuyến mãi, nghĩa là "bạn mua hai món đồ, tôi tặng bạn một món". Đôi khi bạn cũng thấy "买一送一" hoặc "买三送一". ("买二送一"是商店打折时常用的表达，意思是"你买两个东西，我送你一个东西"。)</div>
+                        </div>
+                        <div class="tip-box">
+                            <i class="bi bi-question-circle-fill"></i>
+                            <div><b>Câu hỏi đọc hiểu:</b> (1) Lưu Minh thấy quần short như thế nào? (2) Vương Nhất Tuyết vì sao không muốn mua váy? (3) Váy đắt hơn quần short bao nhiêu?</div>
+                        </div>
+                    </div>
+
+                    <!-- Bài khóa 3 -->
+                    <div id="text3" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-basket"></i> 课文3 - Tại cửa hàng: Vương Nhất Tuyết đang mua đồ</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="tip-box" style="margin-bottom:15px;">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                    <div><b>Tiểu ngữ:</b> "不甜不要钱" thường dùng trong quảng cáo, câu này lược bỏ chủ ngữ, câu đầy đủ là: "如果这个西瓜不甜，我们就不要钱。" ("Free if it isn't sweet" - nếu dưa hấu không ngọt, chúng tôi không lấy tiền.)</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('西瓜又大又新鲜，不甜不要钱！')">
+                                    <div class="dialogue-speaker">店员</div>
+                                    <div class="dialogue-chinese">西瓜又大又新鲜，不甜不要钱！</div>
+                                    <div class="dialogue-pinyin">Xīguā yòu dà yòu xīnxiān, bù tián bú yào qián!</div>
+                                    <div class="dialogue-vietnamese">Dưa hấu vừa to vừa tươi, không ngọt không lấy tiền!</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('西瓜看起来不错，怎么卖？')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">西瓜看起来不错，怎么卖？</div>
+                                    <div class="dialogue-pinyin">Xīguā kàn qǐlái búcuò, zěnme mài?</div>
+                                    <div class="dialogue-vietnamese">Dưa hấu trông không tệ, bán thế nào?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('五块钱一公斤。来，您先尝尝这块冰西瓜，甜极了！')">
+                                    <div class="dialogue-speaker">店员</div>
+                                    <div class="dialogue-chinese">五块钱一公斤。来，您先尝尝这块冰西瓜，甜极了！</div>
+                                    <div class="dialogue-pinyin">Wǔ kuài qián yì gōngjīn. Lái, nín xiān cháng cháng zhè kuài bīng xīguā, tián jí le!</div>
+                                    <div class="dialogue-vietnamese">Năm tệ một cân (kg). Đây, bà thử miếng dưa hấu ướp lạnh này đi, ngọt cực kỳ!</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('是挺甜的！帮我选个大点儿的，再来两斤香蕉。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">是挺甜的！帮我选个大点儿的，再来两斤香蕉。</div>
+                                    <div class="dialogue-pinyin">Shì tǐng tián de! Bāng wǒ xuǎn gè dà diǎnr de, zài lái liǎng jīn xiāngjiāo.</div>
+                                    <div class="dialogue-vietnamese">Đúng là khá ngọt! Giúp tôi chọn quả to hơn một chút, thêm hai cân chuối nữa.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('一共五十八块五毛。')">
+                                    <div class="dialogue-speaker">店员</div>
+                                    <div class="dialogue-chinese">一共五十八块五毛。</div>
+                                    <div class="dialogue-pinyin">Yígòng wǔshíbā kuài wǔ máo.</div>
+                                    <div class="dialogue-vietnamese">Tất cả năm mươi tám tệ năm hào.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('我买了这么多，便宜点儿吧。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese">我买了这么多，便宜点儿吧。</div>
+                                    <div class="dialogue-pinyin">Wǒ mǎi le zhème duō, piányi diǎnr ba.</div>
+                                    <div class="dialogue-vietnamese">Tôi mua nhiều thế này, rẻ chút đi.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('您给我五十五吧，不能再便宜了。')">
+                                    <div class="dialogue-speaker">店员</div>
+                                    <div class="dialogue-chinese">您给我五十五吧，不能再便宜了。</div>
+                                    <div class="dialogue-pinyin">Nín gěi wǒ wǔshíwǔ ba, bù néng zài piányi le.</div>
+                                    <div class="dialogue-vietnamese">Bà trả tôi năm mươi lăm thôi, không thể rẻ hơn nữa rồi.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <i class="bi bi-question-circle-fill"></i>
+                            <div><b>Câu hỏi đọc hiểu:</b> (1) Dưa hấu bao nhiêu tiền một cân? (2) Vương Nhất Tuyết mua những loại trái cây gì? (3) Nhân viên giảm cho Vương Nhất Tuyết bao nhiêu tiền?</div>
+                        </div>
+                    </div>
+
+                    <!-- Bài khóa 4 -->
+                    <div id="text4" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-journal-text"></i> 课文4 - Tại nhà: Lưu Minh đang xem tivi (Văn bản đọc)</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text4')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content" style="background:#fff9e6; border:2px solid #ffd54f;">
+                                <div class="monologue-line" onclick="speak('这几天我们在新家坐着看电视的时候，又发现了新问题。房子大了，电视看起来就有点儿小。这个电视是我们结婚时买的，是时候换个新电视了。今天我一直在网上选电视，没想到，现在的电视不但便宜，而且用着非常方便，有的电视叫它一声就能开机。我看了好几个，都很满意，晚上让一雪来决定吧。')">
+                                    <div class="dialogue-speaker">刘明</div>
+                                    <div class="dialogue-chinese">这几天我们在新家坐着看电视的时候，又发现了新问题。房子大了，电视看起来就有点儿小。这个电视是我们结婚时买的，是时候换个新电视了。今天我一直在网上选电视，没想到，现在的电视不但便宜，而且用着非常方便，有的电视叫它一声就能开机。我看了好几个，都很满意，晚上让一雪来决定吧。</div>
+                                    <div class="dialogue-pinyin">Zhè jǐ tiān wǒmen zài xīn jiā zuòzhe kàn diànshì de shíhou, yòu fāxiàn le xīn wèntí. Fángzi dà le, diànshì kàn qǐlái jiù yǒu diǎnr xiǎo. Zhège diànshì shì wǒmen jiéhūn shí mǎi de, shì shíhou huàn gè xīn diànshì le. Jīntiān wǒ yìzhí zài wǎngshàng xuǎn diànshì, méi xiǎngdào, xiànzài de diànshì bùdàn piányi, érqiě yòngzhe fēicháng fāngbiàn, yǒu de diànshì jiào tā yì shēng jiù néng kāijī. Wǒ kàn le hǎo jǐ gè, dōu hěn mǎnyì, wǎnshang ràng Yīxuě lái juédìng ba.</div>
+                                    <div class="dialogue-vietnamese">Mấy ngày nay chúng tôi ở nhà mới ngồi xem tivi, lại phát hiện ra vấn đề mới. Nhà lớn hơn rồi, cái tivi trông có vẻ hơi nhỏ. Cái tivi này là chúng tôi mua khi kết hôn, đã đến lúc đổi cái tivi mới rồi. Hôm nay tôi cứ chọn tivi trên mạng, không ngờ tivi hiện nay không những rẻ mà còn dùng rất tiện, có loại tivi gọi nó một tiếng là bật được máy. Tôi xem mấy cái, đều rất ưng, tối để Nhất Tuyết quyết định nhé.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <i class="bi bi-question-circle-fill"></i>
+                            <div><b>Câu hỏi đọc hiểu:</b> (1) Tivi của Lưu Minh là mua khi nào? (2) Lưu Minh định mua tivi mới ở đâu? (3) Lưu Minh vì sao thấy tivi mới dùng rất tiện?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== NGỮ PHÁP ====== -->
+            <div id="grammar" class="section-content">
+                <div class="grammar-container">
+                    <div class="grammar-tabs">
+                        <button class="grammar-tab active" onclick="showGrammar('g1', this)"><i class="bi bi-1-circle-fill"></i> 连动句(2)</button>
+                        <button class="grammar-tab" onclick="showGrammar('g2', this)"><i class="bi bi-2-circle-fill"></i> 比较句(10)</button>
+                        <button class="grammar-tab" onclick="showGrammar('g3', this)"><i class="bi bi-3-circle-fill"></i> 程度补语(3)</button>
+                        <button class="grammar-tab" onclick="showGrammar('g4', this)"><i class="bi bi-4-circle-fill"></i> 不但…而且…</button>
+                    </div>
+
+                    <!-- Ngữ pháp 1 -->
+                    <div id="g1" class="grammar-panel active">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">1</div>
+                                <div class="grammar-title">连动句（2）- Câu liên động (2)</div>
+                            </div>
+                            <div class="grammar-structure">动词₁ + 着 + （宾语₁）+ 动词₂ + （宾语₂）</div>
+                            <div class="grammar-explanation">
+                                Động từ trợ thái "着" dùng sau động từ thứ nhất trong câu liên động, biểu thị trạng thái hoặc cách thức khi thực hiện hành động thứ hai.<br>
+                                <b>Kết cấu cơ bản:</b> Động từ₁ + 着 + (Tân ngữ₁) + Động từ₂ + (Tân ngữ₂)
+                            </div>
+                            <div class="grammar-example" onclick="speak('咱们可以走着去。')">
+                                <div class="example-chinese">（1）咱们可以走着去。</div>
+                                <div class="example-pinyin">Zánmen kěyǐ zǒuzhe qù.</div>
+                                <div class="example-vietnamese">Chúng ta có thể đi bộ mà đến.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('弟弟吃着苹果写作业。')">
+                                <div class="example-chinese">（2）弟弟吃着苹果写作业。</div>
+                                <div class="example-pinyin">Dìdi chīzhe píngguǒ xiě zuòyè.</div>
+                                <div class="example-vietnamese">Em trai vừa ăn táo vừa làm bài tập.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('他们坐着看电视。')">
+                                <div class="example-chinese">（3）他们坐着看电视。</div>
+                                <div class="example-pinyin">Tāmen zuòzhe kàn diànshì.</div>
+                                <div class="example-vietnamese">Họ ngồi mà xem tivi.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil"></i> Luyện tập - Hoàn thành câu dựa theo tranh (完成句子)</div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（1）王一雪 ________________ 。</div>
+                                    <div style="font-size:14px; color:#888;">(Gợi ý: 站着做饭 / 站着切菜)</div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（2）刘小雪 ________________ 。</div>
+                                    <div style="font-size:14px; color:#888;">(Gợi ý: 拿着东西吃)</div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（3）服务员 ________________ 。</div>
+                                    <div style="font-size:14px; color:#888;">(Gợi ý: 拿着本子记)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ngữ pháp 2 -->
+                    <div id="g2" class="grammar-panel">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">2</div>
+                                <div class="grammar-title">比较句（10）- Câu so sánh: A不比B + Tính từ + 多少</div>
+                            </div>
+                            <div class="grammar-structure">A 不比 B + 形容词（+ 多少）</div>
+                            <div class="grammar-explanation">
+                                Kết cấu "A不比B + Tính từ" có nghĩa là A và B gần như bằng nhau. Kết cấu này thường dùng để nhấn mạnh hai tình huống gần giống nhau, hoặc phản bác phát biểu của người khác.
+                            </div>
+                            <div class="grammar-example" onclick="speak('裙子不比短裤贵多少。')">
+                                <div class="example-chinese">（1）裙子不比短裤贵多少。</div>
+                                <div class="example-pinyin">Qúnzi bù bǐ duǎnkù guì duōshao.</div>
+                                <div class="example-vietnamese">Váy không đắt hơn quần short bao nhiêu.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('他的中文不比你好。')">
+                                <div class="example-chinese">（2）他的中文不比你好。</div>
+                                <div class="example-pinyin">Tā de Zhōngwén bù bǐ nǐ hǎo.</div>
+                                <div class="example-vietnamese">Tiếng Trung của anh ấy không tốt hơn bạn.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('他跑得不比我快多少。')">
+                                <div class="example-chinese">（3）他跑得不比我快多少。</div>
+                                <div class="example-pinyin">Tā pǎo de bù bǐ wǒ kuài duōshao.</div>
+                                <div class="example-vietnamese">Anh ấy chạy không nhanh hơn tôi bao nhiêu.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil"></i> Luyện tập - Hoàn thành hội thoại (完成对话)</div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（1）A: 天中学中文的时间更长，他的中文水平比家月高吗？</div>
+                                    <div class="practice-sentence">B: <input class="fill-input" style="width:250px;" placeholder="他的中文..."></div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（2）A: 你姐姐一个人住，她一定比你更会做饭吧？</div>
+                                    <div class="practice-sentence">B: <input class="fill-input" style="width:250px;" placeholder="她做饭..."></div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（3）A: 我觉得篮球比足球更有意思，你觉得呢？</div>
+                                    <div class="practice-sentence">B: <input class="fill-input" style="width:250px;" placeholder="..."></div>，你多跟我去踢一踢足球就知道了。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ngữ pháp 3 -->
+                    <div id="g3" class="grammar-panel">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">3</div>
+                                <div class="grammar-title">程度补语（3）- Bổ ngữ mức độ: 极了</div>
+                            </div>
+                            <div class="grammar-structure">形容词 / 心理动词 + 极了</div>
+                            <div class="grammar-explanation">
+                                Bổ ngữ mức độ "极了" dùng sau tính từ hoặc động từ tâm lý, biểu thị tính chất, trạng thái của người hoặc sự vật, hay cảm giác tâm lý của con người đạt đến mức độ rất cao.
+                            </div>
+                            <div class="grammar-example" onclick="speak('这块冰西瓜甜极了。')">
+                                <div class="example-chinese">（1）这块冰西瓜甜极了。</div>
+                                <div class="example-pinyin">Zhè kuài bīng xīguā tián jí le.</div>
+                                <div class="example-vietnamese">Miếng dưa hấu ướp lạnh này ngọt cực kỳ.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('今年夏天热极了。')">
+                                <div class="example-chinese">（2）今年夏天热极了。</div>
+                                <div class="example-pinyin">Jīnnián xiàtiān rè jí le.</div>
+                                <div class="example-vietnamese">Mùa hè năm nay nóng cực kỳ.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('这本书我喜欢极了。')">
+                                <div class="example-chinese">（3）这本书我喜欢极了。</div>
+                                <div class="example-pinyin">Zhè běn shū wǒ xǐhuān jí le.</div>
+                                <div class="example-vietnamese">Cuốn sách này tôi thích cực kỳ.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil"></i> Luyện tập - Hoàn thành câu (完成句子)</div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（1）她做的中国菜 <input class="fill-input" placeholder="___极了">。</div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（2）我昨天晚上睡得 <input class="fill-input" placeholder="___极了">。</div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（3）这些水果五块钱，真是 <input class="fill-input" placeholder="___极了">。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ngữ pháp 4 -->
+                    <div id="g4" class="grammar-panel">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">4</div>
+                                <div class="grammar-title">递进复句"不但……，而且……" - Câu phức tiến bậc "Không những…, mà còn…"</div>
+                            </div>
+                            <div class="grammar-structure">不但……，而且……</div>
+                            <div class="grammar-explanation">
+                                Câu phức tiến bậc "不但……，而且……" nối hai mệnh đề, biểu thị quan hệ tiến bậc.<br>
+                                • Nếu chủ ngữ hai mệnh đề giống nhau → "不但" đặt sau chủ ngữ đầu tiên.<br>
+                                • Nếu chủ ngữ hai mệnh đề khác nhau → "不但" đặt trước chủ ngữ đầu tiên.
+                            </div>
+                            <div class="grammar-example" onclick="speak('现在的电视不但便宜，而且用着非常方便。')">
+                                <div class="example-chinese">（1）现在的电视不但便宜，而且用着非常方便。</div>
+                                <div class="example-pinyin">Xiànzài de diànshì bùdàn piányi, érqiě yòngzhe fēicháng fāngbiàn.</div>
+                                <div class="example-vietnamese">Tivi hiện nay không những rẻ mà còn dùng rất tiện.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('家月不但喜欢唱歌，而且唱得很好听。')">
+                                <div class="example-chinese">（2）家月不但喜欢唱歌，而且唱得很好听。</div>
+                                <div class="example-pinyin">Jiāyuè bùdàn xǐhuān chànggē, érqiě chàng de hěn hǎotīng.</div>
+                                <div class="example-vietnamese">Gia Nguyệt không những thích hát mà còn hát rất hay.</div>
+                            </div>
+                            <div class="grammar-example" onclick="speak('不但家月会说汉语，而且天中也会说汉语。')">
+                                <div class="example-chinese">（3）不但家月会说汉语，而且天中也会说汉语。</div>
+                                <div class="example-pinyin">Bùdàn Jiāyuè huì shuō Hànyǔ, érqiě Tiānzhōng yě huì shuō Hànyǔ.</div>
+                                <div class="example-vietnamese">Không những Gia Nguyệt biết nói tiếng Trung, mà Thiên Trung cũng biết nói tiếng Trung.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil"></i> Luyện tập - Hoàn thành hội thoại (完成对话)</div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（1）A: 为什么很多人喜欢坐高铁？</div>
+                                    <div class="practice-sentence">B: <input class="fill-input" style="width:300px;" placeholder="不但…而且…">。</div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（2）A: 你为什么喜欢在网上买东西？</div>
+                                    <div class="practice-sentence">B: <input class="fill-input" style="width:300px;" placeholder="不但…而且…">。</div>
+                                </div>
+                                <div class="practice-question">
+                                    <div class="practice-sentence">（3）A: 你们班谁会打篮球？</div>
+                                    <div class="practice-sentence">B: <input class="fill-input" style="width:300px;" placeholder="不但…而且…">。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== BÀI TẬP ====== -->
+            <div id="exercises" class="section-content">
+                <div class="exercise-container">
+                    <div class="exercise-tabs">
+                        <button class="exercise-tab active" onclick="showExercise('ex1', this)"><i class="bi bi-1-circle"></i> Chọn từ điền</button>
+                        <button class="exercise-tab" onclick="showExercise('ex2', this)"><i class="bi bi-2-circle"></i> Hội thoại mua sắm</button>
+                        <button class="exercise-tab" onclick="showExercise('ex3', this)"><i class="bi bi-3-circle"></i> Bài tập tổng hợp</button>
+                    </div>
+
+                    <!-- Bài tập 1: Chọn từ điền -->
+                    <div id="ex1" class="exercise-content active">
+                        <div class="section-header-exercise">选词填空 - Chọn từ thích hợp điền vào chỗ trống</div>
+
+                        <div class="part-header">Phần 1: A 试 &nbsp; B 更 &nbsp; C 矮 &nbsp; D 旧 &nbsp; E 声</div>
+
+                        <div class="question-container">
+                            <div class="question-text">（1）你的手机很 <input class="fill-input" id="f1" placeholder="___">，买个新的吧。</div>
+                            <button class="check-btn" onclick="checkFill('f1','旧','r1')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r1" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（2）她比我大两岁，但是比我还 <input class="fill-input" id="f2" placeholder="___"> 一点儿。</div>
+                            <button class="check-btn" onclick="checkFill('f2','矮','r2')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r2" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（3）这条短裤比那条 <input class="fill-input" id="f3" placeholder="___"> 合适，买这条吧。</div>
+                            <button class="check-btn" onclick="checkFill('f3','更','r3')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r3" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（4）我们都听见了他在教室外面的笑 <input class="fill-input" id="f4" placeholder="___">。</div>
+                            <button class="check-btn" onclick="checkFill('f4','声','r4')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r4" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（5）上网买东西很方便，你应该 <input class="fill-input" id="f5" placeholder="___"> 一下。</div>
+                            <button class="check-btn" onclick="checkFill('f5','试','r5')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r5" class="result-message"></div>
+                        </div>
+
+                        <div class="part-header" style="margin-top:25px;">Phần 2: A 一共 &nbsp; B 合适 &nbsp; C 决定 &nbsp; D 结婚 &nbsp; E 开机</div>
+
+                        <div class="question-container">
+                            <div class="question-text">（6）A: 假期的时候你们去哪儿旅游？<br>B: 我想去看海，不知道这个时间是不是 <input class="fill-input" id="f6" placeholder="___">。</div>
+                            <button class="check-btn" onclick="checkFill('f6','合适','r6')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r6" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（7）A: 你们两个准备什么时候 <input class="fill-input" id="f7" placeholder="___">？<br>B: 可能今年10月，到时候一定告诉你。</div>
+                            <button class="check-btn" onclick="checkFill('f7','结婚','r7')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r7" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（8）A: 你帮我看看，我的手机为什么不能 <input class="fill-input" id="f8" placeholder="___">？<br>B: 让小李帮你看，你新买的这个手机跟他的一样。</div>
+                            <button class="check-btn" onclick="checkFill('f8','开机','r8')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r8" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（9）A: 网上的房子太多了，我还没有 <input class="fill-input" id="f9" placeholder="___"> 去看哪一个。<br>B: 你可以先在网上看房，我教你。</div>
+                            <button class="check-btn" onclick="checkFill('f9','决定','r9')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r9" class="result-message"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="question-text">（10）A: 请问，这些水果多少钱？<br>B: 苹果两斤，八块；香蕉四斤，十二块。<input class="fill-input" id="f10" placeholder="___"> 二十块。</div>
+                            <button class="check-btn" onclick="checkFill('f10','一共','r10')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                            <div id="r10" class="result-message"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bài tập 2: Hội thoại mua sắm theo tranh -->
+                    <div id="ex2" class="exercise-content">
+                        <div class="section-header-exercise">用本课新学的词语和语言点描述图片 - Dùng từ ngữ và điểm ngôn ngữ trong bài mô tả tranh</div>
+
+                        <div class="question-container">
+                            <div style="font-size:16px; color:#555; margin-bottom:15px; font-weight:bold;">🥿 Tranh 1: Mua giày</div>
+                            <div class="question-text">
+                                A: 你觉得哪双鞋 <input class="fill-input" id="t1a" placeholder="更好看">？<br><br>
+                                B: 都挺好看的，我也不知道怎么决定。<br><br>
+                                A: 我觉得那双白色的 <input class="fill-input" id="t1b" placeholder="更好看">。<br><br>
+                                B: 这几个颜色的鞋你都 <input class="fill-input" id="t1c" placeholder="试着"> 看 <input class="fill-input" id="t1d" placeholder="看">。
+                            </div>
+                            <button class="check-btn" onclick="checkMultiFill(['t1a','t1b','t1c','t1d'],['更好看','更好看','试着','看'],'rt1')"><i class="bi bi-check-circle"></i>Kiểm tra gợi ý</button>
+                            <div id="rt1" class="result-message"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div style="font-size:16px; color:#555; margin-bottom:15px; font-weight:bold;">🍉 Tranh 2: Mua dưa hấu</div>
+                            <div class="question-text">
+                                A: 这些西瓜看起来很新鲜，<input class="fill-input" id="t2a" placeholder="怎么卖">？<br><br>
+                                B: 两块五一斤。今天的西瓜不但 <input class="fill-input" id="t2b" placeholder="新鲜">，<input class="fill-input" id="t2c" placeholder="而且很甜">。<br><br>
+                                A: 那我要两个大的，多少钱？<br><br>
+                                B: <input class="fill-input" id="t2d" placeholder="一共"> 四十六块五毛。
+                            </div>
+                            <button class="check-btn" onclick="checkMultiFill(['t2a','t2b','t2c','t2d'],['怎么卖','新鲜','而且很甜','一共'],'rt2')"><i class="bi bi-check-circle"></i>Kiểm tra gợi ý</button>
+                            <div id="rt2" class="result-message"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div style="font-size:16px; color:#555; margin-bottom:15px; font-weight:bold;">📺 Tranh 3: Mua tivi</div>
+                            <div class="question-text">
+                                A: 你站在这儿，试着 <input class="fill-input" id="t3a" placeholder="说"> "小天小天，我要看电视"。<br><br>
+                                B: 小天小天，我要看电视。<br><br>
+                                A: 你看！你一 <input class="fill-input" id="t3b" placeholder="说">，它就 <input class="fill-input" id="t3c" placeholder="开机了">。<br><br>
+                                B: 是啊，方便 <input class="fill-input" id="t3d" placeholder="极了">。买这个吧。
+                            </div>
+                            <button class="check-btn" onclick="checkMultiFill(['t3a','t3b','t3c','t3d'],['说','说','开机了','极了'],'rt3')"><i class="bi bi-check-circle"></i>Kiểm tra gợi ý</button>
+                            <div id="rt3" class="result-message"></div>
+                        </div>
+                    </div>
+
+                    <!-- Bài tập 3: Sắp xếp câu -->
+                    <div id="ex3" class="exercise-content">
+                        <div class="section-header-exercise">综合练习 - Bài tập tổng hợp: Sắp xếp câu</div>
+
+                        <div class="arrange-box" id="arrange-1" data-answer="这辆自行车是小雪八岁的时候买的">
+                            <div class="arrange-label">（1）Sắp xếp thành câu đúng:</div>
+                            <div class="word-bank">
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">这辆</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">自行车</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">是</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">小雪</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">八岁</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">的时候</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">买的</span>
+                            </div>
+                            <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'arrange-1')"></div>
+                            <div class="result-area empty" id="result-area-1">Kết quả sẽ hiển thị ở đây...</div>
+                            <div style="display:flex; gap:10px; margin-top:10px;">
+                                <button class="check-btn" onclick="checkArrange('arrange-1','res1')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                                <button class="check-btn" style="background:#6c757d;" onclick="resetArrange('arrange-1','res1')"><i class="bi bi-arrow-clockwise"></i>Làm lại</button>
+                            </div>
+                            <div id="res1" class="result-message"></div>
+                        </div>
+
+                        <div class="arrange-box" id="arrange-2" data-answer="那条裙子比短裤更好看">
+                            <div class="arrange-label">（2）Sắp xếp thành câu đúng:</div>
+                            <div class="word-bank">
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">那条</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">裙子</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">比</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">短裤</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">更</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">好看</span>
+                            </div>
+                            <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'arrange-2')"></div>
+                            <div class="result-area empty" id="result-area-2">Kết quả sẽ hiển thị ở đây...</div>
+                            <div style="display:flex; gap:10px; margin-top:10px;">
+                                <button class="check-btn" onclick="checkArrange('arrange-2','res2')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                                <button class="check-btn" style="background:#6c757d;" onclick="resetArrange('arrange-2','res2')"><i class="bi bi-arrow-clockwise"></i>Làm lại</button>
+                            </div>
+                            <div id="res2" class="result-message"></div>
+                        </div>
+
+                        <div class="arrange-box" id="arrange-3" data-answer="咱们可以走着去商场">
+                            <div class="arrange-label">（3）Sắp xếp thành câu đúng:</div>
+                            <div class="word-bank">
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">咱们</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">可以</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">走着</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">去</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">商场</span>
+                            </div>
+                            <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'arrange-3')"></div>
+                            <div class="result-area empty" id="result-area-3">Kết quả sẽ hiển thị ở đây...</div>
+                            <div style="display:flex; gap:10px; margin-top:10px;">
+                                <button class="check-btn" onclick="checkArrange('arrange-3','res3')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                                <button class="check-btn" style="background:#6c757d;" onclick="resetArrange('arrange-3','res3')"><i class="bi bi-arrow-clockwise"></i>Làm lại</button>
+                            </div>
+                            <div id="res3" class="result-message"></div>
+                        </div>
+
+                        <div class="arrange-box" id="arrange-4" data-answer="现在的电视不但便宜而且用着非常方便">
+                            <div class="arrange-label">（4）Sắp xếp thành câu đúng:</div>
+                            <div class="word-bank">
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">现在的</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">电视</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">不但</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">便宜</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">而且</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">用着</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">非常方便</span>
+                            </div>
+                            <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'arrange-4')"></div>
+                            <div class="result-area empty" id="result-area-4">Kết quả sẽ hiển thị ở đây...</div>
+                            <div style="display:flex; gap:10px; margin-top:10px;">
+                                <button class="check-btn" onclick="checkArrange('arrange-4','res4')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                                <button class="check-btn" style="background:#6c757d;" onclick="resetArrange('arrange-4','res4')"><i class="bi bi-arrow-clockwise"></i>Làm lại</button>
+                            </div>
+                            <div id="res4" class="result-message"></div>
+                        </div>
+
+                        <div class="arrange-box" id="arrange-5" data-answer="这块冰西瓜甜极了">
+                            <div class="arrange-label">（5）Sắp xếp thành câu đúng:</div>
+                            <div class="word-bank">
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">这块</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">冰西瓜</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">甜</span>
+                                <span class="word-source" draggable="true" ondragstart="handleDragStart(event,'source')">极了</span>
+                            </div>
+                            <div class="drop-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event,'arrange-5')"></div>
+                            <div class="result-area empty" id="result-area-5">Kết quả sẽ hiển thị ở đây...</div>
+                            <div style="display:flex; gap:10px; margin-top:10px;">
+                                <button class="check-btn" onclick="checkArrange('arrange-5','res5')"><i class="bi bi-check-circle"></i>Kiểm tra</button>
+                                <button class="check-btn" style="background:#6c757d;" onclick="resetArrange('arrange-5','res5')"><i class="bi bi-arrow-clockwise"></i>Làm lại</button>
+                            </div>
+                            <div id="res5" class="result-message"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end content-body -->
+    </div><!-- end content-area -->
+</div><!-- end main-container -->
+
+<script>
+// ====== DỮ LIỆU TỪ VỰNG ======
+const vocabData = [
+    {num:1,  zh:'辆',   py:'liàng',   vi:'lượng từ chỉ xe cộ',    pos:'lượng từ', group:'g1'},
+    {num:2,  zh:'自行车', py:'zìxíngchē', vi:'xe đạp',             pos:'danh từ',  group:'g1'},
+    {num:3,  zh:'旧',   py:'jiù',     vi:'cũ',                     pos:'tính từ',  group:'g1'},
+    {num:4,  zh:'矮',   py:'ǎi',      vi:'thấp (chiều cao)',        pos:'tính từ',  group:'g1'},
+    {num:5,  zh:'试',   py:'shì',     vi:'thử',                    pos:'động từ',  group:'g1'},
+    {num:6,  zh:'黄色', py:'huángsè', vi:'màu vàng',               pos:'danh từ',  group:'g2'},
+    {num:7,  zh:'短裤', py:'duǎnkù',  vi:'quần short',             pos:'danh từ',  group:'g2'},
+    {num:8,  zh:'大小', py:'dàxiǎo',  vi:'kích thước',             pos:'danh từ',  group:'g2'},
+    {num:9,  zh:'合适', py:'héshì',   vi:'phù hợp, vừa vặn',       pos:'tính từ',  group:'g2'},
+    {num:10, zh:'裙子', py:'qúnzi',   vi:'váy, chân váy',          pos:'danh từ',  group:'g2'},
+    {num:11, zh:'更',   py:'gèng',    vi:'càng, hơn nữa',          pos:'phó từ',   group:'g2'},
+    {num:12, zh:'决定', py:'juédìng', vi:'quyết định',             pos:'động/danh', group:'g2'},
+    {num:13, zh:'西瓜', py:'xīguā',   vi:'dưa hấu',               pos:'danh từ',  group:'g3'},
+    {num:14, zh:'新鲜', py:'xīnxiān', vi:'tươi, mới',             pos:'tính từ',  group:'g3'},
+    {num:15, zh:'甜',   py:'tián',    vi:'ngọt',                   pos:'tính từ',  group:'g3'},
+    {num:16, zh:'公斤', py:'gōngjīn', vi:'kilôgam (kg)',            pos:'lượng từ', group:'g3'},
+    {num:17, zh:'冰',   py:'bīng',    vi:'đông lạnh; nước đá',     pos:'động/danh', group:'g3'},
+    {num:18, zh:'极',   py:'jí',      vi:'vô cùng, cực kỳ',        pos:'phó từ',   group:'g3'},
+    {num:19, zh:'斤',   py:'jīn',     vi:'cân (500g)',             pos:'lượng từ', group:'g3'},
+    {num:20, zh:'香蕉', py:'xiāngjiāo', vi:'chuối',               pos:'danh từ',  group:'g3'},
+    {num:21, zh:'一共', py:'yígòng',  vi:'tất cả, tổng cộng',      pos:'phó từ',   group:'g3'},
+    {num:22, zh:'毛',   py:'máo',     vi:'hào (1/10 tệ)',           pos:'lượng từ', group:'g3'},
+    {num:23, zh:'结婚', py:'jiéhūn',  vi:'kết hôn',               pos:'động từ',  group:'g4'},
+    {num:24, zh:'不但', py:'búdàn',   vi:'không những',            pos:'liên từ',  group:'g4'},
+    {num:25, zh:'而且', py:'érqiě',   vi:'mà còn',                 pos:'liên từ',  group:'g4'},
+    {num:26, zh:'声',   py:'shēng',   vi:'tiếng (âm thanh)',       pos:'lượng/danh', group:'g4'},
+    {num:27, zh:'开机', py:'kāijī',   vi:'bật máy, khởi động',     pos:'động từ',  group:'g4'},
+];
+
+function renderVocab(group) {
+    const grid = document.getElementById('vocab-grid');
+    const data = group === 'all' ? vocabData : vocabData.filter(v => v.group === group);
+    grid.innerHTML = data.map(v => `
+        <div class="vocab-card">
+            <div class="vocab-info">
+                <div class="vocab-number">${v.num}</div>
+                <div class="vocab-content">
+                    <div class="vocab-chinese">${v.zh}</div>
+                    <div class="vocab-pinyin">${v.py}</div>
+                    <div class="vocab-pos">${v.pos}</div>
+                    <div class="vocab-meaning">${v.vi}</div>
+                </div>
+            </div>
+            <button class="audio-btn" onclick="speak('${v.zh}')"><i class="bi bi-volume-up-fill"></i></button>
+        </div>
+    `).join('');
+}
+
+function showVocabGroup(group, btn) {
+    document.querySelectorAll('.vocab-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderVocab(group);
+}
+
+// ====== NAV SECTIONS ======
+const sections = ['objectives','vocabulary','text','grammar','exercises'];
+const sectionMeta = {
+    objectives: {title:'Mục tiêu bài học', icon:'bi-bullseye', badge:'Phần 1/5'},
+    vocabulary:  {title:'Từ vựng (22 từ)',   icon:'bi-alphabet', badge:'Phần 2/5'},
+    text:        {title:'Bài khóa',          icon:'bi-book',     badge:'Phần 3/5'},
+    grammar:     {title:'Ngữ pháp',          icon:'bi-diagram-3',badge:'Phần 4/5'},
+    exercises:   {title:'Bài tập',           icon:'bi-pencil-square', badge:'Phần 5/5'},
+};
+
+let currentSection = 0;
+
+function showSection(id, navEl) {
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (navEl) navEl.classList.add('active');
+    currentSection = sections.indexOf(id);
+    const meta = sectionMeta[id];
+    document.getElementById('section-title-text').textContent = meta.title;
+    document.getElementById('current-icon').innerHTML = `<i class="bi ${meta.icon}"></i>`;
+    document.getElementById('section-badge').textContent = meta.badge;
+    document.getElementById('btn-prev').disabled = currentSection === 0;
+    document.getElementById('btn-next').disabled = currentSection === sections.length - 1;
+    if (id === 'vocabulary') renderVocab('all');
+}
+
+function prevSection() {
+    if (currentSection > 0) {
+        const navItems = document.querySelectorAll('.nav-item');
+        showSection(sections[currentSection - 1], navItems[currentSection - 1]);
+    }
+}
+function nextSection() {
+    if (currentSection < sections.length - 1) {
+        const navItems = document.querySelectorAll('.nav-item');
+        showSection(sections[currentSection + 1], navItems[currentSection + 1]);
+    }
+}
+
+// ====== TEXT TABS ======
+function showText(id, btn) {
+    document.querySelectorAll('.text-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.text-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ====== GRAMMAR TABS ======
+function showGrammar(id, btn) {
+    document.querySelectorAll('.grammar-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.grammar-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ====== EXERCISE TABS ======
+function showExercise(id, btn) {
+    document.querySelectorAll('.exercise-content').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.exercise-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ====== TTS ======
+let audioSpeed = 1.0;
+function setAudioSpeed(v) { audioSpeed = parseFloat(v); }
+
+function speak(text) {
+    if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        
+        // Safari iOS fix for Chinese TTS
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Try different Chinese language codes for Safari compatibility
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        if (isSafari && isIOS) {
+            // Safari on iOS prefers zh-TW or zh-HK for better compatibility
+            utterance.lang = 'zh-TW';
+            utterance.voice = null; // Let system choose
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+        } else {
+            utterance.lang = 'zh-CN';
+        }
+        
+        utterance.rate = audioSpeed;
+        
+        // Safari iOS requires user interaction first
+        if (isSafari && isIOS) {
+            // Force speech synthesis to initialize
+            speechSynthesis.getVoices();
+            
+            // Add a small delay for Safari
+            setTimeout(() => {
+                speechSynthesis.speak(utterance);
+            }, 100);
+        } else {
+            speechSynthesis.speak(utterance);
+        }
+    }
+}
+
+function speakAllText(textId) {
+    const container = document.getElementById(textId);
+    const lines = container.querySelectorAll('.dialogue-chinese');
+    let index = 0;
+    
+    speechSynthesis.cancel();
+    
+    // Safari iOS detection
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    
+    function speakNext() {
+        if (index < lines.length) {
+            const utterance = new SpeechSynthesisUtterance(lines[index].textContent);
+            
+            if (isSafari && isIOS) {
+                utterance.lang = 'zh-TW';
+                utterance.voice = null;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+            } else {
+                utterance.lang = 'zh-CN';
+            }
+            
+            utterance.rate = audioSpeed;
+            utterance.onend = () => { 
+                index++; 
+                setTimeout(speakNext, 300); 
+            };
+            
+            if (isSafari && isIOS) {
+                setTimeout(() => {
+                    speechSynthesis.speak(utterance);
+                }, 100);
+            } else {
+                speechSynthesis.speak(utterance);
+            }
+        }
+    }
+    
+    // Initialize voices for Safari
+    if (isSafari && isIOS) {
+        speechSynthesis.getVoices();
+        setTimeout(speakNext, 200);
+    } else {
+        speakNext();
+    }
+}
+
+window.speechSynthesis.onvoiceschanged = () => {};
+
+// ====== TOGGLE PINYIN / VIETNAMESE ======
+function togglePinyin(btn) {
+    document.body.classList.toggle('hide-pinyin');
+    btn.classList.toggle('active-toggle');
+}
+function toggleVietnamese(btn) {
+    document.body.classList.toggle('hide-vietnamese');
+    btn.classList.toggle('active-toggle');
+}
+
+// ====== CHECK FILL ======
+function checkFill(inputId, correct, resultId) {
+    const val = document.getElementById(inputId).value.trim();
+    const res = document.getElementById(resultId);
+    if (val === correct) {
+        res.textContent = '✓ Chính xác!';
+        res.className = 'result-message show correct';
+    } else {
+        res.textContent = `✗ Chưa đúng! Đáp án: "${correct}"`;
+        res.className = 'result-message show incorrect';
+    }
+}
+
+function checkMultiFill(ids, corrects, resultId) {
+    let ok = 0;
+    ids.forEach((id, i) => {
+        const val = document.getElementById(id)?.value.trim() || '';
+        if (val === corrects[i]) ok++;
+    });
+    const res = document.getElementById(resultId);
+    if (ok === ids.length) {
+        res.textContent = `✓ Tất cả chính xác! (${ok}/${ids.length})`;
+        res.className = 'result-message show correct';
+    } else {
+        const hints = ids.map((id,i) => `"${corrects[i]}"`).join(' / ');
+        res.textContent = `✗ Đúng ${ok}/${ids.length}. Gợi ý đáp án: ${hints}`;
+        res.className = 'result-message show incorrect';
+    }
+}
+
+// ====== DRAG & DROP ======
+let draggedEl = null; let dragFrom = 'source'; let draggedWord = '';
+
+function handleDragStart(e, from) {
+    dragFrom = from;
+    draggedWord = e.target.dataset.word || e.target.textContent.replace('×','').trim();
+    if (from === 'zone') { draggedEl = e.target; draggedEl.classList.add('dragging'); }
+    e.dataTransfer.setData('text/plain', draggedWord);
+    e.dataTransfer.setData('from', from);
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.currentTarget.classList.add('drag-over');
+}
+function handleDragLeave(e) {
+    e.currentTarget.classList.remove('drag-over');
+}
+
+function handleDrop(e, boxId) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+    const word = e.dataTransfer.getData('text/plain');
+    const from = e.dataTransfer.getData('from');
+    const zone = e.currentTarget;
+
+    if (from === 'source') {
+        const el = createWordEl(word, boxId);
+        zone.appendChild(el);
+    } else if (from === 'zone' && draggedEl) {
+        zone.appendChild(draggedEl);
+        draggedEl.classList.remove('dragging');
+        draggedEl = null;
+    }
+    updateResultArea(boxId);
+}
+
+function createWordEl(word, boxId) {
+    const el = document.createElement('span');
+    el.className = 'word-drop';
+    el.dataset.word = word;
+    el.draggable = true;
+    el.textContent = word;
+    el.ondragstart = (e) => handleDragStart(e, 'zone');
+    el.ondragend = () => { if(draggedEl) { draggedEl.classList.remove('dragging'); draggedEl = null; } };
+
+    const del = document.createElement('span');
+    del.className = 'delete-btn';
+    del.innerHTML = '×';
+    del.onclick = (e) => {
+        e.stopPropagation();
+        el.remove();
+        updateResultArea(boxId);
+    };
+    el.appendChild(del);
+    return el;
+}
+
+function updateResultArea(boxId) {
+    const box = document.getElementById(boxId);
+    const zone = box.querySelector('.drop-zone');
+    const area = box.querySelector('.result-area');
+    const words = Array.from(zone.querySelectorAll('.word-drop')).map(w => w.dataset.word);
+    if (words.length === 0) {
+        area.textContent = 'Kết quả sẽ hiển thị ở đây...';
+        area.classList.add('empty');
+    } else {
+        area.textContent = words.join('');
+        area.classList.remove('empty');
+    }
+}
+
+function checkArrange(boxId, resultId) {
+    const box = document.getElementById(boxId);
+    const correct = box.dataset.answer;
+    const zone = box.querySelector('.drop-zone');
+    const user = Array.from(zone.querySelectorAll('.word-drop')).map(w => w.dataset.word).join('');
+    const res = document.getElementById(resultId);
+    if (!user) { res.textContent = 'Vui lòng kéo thả các từ trước!'; res.className = 'result-message show incorrect'; return; }
+    if (user === correct) {
+        res.textContent = `✓ Chính xác! "${correct}"`;
+        res.className = 'result-message show correct';
+    } else {
+        res.textContent = `✗ Chưa đúng! Của bạn: "${user}" | Đáp án: "${correct}"`;
+        res.className = 'result-message show incorrect';
+    }
+}
+
+function resetArrange(boxId, resultId) {
+    const box = document.getElementById(boxId);
+    const zone = box.querySelector('.drop-zone');
+    const area = box.querySelector('.result-area');
+    zone.innerHTML = '';
+    area.textContent = 'Kết quả sẽ hiển thị ở đây...';
+    area.classList.add('empty');
+    const res = document.getElementById(resultId);
+    if (res) { res.className = 'result-message'; res.textContent = ''; }
+}
+
+// ====== RESET ALL ======
+function resetExercises() {
+    if (!confirm('Bạn có chắc muốn làm lại tất cả bài tập?')) return;
+    document.querySelectorAll('input[type="text"]').forEach(i => { i.value = ''; i.style.borderColor = ''; });
+    document.querySelectorAll('.result-message').forEach(m => { m.className = 'result-message'; m.textContent = ''; });
+    ['arrange-1','arrange-2','arrange-3','arrange-4','arrange-5'].forEach((id, i) => resetArrange(id, `res${i+1}`));
+}
+
+// ====== EXPORT ======
+function exportHTML() {
+    const blob = new Blob([document.documentElement.outerHTML], {type:'text/html;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'HSK3_Bai07_NaCondoQuanVaY.html';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+// ====== INIT ======
+renderVocab('all');
+</script>
+
+<div id="note-editor-overlay">
+    <div id="note-editor-container">
+        <div id="note-editor-header">
+            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>
+            <button class="editor-tool-btn" onclick="closeNoteEditor()" style="border:none; background:rgba(255,255,255,0.2); color:white;"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div id="note-editor-toolbar">
+            <button class="editor-tool-btn" onclick="formatDoc('bold')"><i class="bi bi-type-bold"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('italic')"><i class="bi bi-type-italic"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('underline')"><i class="bi bi-type-underline"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('insertUnorderedList')"><i class="bi bi-list-ul"></i></button>
+            <button class="editor-tool-btn" onclick="clearEditor()" style="color:#c62828;"><i class="bi bi-trash"></i></button>
+        </div>
+        <div id="rich-editor" contenteditable="true" spellcheck="false"></div>
+        <div id="note-editor-footer">
+            <span style="font-size:12px; color:#666; font-family:Arial;">Hỗ trợ paste trực tiếp từ Word</span>
+            <div>
+                <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()">Đóng</button>
+                <button class="editor-btn editor-btn-save" onclick="saveNoteEditor()"><i class="bi bi-check-lg"></i> Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'block'; document.getElementById('rich-editor').focus(); }
+    function closeNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'none'; }
+    function saveNoteEditor() { alert('Ghi chú đã được lưu tạm thời!'); closeNoteEditor(); }
+    function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
+    function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
+    
+    document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
+</script>
+</body>
+</html>

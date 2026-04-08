@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 16: 我听说有的熊猫出国了 - HSK3</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+
+        body { 
+            font-family: Arial, "Helvetica Neue", sans-serif; 
+            background: #f5f5f5; 
+            min-height: 100vh; 
+            color: #333; 
+        }
+
+        .chinese-text, .vocab-chinese, .question-chinese, .dialogue-chinese, .text-chinese, .example-chinese, .grammar-structure {
+            font-family: "SimSun", "STSong", "Songti", serif;
+            font-size: 20px;
+        }
+
+        .pinyin-text, .vocab-pinyin, .question-pinyin, .dialogue-pinyin, .text-pinyin, .example-pinyin {
+            font-family: Arial, sans-serif;
+            font-style: normal;
+            font-size: 20px;
+        }
+
+        body.hide-pinyin .dialogue-pinyin, body.hide-pinyin .vocab-pinyin, body.hide-pinyin .example-pinyin, body.hide-pinyin .question-pinyin {
+            display: none !important;
+        }
+
+        body.hide-vietnamese .dialogue-vietnamese, body.hide-vietnamese .vocab-meaning, body.hide-vietnamese .example-vietnamese {
+            display: none !important;
+        }
+
+        .tool-btn.active-toggle {
+            background: #ffebee;
+            border-color: #dc3545;
+            color: #c62828;
+            font-weight: 600;
+        }
+
+        .header { 
+            position: fixed; top: 0; left: 0; right: 0; height: 70px; 
+            background: #dc3545; color: white; padding: 10px 20px; 
+            display: flex; align-items: center; justify-content: space-between; 
+            z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-img { 
+            width: 50px; height: 50px; background: white; border-radius: 8px; 
+            padding: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+        .logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+
+        .main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+
+        .sidebar-left { 
+            width: 220px; background: white; border: 1px solid #d0d0d0; 
+            border-radius: 8px; overflow: hidden; flex-shrink: 0; 
+            position: sticky; top: 90px; height: fit-content; 
+            max-height: calc(100vh - 105px); overflow-y: auto; 
+            display: flex; flex-direction: column; 
+        }
+        .nav-section { border-bottom: 1px solid #e0e0e0; }
+        .nav-title { 
+            padding: 15px; color: #333; font-size: 14px; font-weight: bold; 
+            display: flex; align-items: center; gap: 8px; background: #f8f9fa; 
+            border-bottom: 2px solid #dc3545; font-family: Arial, sans-serif; 
+        }
+        .nav-item { 
+            padding: 12px 15px; cursor: pointer; display: flex; 
+            align-items: center; gap: 10px; color: #555; font-size: 13px; 
+            transition: all 0.2s; font-family: Arial, sans-serif; 
+        }
+        .nav-item:hover { background: #ffebee; color: #dc3545; }
+        .nav-item.active { background: #ffebee; color: #c62828; font-weight: 600; }
+        .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+
+        .tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+        .tool-card { 
+            background: white; border: 1px solid #e0e0e0; border-radius: 8px; 
+            padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+        }
+        .tool-card:last-child { margin-bottom: 0; }
+        .tool-title { 
+            font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; 
+            display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; 
+        }
+        .tool-btn { 
+            width: 100%; padding: 8px; border: 1px solid #e0d0d0; border-radius: 5px; 
+            background: #f8f9fa; cursor: pointer; font-size: 12px; color: #555; 
+            margin-bottom: 6px; display: flex; align-items: center; justify-content: flex-start; 
+            gap: 8px; transition: all 0.2s; font-family: Arial, sans-serif; 
+        }
+        .tool-btn:hover { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+        .tool-btn.primary:hover { background: #d66a20; }
+        .tool-btn.success { background: #dc3545; color: white; border-color: #dc3545; font-weight: 600; }
+        .tool-btn.success:hover { background: #c82333; }
+
+        .content-area { 
+            flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; 
+            display: flex; flex-direction: column; overflow: hidden; min-width: 0; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+        }
+        .content-header { 
+            position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #ffebee); 
+            padding: 20px; border-bottom: 2px solid #dc3545; display: flex; 
+            justify-content: space-between; align-items: center; z-index: 100; 
+        }
+        .section-title { 
+            font-size: 20px; color: #333; font-weight: bold; 
+            display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; 
+        }
+        .section-badge { 
+            background: #dc3545; color: white; padding: 5px 12px; 
+            border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; 
+        }
+        .content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+
+        .section-content { display: none; animation: fadeIn 0.4s ease; }
+        .section-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .objective-card { 
+            background: linear-gradient(to right, #ffebee, #f8f9fa); border-radius: 8px; 
+            padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        }
+        .objective-card i { font-size: 24px; color: #dc3545; margin-bottom: 10px; }
+        .objective-card h3 { font-size: 16px; color: #333; margin-bottom: 8px; font-family: Arial, sans-serif; }
+        .objective-card p { font-size: 14px; color: #666; line-height: 1.6; font-family: Arial, sans-serif; }
+
+        .vocab-container { background: white; border-radius: 8px; padding: 20px; }
+        .vocab-tabs { 
+            display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; 
+            padding-bottom: 10px; flex-wrap: wrap; 
+        }
+        .vocab-tab { 
+            padding: 8px 16px; background: #f5f5f5; border: none; border-radius: 20px; 
+            cursor: pointer; font-size: 14px; color: #666; transition: all 0.2s; font-family: Arial, sans-serif; 
+        }
+        .vocab-tab:hover { background: #e0e0e0; }
+        .vocab-tab.active { background: #dc3545; color: white; font-weight: 600; }
+
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 20px; }
+        .vocab-card { 
+            background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #dc3545; 
+            display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; 
+            position: relative; overflow: hidden; 
+        }
+        .vocab-card:hover { 
+            transform: translateY(-2px); box-shadow: 0 8px 25px rgba(220,53,69,0.15); 
+            border-color: #dc3545; border-style: solid; 
+        }
+        .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .vocab-number { 
+            width: 45px; height: 45px; background: #dc3545; color: white; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-weight: bold; 
+            font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(220,53,69,0.3); font-family: Arial, sans-serif; 
+        }
+        .vocab-content { flex: 1; }
+        .vocab-chinese { font-size: 32px; font-weight: bold; color: #000000; margin-bottom: 6px; letter-spacing: 2px; }
+        .vocab-pinyin { font-size: 20px; color: #FF0000; margin-bottom: 6px; font-weight: 500; }
+        .vocab-meaning { font-size: 20px; color: #666666; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
+        .vocab-example { 
+            font-size: 16px; color: #888; font-style: italic; margin-top: 8px; 
+            padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; 
+        }
+        .vocab-animation { 
+            width: 140px; height: 140px; background: white; border: 2px solid #e0e0e0; 
+            border-radius: 8px; position: relative; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); 
+        }
+        .writer-container { width: 100px; height: 100px; }
+        .animation-controls { position: absolute; bottom: 5px; display: flex; gap: 8px; }
+        .anim-btn { 
+            width: 28px; height: 28px; border: none; background: #ffebee; color: #dc3545; 
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; 
+            justify-content: center; font-size: 12px; transition: all 0.2s; 
+        }
+        .anim-btn:hover { background: #dc3545; color: white; transform: scale(1.1); }
+        .audio-btn { 
+            width: 40px; height: 40px; border-radius: 50%; border: none; background: #ffebee; 
+            color: #dc3545; cursor: pointer; display: flex; align-items: center; 
+            justify-content: center; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+        }
+        .audio-btn:hover { background: #dc3545; color: white; transform: scale(1.1); }
+
+        .text-container { background: white; border-radius: 8px; padding: 30px; line-height: 1.8; }
+        .text-title { 
+            font-size: 22px; font-weight: bold; color: #333; margin-bottom: 20px; 
+            text-align: center; padding-bottom: 15px; border-bottom: 2px solid #dc3545; font-family: Arial, sans-serif; 
+        }
+        .text-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .text-tab { 
+            padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; 
+            border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif; 
+        }
+        .text-tab.active { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .text-content { display: none; }
+        .text-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .dialogue-container { margin-bottom: 30px; }
+        .dialogue-header { 
+            background: #ed7d31; color: white; padding: 10px 15px; 
+            border-radius: 8px 8px 0 0; font-weight: bold; display: flex; 
+            align-items: center; justify-content: space-between; font-family: Arial, sans-serif; 
+        }
+        .dialogue-header-left { display: flex; align-items: center; gap: 10px; }
+        .dialogue-audio-all {
+            background: #fff; color: #ed7d31; border: none; padding: 6px 12px; 
+            border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: 600; 
+            display: flex; align-items: center; gap: 5px; transition: all 0.2s;
+        }
+        .dialogue-audio-all:hover { background: #f5f5f5; transform: scale(1.05); }
+        .dialogue-content { background: #fafafa; padding: 20px; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px; }
+        .dialogue-line { 
+            margin-bottom: 15px; padding: 15px; background: #f8f9fa; 
+            border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer;
+            transition: all 0.2s; position: relative;
+        }
+        .dialogue-line:hover { background: #ffebee; border-color: #dc3545; transform: translateX(5px); }
+        .dialogue-speaker { font-weight: bold; color: #dc3545; margin-bottom: 8px; font-size: 14px; font-family: Arial, sans-serif; }
+        .dialogue-chinese { font-size: 20px; color: #000000; margin-bottom: 6px; line-height: 1.6; text-align: justify; word-spacing: 0; letter-spacing: normal; }
+        .dialogue-pinyin { font-size: 18px; color: #FF0000; margin-bottom: 6px; text-align: justify; word-spacing: 0; letter-spacing: normal; }
+        .dialogue-vietnamese { font-size: 18px; color: #666666; font-family: Arial, sans-serif; text-align: justify; word-spacing: 0; letter-spacing: normal; }
+
+        .grammar-container { background: white; border-radius: 8px; padding: 25px; }
+        .grammar-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .grammar-tab { 
+            padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; 
+            border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .grammar-tab:hover { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .grammar-tab.active { background: #ffebee; border-color: #dc3545; color: #c62828; }
+
+        .grammar-panel { display: none; animation: fadeIn 0.35s ease; }
+        .grammar-panel.active { display: block; }
+
+        .grammar-item { margin-bottom: 30px; border-bottom: 1px solid #e0e0e0; padding-bottom: 25px; }
+        .grammar-item:last-child { border-bottom: none; margin-bottom: 0; }
+        .grammar-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .grammar-number { 
+            width: 40px; height: 40px; background: #ed7d31; color: white; 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; font-weight: bold; font-size: 16px; font-family: Arial, sans-serif; 
+        }
+        .grammar-title { font-size: 18px; font-weight: bold; color: #000000; font-family: Arial, sans-serif; }
+        .grammar-structure { 
+            background: #ffebee; padding: 15px; border-radius: 8px; 
+            font-size: 20px; color: #000000; margin-bottom: 15px; border: 1px solid #dc3545; 
+        }
+        .grammar-explanation { font-size: 16px; color: #666666; line-height: 1.8; margin-bottom: 15px; font-family: Arial, sans-serif; }
+        .grammar-example { 
+            background: #f8f9fa; padding: 15px; border-radius: 8px; 
+            margin-bottom: 10px; border: 1px solid #e0e0e0; 
+        }
+        .example-chinese { font-size: 20px; color: #000000; margin-bottom: 6px; }
+        .example-pinyin { font-size: 18px; color: #FF0000; margin-bottom: 6px; }
+        .example-vietnamese { font-size: 16px; color: #666666; font-family: Arial, sans-serif; }
+
+        .grammar-practice { 
+            margin-top: 20px; padding: 20px; background: #fff8e1; 
+            border-radius: 8px; border: 1px solid #ffe082; 
+        }
+        .practice-title { 
+            font-size: 16px; font-weight: bold; color: #e65100; 
+            margin-bottom: 15px; display: flex; align-items: center; gap: 8px;
+            font-family: Arial, sans-serif;
+        }
+        .practice-question { 
+            margin-bottom: 20px; padding: 15px; background: white;
+            border-radius: 5px; border: 1px solid #e0e0e0;
+        }
+        .practice-sentence {
+            font-size: 20px; font-family: "SimSun", serif; line-height: 1.8; margin-bottom: 15px;
+        }
+        .practice-options {
+            display: flex; flex-wrap: wrap; gap: 20px; margin-top: 10px;
+        }
+        .practice-option {
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            font-size: 18px; font-family: "SimSun", serif; transition: all 0.2s;
+        }
+        .practice-option:hover { color: #dc3545; }
+        .practice-option input[type="radio"] {
+            width: 18px; height: 18px; cursor: pointer; accent-color: #dc3545;
+        }
+
+        .exercise-container { background: white; border-radius: 8px; padding: 25px; }
+        .exercise-tabs { 
+            display: flex; gap: 10px; margin-bottom: 20px; 
+            border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; flex-wrap: wrap; 
+        }
+        .exercise-tab { 
+            padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; 
+            border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; 
+            font-weight: 500; font-family: Arial, sans-serif; display: flex; align-items: center; gap: 8px;
+        }
+        .exercise-tab.active { background: #ffebee; border-color: #dc3545; color: #c62828; }
+        .exercise-content { display: none; }
+        .exercise-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .section-header-exercise {
+            background-color: #dc3545; color: white; padding: 15px 20px;
+            margin: 0 0 20px 0; border-radius: 5px; font-weight: bold;
+            font-size: 22px; font-family: Arial, sans-serif;
+        }
+
+        .part-header {
+            background-color: #ed7d31; color: white; padding: 10px 15px;
+            margin: 20px 0 15px 0; border-radius: 3px; font-weight: bold; font-family: Arial, sans-serif;
+        }
+
+        .audio-player {
+            display: flex; align-items: center; gap: 15px; margin: 15px 0;
+            padding: 15px; background-color: #f0f0f0; border-radius: 8px;
+        }
+
+        .play-btn {
+            width: 50px; height: 50px; border-radius: 50%; background-color: #dc3545;
+            color: white; border: none; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 20px; transition: all 0.2s;
+        }
+        .play-btn:hover { background-color: #c82333; transform: scale(1.05); }
+        .play-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .audio-progress { flex: 1; height: 6px; background-color: #ddd; border-radius: 3px; overflow: hidden; }
+        .audio-progress-bar { height: 100%; width: 0%; background-color: #dc3545; transition: width 0.3s; }
+
+        .question-container {
+            background-color: white; padding: 20px; margin-bottom: 20px;
+            border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;
+        }
+
+        .question-text {
+            margin-bottom: 15px; font-size: 20px; font-family: "SimSun", serif; line-height: 1.6;
+        }
+
+        .radio-group {
+            display: flex; flex-direction: row; gap: 25px; margin-top: 10px; flex-wrap: wrap;
+        }
+
+        .radio-item {
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            font-size: 18px; font-family: "SimSun", serif; transition: all 0.2s;
+        }
+        .radio-item:hover { color: #dc3545; }
+        .radio-item input[type="radio"] {
+            width: 18px; height: 18px; cursor: pointer; accent-color: #dc3545;
+        }
+
+        .vocab-box {
+            background-color: #e3f2fd; padding: 15px; margin-bottom: 20px;
+            border-radius: 5px; display: flex; flex-wrap: wrap; gap: 20px;
+        }
+        .vocab-item {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 18px; font-family: "SimSun", serif;
+        }
+
+        .multi-question-container {
+            display: flex; flex-direction: column; gap: 15px; margin-top: 20px;
+        }
+
+        .sub-question {
+            padding: 15px; background-color: #f9f9f9;
+            border-radius: 5px; border: 1px solid #e0e0e0;
+        }
+
+        .fill-sentence {
+            margin-bottom: 15px; line-height: 2; font-size: 20px; font-family: "SimSun", serif;
+        }
+
+        .passage-box {
+            background-color: #fff8e1; border: 1px solid #ffe082;
+            padding: 20px; margin-bottom: 20px; border-radius: 5px; line-height: 1.8;
+        }
+
+        .writing-container {
+            background: white; padding: 20px; border-radius: 8px;
+            border: 1px solid #e0e0e0; margin-bottom: 20px;
+        }
+
+        .arrange-box {
+            background: #f8f9fa; 
+            padding: 20px; 
+            border-radius: 8px;
+            margin: 15px 0; 
+            border: 1px solid #e0e0e0;
+        }
+
+        .word-bank {
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .word-source {
+            padding: 8px 16px; 
+            background: #e8e8e8; 
+            border: 1px solid #ccc;
+            border-radius: 4px; 
+            font-family: "SimSun", serif; 
+            font-size: 18px;
+            cursor: grab; 
+            transition: all 0.2s; 
+            user-select: none;
+            color: #666;
+        }
+        .word-source:hover { 
+            background: #d0d0d0; 
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .word-source:active {
+            cursor: grabbing;
+        }
+
+        .drop-zone {
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            min-height: 60px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px; 
+            border: 2px dashed #ccc;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .drop-zone.drag-over {
+            background: #fff8e1;
+            border-color: #ed7d31;
+        }
+
+        .word-drop {
+            padding: 8px 16px; 
+            background: white; 
+            border: 1px solid #999;
+            border-radius: 4px; 
+            font-family: "SimSun", serif; 
+            font-size: 18px;
+            cursor: grab;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .word-drop:hover {
+            background: #ffebee;
+            border-color: #dc3545;
+        }
+        .word-drop.dragging {
+            opacity: 0.5;
+        }
+
+        .word-drop .delete-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 18px;
+            height: 18px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 10px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .word-drop:hover .delete-btn {
+            display: flex;
+        }
+
+        .result-area {
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-family: "SimSun", serif;
+            font-size: 20px;
+            color: #333;
+            min-height: 50px;
+            line-height: 1.6;
+        }
+        .result-area.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .char-writing-box {
+            text-align: left; padding: 20px; background: #f8f9fa;
+            border-radius: 8px; margin: 15px 0;
+        }
+
+        .char-input {
+            width: 60px; height: 40px; font-size: 20px; text-align: center;
+            border: 2px solid #dc3545; border-radius: 4px; font-family: "SimSun", serif; margin: 10px 0; display: inline-block; vertical-align: middle;
+        }
+        .char-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(220,53,69,0.2); }
+
+        .check-btn { 
+            background: #dc3545; color: white; border: none; padding: 10px 25px; 
+            border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; 
+            margin-top: 15px; display: inline-flex; align-items: center; gap: 8px; font-family: Arial, sans-serif;
+            transition: all 0.2s;
+        }
+        .check-btn:hover { background: #c82333; transform: translateY(-1px); }
+
+        .result-message { 
+            margin-top: 15px; padding: 12px; border-radius: 6px; 
+            font-weight: 500; display: none; font-family: Arial, sans-serif; font-size: 14px;
+        }
+        .result-message.show { display: block; }
+        .result-message.correct { background: #d4edda; color: #155724; border: 1px solid #28a745; }
+        .result-message.incorrect { background: #f8d7da; color: #721c24; border: 1px solid #dc3545; }
+
+        #note-editor-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 9999; animation: fadeIn 0.3s ease;
+        }
+        #note-editor-container {
+            background: white; width: 85%; height: 85%; margin: 5% auto;
+            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        #note-editor-header {
+            background: #dc3545; color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #c82333;
+        }
+        #note-editor-header h3 { font-family: Arial, sans-serif; font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px; }
+        #note-editor-toolbar {
+            background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #e0e0e0;
+            display: flex; gap: 10px; flex-wrap: wrap;
+        }
+        .editor-tool-btn {
+            padding: 6px 12px; border: 1px solid #ddd; background: white;
+            border-radius: 4px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; transition: all 0.2s;
+        }
+        .editor-tool-btn:hover { background: #ffebee; border-color: #dc3545; }
+        #rich-editor { flex: 1; padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; font-family: Arial, sans-serif; background: #fff; }
+        #rich-editor:focus { outline: none; }
+        #note-editor-footer {
+            background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e0e0e0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .editor-btn { padding: 8px 20px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; font-weight: 600; transition: all 0.2s; }
+        .editor-btn-close { background: #f5f5f5; border: 1px solid #ddd; color: #666; }
+        .editor-btn-close:hover { background: #e0e0e0; }
+        .editor-btn-save { background: #dc3545; border: 1px solid #dc3545; color: white; }
+        .editor-btn-save:hover { background: #c82333; }
+
+        @media (max-width: 1024px) {
+            .sidebar-left { width: 60px; }
+            .sidebar-left .tools-section { display: none; }
+            .nav-item span { display: none; }
+            .nav-item { justify-content: center; padding: 15px 10px; }
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; padding-top: 80px; }
+            .sidebar-left { 
+                width: 100%; position: relative; top: 0; max-height: none; 
+                display: flex; overflow-x: auto; flex-direction: row; 
+            }
+            .nav-section { display: flex; border-bottom: none; flex: 1; }
+            .nav-item { white-space: nowrap; }
+            .tools-section { display: none; }
+            .radio-group { flex-direction: column; gap: 12px; }
+            .practice-options { flex-direction: column; gap: 12px; }
+            .word-bank, .drop-zone { gap: 8px; }
+        }
+    
+        .char-sentence {
+            font-size: 20px; 
+            font-family: "SimSun", serif; 
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .char-pinyin-inline {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .char-label {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .exercise-content .vocab-item .pinyin-text,
+        .exercise-content .vocab-pinyin {
+            display: none !important;
+        }
+        
+        .nav-buttons { 
+            display: flex; justify-content: space-between; margin-top: 30px; 
+            padding-top: 20px; border-top: 2px solid #e0e0e0; 
+        }
+        .nav-btn { 
+            padding: 12px 25px; border: none; border-radius: 6px; 
+            font-size: 14px; cursor: pointer; font-weight: 600; 
+            display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif; 
+        }
+        .nav-btn-prev { background: #f5f5f5; color: #666; border: 1px solid #ddd; }
+        .nav-btn-prev:hover { background: #e0e0e0; }
+        .nav-btn-next { background: #dc3545; color: white; }
+        .nav-btn-next:hover { background: #c82333; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .tf-statement {
+            font-size: 20px;
+            font-family: "SimSun", serif;
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .tf-statement::before {
+            content: "★";
+            position: absolute;
+            left: 0;
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <div class="logo-img">
+            <img id="logo-image" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+        </div>
+        <div class="logo-text">
+            <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+            <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+        </div>
+    </div>
+    <div class="lesson-title" style="flex: 1; text-align: center; font-size: 18px; font-weight: 600; color: white; font-family: Arial, sans-serif; padding: 0 20px;">
+        Bài 16: 我听说有的熊猫出国了 - HSK3
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 13px; font-family: Arial, sans-serif;">Tốc độ:</span>
+        <select id="audio-speed" onchange="setAudioSpeed(this.value)" style="padding: 5px 10px; border-radius: 4px; border: none; font-size: 13px; font-family: Arial, sans-serif; cursor: pointer; background: white; color: #dc3545; font-weight: 600; outline: none;">
+            <option value="0.5">0.5x</option>
+            <option value="0.7">0.7x</option>
+            <option value="0.8">0.8x</option>
+            <option value="1.0" selected>1.0x</option>
+            <option value="1.2">1.2x</option>
+            <option value="1.5">1.5x</option>
+        </select>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="HSK03-3.0.html" style="display: inline-flex; align-items: center; gap: 8px; background: #28a745; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; font-family: Arial, sans-serif; transition: all 0.2s; box-shadow: 0 2px 8px rgba(40,167,69,0.3);" onmouseover="this.style.background='#218838'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#28a745'; this.style.transform='translateY(0)';">
+            <i class="bi bi-house-door"></i>
+            Trang chủ
+        </a>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="sidebar-left">
+        <div class="nav-section">
+            <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung bài học</span></div>
+            <div class="nav-item active" onclick="showSection('objectives', this)">
+                <i class="bi bi-bullseye"></i><span>Mục tiêu</span>
+            </div>
+            <div class="nav-item" onclick="showSection('vocabulary', this)">
+                <i class="bi bi-alphabet"></i><span>Từ vựng</span>
+            </div>
+            <div class="nav-item" onclick="showSection('text', this)">
+                <i class="bi bi-book"></i><span>Bài khóa</span>
+            </div>
+            <div class="nav-item" onclick="showSection('grammar', this)">
+                <i class="bi bi-diagram-3"></i><span>Ngữ pháp</span>
+            </div>
+            <div class="nav-item" onclick="showSection('exercises', this)">
+                <i class="bi bi-pencil-square"></i><span>Bài tập</span>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <div class="tool-card">
+                <div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+                <button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+                    <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+                </button>
+                <button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+                    <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+                </button>
+                <button class="tool-btn primary" onclick="openNoteEditor()">
+                    <i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+                </button>
+            </div>
+            <div class="tool-card">
+                <div class="tool-title"><i class="bi bi-clock-history"></i>Lịch sử</div>
+                <button class="tool-btn primary" onclick="resetExercises()">
+                    <i class="bi bi-arrow-clockwise"></i>Làm lại bài tập
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div class="content-header">
+            <div class="section-title">
+                <span id="current-icon"><i class="bi bi-bullseye"></i></span>
+                <span id="section-title-text">Mục tiêu bài học</span>
+                <span class="section-badge" id="section-badge">Phần 1/5</span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="nav-btn nav-btn-prev" id="btn-prev" onclick="prevSection()" disabled>
+                    <i class="bi bi-chevron-left"></i> Trước
+                </button>
+                <button class="nav-btn nav-btn-next" id="btn-next" onclick="nextSection()">
+                    Tiếp <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <!-- Mục tiêu -->
+            <div id="objectives" class="section-content active">
+                <div class="objectives-grid">
+                    <div class="objective-card">
+                        <i class="bi bi-chat-dots"></i>
+                        <h3>Miêu tả động vật</h3>
+                        <p>Có thể hiểu và miêu tả đặc điểm, thói quen và môi trường sống của động vật.</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-search"></i>
+                        <h3>Bày tỏ ý kiến</h3>
+                        <p>Có thể hiểu và bày tỏ ý kiến cá nhân về động vật.</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-question-circle"></i>
+                        <h3>Câu so sánh (11)</h3>
+                        <p>Nắm vững cách dùng câu so sánh (11) để diễn đạt sự khác biệt về số lượng hoặc thời gian.</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-eye"></i>
+                        <h3>Hiểu biết về gấu trúc</h3>
+                        <p>Có hiểu biết cơ bản về gấu trúc khổng lồ.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Từ vựng -->
+            <div id="vocabulary" class="section-content">
+                <div class="vocab-container">
+                    <div class="vocab-tabs">
+                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (26)</button>
+                        <button class="vocab-tab" onclick="filterVocab('v', this)">Động từ</button>
+                        <button class="vocab-tab" onclick="filterVocab('n', this)">Danh từ</button>
+                        <button class="vocab-tab" onclick="filterVocab('adj', this)">Tính từ</button>
+                        <button class="vocab-tab" onclick="filterVocab('adv', this)">Phó từ</button>
+                        <button class="vocab-tab" onclick="filterVocab('lesson1', this)">课文 1</button>
+                        <button class="vocab-tab" onclick="filterVocab('lesson2', this)">课文 2</button>
+                        <button class="vocab-tab" onclick="filterVocab('lesson3', this)">课文 3</button>
+                        <button class="vocab-tab" onclick="filterVocab('lesson4', this)">课文 4</button>
+                    </div>
+                    <div class="vocab-grid" id="vocab-grid"></div>
+                </div>
+            </div>
+
+            <!-- Bài khóa -->
+            <div id="text" class="section-content">
+                <div class="text-container">
+                    <div class="text-tabs">
+                        <button class="text-tab active" onclick="showText('text1', this)"><i class="bi bi-shop"></i> 课文 1</button>
+                        <button class="text-tab" onclick="showText('text2', this)"><i class="bi bi-tree"></i> 课文 2</button>
+                        <button class="text-tab" onclick="showText('text3', this)"><i class="bi bi-building"></i> 课文 3</button>
+                        <button class="text-tab" onclick="showText('text4', this)"><i class="bi bi-journal-text"></i> 课文 4</button>
+                    </div>
+
+                    <div id="text1" class="text-content active">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-shop"></i> 课文 1 - 在一家宠物领养店</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-line" onclick="speak('这只小猫你们养了多久了？')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">这只小猫你们养了多久了？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhè zhī xiǎo māo nǐmen yǎng le duōjiǔ le?</div>
+                                    <div class="dialogue-vietnamese">Con mèo con này các bạn nuôi bao lâu rồi?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('已经一年多了。第一天看见它的时候，它又脏又小。')">
+                                    <div class="dialogue-speaker">服务员</div>
+                                    <div class="dialogue-chinese chinese-text">已经一年多了。第一天看见它的时候，它又脏又小。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Yǐjīng yì nián duō le. Dì yì tiān kànjiàn tā de shíhou, tā yòu zāng yòu xiǎo.</div>
+                                    <div class="dialogue-vietnamese">Đã hơn một năm rồi. Ngày đầu tiên nhìn thấy nó, nó vừa bẩn vừa nhỏ.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('现在它变得又干净又漂亮了。')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">现在它变得又干净又漂亮了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Xiànzài tā biàn de yòu gānjìng yòu piàoliang le.</div>
+                                    <div class="dialogue-vietnamese">Bây giờ nó trở nên vừa sạch sẽ vừa đẹp.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('是啊。它还特别可爱，一会儿在你脚边睡觉，一会儿在你身上爬。')">
+                                    <div class="dialogue-speaker">服务员</div>
+                                    <div class="dialogue-chinese chinese-text">是啊。它还特别可爱，一会儿在你脚边睡觉，一会儿在你身上爬。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Shì a. Tā hái tèbié kě'ài, yíhuìr zài nǐ jiǎo biān shuìjiào, yíhuìr zài nǐ shēnshang pá.</div>
+                                    <div class="dialogue-vietnamese">Đúng vậy. Nó còn rất đáng yêu, một lúc ngủ bên cạnh chân bạn, một lúc bò trên người bạn.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('你们把它照顾得真好。')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">你们把它照顾得真好。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nǐmen bǎ tā zhàogu de zhēn hǎo.</div>
+                                    <div class="dialogue-vietnamese">Các bạn chăm sóc nó thật tốt.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('它就好像我们的孩子，我们照顾它，它也认得我们了。')">
+                                    <div class="dialogue-speaker">服务员</div>
+                                    <div class="dialogue-chinese chinese-text">它就好像我们的孩子，我们照顾它，它也认得我们了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Tā jiù hǎoxiàng wǒmen de háizi, wǒmen zhàogu tā, tā yě rèn de wǒmen le.</div>
+                                    <div class="dialogue-vietnamese">Nó giống như con của chúng tôi, chúng tôi chăm sóc nó, nó cũng nhận ra chúng tôi rồi.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('妈妈，我们家也养一只小猫吧。')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">妈妈，我们家也养一只小猫吧。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Māma, wǒmen jiā yě yǎng yì zhī xiǎo māo ba.</div>
+                                    <div class="dialogue-vietnamese">Mẹ ơi, nhà mình cũng nuôi một con mèo con đi.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('咱们没时间照顾，还是别养了，我周末带你们去北京动物园看动物吧。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">咱们没时间照顾，还是别养了，我周末带你们去北京动物园看动物吧。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zánmen méi shíjiān zhàogu, háishi bié yǎng le, wǒ zhōumò dài nǐmen qù Běijīng dòngwùyuán kàn dòngwù ba.</div>
+                                    <div class="dialogue-vietnamese">Chúng mình không có thời gian chăm sóc, thôi đừng nuôi nữa, cuối tuần tôi dẫn các con đi sở thú Bắc Kinh xem động vật nhé.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="text2" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-tree"></i> 课文 2 - 在动物园</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-line" onclick="speak('妈妈，大熊猫这个名字很奇怪，它们跟猫有什么关系？')">
+                                    <div class="dialogue-speaker">刘小明</div>
+                                    <div class="dialogue-chinese chinese-text">妈妈，大熊猫这个名字很奇怪，它们跟猫有什么关系？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Māma, dàxióngmāo zhè ge míngzi hěn qíguài, tāmen gēn māo yǒu shénme guānxi?</div>
+                                    <div class="dialogue-vietnamese">Mẹ ơi, cái tên gấu trúc lớn này rất lạ, chúng có quan hệ gì với mèo vậy?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('这个问题问得好，它们跟猫没什么关系，其实应该叫大猫熊。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">这个问题问得好，它们跟猫没什么关系，其实应该叫大猫熊。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhège wèntí wèn de hǎo, tāmen gēn māo méi shénme guānxi, qíshí yīnggāi jiào dà māo xióng.</div>
+                                    <div class="dialogue-vietnamese">Câu hỏi này hay đấy, chúng không có quan hệ gì với mèo, thực ra nên gọi là đại mão hùng.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('大熊猫为什么只吃竹子不吃肉？')">
+                                    <div class="dialogue-speaker">刘小明</div>
+                                    <div class="dialogue-chinese chinese-text">大熊猫为什么只吃竹子不吃肉？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Dàxióngmāo wèishénme zhǐ chī zhúzi bù chī ròu?</div>
+                                    <div class="dialogue-vietnamese">Tại sao gấu trúc chỉ ăn tre trúc mà không ăn thịt?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('它们跟人一样，也可以吃肉，但是对肉不感兴趣。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">它们跟人一样，也可以吃肉，但是对肉不感兴趣。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Tāmen gēn rén yíyàng, yě kěyǐ chī ròu, dànshì duì ròu bù gǎn xìngqù.</div>
+                                    <div class="dialogue-vietnamese">Chúng giống như người, cũng có thể ăn thịt, nhưng không hứng thú với thịt.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('大熊猫为什么是中国的国宝？')">
+                                    <div class="dialogue-speaker">刘小明</div>
+                                    <div class="dialogue-chinese chinese-text">大熊猫为什么是中国的国宝？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Dàxióngmāo wèishénme shì Zhōngguó de guóbǎo?</div>
+                                    <div class="dialogue-vietnamese">Tại sao gấu trúc là bảo vật quốc gia của Trung Quốc?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('全世界只有中国有野生大熊猫，中国是大熊猫的家。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">全世界只有中国有野生大熊猫，中国是大熊猫的家。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Quán shìjiè zhǐyǒu Zhōngguó yǒu yěshēng dàxióngmāo, Zhōngguó shì dàxióngmāo de jiā.</div>
+                                    <div class="dialogue-vietnamese">Toàn thế giới chỉ có Trung Quốc có gấu trúc hoang dã, Trung Quốc là nhà của gấu trúc.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('我听说有的熊猫出国了，他们去哪儿了？')">
+                                    <div class="dialogue-speaker">刘小明</div>
+                                    <div class="dialogue-chinese chinese-text">我听说有的熊猫出国了，他们去哪儿了？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Wǒ tīngshuō yǒu de xióngmāo chū guó le, tāmen qù nǎr le?</div>
+                                    <div class="dialogue-vietnamese">Con nghe nói có gấu trúc xuất ngoại rồi, chúng đi đâu vậy?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('关于这个问题，我得慢慢给你讲。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">关于这个问题，我得慢慢给你讲。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Guānyú zhège wèntí, wǒ děi mànman gěi nǐ jiǎng.</div>
+                                    <div class="dialogue-vietnamese">Về vấn đề này, mẹ phải từ từ giải thích cho con.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('弟弟，你真是"十万个为什么"。')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">弟弟，你真是"十万个为什么"。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Dìdi, nǐ zhēn shì "shí wàn ge wèishénme".</div>
+                                    <div class="dialogue-vietnamese">Em trai, em đúng là "mười vạn cái tại sao".</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="text3" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-building"></i> 课文 3 - 在熊猫馆</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-line" onclick="speak('这只大熊猫一会儿爬上去，一会儿跳下来，可爱极了！')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">这只大熊猫一会儿爬上去，一会儿跳下来，可爱极了！</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhè zhī dàxióngmāo yíhuìr pá shàngqu, yíhuìr tiào xialái, kě'ài jí le!</div>
+                                    <div class="dialogue-vietnamese">Con gấu trúc này một lúc trèo lên, một lúc nhảy xuống, đáng yêu cực kỳ!</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('它好像还没吃饱，站起来张着嘴找吃的呢。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">它好像还没吃饱，站起来张着嘴找吃的呢。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Tā hǎoxiàng hái méi chī bǎo, zhàn qǐlái zhāng zhe zuǐ zhǎo chī de ne.</div>
+                                    <div class="dialogue-vietnamese">Nó hình như chưa ăn no, đứng dậy há miệng tìm đồ ăn.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('它身边那只熊猫半天没动，是不是在睡觉呢？')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">它身边那只熊猫半天没动，是不是在睡觉呢？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Tā shēnbiān nà zhī xióngmāo bàntiān méi dòng, shì bu shì zài shuìjiào ne?</div>
+                                    <div class="dialogue-vietnamese">Con gấu trúc bên cạnh nó nửa ngày không động, có phải đang ngủ không?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('我看不见它的脸，可能是吧。一般来说，熊猫每天要睡很多次觉。')">
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">我看不见它的脸，可能是吧。一般来说，熊猫每天要睡很多次觉。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Wǒ kàn bu jiàn tā de liǎn, kěnéng shì ba. Yìbān láishuō, xióngmāo měitiān yào shuì hěn duō cì jiào.</div>
+                                    <div class="dialogue-vietnamese">Mẹ không thấy mặt nó, có lẽ là vậy. Nói chung, gấu trúc mỗi ngày ngủ rất nhiều lần.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('对，除了睡觉以外，很多时间都在吃东西。')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">对，除了睡觉以外，很多时间都在吃东西。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Duì, chúle shuìjiào yǐwài, hěn duō shíjiān dōu zài chī dōngxi.</div>
+                                    <div class="dialogue-vietnamese">Đúng, ngoài ngủ ra, rất nhiều thời gian đều dùng để ăn uống.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('大熊猫的生活真舒服啊！')">
+                                    <div class="dialogue-speaker">刘小明</div>
+                                    <div class="dialogue-chinese chinese-text">大熊猫的生活真舒服啊！</div>
+                                    <div class="dialogue-pinyin pinyin-text">Dàxióngmāo de shēnghuó zhēn shūfu a!</div>
+                                    <div class="dialogue-vietnamese">Cuộc sống của gấu trúc thật thoải mái!</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('妈妈，您帮我和这两只大熊猫照一张照片吧。')">
+                                    <div class="dialogue-speaker">刘小雪</div>
+                                    <div class="dialogue-chinese chinese-text">妈妈，您帮我和这两只大熊猫照一张照片吧。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Māma, nín bāng wǒ hé zhè liǎng zhī dàxióngmāo zhào yì zhāng zhàopiàn ba.</div>
+                                    <div class="dialogue-vietnamese">Mẹ ơi, mẹ chụp cho con và hai con gấu trúc này một tấm ảnh nhé.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="text4" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-journal-text"></i> 课文 4 - 在宾馆房间 (Nhật ký)</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text4')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content" style="background: #fff9e6; border: 2px solid #ffd54f;">
+                                <div class="dialogue-line" onclick="speak('今天我带小雪和小明去动物园玩了。北京动物园是中国很有名的动物园，里面有非常多的动物，当然，大人和孩子最喜爱的还是大熊猫。每天有很多游客去熊猫馆，他们带着相机去给可爱的大熊猫拍照。动物园早上七点半开门，晚上七点关门，冬天比夏天游客少，所以也比平时早关门一个小时。如果第一次来北京旅游，跟家人一起去北京动物园是个不错的选择。')" style="background: #fffbe6; border: 1px solid #ffcc02;">
+                                    <div class="dialogue-speaker">王一雪写日记</div>
+                                    <div class="dialogue-chinese chinese-text">今天我带小雪和小明去动物园玩了。北京动物园是中国很有名的动物园，里面有非常多的动物，当然，大人和孩子最喜爱的还是大熊猫。每天有很多游客去熊猫馆，他们带着相机去给可爱的大熊猫拍照。动物园早上七点半开门，晚上七点关门，冬天比夏天游客少，所以也比平时早关门一个小时。如果第一次来北京旅游，跟家人一起去北京动物园是个不错的选择。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Jīntiān wǒ dài Xiǎoxuě hé Xiǎomíng qù dòngwùyuán wán le. Běijīng dòngwùyuán shì Zhōngguó hěn yǒumíng de dòngwùyuán, lǐmiàn yǒu fēicháng duō de dòngwù, dāngrán, dàren hé háizi zuì xǐ'ài de háishi dàxióngmāo. Měitiān yǒu hěn duō yóukè qù xióngmāo guǎn, tāmen dàizhe xiàngjī qù gěi kě'ài de dàxióngmāo pāizhào. Dòngwùyuán zǎoshang qī diǎn bàn kāimén, wǎnshang qī diǎn guānmén, dōngtiān bǐ xiàtiān yóukè shǎo, suǒyǐ yě bǐ píngshí zǎo guānmén yí ge xiǎoshí. Rúguǒ dì yī cì lái Běijīng lǚyóu, gēn jiārén yìqǐ qù Běijīng dòngwùyuán shì ge búcuò de xuǎnzé.</div>
+                                    <div class="dialogue-vietnamese">Hôm nay tôi dẫn Tiểu Tuyết và Tiểu Minh đi sở thú chơi. Sở thú Bắc Kinh là sở thú rất nổi tiếng của Trung Quốc, bên trong có rất nhiều động vật, tất nhiên, người lớn và trẻ con yêu thích nhất vẫn là gấu trúc. Mỗi ngày có rất nhiều du khách đến nhà gấu trúc, họ mang theo máy ảnh đi chụp ảnh cho gấu trúc đáng yêu. Sở thú mở cửa lúc 7h30 sáng, đóng cửa lúc 7h tối, mùa đông du khách ít hơn mùa hè, nên cũng đóng cửa sớm hơn bình thường một tiếng. Nếu lần đầu đến Bắc Kinh du lịch, đi sở thú Bắc Kinh cùng gia đình là một lựa chọn không tồi.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ngữ pháp -->
+            <div id="grammar" class="section-content">
+                <div class="grammar-container">
+                    <div class="grammar-tabs">
+                        <button class="grammar-tab active" onclick="showGrammar(0, this)">
+                            <i class="bi bi-clock"></i> 一会儿...，一会儿...
+                        </button>
+                        <button class="grammar-tab" onclick="showGrammar(1, this)">
+                            <i class="bi bi-info-circle"></i> 关于
+                        </button>
+                        <button class="grammar-tab" onclick="showGrammar(2, this)">
+                            <i class="bi bi-chat-quote"></i> 一般来说
+                        </button>
+                        <button class="grammar-tab" onclick="showGrammar(3, this)">
+                            <i class="bi bi-arrow-left-right"></i> 比较句 (11)
+                        </button>
+                    </div>
+
+                    <div class="grammar-panel active" id="grammar-panel-0">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">1</div>
+                                <div class="grammar-title">并列复句 "一会儿...，一会儿..."</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">一会儿 + VP1 ，一会儿 + VP2</div>
+                            <div class="grammar-explanation">
+                                <strong>Cách dùng:</strong> Diễn tả các hành động khác nhau xảy ra trong thời gian ngắn, hoặc trạng thái đối lập xen kẽ.<br>
+                                <strong>Ví dụ:</strong>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">它一会儿在你脚边睡觉，一会儿在你身上爬。</div>
+                                <div class="example-pinyin pinyin-text">Tā yíhuìr zài nǐ jiǎo biān shuìjiào, yíhuìr zài nǐ shēnshang pá.</div>
+                                <div class="example-vietnamese">Nó một lúc ngủ bên cạnh chân bạn, một lúc bò trên người bạn.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">他一会儿进来，一会儿出去，忙得很。</div>
+                                <div class="example-pinyin pinyin-text">Tā yíhuìr jìnlái, yíhuìr chūqu, máng de hěn.</div>
+                                <div class="example-vietnamese">Anh ấy một lúc vào, một lúc ra, bận lắm.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">最近天气变化很快，一会儿冷，一会儿热。</div>
+                                <div class="example-pinyin pinyin-text">Zuìjìn tiānqì biànhuà hěn kuài, yíhuìr lěng, yíhuìr rè.</div>
+                                <div class="example-vietnamese">Dạo này thời tiết thay đổi nhanh, một lúc lạnh, một lúc nóng.</div>
+                            </div>
+                            
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> Bài tập vận dụng</div>
+                                
+                                <div class="practice-question">
+                                    <div class="practice-sentence">1. 她的想法总是变，<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>，一会儿说想学跳舞。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq1" value="A"> A 一会儿说想学唱歌</label>
+                                        <label class="practice-option"><input type="radio" name="gq1" value="B"> B 她说想唱歌</label>
+                                        <label class="practice-option"><input type="radio" name="gq1" value="C"> C 想唱歌一会儿</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq1', 'A', 'gresult1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult1"></div>
+                                </div>
+
+                                <div class="practice-question">
+                                    <div class="practice-sentence">2. 运动会上，他一会儿参加跑步比赛，<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq2" value="A"> A 一会儿参加跳远比赛</label>
+                                        <label class="practice-option"><input type="radio" name="gq2" value="B"> B 参加跳远比赛</label>
+                                        <label class="practice-option"><input type="radio" name="gq2" value="C"> C 他跳远</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq2', 'A', 'gresult2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grammar-panel" id="grammar-panel-1">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">2</div>
+                                <div class="grammar-title">介词 "关于"</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">关于 + N，...</div>
+                            <div class="grammar-explanation">
+                                <strong>Cách dùng:</strong> Giới từ "关于" đứng trước danh từ, dẫn ra đối tượng liên quan đến chủ đề.<br>
+                                <strong>Ví dụ:</strong>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">关于这个问题，我得慢慢给你讲。</div>
+                                <div class="example-pinyin pinyin-text">Guānyú zhège wèntí, wǒ děi mànman gěi nǐ jiǎng.</div>
+                                <div class="example-vietnamese">Về vấn đề này, tôi phải từ từ giải thích cho bạn.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">关于他的要求，我们还要开会以后再决定。</div>
+                                <div class="example-pinyin pinyin-text">Guānyú tā de yāoqiú, wǒmen hái yào kāihuì yǐhòu zài juédìng.</div>
+                                <div class="example-vietnamese">Về yêu cầu của anh ấy, chúng tôi còn phải họp xong rồi mới quyết định.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">关于比赛的时间，我明天一定告诉大家。</div>
+                                <div class="example-pinyin pinyin-text">Guānyú bǐsài de shíjiān, wǒ míngtiān yídìng gàosu dàjiā.</div>
+                                <div class="example-vietnamese">Về thời gian thi đấu, ngày mai tôi nhất định sẽ thông báo mọi người.</div>
+                            </div>
+                            
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> Bài tập vận dụng</div>
+                                
+                                <div class="practice-question">
+                                    <div class="practice-sentence">1. <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>，我还有一些问题想问你。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq3" value="A"> A 关于这个问题</label>
+                                        <label class="practice-option"><input type="radio" name="gq3" value="B"> B 这个问题关于</label>
+                                        <label class="practice-option"><input type="radio" name="gq3" value="C"> C 这个问题</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq3', 'A', 'gresult3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult3"></div>
+                                </div>
+
+                                <div class="practice-question">
+                                    <div class="practice-sentence">2. 经理要跟你谈一谈<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>的事情。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq4" value="A"> A 关于那个工作</label>
+                                        <label class="practice-option"><input type="radio" name="gq4" value="B"> B 那个工作关于</label>
+                                        <label class="practice-option"><input type="radio" name="gq4" value="C"> C 关于工作那个</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq4', 'A', 'gresult4')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grammar-panel" id="grammar-panel-2">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">3</div>
+                                <div class="grammar-title">固定短语 "一般来说"</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">一般来说，...</div>
+                            <div class="grammar-explanation">
+                                <strong>Cách dùng:</strong> Là cụm từ cố định, có nghĩa là "nói chung" hoặc "trong đa số trường hợp", thường dùng ở đầu câu.<br>
+                                <strong>Ví dụ:</strong>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">一般来说，熊猫每天要睡很多次觉。</div>
+                                <div class="example-pinyin pinyin-text">Yìbān láishuō, xióngmāo měitiān yào shuì hěn duō cì jiào.</div>
+                                <div class="example-vietnamese">Nói chung, gấu trúc mỗi ngày ngủ rất nhiều lần.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">一般来说，这种树每年开一次花。</div>
+                                <div class="example-pinyin pinyin-text">Yìbān láishuō, zhè zhǒng shù měi nián kāi yí cì huā.</div>
+                                <div class="example-vietnamese">Nói chung, loại cây này mỗi năm nở hoa một lần.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">一般来说，学习外语需要多练习。</div>
+                                <div class="example-pinyin pinyin-text">Yìbān láishuō, xuéxí wàiyǔ xūyào duō liànxí.</div>
+                                <div class="example-vietnamese">Nói chung, học ngoại ngữ cần luyện tập nhiều.</div>
+                            </div>
+                            
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> Bài tập vận dụng</div>
+                                
+                                <div class="practice-question">
+                                    <div class="practice-sentence">1. <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>，早上空气比较好。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq5" value="A"> A 一般来说</label>
+                                        <label class="practice-option"><input type="radio" name="gq5" value="B"> B 一般说</label>
+                                        <label class="practice-option"><input type="radio" name="gq5" value="C"> C 一般</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq5', 'A', 'gresult5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult5"></div>
+                                </div>
+
+                                <div class="practice-question">
+                                    <div class="practice-sentence">2. <u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>，这种水果夏天最多。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq6" value="A"> A 一般来说</label>
+                                        <label class="practice-option"><input type="radio" name="gq6" value="B"> B 关于来说</label>
+                                        <label class="practice-option"><input type="radio" name="gq6" value="C"> C 一会儿</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq6', 'A', 'gresult6')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult6"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grammar-panel" id="grammar-panel-3">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">4</div>
+                                <div class="grammar-title">比较句 (11)</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">A 比 B + 多/少/早/晚 + V + 数量短语</div>
+                            <div class="grammar-explanation">
+                                <strong>Cách dùng:</strong> Trong câu so sánh dùng "比", khi vị ngữ là động từ thông thường, phía trước có thể dùng "多、少、早、晚" để biểu thị sự khác biệt về số lượng hoặc thời gian.<br>
+                                <strong>Ví dụ:</strong>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">冬天比夏天早关门一个小时。</div>
+                                <div class="example-pinyin pinyin-text">Dōngtiān bǐ xiàtiān zǎo guānmén yí ge xiǎoshí.</div>
+                                <div class="example-vietnamese">Mùa đông đóng cửa sớm hơn mùa hè một tiếng.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">哥哥比弟弟多吃了三个饺子。</div>
+                                <div class="example-pinyin pinyin-text">Gēge bǐ dìdi duō chī le sān ge jiǎozi.</div>
+                                <div class="example-vietnamese">Anh trai ăn nhiều hơn em trai ba cái sủi cảo.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">我比他晚到了十分钟。</div>
+                                <div class="example-pinyin pinyin-text">Wǒ bǐ tā wǎn dào le shí fēnzhōng.</div>
+                                <div class="example-vietnamese">Tôi đến muộn hơn anh ấy mười phút.</div>
+                            </div>
+                            
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> Bài tập vận dụng</div>
+                                
+                                <div class="practice-question">
+                                    <div class="practice-sentence">1. A: 你今天怎么来得这么早？<br>B: 我是坐地铁来的，所以<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq7" value="A"> A 比开车早到了二十分钟</label>
+                                        <label class="practice-option"><input type="radio" name="gq7" value="B"> B 到了二十分钟早</label>
+                                        <label class="practice-option"><input type="radio" name="gq7" value="C"> C 早到比开车二十分钟</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq7', 'A', 'gresult7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult7"></div>
+                                </div>
+
+                                <div class="practice-question">
+                                    <div class="practice-sentence">2. A: 已经十一点了，你怎么还不睡？<br>B: 明天不上课，我想<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>。</div>
+                                    <div class="practice-options">
+                                        <label class="practice-option"><input type="radio" name="gq8" value="A"> A 比平时晚睡一个小时</label>
+                                        <label class="practice-option"><input type="radio" name="gq8" value="B"> B 比一个小时晚睡</label>
+                                        <label class="practice-option"><input type="radio" name="gq8" value="C"> C 睡晚一个小时</label>
+                                    </div>
+                                    <button class="check-btn" onclick="checkAnswer('gq8', 'A', 'gresult8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <div class="result-message" id="gresult8"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Bài tập -->
+            <div id="exercises" class="section-content">
+                <div class="exercise-container">
+                    <div class="exercise-tabs">
+                        <button class="exercise-tab active" onclick="showExercise('listening', this)">
+                            <i class="bi bi-headphones"></i> 一、听力 (10 câu)
+                        </button>
+                        <button class="exercise-tab" onclick="showExercise('reading', this)">
+                            <i class="bi bi-book-open"></i> 二、阅读 (10 câu)
+                        </button>
+                        <button class="exercise-tab" onclick="showExercise('writing', this)">
+                            <i class="bi bi-pen"></i> 三、书写 (10 câu)
+                        </button>
+                    </div>
+
+                    <!-- Listening -->
+                    <div id="listening" class="exercise-content active">
+                        <div class="section-header-exercise">一、听力 (10 câu)</div>
+                        
+                        <div class="part-header">第一部分 - 根据课文 1 选择正确答案 (Câu 1-3)</div>
+                        <div class="audio-player">
+                            <button class="play-btn" onclick="speakAllText('text1')">▶</button>
+                            <div class="audio-progress"><div class="audio-progress-bar"></div></div>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">课文 1 - 在一家宠物领养店</span>
+                        </div>
+                        
+                        <div class="question-container">
+                            <div class="question-text">1. 这只小猫养了多久了？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q1" value="A"> A 第一天养</label>
+                                <label class="radio-item"><input type="radio" name="q1" value="B"> B 养了一年多了</label>
+                                <label class="radio-item"><input type="radio" name="q1" value="C"> C 养了很多年了</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q1', 'B', 'result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result1"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">2. 第一天看见这只小猫的时候，它是什么样的？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q2" value="A"> A 又干净又漂亮</label>
+                                <label class="radio-item"><input type="radio" name="q2" value="B"> B 又脏又小</label>
+                                <label class="radio-item"><input type="radio" name="q2" value="C"> C 又可爱又大</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q2', 'B', 'result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result2"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">3. 王一雪周末要带孩子去哪儿？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q3" value="A"> A 宠物店</label>
+                                <label class="radio-item"><input type="radio" name="q3" value="B"> B 北京动物园</label>
+                                <label class="radio-item"><input type="radio" name="q3" value="C"> C 熊猫馆</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q3', 'B', 'result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result3"></div>
+                        </div>
+
+                        <div class="part-header">第二部分 - 根据课文 2 选择正确答案 (Câu 4-6)</div>
+                        <div class="audio-player">
+                            <button class="play-btn" onclick="speakAllText('text2')">▶</button>
+                            <div class="audio-progress"><div class="audio-progress-bar"></div></div>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">课文 2 - 在动物园</span>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">4. 王一雪和孩子们在聊什么？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q4" value="A"> A 大熊猫</label>
+                                <label class="radio-item"><input type="radio" name="q4" value="B"> B 北京动物园</label>
+                                <label class="radio-item"><input type="radio" name="q4" value="C"> C 动物和人的不同</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q4', 'A', 'result4')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result4"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">5. 大熊猫为什么只吃竹子不吃肉？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q5" value="A"> A 它们不会吃肉</label>
+                                <label class="radio-item"><input type="radio" name="q5" value="B"> B 它们对肉不感兴趣</label>
+                                <label class="radio-item"><input type="radio" name="q5" value="C"> C 它们只吃竹子</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q5', 'B', 'result5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result5"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">6. 刘小雪为什么说弟弟是"十万个为什么"？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q6" value="A"> A 弟弟喜欢看书</label>
+                                <label class="radio-item"><input type="radio" name="q6" value="B"> B 弟弟喜欢听故事</label>
+                                <label class="radio-item"><input type="radio" name="q6" value="C"> C 弟弟喜欢问问题</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q6', 'C', 'result6')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result6"></div>
+                        </div>
+
+                        <div class="part-header">第三部分 - 根据课文 3 选择正确答案 (Câu 7-8)</div>
+                        <div class="audio-player">
+                            <button class="play-btn" onclick="speakAllText('text3')">▶</button>
+                            <div class="audio-progress"><div class="audio-progress-bar"></div></div>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">课文 3 - 在熊猫馆</span>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">7. 一般来说，大熊猫每天做什么？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q7" value="A"> A 爬来爬去</label>
+                                <label class="radio-item"><input type="radio" name="q7" value="B"> B 跟人拍照</label>
+                                <label class="radio-item"><input type="radio" name="q7" value="C"> C 吃东西和睡觉</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q7', 'C', 'result7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result7"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">8. 刘小雪让妈妈帮她做什么？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q8" value="A"> A 照一张照片</label>
+                                <label class="radio-item"><input type="radio" name="q8" value="B"> B 买一些吃的</label>
+                                <label class="radio-item"><input type="radio" name="q8" value="C"> C 找一只熊猫</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q8', 'A', 'result8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result8"></div>
+                        </div>
+
+                        <div class="part-header">第四部分 - 根据课文 4 选择正确答案 (Câu 9-10)</div>
+                        <div class="audio-player">
+                            <button class="play-btn" onclick="speakAllText('text4')">▶</button>
+                            <div class="audio-progress"><div class="audio-progress-bar"></div></div>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">课文 4 - 在宾馆房间</span>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">9. 游客最喜欢去北京动物园看什么动物？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q9" value="A"> A 牛</label>
+                                <label class="radio-item"><input type="radio" name="q9" value="B"> B 羊</label>
+                                <label class="radio-item"><input type="radio" name="q9" value="C"> C 大熊猫</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q9', 'C', 'result9')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result9"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="question-text">10. 北京动物园早上几点开门？</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="q10" value="A"> A 六点</label>
+                                <label class="radio-item"><input type="radio" name="q10" value="B"> B 七点</label>
+                                <label class="radio-item"><input type="radio" name="q10" value="C"> C 七点半</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('q10', 'C', 'result10')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="result10"></div>
+                        </div>
+                    </div>
+
+                    <!-- Reading -->
+                    <div id="reading" class="exercise-content">
+                        <div class="section-header-exercise">二、阅读 (10 câu)</div>
+                        
+                        <div class="part-header">第一部分 - 选词填空 (Câu 11-15)</div>
+                        
+                        <div class="vocab-box">
+                            <div class="vocab-item">A. 照顾</div>
+                            <div class="vocab-item">B. 张</div>
+                            <div class="vocab-item">C. 饱</div>
+                            <div class="vocab-item">D. 奇怪</div>
+                            <div class="vocab-item">E. 脏</div>
+                        </div>
+                        
+                        <div class="multi-question-container">
+                            <div class="sub-question">
+                                <div class="fill-sentence">11. 小猫看到妈妈后马上<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>开嘴要吃的。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q11" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q11" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q11" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q11" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q11" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q11', 'B', 'result11')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result11"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">12. 这个电影介绍了怎么<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>离开爸爸妈妈的小动物。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q12" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q12" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q12" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q12" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q12" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q12', 'A', 'result12')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result12"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">13. 这只大熊猫没吃<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>，你看它还在找吃的东西呢。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q13" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q13" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q13" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q13" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q13" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q13', 'C', 'result13')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result13"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">14. 这个饭馆的桌子这么<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>，碗也不干净，咱们换一家吧。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q14" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q14" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q14" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q14" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q14" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q14', 'E', 'result14')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result14"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">15. 大熊猫这个名字很<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>，它们跟猫没什么关系。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q15" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q15" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q15" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q15" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q15" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q15', 'D', 'result15')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result15"></div>
+                            </div>
+                        </div>
+
+                        <div class="vocab-box" style="margin-top: 20px;">
+                            <div class="vocab-item">A. 认得</div>
+                            <div class="vocab-item">B. 关于</div>
+                            <div class="vocab-item">C. 其实</div>
+                            <div class="vocab-item">D. 一般</div>
+                            <div class="vocab-item">E. 半天</div>
+                        </div>
+
+                        <div class="multi-question-container">
+                            <div class="sub-question">
+                                <div class="fill-sentence">16. A: 小王，你在找什么？<br>B: 我的手机不见了，我找了<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>也没找到。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q16" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q16" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q16" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q16" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q16" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q16', 'E', 'result16')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result16"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">17. A: 你想借哪本书？<br>B: 我忘了名字，是一本<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>动物的书。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q17" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q17" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q17" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q17" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q17" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q17', 'B', 'result17')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result17"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">18. A: 这只小猫在小区里好几天了，是不是找不到家了？<br>B: 我<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>它，这是我邻居家的小猫。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q18" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q18" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q18" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q18" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q18" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q18', 'A', 'result18')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result18"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">19. A: 你周末带孩子做什么？<br>B: 如果天气好，我<u>&nbsp;&nbsp;&nbsp;&nbsp;</u>带孩子去公园里玩。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q19" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q19" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q19" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q19" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q19" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q19', 'D', 'result19')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result19"></div>
+                            </div>
+                            <div class="sub-question">
+                                <div class="fill-sentence">20. A: 大熊猫为什么只吃竹子？<br>B: <u>&nbsp;&nbsp;&nbsp;&nbsp;</u>它们也可以吃肉，但是对肉不感兴趣。</div>
+                                <div class="radio-group">
+                                    <label class="radio-item"><input type="radio" name="q20" value="A"> A</label>
+                                    <label class="radio-item"><input type="radio" name="q20" value="B"> B</label>
+                                    <label class="radio-item"><input type="radio" name="q20" value="C"> C</label>
+                                    <label class="radio-item"><input type="radio" name="q20" value="D"> D</label>
+                                    <label class="radio-item"><input type="radio" name="q20" value="E"> E</label>
+                                </div>
+                                <button class="check-btn" onclick="checkAnswer('q20', 'C', 'result20')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <div class="result-message" id="result20"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Writing -->
+                    <div id="writing" class="exercise-content">
+                        <div class="section-header-exercise">三、书写 (10 câu)</div>
+                        
+                        <div class="part-header">第一部分 - 排列词语 (Câu 21-25)</div>
+                        
+                        <div class="writing-container">
+                            <div class="question-text" style="margin-bottom: 15px;">21.</div>
+                            <div class="arrange-box" id="arrange-21" data-answer="一会儿睡觉一会儿爬">
+                                <div class="word-bank" data-source="true">
+                                    <span class="word-source" draggable="true" data-word="一会儿">一会儿</span>
+                                    <span class="word-source" draggable="true" data-word="睡觉">睡觉</span>
+                                    <span class="word-source" draggable="true" data-word="一会儿">一会儿</span>
+                                    <span class="word-source" draggable="true" data-word="爬">爬</span>
+                                </div>
+                                <div class="drop-zone" data-drop="true"></div>
+                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
+                                <button class="check-btn" onclick="checkArrange('arrange-21', 'result21')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-21')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
+                                <div class="result-message" id="result21"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="question-text" style="margin-bottom: 15px;">22.</div>
+                            <div class="arrange-box" id="arrange-22" data-answer="关于这个问题我得慢慢讲">
+                                <div class="word-bank" data-source="true">
+                                    <span class="word-source" draggable="true" data-word="关于">关于</span>
+                                    <span class="word-source" draggable="true" data-word="这个">这个</span>
+                                    <span class="word-source" draggable="true" data-word="问题">问题</span>
+                                    <span class="word-source" draggable="true" data-word="我">我</span>
+                                    <span class="word-source" draggable="true" data-word="得">得</span>
+                                    <span class="word-source" draggable="true" data-word="慢慢">慢慢</span>
+                                    <span class="word-source" draggable="true" data-word="讲">讲</span>
+                                </div>
+                                <div class="drop-zone" data-drop="true"></div>
+                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
+                                <button class="check-btn" onclick="checkArrange('arrange-22', 'result22')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-22')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
+                                <div class="result-message" id="result22"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="question-text" style="margin-bottom: 15px;">23.</div>
+                            <div class="arrange-box" id="arrange-23" data-answer="一般来说熊猫每天要睡很多次觉">
+                                <div class="word-bank" data-source="true">
+                                    <span class="word-source" draggable="true" data-word="一般来说">一般来说</span>
+                                    <span class="word-source" draggable="true" data-word="熊猫">熊猫</span>
+                                    <span class="word-source" draggable="true" data-word="每天">每天</span>
+                                    <span class="word-source" draggable="true" data-word="要">要</span>
+                                    <span class="word-source" draggable="true" data-word="睡">睡</span>
+                                    <span class="word-source" draggable="true" data-word="很多">很多</span>
+                                    <span class="word-source" draggable="true" data-word="次">次</span>
+                                    <span class="word-source" draggable="true" data-word="觉">觉</span>
+                                </div>
+                                <div class="drop-zone" data-drop="true"></div>
+                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
+                                <button class="check-btn" onclick="checkArrange('arrange-23', 'result23')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-23')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
+                                <div class="result-message" id="result23"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="question-text" style="margin-bottom: 15px;">24.</div>
+                            <div class="arrange-box" id="arrange-24" data-answer="冬天比夏天早关门一个小时">
+                                <div class="word-bank" data-source="true">
+                                    <span class="word-source" draggable="true" data-word="冬天">冬天</span>
+                                    <span class="word-source" draggable="true" data-word="比">比</span>
+                                    <span class="word-source" draggable="true" data-word="夏天">夏天</span>
+                                    <span class="word-source" draggable="true" data-word="早">早</span>
+                                    <span class="word-source" draggable="true" data-word="关门">关门</span>
+                                    <span class="word-source" draggable="true" data-word="一个">一个</span>
+                                    <span class="word-source" draggable="true" data-word="小时">小时</span>
+                                </div>
+                                <div class="drop-zone" data-drop="true"></div>
+                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
+                                <button class="check-btn" onclick="checkArrange('arrange-24', 'result24')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-24')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
+                                <div class="result-message" id="result24"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="question-text" style="margin-bottom: 15px;">25.</div>
+                            <div class="arrange-box" id="arrange-25" data-answer="它好像还没吃饱">
+                                <div class="word-bank" data-source="true">
+                                    <span class="word-source" draggable="true" data-word="它">它</span>
+                                    <span class="word-source" draggable="true" data-word="好像">好像</span>
+                                    <span class="word-source" draggable="true" data-word="还">还</span>
+                                    <span class="word-source" draggable="true" data-word="没">没</span>
+                                    <span class="word-source" draggable="true" data-word="吃饱">吃饱</span>
+                                </div>
+                                <div class="drop-zone" data-drop="true"></div>
+                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
+                                <button class="check-btn" onclick="checkArrange('arrange-25', 'result25')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-25')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
+                                <div class="result-message" id="result25"></div>
+                            </div>
+                        </div>
+
+                        <div class="part-header">第二部分 - 写汉字 (Câu 26-30)</div>
+                        
+                        <div class="writing-container">
+                            <div class="char-writing-box">
+                                <div class="char-label">26. Pinyin: <strong>zāng</strong> (bẩn)</div>
+                                <div class="char-sentence">第一天看见它的时候，它又<span class="char-pinyin-inline">zāng</span>又小。</div>
+                                <div style="margin-top: 10px;">
+                                    <input type="text" class="char-input" id="char-26" maxlength="1" placeholder="?">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-26', '脏', 'result26')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                </div>
+                                <div class="result-message" id="result26"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="char-writing-box">
+                                <div class="char-label">27. Pinyin: <strong>kě'ài</strong> (đáng yêu)</div>
+                                <div class="char-sentence">这只小猫特别<span class="char-pinyin-inline">kě'ài</span>。</div>
+                                <div style="margin-top: 10px;">
+                                    <input type="text" class="char-input" id="char-27" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-27', '可爱', 'result27')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                </div>
+                                <div class="result-message" id="result27"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="char-writing-box">
+                                <div class="char-label">28. Pinyin: <strong>zhàogu</strong> (chăm sóc)</div>
+                                <div class="char-sentence">你们把它<span class="char-pinyin-inline">zhàogu</span>得真好。</div>
+                                <div style="margin-top: 10px;">
+                                    <input type="text" class="char-input" id="char-28" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-28', '照顾', 'result28')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                </div>
+                                <div class="result-message" id="result28"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="char-writing-box">
+                                <div class="char-label">29. Pinyin: <strong>guóbǎo</strong> (bảo vật quốc gia)</div>
+                                <div class="char-sentence">大熊猫是中国的<span class="char-pinyin-inline">guóbǎo</span>。</div>
+                                <div style="margin-top: 10px;">
+                                    <input type="text" class="char-input" id="char-29" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-29', '国宝', 'result29')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                </div>
+                                <div class="result-message" id="result29"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="char-writing-box">
+                                <div class="char-label">30. Pinyin: <strong>xǐ'ài</strong> (yêu thích)</div>
+                                <div class="char-sentence">大人和孩子最<span class="char-pinyin-inline">xǐ'ài</span>大熊猫。</div>
+                                <div style="margin-top: 10px;">
+                                    <input type="text" class="char-input" id="char-30" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-30', '喜爱', 'result30')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                </div>
+                                <div class="result-message" id="result30"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let audioSpeed = 1.0;
+
+    const vocabulary = [
+        { id: 1, chinese: '脏', pinyin: 'zāng', meaning: 'Bẩn', category: 'adj', lesson: 'lesson1', example: '它又脏又小。' },
+        { id: 2, chinese: '可爱', pinyin: 'kě\'ài', meaning: 'Đáng yêu, dễ thương', category: 'adj', lesson: 'lesson1', example: '它还特别可爱。' },
+        { id: 3, chinese: '一会儿', pinyin: 'yíhuìr', meaning: 'Một lúc', category: 'adv', lesson: 'lesson1', example: '一会儿在你脚边睡觉。' },
+        { id: 4, chinese: '脚', pinyin: 'jiǎo', meaning: 'Chân', category: 'n', lesson: 'lesson1', example: '在你脚边睡觉。' },
+        { id: 5, chinese: '照顾', pinyin: 'zhàogu', meaning: 'Chăm sóc', category: 'v', lesson: 'lesson1', example: '你们把它照顾得真好。' },
+        { id: 6, chinese: '好像', pinyin: 'hǎoxiàng', meaning: 'Hình như, giống như', category: 'v', lesson: 'lesson1', example: '它就好像我们的孩子。' },
+        { id: 7, chinese: '认得', pinyin: 'rèn de', meaning: 'Nhận ra, biết', category: 'v', lesson: 'lesson1', example: '它也认得我们了。' },
+        { id: 8, chinese: '周末', pinyin: 'zhōumò', meaning: 'Cuối tuần', category: 'n', lesson: 'lesson1', example: '我周末带你们去。' },
+        { id: 9, chinese: '动物园', pinyin: 'dòngwùyuán', meaning: 'Sở thú', category: 'n', lesson: 'lesson1', example: '北京动物园。' },
+        { id: 10, chinese: '动物', pinyin: 'dòngwù', meaning: 'Động vật', category: 'n', lesson: 'lesson1', example: '看动物。' },
+        { id: 11, chinese: '大熊猫', pinyin: 'dàxióngmāo', meaning: 'Gấu trúc lớn', category: 'n', lesson: 'lesson2', example: '大熊猫这个名字很奇怪。' },
+        { id: 12, chinese: '奇怪', pinyin: 'qíguài', meaning: 'Lạ, kỳ lạ', category: 'adj', lesson: 'lesson2', example: '这个名字很奇怪。' },
+        { id: 13, chinese: '其实', pinyin: 'qíshí', meaning: 'Thực ra, thật ra', category: 'adv', lesson: 'lesson2', example: '其实应该叫大猫熊。' },
+        { id: 14, chinese: '竹子', pinyin: 'zhúzi', meaning: 'Tre trúc', category: 'n', lesson: 'lesson2', example: '只吃竹子不吃肉。' },
+        { id: 15, chinese: '国宝', pinyin: 'guóbǎo', meaning: 'Bảo vật quốc gia', category: 'n', lesson: 'lesson2', example: '中国的国宝。' },
+        { id: 16, chinese: '全', pinyin: 'quán', meaning: 'Toàn bộ, tất cả', category: 'adj', lesson: 'lesson2', example: '全世界只有中国有。' },
+        { id: 17, chinese: '野生', pinyin: 'yěshēng', meaning: 'Hoang dã', category: 'adj', lesson: 'lesson2', example: '野生大熊猫。' },
+        { id: 18, chinese: '关于', pinyin: 'guānyú', meaning: 'Về, vấn đề về', category: 'adv', lesson: 'lesson2', example: '关于这个问题。' },
+        { id: 19, chinese: '饱', pinyin: 'bǎo', meaning: 'No', category: 'adj', lesson: 'lesson3', example: '还没吃饱。' },
+        { id: 20, chinese: '张', pinyin: 'zhāng', meaning: 'Há (miệng)', category: 'v', lesson: 'lesson3', example: '张着嘴找吃的。' },
+        { id: 21, chinese: '嘴', pinyin: 'zuǐ', meaning: 'Miệng', category: 'n', lesson: 'lesson3', example: '张着嘴。' },
+        { id: 22, chinese: '身边', pinyin: 'shēnbiān', meaning: 'Bên cạnh', category: 'n', lesson: 'lesson3', example: '它身边那只熊猫。' },
+        { id: 23, chinese: '半天', pinyin: 'bàntiān', meaning: 'Nửa ngày, lâu', category: 'n', lesson: 'lesson3', example: '半天没动。' },
+        { id: 24, chinese: '脸', pinyin: 'liǎn', meaning: 'Mặt', category: 'n', lesson: 'lesson3', example: '看不见它的脸。' },
+        { id: 25, chinese: '大人', pinyin: 'dàren', meaning: 'Người lớn', category: 'n', lesson: 'lesson4', example: '大人和孩子。' },
+        { id: 26, chinese: '喜爱', pinyin: 'xǐ\'ài', meaning: 'Yêu thích', category: 'v', lesson: 'lesson4', example: '最喜爱的还是大熊猫。' }
+    ];
+
+    const writers = {};
+    let currentSection = 0;
+    const sections = ['objectives', 'vocabulary', 'text', 'grammar', 'exercises'];
+    const sectionTitles = ['Mục tiêu bài học', 'Từ vựng', 'Bài khóa', 'Ngữ pháp', 'Bài tập'];
+    const sectionIcons = ['bi-bullseye', 'bi-alphabet', 'bi-book', 'bi-diagram-3', 'bi-pencil-square'];
+    const toggleStates = { pinyin: false, vietnamese: false };
+
+    let currentGrammarIndex = 0;
+    const GRAMMAR_TOTAL = 4;
+
+    function setAudioSpeed(speed) {
+        audioSpeed = parseFloat(speed);
+        localStorage.setItem('hsk3_audio_speed', audioSpeed);
+    }
+
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            
+            // Safari iOS fix for Chinese TTS
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Try different Chinese language codes for Safari compatibility
+            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            if (isSafari && isIOS) {
+                // Safari on iOS prefers zh-TW or zh-HK for better compatibility
+                utterance.lang = 'zh-TW';
+                utterance.voice = null; // Let system choose
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+            } else {
+                utterance.lang = 'zh-CN';
+            }
+            
+            utterance.rate = audioSpeed;
+            
+            // Safari iOS requires user interaction first
+            if (isSafari && isIOS) {
+                // Force speech synthesis to initialize
+                speechSynthesis.getVoices();
+                
+                // Add a small delay for Safari
+                setTimeout(() => {
+                    speechSynthesis.speak(utterance);
+                }, 100);
+            } else {
+                speechSynthesis.speak(utterance);
+            }
+        }
+    }
+
+    function speakAllText(textId) {
+        const container = document.getElementById(textId);
+        const lines = container.querySelectorAll('.dialogue-chinese');
+        let index = 0;
+        
+        speechSynthesis.cancel();
+        
+        // Safari iOS detection
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        function speakNext() {
+            if (index < lines.length) {
+                const utterance = new SpeechSynthesisUtterance(lines[index].textContent);
+                
+                if (isSafari && isIOS) {
+                    utterance.lang = 'zh-TW';
+                    utterance.voice = null;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1.0;
+                } else {
+                    utterance.lang = 'zh-CN';
+                }
+                
+                utterance.rate = audioSpeed;
+                utterance.onend = () => { 
+                    index++; 
+                    setTimeout(speakNext, 300); 
+                };
+                
+                if (isSafari && isIOS) {
+                    setTimeout(() => {
+                        speechSynthesis.speak(utterance);
+                    }, 100);
+                } else {
+                    speechSynthesis.speak(utterance);
+                }
+            }
+        }
+        
+        // Initialize voices for Safari
+        if (isSafari && isIOS) {
+            speechSynthesis.getVoices();
+            setTimeout(speakNext, 200);
+        } else {
+            speakNext();
+        }
+    }
+
+    function showGrammar(index, btn) {
+        for (let i = 0; i < GRAMMAR_TOTAL; i++) {
+            document.getElementById('grammar-panel-' + i).classList.remove('active');
+        }
+        document.getElementById('grammar-panel-' + index).classList.add('active');
+        document.querySelectorAll('.grammar-tab').forEach(t => t.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        else document.querySelectorAll('.grammar-tab')[index].classList.add('active');
+        currentGrammarIndex = index;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderVocabulary('all');
+        initDragAndDrop();
+        
+        const savedSpeed = localStorage.getItem('hsk3_audio_speed');
+        if (savedSpeed) {
+            audioSpeed = parseFloat(savedSpeed);
+            document.getElementById('audio-speed').value = savedSpeed;
+        }
+    });
+
+    function toggleFeature(feature, btn, className, iconShow, iconHide) {
+        toggleStates[feature] = !toggleStates[feature];
+        document.body.classList.toggle(className, toggleStates[feature]);
+        btn.classList.toggle('active-toggle', toggleStates[feature]);
+        btn.querySelector('i').className = toggleStates[feature] ? iconShow : iconHide;
+    }
+    function togglePinyin(btn) { toggleFeature('pinyin', btn, 'hide-pinyin', 'bi bi-eye', 'bi bi-eye-slash'); }
+    function toggleVietnamese(btn) { toggleFeature('vietnamese', btn, 'hide-vietnamese', 'bi bi-eye', 'bi bi-eye-slash'); }
+
+    function showSection(sectionId, navItem) {
+        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        if (navItem) navItem.classList.add('active');
+        currentSection = sections.indexOf(sectionId);
+        updateHeader(currentSection);
+    }
+
+    function updateHeader(index) {
+        document.getElementById('section-title-text').textContent = sectionTitles[index];
+        document.getElementById('current-icon').innerHTML = `<i class="bi ${sectionIcons[index]}"></i>`;
+        document.getElementById('section-badge').textContent = `Phần ${index + 1}/${sections.length}`;
+        const bPrev = document.getElementById('btn-prev');
+        const bNext = document.getElementById('btn-next');
+        if (bPrev) bPrev.disabled = index === 0;
+        if (bNext) bNext.disabled = index === sections.length - 1;
+    }
+
+    function nextSection() {
+        if (currentSection < sections.length - 1) {
+            const items = document.querySelectorAll('.nav-item');
+            showSection(sections[currentSection + 1], items[currentSection + 1]);
+        }
+    }
+
+    function prevSection() {
+        if (currentSection > 0) {
+            const items = document.querySelectorAll('.nav-item');
+            showSection(sections[currentSection - 1], items[currentSection - 1]);
+        }
+    }
+
+    function renderVocabulary(filter) {
+        const grid = document.getElementById('vocab-grid');
+        Object.keys(writers).forEach(id => {
+            try { writers[id]?.cancelAnimation(); } catch(e) {}
+            delete writers[id];
+        });
+        grid.innerHTML = '';
+        const lessonLabels = { lesson1: '课文 1', lesson2: '课文 2', lesson3: '课文 3', lesson4: '课文 4' };
+        const filtered = (filter === 'all') ? vocabulary
+            : filter.startsWith('lesson') ? vocabulary.filter(v => v.lesson === filter)
+            : vocabulary.filter(v => v.category === filter);
+        filtered.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'vocab-card';
+            card.innerHTML = `
+                <div class="vocab-info">
+                    <div class="vocab-number">${item.id}</div>
+                    <div class="vocab-content">
+                        <div class="vocab-chinese chinese-text">${item.chinese}</div>
+                        <div class="vocab-pinyin pinyin-text">${item.pinyin}</div>
+                        <div class="vocab-meaning">${item.meaning}</div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                            <span style="font-size:11px; background:#ffebee; color:#dc3545; border:1px solid #dc3545; border-radius:10px; padding:2px 8px; font-family:Arial;">${lessonLabels[item.lesson]}</span>
+                        </div>
+                        ${item.example ? `<div class="vocab-example">"${item.example}"</div>` : ''}
+                    </div>
+                    <button class="audio-btn" onclick="speak('${item.chinese}'); event.stopPropagation();">
+                        <i class="bi bi-volume-up"></i>
+                    </button>
+                </div>
+                <div class="vocab-animation">
+                    <div id="writer-${item.id}" class="writer-container"></div>
+                    <div class="animation-controls">
+                        <button class="anim-btn" onclick="replayAnimation(${item.id})" title="Viết lại"><i class="bi bi-arrow-clockwise"></i></button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+        filtered.forEach((item, index) => {
+            setTimeout(() => {
+                const containerId = `writer-${item.id}`;
+                const container = document.getElementById(containerId);
+                if (container && !writers[item.id] && typeof HanziWriter !== 'undefined') {
+                    const char = item.chinese.charAt(0);
+                    writers[item.id] = HanziWriter.create(containerId, char, {
+                        width: 100, height: 100, padding: 5,
+                        strokeColor: '#333', radicalColor: '#dc3545',
+                        strokeWidth: 3, showCharacter: false, showOutline: true,
+                        strokeAnimationSpeed: 1, delayBetweenStrokes: 50
+                    });
+                    writers[item.id].animateCharacter();
+                }
+            }, index * 300);
+        });
+    }
+
+    function filterVocab(category, btn) {
+        document.querySelectorAll('.vocab-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        renderVocabulary(category);
+    }
+
+    function replayAnimation(id) { writers[id]?.animateCharacter(); }
+
+    function showText(textId, btn) {
+        document.querySelectorAll('.text-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(textId).classList.add('active');
+        document.querySelectorAll('.text-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function showExercise(type, btn) {
+        document.querySelectorAll('.exercise-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(type).classList.add('active');
+        document.querySelectorAll('.exercise-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function checkAnswer(questionName, correctValue, resultId) {
+        const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+        const resultDiv = document.getElementById(resultId);
+        if (!selected) {
+            resultDiv.textContent = 'Vui lòng chọn một đáp án!';
+            resultDiv.className = 'result-message show incorrect';
+            return;
+        }
+        const isCorrect = Array.isArray(correctValue)
+            ? correctValue.includes(selected.value)
+            : selected.value === correctValue;
+        resultDiv.textContent = isCorrect
+            ? '✓ Chính xác!'
+            : `✗ Sai rồi! Đáp án đúng là: ${Array.isArray(correctValue) ? correctValue.join('/') : correctValue}`;
+        resultDiv.className = `result-message show ${isCorrect ? 'correct' : 'incorrect'}`;
+    }
+
+    let draggedElement = null;
+    let draggedFrom = null;
+
+    function initDragAndDrop() {
+        document.querySelectorAll('.word-source').forEach(source => {
+            source.addEventListener('dragstart', handleSourceDragStart);
+            source.addEventListener('dragend', handleDragEnd);
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('drop', handleDrop);
+            zone.addEventListener('dragleave', handleDragLeave);
+        });
+    }
+
+    function handleSourceDragStart(e) {
+        draggedElement = e.target;
+        draggedFrom = 'source';
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData('text/plain', e.target.dataset.word);
+        e.dataTransfer.setData('from', 'source');
+    }
+
+    function handleDragStart(e) {
+        draggedElement = e.target;
+        draggedFrom = 'zone';
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', e.target.dataset.word);
+        e.dataTransfer.setData('from', 'zone');
+        e.target.classList.add('dragging');
+    }
+
+    function handleDragEnd(e) {
+        if (e.target.classList.contains('word-drop')) {
+            e.target.classList.remove('dragging');
+        }
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.classList.remove('drag-over');
+        });
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = draggedFrom === 'source' ? 'copy' : 'move';
+        e.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+        if (e.target.classList.contains('drop-zone')) {
+            e.target.classList.remove('drag-over');
+        }
+    }
+
+    function getDragAfterElement(container, x) {
+        const draggableElements = [...container.querySelectorAll('.word-drop:not(.dragging)')];
+        
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = x - box.left - box.width / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        const zone = e.currentTarget;
+        zone.classList.remove('drag-over');
+        
+        const word = e.dataTransfer.getData('text/plain');
+        const from = e.dataTransfer.getData('from');
+        
+        if (from === 'source') {
+            const existing = [...zone.querySelectorAll('.word-drop')].find(el => el.dataset.word === word);
+            if (!existing) {
+                const newEl = createWordDrop(word);
+                const afterElement = getDragAfterElement(zone, e.clientX);
+                if (afterElement == null) {
+                    zone.appendChild(newEl);
+                } else {
+                    zone.insertBefore(newEl, afterElement);
+                }
+            }
+        } else if (from === 'zone' && draggedElement) {
+            const afterElement = getDragAfterElement(zone, e.clientX);
+            if (afterElement == null) {
+                zone.appendChild(draggedElement);
+            } else {
+                zone.insertBefore(draggedElement, afterElement);
+            }
+        }
+        
+        updateResult(zone);
+    }
+
+    function createWordDrop(word) {
+        const el = document.createElement('span');
+        el.className = 'word-drop';
+        el.dataset.word = word;
+        el.draggable = true;
+        el.textContent = word;
+        
+        const deleteBtn = document.createElement('span');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '×';
+        deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            const parent = el.parentElement;
+            el.remove();
+            updateResult(parent);
+        };
+        el.appendChild(deleteBtn);
+        
+        el.addEventListener('dragstart', handleDragStart);
+        el.addEventListener('dragend', handleDragEnd);
+        
+        return el;
+    }
+
+    function updateResult(dropZone) {
+        const box = dropZone.closest('.arrange-box');
+        const resultArea = box.querySelector('.result-area');
+        const words = [...dropZone.querySelectorAll('.word-drop')].map(el => el.dataset.word);
+        
+        if (words.length === 0) {
+            resultArea.textContent = 'Kết quả sẽ hiển thị ở đây...';
+            resultArea.classList.add('empty');
+        } else {
+            resultArea.textContent = words.join('');
+            resultArea.classList.remove('empty');
+        }
+    }
+
+    function checkArrange(boxId, resultId) {
+        const box = document.getElementById(boxId);
+        const resultDiv = document.getElementById(resultId);
+        const correctAnswer = box.dataset.answer;
+        const dropZone = box.querySelector('.drop-zone');
+        const userAnswer = [...dropZone.querySelectorAll('.word-drop')].map(el => el.dataset.word).join('');
+        
+        if (!userAnswer) {
+            resultDiv.textContent = 'Vui lòng sắp xếp câu trước khi kiểm tra!';
+            resultDiv.className = 'result-message show incorrect';
+            return;
+        }
+        
+        const isCorrect = userAnswer === correctAnswer;
+        resultDiv.textContent = isCorrect 
+            ? `✓ Chính xác! "${correctAnswer}"`
+            : `✗ Chưa đúng! Câu của bạn: "${userAnswer || '(trống)'}" | Đáp án: "${correctAnswer}"`;
+        resultDiv.className = `result-message show ${isCorrect ? 'correct' : 'incorrect'}`;
+    }
+
+    function resetArrange(boxId) {
+        const box = document.getElementById(boxId);
+        const dropZone = box.querySelector('.drop-zone');
+        const resultArea = box.querySelector('.result-area');
+        
+        dropZone.innerHTML = '';
+        resultArea.textContent = 'Kết quả sẽ hiển thị ở đây...';
+        resultArea.classList.add('empty');
+        
+        const resultDiv = document.getElementById(boxId.replace('arrange-', 'result'));
+        if (resultDiv) {
+            resultDiv.classList.remove('show', 'correct', 'incorrect');
+            resultDiv.textContent = '';
+        }
+    }
+
+    function checkCharacter(inputId, correctChar, resultId) {
+        const input = document.getElementById(inputId);
+        const resultDiv = document.getElementById(resultId);
+        const userValue = input.value.trim();
+        if (userValue === correctChar) {
+            resultDiv.textContent = '✓ Chính xác!';
+            resultDiv.className = 'result-message show correct';
+            input.style.borderColor = '#28a745';
+        } else {
+            resultDiv.textContent = `✗ Sai! Đáp án đúng là: ${correctChar}`;
+            resultDiv.className = 'result-message show incorrect';
+            input.style.borderColor = '#dc3545';
+        }
+    }
+
+    function resetExercises() {
+        if (!confirm('Bạn có chắc muốn làm lại tất cả bài tập?')) return;
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        document.querySelectorAll('input[type="text"]').forEach(i => { i.value = ''; i.style.borderColor = ''; });
+        document.querySelectorAll('.result-message').forEach(m => { m.classList.remove('show','correct','incorrect'); m.textContent = ''; });
+        document.querySelectorAll('.arrange-box').forEach(box => resetArrange(box.id));
+    }
+</script>
+
+<div id="note-editor-overlay">
+    <div id="note-editor-container">
+        <div id="note-editor-header">
+            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>
+            <button class="editor-tool-btn" onclick="closeNoteEditor()" style="border:none; background:rgba(255,255,255,0.2); color:white;"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div id="note-editor-toolbar">
+            <button class="editor-tool-btn" onclick="formatDoc('bold')"><i class="bi bi-type-bold"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('italic')"><i class="bi bi-type-italic"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('underline')"><i class="bi bi-type-underline"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('insertUnorderedList')"><i class="bi bi-list-ul"></i></button>
+            <button class="editor-tool-btn" onclick="clearEditor()" style="color:#c62828;"><i class="bi bi-trash"></i></button>
+        </div>
+        <div id="rich-editor" contenteditable="true" spellcheck="false"></div>
+        <div id="note-editor-footer">
+            <span style="font-size:12px; color:#666; font-family:Arial;">Hỗ trợ paste trực tiếp từ Word</span>
+            <div>
+                <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()">Đóng</button>
+                <button class="editor-btn editor-btn-save" onclick="saveNoteEditor()"><i class="bi bi-check-lg"></i> Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'block'; document.getElementById('rich-editor').focus(); }
+    function closeNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'none'; }
+    function saveNoteEditor() { alert('Ghi chú đã được lưu tạm thời!'); closeNoteEditor(); }
+    function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
+    function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
+    
+    document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
+</script>
+</body>
+</html>
