@@ -482,7 +482,8 @@
             .data-table { font-size: 14px; }
             .vi-text, .cn-text { font-size: 14px; }
         }
-        </style>
+    </style>
+<base target="_blank">
 </head>
 <body>
     <div class="app-container">
@@ -503,6 +504,7 @@
             <div class="tab-nav">
                 <button class="tab-button active" data-tab="dulich">旅游 Du Lịch</button>
                 <button class="tab-button" data-tab="mausam">购物 Mua Sắm</button>
+                <button class="tab-button" data-tab="coban">基础 Cơ Bản</button>
                 <button class="tab-button" data-tab="thuongdung">常用 Thường Dùng</button>
             </div>
         </div>
@@ -548,7 +550,7 @@
                 </div>
             </div>
 
-            <!-- Mau Sam Tab - NỘI DUNG MỚI HOÀN TOÀN -->
+            <!-- Mau Sam Tab -->
             <div id="tab-mausam" class="tab-panel">
                 <div class="sidebar">
                     <div class="sidebar-header">
@@ -581,6 +583,45 @@
                         <div class="content-card">
                             <div class="card-body">
                                 <div id="lessonContent-mausam"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Co Ban Tab - CHỦ ĐỀ MỚI -->
+            <div id="tab-coban" class="tab-panel">
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <div class="sidebar-title">基础越南语</div>
+                        <div class="sidebar-subtitle">Cơ Bản</div>
+                    </div>
+                    <div class="nav-list" id="navList-coban"></div>
+                    <div class="sidebar-footer">© 2026 Gia Sư Hoa Ngữ Tân An</div>
+                </div>
+
+                <div class="main-content">
+                    <div class="top-bar">
+                        <div class="controls-group">
+                            <div class="control-item">
+                                <button class="btn-icon active" id="voiceF-coban" onclick="setVoice('coban', 'female')">♀</button>
+                                <button class="btn-icon" id="voiceM-coban" onclick="setVoice('coban', 'male')">♂</button>
+                            </div>
+                            <div class="control-item">
+                                <span>语速</span>
+                                <select onchange="updateSpeed('coban', this.value)">
+                                    <option value="0.7">慢速</option>
+                                    <option value="0.9" selected>正常</option>
+                                    <option value="1.2">快速</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-scroll">
+                        <div class="content-card">
+                            <div class="card-body">
+                                <div id="lessonContent-coban"></div>
                             </div>
                         </div>
                     </div>
@@ -687,7 +728,7 @@
                 data: [
                     {vi: "Bùi Viện có nhiều quán bar không?", cn: "裴援街有很多酒吧吗？"},
                     {vi: "Landmark 81 cao nhất Việt Nam phải không?", cn: "地标81是越南最高的吗？"},
-                    {vi: "Ở đây đông người quá!", cn: "这里人太多了！"},
+                    {vi: "Ở đây đông ngườ i quá!", cn: "这里人太多了！"},
                     {vi: "Tôi muốn ăn đặc sản Sài Gòn.", cn: "我想吃西贡特产。"},
                     {vi: "Chợ Bến Thành ở đâu?", cn: "边青市场在哪里？"},
                     {vi: "Phố đi bộ Nguyễn Huệ có gì?", cn: "阮惠步行街有什么？"},
@@ -748,7 +789,7 @@
         };
 
         // ==========================================
-        // DATA MUA SẮM MỚI HOÀN TOÀN (8 CHỦ ĐỀ)
+        // DATA MUA SẮM
         // ==========================================
         const lessonsMauSam = {
             traicay: {
@@ -882,6 +923,102 @@
         };
 
         // ==========================================
+        // DATA CƠ BẢN - 5 CHỦ ĐỀ MỚI
+        // ==========================================
+        const lessonsCoBan = {
+            mausac: {
+                title: '颜色',
+                titleVi: 'Màu Sắc',
+                data: [
+                    {vi: "Màu đỏ", cn: "红色"},
+                    {vi: "Màu xanh dương", cn: "蓝色"},
+                    {vi: "Màu xanh lá", cn: "绿色"},
+                    {vi: "Màu vàng", cn: "黄色"},
+                    {vi: "Màu trắng", cn: "白色"},
+                    {vi: "Màu đen", cn: "黑色"},
+                    {vi: "Màu hồng", cn: "粉色"},
+                    {vi: "Màu tím", cn: "紫色"},
+                    {vi: "Màu cam", cn: "橙色"},
+                    {vi: "Màu nâu", cn: "棕色"},
+                    {vi: "Màu xám", cn: "灰色"},
+                    {vi: "Màu be", cn: "米色"}
+                ]
+            },
+            tien: {
+                title: '货币',
+                titleVi: 'Tiền Tệ',
+                data: [
+                    {vi: "Một nghìn đồng", cn: "一千盾"},
+                    {vi: "Hai nghìn đồng", cn: "两千盾"},
+                    {vi: "Năm nghìn đồng", cn: "五千盾"},
+                    {vi: "Mườ i nghìn đồng", cn: "一万盾"},
+                    {vi: "Hai mươi nghìn đồng", cn: "两万盾"},
+                    {vi: "Năm mươi nghìn đồng", cn: "五万盾"},
+                    {vi: "Một trăm nghìn đồng", cn: "十万盾"},
+                    {vi: "Hai trăm nghìn đồng", cn: "二十万盾"},
+                    {vi: "Năm trăm nghìn đồng", cn: "五十万盾"},
+                    {vi: "Đổi tiền ở đâu?", cn: "在哪里换钱？"},
+                    {vi: "Tỷ giá hôm nay bao nhiêu?", cn: "今天汇率多少？"},
+                    {vi: "Tôi muốn đổi một trăm đô la.", cn: "我想换一百美元。"}
+                ]
+            },
+            phuongtien: {
+                title: '交通工具',
+                titleVi: 'Phương Tiện',
+                data: [
+                    {vi: "Xe máy", cn: "摩托车"},
+                    {vi: "Xe đạp", cn: "自行车"},
+                    {vi: "Xe ô tô", cn: "汽车"},
+                    {vi: "Xe bus", cn: "公交车"},
+                    {vi: "Xe taxi", cn: "出租车"},
+                    {vi: "Xe tuk tuk", cn: "嘟嘟车"},
+                    {vi: "Xe lửa / Tàu hỏa", cn: "火车"},
+                    {vi: "Máy bay", cn: "飞机"},
+                    {vi: "Tàu thuyền", cn: "船"},
+                    {vi: "Xe điện", cn: "电动车"},
+                    {vi: "Grab xe máy", cn: "Grab摩托车"},
+                    {vi: "Thuê xe máy bao nhiêu một ngày?", cn: "租摩托车一天多少钱？"}
+                ]
+            },
+            thoitiet: {
+                title: '天气',
+                titleVi: 'Thờ i Tiết',
+                data: [
+                    {vi: "Nắng", cn: "晴天"},
+                    {vi: "Mưa", cn: "下雨"},
+                    {vi: "Nhiều mây", cn: "多云"},
+                    {vi: "Âm u", cn: "阴天"},
+                    {vi: "Nóng", cn: "热"},
+                    {vi: "Lạnh", cn: "冷"},
+                    {vi: "Ẩm ướt", cn: "潮湿"},
+                    {vi: "Gió", cn: "刮风"},
+                    {vi: "Sấm chớp", cn: "打雷闪电"},
+                    {vi: "Mưa rào", cn: "阵雨"},
+                    {vi: "Hôm nay trờ i nóng quá!", cn: "今天天气真热！"},
+                    {vi: "Nhiệt độ bao nhiêu độ?", cn: "温度多少度？"}
+                ]
+            },
+            chuc: {
+                title: '祝福语',
+                titleVi: 'Câu Chúc',
+                data: [
+                    {vi: "Chúc mừng năm mớ i!", cn: "新年快乐！"},
+                    {vi: "Chúc sức khỏe!", cn: "祝你健康！"},
+                    {vi: "Chúc thành công!", cn: "祝你成功！"},
+                    {vi: "Chúc may mắn!", cn: "祝你好运！"},
+                    {vi: "Chúc vui vẻ!", cn: "祝你快乐！"},
+                    {vi: "Chúc sinh nhật vui vẻ!", cn: "生日快乐！"},
+                    {vi: "Chúc mừng khai trương!", cn: "开业大吉！"},
+                    {vi: "Chúc mừng tốt nghiệp!", cn: "毕业快乐！"},
+                    {vi: "Chúc một ngày tốt lành!", cn: "祝你有美好的一天！"},
+                    {vi: "Vạn sự như ý!", cn: "万事如意！"},
+                    {vi: "An khang thịnh vượng!", cn: "安康兴旺！"},
+                    {vi: "Sức khỏe dồi dào!", cn: "身体健康！"}
+                ]
+            }
+        };
+
+        // ==========================================
         // DATA THUONG DUNG
         // ==========================================
         const lessonsThuongDung = {
@@ -890,8 +1027,8 @@
                 titleVi: 'Chào hỏi',
                 data: [
                     {vi: "Xin chào", cn: "你好"},
-                    {vi: "Chào buổi sáng", cn: "早上好"},
-                    {vi: "Chào buổi tối", cn: "晚上好"},
+                    {vi: "Chào buổ i sáng", cn: "早上好"},
+                    {vi: "Chào buổ i tối", cn: "晚上好"},
                     {vi: "Cảm ơn", cn: "谢谢"},
                     {vi: "Cảm ơn nhiều", cn: "非常感谢"},
                     {vi: "Xin lỗi", cn: "对不起"},
@@ -906,9 +1043,9 @@
                 titleVi: 'Giới thiệu',
                 data: [
                     {vi: "Tôi tên là...", cn: "我叫..."},
-                    {vi: "Tôi là người Trung Quốc", cn: "我是中国人"},
+                    {vi: "Tôi là ngườ i Trung Quốc", cn: "我是中国人"},
                     {vi: "Tôi sống ở Việt Nam", cn: "我住在越南"},
-                    {vi: "Tôi mới đến", cn: "我刚到"},
+                    {vi: "Tôi mớ i đến", cn: "我刚到"},
                     {vi: "Tôi không biết tiếng Việt", cn: "我不会越南语"},
                     {vi: "Tôi học tiếng Việt", cn: "我学越南语"},
                     {vi: "Tôi làm việc ở đây", cn: "我在这里工作"},
@@ -977,7 +1114,7 @@
                     {vi: "mua", cn: "买"}, {vi: "bán", cn: "卖"},
                     {vi: "cho", cn: "给"}, {vi: "lấy", cn: "拿"},
                     {vi: "tìm", cn: "找"}, {vi: "hỏi", cn: "问"},
-                    {vi: "trả lời", cn: "答"}, {vi: "học", cn: "学"},
+                    {vi: "trả lờ i", cn: "答"}, {vi: "học", cn: "学"},
                     {vi: "dạy", cn: "教"}, {vi: "viết", cn: "写"}
                 ]
             },
@@ -1004,9 +1141,9 @@
                     {vi: "to - nhỏ", cn: "大 - 小"},
                     {vi: "nhiều - ít", cn: "多 - 少"},
                     {vi: "cao - thấp", cn: "高 - 低"},
-                    {vi: "dài - ngắn", cn: "长 - 短"},
+                    {vi: "dà i - ngắn", cn: "长 - 短"},
                     {vi: "nhanh - chậm", cn: "快 - 慢"},
-                    {vi: "mới - cũ", cn: "新 - 旧"},
+                    {vi: "mớ i - cũ", cn: "新 - 旧"},
                     {vi: "tốt - xấu", cn: "好 - 坏"},
                     {vi: "đúng - sai", cn: "对 - 错"},
                     {vi: "lạnh - nóng", cn: "冷 - 热"},
@@ -1019,14 +1156,15 @@
         // STATE & FUNCTIONS
         // ==========================================
         let currentTab = 'dulich';
-        let currentVoice = { dulich: 'female', mausam: 'female', thuongdung: 'female' };
-        let speechRate = { dulich: 0.9, mausam: 0.9, thuongdung: 0.9 };
-        let currentLesson = { dulich: 'nhatrang', mausam: 'traicay', thuongdung: 'greetings' };
+        let currentVoice = { dulich: 'female', mausam: 'female', coban: 'female', thuongdung: 'female' };
+        let speechRate = { dulich: 0.9, mausam: 0.9, coban: 0.9, thuongdung: 0.9 };
+        let currentLesson = { dulich: 'nhatrang', mausam: 'traicay', coban: 'mausac', thuongdung: 'greetings' };
 
         function getLessonsByTab(tab) {
             switch(tab) {
                 case 'dulich': return lessonsDuLich;
                 case 'mausam': return lessonsMauSam;
+                case 'coban': return lessonsCoBan;
                 case 'thuongdung': return lessonsThuongDung;
                 default: return lessonsDuLich;
             }
@@ -1053,6 +1191,7 @@
         function init() {
             initTab('dulich', lessonsDuLich, 'nhatrang');
             initTab('mausam', lessonsMauSam, 'traicay');
+            initTab('coban', lessonsCoBan, 'mausac');
             initTab('thuongdung', lessonsThuongDung, 'greetings');
         }
 
