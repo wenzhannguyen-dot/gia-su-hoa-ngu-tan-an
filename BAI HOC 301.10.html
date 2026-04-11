@@ -108,29 +108,6 @@
             border-color: var(--red);
         }
 
-        .home-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid rgba(255,255,255,0.3);
-            background: transparent;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            margin-left: 8px;
-            -webkit-touch-callout: none;
-            user-select: none;
-        }
-
-        .home-btn:hover, .home-btn:active {
-            background: var(--green);
-            border-color: var(--green);
-        }
-
         .lesson-info {
             display: flex;
             align-items: center;
@@ -1058,7 +1035,6 @@
         }
     </style>
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
@@ -1073,7 +1049,7 @@
                 <div class="brand-sub">Giáo trình 301 Câu</div>
             </div>
             <button class="editor-btn" onclick="openEditor()" title="Mở trình soạn thảo">✎</button>
-            <button class="home-btn" onclick="goHome()" title="Quay về trang chủ">🏠</button>
+            <button class="home-btn" onclick="window.location.href='301.html'" title="Về trang chủ">🏠</button>
         </div>
         
         <div class="lesson-info">
@@ -1953,10 +1929,6 @@
         }
     }
 
-    function goHome() {
-        window.location.href = '301.html';
-    }
-
     function openEditor() {
         document.getElementById('editorModal').classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -2147,17 +2119,53 @@
             input.classList.remove('correct');
             resultDiv.innerHTML = '<strong>✗ Sai.</strong> Đáp án: ' + correctAnswer;
             resultDiv.className = 'result-msg show wrong';
-        }
-    }
 
-    window.speechSynthesis.getVoices();
-    
-    window.onload = function() {
-        if (document.getElementById('tuvung').classList.contains('active')) {
-            initVocabStrokes();
+        function checkAnswer(btn) {
+            const item = btn.closest('.exercise-item');
+            const input = item.querySelector('.translation-input');
+            const resultDiv = item.querySelector('.result-msg');
+            const userAnswer = input.value.trim();
+            const correctAnswer = item.dataset.answer;
+            
+            if (!userAnswer) {
+                resultDiv.textContent = 'Vui lòng nhập đáp án!';
+                resultDiv.className = 'result-msg show wrong';
+                return;
+            }
+            
+            function normalize(str) {
+                return str.replace(/\s+/g, '')
+                         .replace(/[，,。！？：；.!?:;]/g, '');
+            }
+            
+            const normalizedUser = normalize(userAnswer);
+            const normalizedCorrect = normalize(correctAnswer);
+            
+            if (normalizedUser === normalizedCorrect) {
+                input.classList.add('correct');
+                input.classList.remove('wrong');
+                resultDiv.innerHTML = '<strong>✓ Chính xác!</strong> ' + correctAnswer;
+                resultDiv.className = 'result-msg show correct';
+            } else {
+                input.classList.add('wrong');
+                input.classList.remove('correct');
+                resultDiv.innerHTML = '<strong>✗ Sai.</strong> Đáp án: ' + correctAnswer;
+                resultDiv.className = 'result-msg show wrong';
+            }
         }
-    };
-</script>
 
-</body>
-</html>
+        window.speechSynthesis.getVoices();
+        
+        function goHome() {
+            window.location.href = '301.html';
+        }
+
+        window.onload = function() {
+            if (document.getElementById('tuvung').classList.contains('active')) {
+                initVocabStrokes();
+            }
+        };
+    </script>
+
+    </body>
+    </html>
