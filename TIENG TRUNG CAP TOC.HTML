@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅游汉语速成 - Tiếng Hoa Du Lịch Cấp Tốc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial Narrow', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .hanzi {
+            font-family: 'DFKai-SB', 'KaiTi', 'STKaiti', 'KaiTi_GB2312', 'SimKai', 'FangSong_GB2312', serif !important;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        h1 { color: #5a67d8; font-size: 2em; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 1.1em; }
+        
+        .controls {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #5a67d8;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            background: #4c51bf;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(90, 103, 216, 0.4);
+        }
+        
+        button.active { background: #e53e3e; }
+        button.secondary { background: #48bb78; }
+        button.secondary:hover { background: #38a169; }
+        
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .search-box:focus { border-color: #5a67d8; }
+        
+        .lesson-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            scrollbar-width: thin;
+        }
+        
+        .lesson-btn {
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.9);
+            color: #5a67d8;
+            border: 2px solid #5a67d8;
+            padding: 8px 16px;
+            white-space: nowrap;
+        }
+        
+        .lesson-btn:hover, .lesson-btn.active {
+            background: #5a67d8;
+            color: white;
+        }
+        
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 500px;
+        }
+        
+        .lesson-title {
+            color: #2d3748;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #5a67d8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .section { margin-bottom: 30px; }
+        
+        .section h3 {
+            color: #e53e3e;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-icon { font-size: 1.2em; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        th {
+            background: #5a67d8;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover { background: #f7fafc; }
+        
+        .hanzi {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .pinyin { color: #718096; font-style: italic; }
+        .meaning { color: #4a5568; }
+        .dialogue-row { background: #fffaf0; }
+        .dialogue-row:hover { background: #feebc8; }
+        
+        .speaker {
+            font-weight: bold;
+            color: #c53030;
+            display: inline-block;
+            min-width: 80px;
+        }
+        
+        .play-btn {
+            background: #ed8936;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 8px;
+            vertical-align: middle;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        
+        .play-btn:hover {
+            background: #dd6b20;
+            transform: scale(1.1);
+        }
+
+        .quiz-container { display: none; }
+        
+        .quiz-question {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #5a67d8;
+        }
+        
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .quiz-option {
+            padding: 12px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            border-color: #5a67d8;
+            background: #f7fafc;
+        }
+        
+        .quiz-option.correct {
+            border-color: #48bb78;
+            background: #c6f6d5;
+        }
+        
+        .quiz-option.wrong {
+            border-color: #f56565;
+            background: #fed7d7;
+        }
+        
+        .score-board {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #e6fffa;
+            border-radius: 10px;
+            color: #234e52;
+        }
+        
+        .hidden { display: none; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            h1 { font-size: 1.5em; }
+            table { font-size: 14px; }
+            td, th { padding: 8px; }
+            .controls { flex-direction: column; align-items: stretch; }
+            .search-box { max-width: 100%; }
+        }
+        
+        .export-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #38b2ac;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(56, 178, 172, 0.4);
+            font-size: 16px;
+            z-index: 1000;
+        }
+        
+        .export-btn:hover {
+            background: #319795;
+            transform: translateY(-3px);
+        }
+        
+        .highlight {
+            background: yellow !important;
+            font-weight: bold;
+        }
+        
+        .mode-switch {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            background: #cbd5e0;
+            color: #2d3748;
+        }
+        
+        .mode-btn.active {
+            background: #5a67d8;
+            color: white;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            max-width: 95%;
+            min-width: 480px;
+            width: auto;
+            max-height: 90vh;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 3px solid #5a67d8;
+            overflow: auto;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            font-size: 1.8em;
+            color: #1a365d;
+            margin-bottom: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #characterTarget {
+            margin: 20px auto;
+            min-width: 300px;
+            min-height: 300px;
+            max-width: 90%;
+            width: auto;
+            height: auto;
+            border: 4px solid #e2e8f0;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .loading-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #e2e8f0;
+            border-top: 5px solid #e63946;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #718096;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .error-display {
+            padding: 30px;
+            text-align: center;
+            color: #e53e3e;
+            background: #fff5f5;
+            border-radius: 12px;
+            border: 2px solid #fed7d7;
+        }
+
+        .error-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .error-display h3 {
+            color: #c53030;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .error-display p {
+            color: #742a2a;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .retry-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .retry-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #fed7d7;
+            color: #c53030;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+            padding: 0;
+            transition: all 0.2s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background: #fc8181;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .stroke-info {
+            margin-top: 15px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 8px;
+            color: #0369a1;
+            font-size: 0.95em;
+            border: 1px solid #bae6fd;
+            box-shadow: 0 1px 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .status-loading {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-loading .status-dot { background: #f59e0b; }
+        .status-success .status-dot { background: #10b981; animation: none; }
+        .status-error .status-dot { background: #ef4444; animation: none; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .modal-controls {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #ed8936;
+            font-size: 16px;
+            padding: 12px 24px;
+        }
+
+        .btn-primary:hover { background: #dd6b20; }
+
+        .btn-secondary {
+            background: #718096;
+            font-size: 16px;
+            padding: 12px 24px;
+        }
+
+        .btn-secondary:hover { background: #4a5568; }
+
+        #characterTarget svg {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        .travel-tip {
+            background: #fffaf0;
+            border-left: 4px solid #ed8936;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95em;
+            color: #744210;
+        }
+    </style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 15px;">
+                <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3); background: linear-gradient(135deg, #e63946 0%, #d62828 100%); display: flex; align-items: center; justify-content: center;">
+                    <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An Logo" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="text-align: left;">
+                    <h1 style="margin: 0; font-size: 1.8em; color: #e63946;">Gia Sư Hoa Ngữ Tân An</h1>
+                    <div style="font-size: 0.9em; color: #718096;">旅游汉语速成 - Tiếng Hoa Du Lịch Cấp Tốc</div>
+                </div>
+            </div>
+            <div style="text-align: center; color: #718096; font-size: 0.95em; font-style: italic; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+                📍 9/1 Bạch Văn Tư, Tân An, Long An | 📱 Zalo: 0839 889 772<br>
+                <span style="color: #e63946; font-weight: bold;">Giao tiếp cơ bản cho người đi du lịch Trung Quốc</span>
+            </div>
+        </header>
+        
+        <div class="lesson-nav" id="lessonNav"></div>
+        
+        <div class="content-area" id="contentArea">
+            <div class="mode-switch">
+                                            </div>
+            
+            <div id="vocabMode" class="tab-content active">
+                <div id="lessonContent"></div>
+            </div>
+            
+            <div id="dialogueMode" class="tab-content">
+                <div id="dialogueContent"></div>
+            </div>
+            
+            <div id="quizMode" class="quiz-container">
+                <div class="score-board">
+                    <strong>Bài kiểm tra nhanh</strong> | 
+                    Điểm: <span id="score">0</span> | 
+                    Câu đúng: <span id="correct">0</span>/<span id="total">0</span>
+                </div>
+                <div id="quizContent"></div>
+                <button onclick="generateQuiz()" style="margin-top: 20px; width: 100%;">🔄 Làm bài mới</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="strokeModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="closeStrokeModal()" title="Đóng (Esc)">×</button>
+            
+            <div class="modal-header">
+                <span>✏️</span>
+                <span>Cách viết chữ</span>
+            </div>
+            
+            <div id="characterTarget">
+                <div id="loadingState" class="loading-container">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Đang tải dữ liệu nét chữ...</div>
+                </div>
+            </div>
+            
+            <div class="stroke-info">
+                <div style="font-size: 1.4em; margin-bottom: 5px;">
+                    <strong id="currentChar" style="color: #1a365d;"></strong>
+                    <span style="color: #718096; margin: 0 8px;">|</span>
+                    <span id="currentPinyin" style="color: #5a67d8; font-weight: 600;"></span>
+                </div>
+                
+                <div id="animationStatus" class="status-indicator status-loading">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Đang khởi tạo...</span>
+                </div>
+            </div>
+            
+            <div class="modal-controls">
+                <button onclick="replayAnimation()" class="btn-primary" id="replayBtn" disabled>🔄 Viết lại</button>
+                <button onclick="closeStrokeModal()" class="btn-secondary">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        // === DỮ LIỆU BÀI HỌC MỚI: TIẾNG HOA DU LỊCH ===
+        const lessons = [
+            {
+                id: 1,
+                title: "BÀI 1: CHÀO HỎI CƠ BẢN (基础问候)",
+                vocab: [
+                    {hanzi: "你好", pinyin: "nǐ hǎo", type: "Câu chào", meaning: "Xin chào (cơ bản nhất)"},
+                    {hanzi: "您好", pinyin: "nín hǎo", type: "Câu chào", meaning: "Chào ngài (kính ngữ)"},
+                    {hanzi: "再见", pinyin: "zàijiàn", type: "Câu chào", meaning: "Tạm biệt, hẹn gặp lại"},
+                    {hanzi: "谢谢", pinyin: "xièxie", type: "Cảm ơn", meaning: "Cảm ơn"},
+                    {hanzi: "不客气", pinyin: "bú kèqi", type: "Trả lời", meaning: "Không có gì, không khách sáo"},
+                    {hanzi: "对不起", pinyin: "duìbùqǐ", type: "Xin lỗi", meaning: "Xin lỗi"},
+                    {hanzi: "没关系", pinyin: "méi guānxi", type: "Trả lời", meaning: "Không sao, không có gì"},
+                    {hanzi: "是", pinyin: "shì", type: "Động từ", meaning: "Là, đúng, vâng"},
+                    {hanzi: "不是", pinyin: "bú shì", type: "Động từ", meaning: "Không phải, không"},
+                    {hanzi: "请", pinyin: "qǐng", type: "Mời", meaning: "Xin mời, làm ơn"}
+                ],
+                dialogues: [
+                    {zh: "你好！", pinyin: "Nǐ hǎo!", vn: "Xin chào!"},
+                    {zh: "您好！很高兴见到您。", pinyin: "Nín hǎo! Hěn gāoxìng jiàndào nín.", vn: "Chào ngài! Rất vui được gặp ngài。"},
+                    {zh: "谢谢！", pinyin: "Xièxie!", vn: "Cảm ơn!"},
+                    {zh: "不客气！", pinyin: "Bú kèqi!", vn: "Không có gì!"},
+                    {zh: "对不起。", pinyin: "Duìbùqǐ.", vn: "Xin lỗi。"},
+                    {zh: "没关系。", pinyin: "Méi guānxi.", vn: "Không sao。"},
+                    {zh: "再见！", pinyin: "Zàijiàn!", vn: "Tạm biệt!"},
+                    {zh: "你好吗？", pinyin: "Nǐ hǎo ma?", vn: "Bạn khỏe không? (Bạn có khỏe không?)"}
+                ]
+            },
+            {
+                id: 2,
+                title: "BÀI 2: Ở SÂN BAY (机场用语)",
+                vocab: [
+                    {hanzi: "机场", pinyin: "jīchǎng", type: "Danh từ", meaning: "Sân bay"},
+                    {hanzi: "护照", pinyin: "hùzhào", type: "Danh từ", meaning: "Hộ chiếu"},
+                    {hanzi: "登机牌", pinyin: "dēngjī pái", type: "Danh từ", meaning: "Thẻ lên máy bay"},
+                    {hanzi: "行李", pinyin: "xíngli", type: "Danh từ", meaning: "Hành lý"},
+                    {hanzi: "安检", pinyin: "ānjiǎn", type: "Danh từ", meaning: "Kiểm tra an ninh"},
+                    {hanzi: "登机口", pinyin: "dēngjī kǒu", type: "Danh từ", meaning: "Cổng lên máy bay"},
+                    {hanzi: "航班", pinyin: "hángbān", type: "Danh từ", meaning: "Chuyến bay"},
+                    {hanzi: "座位", pinyin: "zuòwèi", type: "Danh từ", meaning: "Chỗ ngồi"},
+                    {hanzi: "窗口", pinyin: "chuāngkǒu", type: "Danh từ", meaning: "Quầy (vé, thủ tục)"},
+                    {hanzi: "托运", pinyin: "tuōyùn", type: "Động từ", meaning: "Gửi hành lý (ký gửi)"}
+                ],
+                dialogues: [
+                    {zh: "请出示护照。", pinyin: "Qǐng chūshì hùzhào.", vn: "Xin xuất trình hộ chiếu。"},
+                    {zh: "我的航班号是CA123。", pinyin: "Wǒ de hángbān hào shì CA123.", vn: "Số chuyến bay của tôi là CA123。"},
+                    {zh: "登机口在哪里？", pinyin: "Dēngjī kǒu zài nǎlǐ?", vn: "Cổng lên máy bay ở đâu?"},
+                    {zh: "请去3号登机口。", pinyin: "Qǐng qù sān hào dēngjī kǒu.", vn: "Xin đi cổng số 3。"},
+                    {zh: "这件行李要托运。", pinyin: "Zhè jiàn xíngli yào tuōyùn.", vn: "Hành lý này cần gửi。"},
+                    {zh: "请把行李放上去。", pinyin: "Qǐng bǎ xíngli fàng shàngqu.", vn: "Xin để hành lý lên đây。"},
+                    {zh: "座位在哪里？", pinyin: "Zuòwèi zài nǎlǐ?", vn: "Chỗ ngồi ở đâu?"},
+                    {zh: "请问几点登机？", pinyin: "Qǐngwèn jǐ diǎn dēngjī?", vn: "Xin hỏi mấy giờ lên máy bay?"}
+                ]
+            },
+            {
+                id: 3,
+                title: "BÀI 3: HỎI ĐƯỜNG & DI CHUYỂN (问路出行)",
+                vocab: [
+                    {hanzi: "在哪里", pinyin: "zài nǎlǐ", type: "Hỏi", meaning: "Ở đâu?"},
+                    {hanzi: "怎么走", pinyin: "zěnme zǒu", type: "Hỏi", meaning: "Đi thế nào?/Đi đường nào?"},
+                    {hanzi: "左边", pinyin: "zuǒbiān", type: "Phương hướng", meaning: "Bên trái"},
+                    {hanzi: "右边", pinyin: "yòubiān", type: "Phương hướng", meaning: "Bên phải"},
+                    {hanzi: "前面", pinyin: "qiánmiàn", type: "Phương hướng", meaning: "Phía trước"},
+                    {hanzi: "后面", pinyin: "hòumiàn", type: "Phương hướng", meaning: "Phía sau"},
+                    {hanzi: "地铁", pinyin: "dìtiě", type: "Danh từ", meaning: "Tàu điện ngầm"},
+                    {hanzi: "出租车", pinyin: "chūzū chē", type: "Danh từ", meaning: "Taxi"},
+                    {hanzi: "厕所", pinyin: "cèsuǒ", type: "Danh từ", meaning: "Nhà vệ sinh"},
+                    {hanzi: "近", pinyin: "jìn", type: "Tính từ", meaning: "Gần"}
+                ],
+                dialogues: [
+                    {zh: "请问厕所在哪里？", pinyin: "Qǐngwèn cèsuǒ zài nǎlǐ?", vn: "Xin hỏi nhà vệ sinh ở đâu?"},
+                    {zh: "在前面，右边。", pinyin: "Zài qiánmiàn, yòubiān.", vn: "Ở phía trước, bên phải。"},
+                    {zh: "地铁站怎么走？", pinyin: "Dìtiě zhàn zěnme zǒu?", vn: "Đi đường nào đến ga tàu điện ngầm?"},
+                    {zh: "一直走，然后左转。", pinyin: "Yìzhí zǒu, ránhòu zuǒ zhuǎn.", vn: "Đi thẳng, sau đó rẽ trái。"},
+                    {zh: "离这里远吗？", pinyin: "Lí zhèlǐ yuǎn ma?", vn: "Có xa đây không?"},
+                    {zh: "不远，很近。", pinyin: "Bù yuǎn, hěn jìn.", vn: "Không xa, rất gần。"},
+                    {zh: "我要去机场。", pinyin: "Wǒ yào qù jīchǎng.", vn: "Tôi muốn đi sân bay。"},
+                    {zh: "请帮我叫出租车。", pinyin: "Qǐng bāng wǒ jiào chūzū chē.", vn: "Xin giúp tôi gọi taxi。"}
+                ]
+            },
+            {
+                id: 4,
+                title: "BÀI 4: MUA SẮM & ĂN UỐNG (购物饮食)",
+                vocab: [
+                    {hanzi: "多少钱", pinyin: "duōshao qián", type: "Hỏi giá", meaning: "Bao nhiêu tiền?"},
+                    {hanzi: "太贵了", pinyin: "tài guì le", type: "Mô tả", meaning: "Đắt quá"},
+                    {hanzi: "便宜", pinyin: "piányi", type: "Tính từ", meaning: "Rẻ"},
+                    {hanzi: "可以便宜吗", pinyin: "kěyǐ piányi ma", type: "Mặc cả", meaning: "Có thể rẻ hơn không?"},
+                    {hanzi: "我要这个", pinyin: "wǒ yào zhège", type: "Mua", meaning: "Tôi muốn cái này"},
+                    {hanzi: "不要", pinyin: "bú yào", type: "Từ chối", meaning: "Không muốn, không lấy"},
+                    {hanzi: "吃饭", pinyin: "chīfàn", type: "Động từ", meaning: "Ăn cơm/Ăn uống"},
+                    {hanzi: "菜单", pinyin: "càidān", type: "Danh từ", meaning: "Thực đơn"},
+                    {hanzi: "买单", pinyin: "mǎidān", type: "Động từ", meaning: "Thanh toán (tiền ăn)"},
+                    {hanzi: "刷卡", pinyin: "shuākǎ", type: "Động từ", meaning: "Quẹt thẻ (trả tiền)"}
+                ],
+                dialogues: [
+                    {zh: "这个多少钱？", pinyin: "Zhège duōshao qián?", vn: "Cái này bao nhiêu tiền?"},
+                    {zh: "五十块。", pinyin: "Wǔshí kuài.", vn: "50 tệ (nhân dân tệ)。"},
+                    {zh: "太贵了！可以便宜吗？", pinyin: "Tài guì le! Kěyǐ piányi ma?", vn: "Đắt quá! Có thể rẻ hơn không?"},
+                    {zh: "四十五块，怎么样？", pinyin: "Sìshíwǔ kuài, zěnmeyàng?", vn: "45 tệ, được không?"},
+                    {zh: "我要这个。", pinyin: "Wǒ yào zhège.", vn: "Tôi lấy cái này。"},
+                    {zh: "我要买单。", pinyin: "Wǒ yào mǎidān.", vn: "Tôi muốn thanh toán。"},
+                    {zh: "可以刷卡吗？", pinyin: "Kěyǐ shuākǎ ma?", vn: "Có thể quẹt thẻ không?"},
+                    {zh: "可以，请稍等。", pinyin: "Kěyǐ, qǐng shāo děng.", vn: "Được, xin chờ chút。"}
+                ]
+            }
+        ];
+
+        // === BIẾN TOÀN CỤC ===
+        let currentLesson = 0;
+        let quizMode = false;
+        let score = 0;
+        let correct = 0;
+        let total = 0;
+        let currentWriter = null;
+        let currentCharacter = '';
+        let isAnimating = false;
+        let animationTimeout = null;
+
+        // === KHỞI TẠO ===
+        window.onload = function() {
+            console.log('🚀 旅游汉语速成 - Khởi động...');
+            console.log('📦 HanziWriter Status:', typeof HanziWriter !== 'undefined' ? '✅ Loaded' : '❌ Not Loaded');
+            
+            renderLessonNav();
+            renderLesson(0);
+            
+            document.addEventListener('keydown', handleKeyboard);
+        };
+
+        // === XỬ LÝ BÀN PHÍM ===
+        function handleKeyboard(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('strokeModal').classList.contains('active')) {
+                    closeStrokeModal();
+                } else if (quizMode) {
+                    toggleQuiz();
+                }
+            }
+            else if (e.key === ' ' && document.getElementById('strokeModal').classList.contains('active')) {
+                e.preventDefault();
+                if (!isAnimating) replayAnimation();
+            }
+        }
+
+        // === HIỂN THỊ CÁCH VIẾT CHỮ ===
+        function showStrokeOrder(hanzi, pinyin) {
+            if (typeof HanziWriter === 'undefined') {
+                console.log('HanziWriter not loaded, waiting...');
+                setTimeout(() => {
+                    if (typeof HanziWriter !== 'undefined') {
+                        showStrokeOrder(hanzi, pinyin);
+                    } else {
+                        alert('❌ Lỗi: Thư viện HanziWriter không tải được.\nVui lòng kiểm tra kết nối mạng và tải lại trang.');
+                    }
+                }, 1000);
+                return;
+            }
+
+            currentCharacter = hanzi;
+            isAnimating = false;
+            
+            document.getElementById('currentChar').textContent = hanzi;
+            document.getElementById('currentPinyin').textContent = pinyin || '';
+            updateStatus('loading', 'Đang tải dữ liệu...');
+            document.getElementById('replayBtn').disabled = true;
+            
+            const modal = document.getElementById('strokeModal');
+            modal.classList.add('active');
+            
+            const container = document.getElementById('characterTarget');
+            container.innerHTML = `
+                <div id="loadingState" class="loading-container">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Đang tải dữ liệu nét chữ...</div>
+                </div>
+            `;
+
+            if (currentWriter) {
+                try {
+                    currentWriter.cancelAnimation();
+                } catch(e) {
+                    console.log('Cleanup old writer:', e);
+                }
+                currentWriter = null;
+            }
+
+            setTimeout(() => {
+                try {
+                    if (hanzi.length > 1) {
+                        showMultipleCharacters(hanzi, pinyin, container);
+                    } else {
+                        currentWriter = HanziWriter.create('characterTarget', hanzi, {
+                            width: 300,
+                            height: 300,
+                            padding: 5,
+                            strokeColor: '#e63946',
+                            radicalColor: '#c53030',
+                            outlineColor: '#cbd5e1',
+                            drawingWidth: 4,
+                            strokeWidth: 4,
+                            showOutline: true,
+                            showCharacter: false,
+                            strokeAnimationSpeed: 2.0,
+                            delayBetweenStrokes: 150,
+                            onLoadCharDataSuccess: () => {
+                                console.log('✅ Char data loaded:', hanzi);
+                                updateStatus('loading', 'Đang khởi tạo animation...');
+                                
+                                const loadingEl = document.getElementById('loadingState');
+                                if (loadingEl) loadingEl.style.display = 'none';
+                                
+                                setTimeout(() => {
+                                    startAnimation();
+                                }, 100);
+                            },
+                            onLoadCharDataError: (error) => {
+                                console.error('❌ Error loading char data:', hanzi, error);
+                                showError(container, `Không thể tải dữ liệu cho chữ "${hanzi}"`);
+                                updateStatus('error', 'Lỗi tải dữ liệu');
+                            }
+                        });
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Writer creation error:', error);
+                    showError(container, 'Lỗi khởi tạo: ' + error.message);
+                    updateStatus('error', 'Lỗi khởi tạo');
+                }
+            }, 100);
+        }
+
+        function showMultipleCharacters(hanzi, pinyin, container) {
+            const chars = hanzi.split('');
+            let loadedCount = 0;
+            let writers = [];
+            
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px; justify-content: center; align-items: center; padding: 20px; background: #f0f8ff;">
+                    <div style="display: flex; flex-direction: row; gap: 30px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                        ${chars.map((char, index) => `
+                            <div style="text-align: center; min-width: 120px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <div id="char-${index}" style="width: 100px; height: 100px; border: 2px solid #e63946; border-radius: 6px; background: white; position: relative; margin: 0 auto;">
+                                    <div class="loading-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                        <div class="spinner" style="width: 30px; height: 30px; border: 3px solid #e2e8f0; border-top: 3px solid #e63946; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 1.2em; font-weight: bold; color: #e63946;">${char}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            chars.forEach((char, index) => {
+                const writer = HanziWriter.create(`char-${index}`, char, {
+                    width: 100,
+                    height: 100,
+                    padding: 3,
+                    strokeColor: '#e63946',
+                    radicalColor: '#c53030',
+                    outlineColor: '#cbd5e1',
+                    drawingWidth: 3,
+                    strokeWidth: 3,
+                    showOutline: true,
+                    showCharacter: false,
+                    strokeAnimationSpeed: 2.0,
+                    delayBetweenStrokes: 100,
+                    onLoadCharDataSuccess: () => {
+                        console.log(`✅ Char ${index} loaded:`, char);
+                        loadedCount++;
+                        
+                        const charContainer = document.getElementById(`char-${index}`);
+                        const loadingEl = charContainer.querySelector('.loading-container');
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        
+                        if (loadedCount === chars.length) {
+                            updateStatus('loading', 'Đang khởi tạo animation...');
+                            setTimeout(() => {
+                                startMultipleAnimation(writers, chars);
+                            }, 200);
+                        }
+                    },
+                    onLoadCharDataError: (error) => {
+                        console.error(`❌ Error loading char ${index}:`, char, error);
+                        showError(container, `Không thể tải dữ liệu cho chữ "${char}"`);
+                        updateStatus('error', 'Lỗi tải dữ liệu');
+                    }
+                });
+                writers.push(writer);
+            });
+            
+            currentWriter = writers[0];
+        }
+
+        function startMultipleAnimation(writers, chars) {
+            isAnimating = true;
+            updateStatus('loading', 'Đang viết chữ...');
+            document.getElementById('replayBtn').disabled = true;
+            
+            writers.forEach((writer, index) => {
+                setTimeout(() => {
+                    writer.showCharacter();
+                    setTimeout(() => {
+                        writer.animateCharacter({
+                            onComplete: () => {
+                                console.log(`✅ Animation ${index} completed`);
+                                if (index === writers.length - 1) {
+                                    isAnimating = false;
+                                    updateStatus('success', '✓ Hoàn thành');
+                                    document.getElementById('replayBtn').disabled = false;
+                                }
+                            }
+                        });
+                    }, 100);
+                }, index * 800);
+            });
+        }
+
+        function startAnimation() {
+            if (!currentWriter) return;
+            
+            isAnimating = true;
+            updateStatus('loading', 'Đang viết chữ...');
+            document.getElementById('replayBtn').disabled = true;
+            
+            try {
+                currentWriter.showCharacter();
+                
+                setTimeout(() => {
+                    currentWriter.animateCharacter({
+                        onComplete: function() {
+                            console.log('✅ Animation completed');
+                            isAnimating = false;
+                            updateStatus('success', '✓ Hoàn thành - Nhấn "Viết lại" hoặc Space để xem lại');
+                            document.getElementById('replayBtn').disabled = false;
+                        }
+                    });
+                }, 200);
+                
+            } catch (error) {
+                console.error('❌ Animation error:', error);
+                isAnimating = false;
+                updateStatus('error', 'Lỗi animation');
+                document.getElementById('replayBtn').disabled = false;
+            }
+        }
+
+        function replayAnimation() {
+            if (!currentWriter || isAnimating) {
+                console.log('Cannot replay:', { hasWriter: !!currentWriter, isAnimating });
+                return;
+            }
+            
+            console.log('🔄 Replaying animation...');
+            isAnimating = true;
+            updateStatus('loading', 'Đang phát lại...');
+            document.getElementById('replayBtn').disabled = true;
+            
+            try {
+                currentWriter.hideCharacter();
+                
+                setTimeout(() => {
+                    currentWriter.showCharacter();
+                    
+                    setTimeout(() => {
+                        currentWriter.animateCharacter({
+                            onComplete: function() {
+                                console.log('✅ Replay completed');
+                                isAnimating = false;
+                                updateStatus('success', '✓ Hoàn thành');
+                                document.getElementById('replayBtn').disabled = false;
+                            }
+                        });
+                    }, 200);
+                }, 100);
+                
+            } catch (error) {
+                console.error('❌ Replay error:', error);
+                isAnimating = false;
+                updateStatus('error', 'Lỗi phát lại');
+                document.getElementById('replayBtn').disabled = false;
+            }
+        }
+
+        function showError(container, message) {
+            container.innerHTML = `
+                <div class="error-display">
+                    <div class="error-icon">⚠️</div>
+                    <h3>Đã xảy ra lỗi</h3>
+                    <p>${message}</p>
+                    <button onclick="retryWrite()" class="retry-btn">🔄 Thử lại</button>
+                </div>
+            `;
+        }
+
+        function retryWrite() {
+            if (currentCharacter) {
+                showStrokeOrder(currentCharacter, document.getElementById('currentPinyin').textContent);
+            }
+        }
+
+        function updateStatus(type, text) {
+            const statusEl = document.getElementById('animationStatus');
+            if (!statusEl) return;
+            
+            statusEl.className = 'status-indicator status-' + type;
+            
+            let dot = '';
+            if (type === 'loading') dot = '<span class="status-dot"></span>';
+            else if (type === 'success') dot = '✓';
+            else if (type === 'error') dot = '✗';
+            
+            statusEl.innerHTML = `${dot}<span class="status-text">${text}</span>`;
+        }
+
+        function closeStrokeModal() {
+            const modal = document.getElementById('strokeModal');
+            modal.classList.remove('active');
+            
+            if (animationTimeout) {
+                clearTimeout(animationTimeout);
+                animationTimeout = null;
+            }
+            
+            if (currentWriter) {
+                try {
+                    currentWriter.cancelAnimation();
+                } catch(e) {
+                    console.log('Error destroying writer:', e);
+                }
+                currentWriter = null;
+            }
+            
+            isAnimating = false;
+            currentCharacter = '';
+        }
+
+        function closeModalOnOverlay(event) {
+            if (event.target === document.getElementById('strokeModal')) {
+                closeStrokeModal();
+            }
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-CN';
+                utterance.rate = 0.8;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Trình duyệt không hỗ trợ phát âm!');
+            }
+        }
+
+        function renderLessonNav() {
+            const nav = document.getElementById('lessonNav');
+            nav.innerHTML = lessons.map((lesson, index) => 
+                `<button class="lesson-btn ${index === 0 ? 'active' : ''}" onclick="selectLesson(${index})">
+                    ${lesson.title}
+                </button>`
+            ).join('');
+        }
+
+        function selectLesson(index) {
+            currentLesson = index;
+            document.querySelectorAll('.lesson-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+            renderLesson(index);
+            if(quizMode) generateQuiz();
+        }
+
+        function renderLesson(index) {
+            const lesson = lessons[index];
+            
+            const travelTip = index === 1 ? '<div class="travel-tip">💡 <strong>Mẹo:</strong> Ở sân bay Trung Quốc, nếu không biết tiếng Hoa, cứ đưa vé máy bay và hộ chiếu ra, nhân viên sẽ hiểu ý bạn muốn làm thủ tục.</div>' : 
+                           index === 2 ? '<div class="travel-tip">💡 <strong>Mẹo:</strong> Nếu đi taxi, hãy chuẩn bị sẵn địa chỉ bằng tiếng Trung (ghi trên giấy hoặc điện thoại) để tài xế đọc được.</div>' :
+                           index === 3 ? '<div class="travel-tip">💡 <strong>Mẹo:</strong> Ở Trung Quốc có thể mặc cả ở chợ và các cửa hàng nhỏ, nhưng không mặc cả ở siêu thị hay cửa hàng lớn.</div>' : '';
+
+            const vocabTable = `
+                <div class="section">
+                    <h3><span class="section-icon">📋</span> Từ vựng chủ đề</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:8%">STT</th>
+                                <th style="width:20%">Hán tự</th>
+                                <th style="width:18%">Pinyin</th>
+                                <th style="width:12%">Loại từ</th>
+                                <th style="width:42%">Nghĩa tiếng Việt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${lesson.vocab.map((v, i) => `
+                                <tr class="searchable">
+                                    <td>${i + 1}</td>
+                                    <td class="hanzi">
+                                        <button class="play-btn" onclick="speakText('${v.hanzi}')" title="Nghe phát âm">🔊</button>
+                                        ${v.hanzi}
+                                    </td>
+                                    <td class="pinyin">${v.pinyin}</td>
+                                    <td>${v.type}</td>
+                                    <td class="meaning">${v.meaning}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            const dialogueTable = `
+                <div class="section">
+                    <h3><span class="section-icon">💬</span> Mẫu câu đối thoại thực tế</h3>
+                    ${travelTip}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:8%">STT</th>
+                                <th style="width:25%">Tiếng Trung</th>
+                                <th style="width:25%">Phiên âm</th>
+                                <th style="width:42%">Dịch nghĩa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${lesson.dialogues.map((d, i) => `
+                                <tr class="dialogue-row searchable">
+                                    <td>${i + 1}</td>
+                                    <td class="hanzi">
+                                        <button class="play-btn" onclick="speakText('${d.zh}')" title="Nghe phát âm">🔊</button>
+                                        ${d.zh}
+                                    </td>
+                                    <td class="pinyin">${d.pinyin}</td>
+                                    <td class="meaning">${d.vn}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            document.getElementById('lessonContent').innerHTML = `
+                ${vocabTable}
+                ${dialogueTable}
+            `;
+
+            document.getElementById('dialogueContent').innerHTML = `
+                ${travelTip}
+                <div style="background:#f7fafc;padding:20px;border-radius:10px;">
+                    ${lesson.dialogues.map((d, i) => `
+                        <div style="margin-bottom:20px;padding:15px;background:white;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+                            <div style="font-size:1.3em;color:#2d3748;margin-bottom:8px;">
+                                <button class="play-btn" onclick="speakText('${d.zh}')">🔊</button>
+                                ${d.zh}
+                            </div>
+                            <div style="color:#718096;font-style:italic;margin-bottom:5px;">${d.pinyin}</div>
+                            <div style="color:#c53030;">${d.vn}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function switchMode(mode) {
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if(mode === 'vocab') {
+                document.getElementById('vocabMode').classList.add('active');
+                document.getElementById('quizMode').style.display = 'none';
+                quizMode = false;
+            } else if(mode === 'dialogue') {
+                document.getElementById('dialogueMode').classList.add('active');
+                document.getElementById('quizMode').style.display = 'none';
+                quizMode = false;
+            }
+        }
+
+        function toggleQuiz() {
+            quizMode = !quizMode;
+            const btn = document.getElementById('quizBtn');
+            
+            if(quizMode) {
+                btn.classList.add('active');
+                btn.textContent = '❌ Đóng bài tập';
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById('quizMode').style.display = 'block';
+                generateQuiz();
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '📝 Làm bài tập';
+                document.getElementById('quizMode').style.display = 'none';
+                document.getElementById('vocabMode').classList.add('active');
+                document.querySelectorAll('.mode-btn')[0].classList.add('active');
+                document.querySelectorAll('.mode-btn')[1].classList.remove('active');
+            }
+        }
+
+        function generateQuiz() {
+            score = 0;
+            correct = 0;
+            total = 0;
+            updateScore();
+            
+            const lesson = lessons[currentLesson];
+            const allVocab = [...lesson.vocab];
+            const questions = [];
+            
+            for(let i = 0; i < 5; i++) {
+                const correctIdx = Math.floor(Math.random() * allVocab.length);
+                const correctWord = allVocab[correctIdx];
+                
+                const wrongOptions = [];
+                while(wrongOptions.length < 3) {
+                    const idx = Math.floor(Math.random() * allVocab.length);
+                    if(idx !== correctIdx && !wrongOptions.includes(idx)) {
+                        wrongOptions.push(idx);
+                    }
+                }
+                
+                const options = [
+                    {text: correctWord.meaning, correct: true},
+                    ...wrongOptions.map(idx => ({text: allVocab[idx].meaning, correct: false}))
+                ].sort(() => Math.random() - 0.5);
+                
+                questions.push({
+                    question: `Hán tự "${correctWord.hanzi}" (${correctWord.pinyin}) nghĩa là gì?`,
+                    options: options,
+                    hanzi: correctWord.hanzi
+                });
+            }
+            
+            document.getElementById('quizContent').innerHTML = questions.map((q, idx) => `
+                <div class="quiz-question">
+                    <strong>Câu ${idx + 1}:</strong> ${q.question}
+                    <button class="play-btn" onclick="speakText('${q.hanzi}')">🔊 Nghe</button>
+                    <div class="quiz-options">
+                        ${q.options.map((opt, optIdx) => `
+                            <div class="quiz-option" onclick="checkAnswer(this, ${opt.correct})">
+                                ${String.fromCharCode(65 + optIdx)}. ${opt.text}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkAnswer(element, isCorrect) {
+            if(element.classList.contains('correct') || element.classList.contains('wrong')) return;
+            
+            total++;
+            if(isCorrect) {
+                element.classList.add('correct');
+                score += 10;
+                correct++;
+                speakText('正确');
+            } else {
+                element.classList.add('wrong');
+                const options = element.parentElement.querySelectorAll('.quiz-option');
+                options.forEach(opt => {
+                    if(!opt.classList.contains('wrong') && opt.onclick.toString().includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+                speakText('错了');
+            }
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('correct').textContent = correct;
+            document.getElementById('total').textContent = total;
+        }
+
+        function searchContent() {
+            const term = document.getElementById('searchBox').value.toLowerCase();
+            const rows = document.querySelectorAll('.searchable');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if(text.includes(term)) {
+                    row.style.display = '';
+                    if(term) row.classList.add('highlight');
+                    else row.classList.remove('highlight');
+                } else {
+                    row.style.display = 'none';
+                    row.classList.remove('highlight');
+                }
+            });
+        }
+
+        function exportHTML() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'TiengHoaDuLich-TanAn.html';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Đã xuất file HTML! Bạn có thể mở file này để học offline.');
+        }
+    </script>
+</body>
+</html>
