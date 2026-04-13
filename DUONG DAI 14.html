@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>第十四課 天氣這麼冷！</title>
+<base target="_blank">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+:root{
+  --g:#2e7d32;--g0:#e8f5e9;
+  --b:#1565c0;--b0:#dbeafe;
+  --r:#c62828;--r0:#fff3e0;
+  --s:#607d8b;--s0:#f0f4f5;
+  --k:#222;--w:#fff;
+  --sw:200px;
+  --fzh:32px;--fpy:19px;--fvi:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
+.zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
+
+/* SIDEBAR */
+#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
+.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
+.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
+.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
+.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
+.logo-area{text-align:center;padding:5px 0;}
+.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+.logo-container img{width:100%;height:100%;object-fit:contain;}
+nav{flex:1;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
+.nb:hover{background:rgba(255,255,255,.1);}
+.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+.nb .ic{font-size:18px;}
+.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
+.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
+.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
+.st-btn:hover{background:rgba(255,255,255,.1);}
+.st-btn.on{background:var(--g);border-color:var(--g);}
+
+/* MAIN */
+#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+.tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
+.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
+.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+
+/* SECTIONS */
+.sec{display:none;padding:20px 24px;}
+.sec.on{display:block;}
+.subnav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e0e0e0;flex-wrap:wrap;}
+.subtab{background:#f5f5f5;border:none;padding:10px 20px;font-size:14px;font-weight:600;color:#666;cursor:pointer;border-radius:8px 8px 0 0;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.subtab:hover{background:#e8e8e8;color:var(--b);}
+.subtab.on{background:var(--b);color:#fff;border-bottom-color:var(--r);}
+.sub-content{display:none;}
+.sub-content.on{display:block;}
+
+/* VOCAB TABLE */
+.vt-wrap{overflow-x:auto;margin-bottom:6px;}
+table.vt{border-collapse:collapse;background:var(--w);border-radius:8px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.09);table-layout:auto;width:auto;min-width:100%;}
+table.vt thead tr{background:var(--b);}
+table.vt thead th{padding:9px 12px;font-size:13px;font-weight:700;color:#fff;text-align:left;white-space:nowrap;}
+table.vt thead th.tc{text-align:center;}
+table.vt tbody tr{border-bottom:1px solid #e8ecf0;}
+table.vt tbody tr:last-child{border-bottom:none;}
+table.vt tbody tr:hover{background:#f5f8ff;}
+.c-stt{padding:10px 8px;text-align:center;white-space:nowrap;width:36px;font-size:14px;font-weight:600;color:var(--s);}
+.c-au{padding:10px 6px;text-align:center;white-space:nowrap;width:44px;}
+.c-zh,.c-py{padding:10px;white-space:nowrap;}
+.c-vi{padding:10px;}
+.c-tp{padding:10px 8px;text-align:center;white-space:nowrap;width:58px;}
+.c-st{padding:10px 8px;text-align:center;white-space:nowrap;width:48px;}
+.zh-word{font-size:var(--fzh);color:var(--k);letter-spacing:1px;}
+.py-text{font-size:var(--fpy);color:var(--r);font-weight:500;}
+.vi-text{font-size:var(--fvi);color:var(--b);line-height:1.4;}
+.tp-bd{display:inline-block;font-size:12px;color:#fff;background:var(--s);border-radius:4px;padding:2px 8px;font-weight:600;}
+.bau{background:var(--b);color:#fff;border:none;border-radius:7px;padding:7px 9px;font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.bau:hover{background:#0d47a1;}
+.bau:active{transform:scale(.92);}
+.bst{background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;color:var(--r);line-height:1;}
+.bst:hover{color:#7b0000;}
+
+/* STROKE OVERLAY */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;align-items:center;justify-content:center;}
+#ov.open{display:flex;}
+#obox{background:var(--w);border-radius:14px;padding:24px 28px;max-width:480px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;}
+#ocls{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:var(--s);margin-top:-6px;line-height:1;}
+#otitle{font-size:18px;font-weight:700;color:var(--b);margin-bottom:16px;font-family:'DFKai-SB',serif;}
+#oframes{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hw-cell{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.hw-cell span{font-size:13px;color:var(--s);}
+.hw-controls{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hw-btn{background:var(--b);color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;}
+.hw-btn:hover{background:#0d47a1;}
+.hw-btn.red{background:var(--r);}
+.hw-btn.red:hover{background:#8d1515;}
+
+/* DIALOGUE */
+.db{background:var(--w);border-radius:12px;padding:16px 20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:5px solid var(--b);}
+.db.dg{border-top-color:var(--g);}
+.dt{font-size:15px;font-weight:700;color:var(--b);margin-bottom:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.db.dg .dt{color:var(--g);}
+.dlb{background:var(--b);color:#fff;padding:2px 11px;border-radius:12px;font-size:12px;}
+.db.dg .dlb{background:var(--g);}
+.dab{margin-left:auto;background:var(--b);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:700;}
+.db.dg .dab{background:var(--g);}
+table.dt2{width:100%;border-collapse:collapse;}
+table.dt2 tr{border-bottom:1px solid #f0f0f0;}
+table.dt2 tr:last-child{border-bottom:none;}
+td.d-au{width:44px;padding:11px 6px 11px 0;vertical-align:top;}
+td.d-sp{width:80px;padding:11px 8px 11px 0;vertical-align:top;}
+td.d-tx{padding:11px 0;}
+.spk{display:inline-block;text-align:center;font-size:15px;color:#fff;background:var(--g);padding:5px 7px;border-radius:8px;line-height:1.3;min-width:66px;font-family:'DFKai-SB',serif;}
+.spk.b{background:var(--b);}.spk.c{background:var(--r);}.spk.y{background:#f57c00;}
+.spk small{font-size:11px;display:block;font-family:'Segoe UI',sans-serif;}
+.szh{font-size:var(--fzh);color:var(--k);line-height:1.6;letter-spacing:1px;}
+.spy{font-size:var(--fpy);color:var(--r);margin-top:3px;line-height:1.5;font-weight:500;}
+.svi{font-size:var(--fvi);color:var(--b);margin-top:3px;line-height:1.5;font-style:italic;}
+.spy.hd,.svi.hd{display:none;}
+
+/* GRAMMAR */
+.gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
+.gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
+.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
+.gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
+table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
+table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;text-align:left;font-weight:700;}
+table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
+table.ex tr:last-child td{border-bottom:none;}
+table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
+table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
+
+/* EXERCISES */
+.ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
+.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ei{margin-bottom:14px;}
+.eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
+.eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
+.eh{font-size:14px;color:var(--s);font-style:italic;}
+input.fi{border:2px solid #ccc;border-radius:6px;padding:4px 9px;font-size:19px;width:110px;outline:none;font-family:'DFKai-SB',serif;}
+input.fi:focus{border-color:var(--b);}
+input.fi.ok{border-color:var(--g);background:var(--g0);}
+input.fi.er{border-color:var(--r);background:var(--r0);}
+.bck{background:var(--b);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.bck:hover{background:#0d47a1;}
+.brs{background:var(--s);color:#fff;border:none;padding:9px 15px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin:10px 0 0 8px;}
+.ab{display:none;margin-top:9px;background:var(--g0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--g);}
+.ab.sh{display:block;}
+
+/* CULTURE */
+.culture-box{background:linear-gradient(135deg,#fff,#f5f7fa);border-left:5px solid #ff6b6b;padding:20px;border-radius:12px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.culture-box h3{color:#e74c3c;margin-bottom:10px;font-size:18px;}
+.culture-box p{line-height:1.8;margin-bottom:10px;text-align:justify;}
+
+/* EDITOR MODAL */
+#editorModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
+#editorModal.open{display:flex;}
+.editor-container{background:#fff;border-radius:12px;width:90%;max-width:900px;height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.editor-header{background:var(--b);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0;}
+.editor-header h3{margin:0;font-size:18px;}
+.editor-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.editor-close:hover{background:rgba(255,255,255,.2);}
+.editor-body{flex:1;display:flex;flex-direction:column;}
+#editor-toolbar{border-bottom:1px solid #ddd;}
+#editor-content{flex:1;font-size:16px;line-height:1.6;}
+#editor-content .ql-editor{min-height:100%;}
+.editor-footer{padding:15px 20px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 12px 12px;}
+.editor-status{font-size:13px;color:#666;}
+.editor-actions{display:flex;gap:10px;}
+.btn-save{background:var(--g);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-clear{background:transparent;color:var(--s);border:1px solid #ddd;padding:8px 20px;border-radius:6px;font-size:14px;cursor:pointer;}
+.btn-save:hover{background:#1b5e20;}
+.btn-clear:hover{background:#f5f5f5;}
+
+footer{margin-top:28px;padding:12px 24px;background:var(--k);color:#777;font-size:12px;text-align:center;}
+footer strong{color:var(--r);}
+</style>
+</head>
+<body>
+
+<!-- STROKE OVERLAY -->
+<div id="ov" onclick="ovClick(event)">
+  <div id="obox">
+    <button id="ocls" onclick="closeOv()">✕</button>
+    <div id="otitle"></div>
+    <div id="oframes"></div>
+    <div class="hw-controls" id="octrl"></div>
+  </div>
+</div>
+
+<!-- EDITOR MODAL -->
+<div id="editorModal">
+  <div class="editor-container">
+    <div class="editor-header">
+      <h3>📝 Soạn thảo ghi chú - Bài 14</h3>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div id="editor-toolbar">
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="1">Tiêu đề 1</option>
+            <option value="2">Tiêu đề 2</option>
+            <option selected>Tiêu đề thường</option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats"><button class="ql-clean"></button></span>
+      </div>
+      <div id="editor-content"></div>
+    </div>
+    <div class="editor-footer">
+      <span class="editor-status">💡 Ghi chú tự động lưu vào trình duyệt</span>
+      <div class="editor-actions">
+        <button class="btn-clear" onclick="clearEditor()">Xóa tất cả</button>
+        <button class="btn-save" onclick="saveEditor()">Lưu ghi chú</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="lb">
+    <div class="logo-area">
+      <div class="logo-container">
+        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+      </div>
+    </div>
+    <div class="ln">GIA SƯ HOA NGỮ TÂN AN</div>
+    <div class="la">9/1 Bạch Văn Tư, Tân An, Long An</div>
+    <div class="lz">Zalo: 0839 889 772</div>
+  </div>
+  <nav>
+    <button class="nb" onclick="window.open('TIENG TRUNG DUONG DAI.html','_self')"><span class="ic">🏠</span><span>VỀ TRANG CHỦ</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TỪ VỰNG</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BÀI KHÓA</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGỮ PHÁP</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BÀI TẬP</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VĂN HÓA</span></button>
+  </nav>
+  <div class="side-toggle" id="toggleContainer" style="display:none;">
+    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phiên âm</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tiếng Việt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mn">
+  <div class="topbar">
+    <div>
+      <div class="tzh">BÀI 14 · 第十四課</div>
+      <div class="tvi">天氣這麼冷！· Trời lạnh thế!</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:15px;">
+      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soạn thảo</span></button>
+      <div class="badge">當代中文課程 1</div>
+    </div>
+  </div>
+
+  <!-- TỪ VỰNG -->
+  <div id="vocab" class="sec on">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Từ vựng 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')">📖 Từ vựng 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','ct')">📝 Cụm từ · 短語</button>
+      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhân vật · 人物</button>
+    </div>
+    <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
+    <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
+    <div id="vocab-ct" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-ct"></table></div></div>
+    <div id="vocab-nv" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-nv"></table></div></div>
+  </div>
+
+  <!-- BÀI KHÓA -->
+  <div id="baikoa" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hội thoại 1 · 對話一</button>
+      <button class="subtab" onclick="goSub('baikoa','ht2')">💬 Hội thoại 2 · 對話二</button>
+    </div>
+    <div id="baikoa-ht1" class="sub-content on">
+      <div class="db">
+        <div class="dt">
+          <span class="dlb">Hội thoại 1 · 對話一</span>Thời tiết và các mùa
+          <button class="dab" onclick="sayZh('如玉：外面風那麼大，我覺得今天比昨天冷。臺灣會不會下雪？明華：很高的山會下雪。玉山常下雪。美國呢？開始下雪了吧？如玉：還沒有。每年差不多十二月開始。下雪的時候，我常去山上滑雪。明華：我怕冷。我比較喜歡春天。如玉：春天不錯，天氣很舒服。明華：我去年五月在紐約玩了兩個星期。那個時候，天氣很好，風景也很漂亮，我玩得非常開心。如玉：我在臺灣住了半年多了。有一點想家。明華：新年快到了。想回去看父母嗎？如玉：我打算十二月底回去。想跟我去美國玩嗎？明華：冬天太冷了。不過，我想明年秋天去看紅葉。對了，妳什麼時候回來？如玉：因為我們只放十天的假，所以一月五號回來。')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('外面風那麼大，我覺得今天比昨天冷。臺灣會不會下雪？')">🔊</button></td><td class="d-sp"><div class="spk">如玉<small>Rúyù</small></div></td><td class="d-tx"><div class="szh">外面風那麼大，我覺得今天比昨天冷。臺灣會不會下雪？</div><div class="spy">Wàimiàn fēng nàme dà, wǒ juéde jīntiān bǐ zuótiān lěng. Táiwān huì bú huì xiàxuě?</div><div class="svi">Gió bên ngoài to quá, cháu nghĩ hôm nay lạnh hơn hôm qua. Đài Loan có tuyết rơi không ạ?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('很高的山會下雪。玉山常下雪。美國呢？開始下雪了吧？')">🔊</button></td><td class="d-sp"><div class="spk b">明華<small>Mínghuá</small></div></td><td class="d-tx"><div class="szh">很高的山會下雪。玉山常下雪。美國呢？開始下雪了吧？</div><div class="spy">Hěn gāo de shān huì xiàxuě. Yùshān cháng xiàxuě. Měiguó ne? Kāishǐ xià xuě le ba?</div><div class="svi">Núi rất cao mới có tuyết rơi. Núi Ngọc Sơn thường có tuyết. Mỹ thì sao? Bắt đầu rơi chưa?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('還沒有。每年差不多十二月開始。下雪的時候，我常去山上滑雪。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">還沒有。每年差不多十二月開始。下雪的時候，我常去山上滑雪。</div><div class="spy">Hái méi yǒu. Měi nián chàbùduō shí’èryuè kāishǐ. Xiàxuě de shíhòu, wǒ cháng qù shānshàng huáxuě.</div><div class="svi">Vẫn chưa có ạ. Hằng năm khoảng tháng 12 là bắt đầu. Lúc tuyết rơi, cháu thường đi lên núi trượt tuyết.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我怕冷。我比較喜歡春天。')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">我怕冷。我比較喜歡春天。</div><div class="spy">Wǒ pà lěng. Wǒ bǐjiào xǐhuān chūntiān.</div><div class="svi">Chú sợ lạnh. Chú thích mùa xuân hơn.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('春天不錯，天氣很舒服。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">春天不錯，天氣很舒服。</div><div class="spy">Chūntiān búcuò, tiānqì hěn shūfú.</div><div class="svi">Mùa xuân không tệ, thời tiết rất thoải mái.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我去年五月在紐約玩了兩個星期。那個時候，天氣很好，風景也很漂亮，我玩得非常開心。')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">我去年五月在紐約玩了兩個星期。那個時候，天氣很好，風景也很漂亮，我玩得非常開心。</div><div class="spy">Wǒ qùnián wǔyuè zài Niǔyuē wánle liǎng ge xīngqí. Nàge shíhòu, tiānqì hěn hǎo, fēngjǐng yě hěn piàoliang, wǒ wán de fēicháng kāixīn.</div><div class="svi">Tháng 5 năm ngoái chú đi chơi Niu Óc hai tuần. Lúc đó, thời tiết rất đẹp, phong cảnh cũng rất đẹp, chú chơi rất vui.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我在臺灣住了半年多了。有一點想家。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">我在臺灣住了半年多了。有一點想家。</div><div class="spy">Wǒ zài Táiwān zhùle bàn nián duō le. Yǒu yìdiǎn xiǎng jiā.</div><div class="svi">Cháu sống ở Đài Loan hơn nửa năm rồi. Hơi nhớ nhà.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('新年快到了。想回去看父母嗎？')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">新年快到了。想回去看父母嗎？</div><div class="spy">Xīnnián kuài dào le. Xiǎng huíqù kàn fùmǔ ma?</div><div class="svi">Năm mới sắp đến rồi. Có định về thăm bố mẹ không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我打算十二月底回去。想跟我去美國玩嗎？')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">我打算十二月底回去。想跟我去美國玩嗎？</div><div class="spy">Wǒ dǎsuàn shí’èryuè dǐ huíqù. Xiǎng gēn wǒ qù Měiguó wán ma?</div><div class="svi">Cháu tính cuối tháng 12 về. Chú muốn đi Mỹ cùng cháu không ạ?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('冬天太冷了。不過，我想明年秋天去看紅葉。對了，妳什麼時候回來？')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">冬天太冷了。不過，我想明年秋天去看紅葉。對了，妳什麼時候回來？</div><div class="spy">Dōngtiān tài lěng le. Búguò, wǒ xiǎng míngnián qiūtiān qù kàn hóngyè. Duìle, nǐ shénme shíhòu huílái?</div><div class="svi">Mùa đông lạnh lắm. Nhưng mà, chú định mùa thu năm sau đi ngắm lá đỏ. Đúng rồi, bao giờ cháu quay lại?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('因為我們只放十天的假，所以一月五號回來。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">因為我們只放十天的假，所以一月五號回來。</div><div class="spy">Yīnwèi wǒmen zhǐ fàng shí tiān de jià, suǒyǐ yīyuè wǔhào huílái.</div><div class="svi">Do chúng cháu chỉ được nghỉ 10 ngày, nên ngày 5 tháng 1 quay lại ạ.</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="baikoa-ht2" class="sub-content">
+      <div class="db dg">
+        <div class="dt">
+          <span class="dlb">Hội thoại 2 · 對話二</span>Bão và mưa
+          <button class="dab" onclick="sayZh('明華：如玉，雨下得這麼大，妳怎麼沒帶傘呢？如玉：我昨天帶了，可是今天忘了帶。明華：颱風快要來了。如玉：我已經聽說了。明華：這裡每年夏天都有颱風。颱風來的時候，風和雨都很大，做什麼都很不方便。如玉：是啊！哪裡都濕濕的。真討厭。明華：電視新聞說，這次的颱風會比上次的更大，請大家多小心。如玉：希望這次的沒有上次的那麼可怕。明華：如玉，妳看！雨停了。如玉：太好了！謝謝你的傘，再見。明華：不客氣。小心慢走。')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('如玉，雨下得這麼大，妳怎麼沒帶傘呢？')">🔊</button></td><td class="d-sp"><div class="spk b">明華<small>Mínghuá</small></div></td><td class="d-tx"><div class="szh">如玉，雨下得這麼大，妳怎麼沒帶傘呢？</div><div class="spy">Rúyù, yǔ xià de zhème dà, nǐ zěnme méi dài sǎn ne?</div><div class="svi">Như Ngọc, mưa to thế này, sao cháu không mang ô?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我昨天帶了，可是今天忘了帶。')">🔊</button></td><td class="d-sp"><div class="spk">如玉<small>Rúyù</small></div></td><td class="d-tx"><div class="szh">我昨天帶了，可是今天忘了帶。</div><div class="spy">Wǒ zuótiān dài le, kěshì jīntiān wàngle dài.</div><div class="svi">Hôm qua cháu có mang, nhưng mà hôm nay quên mang rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('颱風快要來了。')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">颱風快要來了。</div><div class="spy">Táifēng kuài yào lái le.</div><div class="svi">Bão sắp đến rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我已經聽說了。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">我已經聽說了。</div><div class="spy">Wǒ yǐjīng tīngshuō le.</div><div class="svi">Cháu có nghe ạ.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('這裡每年夏天都有颱風。颱風來的時候，風和雨都很大，做什麼都很不方便。')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">這裡每年夏天都有颱風。颱風來的時候，風和雨都很大，做什麼都很不方便。</div><div class="spy">Zhèlǐ měi nián xiàtiān dōu yǒu táifēng. Táifēng lái de shíhòu, fēng hàn yǔ dōu hěn dà, zuò shénme dōu hěn bù fāngbiàn.</div><div class="svi">Mùa hè hằng năm ở đây đều có bão. Lúc bão đến, gió và mưa đều rất to, làm gì cũng rất bất tiện.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('是啊！哪裡都濕濕的。真討厭。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">是啊！哪裡都濕濕的。真討厭。</div><div class="spy">Shì a! Nǎlǐ dōu shīshī de, zhēn tǎoyàn.</div><div class="svi">Đúng thế! Chỗ nào cũng ẩm ướt. Thật đáng ghét.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('電視新聞說，這次的颱風會比上次的更大，請大家多小心。')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">電視新聞說，這次的颱風會比上次的更大，請大家多小心。</div><div class="spy">Diànshì xīnwén shuō, zhè cì de táifēng huì bǐ shàng cì de gèng dà, qǐng dàjiā duō xiǎoxīn.</div><div class="svi">Tin tức tivi nói, bão lần này còn sẽ to hơn so với lần trước, mọi người hãy cẩn thận hơn.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('希望這次的沒有上次的那麼可怕。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">希望這次的沒有上次的那麼可怕。</div><div class="spy">Xīwàng zhè cì de méi yǒu shàng cì de nàme kěpà.</div><div class="svi">Hy vọng lần này không đáng sợ như lần trước.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('如玉，妳看！雨停了。')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">如玉，妳看！雨停了。</div><div class="spy">Rúyù, nǐ kàn! Yǔ tíng le.</div><div class="svi">Như Ngọc, cháu xem! Tạnh mưa rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('太好了！謝謝你的傘，再見。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">太好了！謝謝你的傘，再見。</div><div class="spy">Tài hǎo le! Xièxie nǐ de sǎn, zàijiàn.</div><div class="svi">Tuyệt vời! Cảm ơn ô của chú, cháu chào chú ạ.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('不客氣。小心慢走。')">🔊</button></td><td class="d-sp"><div class="spk b">明華</div></td><td class="d-tx"><div class="szh">不客氣。小心慢走。</div><div class="spy">Bú kèqì. Xiǎoxīn màn zǒu.</div><div class="svi">Không phải khách sáo. Đi cẩn thận nhé.</div></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGỮ PHÁP -->
+  <div id="ngupap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('ngupap','g1')">1 · Thời gian - Thời lượng sau 了</button>
+      <button class="subtab" onclick="goSub('ngupap','g2')">2 · Hoàn thành cho đến nay</button>
+      <button class="subtab" onclick="goSub('ngupap','g3')">3 · 快...了</button>
+      <button class="subtab" onclick="goSub('ngupap','g4')">4 · So sánh với 更</button>
+      <button class="subtab" onclick="goSub('ngupap','g5')">5 · So sánh kém 沒有</button>
+    </div>
+    <div id="ngupap-g1" class="sub-content on">
+      <div class="gc">
+        <div><span class="gn">1</span><span class="gtt">Thời gian - Thời lượng sau Trợ từ 了 le · 時間-時量</span></div>
+        <div class="gsb">Cấu trúc này cho biết thời lượng của một hoạt động đã hoàn thành.</div>
+        <div class="fm">Động từ + 了 + Thời lượng<div class="fn">V + le + thời gian</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">媽媽的朋友在臺北玩了三天。</div></td><td><div class="py">Māma de péngyǒu zài Táiběi wánle sān tiān.</div></td><td><div class="vi">Bạn của mẹ đã ở Đài Bắc chơi được 3 ngày.</div></td></tr>
+          <tr><td><div class="zh">老師在美國住了一年。</div></td><td><div class="py">Lǎoshī zài Měiguó zhùle yì nián.</div></td><td><div class="vi">Cô giáo đã ở Mỹ được 1 năm.</div></td></tr>
+          <tr><td><div class="zh">他在這裡等了一個鐘頭。</div></td><td><div class="py">Tā zài zhèlǐ děngle yí ge zhōngtóu.</div></td><td><div class="vi">Anh ấy đã đợi ở đây được một tiếng đồng hồ.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Lưu ý: Nếu động từ là ngoại động từ và có tân ngữ theo sau thì động từ đó phải được lặp lại.<br>Ví dụ: 他租房子租了半年。/ 他住臺北住了三年。</div>
+      </div>
+    </div>
+    <div id="ngupap-g2" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">2</span><span class="gtt">Hoàn thành cho đến nay với 2 lần 了 · 動作持續</span></div>
+        <div class="gsb">2 lần 了 kết hợp với Thời gian - Thời lượng biểu thị việc hoàn thành một hành động cho đến thời điểm nói.</div>
+        <div class="fm">Động từ + 了 + Thời lượng + 了<div class="fn">V + le + thời gian + le</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">她已經在臺灣玩了一年了。</div></td><td><div class="py">Tā yǐjīng zài Táiwān wánle yì nián le.</div></td><td><div class="vi">Cô ấy ở Đài Loan chơi được 1 năm rồi.</div></td></tr>
+          <tr><td><div class="zh">我在這裡住了兩個月了。</div></td><td><div class="py">Wǒ zài zhèlǐ zhùle liǎng ge yuèle.</div></td><td><div class="vi">Tôi ở đây được 2 tháng rồi.</div></td></tr>
+          <tr><td><div class="zh">玉山下雪下了多久了？</div></td><td><div class="py">Yùshān xiàxuě xiàle duōjiǔ le?</div></td><td><div class="vi">Núi Ngọc Sơn tuyết rơi được bao lâu rồi?</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="ngupap-g3" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">3</span><span class="gtt">快...了 (sắp... rồi) · 快要</span></div>
+        <div class="gsb">Diễn tả một hành động hoặc sự kiện sẽ sớm xảy ra. Có thể dùng 要, 快要 hoặc 快.</div>
+        <div class="fm">快 / 要 / 快要 + Động từ + 了<div class="fn">Sắp... rồi</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">快下雨了。</div></td><td><div class="py">Kuài xiàyǔ le.</div></td><td><div class="vi">Sắp mưa rồi.</div></td></tr>
+          <tr><td><div class="zh">颱風快要來了。</div></td><td><div class="py">Táifēng kuài yào lái le.</div></td><td><div class="vi">Bão sắp đến rồi.</div></td></tr>
+          <tr><td><div class="zh">新年快到了。</div></td><td><div class="py">Xīnnián kuài dào le.</div></td><td><div class="vi">Năm mới sắp đến rồi.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Lưu ý: Nếu có từ chỉ thời gian cụ thể (như 明天), không dùng được 快要. Ví dụ sai: *他明天快要回來了。</div>
+      </div>
+    </div>
+    <div id="ngupap-g4" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">4</span><span class="gtt">So sánh với 更 gèng (càng) · 更</span></div>
+        <div class="gsb">更 là trạng từ bổ nghĩa cho động từ trạng thái, biểu thị mức độ cao hơn so với so sánh thông thường.</div>
+        <div class="fm">A 比 B 更 + Tính từ<div class="fn">A so với B càng/còn...</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">他很高，他哥哥比他更高。</div></td><td><div class="py">Tā hěn gāo, tā gēge bǐ tā gèng gāo.</div></td><td><div class="vi">Anh ấy rất cao, anh trai anh ấy còn cao hơn anh ấy.</div></td></tr>
+          <tr><td><div class="zh">今年比去年更冷。</div></td><td><div class="py">Jīnnián bǐ qùnián gèng lěng.</div></td><td><div class="vi">Năm nay so với năm ngoái càng lạnh.</div></td></tr>
+          <tr><td><div class="zh">這次的颱風比上次的更大。</div></td><td><div class="py">Zhè cì de táifēng bǐ shàng cì de gèng dà.</div></td><td><div class="vi">Bão lần này còn lớn hơn so với lần trước.</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="ngupap-g5" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">5</span><span class="gtt">So sánh kém 沒有...那麼/這麼 · 不如</span></div>
+        <div class="gsb">A 沒有 B 那麼/這麼... dùng để chỉ ra rằng A không có (tính từ) như/bằng B.</div>
+        <div class="fm">A 沒有 B 那麼/這麼 + Tính từ<div class="fn">A không... như/bằng B</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">哥哥沒有爸爸那麼高。</div></td><td><div class="py">Gēge méi yǒu bàba nàme gāo.</div></td><td><div class="vi">Anh trai không cao bằng bố.</div></td></tr>
+          <tr><td><div class="zh">這次的颱風沒有上次的那麼可怕。</div></td><td><div class="py">Zhè cì de táifēng méi yǒu shàng cì de nàme kěpà.</div></td><td><div class="vi">Bão lần này không đáng sợ như lần trước.</div></td></tr>
+          <tr><td><div class="zh">臺北沒有紐約那麼冷。</div></td><td><div class="py">Táiběi méi yǒu Niǔyuē nàme lěng.</div></td><td><div class="vi">Đài Bắc không lạnh bằng Niu Óc.</div></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÀI TẬP -->
+  <div id="baitap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bài 1 · Thời lượng sau 了</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bài 2 · 2 lần 了</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bài 3 · 快...了</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bài 4 · So sánh</button>
+    </div>
+    <div id="baitap-bt1" class="sub-content on">
+      <div class="ec">
+        <div class="ett">📝 Bài 1 · Thời gian - Thời lượng sau Trợ từ 了</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Trả lời các câu hỏi bằng cách sử dụng Thời gian - Thời lượng.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>你等了多久？<br>我等了<input class="fi" id="e1-1" style="width:150px;">。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>你在臺北住了多久？<br>他住了<input class="fi" id="e1-2" style="width:150px;">。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>你在紐約住了兩年吧？<br>我<input class="fi" id="e1-3" style="width:120px;">，只<input class="fi" id="e1-4" style="width:120px;">。（八個月）</div></div>
+        <button class="bck" onclick="ckE1()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE1()">🔄 Làm lại</button>
+        <div class="ab" id="ab1"><strong>Gợi ý đáp án:</strong> ① 半個鐘頭 / 一個鐘頭... ② 三年 / 半年... ③ 沒有住兩年，只住了八個月</div>
+      </div>
+    </div>
+    <div id="baitap-bt2" class="sub-content">
+      <div class="ec" style="border-top-color:var(--b)">
+        <div class="ett" style="color:var(--b)">📝 Bài 2 · Hoàn thành cho đến nay với 2 lần 了</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Trả lời các câu hỏi bằng cách sử dụng 2 lần 了.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>你在臺灣住了多久了？<br>我住了<input class="fi" id="e2-1" style="width:180px;">。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>陳老師教了多久的中文了？<br>他教了<input class="fi" id="e2-2" style="width:180px;">。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>玉山下雪下了多久了？<br>玉山已經<input class="fi" id="e2-3" style="width:220px;">。</div></div>
+        <button class="bck" onclick="ckE2()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE2()">🔄 Làm lại</button>
+        <div class="ab" id="ab2"><strong>Gợi ý đáp án:</strong> ① 半年多了 / 三個月了... ② 五年了 / 一年了... ③ 下雪下了三天了 / 下了很久了...</div>
+      </div>
+    </div>
+    <div id="baitap-bt3" class="sub-content">
+      <div class="ec" style="border-top-color:var(--r)">
+        <div class="ett" style="color:var(--r)">📝 Bài 3 · 快...了</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Hoàn thành câu trả lời dùng 快...了.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>A：你的老師回國了嗎？<br>B：他<input class="fi" id="e3-1" style="width:180px;">。大概後天吧！</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>A：已經十點了，哥哥怎麼還沒來？<br>B：<input class="fi" id="e3-2" style="width:200px;">。他說五分鐘以後會到。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>A：外面風怎麼那麼大？<br>B：<input class="fi" id="e3-3" style="width:150px;">下雨了，我們走吧！</div></div>
+        <button class="bck" onclick="ckE3()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE3()">🔄 Làm lại</button>
+        <div class="ab" id="ab3"><strong>Đáp án:</strong> ① 快要回國了 / 快回國了 ② 快要到了 / 快到了 ③ 快下雨了</div>
+      </div>
+    </div>
+    <div id="baitap-bt4" class="sub-content">
+      <div class="ec" style="border-top-color:#764ba2">
+        <div class="ett" style="color:#764ba2">📝 Bài 4 · So sánh</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">So sánh các tình huống sau.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>臺北和紐約，哪裡比較冷？<br><input class="fi" id="e4-1" style="width:320px;">。</div><div class="eh">→ Gợi ý: 臺北沒有紐約那麼冷 / 紐約比臺北更冷</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>今年比去年冷嗎？<br><input class="fi" id="e4-2" style="width:320px;">。</div><div class="eh">→ Gợi ý: 今年比去年更冷 / 今年沒有去年那麼冷</div></div>
+        <button class="bck" onclick="ckE4()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE4()">🔄 Làm lại</button>
+        <div class="ab" id="ab4"><strong>Gợi ý đáp án:</strong> ① 紐約比臺北更冷 / 臺北沒有紐約那麼冷 ② 今年比去年更冷</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VĂN HÓA -->
+  <div id="vanhoa" class="sec">
+    <div class="culture-box">
+      <h3>🌪️ Những ngày nghỉ bão · 颱風假</h3>
+      <p>"Những ngày bão" là thời gian nghỉ học và nghỉ làm được thông báo khi một cơn bão có tốc độ gió trung bình từ cấp 7 trở lên hoặc gió giật cấp 10 trở lên dự kiến sẽ đi qua một khu vực trong vòng bốn giờ tới. Mọi người sẽ được nghỉ làm và nghỉ học cho đến khi cơn bão đi qua.</p>
+      <p>Bão mang theo gió mạnh và mưa lớn. Quyền quyết định cho nghỉ học và nghỉ làm đã được trao cho Tổng cục Hành chính Nhân sự (DGPA) vào năm 1993. DGPA đã xem xét các dự báo thời tiết từ Cục Thời tiết Trung ương và các đề xuất từ chính quyền địa phương khi quyết định có nên công bố số ngày bão trên toàn quốc.</p>
+      <p>Hoạt động câu tôm (釣蝦) là một hoạt động giải trí đặc biệt chỉ có ở Đài Loan. Cơ sở câu tôm trong nhà là một nơi tuyệt vời để dành cả nửa ngày, nơi bạn có thể tự tay nướng tôm mà mình bắt được hoặc nhờ nhân viên rang hộ và ăn tại chỗ.</p>
+    </div>
+    <div class="gc">
+      <div class="gtt">🌡️ Từ vựng về thời tiết và mùa · 天氣季節</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:15px;">
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('春天')"><div style="font-size:28px;">🌸</div><div class="zh" style="font-size:20px;margin:6px 0;">春天</div><div style="font-size:13px;color:var(--b);">chūntiān - mùa xuân</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('夏天')"><div style="font-size:28px;">☀️</div><div class="zh" style="font-size:20px;margin:6px 0;">夏天</div><div style="font-size:13px;color:var(--b);">xiàtiān - mùa hè</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('秋天')"><div style="font-size:28px;">🍂</div><div class="zh" style="font-size:20px;margin:6px 0;">秋天</div><div style="font-size:13px;color:var(--b);">qiūtiān - mùa thu</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('冬天')"><div style="font-size:28px;">❄️</div><div class="zh" style="font-size:20px;margin:6px 0;">冬天</div><div style="font-size:13px;color:var(--b);">dōngtiān - mùa đông</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('颱風')"><div style="font-size:28px;">🌀</div><div class="zh" style="font-size:20px;margin:6px 0;">颱風</div><div style="font-size:13px;color:var(--b);">táifēng - bão</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('下雪')"><div style="font-size:28px;">🌨️</div><div class="zh" style="font-size:20px;margin:6px 0;">下雪</div><div style="font-size:13px;color:var(--b);">xiàxuě - tuyết rơi</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('下雨')"><div style="font-size:28px;">🌧️</div><div class="zh" style="font-size:20px;margin:6px 0;">下雨</div><div style="font-size:13px;color:var(--b);">xiàyǔ - trời mưa</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('風很大')"><div style="font-size:28px;">💨</div><div class="zh" style="font-size:20px;margin:6px 0;">風很大</div><div style="font-size:13px;color:var(--b);">fēng hěn dà - gió to</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>GIA SƯ HOA NGỮ TÂN AN</strong> &nbsp;·&nbsp; 9/1 Bạch Văn Tư, Tân An, Long An &nbsp;·&nbsp; Zalo: 0839 889 772<br>
+    當代中文課程 1 · 第十四課 天氣這麼冷！— Tài liệu giảng dạy nội bộ
+  </footer>
+</div>
+
+<script>
+// ── DỮ LIỆU TỪ VỰNG ──────────────────────────────────────────
+const TV1=[
+  {n:'1', zh:'天氣', py:'tiānqì', vi:'thời tiết, trời', t:'N'},
+  {n:'2', zh:'冷', py:'lěng', vi:'lạnh, rét', t:'Vs'},
+  {n:'3', zh:'風', py:'fēng', vi:'gió', t:'N'},
+  {n:'4', zh:'滑雪', py:'huáxuě', vi:'trượt tuyết', t:'V-sep'},
+  {n:'5', zh:'春天', py:'chūntiān', vi:'mùa xuân, xuân', t:'N'},
+  {n:'6', zh:'想', py:'xiǎng', vi:'nhớ (ai đó)', t:'Vst'},
+  {n:'7', zh:'新年', py:'xīnnián', vi:'năm mới', t:'N'},
+  {n:'8', zh:'快', py:'kuài', vi:'sắp', t:'Adv'},
+  {n:'9', zh:'父母', py:'fùmǔ', vi:'bố mẹ', t:'N'},
+  {n:'10', zh:'冬天', py:'dōngtiān', vi:'mùa đông, đông', t:'N'},
+  {n:'11', zh:'明年', py:'míngnián', vi:'năm sau/tới, sang năm', t:'N'},
+  {n:'12', zh:'秋天', py:'qiūtiān', vi:'mùa thu, thu', t:'N'},
+  {n:'13', zh:'紅葉', py:'hóngyè', vi:'lá đỏ', t:'N'},
+  {n:'14', zh:'只', py:'zhǐ', vi:'chỉ', t:'Adv'},
+];
+const TV2=[
+  {n:'1', zh:'雨', py:'yǔ', vi:'mưa', t:'N'},
+  {n:'2', zh:'傘', py:'sǎn', vi:'ô', t:'N'},
+  {n:'3', zh:'颱風', py:'táifēng', vi:'bão, bão nhiệt đới Tây Bắc Thái Bình Dương', t:'N'},
+  {n:'4', zh:'要', py:'yào', vi:'sẽ, sắp', t:'Vaux'},
+  {n:'5', zh:'夏天', py:'xiàtiān', vi:'mùa hè/ha, hè, hạ', t:'N'},
+  {n:'6', zh:'濕', py:'shī', vi:'ẩm, ẩm ướt', t:'Vs'},
+  {n:'7', zh:'討厭', py:'tǎoyàn', vi:'đáng ghét', t:'Vs'},
+  {n:'8', zh:'新聞', py:'xīnwén', vi:'tin tức', t:'N'},
+  {n:'9', zh:'更', py:'gèng', vi:'càng', t:'Adv'},
+  {n:'10', zh:'大家', py:'dàjiā', vi:'mọi người', t:'N'},
+  {n:'11', zh:'小心', py:'xiǎoxīn', vi:'cẩn thận', t:'Vs'},
+  {n:'12', zh:'可怕', py:'kěpà', vi:'đáng sợ', t:'Vs'},
+  {n:'13', zh:'停', py:'tíng', vi:'dừng', t:'Vp'},
+];
+const CUMTU=[
+  {n:'1', zh:'下雪', py:'xiàxuě', vi:'tuyết rơi, rơi tuyết'},
+  {n:'2', zh:'十二月底', py:'shí\'èryuè dǐ', vi:'cuối tháng 12'},
+  {n:'3', zh:'下雨', py:'xiàyǔ', vi:'mưa rơi, trời mưa'},
+  {n:'4', zh:'這次', py:'zhè cì', vi:'lần này'},
+  {n:'5', zh:'上次', py:'shàng cì', vi:'lần trước'},
+  {n:'6', zh:'慢走', py:'màn zǒu', vi:'đi thong thả'},
+];
+const NHANVAT=[
+  {n:'1', zh:'如玉', py:'Rúyù', vi:'Như Ngọc (tên nhân vật)'},
+  {n:'2', zh:'明華', py:'Mínghuá', vi:'Minh Hoa (tên nhân vật)'},
+  {n:'3', zh:'玉山', py:'Yùshān', vi:'núi Ngọc Sơn (ngọn núi cao nhất ở Đài Loan)'},
+  {n:'4', zh:'紐約', py:'Niǔyuē', vi:'Niu Óc (New York)'},
+];
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+const HW=new Set('天氣冷風滑雪春天想新年快父母冬天明年秋天紅葉只雨傘颱風要夏濕討厭新聞更大家小心可怕停下雪十二月底這次上次慢走如玉明華玉山紐約外面那麼覺得今天比昨天臺灣會不會很高的山常美國呢開始還沒有每年差不多月去山上我怕比較不錯很舒服去年五月在玩了兩個星期時候風景也很漂亮得非常開心住了半年多了一點想家快到看打算跟我玩太不過後來因為我們放假所以號回來下得這麼大妳怎麼沒帶呢可是忘記帶已經聽說這裡每都有來的時候和都很大做什麼很不方便是啊哪裡濕濕的真電視說這次會請多希望沒有上次妳看謝謝再見不客氣'.split(''));
+function canStroke(zh){return[...zh].some(c=>HW.has(c));}
+
+// ── BUILD TABLE ───────────────────────────────────────────────
+function buildTable(id,arr,hasType){
+  const th=`<thead><tr>
+    <th class="tc" style="width:36px">STT</th>
+    <th class="tc" style="width:44px">🔊</th>
+    <th>Chữ Hán</th><th>Phiên âm</th><th>Nghĩa tiếng Việt</th>
+    ${hasType?'<th class="tc" style="width:58px">Từ loại</th>':''}
+    <th class="tc" style="width:48px">筆順</th>
+  </tr></thead>`;
+  const tb=arr.map(w=>{
+    const s=w.zh.replace(/'/g,"\\'");
+    return`<tr>
+      <td class="c-stt">${w.n}</td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
+      <td class="c-py"><span class="py-text">${w.py}</span></td>
+      <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
+      ${hasType?`<td class="c-tp">${w.t?`<span class="tp-bd">${w.t}</span>`:''}</td>`:''}
+      <td class="c-st">${canStroke(w.zh)?`<button class="bst" onclick="openStroke('${s}')">筆</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById(id).innerHTML=th+'<tbody>'+tb+'</tbody>';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTable('t-t1',TV1,true);
+  buildTable('t-t2',TV2,true);
+  buildTable('t-ct',CUMTU,false);
+  buildTable('t-nv',NHANVAT,false);
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb[data-sec]').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`.nb[data-sec="${id}"]`)?.classList.add('on');
+  document.getElementById('toggleContainer').style.display=id==='baikoa'?'block':'none';
+  window.scrollTo(0,0);
+}
+function goSub(sec,sub){
+  document.querySelectorAll(`#${sec} .sub-content`).forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll(`#${sec} .subtab`).forEach(e=>e.classList.remove('on'));
+  document.getElementById(`${sec}-${sub}`).classList.add('on');
+  event.target.classList.add('on');
+}
+
+// ── TOGGLE ────────────────────────────────────────────────────
+let sPY=true,sVI=true;
+function tog(l){
+  if(l==='py'){
+    sPY=!sPY;
+    document.querySelectorAll('.spy').forEach(e=>e.classList.toggle('hd',!sPY));
+    document.getElementById('tp').classList.toggle('on',sPY);
+  }else{
+    sVI=!sVI;
+    document.querySelectorAll('.svi').forEach(e=>e.classList.toggle('hd',!sVI));
+    document.getElementById('tv').classList.toggle('on',sVI);
+  }
+}
+
+// ── BÀI TẬP ──────────────────────────────────────────────────
+function setField(id,ok){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.toggle('ok',ok);
+  el.classList.toggle('er',!ok&&el.value.trim().length>0);
+}
+function resetFields(ids,abId){
+  ids.forEach(k=>{const el=document.getElementById(k);el.value='';el.classList.remove('ok','er');});
+  document.getElementById(abId).classList.remove('sh');
+}
+function showAns(id){document.getElementById(id).classList.add('sh');}
+
+function ckE1(){
+  const a1=document.getElementById('e1-1').value.trim();
+  const a2=document.getElementById('e1-2').value.trim();
+  const a3=document.getElementById('e1-3').value.trim();
+  const a4=document.getElementById('e1-4').value.trim();
+  setField('e1-1',a1.includes('鐘頭')||a1.includes('小時')||a1.includes('半個'));
+  setField('e1-2',a2.includes('年')||a2.includes('月'));
+  setField('e1-3',a3.includes('沒有')||a3.includes('不是'));
+  setField('e1-4',a4.includes('八個月')||a4.includes('住了八個月'));
+  showAns('ab1');
+}
+function rsE1(){resetFields(['e1-1','e1-2','e1-3','e1-4'],'ab1');}
+
+function ckE2(){
+  const a1=document.getElementById('e2-1').value.trim();
+  const a2=document.getElementById('e2-2').value.trim();
+  const a3=document.getElementById('e2-3').value.trim();
+  setField('e2-1',a1.endsWith('了')&&a1.includes('了'));
+  setField('e2-2',a2.endsWith('了')&&a2.includes('了'));
+  setField('e2-3',a3.includes('下雪')&&a3.endsWith('了'));
+  showAns('ab2');
+}
+function rsE2(){resetFields(['e2-1','e2-2','e2-3'],'ab2');}
+
+function ckE3(){
+  const a1=document.getElementById('e3-1').value.trim();
+  const a2=document.getElementById('e3-2').value.trim();
+  const a3=document.getElementById('e3-3').value.trim();
+  setField('e3-1',a1.includes('快')&&a1.includes('了'));
+  setField('e3-2',a2.includes('快')&&a2.includes('了'));
+  setField('e3-3',a3==='快');
+  showAns('ab3');
+}
+function rsE3(){resetFields(['e3-1','e3-2','e3-3'],'ab3');}
+
+function ckE4(){
+  const a1=document.getElementById('e4-1').value.trim();
+  const a2=document.getElementById('e4-2').value.trim();
+  setField('e4-1',a1.includes('冷'));
+  setField('e4-2',a2.includes('冷'));
+  showAns('ab4');
+}
+function rsE4(){resetFields(['e4-1','e4-2'],'ab4');}
+
+// ── TTS ───────────────────────────────────────────────────────
+let VX=window.speechSynthesis.getVoices();
+window.speechSynthesis.onvoiceschanged=()=>{VX=window.speechSynthesis.getVoices();};
+function sayZh(t){
+  if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ TTS.');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  let v=null;
+  for(const p of['zh-TW','zh-CN','zh','cmn']){
+    v=VX.find(x=>x.lang?.toLowerCase().startsWith(p.toLowerCase()));
+    if(v)break;
+  }
+  if(v)u.voice=v;
+  u.lang='zh-TW';u.rate=0.82;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+let hwInstances=[];
+function openStroke(word){
+  const chars=[...word].filter(c=>HW.has(c));
+  if(!chars.length)return;
+  hwInstances.forEach(h=>{try{h.writer.cancelAnimation();}catch(e){}});
+  hwInstances=[];
+  document.getElementById('otitle').textContent='筆順 · '+word;
+  const framesEl=document.getElementById('oframes');
+  framesEl.innerHTML='';
+  const SIZE=chars.length>3?110:140;
+  chars.forEach((ch,i)=>{
+    const cell=document.createElement('div');cell.className='hw-cell';
+    const svg=document.createElement('div');svg.id='hw-svg-'+i;
+    svg.style.cssText=`width:${SIZE}px;height:${SIZE}px;border:2px solid #e0e0e0;border-radius:8px;background:#fafafa;`;
+    const lbl=document.createElement('span');lbl.textContent=ch;
+    cell.appendChild(svg);cell.appendChild(lbl);framesEl.appendChild(cell);
+    try{
+      const w=HanziWriter.create(svg.id,ch,{
+        width:SIZE,height:SIZE,padding:10,
+        strokeColor:'#c62828',outlineColor:'#e0e0e0',
+        strokeAnimationSpeed:1,delayBetweenStrokes:200,
+        showCharacter:true,showOutline:true,
+        charDataLoader:(char,onLoad,onError)=>{
+          fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${char}.json`)
+            .then(r=>r.json()).then(d=>onLoad(d))
+            .catch(()=>fetch(`https://raw.githubusercontent.com/chanind/hanzi-writer-data/master/${char}.json`)
+              .then(r=>r.json()).then(d=>onLoad(d)).catch(err=>onError(err)));
+        }
+      });
+      hwInstances.push({writer:w});
+    }catch(e){console.warn('HanziWriter error',ch,e);}
+  });
+  const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
+  [['▶ Hoạt ảnh',hwAnimAll,''],['🔄 Lặp',hwLoopAll,''],['✕ Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+    const b=document.createElement('button');
+    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+  });
+  document.getElementById('ov').classList.add('open');
+}
+function hwAnimAll(){hwInstances.forEach((h,i)=>setTimeout(()=>h.writer.animateCharacter(),i*600));}
+function hwLoopAll(){let i=0;(function next(){if(i>=hwInstances.length)i=0;hwInstances[i].writer.animateCharacter({onComplete:()=>{i++;next();}});})();}
+function closeOv(){document.getElementById('ov').classList.remove('open');}
+function ovClick(e){if(e.target===document.getElementById('ov'))closeOv();}
+
+// ── EDITOR ────────────────────────────────────────────────────
+let quill;
+function openEditor(){
+  document.getElementById('editorModal').classList.add('open');
+  if(!quill){
+    quill=new Quill('#editor-content',{
+      theme:'snow',
+      placeholder:'Viết ghi chú Bài 14 ở đây...',
+      modules:{toolbar:'#editor-toolbar'}
+    });
+    const saved=localStorage.getItem('bai14_notes');
+    if(saved)quill.root.innerHTML=saved;
+  }
+}
+function closeEditor(){document.getElementById('editorModal').classList.remove('open');}
+function saveEditor(){if(quill){localStorage.setItem('bai14_notes',quill.root.innerHTML);alert('✅ Đã lưu ghi chú!');}}
+function clearEditor(){if(quill&&confirm('Xóa tất cả ghi chú?')){quill.root.innerHTML='';localStorage.removeItem('bai14_notes');}}
+setInterval(()=>{
+  if(quill&&document.getElementById('editorModal').classList.contains('open'))
+    localStorage.setItem('bai14_notes',quill.root.innerHTML);
+},30000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditor();closeOv();}});
+</script>
+</body>
+</html>

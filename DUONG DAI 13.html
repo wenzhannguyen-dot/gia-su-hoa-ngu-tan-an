@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>第十三課 生日快樂</title>
+<base target="_blank">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+:root{
+  --g:#2e7d32;--g0:#e8f5e9;
+  --b:#1565c0;--b0:#dbeafe;
+  --r:#c62828;--r0:#fff3e0;
+  --s:#607d8b;--s0:#f0f4f5;
+  --k:#222;--w:#fff;
+  --sw:200px;
+  --fzh:32px;--fpy:19px;--fvi:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
+.zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
+
+/* SIDEBAR */
+#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
+.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
+.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
+.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
+.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
+.logo-area{text-align:center;padding:5px 0;}
+.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+.logo-container img{width:100%;height:100%;object-fit:contain;}
+nav{flex:1;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
+.nb:hover{background:rgba(255,255,255,.1);}
+.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+.nb .ic{font-size:18px;}
+.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
+.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
+.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
+.st-btn:hover{background:rgba(255,255,255,.1);}
+.st-btn.on{background:var(--g);border-color:var(--g);}
+
+/* MAIN */
+#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+.tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
+.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
+.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+
+/* SECTIONS */
+.sec{display:none;padding:20px 24px;}
+.sec.on{display:block;}
+.subnav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e0e0e0;flex-wrap:wrap;}
+.subtab{background:#f5f5f5;border:none;padding:10px 20px;font-size:14px;font-weight:600;color:#666;cursor:pointer;border-radius:8px 8px 0 0;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.subtab:hover{background:#e8e8e8;color:var(--b);}
+.subtab.on{background:var(--b);color:#fff;border-bottom-color:var(--r);}
+.sub-content{display:none;}
+.sub-content.on{display:block;}
+
+/* VOCAB TABLE */
+.vt-wrap{overflow-x:auto;margin-bottom:6px;}
+table.vt{border-collapse:collapse;background:var(--w);border-radius:8px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.09);table-layout:auto;width:auto;min-width:100%;}
+table.vt thead tr{background:var(--b);}
+table.vt thead th{padding:9px 12px;font-size:13px;font-weight:700;color:#fff;text-align:left;white-space:nowrap;}
+table.vt thead th.tc{text-align:center;}
+table.vt tbody tr{border-bottom:1px solid #e8ecf0;}
+table.vt tbody tr:last-child{border-bottom:none;}
+table.vt tbody tr:hover{background:#f5f8ff;}
+.c-stt{padding:10px 8px;text-align:center;white-space:nowrap;width:36px;font-size:14px;font-weight:600;color:var(--s);}
+.c-au{padding:10px 6px;text-align:center;white-space:nowrap;width:44px;}
+.c-zh,.c-py{padding:10px;white-space:nowrap;}
+.c-vi{padding:10px;}
+.c-tp{padding:10px 8px;text-align:center;white-space:nowrap;width:58px;}
+.c-st{padding:10px 8px;text-align:center;white-space:nowrap;width:48px;}
+.zh-word{font-size:var(--fzh);color:var(--k);letter-spacing:1px;}
+.py-text{font-size:var(--fpy);color:var(--r);font-weight:500;}
+.vi-text{font-size:var(--fvi);color:var(--b);line-height:1.4;}
+.tp-bd{display:inline-block;font-size:12px;color:#fff;background:var(--s);border-radius:4px;padding:2px 8px;font-weight:600;}
+.bau{background:var(--b);color:#fff;border:none;border-radius:7px;padding:7px 9px;font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.bau:hover{background:#0d47a1;}
+.bau:active{transform:scale(.92);}
+.bst{background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;color:var(--r);line-height:1;}
+.bst:hover{color:#7b0000;}
+
+/* STROKE OVERLAY */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;align-items:center;justify-content:center;}
+#ov.open{display:flex;}
+#obox{background:var(--w);border-radius:14px;padding:24px 28px;max-width:480px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;}
+#ocls{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:var(--s);margin-top:-6px;line-height:1;}
+#otitle{font-size:18px;font-weight:700;color:var(--b);margin-bottom:16px;font-family:'DFKai-SB',serif;}
+#oframes{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hw-cell{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.hw-cell span{font-size:13px;color:var(--s);}
+.hw-controls{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hw-btn{background:var(--b);color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;}
+.hw-btn:hover{background:#0d47a1;}
+.hw-btn.red{background:var(--r);}
+.hw-btn.red:hover{background:#8d1515;}
+
+/* DIALOGUE */
+.db{background:var(--w);border-radius:12px;padding:16px 20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:5px solid var(--b);}
+.db.dg{border-top-color:var(--g);}
+.dt{font-size:15px;font-weight:700;color:var(--b);margin-bottom:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.db.dg .dt{color:var(--g);}
+.dlb{background:var(--b);color:#fff;padding:2px 11px;border-radius:12px;font-size:12px;}
+.db.dg .dlb{background:var(--g);}
+.dab{margin-left:auto;background:var(--b);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:700;}
+.db.dg .dab{background:var(--g);}
+table.dt2{width:100%;border-collapse:collapse;}
+table.dt2 tr{border-bottom:1px solid #f0f0f0;}
+table.dt2 tr:last-child{border-bottom:none;}
+td.d-au{width:44px;padding:11px 6px 11px 0;vertical-align:top;}
+td.d-sp{width:80px;padding:11px 8px 11px 0;vertical-align:top;}
+td.d-tx{padding:11px 0;}
+.spk{display:inline-block;text-align:center;font-size:15px;color:#fff;background:var(--g);padding:5px 7px;border-radius:8px;line-height:1.3;min-width:66px;font-family:'DFKai-SB',serif;}
+.spk.b{background:var(--b);}.spk.c{background:var(--r);}.spk.y{background:#f57c00;}
+.spk small{font-size:11px;display:block;font-family:'Segoe UI',sans-serif;}
+.szh{font-size:var(--fzh);color:var(--k);line-height:1.6;letter-spacing:1px;}
+.spy{font-size:var(--fpy);color:var(--r);margin-top:3px;line-height:1.5;font-weight:500;}
+.svi{font-size:var(--fvi);color:var(--b);margin-top:3px;line-height:1.5;font-style:italic;}
+.spy.hd,.svi.hd{display:none;}
+
+/* GRAMMAR */
+.gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
+.gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
+.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
+.gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
+table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
+table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;text-align:left;font-weight:700;}
+table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
+table.ex tr:last-child td{border-bottom:none;}
+table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
+table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
+
+/* EXERCISES */
+.ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
+.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ei{margin-bottom:14px;}
+.eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
+.eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
+.eh{font-size:14px;color:var(--s);font-style:italic;}
+input.fi{border:2px solid #ccc;border-radius:6px;padding:4px 9px;font-size:19px;width:110px;outline:none;font-family:'DFKai-SB',serif;}
+input.fi:focus{border-color:var(--b);}
+input.fi.ok{border-color:var(--g);background:var(--g0);}
+input.fi.er{border-color:var(--r);background:var(--r0);}
+.bck{background:var(--b);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.bck:hover{background:#0d47a1;}
+.brs{background:var(--s);color:#fff;border:none;padding:9px 15px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin:10px 0 0 8px;}
+.ab{display:none;margin-top:9px;background:var(--g0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--g);}
+.ab.sh{display:block;}
+
+/* CULTURE */
+.culture-box{background:linear-gradient(135deg,#fff,#f5f7fa);border-left:5px solid #ff6b6b;padding:20px;border-radius:12px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.culture-box h3{color:#e74c3c;margin-bottom:10px;font-size:18px;}
+.culture-box p{line-height:1.8;margin-bottom:10px;text-align:justify;}
+
+/* EDITOR MODAL */
+#editorModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
+#editorModal.open{display:flex;}
+.editor-container{background:#fff;border-radius:12px;width:90%;max-width:900px;height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.editor-header{background:var(--b);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0;}
+.editor-header h3{margin:0;font-size:18px;}
+.editor-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.editor-close:hover{background:rgba(255,255,255,.2);}
+.editor-body{flex:1;display:flex;flex-direction:column;}
+#editor-toolbar{border-bottom:1px solid #ddd;}
+#editor-content{flex:1;font-size:16px;line-height:1.6;}
+#editor-content .ql-editor{min-height:100%;}
+.editor-footer{padding:15px 20px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 12px 12px;}
+.editor-status{font-size:13px;color:#666;}
+.editor-actions{display:flex;gap:10px;}
+.btn-save{background:var(--g);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-clear{background:transparent;color:var(--s);border:1px solid #ddd;padding:8px 20px;border-radius:6px;font-size:14px;cursor:pointer;}
+.btn-save:hover{background:#1b5e20;}
+.btn-clear:hover{background:#f5f5f5;}
+
+footer{margin-top:28px;padding:12px 24px;background:var(--k);color:#777;font-size:12px;text-align:center;}
+footer strong{color:var(--r);}
+</style>
+</head>
+<body>
+
+<!-- STROKE OVERLAY -->
+<div id="ov" onclick="ovClick(event)">
+  <div id="obox">
+    <button id="ocls" onclick="closeOv()">✕</button>
+    <div id="otitle"></div>
+    <div id="oframes"></div>
+    <div class="hw-controls" id="octrl"></div>
+  </div>
+</div>
+
+<!-- EDITOR MODAL -->
+<div id="editorModal">
+  <div class="editor-container">
+    <div class="editor-header">
+      <h3>📝 Soạn thảo ghi chú - Bài 13</h3>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div id="editor-toolbar">
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="1">Tiêu đề 1</option>
+            <option value="2">Tiêu đề 2</option>
+            <option selected>Tiêu đề thường</option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats"><button class="ql-clean"></button></span>
+      </div>
+      <div id="editor-content"></div>
+    </div>
+    <div class="editor-footer">
+      <span class="editor-status">💡 Ghi chú tự động lưu vào trình duyệt</span>
+      <div class="editor-actions">
+        <button class="btn-clear" onclick="clearEditor()">Xóa tất cả</button>
+        <button class="btn-save" onclick="saveEditor()">Lưu ghi chú</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="lb">
+    <div class="logo-area">
+      <div class="logo-container">
+        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+      </div>
+    </div>
+    <div class="ln">GIA SƯ HOA NGỮ TÂN AN</div>
+    <div class="la">9/1 Bạch Văn Tư, Tân An, Long An</div>
+    <div class="lz">Zalo: 0839 889 772</div>
+  </div>
+  <nav>
+    <button class="nb" onclick="window.open('TIENG TRUNG DUONG DAI.html','_self')"><span class="ic">🏠</span><span>VỀ TRANG CHỦ</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TỪ VỰNG</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BÀI KHÓA</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGỮ PHÁP</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BÀI TẬP</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VĂN HÓA</span></button>
+  </nav>
+  <div class="side-toggle" id="toggleContainer" style="display:none;">
+    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phiên âm</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tiếng Việt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mn">
+  <div class="topbar">
+    <div>
+      <div class="tzh">BÀI 13 · 第十三課</div>
+      <div class="tvi">生日快樂 · Sinh nhật vui vẻ?</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:15px;">
+      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soạn thảo</span></button>
+      <div class="badge">當代中文課程 1</div>
+    </div>
+  </div>
+
+  <!-- TỪ VỰNG -->
+  <div id="vocab" class="sec on">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Từ vựng 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')">📖 Từ vựng 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','c1')">📝 Cụm từ 1 · 短語一</button>
+      <button class="subtab" onclick="goSub('vocab','c2')">📝 Cụm từ 2 · 短語二</button>
+      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhân vật · 人物</button>
+    </div>
+    <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
+    <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
+    <div id="vocab-c1" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c1"></table></div></div>
+    <div id="vocab-c2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c2"></table></div></div>
+    <div id="vocab-nv" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-nv2"></table></div></div>
+  </div>
+
+  <!-- BÀI KHÓA -->
+  <div id="baikoa" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hội thoại 1 · 對話一</button>
+      <button class="subtab" onclick="goSub('baikoa','ht2')">💬 Hội thoại 2 · 對話二</button>
+    </div>
+    <div id="baikoa-ht1" class="sub-content on">
+      <div class="db">
+        <div class="dt">
+          <span class="dlb">Hội thoại 1 · 對話一</span>Đặt lịch qua điện thoại
+          <button class="dab" onclick="sayZh('喂，安同嗎？是，我就是。怡君，好久不見，聽說妳去花蓮？我沒去花蓮，我剛從臺東回來。找我有什麼事？明天是你的生日，對不對？啊，我怎麼忘了！最近太忙了，謝謝妳還記得。當然記得！語言交換的時候，妳那麼熱心教我西班牙文。不必客氣，妳也一樣。明天我想請你吃晚飯，給你過生日。妳太客氣了！我們在哪裡見面呢？明天我一下課，就去你們學校找你。大概幾點？五點左右。好，我會在學校門口等妳。')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('喂，安同嗎？')">🔊</button></td><td class="d-sp"><div class="spk">怡君<small>Yíjūn</small></div></td><td class="d-tx"><div class="szh">喂，安同嗎？</div><div class="spy">Wéi, Āntóng ma?</div><div class="svi">A lô, anh An Đồng à?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('是，我就是。怡君，好久不見，聽說妳去花蓮？')">🔊</button></td><td class="d-sp"><div class="spk b">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">是，我就是。怡君，好久不見，聽說妳去花蓮？</div><div class="spy">Shì, wǒ jiù shì. Yíjūn, hǎojiǔ bújiàn, tīngshuō nǐ qù Huālián?</div><div class="svi">Ừ, là anh đây. Di Quân, lâu rồi không gặp, nghe nói em đi Hoa Liên?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我沒去花蓮，我剛從臺東回來。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">我沒去花蓮，我剛從臺東回來。</div><div class="spy">Wǒ méi qù Huālián, wǒ gāng cóng Táidōng huílái.</div><div class="svi">Em không đi Hoa Liên, em vừa mới trở về từ Đài Đông.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('找我有什麼事？')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">找我有什麼事？</div><div class="spy">Zhǎo wǒ yǒu shénme shì?</div><div class="svi">Tìm anh có việc gì?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('明天是你的生日，對不對？')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">明天是你的生日，對不對？</div><div class="spy">Míngtiān shì nǐ de shēngrì, duì bú duì?</div><div class="svi">Mai là sinh nhật anh, đúng không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('啊，我怎麼忘了！最近太忙了，謝謝妳還記得。')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">啊，我怎麼忘了！最近太忙了，謝謝妳還記得。</div><div class="spy">A, wǒ zěnme wàng le! Zuìjìn tài máng le, xièxie nǐ hái jìde.</div><div class="svi">A, anh thế mà quên luôn! Dạo này bận quá, cám ơn em vẫn còn nhớ.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('當然記得！語言交換的時候，妳那麼熱心教我西班牙文。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">當然記得！語言交換的時候，妳那麼熱心教我西班牙文。</div><div class="spy">Dāngrán jìde! Yǔyán jiāohuàn de shíhou, nǐ nàme rèxīn jiāo wǒ Xībānyáwén.</div><div class="svi">Đương nhiên nhớ chứ! Lúc trao đổi ngôn ngữ, anh dạy em tiếng Tây Ban Nha nhiệt tình như thế.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('不必客氣，妳也一樣。')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">不必客氣，妳也一樣。</div><div class="spy">Búbì kèqi, nǐ yě yíyàng.</div><div class="svi">Không phải khách sáo, em cũng vậy mà.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('明天我想請你吃晚飯，給你過生日。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">明天我想請你吃晚飯，給你過生日。</div><div class="spy">Míngtiān wǒ xiǎng qǐng nǐ chī wǎnfàn, gěi nǐ guò shēngrì.</div><div class="svi">Mai em muốn mời anh ăn tối, tổ chức sinh nhật cho anh.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('妳太客氣了！我們在哪裡見面呢？')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">妳太客氣了！我們在哪裡見面呢？</div><div class="spy">Nǐ tài kèqi le! Wǒmen zài nǎlǐ jiànmiàn ne?</div><div class="svi">Em khách sáo quá! Anh em mình gặp nhau ở đâu đây?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('明天我一下課，就去你們學校找你。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">明天我一下課，就去你們學校找你。</div><div class="spy">Míngtiān wǒ yí xiàkè, jiù qù nǐmen xuéxiào zhǎo nǐ.</div><div class="svi">Mai em vừa tan học xong thì sẽ đến trường anh gặp anh.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('大概幾點？')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">大概幾點？</div><div class="spy">Dàgài jǐdiǎn?</div><div class="svi">Khoảng mấy giờ?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('五點左右。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">五點左右。</div><div class="spy">Wǔdiǎn zuǒyòu.</div><div class="svi">Khoảng 5 giờ.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('好，我會在學校門口等妳。')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">好，我會在學校門口等妳。</div><div class="spy">Hǎo, wǒ huì zài xuéxiào ménkǒu děng nǐ.</div><div class="svi">Được, anh sẽ đợi em ở cổng trường.</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="baikoa-ht2" class="sub-content">
+      <div class="db dg">
+        <div class="dt">
+          <span class="dlb">Hội thoại 2 · 對話二</span>Ăn mừng sinh nhật
+          <button class="dab" onclick="sayZh('怡君，謝謝妳請我到這麼有名的餐廳吃飯。哪裡，哪裡！這是我給你的禮物。謝謝！真開心，今年有臺灣朋友給我過生日。你想吃什麼？有沒有不吃的東西？我什麼都吃。我已經訂了豬腳麵線和蛋。等一下你多吃一點。臺灣人過生日是不是都吃這些東西？對啊！這是傳統，不過，現大部分年輕人過生日不吃這些東西了。那麼，你們過生日吃什麼呢？跟你們一樣，吃蛋糕。今天我也訂了一個生日蛋糕。妳對我真好。安同，祝你生日快樂、萬事如意、心想事成。謝謝！謝謝！')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('怡君，謝謝妳請我到這麼有名的餐廳吃飯。')">🔊</button></td><td class="d-sp"><div class="spk b">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">怡君，謝謝妳請我到這麼有名的餐廳吃飯。</div><div class="spy">Yíjūn, xièxie nǐ qǐng wǒ dào zhème yǒumíng de cāntīng chīfàn.</div><div class="svi">Di Quân, cám ơn em đã mời anh đến nhà hàng nổi tiếng như thế này ăn cơm.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('哪裡，哪裡！這是我給你的禮物。')">🔊</button></td><td class="d-sp"><div class="spk">怡君<small>Yíjūn</small></div></td><td class="d-tx"><div class="szh">哪裡，哪裡！這是我給你的禮物。</div><div class="spy">Nǎlǐ, nǎlǐ! Zhè shì wǒ gěi nǐ de lǐwù.</div><div class="svi">Đâu có, đâu có! Đây là quà em tặng cho anh mà.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝！真開心，今年有臺灣朋友給我過生日。')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">謝謝！真開心，今年有臺灣朋友給我過生日。</div><div class="spy">Xièxie! Zhēn kāixīn, jīnnián yǒu Táiwān péngyǒu gěi wǒ guò shēngrì.</div><div class="svi">Cám ơn! Anh thật sự rất vui, năm nay có người bạn Đài Loan tổ chức sinh nhật cho mình.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你想吃什麼？有沒有不吃的東西？')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">你想吃什麼？有沒有不吃的東西？</div><div class="spy">Nǐ xiǎng chī shénme? Yǒu méiyǒu bù chī de dōngxi?</div><div class="svi">Anh muốn ăn gì? Có đồ gì không ăn được hay không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我什麼都吃。')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">我什麼都吃。</div><div class="spy">Wǒ shénme dōu chī.</div><div class="svi">Anh cái gì cũng ăn được.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我已經訂了豬腳麵線和蛋。等一下你多吃一點。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">我已經訂了豬腳麵線和蛋。等一下你多吃一點。</div><div class="spy">Wǒ yǐjīng dìng le zhūjiǎo miànxiàn hàn dàn. Děng yíxià nǐ duō chī yìdiǎn.</div><div class="svi">Em đã đặt món mì chân heo sợi nhỏ với trứng. Chốc nữa anh ăn nhiều chút nha.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('臺灣人過生日是不是都吃這些東西？')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">臺灣人過生日是不是都吃這些東西？</div><div class="spy">Táiwān rén guò shēngrì shìbùshì dōu chī zhè xiē dōngxi?</div><div class="svi">Người Đài Loan tổ chức sinh nhật đều ăn những món này có phải không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('對啊！這是傳統，不過，現大部分年輕人過生日不吃這些東西了。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">對啊！這是傳統，不過，現大部分年輕人過生日不吃這些東西了。</div><div class="spy">Duì a! Zhè shì chuántǒng, búguò, xiànzài dà bùfèn niánqīng rén guò shēngrì bù chī zhè xiē dōngxi le.</div><div class="svi">Chính xác đó! Đây là truyền thống, có điều, phần lớn giới trẻ bây giờ tổ chức sinh nhật không ăn những món này nữa rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('那麼，你們過生日吃什麼呢？')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">那麼，你們過生日吃什麼呢？</div><div class="spy">Nàme, nǐmen guò shēngrì chī shénme ne?</div><div class="svi">Vậy thì, mọi người thường ăn gì khi tổ chức sinh nhật?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('跟你們一樣，吃蛋糕。今天我也訂了一個生日蛋糕。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">跟你們一樣，吃蛋糕。今天我也訂了一個生日蛋糕。</div><div class="spy">Gēn nǐmen yíyàng, chī dàngāo. Jīntiān wǒ yě dìng le yí ge shēngrì dàngāo.</div><div class="svi">Giống như bên anh, ăn bánh ga tô. Hôm nay em cũng đặt một cái bánh sinh nhật.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('妳對我真好。')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">妳對我真好。</div><div class="spy">Nǐ duì wǒ zhēn hǎo.</div><div class="svi">Em đối với anh thật tốt quá.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同，祝你生日快樂、萬事如意、心想事成。')">🔊</button></td><td class="d-sp"><div class="spk">怡君</div></td><td class="d-tx"><div class="szh">安同，祝你生日快樂、萬事如意、心想事成。</div><div class="spy">Āntóng, zhù nǐ shēngrì kuàilè, wànshì rúyì, xīnxiǎng shìchéng.</div><div class="svi">An Đồng, chúc mừng sinh nhật, vạn sự như ý, cầu được ước thấy.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝！謝謝！')">🔊</button></td><td class="d-sp"><div class="spk b">安同</div></td><td class="d-tx"><div class="szh">謝謝！謝謝！</div><div class="spy">Xièxie! Xièxie!</div><div class="svi">Cám ơn! Cám ơn em!</div></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGỮ PHÁP -->
+  <div id="ngupap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('ngupap','g1')">1 · 一⋯就⋯</button>
+      <button class="subtab" onclick="goSub('ngupap','g2')">2 · Trợ từ 了</button>
+      <button class="subtab" onclick="goSub('ngupap','g3')">3 · 不 và 沒</button>
+      <button class="subtab" onclick="goSub('ngupap','g4')">4 · Từ để hỏi + 都</button>
+      <button class="subtab" onclick="goSub('ngupap','g5')">5 · 多/少 + Động từ</button>
+      <button class="subtab" onclick="goSub('ngupap','g6')">6 · 是不是</button>
+      <button class="subtab" onclick="goSub('ngupap','g7')">7 · 跟⋯一樣</button>
+    </div>
+    <div id="ngupap-g1" class="sub-content on">
+      <div class="gc">
+        <div><span class="gn">1</span><span class="gtt">Ngay khi ⋯ thì ⋯ · 一⋯就⋯</span></div>
+        <div class="gsb">Cấu trúc "一 A 就 B" cho biết một chuỗi các sự kiện với B diễn ra ngay sau A.</div>
+        <div class="fm">一 + Sự kiện A + 就 + Sự kiện B<div class="fn">Vừa/Hễ/Cứ... thì/đã/là...</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我一下課，就回來。</div></td><td><div class="py">Wǒ yí xiàkè, jiù huílái.</div></td><td><div class="vi">Tôi vừa tan học thì trở về.</div></td></tr>
+          <tr><td><div class="zh">他一回國，就找工作。</div></td><td><div class="py">Tā yì huíguó, jiù zhǎo gōngzuò.</div></td><td><div class="vi">Anh ấy vừa về nước thì tìm công việc.</div></td></tr>
+          <tr><td><div class="zh">明天我一下課，就去你們學校找你。</div></td><td><div class="py">Míngtiān wǒ yí xiàkè, jiù qù nǐmen xuéxiào zhǎo nǐ.</div></td><td><div class="vi">Mai em vừa tan học xong thì sẽ đến trường anh gặp anh.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Lưu ý: Khi cùng chủ ngữ thì chủ ngữ thứ 2 có thể được lược bỏ.</div>
+      </div>
+    </div>
+    <div id="ngupap-g2" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">2</span><span class="gtt">Hành động đã hoàn thành với 了 · 動態助詞了</span></div>
+        <div class="gsb">Trợ từ 了 được thêm vào sau động từ để chỉ ra rằng một hành động, sự việc đã được hoàn thành hoặc đã diễn ra.</div>
+        <div class="fm">V + 了<div class="fn">Đã/ rồi (trợ từ động thái)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我買了三張車票。</div></td><td><div class="py">Wǒ mǎi le sān zhāng chēpiào.</div></td><td><div class="vi">Tôi đã mua ba cái vé.</div></td></tr>
+          <tr><td><div class="zh">我已經訂了豬腳麵線和蛋。</div></td><td><div class="py">Wǒ yǐjīng dìng le zhūjiǎo miànxiàn hàn dàn.</div></td><td><div class="vi">Em đã đặt món mì chân heo sợi nhỏ với trứng.</div></td></tr>
+          <tr><td><div class="zh">昨天我朋友來我家，我多做了一點菜。</div></td><td><div class="py">Zuótiān wǒ péngyǒu lái wǒ jiā, wǒ duō zuò le yìdiǎn cài.</div></td><td><div class="vi">Hôm qua bạn tôi đến nhà tôi, tôi đã nấu nhiều món ăn hơn một chút.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Phủ định: Không dùng 了 trong câu phủ định. Ví dụ: 我沒吃晚飯 (Tôi chưa/chưa ăn cơm tối).</div>
+      </div>
+    </div>
+    <div id="ngupap-g3" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">3</span><span class="gtt">Phủ định 不 và 沒 · 否定詞</span></div>
+        <div class="gsb">Cả 不 và 沒 đều là từ phủ định nhưng được sử dụng khác nhau tùy loại động từ.</div>
+        <div class="fm">不 (Thói quen/Không có ý định) · 沒 (Không xảy ra trong quá khứ)<div class="fn">Phủ định động từ hành động/trạng thái/quy trình</div></div>
+        <table class="ex">
+          <tr><th>Loại</th><th>Dùng 不</th><th>Dùng 沒</th></tr>
+          <tr><td><div class="zh">Động từ hành động</div></td><td><div class="py">我們星期六不上課。</div><div class="vi">Chúng tôi không đến lớp vào thứ bảy.</div></td><td><div class="py">昨天我沒打電話給他。</div><div class="vi">Hôm qua tôi không gọi điện cho anh ấy.</div></td></tr>
+          <tr><td><div class="zh">Động từ trạng thái</div></td><td><div class="py">今天不熱。</div><div class="vi">Hôm nay không nóng.</div></td><td><div class="py">—</div></td></tr>
+          <tr><td><div class="zh">Động từ quy trình</div></td><td><div class="py">—</div></td><td><div class="py">中文課還沒結束。</div><div class="vi">Khóa tiếng Trung vẫn chưa kết thúc.</div></td></tr>
+        </table>
+        <div class="gnote">💡 沒 phủ định điều không xảy ra trong quá khứ. 不 phủ định thói quen hoặc ý định.</div>
+      </div>
+    </div>
+    <div id="ngupap-g4" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">4</span><span class="gtt">Tất cả với từ để hỏi · 疑問代詞與都</span></div>
+        <div class="gsb">Các từ để hỏi có thể xuất hiện trong câu trần thuật với 都 để biểu thị tính tổng thể không có ngoại lệ.</div>
+        <div class="fm">誰/什麼/哪裡/什麼時候/怎麼 + 都<div class="fn">Ai/Cái gì/Ở đâu/Khi nào/Như thế nào... đều/cũng</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">誰都喜歡去旅行。</div></td><td><div class="py">Shéi dōu xǐhuān qù lǚxíng.</div></td><td><div class="vi">Ai cũng thích đi du lịch.</div></td></tr>
+          <tr><td><div class="zh">他什麼都想買。</div></td><td><div class="py">Tā shénme dōu xiǎng mǎi.</div></td><td><div class="vi">Anh ấy cái gì cũng muốn mua.</div></td></tr>
+          <tr><td><div class="zh">昨天我哪裡都沒去，在家看電視。</div></td><td><div class="py">Zuótiān wǒ nǎlǐ dōu méi qù, zài jiā kàn diànshì.</div></td><td><div class="vi">Tớ hôm qua chỗ nào cũng chẳng đi, ở nhà xem tivi.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Trong câu phủ định: 誰也不喜歡... (Chẳng ai thích...), 什麼也不想吃 (Cái gì cũng chẳng muốn ăn).</div>
+      </div>
+    </div>
+    <div id="ngupap-g5" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">5</span><span class="gtt">Nhiều/Ít hơn dự kiến · 多/少 + 動詞</span></div>
+        <div class="gsb">多 "nhiều hơn" hoặc 少 "ít hơn" được đặt trước động từ để biểu thị so với dự kiến.</div>
+        <div class="fm">多/少 + V · 多/少 + V + 一點<div class="fn">Nhiều/Ít + làm gì · Nhiều/Ít hơn một chút</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我最近沒錢了，應該少買東西。</div></td><td><div class="py">Wǒ zuìjìn méi qián le, yīnggāi shǎo mǎi dōngxi.</div></td><td><div class="vi">Dạo này tớ chẳng có tiền nữa, phải ít mua đồ lại thôi.</div></td></tr>
+          <tr><td><div class="zh">我中文不好，應該多看書，少看電視。</div></td><td><div class="py">Wǒ Zhōngwén bù hǎo, yīnggāi duō kànshū, shǎo kàn diànshì.</div></td><td><div class="vi">Tiếng Trung của tôi không tốt, nên đọc sách nhiều hơn, ít xem tivi hơn.</div></td></tr>
+          <tr><td><div class="zh">等一下你多吃一點。</div></td><td><div class="py">Děng yíxià nǐ duō chī yìdiǎn.</div></td><td><div class="vi">Chốc nữa anh ăn nhiều chút nha.</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="ngupap-g6" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">6</span><span class="gtt">Xác nhận thông tin · 是不是</span></div>
+        <div class="gsb">Cấu trúc này tìm kiếm xác nhận đối với thông tin đã biết hoặc rõ ràng từ ngữ cảnh.</div>
+        <div class="fm">S + 是不是 + VP?<div class="fn">Có phải/Đúng không + làm gì?</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">你是不是在家等我？</div></td><td><div class="py">Nǐ shìbùshì zài jiā děng wǒ?</div></td><td><div class="vi">Em ở nhà đợi anh, có đúng không?</div></td></tr>
+          <tr><td><div class="zh">明天是你的生日，對不對？</div></td><td><div class="py">Míngtiān shì nǐ de shēngrì, duìbúduì?</div></td><td><div class="vi">Mai là sinh nhật anh, đúng không?</div></td></tr>
+          <tr><td><div class="zh">他是不是剛旅行回來？</div></td><td><div class="py">Tā shìbùshì gāng lǚxíng huílái?</div></td><td><div class="vi">Có phải cậu mới đi du lịch về không?</div></td></tr>
+        </table>
+        <div class="gnote">💡 Khác với câu hỏi 嗎 và A不A. 是不是 yêu cầu xác nhận thông tin cũ.</div>
+      </div>
+    </div>
+    <div id="ngupap-g7" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">7</span><span class="gtt">So sánh bằng · 跟⋯一樣</span></div>
+        <div class="gsb">Cấu trúc này được sử dụng để so sánh hai người hoặc sự vật giống hay không giống nhau.</div>
+        <div class="fm">A 跟 B 一樣 (Động từ trạng thái)<div class="fn">A giống như B / A và B giống nhau</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">這支手機跟那支手機一樣。</div></td><td><div class="py">Zhè zhī shǒujī gēn nà zhī shǒujī yíyàng.</div></td><td><div class="vi">Chiếc đi động này giống cái đi động kia.</div></td></tr>
+          <tr><td><div class="zh">我的生日跟她的生日一樣。</div></td><td><div class="py">Wǒ de shēngrì gēn tā de shēngrì yíyàng.</div></td><td><div class="vi">Ngày sinh của tớ giống ngày sinh của cô ấy.</div></td></tr>
+          <tr><td><div class="zh">中國茶跟日本茶不一樣。</div></td><td><div class="py">Zhōngguó chá gēn Rìběn chá bù yíyàng.</div></td><td><div class="vi">Trà Trung Quốc không giống trà Nhật Bản.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Phủ định: 不 đứng trước 一樣 (不一樣 - không giống nhau) hoặc trước 跟 (不跟我一樣高).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÀI TẬP -->
+  <div id="baitap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bài 1 · 一⋯就⋯</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bài 2 · 了</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bài 3 · 不/沒</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bài 4 · 跟⋯一樣</button>
+    </div>
+    <div id="baitap-bt1" class="sub-content on">
+      <div class="ec">
+        <div class="ett">📝 Bài 1 · Hoàn thành câu với 一⋯就⋯</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Dựa vào gợi ý, điền vào chỗ trống.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我<input class="fi" id="e1-1" style="width:90px;">課，<input class="fi" id="e1-2" style="width:120px;">。</div><div class="eh">→ (vừa tan học thì trở về - 下課/就回來)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>他<input class="fi" id="e1-3" style="width:90px;">國，<input class="fi" id="e1-4" style="width:140px;">。</div><div class="eh">→ (vừa về nước thì tìm việc - 回國/就找工作)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>明天我<input class="fi" id="e1-5" style="width:110px;">課，<input class="fi" id="e1-6" style="width:200px;">。</div><div class="eh">→ (vừa tan học thì đến trường anh - 一下/就去你們學校找你)</div></div>
+        <button class="bck" onclick="ckE1()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE1()">🔄 Làm lại</button>
+        <div class="ab" id="ab1"><strong>Đáp án:</strong> ① 一下, 就回來 &nbsp; ② 一回, 就找工作 &nbsp; ③ 一下, 就去你們學校找你</div>
+      </div>
+    </div>
+    <div id="baitap-bt2" class="sub-content">
+      <div class="ec" style="border-top-color:var(--b)">
+        <div class="ett" style="color:var(--b)">📝 Bài 2 · Hành động đã hoàn thành với 了</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 了 vào vị trí thích hợp.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我已經訂<input class="fi" id="e2-1" style="width:60px;">豬腳麵線。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>昨天我朋友來我家，我多做<input class="fi" id="e2-2" style="width:60px;">一點菜。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>她今天太累<input class="fi" id="e2-3" style="width:60px;">，想少做一點功課。</div></div>
+        <button class="bck" onclick="ckE2()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE2()">🔄 Làm lại</button>
+        <div class="ab" id="ab2"><strong>Đáp án:</strong> ① 了 &nbsp; ② 了 &nbsp; ③ 了</div>
+      </div>
+    </div>
+    <div id="baitap-bt3" class="sub-content">
+      <div class="ec" style="border-top-color:var(--r)">
+        <div class="ett" style="color:var(--r)">📝 Bài 3 · Phân biệt 不 và 沒</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 不 hoặc 沒 vào chỗ trống.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我們星期六<input class="fi" id="e3-1" style="width:80px;">上課。</div><div class="eh">→ (Thói quen)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>昨天我<input class="fi" id="e3-2" style="width:80px;">打電話給他。</div><div class="eh">→ (Quá khứ)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>今天<input class="fi" id="e3-3" style="width:80px;">熱。</div><div class="eh">→ (Trạng thái)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>中文課還<input class="fi" id="e3-4" style="width:80px;">結束。</div><div class="eh">→ (Quy trình chưa xong)</div></div>
+        <button class="bck" onclick="ckE3()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE3()">🔄 Làm lại</button>
+        <div class="ab" id="ab3"><strong>Đáp án:</strong> ① 不 &nbsp; ② 沒 &nbsp; ③ 不 &nbsp; ④ 沒</div>
+      </div>
+    </div>
+    <div id="baitap-bt4" class="sub-content">
+      <div class="ec" style="border-top-color:#764ba2">
+        <div class="ett" style="color:#764ba2">📝 Bài 4 · So sánh với 跟⋯一樣</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Sắp xếp từ thành câu hoàn chỉnh.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>生日/我/的/她/一樣/跟/的/生日。</div><input class="fi" id="e4-1" style="width:320px;"></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>不/中國茶/一樣/日本茶/跟。</div><input class="fi" id="e4-2" style="width:320px;"></div>
+        <button class="bck" onclick="ckE4()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE4()">🔄 Làm lại</button>
+        <div class="ab" id="ab4"><strong>Đáp án:</strong> ① 我的生日跟她的一樣。 ② 中國茶跟日本茶不一樣。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VĂN HÓA -->
+  <div id="vanhoa" class="sec">
+    <div class="culture-box">
+      <h3>🎂 Lời chúc mừng bằng tiếng Trung</h3>
+      <p>Lời chúc được dùng để chúc mừng mọi người trong những dịp đặc biệt. Người Trung Hoa coi trọng điều này trong các mối quan hệ giữa các cá nhân và thích bày tỏ những suy nghĩ quan tâm đúng nơi, đúng lúc và đúng dịp. Hầu hết những câu nói này là được biểu đạt bằng bốn chữ với ý nghĩa cố định và tốt lành. Lời chúc mừng được dùng nhiều nhất có lẽ là 萬事如意 (wànshì rúyì - vạn sự như ý), 心想事成 (xīnxiǎng shìchéng - cầu được ước thấy).</p>
+    </div>
+    <div class="culture-box">
+      <h3>🎉 Sinh nhật ở Đài Loan</h3>
+      <p>Theo truyền thống, người Trung Hoa kỷ niệm sinh nhật của họ dựa trên âm lịch, nhưng ngày nay, hầu hết mọi người kỷ niệm sinh nhật của họ theo lịch dương. Sinh nhật rất quan trọng đối với người Đài Loan và người Đài Loan có những lễ kỷ niệm sinh nhật đặc biệt, chẳng hạn như cúng đầy tháng, lễ thôi nôi, lễ mừng thọ 60, 70, lễ mừng thượng thọ 80 tuổi, v.v. đều có tầm quan trọng đặc biệt.</p>
+      <p>Truyền thống cổ xưa của 抓週 zhuāzhōu (bốc thôi nôi) vẫn được thực hiện. Đối với phong tục này, một đứa trẻ sẽ được bao quanh bởi một số món đồ vào ngày sinh nhật đầu tiên. Vật phẩm mà bé lấy được cho biết bé sẽ có tính cách ra sao và nghề nghiệp tương lai của bé là gì.</p>
+    </div>
+    <div class="gc">
+      <div class="gtt">🎁 Từ vựng chủ đề sinh nhật · 生日詞彙</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:15px;">
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('生日快樂')"><div style="font-size:32px;">🎂</div><div class="zh" style="font-size:22px;margin:6px 0;">生日快樂</div><div style="font-size:13px;color:var(--r);">shēngrì kuàilè</div><div style="font-size:13px;color:var(--b);margin-top:3px;">sinh nhật vui vẻ</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('生日蛋糕')"><div style="font-size:32px;">🎂</div><div class="zh" style="font-size:22px;margin:6px 0;">生日蛋糕</div><div style="font-size:13px;color:var(--r);">shēngrì dàngāo</div><div style="font-size:13px;color:var(--b);margin-top:3px;">bánh sinh nhật</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('禮物')"><div style="font-size:32px;">🎁</div><div class="zh" style="font-size:22px;margin:6px 0;">禮物</div><div style="font-size:13px;color:var(--r);">lǐwù</div><div style="font-size:13px;color:var(--b);margin-top:3px;">quà tặng</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('萬事如意')"><div style="font-size:32px;">🧧</div><div class="zh" style="font-size:22px;margin:6px 0;">萬事如意</div><div style="font-size:13px;color:var(--r);">wànshì rúyì</div><div style="font-size:13px;color:var(--b);margin-top:3px;">vạn sự như ý</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('心想事成')"><div style="font-size:32px;">✨</div><div class="zh" style="font-size:22px;margin:6px 0;">心想事成</div><div style="font-size:13px;color:var(--r);">xīnxiǎng shìchéng</div><div style="font-size:13px;color:var(--b);margin-top:3px;">cầu được ước thấy</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('豬腳麵線')"><div style="font-size:32px;">🍜</div><div class="zh" style="font-size:22px;margin:6px 0;">豬腳麵線</div><div style="font-size:13px;color:var(--r);">zhūjiǎo miànxiàn</div><div style="font-size:13px;color:var(--b);margin-top:3px;">mì chân heo</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>GIA SƯ HOA NGỮ TÂN AN</strong> &nbsp;·&nbsp; 9/1 Bạch Văn Tư, Tân An, Long An &nbsp;·&nbsp; Zalo: 0839 889 772<br>
+    當代中文課程 1 · 第十三課 生日快樂 — Tài liệu giảng dạy nội bộ
+  </footer>
+</div>
+
+<script>
+// ── DỮ LIỆU TỪ VỰNG ──────────────────────────────────────────
+const TV1=[
+  {n:'1', zh:'生日',   py:'shēngrì',    vi:'sinh nhật, ngày sinh',t:'N'},
+  {n:'2', zh:'快樂',   py:'kuàilè',     vi:'vui vẻ, mừng, hạnh phúc',t:'Vs'},
+  {n:'3', zh:'回來',   py:'huílái',     vi:'(quay) trở về, quay về',t:'Vi'},
+  {n:'4', zh:'啊',     py:'a',          vi:'a, à, á... (tỏ ý nhận ra)',t:'Ptc'},
+  {n:'5', zh:'怎麼',   py:'zěnme',      vi:'thế (nào) mà (lại)',t:'Adv'},
+  {n:'6', zh:'忘',     py:'wàng',       vi:'quên (luôn/mất)',t:'V'},
+  {n:'7', zh:'記得',   py:'jìde',       vi:'nhớ',t:'Vst'},
+  {n:'8', zh:'當然',   py:'dāngrán',    vi:'đương/tất/dĩ nhiên',t:'Adv'},
+  {n:'9', zh:'語言',   py:'yǔyán',      vi:'ngôn ngữ, lời/tiếng nói',t:'N'},
+  {n:'10',zh:'交換',   py:'jiāohuàn',   vi:'trao đổi',t:'V'},
+  {n:'11',zh:'那麼',   py:'nàme',       vi:'như (thế) kia/đấy/đó/thế',t:'Adv'},
+  {n:'12',zh:'熱心',   py:'rèxīn',      vi:'nhiệt tình, sốt sắng',t:'Vs'},
+  {n:'13',zh:'西班牙文',py:'Xībānyá wén', vi:'tiếng Tây Ban Nha',t:'N'},
+  {n:'14',zh:'一樣',   py:'yíyàng',     vi:'vậy, thế, như vậy/thế/nhau',t:'Vs'},
+  {n:'15',zh:'過',     py:'guò',        vi:'tổ chức (sinh nhật...)',t:'V'},
+  {n:'16',zh:'左右',   py:'zuǒyòu',     vi:'khoảng',t:'N'},
+  {n:'17',zh:'門口',   py:'ménkǒu',     vi:'cổng, cửa',t:'N'},
+];
+const CT1=[
+  {n:'18',zh:'西班牙', py:'Xībānyá',    vi:'Tây Ban Nha'},
+  {n:'19',zh:'生日快樂',py:'shēngrì kuàilè', vi:'sinh nhật vui vẻ'},
+  {n:'20',zh:'我就是', py:'wǒ jiù shì', vi:'(chính) là tôi/tớ...'},
+  {n:'21',zh:'好久不見',py:'hǎojiǔ bújiàn', vi:'(đã) lâu (rồi/quá) không gặp'},
+  {n:'22',zh:'不必客氣',py:'búbì kèqi',  vi:'không cần/phải khách sáo'},
+  {n:'23',zh:'太客氣',  py:'tài kèqi',   vi:'khách sáo quá'},
+];
+const NV2=[
+  {n:'1',zh:'怡君',py:'Yíjūn',vi:'Di Quân (tên nữ)'},
+  {n:'2',zh:'安同',py:'Āntóng',vi:'An Đồng (tên nam)'},
+];
+const TV2=[
+  {n:'3', zh:'禮物',   py:'lǐwù',       vi:'quà, quà tặng',t:'N'},
+  {n:'4', zh:'今年',   py:'jīnnián',    vi:'năm nay',t:'N'},
+  {n:'5', zh:'訂',     py:'dìng',       vi:'đặt, đặt trước',t:'V'},
+  {n:'6', zh:'了',     py:'le',         vi:'đã, rồi... (trợ từ động thái)',t:'Ptc'},
+  {n:'7', zh:'豬腳',   py:'zhūjiǎo',    vi:'chân heo/lợn',t:'N'},
+  {n:'8', zh:'麵線',   py:'miànxiàn',   vi:'mì sợi nhỏ',t:'N'},
+  {n:'9', zh:'蛋',     py:'dàn',        vi:'trứng',t:'N'},
+  {n:'10',zh:'一點',   py:'yìdiǎn',     vi:'chút, một chút/ít',t:'Vs'},
+  {n:'11',zh:'傳統',   py:'chuántǒng',  vi:'truyền thống',t:'N'},
+  {n:'12',zh:'年輕',   py:'niánqīng',   vi:'trẻ tuổi',t:'Vs'},
+  {n:'13',zh:'蛋糕',   py:'dàngāo',     vi:'bánh gato, bánh kem',t:'N'},
+  {n:'14',zh:'對',     py:'duì',        vi:'đối với',t:'Prep'},
+  {n:'15',zh:'祝',     py:'zhù',        vi:'chúc',t:'V'},
+];
+const CT2=[
+  {n:'16',zh:'哪裡哪裡',py:'nǎlǐ nǎlǐ',  vi:'đâu có, đâu có (khiêm tốn)'},
+  {n:'17',zh:'大部分', py:'dà bùfèn',   vi:'phần lớn, hầu hết/như'},
+  {n:'18',zh:'萬事如意',py:'wànshì rúyì', vi:'vạn sự như ý'},
+  {n:'19',zh:'心想事成',py:'xīnxiǎng shìchéng', vi:'cầu được ước thấy, mong gì được nấy'},
+];
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+const HW=new Set('生日快樂回來啊怎麼忘記得當然語言交換那麼熱心西班牙文一樣過左右門口我就是好久不見不必客氣太客氣禮物今年訂了豬腳麵線蛋一點傳統年輕蛋糕對祝哪裡大部分萬事如意心想事成我你他她你我們上課回家國找今天明天朋友吃飯工作沒有在的話說聽不沒是了嗎呢吧也的都還有可以這那和個很真到給想比較去來要會就下課學校大概幾點等五分左右見面已經請晚飯請問叫什麼名字認識高興認識您是是不是男女老師學生年級班學院系同學們公司商小姐先先生醫院醫生護士病人藥院長護理師工程師經理職員銀行行員律師作家記者主編廚師服務生警察先生小姐太太夫人公子位本張些封條片隻份台次間件條位本個杯瓶支枝條張本台件次間些片封隻份'.split(''));
+function canStroke(zh){return[...zh].some(c=>HW.has(c));}
+
+// ── BUILD TABLE ───────────────────────────────────────────────
+function buildTable(id,arr,hasType){
+  const th=`<thead><tr>
+    <th class="tc" style="width:36px">STT</th>
+    <th class="tc" style="width:44px">🔊</th>
+    <th>Chữ Hán</th><th>Phiên âm</th><th>Nghĩa tiếng Việt</th>
+    ${hasType?'<th class="tc" style="width:58px">Từ loại</th>':''}
+    <th class="tc" style="width:48px">筆順</th>
+  </tr></thead>`;
+  const tb=arr.map(w=>{
+    const s=w.zh.replace(/'/g,"\\'");
+    return`<tr>
+      <td class="c-stt">${w.n}</td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
+      <td class="c-py"><span class="py-text">${w.py}</span></td>
+      <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
+      ${hasType?`<td class="c-tp">${w.t?`<span class="tp-bd">${w.t}</span>`:''}</td>`:''}
+      <td class="c-st">${canStroke(w.zh)?`<button class="bst" onclick="openStroke('${s}')">筆</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById(id).innerHTML=th+'<tbody>'+tb+'</tbody>';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTable('t-t1',TV1,true);
+  buildTable('t-t2',TV2,true);
+  buildTable('t-c1',CT1,false);
+  buildTable('t-c2',CT2,false);
+  buildTable('t-nv2',NV2,false);
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb[data-sec]').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`.nb[data-sec="${id}"]`)?.classList.add('on');
+  document.getElementById('toggleContainer').style.display=id==='baikoa'?'block':'none';
+  window.scrollTo(0,0);
+}
+function goSub(sec,sub){
+  document.querySelectorAll(`#${sec} .sub-content`).forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll(`#${sec} .subtab`).forEach(e=>e.classList.remove('on'));
+  document.getElementById(`${sec}-${sub}`).classList.add('on');
+  event.target.classList.add('on');
+}
+
+// ── TOGGLE ────────────────────────────────────────────────────
+let sPY=true,sVI=true;
+function tog(l){
+  if(l==='py'){
+    sPY=!sPY;
+    document.querySelectorAll('.spy').forEach(e=>e.classList.toggle('hd',!sPY));
+    document.getElementById('tp').classList.toggle('on',sPY);
+  }else{
+    sVI=!sVI;
+    document.querySelectorAll('.svi').forEach(e=>e.classList.toggle('hd',!sVI));
+    document.getElementById('tv').classList.toggle('on',sVI);
+  }
+}
+
+// ── BÀI TẬP ──────────────────────────────────────────────────
+function setField(id,ok){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.toggle('ok',ok);
+  el.classList.toggle('er',!ok&&el.value.trim().length>0);
+}
+function resetFields(ids,abId){
+  ids.forEach(k=>{const el=document.getElementById(k);el.value='';el.classList.remove('ok','er');});
+  document.getElementById(abId).classList.remove('sh');
+}
+function showAns(id){document.getElementById(id).classList.add('sh');}
+
+function ckE1(){
+  const a1=document.getElementById('e1-1').value.trim();
+  const a2=document.getElementById('e1-2').value.trim();
+  const a3=document.getElementById('e1-3').value.trim();
+  const a4=document.getElementById('e1-4').value.trim();
+  const a5=document.getElementById('e1-5').value.trim();
+  const a6=document.getElementById('e1-6').value.trim();
+  setField('e1-1',a1==='一下');
+  setField('e1-2',a2==='就回來'||a2==='就回来');
+  setField('e1-3',a3==='一回');
+  setField('e1-4',a4==='就找工作');
+  setField('e1-5',a5==='一下');
+  setField('e1-6',a6==='就去你們學校找你'||a6==='就去你们学校找你');
+  showAns('ab1');
+}
+function rsE1(){resetFields(['e1-1','e1-2','e1-3','e1-4','e1-5','e1-6'],'ab1');}
+
+function ckE2(){
+  const v1=document.getElementById('e2-1').value.trim();
+  const v2=document.getElementById('e2-2').value.trim();
+  const v3=document.getElementById('e2-3').value.trim();
+  setField('e2-1',v1==='了');
+  setField('e2-2',v2==='了');
+  setField('e2-3',v3==='了');
+  showAns('ab2');
+}
+function rsE2(){resetFields(['e2-1','e2-2','e2-3'],'ab2');}
+
+function ckE3(){
+  const v1=document.getElementById('e3-1').value.trim();
+  const v2=document.getElementById('e3-2').value.trim();
+  const v3=document.getElementById('e3-3').value.trim();
+  const v4=document.getElementById('e3-4').value.trim();
+  setField('e3-1',v1==='不');
+  setField('e3-2',v2==='沒'||v2==='没');
+  setField('e3-3',v3==='不');
+  setField('e3-4',v4==='沒'||v4==='没');
+  showAns('ab3');
+}
+function rsE3(){resetFields(['e3-1','e3-2','e3-3','e3-4'],'ab3');}
+
+function ckE4(){
+  const v1=document.getElementById('e4-1').value.trim();
+  const v2=document.getElementById('e4-2').value.trim();
+  setField('e4-1',v1==='我的生日跟她的一樣。'||v1==='我的生日跟她的一样。');
+  setField('e4-2',v2==='中國茶跟日本茶不一樣。'||v2==='中国茶跟日本茶不一样。');
+  showAns('ab4');
+}
+function rsE4(){resetFields(['e4-1','e4-2'],'ab4');}
+
+// ── TTS ───────────────────────────────────────────────────────
+let VX=window.speechSynthesis.getVoices();
+window.speechSynthesis.onvoiceschanged=()=>{VX=window.speechSynthesis.getVoices();};
+function sayZh(t){
+  if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ TTS.');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  let v=null;
+  for(const p of['zh-TW','zh-CN','zh','cmn']){
+    v=VX.find(x=>x.lang?.toLowerCase().startsWith(p.toLowerCase()));
+    if(v)break;
+  }
+  if(v)u.voice=v;
+  u.lang='zh-TW';u.rate=0.82;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+let hwInstances=[];
+function openStroke(word){
+  const chars=[...word].filter(c=>HW.has(c));
+  if(!chars.length)return;
+  hwInstances.forEach(h=>{try{h.writer.cancelAnimation();}catch(e){}});
+  hwInstances=[];
+  document.getElementById('otitle').textContent='筆順 · '+word;
+  const framesEl=document.getElementById('oframes');
+  framesEl.innerHTML='';
+  const SIZE=chars.length>3?110:140;
+  chars.forEach((ch,i)=>{
+    const cell=document.createElement('div');cell.className='hw-cell';
+    const svg=document.createElement('div');svg.id='hw-svg-'+i;
+    svg.style.cssText=`width:${SIZE}px;height:${SIZE}px;border:2px solid #e0e0e0;border-radius:8px;background:#fafafa;`;
+    const lbl=document.createElement('span');lbl.textContent=ch;
+    cell.appendChild(svg);cell.appendChild(lbl);framesEl.appendChild(cell);
+    try{
+      const w=HanziWriter.create(svg.id,ch,{
+        width:SIZE,height:SIZE,padding:10,
+        strokeColor:'#c62828',outlineColor:'#e0e0e0',
+        strokeAnimationSpeed:1,delayBetweenStrokes:200,
+        showCharacter:true,showOutline:true,
+        charDataLoader:(char,onLoad,onError)=>{
+          fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${char}.json`)
+            .then(r=>r.json()).then(d=>onLoad(d))
+            .catch(()=>fetch(`https://raw.githubusercontent.com/chanind/hanzi-writer-data/master/${char}.json`)
+              .then(r=>r.json()).then(d=>onLoad(d)).catch(err=>onError(err)));
+        }
+      });
+      hwInstances.push({writer:w});
+    }catch(e){console.warn('HanziWriter error',ch,e);}
+  });
+  const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
+  [['▶ Hoạt ảnh',hwAnimAll,''],['🔄 Lặp',hwLoopAll,''],['✕ Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+    const b=document.createElement('button');
+    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+  });
+  document.getElementById('ov').classList.add('open');
+}
+function hwAnimAll(){hwInstances.forEach((h,i)=>setTimeout(()=>h.writer.animateCharacter(),i*600));}
+function hwLoopAll(){let i=0;(function next(){if(i>=hwInstances.length)i=0;hwInstances[i].writer.animateCharacter({onComplete:()=>{i++;next();}});})();}
+function closeOv(){document.getElementById('ov').classList.remove('open');}
+function ovClick(e){if(e.target===document.getElementById('ov'))closeOv();}
+
+// ── EDITOR ────────────────────────────────────────────────────
+let quill;
+function openEditor(){
+  document.getElementById('editorModal').classList.add('open');
+  if(!quill){
+    quill=new Quill('#editor-content',{
+      theme:'snow',
+      placeholder:'Viết ghi chú Bài 13 ở đây...',
+      modules:{toolbar:'#editor-toolbar'}
+    });
+    const saved=localStorage.getItem('bai13_notes');
+    if(saved)quill.root.innerHTML=saved;
+  }
+}
+function closeEditor(){document.getElementById('editorModal').classList.remove('open');}
+function saveEditor(){if(quill){localStorage.setItem('bai13_notes',quill.root.innerHTML);alert('✅ Đã lưu ghi chú!');}}
+function clearEditor(){if(quill&&confirm('Xóa tất cả ghi chú?')){quill.root.innerHTML='';localStorage.removeItem('bai13_notes');}}
+setInterval(()=>{
+  if(quill&&document.getElementById('editorModal').classList.contains('open'))
+    localStorage.setItem('bai13_notes',quill.root.innerHTML);
+},30000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditor();closeOv();}});
+</script>
+</body>
+</html>

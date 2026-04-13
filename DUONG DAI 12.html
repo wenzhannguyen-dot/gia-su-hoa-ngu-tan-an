@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>第十二課 你在臺灣學多久的中文？</title>
+<base target="_blank">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+:root{
+  --g:#2e7d32;--g0:#e8f5e9;
+  --b:#1565c0;--b0:#dbeafe;
+  --r:#c62828;--r0:#fff3e0;
+  --s:#607d8b;--s0:#f0f4f5;
+  --k:#222;--w:#fff;
+  --sw:200px;
+  --fzh:32px;--fpy:19px;--fvi:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
+.zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
+
+/* SIDEBAR */
+#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
+.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
+.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
+.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
+.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
+.logo-area{text-align:center;padding:5px 0;}
+.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+.logo-container img{width:100%;height:100%;object-fit:contain;}
+nav{flex:1;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
+.nb:hover{background:rgba(255,255,255,.1);}
+.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+.nb .ic{font-size:18px;}
+.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
+.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
+.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
+.st-btn:hover{background:rgba(255,255,255,.1);}
+.st-btn.on{background:var(--g);border-color:var(--g);}
+
+/* MAIN */
+#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+.tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
+.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
+.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+
+/* SECTIONS */
+.sec{display:none;padding:20px 24px;}
+.sec.on{display:block;}
+.subnav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e0e0e0;flex-wrap:wrap;}
+.subtab{background:#f5f5f5;border:none;padding:10px 20px;font-size:14px;font-weight:600;color:#666;cursor:pointer;border-radius:8px 8px 0 0;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.subtab:hover{background:#e8e8e8;color:var(--b);}
+.subtab.on{background:var(--b);color:#fff;border-bottom-color:var(--r);}
+.sub-content{display:none;}
+.sub-content.on{display:block;}
+
+/* VOCAB TABLE */
+.vt-wrap{overflow-x:auto;margin-bottom:6px;}
+table.vt{border-collapse:collapse;background:var(--w);border-radius:8px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.09);table-layout:auto;width:auto;min-width:100%;}
+table.vt thead tr{background:var(--b);}
+table.vt thead th{padding:9px 12px;font-size:13px;font-weight:700;color:#fff;text-align:left;white-space:nowrap;}
+table.vt thead th.tc{text-align:center;}
+table.vt tbody tr{border-bottom:1px solid #e8ecf0;}
+table.vt tbody tr:last-child{border-bottom:none;}
+table.vt tbody tr:hover{background:#f5f8ff;}
+.c-stt{padding:10px 8px;text-align:center;white-space:nowrap;width:36px;font-size:14px;font-weight:600;color:var(--s);}
+.c-au{padding:10px 6px;text-align:center;white-space:nowrap;width:44px;}
+.c-zh,.c-py{padding:10px;white-space:nowrap;}
+.c-vi{padding:10px;}
+.c-tp{padding:10px 8px;text-align:center;white-space:nowrap;width:58px;}
+.c-st{padding:10px 8px;text-align:center;white-space:nowrap;width:48px;}
+.zh-word{font-size:var(--fzh);color:var(--k);letter-spacing:1px;}
+.py-text{font-size:var(--fpy);color:var(--r);font-weight:500;}
+.vi-text{font-size:var(--fvi);color:var(--b);line-height:1.4;}
+.tp-bd{display:inline-block;font-size:12px;color:#fff;background:var(--s);border-radius:4px;padding:2px 8px;font-weight:600;}
+.bau{background:var(--b);color:#fff;border:none;border-radius:7px;padding:7px 9px;font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.bau:hover{background:#0d47a1;}
+.bau:active{transform:scale(.92);}
+.bst{background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;color:var(--r);line-height:1;}
+.bst:hover{color:#7b0000;}
+
+/* STROKE OVERLAY */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;align-items:center;justify-content:center;}
+#ov.open{display:flex;}
+#obox{background:var(--w);border-radius:14px;padding:24px 28px;max-width:480px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;}
+#ocls{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:var(--s);margin-top:-6px;line-height:1;}
+#otitle{font-size:18px;font-weight:700;color:var(--b);margin-bottom:16px;font-family:'DFKai-SB',serif;}
+#oframes{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hw-cell{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.hw-cell span{font-size:13px;color:var(--s);}
+.hw-controls{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hw-btn{background:var(--b);color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;}
+.hw-btn:hover{background:#0d47a1;}
+.hw-btn.red{background:var(--r);}
+.hw-btn.red:hover{background:#8d1515;}
+
+/* DIALOGUE */
+.db{background:var(--w);border-radius:12px;padding:16px 20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:5px solid var(--b);}
+.db.dg{border-top-color:var(--g);}
+.dt{font-size:15px;font-weight:700;color:var(--b);margin-bottom:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.db.dg .dt{color:var(--g);}
+.dlb{background:var(--b);color:#fff;padding:2px 11px;border-radius:12px;font-size:12px;}
+.db.dg .dlb{background:var(--g);}
+.dab{margin-left:auto;background:var(--b);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:700;}
+.db.dg .dab{background:var(--g);}
+table.dt2{width:100%;border-collapse:collapse;}
+table.dt2 tr{border-bottom:1px solid #f0f0f0;}
+table.dt2 tr:last-child{border-bottom:none;}
+td.d-au{width:44px;padding:11px 6px 11px 0;vertical-align:top;}
+td.d-sp{width:80px;padding:11px 8px 11px 0;vertical-align:top;}
+td.d-tx{padding:11px 0;}
+.spk{display:inline-block;text-align:center;font-size:15px;color:#fff;background:var(--g);padding:5px 7px;border-radius:8px;line-height:1.3;min-width:66px;font-family:'DFKai-SB',serif;}
+.spk.b{background:var(--b);}.spk.c{background:var(--r);}.spk.y{background:#f57c00;}
+.spk small{font-size:11px;display:block;font-family:'Segoe UI',sans-serif;}
+.szh{font-size:var(--fzh);color:var(--k);line-height:1.6;letter-spacing:1px;}
+.spy{font-size:var(--fpy);color:var(--r);margin-top:3px;line-height:1.5;font-weight:500;}
+.svi{font-size:var(--fvi);color:var(--b);margin-top:3px;line-height:1.5;font-style:italic;}
+.spy.hd,.svi.hd{display:none;}
+
+/* GRAMMAR */
+.gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
+.gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
+.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
+.gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
+table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
+table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;text-align:left;font-weight:700;}
+table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
+table.ex tr:last-child td{border-bottom:none;}
+table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
+table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
+
+/* EXERCISES */
+.ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
+.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ei{margin-bottom:14px;}
+.eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
+.eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
+.eh{font-size:14px;color:var(--s);font-style:italic;}
+input.fi{border:2px solid #ccc;border-radius:6px;padding:4px 9px;font-size:19px;width:110px;outline:none;font-family:'DFKai-SB',serif;}
+input.fi:focus{border-color:var(--b);}
+input.fi.ok{border-color:var(--g);background:var(--g0);}
+input.fi.er{border-color:var(--r);background:var(--r0);}
+.bck{background:var(--b);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.bck:hover{background:#0d47a1;}
+.brs{background:var(--s);color:#fff;border:none;padding:9px 15px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin:10px 0 0 8px;}
+.ab{display:none;margin-top:9px;background:var(--g0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--g);}
+.ab.sh{display:block;}
+
+/* CULTURE */
+.culture-box{background:linear-gradient(135deg,#fff,#f5f7fa);border-left:5px solid #ff6b6b;padding:20px;border-radius:12px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.culture-box h3{color:#e74c3c;margin-bottom:10px;font-size:18px;}
+.culture-box p{line-height:1.8;margin-bottom:10px;text-align:justify;}
+
+/* EDITOR MODAL */
+#editorModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
+#editorModal.open{display:flex;}
+.editor-container{background:#fff;border-radius:12px;width:90%;max-width:900px;height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.editor-header{background:var(--b);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0;}
+.editor-header h3{margin:0;font-size:18px;}
+.editor-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.editor-close:hover{background:rgba(255,255,255,.2);}
+.editor-body{flex:1;display:flex;flex-direction:column;}
+#editor-toolbar{border-bottom:1px solid #ddd;}
+#editor-content{flex:1;font-size:16px;line-height:1.6;}
+#editor-content .ql-editor{min-height:100%;}
+.editor-footer{padding:15px 20px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 12px 12px;}
+.editor-status{font-size:13px;color:#666;}
+.editor-actions{display:flex;gap:10px;}
+.btn-save{background:var(--g);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-clear{background:transparent;color:var(--s);border:1px solid #ddd;padding:8px 20px;border-radius:6px;font-size:14px;cursor:pointer;}
+.btn-save:hover{background:#1b5e20;}
+.btn-clear:hover{background:#f5f5f5;}
+
+footer{margin-top:28px;padding:12px 24px;background:var(--k);color:#777;font-size:12px;text-align:center;}
+footer strong{color:var(--r);}
+</style>
+</head>
+<body>
+
+<!-- STROKE OVERLAY -->
+<div id="ov" onclick="ovClick(event)">
+  <div id="obox">
+    <button id="ocls" onclick="closeOv()">✕</button>
+    <div id="otitle"></div>
+    <div id="oframes"></div>
+    <div class="hw-controls" id="octrl"></div>
+  </div>
+</div>
+
+<!-- EDITOR MODAL -->
+<div id="editorModal">
+  <div class="editor-container">
+    <div class="editor-header">
+      <h3>📝 Soạn thảo ghi chú - Bài 12</h3>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div id="editor-toolbar">
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="1">Tiêu đề 1</option>
+            <option value="2">Tiêu đề 2</option>
+            <option selected>Tiêu đề thường</option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats"><button class="ql-clean"></button></span>
+      </div>
+      <div id="editor-content"></div>
+    </div>
+    <div class="editor-footer">
+      <span class="editor-status">💡 Ghi chú tự động lưu vào trình duyệt</span>
+      <div class="editor-actions">
+        <button class="btn-clear" onclick="clearEditor()">Xóa tất cả</button>
+        <button class="btn-save" onclick="saveEditor()">Lưu ghi chú</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="lb">
+    <div class="logo-area">
+      <div class="logo-container">
+        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+      </div>
+    </div>
+    <div class="ln">GIA SƯ HOA NGỮ TÂN AN</div>
+    <div class="la">9/1 Bạch Văn Tư, Tân An, Long An</div>
+    <div class="lz">Zalo: 0839 889 772</div>
+  </div>
+  <nav>
+    <button class="nb" onclick="window.open('TIENG TRUNG DUONG DAI.html','_self')"><span class="ic">🏠</span><span>VỀ TRANG CHỦ</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TỪ VỰNG</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BÀI KHÓA</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGỮ PHÁP</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BÀI TẬP</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VĂN HÓA</span></button>
+  </nav>
+  <div class="side-toggle" id="toggleContainer" style="display:none;">
+    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phiên âm</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tiếng Việt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mn">
+  <div class="topbar">
+    <div>
+      <div class="tzh">BÀI 12 · 第十二課</div>
+      <div class="tvi">你在臺灣學多久的中文？· Bạn ở Đài Loan học tiếng Trung bao lâu?</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:15px;">
+      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soạn thảo</span></button>
+      <div class="badge">當代中文課程 1</div>
+    </div>
+  </div>
+
+  <!-- TỪ VỰNG -->
+  <div id="vocab" class="sec on">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Từ vựng 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')">📖 Từ vựng 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','c1')">📝 Cụm từ 1 · 短語一</button>
+      <button class="subtab" onclick="goSub('vocab','c2')">📝 Cụm từ 2 · 短語二</button>
+      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhân vật · 人物</button>
+    </div>
+    <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
+    <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
+    <div id="vocab-c1" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c1"></table></div></div>
+    <div id="vocab-c2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c2"></table></div></div>
+    <div id="vocab-nv" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-nv2"></table></div></div>
+  </div>
+
+  <!-- BÀI KHÓA -->
+  <div id="baikoa" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hội thoại 1 · 對話一</button>
+      <button class="subtab" onclick="goSub('baikoa','ht2')">💬 Hội thoại 2 · 對話二</button>
+    </div>
+    <div id="baikoa-ht1" class="sub-content on">
+      <div class="db">
+        <div class="dt">
+          <span class="dlb">Hội thoại 1 · 對話一</span>Kế hoạch học tập
+          <button class="dab" onclick="sayZh('安同，你計畫在臺灣學多久的中文？五年。為什麼要這麼久的時間？我先在語言中心念一年，再念四年大學，所以需要五年。這得花不少錢！對，不過我有獎學金。要是成績不好，就沒獎學金了。你呢？我的學費是公司替我付的。你打算學多久呢？大概兩年，是公司決定的。希望我以後也可以到這麼好的公司上班。我又要上班，又要念書，真的很累。我們一起加油吧！')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同，你計畫在臺灣學多久的中文？')">🔊</button></td><td class="d-sp"><div class="spk b">田中<small>Tiánzhōng</small></div></td><td class="d-tx"><div class="szh">安同，你計畫在臺灣學多久的中文？</div><div class="spy">Āntóng, nǐ jìhuà zài Táiwān xué duō jiǔ de Zhōngwén?</div><div class="svi">An Đồng, em lập kế hoạch học tiếng Trung ở Đài Loan trong bao lâu?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('五年。')">🔊</button></td><td class="d-sp"><div class="spk c">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">五年。</div><div class="spy">Wǔ nián.</div><div class="svi">5 năm.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('為什麼要這麼久的時間？')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">為什麼要這麼久的時間？</div><div class="spy">Wèishénme yào zhème jiǔ de shíjiān?</div><div class="svi">Tại sao cần thời gian lâu thế?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我先在語言中心念一年，再念四年大學，所以需要五年。')">🔊</button></td><td class="d-sp"><div class="spk c">安同</div></td><td class="d-tx"><div class="szh">我先在語言中心念一年，再念四年大學，所以需要五年。</div><div class="spy">Wǒ xiān zài yǔyán zhōngxīn niàn yì nián, zài niàn sì nián dàxué, suǒyǐ xūyào wǔ nián.</div><div class="svi">Em học một năm ở trung tâm ngôn ngữ trước, sau đó học 4 năm đại học, cho nên cần 5 năm.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('這得花不少錢！')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">這得花不少錢！</div><div class="spy">Zhè děi huā bù shǎo qián!</div><div class="svi">Cái này phải tốn không ít tiền!</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('對，不過我有獎學金。要是成績不好，就沒獎學金了。你呢？')">🔊</button></td><td class="d-sp"><div class="spk c">安同</div></td><td class="d-tx"><div class="szh">對，不過我有獎學金。要是成績不好，就沒獎學金了。你呢？</div><div class="spy">Duì, búguò wǒ yǒu jiǎngxuéjīn. Yàoshi chéngjī bù hǎo, jiù méi jiǎngxuéjīn le. Nǐ ne?</div><div class="svi">Đúng vậy, nhưng em có học bổng. Nếu thành tích không tốt sẽ không có học bổng nữa. Anh thì sao?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我的學費是公司替我付的。')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">我的學費是公司替我付的。</div><div class="spy">Wǒ de xuéfèi shì gōngsī tì wǒ fù de.</div><div class="svi">Tiền học của anh là công ty trả thay cho anh.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你打算學多久呢？')">🔊</button></td><td class="d-sp"><div class="spk c">安同</div></td><td class="d-tx"><div class="szh">你打算學多久呢？</div><div class="spy">Nǐ dǎsuàn xué duō jiǔ ne?</div><div class="svi">Anh tính học bao lâu thế?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('大概兩年，是公司決定的。')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">大概兩年，是公司決定的。</div><div class="spy">Dàgài liǎng nián, shì gōngsī juédìng de.</div><div class="svi">Khoảng 2 năm, là công ty quyết định.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('希望我以後也可以到這麼好的公司上班。')">🔊</button></td><td class="d-sp"><div class="spk c">安同</div></td><td class="d-tx"><div class="szh">希望我以後也可以到這麼好的公司上班。</div><div class="spy">Xīwàng wǒ yǐhòu yě kěyǐ dào zhème hǎo de gōngsī shàngbān.</div><div class="svi">Hi vọng sau này em có thể đi làm ở công ty tốt như này.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我又要上班，又要念書，真的很累。')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">我又要上班，又要念書，真的很累。</div><div class="spy">Wǒ yòu yào shàngbān, yòu yào niànshū, zhēnde hěn lèi.</div><div class="svi">Anh vừa phải đi làm, vừa phải học, thật sự rất mệt.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我們一起加油吧！')">🔊</button></td><td class="d-sp"><div class="spk c">安同</div></td><td class="d-tx"><div class="szh">我們一起加油吧！</div><div class="spy">Wǒmen yìqǐ jiāyóu ba!</div><div class="svi">Chúng ta cùng cố gắng thôi!</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="baikoa-ht2" class="sub-content">
+      <div class="db dg">
+        <div class="dt">
+          <span class="dlb">Hội thoại 2 · 對話二</span>Công việc và tương lai
+          <button class="dab" onclick="sayZh('田中，你是什麼時候來臺灣工作的？去年，我已經在臺灣工作一年了。為什麼你們公司要替你付學費？因為我們公司跟臺灣人做生意。老闆希望我們都會說中文。我覺得你們公司真好。對了，妳回國以後，打算做什麼？我回國以後，也想找個有機會說中文的工作。不錯，這樣的工作在你們國家好找嗎？不知道好不好找，我試試看。要是難找呢？那麼我再來臺灣學中文。太好了！那我們就可以再見面了。')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('田中，你是什麼時候來臺灣工作的？')">🔊</button></td><td class="d-sp"><div class="spk">月美<small>Yuèměi</small></div></td><td class="d-tx"><div class="szh">田中，你是什麼時候來臺灣工作的？</div><div class="spy">Tiánzhōng, nǐ shì shénme shíhòu lái Táiwān gōngzuò de?</div><div class="svi">Điền Trung, anh là từ lúc nào đến Đài Loan làm việc thế?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('去年，我已經在臺灣工作一年了。')">🔊</button></td><td class="d-sp"><div class="spk y">田中<small>Tiánzhōng</small></div></td><td class="d-tx"><div class="szh">去年，我已經在臺灣工作一年了。</div><div class="spy">Qùnián, wǒ yǐjīng zài Táiwān gōngzuò yì nián le.</div><div class="svi">Năm ngoái, anh đã ở Đài Loan làm việc 1 năm rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('為什麼你們公司要替你付學費？')">🔊</button></td><td class="d-sp"><div class="spk">月美</div></td><td class="d-tx"><div class="szh">為什麼你們公司要替你付學費？</div><div class="spy">Wèishénme nǐmen gōngsī yào tì nǐ fù xuéfèi?</div><div class="svi">Sao công ty các anh phải trả tiền học giúp anh?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('因為我們公司跟臺灣人做生意。老闆希望我們都會說中文。')">🔊</button></td><td class="d-sp"><div class="spk y">田中</div></td><td class="d-tx"><div class="szh">因為我們公司跟臺灣人做生意。老闆希望我們都會說中文。</div><div class="spy">Yīnwèi wǒmen gōngsī gēn Táiwān rén zuò shēngyì. Lǎobǎn xīwàng wǒmen dōu huì shuō Zhōngwén.</div><div class="svi">Bởi vì công ty bọn anh làm ăn kinh doanh với người Đài Loan. Sếp hi vọng bọn anh đều biết nói tiếng Trung.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我覺得你們公司真好。')">🔊</button></td><td class="d-sp"><div class="spk">月美</div></td><td class="d-tx"><div class="szh">我覺得你們公司真好。</div><div class="spy">Wǒ juéde nǐmen gōngsī zhēn hǎo.</div><div class="svi">Em thấy công ty các anh thật tốt.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('對了，妳回國以後，打算做什麼？')">🔊</button></td><td class="d-sp"><div class="spk y">田中</div></td><td class="d-tx"><div class="szh">對了，妳回國以後，打算做什麼？</div><div class="spy">Duì le, nǐ huíguó yǐhòu, dǎsuàn zuò shénme?</div><div class="svi">Chính xác đó, sau khi về nước em định làm gì?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我回國以後，也想找個有機會說中文的工作。')">🔊</button></td><td class="d-sp"><div class="spk">月美</div></td><td class="d-tx"><div class="szh">我回國以後，也想找個有機會說中文的工作。</div><div class="spy">Wǒ huíguó yǐhòu, yě xiǎng zhǎo ge yǒu jīhuì shuō Zhōngwén de gōngzuò.</div><div class="svi">Sau khi em về nước, cũng muốn tìm công việc có cơ hội nói tiếng Trung.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('不錯，這樣的工作在你們國家好找嗎？')">🔊</button></td><td class="d-sp"><div class="spk y">田中</div></td><td class="d-tx"><div class="szh">不錯，這樣的工作在你們國家好找嗎？</div><div class="spy">Búcuò, zhèyàng de gōngzuò zài nǐmen guójiā hǎo zhǎo ma?</div><div class="svi">Không tệ, công việc thế này ở nước em có dễ tìm không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('不知道好不好找，我試試看。')">🔊</button></td><td class="d-sp"><div class="spk">月美</div></td><td class="d-tx"><div class="szh">不知道好不好找，我試試看。</div><div class="spy">Bù zhīdào hǎo bù hǎo zhǎo, wǒ shìshìkàn.</div><div class="svi">Không biết dễ hay không nữa, em thử xem.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('要是難找呢？')">🔊</button></td><td class="d-sp"><div class="spk y">田中</div></td><td class="d-tx"><div class="szh">要是難找呢？</div><div class="spy">Yàoshi nán zhǎo ne?</div><div class="svi">Nếu khó tìm thì sao?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('那麼我再來臺灣學中文。')">🔊</button></td><td class="d-sp"><div class="spk">月美</div></td><td class="d-tx"><div class="szh">那麼我再來臺灣學中文。</div><div class="spy">Nàme wǒ zài lái Táiwān xué Zhōngwén.</div><div class="svi">Vậy thì em lại đến Đài Loan học tiếng Trung.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('太好了！那我們就可以再見面了。')">🔊</button></td><td class="d-sp"><div class="spk y">田中</div></td><td class="d-tx"><div class="szh">太好了！那我們就可以再見面了。</div><div class="spy">Tài hǎo le! Nà wǒmen jiù kěyǐ zài jiànmiàn le.</div><div class="svi">Quá được! Vậy chúng ta sẽ có thể gặp lại rồi.</div></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGỮ PHÁP -->
+  <div id="ngupap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('ngupap','g1')">1 · 先...再...</button>
+      <button class="subtab" onclick="goSub('ngupap','g2')">2 · 是...的</button>
+      <button class="subtab" onclick="goSub('ngupap','g3')">3 · 以後</button>
+      <button class="subtab" onclick="goSub('ngupap','g4')">4 · 好/難 + Động từ</button>
+    </div>
+    <div id="ngupap-g1" class="sub-content on">
+      <div class="gc">
+        <div><span class="gn">1</span><span class="gtt">Thứ tự thời gian với 先...再... · 先...再...</span></div>
+        <div class="gsb">Cấu trúc này trình bày trình tự thời gian của hai sự kiện liên tiếp. Biểu thị "trước...sau đó..."</div>
+        <div class="fm">先 + VP1，再 + VP2<div class="fn">Trước...sau đó...</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">弟弟打算先去旅行再找工作。</div></td><td><div class="py">Dìdi dǎsuàn xiān qù lǚxíng zài zhǎo gōngzuò.</div></td><td><div class="vi">Em trai định đi du lịch trước, sau đó tìm công việc.</div></td></tr>
+          <tr><td><div class="zh">我想先吃晚飯再給媽媽打電話。</div></td><td><div class="py">Wǒ xiǎng xiān chī wǎnfàn zài gěi māma dǎ diànhuà.</div></td><td><div class="vi">Tôi muốn ăn cơm trước rồi gọi điện thoại cho mẹ sau.</div></td></tr>
+          <tr><td><div class="zh">他計畫在臺灣先學語言再念大學。</div></td><td><div class="py">Tā jìhuà zài Táiwān xiān xué yǔyán zài niàn dàxué.</div></td><td><div class="vi">Anh ấy lập kế hoạch ở Đài Loan học ngôn ngữ trước, sau đó học đại học.</div></td></tr>
+          <tr><td><div class="zh">我昨天晚上先寫功課，再看電視。</div></td><td><div class="py">Wǒ zuótiān wǎnshàng xiān xiě gōngkè, zài kàn diànshì.</div></td><td><div class="vi">Tối qua tớ làm bài tập trước, sau đó xem tivi.</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="ngupap-g2" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">2</span><span class="gtt">Nhấn mạnh với 是...的 · 是...的</span></div>
+        <div class="gsb">Cấu trúc này đánh dấu thành phần là trọng tâm trong câu của một sự kiện trong quá khứ. Dùng để nhấn mạnh thời gian, địa điểm, phương thức hoặc chủ thể.</div>
+        <div class="fm">S + 是 + [Trọng tâm] + VP + 的<div class="fn">Chính là.../Là...đấy</div></div>
+        <table class="ex">
+          <tr><th>Loại nhấn mạnh</th><th>Ví dụ</th><th>Nghĩa</th></tr>
+          <tr><td>Thời gian</td><td><div class="zh">他是昨天晚上到臺灣的。</div><div class="py">Tā shì zuótiān wǎnshàng dào Táiwān de.</div></td><td><div class="vi">Anh ấy là tối qua đến Đài Loan đấy.</div></td></tr>
+          <tr><td>Địa điểm</td><td><div class="zh">他是在學校附近吃晚飯的。</div><div class="py">Tā shì zài xuéxiào fùjìn chī wǎnfàn de.</div></td><td><div class="vi">Anh ấy là ở gần trường ăn cơm tối đó.</div></td></tr>
+          <tr><td>Phương thức</td><td><div class="zh">我是坐公車來上課的。</div><div class="py">Wǒ shì zuò gōngchē lái shàngkè de.</div></td><td><div class="vi">Tớ là đi xe buýt tới trường học đấy.</div></td></tr>
+          <tr><td>Chủ thể</td><td><div class="zh">學費是公司替我付的。</div><div class="py">Xuéfèi shì gōngsī tì wǒ fù de.</div></td><td><div class="vi">Tiền học là công ty đóng cho anh đó.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Phủ định: 不 đặt trước 是 (không phải là...). Câu hỏi: dùng 嗎 ở cuối hoặc đảo 是 lên đầu.</div>
+      </div>
+    </div>
+    <div id="ngupap-g3" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">3</span><span class="gtt">Sau khi với 以後 · 以後</span></div>
+        <div class="gsb">以後 có thể đứng một mình như danh từ chỉ thời gian tương lai, hoặc đứng sau một sự kiện để chỉ "sau khi...".</div>
+        <div class="fm">Sự kiện + 以後 + VP<div class="fn">Sau khi.../Sau...</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">回國以後，我要找個有機會說中文的工作。</div></td><td><div class="py">Huíguó yǐhòu, wǒ yào zhǎo ge yǒu jīhuì shuō Zhōngwén de gōngzuò.</div></td><td><div class="vi">Sau khi về nước, em muốn tìm công ty có cơ hội nói tiếng Trung.</div></td></tr>
+          <tr><td><div class="zh">來臺灣以後，我每星期上五天的中文課。</div></td><td><div class="py">Lái Táiwān yǐhòu, wǒ měi xīngqí shàng wǔ tiān de Zhōngwén kè.</div></td><td><div class="vi">Sau khi tới Đài Loan, tớ đến lớp học tiếng Trung năm ngày một tuần.</div></td></tr>
+          <tr><td><div class="zh">我們以後都得上網。</div></td><td><div class="py">Wǒmen yǐhòu dōu děi shàngwǎng.</div></td><td><div class="vi">Chúng ta sau này đều phải lên mạng.</div></td></tr>
+          <tr><td><div class="zh">下課以後，你打算做什麼？</div></td><td><div class="py">Xiàkè yǐhòu, nǐ dǎsuàn zuò shénme?</div></td><td><div class="vi">Sau khi tan học, cậu định làm gì?</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="ngupap-g4" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">4</span><span class="gtt">Dễ/Khó làm gì với 好/難 + Động từ · 好/難 + Động từ</span></div>
+        <div class="gsb">Khi 好 hoặc 難 kết hợp với động từ hành động, chúng trở thành tính từ chỉ mức độ dễ/khó. Có thể dùng 很 để nhấn mạnh.</div>
+        <div class="fm">好/難 + Động từ<div class="fn">Dễ/khó làm gì</div></div>
+        <table class="ex">
+          <tr><th>Cấu trúc</th><th>Ví dụ</th><th>Nghĩa</th></tr>
+          <tr><td>Với động từ tri nhận</td><td><div class="zh">好吃 / 難吃</div><div class="py">hǎochī / nánchī</div></td><td><div class="vi">ăn ngon / ăn không ngon</div></td></tr>
+          <tr><td>Với động từ hành động</td><td><div class="zh">好找 / 難找</div><div class="py">hǎo zhǎo / nán zhǎo</div></td><td><div class="vi">dễ tìm / khó tìm</div></td></tr>
+          <tr><td>Ví dụ câu</td><td><div class="zh">好工作很難找。</div><div class="py">Hǎo gōngzuò hěn nán zhǎo.</div></td><td><div class="vi">Công việc tốt rất khó tìm.</div></td></tr>
+          <tr><td>Ví dụ câu</td><td><div class="zh">日本菜好吃也好看。</div><div class="py">Rìběn cài hǎochī yě hǎokàn.</div></td><td><div class="vi">Món Nhật ăn ngon, cũng đẹp mắt.</div></td></tr>
+          <tr><td>Ví dụ câu</td><td><div class="zh">有人覺得中文很難學。</div><div class="py">Yǒu rén juéde Zhōngwén hěn nán xué.</div></td><td><div class="vi">Có người cảm thấy tiếng Trung rất khó học.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Phủ định: 不好吃 (không ngon), 不難找 (khó tìm → không khó tìm).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÀI TẬP -->
+  <div id="baitap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bài 1 · 先...再...</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bài 2 · 是...的</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bài 3 · 以後</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bài 4 · 好/難</button>
+    </div>
+    <div id="baitap-bt1" class="sub-content on">
+      <div class="ec">
+        <div class="ett">📝 Bài 1 · Hoàn thành câu với 先...再...</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Dựa vào gợi ý, điền vào chỗ trống đúng trình tự thời gian.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我每天先 <input class="fi" id="e1-1" style="width:120px;">，再 <input class="fi" id="e1-2" style="width:120px;">。</div><div class="eh">→ (上中文課 / 吃中飯)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>他想先 <input class="fi" id="e1-3" style="width:120px;">，再 <input class="fi" id="e1-4" style="width:120px;">。</div><div class="eh">→ (打籃球 / 回宿舍)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>他們明天打算先去 <input class="fi" id="e1-5" style="width:120px;">，再去 <input class="fi" id="e1-6" style="width:120px;">。</div><div class="eh">→ (看電影 / 吃晚飯)</div></div>
+        <button class="bck" onclick="ckE1()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE1()">🔄 Làm lại</button>
+        <div class="ab" id="ab1"><strong>Gợi ý đáp án:</strong> ① 上中文課 / 吃中飯 &nbsp; ② 打籃球 / 回宿舍 &nbsp; ③ 看電影 / 吃晚飯</div>
+      </div>
+    </div>
+    <div id="baitap-bt2" class="sub-content">
+      <div class="ec" style="border-top-color:var(--b)">
+        <div class="ett" style="color:var(--b)">📝 Bài 2 · Nhấn mạnh với 是...的</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Hoàn thành câu hỏi và trả lời sử dụng cấu trúc 是...的.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>A: 他（是什麼時候）去學校的？<br>B: 他是 <input class="fi" id="e2-1" style="width:140px;"> 去學校的。</div><div class="eh">→ (七點半)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>A: 你的學費是誰付的？<br>B: 我的學費是 <input class="fi" id="e2-2" style="width:140px;"> 付的。</div><div class="eh">→ (公司)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>A: 你是怎麼去公司的？<br>B: 我是 <input class="fi" id="e2-3" style="width:140px;"> 去公司的。</div><div class="eh">→ (坐公車)</div></div>
+        <button class="bck" onclick="ckE2()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE2()">🔄 Làm lại</button>
+        <div class="ab" id="ab2"><strong>Đáp án:</strong> ① 七點半 &nbsp; ② 公司 &nbsp; ③ 坐公車</div>
+      </div>
+    </div>
+    <div id="baitap-bt3" class="sub-content">
+      <div class="ec" style="border-top-color:var(--r)">
+        <div class="ett" style="color:var(--r)">📝 Bài 3 · Hoàn thành câu với 以後</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Trả lời câu hỏi sử dụng từ 以後.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>A: 我們什麼時候去吃晚飯？<br>B: 我們 <input class="fi" id="e3-1" style="width:200px;"> 去吃晚飯。</div><div class="eh">→ (下課以後)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>A: 你什麼時候回國？<br>B: 我 <input class="fi" id="e3-2" style="width:200px;"> 回國。</div><div class="eh">→ (畢業以後)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>A: 半年以後，你打算做什麼？<br>B: <input class="fi" id="e3-3" style="width:280px;">。</div><div class="eh">→ (半年以後，我打算找工作)</div></div>
+        <button class="bck" onclick="ckE3()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE3()">🔄 Làm lại</button>
+        <div class="ab" id="ab3"><strong>Đáp án:</strong> ① 下課以後 &nbsp; ② 畢業以後 &nbsp; ③ 半年以後，我打算找工作</div>
+      </div>
+    </div>
+    <div id="baitap-bt4" class="sub-content">
+      <div class="ec" style="border-top-color:#764ba2">
+        <div class="ett" style="color:#764ba2">📝 Bài 4 · 好/難 + Động từ</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Bình luận về các tình huống sử dụng 好/難.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>越南菜 <input class="fi" id="e4-1" style="width:160px;"> (好吃)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>說中文的工作 <input class="fi" id="e4-2" style="width:160px;"> (好找/難找)</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>這個字 <input class="fi" id="e4-3" style="width:160px;"> (難寫)</div></div>
+        <button class="bck" onclick="ckE4()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE4()">🔄 Làm lại</button>
+        <div class="ab" id="ab4"><strong>Gợi ý:</strong> ① 很好吃 / 不好吃 &nbsp; ② 很好找 / 很難找 &nbsp; ③ 很難寫</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VĂN HÓA -->
+  <div id="vanhoa" class="sec">
+    <div class="culture-box">
+      <h3>🤝 Xưng hô với Mọi người ở Nơi làm việc</h3>
+      <p>Lịch sự mọi lúc mọi nơi là điều được người Trung Hoa rất xem trọng. Nơi làm việc cũng không ngoại lệ. Mọi người được xưng hô như thế nào còn phụ thuộc vào nhiều yếu tố.</p>
+      <p>Cách phổ biến nhất để xưng hô với một người là theo chức danh công việc của họ. Ví dụ: một người quản lý có thể được gọi là 王經理 Wáng Jīnglǐ "Quản lý Vương" hoặc một giáo sư là 李教授 Lǐ Jiàoshòu "Giáo sư Lý". Mọi người cũng được đề cập bằng các chức danh cho biết trình độ học vấn cao nhất mà họ có được.</p>
+      <p>Ví dụ, một người có bằng Tiến sĩ, có thể được gọi là 陳博士 Chén Bóshì "Tiến sĩ Trần" hoặc 文學博士陳月文 Wénxué Bóshì Chén Yuè-wén "Tiến sĩ Văn học Trần Nguyệt Văn". Còn có một cách xưng hô khác dựa trên nghề nghiệp, chẳng hạn như 張老師 Zhāng Lǎoshī "thầy Trương", hoặc 王議員 Wáng Yìyuán "Nghị sĩ Vương".</p>
+      <p>Khi không chắc chắn về chức danh công việc hoặc nghề nghiệp của ai đó, cô 小姐, bà 女士, hoặc ngài 先生 cũng là một cách gọi lịch sự.</p>
+    </div>
+    <div class="culture-box" style="border-left-color:#9b59b6;">
+      <h3 style="color:#9b59b6;">🔒 Quyền riêng tư đối với người Đài Loan</h3>
+      <p>Đôi khi người Đài Loan hỏi bạn bè ở nước ngoài những câu hỏi như "Bạn làm việc ở đâu?", "Bạn kiếm được bao nhiêu?", "Bạn đã kết hôn chưa?", "Bạn có bao nhiêu con?", và "Là trai hay gái?"</p>
+      <p>Trong khi nhiều người nước ngoài coi những câu hỏi kiểu này là xâm phạm quyền riêng tư thì trong văn hóa Đài Loan, chúng được coi là một dấu hiệu của sự quan tâm và là một cách thể hiện sự thân thiện.</p>
+    </div>
+    <div class="gc">
+      <div class="gtt">💼 Từ vựng về Công việc và Học tập</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:15px;">
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('上班')"><div style="font-size:32px;">💼</div><div class="zh" style="font-size:22px;margin:6px 0;">上班</div><div style="font-size:13px;color:var(--r);">shàngbān</div><div style="font-size:13px;color:var(--b);margin-top:3px;">đi làm</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('工作')"><div style="font-size:32px;">📋</div><div class="zh" style="font-size:22px;margin:6px 0;">工作</div><div style="font-size:13px;color:var(--r);">gōngzuò</div><div style="font-size:13px;color:var(--b);margin-top:3px;">công việc</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('做生意')"><div style="font-size:32px;">🤝</div><div class="zh" style="font-size:22px;margin:6px 0;">做生意</div><div style="font-size:13px;color:var(--r);">zuò shēngyì</div><div style="font-size:13px;color:var(--b);margin-top:3px;">làm ăn kinh doanh</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('學費')"><div style="font-size:32px;">💰</div><div class="zh" style="font-size:22px;margin:6px 0;">學費</div><div style="font-size:13px;color:var(--r);">xuéfèi</div><div style="font-size:13px;color:var(--b);margin-top:3px;">học phí</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('獎學金')"><div style="font-size:32px;">🏆</div><div class="zh" style="font-size:22px;margin:6px 0;">獎學金</div><div style="font-size:13px;color:var(--r);">jiǎngxuéjīn</div><div style="font-size:13px;color:var(--b);margin-top:3px;">học bổng</div></div>
+        <div style="background:#f0f4ff;padding:14px;border-radius:10px;text-align:center;cursor:pointer;" onclick="sayZh('大學')"><div style="font-size:32px;">🎓</div><div class="zh" style="font-size:22px;margin:6px 0;">大學</div><div style="font-size:13px;color:var(--r);">dàxué</div><div style="font-size:13px;color:var(--b);margin-top:3px;">đại học</div></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>GIA SƯ HOA NGỮ TÂN AN</strong> &nbsp;·&nbsp; 9/1 Bạch Văn Tư, Tân An, Long An &nbsp;·&nbsp; Zalo: 0839 889 772<br>
+    當代中文課程 1 · 第十二課 你在臺灣學多久的中文？— Tài liệu giảng dạy nội bộ
+  </footer>
+</div>
+
+<script>
+// ── DỮ LIỆU TỪ VỰNG ──────────────────────────────────────────
+const TV1=[
+  {n:'1', zh:'計畫',   py:'jìhuà',    vi:'lập/lên/vạch kế hoạch, tính toán',t:'V'},
+  {n:'2', zh:'年',     py:'nián',      vi:'năm (lượng từ về thời gian)',t:'M'},
+  {n:'3', zh:'久',     py:'jiǔ',    vi:'lâu, lâu dài',t:'Vs'},
+  {n:'4', zh:'時間',   py:'shíjiān',   vi:'thời gian',t:'N'},
+  {n:'5', zh:'先',     py:'xiān',        vi:'trước',t:'Adv'},
+  {n:'6', zh:'念',     py:'niàn',   vi:'học',t:'V'},
+  {n:'7', zh:'大學',   py:'dàxué',   vi:'đại học',t:'N'},
+  {n:'8', zh:'需要',     py:'xūyào',       vi:'cần, cần phải',t:'Vst'},
+  {n:'9', zh:'花',     py:'huā',   vi:'tiêu, tiêu tốn, tốn, mất (tiền hoặc thời gian)',t:'V'},
+  {n:'10',zh:'獎學金',     py:'jiǎngxuéjīn',     vi:'học bổng',t:'N'},
+  {n:'11',zh:'成績',   py:'chéngjī',    vi:'thành tích',t:'N'},
+  {n:'12',zh:'學費',   py:'xuéfèi',    vi:'học phí, tiền học',t:'N'},
+  {n:'13',zh:'公司',   py:'gōngsī',  vi:'công ty',t:'N'},
+  {n:'14',zh:'替',     py:'tì',        vi:'thay, thay cho, cho, giúp',t:'Prep'},
+  {n:'15',zh:'希望',   py:'xīwàng',    vi:'hi vọng',t:'Vst'},
+  {n:'16',zh:'以後',   py:'yǐhòu',    vi:'sau, sau này/đó, về sau (trong tương lai)',t:'N'},
+  {n:'17',zh:'到',     py:'dào',        vi:'đi, đi đến, đến, tới',t:'V'},
+  {n:'18',zh:'上班',   py:'shàngbān',    vi:'đi làm',t:'V-sep'},
+  {n:'19',zh:'念書',   py:'niànshū',  vi:'học',t:'V-sep'},
+  {n:'20',zh:'累',     py:'lèi',        vi:'mệt',t:'Vs'},
+  {n:'21',zh:'語言中心',   py:'yǔyán zhōngxīn',    vi:'trung tâm ngôn ngữ',t:'N'},
+  {n:'22',zh:'加油',     py:'jiāyóu',      vi:'cố lên, cố gắng',t:'V'},
+];
+const CT1=[
+  {n:'23',zh:'這麼久', py:'zhème jiǔ', vi:'lâu thế, lâu như vậy'},
+  {n:'24',zh:'這麼多',   py:'zhème duō',      vi:'nhiều thế, nhiều như vậy'},
+  {n:'25',zh:'這麼好',   py:'zhème hǎo',      vi:'tốt thế, tốt như vậy'},
+];
+const NV2=[
+  {n:'1',zh:'田中',py:'Tiánzhōng',vi:'Điền Trung (nhân vật nam)'},
+  {n:'2',zh:'安同',py:'Āntóng',vi:'An Đồng (nhân vật nam)'},
+];
+const TV2=[
+  {n:'1', zh:'工作',   py:'gōngzuò',   vi:'làm việc',t:'Vi'},
+  {n:'2', zh:'去年',   py:'qùnián',   vi:'năm ngoái/quá, năm vừa rồi',t:'N'},
+  {n:'3', zh:'做',     py:'zuò',       vi:'làm',t:'V'},
+  {n:'4', zh:'生意',   py:'shēngyì',  vi:'làm ăn, buôn bán, kinh doanh',t:'N'},
+  {n:'5', zh:'以後',     py:'yǐhòu',        vi:'sau khi',t:'N'},
+  {n:'6', zh:'好',     py:'hǎo',     vi:'dễ',t:'Vs'},
+  {n:'7', zh:'找',   py:'zhǎo',    vi:'tìm, kiếm, tìm kiếm',t:'V'},
+  {n:'8', zh:'工作',   py:'gōngzuò',    vi:'công việc',t:'N'},
+  {n:'9', zh:'這樣',     py:'zhèyàng',      vi:'(loại/kiểu) như (thế) này/vậy',t:'N'},
+  {n:'10',zh:'國家',   py:'guójiā',      vi:'quốc gia, đất nước, nước',t:'N'},
+  {n:'11',zh:'試',     py:'shì',       vi:'thử',t:'Vi'},
+  {n:'12',zh:'難',   py:'nán',    vi:'khó',t:'Vs'},
+  {n:'13',zh:'那麼',   py:'nàme',  vi:'vậy/thế thì',t:'Ptc'},
+  {n:'14',zh:'再',     py:'zài',      vi:'lại, nữa',t:'Adv'},
+];
+const CT2=[
+  {n:'15',zh:'試試看',   py:'shìshìkàn',     vi:'thử xem'},
+];
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+const HW=new Set('計畫年久時間先念大學需要花獎學金成績學費公司替希望以後到上班念書累語言中心加油工作去年做生意好找這樣國家試難那麼再試試看田中安同月美我你他她不喜歡很都也常的了呢嗎來有沒在會要'.split(''));
+function canStroke(zh){return[...zh].some(c=>HW.has(c));}
+
+// ── BUILD TABLE ───────────────────────────────────────────────
+function buildTable(id,arr,hasType){
+  const th=`<thead><tr>
+    <th class="tc" style="width:36px">STT</th>
+    <th class="tc" style="width:44px">🔊</th>
+    <th>Chữ Hán</th><th>Phiên âm</th><th>Nghĩa tiếng Việt</th>
+    ${hasType?'<th class="tc" style="width:58px">Từ loại</th>':''}
+    <th class="tc" style="width:48px">筆順</th>
+  </tr></thead>`;
+  const tb=arr.map(w=>{
+    const s=w.zh.replace(/'/g,"\\'");
+    return`<tr>
+      <td class="c-stt">${w.n}</td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
+      <td class="c-py"><span class="py-text">${w.py}</span></td>
+      <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
+      ${hasType?`<td class="c-tp">${w.t?`<span class="tp-bd">${w.t}</span>`:''}</td>`:''}
+      <td class="c-st">${canStroke(w.zh)?`<button class="bst" onclick="openStroke('${s}')">筆</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById(id).innerHTML=th+'<tbody>'+tb+'</tbody>';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTable('t-t1',TV1,true);
+  buildTable('t-t2',TV2,true);
+  buildTable('t-c1',CT1,false);
+  buildTable('t-c2',CT2,false);
+  buildTable('t-nv2',NV2,false);
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb[data-sec]').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`.nb[data-sec="${id}"]`)?.classList.add('on');
+  document.getElementById('toggleContainer').style.display=id==='baikoa'?'block':'none';
+  window.scrollTo(0,0);
+}
+function goSub(sec,sub){
+  document.querySelectorAll(`#${sec} .sub-content`).forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll(`#${sec} .subtab`).forEach(e=>e.classList.remove('on'));
+  document.getElementById(`${sec}-${sub}`).classList.add('on');
+  event.target.classList.add('on');
+}
+
+// ── TOGGLE ────────────────────────────────────────────────────
+let sPY=true,sVI=true;
+function tog(l){
+  if(l==='py'){
+    sPY=!sPY;
+    document.querySelectorAll('.spy').forEach(e=>e.classList.toggle('hd',!sPY));
+    document.getElementById('tp').classList.toggle('on',sPY);
+  }else{
+    sVI=!sVI;
+    document.querySelectorAll('.svi').forEach(e=>e.classList.toggle('hd',!sVI));
+    document.getElementById('tv').classList.toggle('on',sVI);
+  }
+}
+
+// ── BÀI TẬP ──────────────────────────────────────────────────
+function setField(id,ok){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.toggle('ok',ok);
+  el.classList.toggle('er',!ok&&el.value.trim().length>0);
+}
+function resetFields(ids,abId){
+  ids.forEach(k=>{const el=document.getElementById(k);el.value='';el.classList.remove('ok','er');});
+  document.getElementById(abId).classList.remove('sh');
+}
+function showAns(id){document.getElementById(id).classList.add('sh');}
+
+function ckE1(){
+  const a1=document.getElementById('e1-1').value.trim();
+  const a2=document.getElementById('e1-2').value.trim();
+  const a3=document.getElementById('e1-3').value.trim();
+  const a4=document.getElementById('e1-4').value.trim();
+  const a5=document.getElementById('e1-5').value.trim();
+  const a6=document.getElementById('e1-6').value.trim();
+  setField('e1-1',a1==='上中文課');
+  setField('e1-2',a2==='吃中飯');
+  setField('e1-3',a3==='打籃球');
+  setField('e1-4',a4==='回宿舍');
+  setField('e1-5',a5==='看電影');
+  setField('e1-6',a6==='吃晚飯');
+  showAns('ab1');
+}
+function rsE1(){resetFields(['e1-1','e1-2','e1-3','e1-4','e1-5','e1-6'],'ab1');}
+
+function ckE2(){
+  const v1=document.getElementById('e2-1').value.trim();
+  const v2=document.getElementById('e2-2').value.trim();
+  const v3=document.getElementById('e2-3').value.trim();
+  setField('e2-1',v1==='七點半');
+  setField('e2-2',v2==='公司');
+  setField('e2-3',v3==='坐公車');
+  showAns('ab2');
+}
+function rsE2(){resetFields(['e2-1','e2-2','e2-3'],'ab2');}
+
+function ckE3(){
+  const v1=document.getElementById('e3-1').value.trim();
+  const v2=document.getElementById('e3-2').value.trim();
+  const v3=document.getElementById('e3-3').value.trim();
+  setField('e3-1',v1==='下課以後');
+  setField('e3-2',v2==='畢業以後');
+  setField('e3-3',v3.includes('半年以後')&&v3.includes('找工作'));
+  showAns('ab3');
+}
+function rsE3(){resetFields(['e3-1','e3-2','e3-3'],'ab3');}
+
+function ckE4(){
+  showAns('ab4');
+}
+function rsE4(){resetFields(['e4-1','e4-2','e4-3'],'ab4');}
+
+// ── TTS ───────────────────────────────────────────────────────
+let VX=window.speechSynthesis.getVoices();
+window.speechSynthesis.onvoiceschanged=()=>{VX=window.speechSynthesis.getVoices();};
+function sayZh(t){
+  if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ TTS.');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  let v=null;
+  for(const p of['zh-TW','zh-CN','zh','cmn']){
+    v=VX.find(x=>x.lang?.toLowerCase().startsWith(p.toLowerCase()));
+    if(v)break;
+  }
+  if(v)u.voice=v;
+  u.lang='zh-TW';u.rate=0.82;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+let hwInstances=[];
+function openStroke(word){
+  const chars=[...word].filter(c=>HW.has(c));
+  if(!chars.length)return;
+  hwInstances.forEach(h=>{try{h.writer.cancelAnimation();}catch(e){}});
+  hwInstances=[];
+  document.getElementById('otitle').textContent='筆順 · '+word;
+  const framesEl=document.getElementById('oframes');
+  framesEl.innerHTML='';
+  const SIZE=chars.length>3?110:140;
+  chars.forEach((ch,i)=>{
+    const cell=document.createElement('div');cell.className='hw-cell';
+    const svg=document.createElement('div');svg.id='hw-svg-'+i;
+    svg.style.cssText=`width:${SIZE}px;height:${SIZE}px;border:2px solid #e0e0e0;border-radius:8px;background:#fafafa;`;
+    const lbl=document.createElement('span');lbl.textContent=ch;
+    cell.appendChild(svg);cell.appendChild(lbl);framesEl.appendChild(cell);
+    try{
+      const w=HanziWriter.create(svg.id,ch,{
+        width:SIZE,height:SIZE,padding:10,
+        strokeColor:'#c62828',outlineColor:'#e0e0e0',
+        strokeAnimationSpeed:1,delayBetweenStrokes:200,
+        showCharacter:true,showOutline:true,
+        charDataLoader:(char,onLoad,onError)=>{
+          fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${char}.json`)
+            .then(r=>r.json()).then(d=>onLoad(d))
+            .catch(()=>fetch(`https://raw.githubusercontent.com/chanind/hanzi-writer-data/master/${char}.json`)
+              .then(r=>r.json()).then(d=>onLoad(d)).catch(err=>onError(err)));
+        }
+      });
+      hwInstances.push({writer:w});
+    }catch(e){console.warn('HanziWriter error',ch,e);}
+  });
+  const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
+  [['▶ Hoạt ảnh',hwAnimAll,''],['🔄 Lặp',hwLoopAll,''],['✕ Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+    const b=document.createElement('button');
+    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+  });
+  document.getElementById('ov').classList.add('open');
+}
+function hwAnimAll(){hwInstances.forEach((h,i)=>setTimeout(()=>h.writer.animateCharacter(),i*600));}
+function hwLoopAll(){let i=0;(function next(){if(i>=hwInstances.length)i=0;hwInstances[i].writer.animateCharacter({onComplete:()=>{i++;next();}});})();}
+function closeOv(){document.getElementById('ov').classList.remove('open');}
+function ovClick(e){if(e.target===document.getElementById('ov'))closeOv();}
+
+// ── EDITOR ────────────────────────────────────────────────────
+let quill;
+function openEditor(){
+  document.getElementById('editorModal').classList.add('open');
+  if(!quill){
+    quill=new Quill('#editor-content',{
+      theme:'snow',
+      placeholder:'Viết ghi chú Bài 12 ở đây...',
+      modules:{toolbar:'#editor-toolbar'}
+    });
+    const saved=localStorage.getItem('bai12_notes');
+    if(saved)quill.root.innerHTML=saved;
+  }
+}
+function closeEditor(){document.getElementById('editorModal').classList.remove('open');}
+function saveEditor(){if(quill){localStorage.setItem('bai12_notes',quill.root.innerHTML);alert('✅ Đã lưu ghi chú!');}}
+function clearEditor(){if(quill&&confirm('Xóa tất cả ghi chú?')){quill.root.innerHTML='';localStorage.removeItem('bai12_notes');}}
+setInterval(()=>{
+  if(quill&&document.getElementById('editorModal').classList.contains('open'))
+    localStorage.setItem('bai12_notes',quill.root.innerHTML);
+},30000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditor();closeOv();}});
+</script>
+</body>
+</html>
