@@ -437,6 +437,30 @@
             line-height: 1.5;
         }
 
+        /* Answer row styling */
+        tr.answer-row td {
+            background: #FFF8E1;
+        }
+
+        tr.answer-row .vi-text {
+            color: #5D4037;
+            font-style: italic;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        tr.answer-row .vi-text::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #FF9800;
+        }
+
+        tr.answer-row .cn-text {
+            color: #F57C00;
+            font-style: italic;
+        }
+
         /* Mobile */
         @media (max-width: 768px) {
             .app-header { padding: 10px 16px; }
@@ -468,6 +492,7 @@
             .col-audio { width: 40px; }
             .audio-btn { width: 30px; height: 30px; font-size: 10px; }
             .vi-text, .cn-text { font-size: 14px; }
+            tr.answer-row .vi-text { padding-left: 15px; }
         }
 
         @media (max-width: 480px) {
@@ -479,7 +504,6 @@
             .vi-text, .cn-text { font-size: 13px; }
         }
     </style>
-<base target="_blank">
 </head>
 <body>
     <div class="app-container">
@@ -585,7 +609,7 @@
                 </div>
             </div>
 
-            <!-- NHA O TAB - CÓ THÊM PHẦN CƠ BẢN -->
+            <!-- NHA O TAB - ĐÃ THÊM CÂU TRẢ LỜI CHI TIẾT -->
             <div id="tab-nhao" class="tab-panel">
                 <div class="sidebar">
                     <div class="sidebar-header">
@@ -919,14 +943,14 @@
         };
 
         // ==========================================
-        // DATA NHÀ Ở - CÓ THÊM PHẦN CƠ BẢN ĐẦU TIÊN
+        // DATA NHÀ Ở - ĐÃ BỔ SUNG CÂU TRẢ LỜI CHI TIẾT
         // ==========================================
         const lessonsNhaO = {
-            // PHẦN CƠ BẢN MỚI
             coban: {
                 title: '基本信息',
                 titleVi: 'Thông tin cơ bản',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Diện tích căn nhà bao nhiêu mét vuông?", cn: "房子面积多少平方米？"},
                     {vi: "Diện tích đất và diện tích sử dụng khác nhau thế nào?", cn: "土地面积和使用面积有什么不同？"},
                     {vi: "Giá bán là bao nhiêu một mét vuông?", cn: "售价每平方米多少钱？"},
@@ -941,13 +965,30 @@
                     {vi: "Có cần công chứng hợp đồng không?", cn: "需要公证合同吗？"},
                     {vi: "Phí sang tên bao nhiêu tiền?", cn: "过户费多少钱？"},
                     {vi: "Thuế thu nhập cá nhân ai đóng?", cn: "个人所得税谁交？"},
-                    {vi: "Thời gian bàn giao nhà là khi nào?", cn: "什么时候交房？"}
+                    {vi: "Thời gian bàn giao nhà là khi nào?", cn: "什么时候交房？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu - thông tin thực tế 2026)
+                    {vi: "Căn hộ trung bình 60-80m2, nhà phố 100-200m2 tùy loại hình.", cn: "公寓平均60-80平方米，排屋100-200平方米视类型而定。", type: "answer"},
+                    {vi: "Diện tích đất là tổng diện tích sàn xây dựng, diện tích sử dụng là phần thực dùng được.", cn: "土地面积是建筑总面积，使用面积是实际可用部分。", type: "answer"},
+                    {vi: "Tại Tp.HCM khoảng 50-80 triệu/m2, Hà Nội 40-70 triệu/m2 năm 2026.", cn: "2026年胡志明市约5000-8000万盾/平方米，河内4000-7000万盾。", type: "answer"},
+                    {vi: "Căn hộ 2 phòng ngủ trung bình 3-5 tỷ đồng tùy khu vực.", cn: "两房公寓根据区域平均30-50亿越南盾。", type: "answer"},
+                    {vi: "Giá thường chưa bao gồm VAT 10%, phí bảo trì 2% và lệ phí trước bạ.", cn: "价格通常不含10%增值税、2%维修费和过户费。", type: "answer"},
+                    {vi: "Có thể thương lượng 5-10% giá niêm yết, đặc biệt với căn thứ cấp.", cn: "可以议价5-10%挂牌价，尤其是二手房。", type: "answer"},
+                    {vi: "Giảm tối đa thường 10-15% nếu thanh toán nhanh hoặc mua số lượng.", cn: "如快速付款或批量购买通常最多可降10-15%。", type: "answer"},
+                    {vi: "Đặt cọc thường 10-20% giá trị, cọc giữ chỗ 50-100 triệu đồng.", cn: "定金通常为价值的10-20%，意向金5000万到1亿盾。", type: "answer"},
+                    {vi: "Thủ tục từ 30-90 ngày tùy thủ tục ngân hàng và công chứng.", cn: "视银行和公证程序手续需30-90天。", type: "answer"},
+                    {vi: "Cần CMND/CCCD, hộ khẩu hoặc hộ chiếu + visa, chứng nhận tình trạng hôn nhân.", cn: "需身份证/护照、户口本或签证、婚姻状况证明。", type: "answer"},
+                    {vi: "Sổ hồng phải có sẵn, kiểm tra tình trạng pháp lý sạch, không tranh chấp.", cn: "房产证必须齐全，检查法律状态清白无纠纷。", type: "answer"},
+                    {vi: "Bắt buộc công chứng tại phòng công chứng nhà nước hoặc văn phòng tư.", cn: "必须在国家公证处或私人公证办公室公证。", type: "answer"},
+                    {vi: "Phí sang tên 0.5% giá trị công nhận trên hợp đồng.", cn: "过户费为合同认可价值的0.5%。", type: "answer"},
+                    {vi: "Thuế TNCN 2% do người bán đóng, nhưng thực tế có thể thỏa thuận.", cn: "个人所得税2%由卖方缴纳，但实际可协商。", type: "answer"},
+                    {vi: "Thời gian bàn giao từ 30-60 ngày sau khi hoàn tất thủ tục sang tên.", cn: "完成过户手续并全额付款后30-60天交房。", type: "answer"}
                 ]
             },
             loaiphong: {
                 title: '房型与结构',
                 titleVi: 'Loại phòng & Cấu trúc',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Căn hộ này có mấy phòng ngủ?", cn: "这个公寓有几间卧室？"},
                     {vi: "Phòng khách rộng bao nhiêu mét vuông?", cn: "客厅多少平方米？"},
                     {vi: "Có phòng đa năng không?", cn: "有多功能房吗？"},
@@ -962,13 +1003,30 @@
                     {vi: "Nhà ống hay nhà vườn?", cn: "排屋还是别墅？"},
                     {vi: "Có kho để đồ không?", cn: "有储藏室吗？"},
                     {vi: "Phòng ngủ có cửa sổ ban công không?", cn: "卧室有落地窗吗？"},
-                    {vi: "Nhà xây thô hay bàn giao thô?", cn: "是毛坯房还是交付毛坯？"}
+                    {vi: "Nhà xây thô hay bàn giao thô?", cn: "是毛坯房还是交付毛坯？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu)
+                    {vi: "Căn hộ thường có 2-3 phòng ngủ, nhà phố 3-4 tầng có 3-5 phòng.", cn: "公寓通常2-3房，排屋3-4层有3-5间房。", type: "answer"},
+                    {vi: "Phòng khách trung bình 20-30m2 đối với căn hộ 80-100m2.", cn: "80-100平方米公寓客厅平均20-30平方米。", type: "answer"},
+                    {vi: "Căn hộ hiện đại thường có phòng đa năng làm văn phòng hoặc phòng trẻ em.", cn: "现代公寓通常有多功能房做办公室或儿童房。", type: "answer"},
+                    {vi: "Phòng master căn hộ cao cấp thường có toilet riêng, phòng thường thì không.", cn: "高端公寓主卧通常带独立卫生间，普通房则没有。", type: "answer"},
+                    {vi: "Logia căn hộ thường rộng 3-6m2, đủ phơi đồ và để máy giặt.", cn: "公寓阳台通常3-6平方米，够晾晒和放洗衣机。", type: "answer"},
+                    {vi: "Nhà phố hiện đại thường có gác lửng tận dụng không gian thờ cúng hoặc đọc sách.", cn: "现代排屋通常有阁楼利用做礼拜空间或书房。", type: "answer"},
+                    {vi: "Nhà phố thường tường chung 2 bên, biệt thự là tường riêng độc lập.", cn: "排屋通常两边共墙，别墅是独立墙。", type: "answer"},
+                    {vi: "Trần nhà chuẩn tối thiểu 2.4m, thường là 2.7-3m cho thoáng mát.", cn: "标准最低天花板2.4米，通常2.7-3米较通风。", type: "answer"},
+                    {vi: "Chung cư cao cấp có tầng hầm để xe, chung cư cũ và nhà phố để ngoài sân.", cn: "高级公寓有地下停车场，旧公寓和排屋停院外。", type: "answer"},
+                    {vi: "Sân thượng chung cư là sở hữu chung, nhà phố là sở hữu riêng sử dụng riêng.", cn: "公寓天台是共有产权，排屋是私有产权专用。", type: "answer"},
+                    {vi: "Hướng Đông Nam được coi là đẹp nhất tại Việt Nam, mát mẻ sáng sớm.", cn: "东南朝向在越南被认为最好，早晨凉爽。", type: "answer"},
+                    {vi: "Nhà ống là nhà phố liền kề trong hẻm hoặc mặt tiền, nhà vườn là biệt thự.", cn: "排屋是巷子或临街联排，别墅是独立花园房。", type: "answer"},
+                    {vi: "Căn hộ hiện đại có tủ kho chứa đồ trong bếp hoặc logia.", cn: "现代公寓厨房或阳台有储物柜储藏室。", type: "answer"},
+                    {vi: "Căn hộ cao cấp có cửa sổ lớn kính cường lực từ sàn đến trần.", cn: "高端公寓有大落地窗钢化玻璃从地板到天花板。", type: "answer"},
+                    {vi: "Nhà xây thô là chưa hoàn thiện nội thất, bàn giao thô chỉ có kết cấu.", cn: "毛坯房是未完成内部装修，交付毛坯只有结构。", type: "answer"}
                 ]
             },
             noithatchitiet: {
                 title: '家具与装修',
                 titleVi: 'Nội thất chi tiết',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Sàn nhà lát gạch men hay gỗ công nghiệp?", cn: "地板铺瓷砖还是复合木地板？"},
                     {vi: "Trần thạch cao có đèn âm trần không?", cn: "石膏吊顶有筒灯吗？"},
                     {vi: "Tủ bếp làm bằng gỗ tự nhiên hay acrylic?", cn: "橱柜是实木还是亚克力？"},
@@ -983,13 +1041,30 @@
                     {vi: "Tủ quần áo âm tường hay tủ đứng?", cn: "衣柜是嵌入式还是立式？"},
                     {vi: "Kệ tivi treo tường hay kệ để sàn?", cn: "电视柜是挂墙还是落地？"},
                     {vi: "Điều hòa multi hay điều hòa thường?", cn: "空调是多联机还是普通分体？"},
-                    {vi: "Có bình nóng lạnh gián tiếp không?", cn: "有间接加热热水器吗？"}
+                    {vi: "Có bình nóng lạnh gián tiếp không?", cn: "有间接加热热水器吗？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu)
+                    {vi: "Phòng khách thường lát gạch men 80x80cm, phòng ngủ gỗ công nghiệp chống ẩm.", cn: "客厅通常铺80x80cm瓷砖，卧室铺防潮复合木地板。", type: "answer"},
+                    {vi: "Trần thạch cao chìm có đèn LED âm trần và đèn dây viền trang trí.", cn: "嵌入式石膏吊顶有LED筒灯和装饰灯带。", type: "answer"},
+                    {vi: "Tủ bếp hiện đại dùng acrylic bóng gương hoặc laminate chống trầy.", cn: "现代橱柜用镜面亚克力或防刮层压板。", type: "answer"},
+                    {vi: "Bếp hiện đại có máy hút mùi kính cong cảm ứng, công suất 1000m3/h.", cn: "现代厨房有弧形玻璃感应抽油烟机，功率1000立方米/小时。", type: "answer"},
+                    {vi: "Phòng tắm hiện đại dùng lavabo đặt bàn đá marble hoặc quartz.", cn: "现代浴室用大理石或石英石台面台上盆。", type: "answer"},
+                    {vi: "Sen tắm cao cấp có màn hình LED hiển thị nhiệt độ và áp suất.", cn: "高级花洒有LED屏幕显示温度和压力。", type: "answer"},
+                    {vi: "Bồn cầu hiện đại thường là một khối liền khối xả xoáy nắp rơi êm.", cn: "现代马桶通常是一体式漩涡冲水缓降盖板。", type: "answer"},
+                    {vi: "Cửa phòng ngủ dùng gỗ tự nhiên (căm xe, sồi), cửa toilet nhựa chống nước.", cn: "卧室门用实木（铁木、橡木），卫生间门用防水塑料。", type: "answer"},
+                    {vi: "Căn hộ cao cấp dùng khóa vân tay Samsung hoặc Yale có mã số và thẻ từ.", cn: "高端公寓用三星或耶鲁指纹锁带密码和磁卡。", type: "answer"},
+                    {vi: "Căn hộ thông minh có rèm tự động điều khiển qua app điện thoại.", cn: "智能公寓有窗帘通过手机APP自动控制。", type: "answer"},
+                    {vi: "Giường ngủ hiện đại có 4 ngăn kéo lớn dưới gầm chứa chăn ga gối.", cn: "现代床有4个大抽屉在床底存放被褥。", type: "answer"},
+                    {vi: "Phòng nhỏ dùng tủ âm tường kịch trần, phòng rộng dùng tủ độc lập walk-in.", cn: "小房间用嵌入式顶天衣柜，大房间用独立步入式衣帽间。", type: "answer"},
+                    {vi: "Kệ tivi hiện đại treo tường chịu lực 50kg, có hệ thống dây điện âm.", cn: "现代电视柜挂墙承重50公斤，有暗线系统。", type: "answer"},
+                    {vi: "Căn hộ 3 phòng ngủ trở lên nên dùng điều hòa multi tiết kiệm điện.", cn: "三房以上公寓宜用多联机空调省电。", type: "answer"},
+                    {vi: "Có bình nóng lạnh gián tiếp Rossi hoặc Ariston dung tích 30-50 lít.", cn: "有Rossi或Ariston 30-50升间接加热热水器。", type: "answer"}
                 ]
             },
             thutucgiayto: {
                 title: '法律与手续',
                 titleVi: 'Thủ tục pháp lý',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Sổ hồng chính chủ đứng tên ai?", cn: "房产证正主写谁的名字？"},
                     {vi: "Sổ đỏ đã sang tên chưa?", cn: "红皮书已经过户了吗？"},
                     {vi: "Đất có quy hoạch treo không?", cn: "土地有规划冻结吗？"},
@@ -1004,13 +1079,30 @@
                     {vi: "Phí công chứng bao nhiêu tiền?", cn: "公证费多少钱？"},
                     {vi: "Cần chuẩn bị bản sao hộ chiếu không?", cn: "需要准备护照复印件吗？"},
                     {vi: "Hợp đồng song ngữ Trung-Việt có giá trị không?", cn: "中越双语合同有效吗？"},
-                    {vi: "Bảo hiểm cháy nổ bắt buộc hay tự nguyện?", cn: "火灾保险是强制还是自愿？"}
+                    {vi: "Bảo hiểm cháy nổ bắt buộc hay tự nguyện?", cn: "火灾保险是强制还是自愿？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu)
+                    {vi: "Sổ hồng phải đứng tên chính chủ bán, kiểm tra CMND chủ sở hữu.", cn: "房产证必须写卖方正主名，检查业主身份证。", type: "answer"},
+                    {vi: "Phải kiểm tra sổ gốc tại phòng địa chính trước khi giao dịch.", cn: "交易前必须在土地登记处检查原件。", type: "answer"},
+                    {vi: "Kiểm tra quy hoạch tại UBND quận/huyện, xem có bị giải tỏa không.", cn: "在区/县人民委员会检查规划，看是否被拆迁。", type: "answer"},
+                    {vi: "Phải yêu cầu giấy xác nhận không còn nợ ngân hàng hoặc thế chấp.", cn: "必须要求银行确认无欠款或抵押证明。", type: "answer"},
+                    {vi: "Đúng, thuế TNCN là 2% trên giá trị chuyển nhượng ghi trong hợp đồng.", cn: "对，个人所得税是转让合同价值的2%。", type: "answer"},
+                    {vi: "Đúng, lệ phí trước bạ là 0.5% cho đất ở và nhà ở.", cn: "对，住宅地和房屋过户费是0.5%。", type: "answer"},
+                    {vi: "Công chứng tại Phòng Công chứng Nhà nước hoặc Văn phòng Công chứng tư.", cn: "在国家公证处或私人公证办公室公证。", type: "answer"},
+                    {vi: "Nếu hồ sơ đầy đủ, sang tên mất 7-15 ngày làm việc tại VP đăng ký đất đai.", cn: "如文件齐全，过户需7-15个工作日在土地登记处。", type: "answer"},
+                    {vi: "Người nước ngoài cần chứng minh khả năng tài chính qua sao kê ngân hàng.", cn: "外国人需通过银行对账单证明财务能力。", type: "answer"},
+                    {vi: "Có, hợp đồng đặt cọc có giá trị pháp lý nếu công chứng và ghi rõ điều khoản phạt vi phạm.", cn: "有，如公证并明确违约条款，定金合同有法律效力。", type: "answer"},
+                    {vi: "Tìm luật sư chuyên BĐS tại Đoàn Luật sư tỉnh/thành phố hoặc văn phòng luật sư uy tín.", cn: "在省/市律师协会或信誉好的律师事务所找专业房产律师。", type: "answer"},
+                    {vi: "Phí công chứng khoảng 0.1% giá trị hợp đồng, tối thiểu 50.000 đồng.", cn: "公证费约合同价值的0.1%，最低5万盾。", type: "answer"},
+                    {vi: "Cần sao y hộ chiếu có công chứng, visa hợp lệ còn trên 3 tháng.", cn: "需公证护照复印件，有效签证剩余3个月以上。", type: "answer"},
+                    {vi: "Có giá trị nếu có công chứng viên bản dịch tiếng Việt là chính thức.", cn: "如有公证员认证越文版为正式文本则有效。", type: "answer"},
+                    {vi: "Bắt buộc đối với chung cư, tự nguyện đối với nhà phố riêng lẻ.", cn: "公寓强制要求，独立排屋自愿购买。", type: "answer"}
                 ]
             },
             nguoinuocngoai: {
                 title: '外国人购房条件',
                 titleVi: 'Điều kiện người nước ngoài',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Người Trung Quốc có được mua nhà ở Việt Nam không?", cn: "中国人可以在越南买房吗？"},
                     {vi: "Cần thị thực ít nhất 3 tháng mới được mua phải không?", cn: "需要至少3个月签证才能购买对吗？"},
                     {vi: "Người nước ngoài chỉ được sở hữu 30% căn hộ trong dự án?", cn: "外国人只能拥有项目的30%公寓？"},
@@ -1025,13 +1117,30 @@
                     {vi: "Người nước ngoài có được thế chấp nhà để vay ngân hàng không?", cn: "外国人可以抵押房子向银行贷款吗？"},
                     {vi: "Thủ tục xin cấp sổ hồng cho người nước ngoài khác gì?", cn: "外国人申请房产证的程序有什么不同？"},
                     {vi: "Nếu hết hạn 50 năm nhà thuộc về ai?", cn: "如果50年到期房子归谁？"},
-                    {vi: "Có được ủy quyền cho người Việt đứng tên mua hộ không?", cn: "可以委托越南人代持购买吗？"}
+                    {vi: "Có được ủy quyền cho người Việt đứng tên mua hộ không?", cn: "可以委托越南人代持购买吗？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu)
+                    {vi: "Có, người Trung Quốc được quyền mua căn hộ theo Luật Nhà ở 2014 và Nghị định 99/2015.", cn: "可以，中国人根据2014年住房法和99/2015号法令有权购买公寓。", type: "answer"},
+                    {vi: "Đúng, cần visa du lịch, lao động hoặc định cư còn hiệu lực tối thiểu 3 tháng.", cn: "对，需要至少3个月有效期的旅游、工作或定居签证。", type: "answer"},
+                    {vi: "Đúng, không quá 30% căn hộ chung cư hoặc 250 căn nhà phố trong 1 dự án.", cn: "对，一个项目不超过30%公寓或250套排屋。", type: "answer"},
+                    {vi: "Đúng, sở hữu tối đa 50 năm từ ngày cấp sổ, có thể gia hạn thêm một lần.", cn: "对，从发证日起最多50年产权，可延期一次。", type: "answer"},
+                    {vi: "Có thể gia hạn thêm 50 năm nếu được cơ quan nhà nước có thẩm quyền chấp thuận.", cn: "如获主管国家机关批准可再续50年。", type: "answer"},
+                    {vi: "Không, người nước ngoài không được mua đất nông nghiệp, chỉ được thuê đất đầu tư.", cn: "不可以，外国人不能买农业用地，只能租地投资。", type: "answer"},
+                    {vi: "Đúng, chỉ được mua căn hộ thương mại, không được mua đất thổ cư xây nhà riêng lẻ.", cn: "对，只能买商业公寓，不能买宅基地建独立房。", type: "answer"},
+                    {vi: "Nếu kết hôn với người Việt, vợ/chồng Việt Nam có thể đứng tên đất, người nước ngoài sở hữu công trình.", cn: "如与越南人结婚，越籍配偶可登记土地，外国人拥有建筑。", type: "answer"},
+                    {vi: "Đầu tư 100% vốn nước ngoài được thuê đất 50 năm để xây nhà cho thuê hoặc bán.", cn: "100%外资投资可租地50年建出租或出售房屋。", type: "answer"},
+                    {vi: "Sổ hồng ghi tên người nước ngoài, nhưng ghi rõ thời hạn sở hữu và quyền hạn chế.", cn: "房产证写外国人名字，但注明产权期限和限制权利。", type: "answer"},
+                    {vi: "Cần giấy xác nhận tạm trú hoặc cư trú hợp pháp tại địa phương nơi mua nhà.", cn: "需要购房地合法暂住或居住证明。", type: "answer"},
+                    {vi: "Được thế chấp tại ngân hàng nước ngoài hoặc ngân hàng Việt Nam để vay vốn.", cn: "可在越南或外国银行抵押贷款。", type: "answer"},
+                    {vi: "Thủ tục tương tự nhưng cần thêm giấy tờ chứng minh tư cách cư trú hợp pháp.", cn: "程序类似但需额外证明合法居留身份文件。", type: "answer"},
+                    {vi: "Nhà thuộc về Nhà nước, nhưng được bồi thường giá trò còn lại hoặc gia hạn sử dụng.", cn: "房子归国家，但获补偿剩余价值或延长使用。", type: "answer"},
+                    {vi: "Không được ủy quyền đứng tên hộ, vi phạm có thể bị tịch thu tài sản và trục xuất.", cn: "不得委托代持，违者可被没收资产和驱逐出境。", type: "answer"}
                 ]
             },
             xaydung: {
                 title: '建房与施工',
                 titleVi: 'Xây dựng & Thi công',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Xin giấy phép xây dựng mất bao lâu?", cn: "申请建筑许可证需要多久？"},
                     {vi: "Đất có quy hoạch 1/500 mới được xây đúng không?", cn: "土地有1/500规划才能建房对吗？"},
                     {vi: "Chi phí xây dựng khoảng bao nhiêu một mét vuông?", cn: "建筑成本大约每平方米多少？"},
@@ -1046,13 +1155,30 @@
                     {vi: "Chiều cao tối đa xây được mấy tầng?", cn: "最高可以建几层？"},
                     {vi: "Lệch khối có được phép không?", cn: "可以错层建筑吗？"},
                     {vi: "Phí thẩm định thiết kế bao nhiêu?", cn: "设计审核费多少？"},
-                    {vi: "Có cần khảo sát địa chất trước khi xây không?", cn: "建房前需要地质勘察吗？"}
+                    {vi: "Có cần khảo sát địa chất trước khi xây không?", cn: "建房前需要地质勘察吗？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu)
+                    {vi: "Thủ tục đầy đủ mất 15-30 ngày làm việc tại Phòng Quản lý Đô thị.", cn: "完整手续在城建管理局需15-30个工作日。", type: "answer"},
+                    {vi: "Đúng, phải có quy hoạch chi tiết 1/500 được duyệt mới cấp phép xây dựng.", cn: "对，必须有批准的1/500详细规划才发建筑许可。", type: "answer"},
+                    {vi: "Xây thô hoàn thiện cơ bản 3-5 triệu/m2, nội thất cao cấp 8-12 triệu/m2 năm 2026.", cn: "2026年基本毛坯完成300-500万盾/平方米，高级装修800-1200万盾。", type: "answer"},
+                    {vi: "Nhà thầu phải có chứng chỉ năng lực hạng II hoặc I tùy quy mô công trình.", cn: "承包商必须有相应工程规模的二级或一级资质证书。", type: "answer"},
+                    {vi: "Trọn gói là nhà thầu lo vật liệu và nhân công, nhân công là chủ tự mua vật liệu.", cn: "包工包料是承包商负责材料和人工，清包工是业主自购材料。", type: "answer"},
+                    {vi: "Nhà phố 3 tầng mất 6-9 tháng, biệt thự 2 tầng mất 8-12 tháng tùy diện tích.", cn: "3层排屋需6-9个月，2层别墅需8-12个月视面积而定。", type: "answer"},
+                    {vi: "Bắt buộc phải có kỹ sư giám sát độc lập hoặc thuê công ty tư vấn giám sát.", cn: "强制要求有独立监理工程师或雇佣监理咨询公司。", type: "answer"},
+                    {vi: "Hợp đồng trọn gói nhà thầu lo, hợp đồng nhân công chủ đầu tư tự lo vật liệu.", cn: "包工包料合同承包商负责，清包工合同业主自负责材料。", type: "answer"},
+                    {vi: "Nghiệm thu 3 giai đoạn: móng, thô, hoàn thiện và nghiệm thu tổng thể PCCC.", cn: "分三阶段验收：基础、毛坯、装修及消防总体验收。", type: "answer"},
+                    {vi: "Bảo hành kết cấu 5 năm, chống thấm 3 năm, thiết bị 1-2 năm tùy loại.", cn: "结构保修5年，防水3年，设备1-2年视类型而定。", type: "answer"},
+                    {vi: "Được phép xây tầng hầm nếu đất không ngập và có hệ thống chống ngập.", cn: "如土地不淹水且有防洪系统可建地下室。", type: "answer"},
+                    {vi: "Tùy quy hoạch từng khu, thường cho phép 3-5 tầng đối với nhà phố.", cn: "视各区域规划，排屋通常允许3-5层。", type: "answer"},
+                    {vi: "Được phép lệch khối tối đa 20% diện tích sàn tầng trên so với tầng dưới.", cn: "允许错层最多上层面积比下层小20%。", type: "answer"},
+                    {vi: "Phí thẩm định khoảng 0.1% giá trị công trình, tối thiểu 1 triệu đồng.", cn: "审核费约工程价值的0.1%，最低100万盾。", type: "answer"},
+                    {vi: "Bắt buộc khảo sát địa chất nếu xây từ 2 tầng trở lên hoặc diện tích lớn.", cn: "建2层以上或大面积强制要求地质勘察。", type: "answer"}
                 ]
             },
             thuevamua: {
                 title: '租房与买卖',
                 titleVi: 'Thuê & Mua bán',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Tiền cọc thuê nhà thường là mấy tháng?", cn: "租房押金通常是几个月？"},
                     {vi: "Hợp đồng thuê nhà tối thiểu 6 tháng đúng không?", cn: "租房合同最少6个月对吗？"},
                     {vi: "Tiền thuê có bao gồm phí quản lý chung cư không?", cn: "租金包含公寓管理费吗？"},
@@ -1067,13 +1193,30 @@
                     {vi: "Giao dịch qua sàn bất động sản mất phí bao nhiêu?", cn: "通过房产中介交易费用多少？"},
                     {vi: "Có thể đặt cọc bằng ngoại tệ không?", cn: "可以用外币付定金吗？"},
                     {vi: "Thời điểm bàn giao nhà là khi nào?", cn: "交房时间是什么时候？"},
-                    {vi: "Nhận nhà cần kiểm tra những gì?", cn: "收房需要检查什么？"}
+                    {vi: "Nhận nhà cần kiểm tra những gì?", cn: "收房需要检查什么？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu)
+                    {vi: "Thường là 1-2 tháng tiền nhà, căn hộ cao cấp có thể 3 tháng.", cn: "通常1-2个月租金，高端公寓可能3个月。", type: "answer"},
+                    {vi: "Không bắt buộc, có thể thuê ngắn hạn 1-3 tháng nhưng giá cao hơn.", cn: "非强制，可短租1-3个月但价格较高。", type: "answer"},
+                    {vi: "Không bao gồm, người thuê phải trả thêm phí quản lý 10-20 triệu/tháng tùy dự án.", cn: "不包含，租客需额外付每月1000-2000万盾管理费视项目而定。", type: "answer"},
+                    {vi: "Không, chỉ được tăng sau mỗi năm và phải thông báo trước 3 tháng.", cn: "不可以，只能每年涨一次且需提前3个月通知。", type: "answer"},
+                    {vi: "Có, nhưng cần được chủ nhà đồng ý và người nhận chuyển nhượng phải đủ điều kiện.", cn: "可以，但需房东同意且受让方需符合条件。", type: "answer"},
+                    {vi: "Người Việt 20-30%, người nước ngoài thường 30-50% tùy ngân hàng.", cn: "越南人20-30%，外国人视银行而定30-50%。", type: "answer"},
+                    {vi: "Hiện tại lãi suất cho vay mua nhà 10-12%/năm VND, 6-8%/năm USD.", cn: "现在购房贷款越盾利率10-12%/年，美元6-8%/年。", type: "answer"},
+                    {vi: "Tối đa 25 năm cho người Việt, 15-20 năm cho người nước ngoài.", cn: "越南人最长25年，外国人15-20年。", type: "answer"},
+                    {vi: "Có, nhưng thường phải sau 3-5 năm mới không mất phí, trước đó mất 1-3% số tiền trả trước.", cn: "可以，但通常3-5年后才免费，之前提前还款罚1-3%。", type: "answer"},
+                    {vi: "Phí thường 1-3% số tiền trả trước nếu trong thời gian cấm trả nợ trước.", cn: "如在禁提前还款期内，费用通常为提前还款额的1-3%。", type: "answer"},
+                    {vi: "Phải kiểm tra nợ thuế sử dụng đất, phí quản lý chung cư, tiền điện nước.", cn: "需检查土地使用税欠费、公寓管理费、水电费。", type: "answer"},
+                    {vi: "Phí môi giới thường 1-2% giá trị giao dịch do người mua hoặc bán trả.", cn: "中介费通常交易价值的1-2%由买方或卖方支付。", type: "answer"},
+                    {vi: "Không, tất cả giao dịch phải đổi ra VND theo tỷ giá ngân hàng tại thời điểm giao dịch.", cn: "不可以，所有交易必须按银行汇率兑换成越盾。", type: "answer"},
+                    {vi: "Bàn giao sau khi thanh toán đủ 95-100% giá trị và hoàn tất thủ tục sang tên.", cn: "支付完95-100%价值并完成过户手续后交房。", type: "answer"},
+                    {vi: "Kiểm tra hệ thống điện nước, chống thấm, nứt tường, thiết bị vệ sinh, khóa cửa.", cn: "检查水电系统、防水、墙裂、卫生设备、门锁。", type: "answer"}
                 ]
             },
             tiennghi: {
                 title: '设施与环境',
                 titleVi: 'Tiện ích & Môi trường',
                 data: [
+                    // CÂU HỎI GỐC (15 câu)
                     {vi: "Khu dân cư có điện 3 pha không?", cn: "居民区有三相电吗？"},
                     {vi: "Nguồn nước máy hay nước giếng khoan?", cn: "是自来水还是井水？"},
                     {vi: "Hệ thống thoát nước có bị ngập khi mưa không?", cn: "排水系统下雨会淹吗？"},
@@ -1088,7 +1231,23 @@
                     {vi: "Hướng nhà có bị nắng chiều không?", cn: "房子朝向会西晒吗？"},
                     {vi: "Thoáng gió tự nhiên có tốt không?", cn: "自然通风好吗？"},
                     {vi: "Có khu công viên gần đó không?", cn: "附近有公园吗？"},
-                    {vi: "Mật độ xây dựng của dự án bao nhiêu?", cn: "项目建筑密度多少？"}
+                    {vi: "Mật độ xây dựng của dự án bao nhiêu?", cn: "项目建筑密度多少？"},
+                    // CÂU TRẢ LỜI MỚI (15 câu)
+                    {vi: "Khu dân cư mới có điện 3 pha cho nhà phố, căn hộ dùng điện 1 pha 220V.", cn: "新居民区排屋有三相电，公寓用单相220V电。", type: "answer"},
+                    {vi: "Khu đô thị dùng nước máy thành phố, khu ngoại thành có thể dùng nước ngầm.", cn: "市区用城市自来水，郊区可能用地下水。", type: "answer"},
+                    {vi: "Khu đô thị mới có hệ thống thoát nước hiện đại, khu cũ dễ ngập khi mưa lớn.", cn: "新城区有现代排水系统，旧区大雨易淹。", type: "answer"},
+                    {vi: "Các khu đô thị lớn có trạm biến áp riêng, đảm bảo điện ổn định.", cn: "大城区有专用变电站，确保电力稳定。", type: "answer"},
+                    {vi: "Đường nhánh tối thiểu 6m, đường chính 12-20m tùy quy hoạch.", cn: "支路最少6米，主路12-20米视规划而定。", type: "answer"},
+                    {vi: "Vỉa hè chuẩn 3m có thể đậu xe máy, ô tô cần vỉa hè 5m trở lên.", cn: "标准3米人行道可停摩托车，汽车需5米以上。", type: "answer"},
+                    {vi: "Khu đô thị mới cây xanh chiếm 20-30% diện tích, có công viên nội khu.", cn: "新城区绿化占20-30%面积，有区内公园。", type: "answer"},
+                    {vi: "Bán kính 500m-1km thường có trường tiểu học, 2-3km có bệnh viện.", cn: "半径500米-1公里通常有小学，2-3公里有医院。", type: "answer"},
+                    {vi: "Khu dân cư thường có chợ truyền thống trong bán kính 500m, siêu thị 1-2km.", cn: "居民区通常500米内有传统市场，1-2公里有超市。", type: "answer"},
+                    {vi: "Khu có bảo vệ tuần tra 24/7, camera giám sát an ninh tốt.", cn: "有保安24小时巡逻，监控摄像头治安好。", type: "answer"},
+                    {vi: "Nhà cách đường lớn 50m trở lên thì tiếng ồn không ảnh hưởng nhiều.", cn: "房子离大路50米以上噪音影响不大。", type: "answer"},
+                    {vi: "Hướng Tây Nam và Tây thường bị nắng chiều, cần có rèm cách nhiệt.", cn: "西南和西向通常西晒，需有隔热窗帘。", type: "answer"},
+                    {vi: "Nhà ống cần thiết kế giếng trời giữa nhà để đón gió tự nhiên.", cn: "排屋需设计天井在中间接收自然风。", type: "answer"},
+                    {vi: "Các khu đô thị mới có công viên 1-2 hecta trong bán kính 500m.", cn: "新城区500米半径内有1-2公顷公园。", type: "answer"},
+                    {vi: "Mật độ xây dựng nhà phố thường 60-70%, chung cư 40-50% diện tích đất.", cn: "排屋建筑密度通常60-70%，公寓40-50%。", type: "answer"}
                 ]
             }
         };
@@ -1313,7 +1472,8 @@
                 const num = idx + 1;
                 const btnId = `btn-${tab}-${num}`;
                 const text = item.vi.replace(/'/g, "\'").replace(/"/g, '&quot;');
-                html += `<tr>
+                const rowClass = item.type === 'answer' ? 'answer-row' : '';
+                html += `<tr class="${rowClass}">
                     <td class="col-num">${num}</td>
                     <td class="col-audio"><button class="audio-btn" id="${btnId}" onclick="speak('${tab}', '${text}', '${btnId}')">▶</button></td>
                     <td class="vi-text">${item.vi}</td>
