@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BÀI 03: 你工作忙吗? | Gia Sư Hoa Ngữ Tân An</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --purple: #7c3aed;
+            --purple-dark: #6d28d9;
+            --purple-light: #8b5cf6;
+            --orange: #f59e0b;
+            --orange-dark: #d97706;
+            --green: #10b981;
+            --green-dark: #059669;
+            --green-light: #d1fae5;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --gray-dark: #374151;
+            --white: #ffffff;
+            --cream: #fef3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--gray-light);
+            color: var(--purple-dark);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            height: 100vh;
+        }
+
+        .sidebar {
+            background: var(--purple);
+            border-right: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .brand-header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 15px;
+        }
+
+        .logo-img {
+            width: 90px; height: 90px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            margin: 0 auto 10px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--white);
+            overflow: hidden; padding: 5px;
+        }
+
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+
+        .brand-name { font-size: 13px; font-weight: bold; color: var(--cream); margin-bottom: 8px; line-height: 1.4; }
+        .brand-contact { font-size: 11px; color: rgba(255,255,255,0.9); line-height: 1.6; }
+
+        .nav-menu { list-style: none; flex: 1; }
+        .nav-item { margin-bottom: 8px; }
+
+        .nav-btn {
+            width: 100%; padding: 10px 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--white); border-radius: 8px;
+            cursor: pointer; text-align: left; font-size: 14px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .nav-btn.active { background: var(--green); border-color: var(--green); font-weight: bold; }
+
+        .header {
+            position: fixed; top: 0; left: 220px; right: 0;
+            background: var(--purple);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 90; height: 70px;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header h2 { color: var(--cream); font-size: 20px; }
+
+        .progress-bar {
+            width: 140px; height: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 4px; overflow: hidden;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .progress-fill { height: 100%; background: var(--green); }
+        .progress-text { font-size: 13px; color: var(--cream); margin-left: 10px; font-weight: 600; }
+        .header-controls { display: flex; gap: 12px; }
+
+        .content-area { flex: 1; overflow-y: auto; padding: 90px 25px 30px 25px; height: 100vh; }
+
+        .slide-container {
+            max-width: 900px; margin: 0 auto 30px;
+            border: 1px solid var(--gray); border-radius: 12px;
+            padding: 25px 30px;
+            height: calc(100vh - 130px);
+            display: flex; flex-direction: column; position: relative;
+            background-image: url('https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/NEN.png');
+            background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
+        }
+
+        .slide-content {
+            flex: 1; overflow-y: auto; position: relative; z-index: 1;
+            background: transparent; border-radius: 8px; padding: 15px; margin-bottom: 15px;
+        }
+
+        .slide-content::-webkit-scrollbar { width: 6px; }
+        .slide-content::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .slide-content::-webkit-scrollbar-thumb { background: var(--purple-light); border-radius: 3px; }
+
+        .slide-title {
+            font-size: 22px; color: var(--white);
+            margin-bottom: 20px; padding: 10px 15px;
+            background: rgba(124, 58, 237, 0.85);
+            border-radius: 8px; display: flex; align-items: center; gap: 12px;
+            flex-shrink: 0; border: 1px solid rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .slide-number {
+            background: var(--purple-light); border: 1px solid rgba(255,255,255,0.5);
+            color: var(--white); width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: bold;
+        }
+
+        .slide-nav {
+            display: flex; justify-content: center; align-items: center;
+            margin-top: auto; padding-top: 15px; flex-shrink: 0;
+            position: relative; z-index: 1; gap: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px; border: 1px solid; border-radius: 8px;
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .btn-orange { background: var(--orange); border-color: var(--orange); color: var(--white); }
+        .btn-success { background: var(--green); border-color: var(--green); color: var(--white); }
+        .btn-check {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--green) 100%);
+            border: none; color: var(--white); padding: 12px 28px; font-weight: 700;
+        }
+        .btn-nav { padding: 12px 28px; font-size: 15px; min-width: 130px; justify-content: center; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-answer {
+            padding: 6px 12px; border: 1px solid; border-radius: 6px;
+            font-size: 12px; font-weight: 600; cursor: pointer; margin-left: auto;
+        }
+        .btn-show-answer { background: var(--orange); border-color: var(--white); color: var(--white); }
+        .btn-hide-answer { background: var(--green); border-color: var(--white); color: var(--white); }
+
+        /* ===== CONSONANT EXERCISE ===== */
+        .consonant-exercise {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .consonant-group {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 12px; padding: 15px; text-align: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .group-header {
+            font-size: 28px; font-weight: bold; color: var(--purple);
+            margin-bottom: 12px; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .consonant-inputs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+        .input-wrapper { display: flex; flex-direction: column; align-items: center; }
+
+        .char-input {
+            width: 40px; height: 40px;
+            border: 1px solid var(--gray); border-radius: 8px;
+            text-align: center; font-size: 18px; font-weight: bold;
+            text-transform: lowercase;
+            background: rgba(255,255,255,0.9); color: var(--purple-dark);
+        }
+        .char-input:focus { border-color: var(--green); outline: none; }
+        .char-input.correct { border-color: var(--green); background: #d1fae5; color: var(--green-dark); }
+        .char-input.incorrect { border-color: #ef4444; background: #fee2e2; color: #dc2626; }
+
+        /* ===== TONE SELECT (gạch dưới chọn âm tiết) ===== */
+        .tone-exercise { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+        .tone-item {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 10px; padding: 12px; text-align: center;
+            cursor: pointer; position: relative; backdrop-filter: blur(2px);
+        }
+        .tone-item.selected { background: rgba(139,92,246,0.2); border-color: var(--purple); }
+        .tone-item.correct { background: var(--green-light); border-color: var(--green); }
+        .tone-item.incorrect { background: #fee2e2; border-color: #ef4444; }
+        .tone-item.correct-answer { background: var(--green-light); border-color: var(--green); }
+
+        .check-icon { position: absolute; top: 6px; right: 8px; font-size: 12px; color: transparent; }
+        .tone-item.selected .check-icon { color: var(--purple); }
+        .tone-item.correct .check-icon, .tone-item.correct-answer .check-icon { color: var(--green); }
+
+        .tone-pair { font-size: 16px; font-weight: bold; color: var(--purple); text-shadow: 1px 1px 2px rgba(255,255,255,0.8); }
+        .pinyin-text { font-size: 13px; color: var(--gray); margin-top: 4px; }
+
+        /* ===== 不/一 TONE EXERCISE ===== */
+        .bu-yi-exercise {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+
+        .bu-yi-column {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 12px; padding: 15px; backdrop-filter: blur(2px);
+        }
+
+        .bu-yi-header {
+            font-size: 22px; font-weight: bold; color: var(--purple);
+            margin-bottom: 12px; text-align: center;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .bu-yi-item {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px; padding: 8px;
+            background: rgba(255,255,255,0.8); border-radius: 8px;
+            border: 1px solid var(--gray-light);
+        }
+
+        .bu-yi-num {
+            font-size: 13px; color: var(--white);
+            background: var(--purple-light);
+            width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; flex-shrink: 0;
+        }
+
+        .bu-yi-hanzi {
+            font-family: SimHei, serif; font-size: 20px; color: var(--gray-dark);
+        }
+
+        .bu-yi-select {
+            margin-left: auto;
+            padding: 5px 10px;
+            border: 1px solid var(--gray); border-radius: 6px;
+            font-size: 14px; background: rgba(255,255,255,0.9);
+            color: var(--purple-dark); cursor: pointer; min-width: 80px;
+        }
+        .bu-yi-select:focus { border-color: var(--green); outline: none; }
+        .bu-yi-select.correct-answer { border-color: var(--green); background: #d1fae5; color: var(--green-dark); font-weight: bold; }
+
+        /* ===== PINYIN SELECT GRID ===== */
+        .pinyin-select-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+
+        .pinyin-select-card {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 12px; padding: 15px; text-align: center; backdrop-filter: blur(2px);
+        }
+
+        .pinyin-select-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+        }
+
+        .pinyin-hanzi {
+            font-size: 36px; color: var(--purple); font-family: "SimHei", serif;
+            font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .pinyin-dropdown {
+            width: 100%; padding: 10px; border: 1px solid var(--gray);
+            border-radius: 8px; font-size: 14px; text-align: center;
+            background: rgba(255,255,255,0.9); color: var(--purple-dark); cursor: pointer;
+        }
+        .pinyin-dropdown:focus { border-color: var(--green); outline: none; }
+        .pinyin-dropdown.correct { border-color: var(--green); background: #d1fae5; color: var(--green-dark); }
+        .pinyin-dropdown.incorrect { border-color: #ef4444; background: #fee2e2; color: #dc2626; }
+
+        /* ===== DIALOGUE ===== */
+        .dialogue-container { display: flex; flex-direction: column; gap: 12px; }
+
+        .dialogue-item {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 12px; padding: 15px; backdrop-filter: blur(2px);
+        }
+
+        .dialogue-speaker {
+            font-weight: bold; color: var(--green-dark); margin-bottom: 8px;
+            font-size: 16px; text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .dialogue-text {
+            font-size: 17px; line-height: 1.6; color: var(--gray-dark);
+            font-family: SimHei, sans-serif;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .blank-select {
+            padding: 6px 10px; border: 1px solid var(--gray); border-radius: 8px;
+            font-size: 15px; min-width: 120px;
+            background: rgba(255,255,255,0.9); color: var(--gray-dark); cursor: pointer;
+        }
+        .blank-select:focus { border-color: var(--green); outline: none; }
+        .blank-select.correct-answer { border-color: var(--green); background: #d1fae5; color: var(--green-dark); font-weight: bold; }
+
+        /* ===== WORD POSITION EXERCISE (Bài 6) ===== */
+        .word-pos-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .word-pos-item {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 12px; padding: 15px; backdrop-filter: blur(2px);
+        }
+
+        .word-pos-question {
+            font-size: 17px; color: var(--purple-dark); margin-bottom: 10px;
+            font-family: SimHei, sans-serif;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .slot-label {
+            display: inline-block; padding: 2px 10px;
+            border: 1px solid var(--gray); border-radius: 6px;
+            background: rgba(255,255,255,0.8); font-weight: bold;
+            color: var(--purple); margin: 0 3px; font-size: 15px;
+        }
+
+        .pos-select {
+            padding: 6px 10px; border: 1px solid var(--gray); border-radius: 8px;
+            font-size: 15px; background: rgba(255,255,255,0.9);
+            color: var(--gray-dark); cursor: pointer; min-width: 80px;
+        }
+        .pos-select:focus { border-color: var(--green); outline: none; }
+        .pos-select.correct-answer { border-color: var(--green); background: #d1fae5; color: var(--green-dark); font-weight: bold; }
+
+        /* ===== HANZI WRITE ===== */
+        .writing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+
+        .writing-card {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 12px; padding: 15px; backdrop-filter: blur(2px);
+        }
+
+        .writing-number {
+            display: inline-block; background: var(--purple-light); color: var(--white);
+            width: 22px; height: 22px; border-radius: 50%; line-height: 20px;
+            margin-bottom: 8px; font-size: 11px; font-weight: bold;
+        }
+
+        .writing-pinyin { font-size: 16px; color: var(--orange-dark); font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); }
+
+        .hanzi-input {
+            width: 100%; padding: 8px; border: 1px solid var(--gray); border-radius: 8px;
+            text-align: center; font-size: 20px; font-family: "SimHei", sans-serif;
+            margin-top: 8px; background: rgba(255,255,255,0.9); color: var(--purple-dark);
+        }
+        .hanzi-input:focus { border-color: var(--green); outline: none; }
+        .hanzi-input.correct { border-color: var(--green); background: #d1fae5; color: var(--green-dark); }
+        .hanzi-input.incorrect { border-color: #ef4444; background: #fee2e2; color: #dc2626; }
+
+        /* ===== CHAR STRUCTURE (Bài 8) ===== */
+        .char-structure {
+            display: flex; justify-content: center; align-items: center;
+            gap: 25px; padding: 25px;
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 16px; flex-wrap: wrap; backdrop-filter: blur(2px);
+        }
+
+        .char-box {
+            text-align: center; padding: 18px;
+            background: rgba(255,255,255,0.9); border: 1px solid var(--gray);
+            border-radius: 12px; min-width: 95px;
+        }
+
+        .char-display { font-size: 44px; color: var(--green-dark); margin-bottom: 6px; font-family: "SimHei", serif; font-weight: bold; }
+        .char-pinyin { font-size: 15px; color: var(--gray); font-weight: 600; }
+
+        /* ===== TRANSLATION ===== */
+        .translation-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .translation-item {
+            background: transparent; border: 1px solid var(--gray);
+            border-radius: 12px; padding: 15px; backdrop-filter: blur(2px);
+        }
+
+        .translation-vi {
+            font-size: 16px; color: var(--gray-dark);
+            display: flex; align-items: center; gap: 10px; font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .translation-cn {
+            font-size: 20px; color: var(--green-dark);
+            font-family: "SimHei", sans-serif;
+            padding-top: 10px; border-top: 1px dashed var(--gray);
+            display: none; margin-top: 8px; font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .translation-item.revealed .translation-cn { display: block; }
+        .translation-item.revealed { border-color: var(--green); background: rgba(240,253,244,0.5); }
+
+        /* ===== ANSWER REVEALS ===== */
+        .answer-reveal {
+            font-size: 12px; color: var(--green); font-weight: bold;
+            margin-top: 5px; display: none; text-shadow: 1px 1px 2px rgba(255,255,255,0.9);
+        }
+        .answer-reveal.show { display: block; }
+
+        .correct-answer-display {
+            margin-top: 8px; padding: 6px; border: 1px solid var(--green);
+            border-radius: 8px; color: var(--green); font-weight: bold;
+            display: none; font-size: 16px; background: rgba(236,253,245,0.9);
+        }
+        .correct-answer-display.show { display: block; }
+
+        .question-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .text-center { text-align: center; }
+
+        /* Result Modal */
+        .result-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(124,58,237,0.8);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .result-card {
+            background: var(--white); border: 1px solid var(--purple-light);
+            padding: 30px; border-radius: 20px; text-align: center; max-width: 400px;
+        }
+        .score-circle {
+            width: 120px; height: 120px; border-radius: 50%;
+            border: 1px solid var(--purple-light);
+            display: flex; align-items: center; justify-content: center;
+            margin: 15px auto;
+            background: conic-gradient(var(--green) calc(var(--score) * 1%), var(--gray-light) calc(var(--score) * 1%));
+            position: relative;
+        }
+        .score-circle::before {
+            content: ''; position: absolute; width: 90px; height: 90px;
+            background: var(--white); border-radius: 50%;
+        }
+        .score-text { position: relative; font-size: 28px; font-weight: bold; color: var(--purple); }
+
+        @media (max-width: 768px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .header { left: 0; height: 60px; }
+            .slide-container { height: calc(100vh - 110px); padding: 15px; }
+            .consonant-exercise, .pinyin-select-grid { grid-template-columns: 1fr; }
+            .tone-exercise { grid-template-columns: repeat(2, 1fr); }
+            .bu-yi-exercise { grid-template-columns: 1fr; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand-header">
+            <div class="logo-img">
+                <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+            </div>
+            <div class="brand-name">GIA SƯ HOA NGỮ TÂN AN</div>
+            <div class="brand-contact">
+                📍 9/1 Bạch Văn Tư<br>
+                Tân An, Long An<br>
+                💬 Zalo: 0839.889.772
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item"><button class="nav-btn active" onclick="window.location.href='BAI TAP 301.html'"><span>Trang chủ</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(1)"><span>Bài 1</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(2)"><span>Bài 2</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(3)"><span>Bài 3a</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(4)"><span>Bài 3b</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(5)"><span>Bài 4</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(6)"><span>Bài 5</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(7)"><span>Bài 6</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(8)"><span>Bài 7</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(9)"><span>Bài 8</span></button></li>
+            <li class="nav-item"><button class="nav-btn" onclick="goToSlide(10)"><span>Bài 9</span></button></li>
+        </ul>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+        <header class="header">
+            <div class="header-left">
+                <h2 id="header-title">BÀI 03: 你工作忙吗?</h2>
+                <div style="display:flex;align-items:center;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-bar" style="width:0%"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">0/10</span>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button class="btn btn-orange" onclick="resetCurrent()">↺ Làm lại</button>
+                <button class="btn btn-check" onclick="checkAndShowAnswers()">✓ Kiểm tra</button>
+            </div>
+        </header>
+        <div class="content-area" id="content-area"></div>
+    </main>
+</div>
+
+<!-- Result Modal -->
+<div class="result-overlay" id="result-modal" onclick="closeModal(event)">
+    <div class="result-card">
+        <h3 style="color:var(--purple);margin-bottom:15px;font-size:24px;">Kết quả bài làm</h3>
+        <div class="score-circle" id="score-circle" style="--score:0">
+            <span class="score-text" id="score-text">0/0</span>
+        </div>
+        <p id="score-message" style="font-size:16px;margin-top:15px;color:var(--purple-dark);font-weight:500;">Hãy cố gắng hơn nhé!</p>
+        <button class="btn btn-success" onclick="closeModal()" style="width:100%;margin-top:20px;">Tiếp tục học →</button>
+    </div>
+</div>
+
+<script>
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// =========================================================
+// DỮ LIỆU BÀI 03 - THEO ĐÚNG PDF
+// =========================================================
+const exercises = [
+    // 0: INTRO
+    {
+        type: 'intro',
+        title: 'BÀI 03 - 你工作忙吗?',
+        content: `
+            <div class="text-center" style="padding:40px 20px;">
+                <div style="font-size:52px;color:var(--purple);margin-bottom:20px;font-family:SimHei;font-weight:bold;text-shadow:2px 2px 4px rgba(255,255,255,0.9);">你工作忙吗？</div>
+                <h1 style="font-size:26px;margin-bottom:15px;color:var(--purple-dark);text-shadow:1px 1px 2px rgba(255,255,255,0.9);">BÀI 03: CÔNG VIỆC BẠN BẬN KHÔNG?</h1>
+                <p style="font-size:16px;color:var(--gray-dark);max-width:500px;margin:0 auto;line-height:1.8;text-shadow:1px 1px 2px rgba(255,255,255,0.9);">
+                    GIA SƯ HOA NGỮ TÂN AN<br>
+                    <span style="color:var(--orange);font-weight:bold;">Hãy chọn bài tập từ menu bên trái để bắt đầu.</span>
+                </p>
+                <button class="btn btn-success" onclick="nextSlide()" style="margin-top:30px;padding:12px 30px;font-size:16px;">Bắt đầu học →</button>
+            </div>
+        `
+    },
+
+    // 1: Bổ sung hoàn chỉnh 6 nhóm phụ âm (trang 2)
+    {
+        type: 'fill-consonants',
+        title: 'Bổ sung hoàn chỉnh 6 nhóm phụ âm sau',
+        data: [
+            { group: 'b', answers: ['p', 'm', 'f'] },
+            { group: 'd', answers: ['t', 'n', 'l'] },
+            { group: 'g', answers: ['k', 'h'] },
+            { group: 'j', answers: ['q', 'x'] },
+            { group: 'z', answers: ['c', 's'] },
+            { group: 'zh', answers: ['ch', 'sh', 'r'] }
+        ]
+    },
+
+    // 2: Tìm gạch dưới những chữ có âm tiết ü (trang 3)
+    // Đáp án (gạch đỏ trong PDF): 1.yuànzi (yuan có ü), 3.qǔzi (qu có ü), 4.nǔlì (nü có ü),
+    // 5.xuéxí (xu có ü), 6.juédìng (ju có ü), 7.xiǎoyǔ (yü), 8.yīnyuè (yue có ü),
+    // 10.jùzi (ju có ü), 12.dìqū (qu có ü)
+    {
+        type: 'tone-select-2',
+        title: 'Tìm gạch dưới những chữ có âm tiết ü',
+        data: [
+            { pair: 'yuànzi',  syllable: 'yuàn', correct: true },
+            { pair: 'chūfà',   syllable: 'chū',  correct: false },
+            { pair: 'qǔzi',    syllable: 'qǔ',   correct: true },
+            { pair: 'nǔlì',    syllable: 'nǔ',   correct: true },
+            { pair: 'xuéxí',   syllable: 'xué',  correct: true },
+            { pair: 'juédìng', syllable: 'jué',  correct: true },
+            { pair: 'xiǎoyǔ',  syllable: 'yǔ',   correct: true },
+            { pair: 'yīnyuè',  syllable: 'yuè',  correct: true },
+            { pair: 'lùdēng',  syllable: 'lù',   correct: false },
+            { pair: 'jùzi',    syllable: 'jù',   correct: true },
+            { pair: 'túshū',   syllable: 'shū',  correct: false },
+            { pair: 'dìqū',    syllable: 'qū',   correct: true }
+        ]
+    },
+
+    // 3: Chỉ ra thanh điệu của 不 (trang 4)
+    // 不 đọc bù (thanh 4) trước các từ thanh 1,2,3
+    // 不 đọc bú (thanh 2) trước từ thanh 4
+    // Các từ: 1.好hǎo(3)→bù, 2.太忙tàimáng(4)→bú, 3.谢xiè(4)→bú, 4.来lái(2)→bù, 5.是shì(4)→bú, 6.太累tàilèi(4)→bú, 7.累lèi(4)→bú, 8.高gāo(1)→bù
+    {
+        type: 'bu-yi-tone',
+        title: 'Chỉ ra thanh điệu của 不',
+        character: '不',
+        toneOptions: ['bù', 'bú'],
+        data: [
+            { num: 1, hanzi: '好 hǎo',      answer: 'bù' },
+            { num: 2, hanzi: '太忙 tàimáng', answer: 'bú' },
+            { num: 3, hanzi: '谢 xiè',      answer: 'bú' },
+            { num: 4, hanzi: '来 lái',      answer: 'bù' },
+            { num: 5, hanzi: '是 shì',      answer: 'bú' },
+            { num: 6, hanzi: '太累 tàilèi', answer: 'bú' },
+            { num: 7, hanzi: '累 lèi',      answer: 'bú' },
+            { num: 8, hanzi: '高 gāo',      answer: 'bù' }
+        ]
+    },
+
+    // 4: Chỉ ra thanh điệu của 一 (trang 5)
+    // 一 đọc Yì (thanh 4) trước thanh 1,2,3; Yí (thanh 2) trước thanh 4
+    // 1.起qǐ(3)→Yì, 2.毛máo(2)→Yì, 3.天tiān(1)→Yì, 4.早zǎo(3)→Yì, 5.块kuài(4)→Yí, 6.般bān(1)→Yì, 7.会儿huìr(4)→Yí, 8.年nián(2)→Yì
+    {
+        type: 'bu-yi-tone',
+        title: 'Chỉ ra thanh điệu của 一',
+        character: '一',
+        toneOptions: ['Yì', 'Yí'],
+        data: [
+            { num: 1, hanzi: '起 qǐ',     answer: 'Yì' },
+            { num: 2, hanzi: '毛 máo',    answer: 'Yì' },
+            { num: 3, hanzi: '天 tiān',   answer: 'Yì' },
+            { num: 4, hanzi: '早 zǎo',    answer: 'Yì' },
+            { num: 5, hanzi: '块 kuài',   answer: 'Yí' },
+            { num: 6, hanzi: '般 bān',    answer: 'Yì' },
+            { num: 7, hanzi: '会儿 huìr', answer: 'Yí' },
+            { num: 8, hanzi: '年 nián',   answer: 'Yì' }
+        ]
+    },
+
+    // 5: Phiên âm cho những từ dưới đây (trang 6) - 3 nhóm × 4 từ
+    {
+        type: 'pinyin-select',
+        title: 'Phiên âm cho những từ dưới đây',
+        data: [
+            { hanzi: '年',  answer: 'nián',     options: ['nián', 'niǎn', 'niàn', 'niān'] },
+            { hanzi: '月',  answer: 'yuè',      options: ['yuè', 'yüè', 'yuě', 'yuē'] },
+            { hanzi: '日',  answer: 'rì',       options: ['rì', 'rí', 'rǐ', 'rī'] },
+            { hanzi: '号',  answer: 'hào',      options: ['hào', 'háo', 'hǎo', 'hāo'] },
+            { hanzi: '今天', answer: 'jīntiān',  options: ['jīntiān', 'jǐntiān', 'jìntiān', 'jīntiǎn'] },
+            { hanzi: '明天', answer: 'míngtiān', options: ['míngtiān', 'mǐngtiān', 'mìngtiān', 'míngtiǎn'] },
+            { hanzi: '今年', answer: 'jīnnián',  options: ['jīnnián', 'jǐnnián', 'jìnnián', 'jīnniǎn'] },
+            { hanzi: '明年', answer: 'míngnián', options: ['míngnián', 'mǐngnián', 'mìngnián', 'míngniǎn'] },
+            { hanzi: '哥哥', answer: 'gēge',     options: ['gēge', 'gége', 'gěge', 'gège'] },
+            { hanzi: '弟弟', answer: 'dìdi',     options: ['dìdi', 'dídi', 'dǐdi', 'dīdi'] },
+            { hanzi: '姐姐', answer: 'jiějie',   options: ['jiějie', 'jiéjie', 'jiējie', 'jiějié'] },
+            { hanzi: '妹妹', answer: 'mèimei',   options: ['mèimei', 'méimei', 'měimei', 'mēimei'] }
+        ]
+    },
+
+    // 6: Hoàn thành đối thoại (trang 7-9) - 5 cặp hội thoại
+    {
+        type: 'dialogue',
+        title: 'Hoàn thành đối thoại',
+        data: [
+            // Đối thoại 1 (trang 7)
+            { speaker: 'A', text: '今天10月31号吗？' },
+            { speaker: 'B', text: '不，________！（11.1）', answer: '今天11月1号', options: ['今天11月1号', '今天10月1号', '明天11月1号'] },
+            // Đối thoại 2 (trang 7)
+            { speaker: 'A', text: '明天你爸爸、妈妈来吗？' },
+            { speaker: 'B (爸爸)', text: '我爸爸________，我妈妈________', answer: '来／不来', options: ['来／不来', '不来／来', '来／来'] },
+            // Đối thoại 3 (trang 8)
+            { speaker: 'A', text: '我________，________？（呢）', answer: '身体很好，你呢', options: ['身体很好，你呢', '工作很忙，你呢', '身体不好，你呢'] },
+            { speaker: 'B', text: '我身体也很好，谢谢！' },
+            // Đối thoại 4 (trang 8)
+            { speaker: 'A', text: '我工作很忙，也很累，________？（呢）', answer: '你呢', options: ['你呢', '他呢', '我呢'] },
+            { speaker: 'B', text: '我________', answer: '工作不太忙', options: ['工作不太忙', '工作很忙', '也很累'] },
+            // Đối thoại 5 (trang 9)
+            { speaker: 'A', text: '明年你哥哥来，________？（呢）', answer: '你妹妹呢', options: ['你妹妹呢', '你弟弟呢', '你姐姐呢'] },
+            { speaker: 'B', text: '我妹妹工作很忙，她不来。' }
+        ]
+    },
+
+    // 7: Tìm vị trí thích hợp cho từ trong ngoặc (trang 10)
+    {
+        type: 'word-position',
+        title: 'Tìm vị trí thích hợp cho từ trong ngoặc',
+        data: [
+            {
+                sentence: '妈妈 A 不工作，B 爸爸 C 不 D 工作',
+                keyword: '也',
+                answer: 'C',
+                options: ['A', 'B', 'C', 'D']
+            },
+            {
+                sentence: 'A 爸爸、B 妈妈 C 身体 D 好吗？',
+                keyword: '你',
+                answer: 'A',
+                options: ['A', 'B', 'C', 'D']
+            },
+            {
+                sentence: 'A 他们 B 身体 C 很好 D 。',
+                keyword: '都',
+                answer: 'C',
+                options: ['A', 'B', 'C', 'D']
+            },
+            {
+                sentence: 'A 他们 B 工作 C 很忙，D 很累。',
+                keyword: '都、也',
+                answer: 'C、D',
+                options: ['A、B', 'B、C', 'C、D', 'A、D']
+            }
+        ]
+    },
+
+    // 8: Viết chữ Hán dựa theo phiên âm (trang 11)
+    {
+        type: 'hanzi-write',
+        title: 'Viết chữ Hán dựa theo phiên âm',
+        data: [
+            { pinyin: 'Wǒ gēge、dìdi míngtiān dōulái.', hanzi: '我哥哥、弟弟明天都来。' },
+            { pinyin: 'Tā bàba、māma shēntǐ hěn hǎo.', hanzi: '他爸爸、妈妈身体很好。' }
+        ]
+    },
+
+    // 9: Viết và phiên âm chữ hán có thiên bàng 女 (trang 12)
+    {
+        type: 'char-structure',
+        title: 'Viết và phiên âm chữ Hán có thiên bàng 女',
+        content: 'nu-structure'
+    },
+
+    // 10: Luyện dịch Việt Hoa (trang 13-15)
+    {
+        type: 'translation',
+        title: 'Luyện dịch Việt - Hoa',
+        data: [
+            { vi: 'Công việc bạn có bận rộn không?', cn: '你工作忙吗？' },
+            { vi: 'Hôm nay chúng tôi đều rất bận rộn.', cn: '今天我们都很忙。' },
+            { vi: 'Ngày mai anh trai, chị gái tôi đều không đến.', cn: '明天我哥哥、姐姐都不来。' },
+            { vi: 'Ngày mai ngày 8 tháng 3.', cn: '明天三月八号。' },
+            { vi: 'Năm nay 2011, sang năm 2012.', cn: '今年2011年，明年2012年' },
+            { vi: 'Hôm nay 31 tháng 12, ngày mai 1 tháng 1.', cn: '今天12月31号，明天1月1号。' },
+            { vi: 'Em gái tôi không bận lắm, em trai tôi rất bận.', cn: '我妹妹不太忙，我弟弟很忙。' },
+            { vi: 'Tôi không được khỏe lắm, còn bạn?', cn: '我身体不太好，你呢？' },
+            { vi: 'Mary không mệt lắm, tôi cũng không mệt lắm.', cn: '玛丽不太累，我也不太累。' },
+            { vi: 'Ba mẹ bạn khỏe không?', cn: '你爸爸、妈妈身体好吗？' }
+        ]
+    }
+];
+
+let currentSlide = 0;
+let checkedAnswers = {};
+
+function init() {
+    renderSlide(0);
+    updateProgress();
+}
+
+function renderSlide(index) {
+    currentSlide = index;
+    const ex = exercises[index];
+    const container = document.getElementById('content-area');
+
+    document.getElementById('header-title').textContent =
+        index === 0 ? 'BÀI 03: 你工作忙吗?' : `Bài ${index}: ${ex.title}`;
+
+    document.querySelectorAll('.nav-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+    });
+
+    let html = '<div class="slide-container"><div class="slide-content">';
+    html += `<h3 class="slide-title"><span class="slide-number">${index}</span>${ex.title}</h3>`;
+
+    switch (ex.type) {
+        case 'intro':           html += ex.content; break;
+        case 'fill-consonants': html += renderConsonants(ex.data, index); break;
+        case 'tone-select-2':   html += renderToneSelect(ex.data, index); break;
+        case 'bu-yi-tone':      html += renderBuYiTone(ex, index); break;
+        case 'pinyin-select':   html += renderPinyinSelect(ex.data, index); break;
+        case 'dialogue':        html += renderDialogue(ex.data, index); break;
+        case 'word-position':   html += renderWordPosition(ex.data, index); break;
+        case 'hanzi-write':     html += renderHanziWrite(ex.data, index); break;
+        case 'char-structure':  html += renderCharStructure(); break;
+        case 'translation':     html += renderTranslation(ex.data, index); break;
+    }
+
+    html += '</div>';
+    html += `<div class="slide-nav">
+        <button class="btn btn-orange btn-nav" onclick="prevSlide()" ${index === 0 ? 'disabled' : ''}>← Bài trước</button>
+        <button class="btn btn-success btn-nav" onclick="nextSlide()" ${index === exercises.length - 1 ? 'disabled' : ''}>Bài sau →</button>
+    </div></div>`;
+    container.innerHTML = html;
+}
+
+function nextSlide() { if (currentSlide < exercises.length - 1) renderSlide(currentSlide + 1); }
+function prevSlide() { if (currentSlide > 0) renderSlide(currentSlide - 1); }
+function goToSlide(i) { renderSlide(i); }
+function resetCurrent() { delete checkedAnswers[currentSlide]; renderSlide(currentSlide); }
+
+// ---- RENDER FUNCTIONS ----
+
+function renderConsonants(data, si) {
+    let html = '<div class="consonant-exercise">';
+    data.forEach((g, gi) => {
+        html += `<div class="consonant-group">
+            <div class="group-header">${g.group}</div>
+            <div class="consonant-inputs">
+                ${g.answers.map((ans, ai) => `
+                    <div class="input-wrapper">
+                        <input type="text" class="char-input"
+                            data-slide="${si}" data-group="${gi}" data-index="${ai}"
+                            data-answer="${ans}" maxlength="3" placeholder="?">
+                        <div class="answer-reveal" id="reveal-${si}-${gi}-${ai}">${ans}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderToneSelect(data, si) {
+    let html = '<div class="tone-exercise">';
+    data.forEach((item, idx) => {
+        html += `<div class="tone-item" data-slide="${si}" data-question="${idx}"
+                     data-correct="${item.correct}" onclick="toggleTone2Selection(this)">
+            <div class="check-icon">✓</div>
+            <div class="tone-pair">${item.pair}</div>
+            <div class="pinyin-text">(${item.syllable})</div>
+        </div>`;
+    });
+    html += `</div>
+        <div style="text-align:center;margin-top:15px;">
+            <button class="btn-answer btn-show-answer" onclick="toggleToneAnswer(this,${si})">Hiện đáp án</button>
+        </div>`;
+    return html;
+}
+
+function renderBuYiTone(ex, si) {
+    const { character, toneOptions, data } = ex;
+    let html = `<div style="text-align:center;margin-bottom:15px;">
+        <span style="font-family:SimHei;font-size:40px;color:var(--purple);font-weight:bold;">${character}</span>
+        <span style="font-size:14px;color:var(--gray);margin-left:15px;">Chọn thanh điệu đúng cho ${character} trước mỗi từ</span>
+    </div>`;
+    html += '<div class="bu-yi-exercise">';
+    // Chia 2 cột: 4 dòng mỗi cột
+    const half = Math.ceil(data.length / 2);
+    [data.slice(0, half), data.slice(half)].forEach((col, ci) => {
+        html += '<div class="bu-yi-column">';
+        col.forEach((item) => {
+            const shuffled = shuffleArray([...toneOptions]);
+            html += `<div class="bu-yi-item">
+                <div class="bu-yi-num">${item.num}</div>
+                <div class="bu-yi-hanzi">${item.hanzi}</div>
+                <select class="bu-yi-select"
+                    data-slide="${si}" data-answer="${item.answer}" id="buyi-${si}-${item.num}">
+                    <option value="">--</option>
+                    ${shuffled.map(o => `<option value="${o}">${o}</option>`).join('')}
+                </select>
+            </div>`;
+        });
+        html += '</div>';
+    });
+    html += '</div>';
+    html += `<div style="text-align:center;margin-top:15px;">
+        <button class="btn-answer btn-show-answer" onclick="showBuYiAnswers(${si})">Hiện đáp án</button>
+    </div>`;
+    return html;
+}
+
+function renderPinyinSelect(data, si) {
+    let html = '<div class="pinyin-select-grid">';
+    data.forEach((item, idx) => {
+        const shuffled = shuffleArray([...item.options]);
+        html += `<div class="pinyin-select-card">
+            <div class="pinyin-select-header">
+                <div class="pinyin-hanzi">${item.hanzi}</div>
+                <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this,'pinyin-select',${si},${idx})">Hiện đáp án</button>
+            </div>
+            <select class="pinyin-dropdown" data-slide="${si}" data-index="${idx}"
+                data-answer="${item.answer}" id="pinyin-select-${si}-${idx}">
+                <option value="">-- Chọn --</option>
+                ${shuffled.map(o => `<option value="${o}">${o}</option>`).join('')}
+            </select>
+            <div class="correct-answer-display" id="pinyin-select-answer-${si}-${idx}">Đáp án: ${item.answer}</div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderDialogue(data, si) {
+    let html = '<div class="dialogue-container">';
+    data.forEach((item, idx) => {
+        if (item.options) {
+            const shuffled = shuffleArray([...item.options]);
+            html += `<div class="dialogue-item">
+                <div class="question-header">
+                    <div class="dialogue-speaker">${item.speaker}：</div>
+                    <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this,'dialogue',${si},${idx})">Hiện đáp án</button>
+                </div>
+                <div class="dialogue-text">
+                    ${item.text.replace('________', `
+                        <select class="blank-select" data-slide="${si}" data-index="${idx}"
+                            data-answer="${item.answer}" id="dialogue-${si}-${idx}">
+                            <option value="">-- Chọn --</option>
+                            ${shuffled.map(o => `<option value="${o}">${o}</option>`).join('')}
+                        </select>
+                    `)}
+                </div>
+                <div class="correct-answer-display" id="dialogue-answer-${si}-${idx}" style="margin-top:8px;">Đáp án: ${item.answer}</div>
+            </div>`;
+        } else {
+            html += `<div class="dialogue-item">
+                <div class="dialogue-speaker">${item.speaker}：</div>
+                <div class="dialogue-text">${item.text}</div>
+            </div>`;
+        }
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderWordPosition(data, si) {
+    let html = '<div class="word-pos-list">';
+    data.forEach((item, idx) => {
+        const shuffled = shuffleArray([...item.options]);
+        html += `<div class="word-pos-item">
+            <div class="question-header">
+                <div class="word-pos-question">
+                    <span style="color:var(--purple-light);font-weight:bold;">${idx + 1}.</span>
+                    ${item.sentence}
+                    <span style="color:var(--orange-dark);font-weight:bold;"> （${item.keyword}）</span>
+                </div>
+                <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this,'word-pos',${si},${idx})">Hiện đáp án</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+                <span style="font-size:14px;color:var(--gray-dark);">Vị trí:</span>
+                <select class="pos-select" data-slide="${si}" data-index="${idx}"
+                    data-answer="${item.answer}" id="pos-select-${si}-${idx}">
+                    <option value="">-- Chọn --</option>
+                    ${shuffled.map(o => `<option value="${o}">${o}</option>`).join('')}
+                </select>
+            </div>
+            <div class="correct-answer-display" id="word-pos-answer-${si}-${idx}" style="margin-top:8px;">Đáp án: ${item.answer}</div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderHanziWrite(data, si) {
+    let html = '<div class="writing-grid">';
+    data.forEach((item, idx) => {
+        html += `<div class="writing-card">
+            <div class="question-header" style="justify-content:flex-start;">
+                <div class="writing-number">${idx + 1}</div>
+                <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this,'hanzi',${si},${idx})">Hiện đáp án</button>
+            </div>
+            <div class="writing-pinyin">${item.pinyin}</div>
+            <input type="text" class="hanzi-input" data-slide="${si}" data-index="${idx}"
+                data-answer="${item.hanzi}" placeholder="Viết chữ Hán..."
+                style="font-family:SimHei,serif;font-size:20px;" id="hanzi-input-${si}-${idx}">
+            <div class="correct-answer-display" id="hanzi-answer-${si}-${idx}"
+                style="font-size:18px;color:var(--purple);font-family:SimHei;">${item.hanzi}</div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+function renderCharStructure() {
+    const chars = [
+        { pinyin: 'hǎo', hanzi: '好' },
+        { pinyin: 'tā',  hanzi: '她' },
+        { pinyin: 'mā',  hanzi: '妈' },
+        { pinyin: 'jiě', hanzi: '姐' },
+        { pinyin: 'mèi', hanzi: '妹' }
+    ];
+    let html = '<div class="char-structure">';
+    chars.forEach(c => {
+        html += `<div class="char-box">
+            <div class="char-display">${c.hanzi}</div>
+            <div class="char-pinyin">${c.pinyin}</div>
+        </div>`;
+    });
+    html += `</div>
+    <div style="text-align:center;margin-top:20px;padding:15px;border:1px solid var(--gray);border-radius:12px;font-size:14px;background:rgba(240,253,244,0.7);backdrop-filter:blur(2px);">
+        <strong style="color:var(--green-dark);">Ghi chú:</strong>
+        <span style="color:var(--gray-dark);">Các chữ 好、她、妈、姐、妹 đều có thiên bàng 女 (nữ).</span>
+    </div>`;
+    return html;
+}
+
+function renderTranslation(data, si) {
+    let html = '<div class="translation-list">';
+    data.forEach((item, idx) => {
+        html += `<div class="translation-item" id="trans-${si}-${idx}">
+            <div class="question-header">
+                <div class="translation-vi">
+                    <span style="color:var(--green);font-weight:bold;">${idx + 1}.</span> ${item.vi}
+                </div>
+                <button class="btn-answer btn-show-answer" onclick="toggleTranslationAnswer(this,${si},${idx})">Hiện đáp án</button>
+            </div>
+            <div class="translation-cn">${item.cn}</div>
+        </div>`;
+    });
+    html += '</div>';
+    return html;
+}
+
+// ---- TOGGLE / CHECK FUNCTIONS ----
+
+function toggleTone2Selection(el) { el.classList.toggle('selected'); }
+
+function toggleToneAnswer(btn, si) {
+    const showing = btn.textContent === 'Ẩn';
+    btn.textContent = showing ? 'Hiện đáp án' : 'Ẩn';
+    btn.className = showing ? 'btn-answer btn-show-answer' : 'btn-answer btn-hide-answer';
+    document.querySelectorAll('.tone-item').forEach(item => {
+        const correct = item.dataset.correct === 'true';
+        if (!showing && correct) item.classList.add('correct-answer');
+        else item.classList.remove('correct-answer');
+    });
+}
+
+function showBuYiAnswers(si) {
+    const ex = exercises[si];
+    ex.data.forEach(item => {
+        const sel = document.getElementById(`buyi-${si}-${item.num}`);
+        if (sel) {
+            sel.value = item.answer;
+            sel.classList.add('correct-answer');
+        }
+    });
+}
+
+function toggleAnswer(btn, type, si, idx) {
+    const showing = btn.textContent === 'Ẩn';
+    btn.textContent = showing ? 'Hiện đáp án' : 'Ẩn';
+    btn.className = showing ? 'btn-answer btn-show-answer' : 'btn-answer btn-hide-answer';
+
+    let el;
+    if (type === 'mc') {
+        el = document.getElementById(`mc-answer-${si}-${idx}`);
+        const opts = document.querySelectorAll(`#options-${si}-${idx} .option`);
+        const correctVal = document.querySelector(`#options-${si}-${idx}`).parentElement.dataset.correct;
+        opts.forEach(o => { if (!showing) { if (o.dataset.option === correctVal) o.classList.add('correct-answer'); } else o.classList.remove('correct-answer'); });
+    } else if (type === 'pinyin-select') {
+        el = document.getElementById(`pinyin-select-answer-${si}-${idx}`);
+    } else if (type === 'dialogue') {
+        el = document.getElementById(`dialogue-answer-${si}-${idx}`);
+    } else if (type === 'hanzi') {
+        el = document.getElementById(`hanzi-answer-${si}-${idx}`);
+    } else if (type === 'word-pos') {
+        el = document.getElementById(`word-pos-answer-${si}-${idx}`);
+    }
+    if (el) el.classList.toggle('show', !showing);
+}
+
+function toggleTranslationAnswer(btn, si, idx) {
+    const showing = btn.textContent === 'Ẩn';
+    btn.textContent = showing ? 'Hiện đáp án' : 'Ẩn';
+    btn.className = showing ? 'btn-answer btn-show-answer' : 'btn-answer btn-hide-answer';
+    const item = document.getElementById(`trans-${si}-${idx}`);
+    item.classList.toggle('revealed', !showing);
+}
+
+function checkAndShowAnswers() {
+    const ex = exercises[currentSlide];
+    if (ex.type === 'intro' || ex.type === 'char-structure') { showResult(1, 1); return; }
+
+    let correct = 0, total = 0;
+
+    switch (ex.type) {
+        case 'fill-consonants':
+            document.querySelectorAll('.char-input').forEach(inp => {
+                const ok = inp.value.toLowerCase().trim() === inp.dataset.answer.toLowerCase();
+                inp.classList.toggle('correct', ok);
+                inp.classList.toggle('incorrect', !ok && inp.value !== '');
+                const rev = document.getElementById(`reveal-${inp.dataset.slide}-${inp.dataset.group}-${inp.dataset.index}`);
+                if (rev && !ok) rev.classList.add('show');
+                if (ok) correct++;
+                total++;
+            });
+            break;
+
+        case 'tone-select-2':
+            document.querySelectorAll('.tone-item').forEach(item => {
+                const selected = item.classList.contains('selected');
+                const should = item.dataset.correct === 'true';
+                item.classList.remove('correct', 'incorrect');
+                if (should) item.classList.add('correct-answer');
+                if (selected && should) { item.classList.add('correct'); correct++; }
+                else if (selected && !should) item.classList.add('incorrect');
+                if (should) total++;
+            });
+            break;
+
+        case 'bu-yi-tone':
+            ex.data.forEach(item => {
+                const sel = document.getElementById(`buyi-${currentSlide}-${item.num}`);
+                if (sel) {
+                    const ok = sel.value === item.answer;
+                    sel.classList.toggle('correct-answer', ok);
+                    sel.style.borderColor = ok ? 'var(--green)' : (sel.value ? '#ef4444' : '');
+                    if (ok) correct++;
+                    total++;
+                }
+            });
+            break;
+
+        case 'pinyin-select':
+            document.querySelectorAll('.pinyin-dropdown').forEach(sel => {
+                const ok = sel.value === sel.dataset.answer;
+                sel.classList.toggle('correct', ok);
+                sel.classList.toggle('incorrect', !ok && sel.value !== '');
+                const el = document.getElementById(`pinyin-select-answer-${sel.dataset.slide}-${sel.dataset.index}`);
+                if (el && !ok) el.classList.add('show');
+                if (ok) correct++;
+                total++;
+            });
+            break;
+
+        case 'dialogue':
+            document.querySelectorAll('.blank-select').forEach(sel => {
+                const ok = sel.value === sel.dataset.answer;
+                sel.classList.toggle('correct-answer', ok);
+                sel.style.borderColor = ok ? 'var(--green)' : '#ef4444';
+                if (!ok) { const el = sel.nextElementSibling; if (el) el.style.display = 'inline'; }
+                if (ok) correct++;
+                total++;
+            });
+            break;
+
+        case 'word-position':
+            document.querySelectorAll('.pos-select').forEach(sel => {
+                const ok = sel.value === sel.dataset.answer;
+                sel.classList.toggle('correct-answer', ok);
+                sel.style.borderColor = ok ? 'var(--green)' : (sel.value ? '#ef4444' : '');
+                const el = document.getElementById(`word-pos-answer-${sel.dataset.slide}-${sel.dataset.index}`);
+                if (el && !ok) el.classList.add('show');
+                if (ok) correct++;
+                total++;
+            });
+            break;
+
+        case 'hanzi-write':
+            document.querySelectorAll('.hanzi-input').forEach(inp => {
+                const ok = inp.value.trim() === inp.dataset.answer;
+                inp.classList.toggle('correct', ok);
+                inp.classList.toggle('incorrect', !ok && inp.value !== '');
+                const el = document.getElementById(`hanzi-answer-${inp.dataset.slide}-${inp.dataset.index}`);
+                if (el && !ok) el.classList.add('show');
+                if (ok) correct++;
+                total++;
+            });
+            break;
+
+        case 'translation':
+            document.querySelectorAll('.translation-item').forEach(item => {
+                if (!item.classList.contains('revealed')) {
+                    item.classList.add('revealed');
+                    const btn = item.querySelector('.btn-answer');
+                    if (btn) { btn.textContent = 'Ẩn'; btn.className = 'btn-answer btn-hide-answer'; }
+                }
+                total++; correct++;
+            });
+            break;
+    }
+
+    checkedAnswers[currentSlide] = true;
+    showResult(correct, total);
+    updateProgress();
+}
+
+function showResult(correct, total) {
+    const modal = document.getElementById('result-modal');
+    const circle = document.getElementById('score-circle');
+    const text = document.getElementById('score-text');
+    const msg = document.getElementById('score-message');
+    const pct = total > 0 ? (correct / total) * 100 : 0;
+
+    circle.style.setProperty('--score', pct);
+    text.textContent = `${correct}/${total}`;
+
+    if (pct === 100) { msg.textContent = '🎉 Xuất sắc! Bạn đã làm đúng hết!'; msg.style.color = 'var(--green)'; }
+    else if (pct >= 80) { msg.textContent = '👏 Rất tốt! Cố gắng thêm!'; msg.style.color = 'var(--green)'; }
+    else if (pct >= 60) { msg.textContent = '👍 Khá đấy! Ôn lại phần sai nhé!'; msg.style.color = 'var(--orange-dark)'; }
+    else { msg.textContent = '💪 Cần cố gắng thêm! Đã hiện đáp án đúng.'; msg.style.color = '#dc2626'; }
+
+    modal.style.display = 'flex';
+}
+
+function closeModal(e) {
+    if (!e || e.target.id === 'result-modal') document.getElementById('result-modal').style.display = 'none';
+}
+
+function updateProgress() {
+    const completed = Object.keys(checkedAnswers).length;
+    const total = exercises.length - 1;
+    document.getElementById('progress-bar').style.width = (completed / total * 100) + '%';
+    document.getElementById('progress-text').textContent = `${completed}/${total}`;
+}
+
+window.addEventListener('load', init);
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>
