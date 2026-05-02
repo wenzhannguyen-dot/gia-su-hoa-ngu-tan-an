@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Học Tiếng Trung Tương Tác</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100vw;height:100svh;overflow:hidden;font-family:'Segoe UI',Arial,sans-serif}
+body{background:url('https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/NEN.png') center/cover no-repeat fixed}
+.container{width:100vw;height:100svh;display:flex;flex-direction:column;padding:3vh 4vw;background:transparent}
+.topbar{background:linear-gradient(135deg,#1e40af,#1e3a8a);color:#fff;padding:0.8vh 2vw;border-radius:0.5vw;border:0.15vw solid rgba(100,116,139,0.5);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;font-size:1.2vw;box-shadow:0 0.2vw 0.4vw rgba(0,0,0,0.2)}
+.topbar-logo{max-height:7vh;width:auto;filter:brightness(1.1)}
+.topbar-info{flex:1;text-align:center;font-size:1.2vw;color:#dbeafe}
+.topbar-info strong{color:#fff;font-size:1.3vw}
+.content-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5vw;flex:1;min-height:0;margin-top:1.5vh;overflow:hidden}
+.section{background:transparent;border:0.15vw solid rgba(148,163,184,0.8);border-radius:0.5vw;padding:0.4vw;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0.2vw 0.4vw rgba(0,0,0,0.1)}
+.section-title{text-align:center;color:#1e40af;font-size:1.4vw;font-weight:bold;margin-bottom:0.3vh;background:linear-gradient(135deg,rgba(239,246,255,0.9),rgba(219,234,254,0.9));padding:0.4vw;border-radius:0.4vw;border:0.1vw solid rgba(148,163,184,0.6);flex-shrink:0}
+.buttons-area{flex:1;overflow:hidden}
+.buttons-grid,.finals-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.4vh;height:100%;align-content:start}
+.btn-initial{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:0.1vw solid #475569;font-size:1.4vw;font-weight:bold;border-radius:0.3vw;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;user-select:none;min-height:3.8vh;padding:0.3vh 0;box-shadow:0 0.1vw 0.2vw rgba(0,0,0,0.15)}
+.btn-initial:hover{background:linear-gradient(135deg,#3b82f6,#2563eb);transform:translateY(-0.1vh)}
+.btn-initial.active{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;box-shadow:0 0 0.4vw rgba(249,115,22,0.6);transform:scale(1.05);border-color:#c2410c}
+.btn-final{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:0.1vw solid #15803d;font-size:1.4vw;font-weight:bold;border-radius:0.3vw;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;user-select:none;min-height:3.8vh;padding:0.3vh 0;box-shadow:0 0.1vw 0.2vw rgba(0,0,0,0.15)}
+.btn-final:hover{background:linear-gradient(135deg,#22c55e,#16a34a);transform:translateY(-0.1vh)}
+.btn-final.active{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;box-shadow:0 0 0.4vw rgba(249,115,22,0.6);transform:scale(1.05);border-color:#c2410c}
+.btn-final.valid{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 0 0.4vw rgba(34,197,94,0.5);border-color:#15803d;animation:pulse 1s infinite}
+.btn-final.valid:hover{background:linear-gradient(135deg,#4ade80,#22c55e);transform:translateY(-0.1vh)}
+.btn-final.valid.active{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;box-shadow:0 0 0.4vw rgba(249,115,22,0.6);transform:scale(1.05);border-color:#c2410c;animation:none}
+.btn-final.invalid{background:linear-gradient(135deg,#64748b,#475569);color:#94a3b8;border-color:#475569;opacity:0.5;cursor:not-allowed}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+.tone-buttons{display:flex;gap:1.5vw;justify-content:center;margin-bottom:0.3vh;flex-shrink:0;padding:0.3vh 0}
+.tone-btn{width:3.5vw;height:3.5vw;border-radius:50%;background:linear-gradient(135deg,#64748b,#475569);color:#fff;border:0.15vw solid #64748b;font-weight:bold;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-size:1.6vw;user-select:none;flex-shrink:0;box-shadow:0 0.1vw 0.2vw rgba(0,0,0,0.2)}
+.tone-btn:hover{background:linear-gradient(135deg,#94a3b8,#64748b);transform:scale(1.1)}
+.tone-btn.active{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;box-shadow:0 0 0.4vw rgba(249,115,22,0.6);border-color:#c2410c}
+.tone-btn.valid{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 0 0.4vw rgba(34,197,94,0.5);border-color:#15803d;animation:pulse 1s infinite}
+.tone-btn.valid:hover{background:linear-gradient(135deg,#4ade80,#22c55e);transform:scale(1.1)}
+.tone-btn.valid.active{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;box-shadow:0 0 0.4vw rgba(249,115,22,0.6);transform:scale(1.05);border-color:#c2410c;animation:none}
+.info-box{background:transparent;border:0.15vw solid rgba(148,163,184,0.8);border-radius:0.4vw;padding:0.8vw;text-align:center;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:0}
+.info-box p{color:#475569;font-size:1vw;line-height:1.4;margin-bottom:0.5vh}
+.output-text{font-size:2.5vw;font-weight:bold;color:#1e3a8a;margin:0.5vh 0}
+.website-area{background:linear-gradient(135deg,#1e293b,#0f172a);border:0.15vw solid #475569;border-radius:0.4vw;padding:0.8vh;text-align:center;margin-top:1.5vh;flex-shrink:0;box-shadow:0 0.2vw 0.4vw rgba(0,0,0,0.2)}
+.website-area a{color:#fff;text-decoration:none;font-size:1vw;font-weight:bold}
+.footer-in-section{background:rgba(255,255,255,0.85);border:0.15vw solid rgba(148,163,184,0.6);border-radius:0.4vw;padding:0.8vh;text-align:center;margin-top:auto;flex-shrink:0;color:#475569;font-size:0.85vw;line-height:1.6;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%}
+.footer-in-section div{width:100%;text-align:center}
+.footer-in-section strong{color:#1e40af;font-size:0.9vw}
+@media(max-aspect-ratio:4/3){.content-grid{grid-template-columns:1fr 1fr}.section:last-child{grid-column:1/-1;display:grid;grid-template-columns:1fr 2fr;gap:1.5vw}.section:last-child .section-title{grid-column:1/-1}.tone-buttons{flex-direction:column;gap:0.3vh}.tone-btn{width:2.8vw;height:2.8vw;font-size:1.3vw}}
+@media(max-aspect-ratio:3/4){.content-grid{grid-template-columns:1fr}.section{min-height:0}.buttons-grid,.finals-grid{grid-template-columns:repeat(6,1fr)}.tone-buttons{flex-direction:row;gap:0.4vw}.tone-btn{width:4.5vw;height:4.5vw}}
+.buttons-grid div,.finals-grid div{min-height:3.8vh}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="topbar">
+<div class="topbar-left"><img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="LOGO" class="topbar-logo"></div>
+<div class="topbar-info"><strong>GIA SƯ HOA NGỮ TÂN AN</strong> | 9/1 Bạch Văn Tư, Tân An | Zalo: 0839.889.772</div>
+</div>
+<div class="content-grid">
+<div class="section">
+<div class="section-title">Phụ Âm 声母</div>
+<div class="buttons-area"><div class="buttons-grid">
+<button class="btn-initial" data-s="b">b</button><button class="btn-initial" data-s="p">p</button><button class="btn-initial" data-s="m">m</button><button class="btn-initial" data-s="f">f</button>
+<button class="btn-initial" data-s="d">d</button><button class="btn-initial" data-s="t">t</button><button class="btn-initial" data-s="n">n</button><button class="btn-initial" data-s="l">l</button>
+<button class="btn-initial" data-s="g">g</button><button class="btn-initial" data-s="k">k</button><button class="btn-initial" data-s="h">h</button><div></div>
+<button class="btn-initial" data-s="j">j</button><button class="btn-initial" data-s="q">q</button><button class="btn-initial" data-s="x">x</button><div></div>
+<button class="btn-initial" data-s="zh">zh</button><button class="btn-initial" data-s="ch">ch</button><button class="btn-initial" data-s="sh">sh</button><button class="btn-initial" data-s="r">r</button>
+<button class="btn-initial" data-s="z">z</button><button class="btn-initial" data-s="c">c</button><button class="btn-initial" data-s="s">s</button><div></div>
+<button class="btn-initial" data-s="y">y</button><button class="btn-initial" data-s="w">w</button><div></div><div></div>
+</div></div>
+<div class="footer-in-section">
+<div>Email: wenzhannguyen@gmail.com</div>
+<div><strong>DỄ DÀNG TỰ TIN CHINH PHỤC MỤC TIÊU HOA NGỮ</strong></div>
+<div><strong>NƠI ĐÀO TẠO TIẾNG TRUNG MỌI GIÁO TRÌNH</strong></div>
+</div>
+</div>
+<div class="section">
+<div class="section-title">Nguyên Âm 韵母</div>
+<div class="buttons-area"><div class="finals-grid">
+<div></div><button class="btn-final" data-s="i">i</button><button class="btn-final" data-s="u">u</button><button class="btn-final" data-s="ü">ü</button>
+<button class="btn-final" data-s="a">a</button><button class="btn-final" data-s="ia">ia</button><button class="btn-final" data-s="ua">ua</button><div></div>
+<button class="btn-final" data-s="o">o</button><div></div><button class="btn-final" data-s="uo">uo</button><div></div>
+<button class="btn-final" data-s="e">e</button><button class="btn-final" data-s="ie">ie</button><div></div><button class="btn-final" data-s="üe">üe</button>
+<button class="btn-final" data-s="ai">ai</button><div></div><button class="btn-final" data-s="uai">uai</button><div></div>
+<button class="btn-final" data-s="ei">ei</button><div></div><button class="btn-final" data-s="ui">ui</button><div></div>
+<button class="btn-final" data-s="ao">ao</button><button class="btn-final" data-s="iao">iao</button><div></div><div></div>
+<button class="btn-final" data-s="ou">ou</button><button class="btn-final" data-s="iu">iu</button><div></div><div></div>
+<button class="btn-final" data-s="an">an</button><button class="btn-final" data-s="ian">ian</button><button class="btn-final" data-s="uan">uan</button><button class="btn-final" data-s="üan">üan</button>
+<button class="btn-final" data-s="en">en</button><button class="btn-final" data-s="in">in</button><button class="btn-final" data-s="un">un</button><button class="btn-final" data-s="ün">ün</button>
+<button class="btn-final" data-s="ang">ang</button><button class="btn-final" data-s="iang">iang</button><button class="btn-final" data-s="uang">uang</button><div></div>
+<button class="btn-final" data-s="eng">eng</button><button class="btn-final" data-s="ing">ing</button><button class="btn-final" data-s="ueng">ueng</button><div></div>
+<button class="btn-final" data-s="ong">ong</button><button class="btn-final" data-s="iong">iong</button><div></div><div></div>
+<button class="btn-final" data-s="er">er</button><div></div><div></div><div></div>
+</div></div>
+</div>
+<div class="section">
+<div class="section-title">Thanh Điệu 声调</div>
+<div class="tone-buttons">
+<button class="tone-btn" data-t="1" title="Bình">¯</button><button class="tone-btn" data-t="2" title="Tảng">´</button><button class="tone-btn" data-t="3" title="Huyền">ˇ</button><button class="tone-btn" data-t="4" title="Hỏi">ˋ</button><button class="tone-btn" data-t="5" title="Nhẹ">·</button>
+</div>
+<div class="info-box">
+<p>Âm tiết hoàn chỉnh:</p>
+<div class="output-text" id="out">p</div>
+<div class="website-area">
+<a href="https://giasuhoangutanan.com" target="_blank" rel="noopener noreferrer">🌐 giasuhoangutanan.com</a>
+</div>
+<div class="copyright-info" style="margin-top:0.5vh;padding:0.5vw;background:linear-gradient(135deg,rgba(30,64,175,0.1),rgba(30,58,138,0.1));border:0.1vw solid rgba(147,197,253,0.4);border-radius:0.3vw;text-align:center;font-size:0.85vw;color:#1e40af;line-height:1.5;">
+<div style="font-weight:bold;font-size:0.9vw;">© Bản quyền thuộc về Gia Sư Hoa Ngữ Tân An</div>
+<div>Người viết: Nguyễn Văn Chiến</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+const AUDIO_BASE="https://raw.githubusercontent.com/davinfifield/mp3-chinese-pinyin-sound/master/mp3/";
+const validCombinations={"b":["a","o","ai","ei","ao","an","en","ang","eng","i","iao","ie","ian","in","ing","u"],"p":["a","o","ai","ei","ao","an","en","ang","eng","i","iao","ie","ian","in","ing","u"],"m":["a","o","e","ai","ei","ao","ou","an","en","ang","eng","i","iao","ie","iu","ian","in","ing","u"],"f":["a","o","ei","ou","an","en","ang","eng","u"],"d":["a","e","ai","ei","ao","ou","an","en","ang","eng","ong","i","iao","ie","iu","ian","ing","u","uo","ui","uan","un"],"t":["a","e","ai","ao","ou","an","en","ang","eng","ong","i","iao","ie","ian","ing","u","uo","ui","uan","un"],"n":["a","e","ai","ei","ao","ou","an","en","ang","eng","ong","i","iao","ie","iu","ian","in","iang","ing","u","uo","uan","ü","üe"],"l":["a","e","ai","ei","ao","ou","an","ang","eng","ong","i","ia","iao","ie","iu","ian","in","iang","ing","u","uo","uan","un","ü","üe"],"g":["a","e","ai","ei","ao","ou","an","en","ang","eng","ong","u","ua","uo","uai","ui","uan","un","uang"],"k":["a","e","ai","ei","ao","ou","an","en","ang","eng","ong","u","ua","uo","uai","ui","uan","un","uang"],"h":["a","e","ai","ei","ao","ou","an","en","ang","eng","ong","u","ua","uo","uai","ui","uan","un","uang"],"j":["i","ia","iao","ie","iu","ian","in","iang","ing","iong","ü","üe","üan","ün"],"q":["i","ia","iao","ie","iu","ian","in","iang","ing","iong","ü","üe","üan","ün"],"x":["i","ia","iao","ie","iu","ian","in","iang","ing","iong","ü","üe","üan","ün"],"y":["i","a","ao","e","ou","an","in","ang","ing","ong","ü","üe","üan","ün"],"zh":["a","e","ai","ei","ao","ou","an","en","ang","eng","ong","i","u","ua","uo","uai","ui","uan","un","uang"],"ch":["a","e","ai","ao","ou","an","en","ang","eng","ong","i","u","ua","uo","uai","ui","uan","un","uang"],"sh":["a","e","ai","ao","ou","an","en","ang","eng","i","u","ua","uo","uai","ui","uan","un","uang"],"r":["e","ao","ou","an","en","ang","eng","ong","i","u","uo","ui","uan","un"],"z":["a","e","ai","ei","ao","ou","an","en","ang","eng","ong","i","u","uo","ui","uan","un"],"c":["a","e","ai","ao","ou","an","en","ang","eng","ong","i","u","uo","ui","uan","un"],"s":["a","e","ai","ao","ou","an","en","ang","eng","ong","i","u","uo","ui","uan","un"],"w":["u","a","o","ai","ei","an","en","ang","eng"]};
+const jqxy=['j','q','x','y'];
+let si='p',sf='',st=0,ac=null,currentAudio=null;
+const tm={a:['ā','á','ǎ','à','a'],e:['ē','é','ě','è','e'],i:['ī','í','ǐ','ì','i'],o:['ō','ó','ǒ','ò','o'],u:['ū','ú','ǔ','ù','u'],ü:['ǖ','ǘ','ǚ','ǜ','ü']};
+
+function fmv(s){const v=['a','o','e','i','u','ü'];for(let x of v)if(s.includes(x))return x;return null}
+function atp(i,f,t){
+if(t===0||t===5)return i+f;
+let s=i+f;
+if(jqxy.includes(i)&&f.startsWith('ü')){s=i+f.replace('ü','u');}
+let m=fmv(s);
+if(m&&tm[m])return s.replace(m,tm[m][t-1]);
+return s;
+}
+
+function ps(f,d){try{if(!ac)ac=new(window.AudioContext||webkitAudioContext)();if(ac.state==='suspended')ac.resume();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.setValueAtTime(f,ac.currentTime);g.gain.setValueAtTime(0.15,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ac.currentTime+d);o.start(ac.currentTime);o.stop(ac.currentTime+d)}catch(e){}}
+
+function playAudio(url){
+try{if(currentAudio){currentAudio.pause();currentAudio=null}currentAudio=new Audio(url);currentAudio.play().catch(e=>{})}catch(e){}}
+
+function getInitialAudio(initial){
+const map={b:"bo",p:"po",m:"mo",f:"fo",d:"de",t:"te",n:"ne",l:"le",g:"ge",k:"ke",h:"he",j:"ji",q:"qi",x:"xi",zh:"zhe",ch:"che",sh:"she",r:"re",z:"ze",c:"ce",s:"se",y:"yi",w:"wu"};
+return map[initial]||initial;
+}
+
+function getFinalAudio(final){
+const map={a:"a",o:"o",e:"e",er:"er",ai:"ai",ei:"ei",ao:"ao",ou:"ou",an:"an",en:"en",ang:"ang",eng:"eng",ong:"weng",i:"yi",ia:"ya",iao:"yao",ie:"ye",iu:"you",ian:"yan",in:"yin",iang:"yang",ing:"ying",iong:"yong",u:"wu",ua:"wa",uo:"wo",uai:"wai",ui:"wei",uan:"wan",un:"wen",uang:"wang",ueng:"weng",ü:"yu",üe:"yue",üan:"yuan",ün:"yun"};
+return map[final]||final;
+}
+
+function getSyllableAudio(initial,final,tone){
+let f=final;
+if(jqxy.includes(initial)&&f.startsWith('ü'))f=f.replace('ü','u');
+if(initial==='y'){
+if(f==='i')return"yi"+tone;
+if(f==='a')return"ya"+tone;
+if(f==='ao')return"yao"+tone;
+if(f==='e')return"ye"+tone;
+if(f==='ou')return"you"+tone;
+if(f==='an')return"yan"+tone;
+if(f==='in')return"yin"+tone;
+if(f==='ang')return"yang"+tone;
+if(f==='ing')return"ying"+tone;
+if(f==='ong')return"yong"+tone;
+if(f==='ü')return"yu"+tone;
+if(f==='üe')return"yue"+tone;
+if(f==='üan')return"yuan"+tone;
+if(f==='ün')return"yun"+tone;
+}
+if(initial==='w'){
+if(f==='u')return"wu"+tone;
+if(f==='a')return"wa"+tone;
+if(f==='o')return"wo"+tone;
+if(f==='ai')return"wai"+tone;
+if(f==='ei')return"wei"+tone;
+if(f==='an')return"wan"+tone;
+if(f==='en')return"wen"+tone;
+if(f==='ang')return"wang"+tone;
+if(f==='eng')return"weng"+tone;
+}
+return initial+f+tone;
+}
+
+function uo(){const o=document.getElementById('out');let t='';if(si||sf)t=atp(si,sf,st);if(!t)t='p';o.textContent=t}
+function updateFinalsState(initial){const validFinals=validCombinations[initial]||[];document.querySelectorAll('.btn-final').forEach(btn=>{const final=btn.dataset.s;btn.classList.remove('valid','invalid','active');if(!final)return;if(validFinals.includes(final)){btn.classList.add('valid')}else{btn.classList.add('invalid')}})}
+function updateTonesState(){document.querySelectorAll('.tone-btn').forEach(btn=>{btn.classList.add('valid');btn.classList.remove('active')})}
+function resetAllStates(){document.querySelectorAll('.btn-initial').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.btn-final').forEach(b=>b.classList.remove('valid','invalid','active'));document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('valid','active'))}
+
+document.addEventListener('click',function(e){
+const b=e.target.closest('.btn-initial');
+if(b&&b.dataset.s){
+const initial=b.dataset.s;si=initial;sf='';st=0;
+resetAllStates();
+b.classList.add('active');
+updateFinalsState(initial);
+updateTonesState();
+const audioFile=getInitialAudio(initial)+"1";
+playAudio(AUDIO_BASE+audioFile+".mp3");
+ps(300+Math.random()*100,0.3);
+uo();
+return}
+const fb=e.target.closest('.btn-final');
+if(fb&&fb.dataset.s){
+if(fb.classList.contains('invalid'))return;
+sf=fb.dataset.s;ps(500+Math.random()*200,0.4);
+document.querySelectorAll('.btn-final.active').forEach(btn=>btn.classList.remove('active'));
+fb.classList.add('active');
+const audioFile=getFinalAudio(sf)+"1";
+playAudio(AUDIO_BASE+audioFile+".mp3");
+uo();
+return}
+const t=e.target.closest('.tone-btn');
+if(t&&t.dataset.t){
+st=parseInt(t.dataset.t);const ts={1:{f:523},2:{f:440},3:{f:349},4:{f:659},5:{f:392}};const x=ts[st];ps(x.f,0.6);
+document.querySelectorAll('.tone-btn.active').forEach(btn=>btn.classList.remove('active'));
+t.classList.add('active');
+if(si&&sf){
+const audioFile=getSyllableAudio(si,sf,st);
+playAudio(AUDIO_BASE+audioFile+".mp3");
+}
+uo();
+return}
+});
+</script>
+</body>
+</html>
