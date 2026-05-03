@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#667eea">
+    <title>Luyện viết chữ Hán - GIA SƯ HOA NGỮ TÂN AN</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 10px;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: max(10px, env(safe-area-inset-left));
+            padding-right: max(10px, env(safe-area-inset-right));
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 100%;
+            width: 100%;
+            margin: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 640px) {
+            .container {
+                max-width: 600px;
+                padding: 30px;
+                border-radius: 20px;
+            }
+        }
+
+        .header-info {
+            text-align: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .logo-display {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 3px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: white;
+            padding: 5px;
+            transition: transform 0.2s;
+            display: block;
+        }
+
+        @media (min-width: 640px) {
+            .logo-display {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        .logo-display:active {
+            transform: scale(0.95);
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .upload-btn:active {
+            background: #5a67d8;
+            transform: scale(0.9);
+        }
+
+        .center-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 6px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+
+        @media (min-width: 640px) {
+            .center-name {
+                font-size: 22px;
+            }
+        }
+
+        .center-name:active {
+            background: #f0f0f0;
+        }
+
+        .center-name[contenteditable="true"]:focus {
+            outline: 2px solid #667eea;
+            background: #f8f9fa;
+        }
+
+        .center-address {
+            font-size: 13px;
+            color: #718096;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            display: inline-block;
+            max-width: 100%;
+            word-break: break-word;
+        }
+
+        @media (min-width: 640px) {
+            .center-address {
+                font-size: 14px;
+            }
+        }
+
+        .center-address:active {
+            background: #f0f0f0;
+        }
+
+        .center-address[contenteditable="true"]:focus {
+            outline: 2px solid #667eea;
+            background: #f8f9fa;
+        }
+
+        .edit-hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* START SCREEN STYLES */
+        #start-screen {
+            text-align: center;
+            padding: 20px 10px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .start-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(102, 126, 234, 0.1);
+        }
+
+        @media (min-width: 640px) {
+            .start-title {
+                font-size: 36px;
+            }
+        }
+
+        .start-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .start-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .feature-text strong {
+            display: block;
+            color: #667eea;
+            margin-bottom: 2px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .start-btn:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .start-btn::before {
+            content: "▶";
+            font-size: 16px;
+        }
+
+        .word-count {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .progress {
+            text-align: center;
+            color: #666;
+            margin-bottom: 16px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .hint-box {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            position: relative;
+            touch-action: pan-y;
+        }
+
+        .sound-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .sound-btn:active {
+            background: #5a67d8;
+            transform: scale(0.9);
+        }
+
+        .sound-btn.playing {
+            animation: pulse 1s infinite;
+            background: #e74c3c;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .pinyin {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        @media (min-width: 640px) {
+            .pinyin {
+                font-size: 28px;
+            }
+        }
+
+        .meaning {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.4;
+            padding: 0 40px 0 0;
+        }
+
+        @media (min-width: 640px) {
+            .meaning {
+                font-size: 18px;
+            }
+        }
+
+        .input-area {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        #hanzi-input {
+            width: 100%;
+            padding: 16px;
+            font-size: 32px;
+            text-align: center;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            font-family: 'SimSun', 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+            outline: none;
+            transition: all 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+            background: white;
+        }
+
+        @media (min-width: 640px) {
+            #hanzi-input {
+                font-size: 36px;
+                padding: 20px;
+            }
+        }
+
+        #hanzi-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #hanzi-input.error {
+            border-color: #e74c3c;
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .message {
+            text-align: center;
+            min-height: 24px;
+            margin-bottom: 16px;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 640px) {
+            .message {
+                font-size: 16px;
+                min-height: 30px;
+            }
+        }
+
+        .message.success { color: #27ae60; }
+        .message.error { color: #e74c3c; }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+            flex: 1;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 640px) {
+            button {
+                padding: 14px 24px;
+                font-size: 16px;
+            }
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        button:active::after {
+            width: 200px;
+            height: 200px;
+        }
+
+        .check-btn {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .check-btn:active {
+            background: #5a67d8;
+        }
+
+        .stop-btn {
+            background: #e74c3c;
+            color: white;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .stop-btn:active {
+            background: #c0392b;
+        }
+
+        .report { display: none; }
+        .report.show { display: block; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        @media (min-width: 640px) {
+            .stats {
+                gap: 15px;
+            }
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        @media (min-width: 640px) {
+            .stat-box {
+                padding: 15px;
+            }
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 640px) {
+            .stat-value {
+                font-size: 28px;
+            }
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        @media (min-width: 640px) {
+            .stat-label {
+                font-size: 14px;
+            }
+        }
+
+        .wrong-list {
+            max-height: 50vh;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .wrong-item {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .wrong-item:last-child { border-bottom: none; }
+
+        .wrong-hanzi {
+            font-size: 28px;
+            font-family: 'SimSun', 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+            color: #e74c3c;
+        }
+
+        .wrong-info {
+            text-align: right;
+            color: #666;
+            font-size: 13px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        @media (min-width: 640px) {
+            .wrong-info {
+                font-size: 14px;
+            }
+        }
+
+        h2 { 
+            text-align: center; 
+            margin-bottom: 16px; 
+            color: #333; 
+            font-size: 20px;
+        }
+
+        @media (min-width: 640px) {
+            h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+        }
+
+        h3 { 
+            color: #333; 
+            font-size: 15px; 
+            margin-bottom: 10px;
+        }
+
+        @media (min-width: 640px) {
+            h3 {
+                font-size: 16px;
+            }
+        }
+
+        .tts-status {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+            font-style: italic;
+            min-height: 16px;
+        }
+
+        #logo-input {
+            display: none;
+        }
+
+        /* Prevent text zoom on orientation change */
+        @media screen and (max-width: 768px) {
+            html {
+                -webkit-text-size-adjust: 100%;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <div class="header-info">
+            <div class="logo-container">
+                <img class="logo-display" id="logo-img" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzY2N2VlYSIgcng9IjEyIi8+CiAgPHRleHQgeD0iNjAiIHk9IjY1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5ixPC90ZXh0PgogIDx0ZXh0IHg9IjYwIiB5PSIxMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdIQVRBPC90ZXh0Pgo8L3N2Zz4=" alt="Logo">
+                <button class="upload-btn" onclick="document.getElementById('logo-input').click()" title="Tải logo mới" aria-label="Tải logo mới">📷</button>
+                <input type="file" id="logo-input" accept="image/*" onchange="updateLogo(this)">
+            </div>
+            <div class="center-name" id="center-name" contenteditable="false" onclick="enableEdit(this)">GIA SƯ HOA NGỮ TÂN AN</div>
+            <div class="center-address" id="center-address" contenteditable="false" onclick="enableEdit(this)">9/1 BẠCH VĂN TƯ, TÂN AN, LONG AN</div>
+            <div class="edit-hint">💡 Chạm vào để chỉnh sửa</div>
+        </div>
+
+        <!-- START SCREEN -->
+        <div id="start-screen">
+            <h1 class="start-title">Luyện viết chữ Hán</h1>
+            <p class="start-subtitle">Kiểm tra khả năng nhớ chữ Hán của bạn qua phiên âm và nghĩa tiếng Việt</p>
+            
+            <div class="start-features">
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <div class="feature-text">
+                        <strong>600 từ vựng HSK</strong>
+                        Đầy đủ phiên âm Pinyin và nghĩa tiếng Việt
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔊</span>
+                    <div class="feature-text">
+                        <strong>Nghe phát âm</strong>
+                        Hỗ trợ phát âm chuẩn bản ngữ
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <div class="feature-text">
+                        <strong>Báo cáo chi tiết</strong>
+                        Thống kê kết quả và các từ làm sai
+                    </div>
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startQuiz()">Bắt đầu làm bài</button>
+            <div class="word-count">Tổng cộng 600 từ vựng</div>
+        </div>
+
+        <div id="quiz-area" style="display: none;">
+            <div class="progress">Câu <span id="current-num">1</span> / <span id="total-num">600</span></div>
+            
+            <div class="hint-box">
+                <button class="sound-btn" onclick="replayAudio()" title="Nghe lại" aria-label="Nghe lại phát âm">🔊</button>
+                <div class="pinyin" id="pinyin-hint"></div>
+                <div class="meaning" id="meaning-hint"></div>
+                <div class="tts-status" id="tts-status"></div>
+            </div>
+            
+            <div class="input-area">
+                <input type="text" id="hanzi-input" placeholder="Nhập chữ Hán..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+            </div>
+            
+            <div class="message" id="message"></div>
+            
+            <div class="controls">
+                <button class="check-btn" onclick="checkAnswer()" ontouchstart="">Kiểm tra</button>
+                <button class="stop-btn" onclick="stopQuiz()" ontouchstart="">Dừng bài</button>
+            </div>
+        </div>
+
+        <div id="report-area" class="report">
+            <h2>Báo cáo kết quả</h2>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="total-stat">0</div>
+                    <div class="stat-label">Tổng số câu</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="correct-stat">0</div>
+                    <div class="stat-label">Số đúng</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="wrong-stat">0</div>
+                    <div class="stat-label">Số sai</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="percent-stat">0%</div>
+                    <div class="stat-label">Tỉ lệ %</div>
+                </div>
+            </div>
+            
+            <h3>Các từ làm sai:</h3>
+            <div class="wrong-list" id="wrong-list"></div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="check-btn" onclick="location.reload()" ontouchstart="" style="min-width: 200px;">Làm lại</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logo mặc định
+        const defaultLogo = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzY2N2VlYSIgcng9IjEyIi8+CiAgPHRleHQgeD0iNjAiIHk9IjY1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7wn5ixPC90ZXh0PgogIDx0ZXh0IHg9IjYwIiB5PSIxMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdIQVRBPC90ZXh0Pgo8L3N2Zz4=";
+
+        function updateLogo(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('logo-img').src = e.target.result;
+                    localStorage.setItem('customLogo', e.target.result);
+                    // Haptic feedback nếu có
+                    if (navigator.vibrate) navigator.vibrate(50);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function enableEdit(element) {
+            element.contentEditable = true;
+            element.focus();
+            
+            // Chọn toàn bộ text
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            
+            // Lưu khi blur
+            element.onblur = function() {
+                element.contentEditable = false;
+                localStorage.setItem(element.id, element.textContent);
+                if (navigator.vibrate) navigator.vibrate(30);
+            };
+            
+            // Lưu khi nhấn Enter
+            element.onkeydown = function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    element.blur();
+                }
+            };
+        }
+
+        // Khôi phục dữ liệu đã lưu
+        window.onload = function() {
+            const savedLogo = localStorage.getItem('customLogo');
+            if (savedLogo) {
+                document.getElementById('logo-img').src = savedLogo;
+            }
+            
+            const savedName = localStorage.getItem('center-name');
+            if (savedName) {
+                document.getElementById('center-name').textContent = savedName;
+            }
+            
+            const savedAddress = localStorage.getItem('center-address');
+            if (savedAddress) {
+                document.getElementById('center-address').textContent = savedAddress;
+            }
+        };
+
+        const wordList = [{"hanzi":"阿姨","pinyin":"āyí","meaning":"Dì, cô, bác gái (vợ của cậu, chú, bác trai)"},{"hanzi":"啊","pinyin":"a","meaning":"À, ơ, nhỉ (trợ từ cảm thán)"},{"hanzi":"矮","pinyin":"ǎi","meaning":"Thấp (chiều cao)"},{"hanzi":"爱","pinyin":"ài","meaning":"Yêu, thích"},{"hanzi":"爱好","pinyin":"àihào","meaning":"Sở thích"},{"hanzi":"安静","pinyin":"ānjìng","meaning":"Yên tĩnh, trật tự"},{"hanzi":"八","pinyin":"bā","meaning":"Số 8"},{"hanzi":"把","pinyin":"bǎ","meaning":"Cầm, nắm (giới từ)"},{"hanzi":"爸爸","pinyin":"bàba","meaning":"Bố, ba"},{"hanzi":"吧","pinyin":"ba","meaning":"Nhé, đi, thôi (ngữ khí)"},{"hanzi":"白","pinyin":"bái","meaning":"Màu trắng"},{"hanzi":"百","pinyin":"bǎi","meaning":"Trăm"},{"hanzi":"班","pinyin":"bān","meaning":"Lớp học, ca làm"},{"hanzi":"搬","pinyin":"bān","meaning":"Chuyển, dọn (nhà)"},{"hanzi":"半","pinyin":"bàn","meaning":"Một nửa, rưỡi"},{"hanzi":"办法","pinyin":"bànfǎ","meaning":"Biện pháp, cách"},{"hanzi":"办公室","pinyin":"bàngōngshì","meaning":"Văn phòng làm việc"},{"hanzi":"帮忙","pinyin":"bāngmáng","meaning":"Giúp đỡ, giúp một tay"},{"hanzi":"帮助","pinyin":"bāngzhù","meaning":"Giúp đỡ"},{"hanzi":"包","pinyin":"bāo","meaning":"Cái túi, cái cặp"},{"hanzi":"饱","pinyin":"bǎo","meaning":"No (ăn no)"},{"hanzi":"报纸","pinyin":"bàozhǐ","meaning":"Báo giấy"},{"hanzi":"杯子","pinyin":"bēizi","meaning":"Cái ly, cái chén"},{"hanzi":"北方","pinyin":"běifāng","meaning":"Phương Bắc"},{"hanzi":"北京","pinyin":"Běijīng","meaning":"Bắc Kinh (thủ đô TQ)"},{"hanzi":"被","pinyin":"bèi","meaning":"Bị (cấu trúc bị động)"},{"hanzi":"本","pinyin":"běn","meaning":"Quyển, cuốn (sách)"},{"hanzi":"鼻子","pinyin":"bízi","meaning":"Cái mũi"},{"hanzi":"比","pinyin":"bǐ","meaning":"Hơn, so với"},{"hanzi":"比较","pinyin":"bǐjiào","meaning":"Tương đối, khá là"},{"hanzi":"比赛","pinyin":"bǐsài","meaning":"Cuộc thi, trận đấu"},{"hanzi":"必须","pinyin":"bìxū","meaning":"Phải, nhất thiết"},{"hanzi":"变化","pinyin":"biànhuà","meaning":"Thay đổi, biến đổi"},{"hanzi":"表示","pinyin":"biǎoshì","meaning":"Biểu thị, biểu đạt"},{"hanzi":"表演","pinyin":"biǎoyǎn","meaning":"Biểu diễn"},{"hanzi":"别","pinyin":"bié","meaning":"Đừng"},{"hanzi":"别人","pinyin":"biérén","meaning":"Người khác"},{"hanzi":"宾馆","pinyin":"bīnguǎn","meaning":"Khách sạn, nhà trọ"},{"hanzi":"冰箱","pinyin":"bīngxiāng","meaning":"Tủ lạnh"},{"hanzi":"不客气","pinyin":"bú kèqi","meaning":"Khách sáo (không)"},{"hanzi":"不","pinyin":"bù","meaning":"Không"},{"hanzi":"才","pinyin":"cái","meaning":"Mới (chỉ chậm)"},{"hanzi":"菜","pinyin":"cài","meaning":"Rau, món ăn"},{"hanzi":"菜单","pinyin":"càidān","meaning":"Thực đơn"},{"hanzi":"参加","pinyin":"cānjiā","meaning":"Tham gia, dự"},{"hanzi":"草","pinyin":"cǎo","meaning":"Cỏ"},{"hanzi":"层","pinyin":"céng","meaning":"Tầng, lớp"},{"hanzi":"茶","pinyin":"chá","meaning":"Trà"},{"hanzi":"差","pinyin":"chà","meaning":"Kém, tệ"},{"hanzi":"长","pinyin":"cháng","meaning":"Dài"},{"hanzi":"唱歌","pinyin":"chànggē","meaning":"Hát"},{"hanzi":"超市","pinyin":"chāoshì","meaning":"Siêu thị"},{"hanzi":"衬衫","pinyin":"chènshān","meaning":"Áo sơ mi"},{"hanzi":"成绩","pinyin":"chéngjì","meaning":"Thành tích, điểm số"},{"hanzi":"城市","pinyin":"chéngshì","meaning":"Thành phố"},{"hanzi":"吃","pinyin":"chī","meaning":"Ăn"},{"hanzi":"迟到","pinyin":"chídào","meaning":"Đi trễ, muộn"},{"hanzi":"出","pinyin":"chū","meaning":"Ra, đi ra"},{"hanzi":"出现","pinyin":"chūxiàn","meaning":"Xuất hiện"},{"hanzi":"出租车","pinyin":"chūzūchē","meaning":"Xe taxi"},{"hanzi":"厨房","pinyin":"chúfáng","meaning":"Nhà bếp"},{"hanzi":"除了","pinyin":"chúle","meaning":"Ngoài... ra"},{"hanzi":"穿","pinyin":"chuān","meaning":"Mặc (quần áo)"},{"hanzi":"船","pinyin":"chuán","meaning":"Thuyền, tàu"},{"hanzi":"春","pinyin":"chūn","meaning":"Mùa xuân"},{"hanzi":"词语","pinyin":"cíyǔ","meaning":"Từ ngữ"},{"hanzi":"次","pinyin":"cì","meaning":"Lần (số lần)"},{"hanzi":"聪明","pinyin":"cōngming","meaning":"Thông minh"},{"hanzi":"从","pinyin":"cóng","meaning":"Từ"},{"hanzi":"错","pinyin":"cuò","meaning":"Sai"},{"hanzi":"打电话","pinyin":"dǎ diànhuà","meaning":"Gọi điện thoại"},{"hanzi":"打篮球","pinyin":"dǎ lánqiú","meaning":"Chơi bóng rổ"},{"hanzi":"打扫","pinyin":"dǎsǎo","meaning":"Quét dọn, lau chùi"},{"hanzi":"打算","pinyin":"dǎsuàn","meaning":"Dự định, định"},{"hanzi":"大","pinyin":"dà","meaning":"To, lớn"},{"hanzi":"大家","pinyin":"dàjiā","meaning":"Mọi người"},{"hanzi":"带","pinyin":"dài","meaning":"Mang, dẫn theo"},{"hanzi":"担心","pinyin":"dānxīn","meaning":"Lo lắng"},{"hanzi":"蛋糕","pinyin":"dàngāo","meaning":"Bánh ngọt, bánh kem"},{"hanzi":"但是","pinyin":"dànshì","meaning":"Nhưng"},{"hanzi":"当然","pinyin":"dāngrán","meaning":"Tất nhiên, đương nhiên"},{"hanzi":"到","pinyin":"dào","meaning":"Đến, tới"},{"hanzi":"地","pinyin":"de","meaning":"Trợ từ trạng ngữ"},{"hanzi":"的","pinyin":"de","meaning":"Của (sở hữu)"},{"hanzi":"得","pinyin":"de","meaning":"Trợ từ bổ ngữ"},{"hanzi":"灯","pinyin":"dēng","meaning":"Đèn"},{"hanzi":"等","pinyin":"děng","meaning":"Chờ, đợi"},{"hanzi":"低","pinyin":"dī","meaning":"Thấp (không cao)"},{"hanzi":"弟弟","pinyin":"dìdi","meaning":"Em trai"},{"hanzi":"地方","pinyin":"dìfang","meaning":"Địa phương, chỗ"},{"hanzi":"地铁","pinyin":"dìtiě","meaning":"Tàu điện ngầm"},{"hanzi":"地图","pinyin":"dìtú","meaning":"Bản đồ"},{"hanzi":"第一","pinyin":"dì-yī","meaning":"Thứ nhất"},{"hanzi":"点","pinyin":"diǎn","meaning":"Giờ (1 giờ = 1 điểm)"},{"hanzi":"电脑","pinyin":"diànnǎo","meaning":"Máy tính"},{"hanzi":"电视","pinyin":"diànshì","meaning":"Ti vi"},{"hanzi":"电梯","pinyin":"diàntī","meaning":"Thang máy"},{"hanzi":"电影","pinyin":"diànyǐng","meaning":"Phim điện ảnh"},{"hanzi":"电子邮件","pinyin":"diànzǐ yóujiàn","meaning":"Email, thư điện tử"},{"hanzi":"东","pinyin":"dōng","meaning":"Đông"},{"hanzi":"东西","pinyin":"dōngxi","meaning":"Đồ vật, thứ gì đó"},{"hanzi":"冬","pinyin":"dōng","meaning":"Mùa đông"},{"hanzi":"懂","pinyin":"dǒng","meaning":"Hiểu"},{"hanzi":"动物","pinyin":"dòngwù","meaning":"Động vật"},{"hanzi":"都","pinyin":"dōu","meaning":"Đều"},{"hanzi":"读","pinyin":"dú","meaning":"Đọc"},{"hanzi":"短","pinyin":"duǎn","meaning":"Ngắn"},{"hanzi":"段","pinyin":"duàn","meaning":"Đoạn"},{"hanzi":"锻炼","pinyin":"duànliàn","meaning":"Rèn luyện, tập thể dục"},{"hanzi":"对","pinyin":"duì","meaning":"Đúng"},{"hanzi":"对不起","pinyin":"duìbuqǐ","meaning":"Xin lỗi"},{"hanzi":"多","pinyin":"duō","meaning":"Nhiều"},{"hanzi":"多么","pinyin":"duōme","meaning":"Thật là, biết bao (cảm thán)"},{"hanzi":"多少","pinyin":"duōshao","meaning":"Bao nhiêu"},{"hanzi":"饿","pinyin":"è","meaning":"Đói"},{"hanzi":"而且","pinyin":"érqiě","meaning":"Hơn nữa, vả lại"},{"hanzi":"儿子","pinyin":"érzi","meaning":"Con trai"},{"hanzi":"耳朵","pinyin":"ěrduo","meaning":"Cái tai"},{"hanzi":"二","pinyin":"èr","meaning":"Số 2"},{"hanzi":"发烧","pinyin":"fāshāo","meaning":"Sốt"},{"hanzi":"发现","pinyin":"fāxiàn","meaning":"Phát hiện"},{"hanzi":"饭馆","pinyin":"fànguǎn","meaning":"Quán ăn, nhà hàng"},{"hanzi":"方便","pinyin":"fāngbiàn","meaning":"Thuận tiện"},{"hanzi":"房间","pinyin":"fángjiān","meaning":"Căn phòng"},{"hanzi":"放","pinyin":"fàng","meaning":"Đặt, thả, để"},{"hanzi":"放心","pinyin":"fàngxīn","meaning":"Yên tâm"},{"hanzi":"非常","pinyin":"fēicháng","meaning":"Rất, vô cùng"},{"hanzi":"飞机","pinyin":"fēijī","meaning":"Máy bay"},{"hanzi":"分","pinyin":"fēn","meaning":"Phút"},{"hanzi":"分钟","pinyin":"fēnzhōng","meaning":"Phút (đơn vị)"},{"hanzi":"服务员","pinyin":"fúwùyuán","meaning":"Nhân viên phục vụ"},{"hanzi":"附近","pinyin":"fùjìn","meaning":"Gần đây, lân cận"},{"hanzi":"复习","pinyin":"fùxí","meaning":"Ôn tập"},{"hanzi":"干净","pinyin":"gānjìng","meaning":"Sạch sẽ"},{"hanzi":"敢","pinyin":"gǎn","meaning":"Dám"},{"hanzi":"感冒","pinyin":"gǎnmào","meaning":"Cảm, cúm"},{"hanzi":"刚才","pinyin":"gāngcái","meaning":"Vừa rồi, nãy giờ"},{"hanzi":"高","pinyin":"gāo","meaning":"Cao"},{"hanzi":"高兴","pinyin":"gāoxìng","meaning":"Vui vẻ, vui mừng"},{"hanzi":"告诉","pinyin":"gàosu","meaning":"Nói cho biết, báo cho biết"},{"hanzi":"哥哥","pinyin":"gēge","meaning":"Anh trai"},{"hanzi":"个","pinyin":"ge","meaning":"Cái, người (lượng từ chung)"},{"hanzi":"给","pinyin":"gěi","meaning":"Cho, tặng"},{"hanzi":"跟","pinyin":"gēn","meaning":"Với, cùng"},{"hanzi":"根据","pinyin":"gēnjù","meaning":"Căn cứ vào, theo"},{"hanzi":"更","pinyin":"gèng","meaning":"Hơn (so sánh hơn)"},{"hanzi":"公共汽车","pinyin":"gōnggòngqìchē","meaning":"Xe buýt"},{"hanzi":"公斤","pinyin":"gōngjīn","meaning":"Kilogram"},{"hanzi":"公司","pinyin":"gōngsī","meaning":"Công ty"},{"hanzi":"公园","pinyin":"gōngyuán","meaning":"Công viên"},{"hanzi":"工作","pinyin":"gōngzuò","meaning":"Công việc"},{"hanzi":"狗","pinyin":"gǒu","meaning":"Con chó"},{"hanzi":"故事","pinyin":"gùshi","meaning":"Câu chuyện"},{"hanzi":"刮风","pinyin":"guā fēng","meaning":"Có gió, thổi gió"},{"hanzi":"关","pinyin":"guān","meaning":"Đóng, tắt"},{"hanzi":"关系","pinyin":"guānxì","meaning":"Quan hệ"},{"hanzi":"关心","pinyin":"guānxīn","meaning":"Quan tâm"},{"hanzi":"关于","pinyin":"guānyú","meaning":"Về, liên quan đến"},{"hanzi":"贵","pinyin":"guì","meaning":"Đắt"},{"hanzi":"国家","pinyin":"guójiā","meaning":"Quốc gia"},{"hanzi":"果汁","pinyin":"guǒzhī","meaning":"Nước ép trái cây"},{"hanzi":"过去","pinyin":"guòqù","meaning":"Quá khứ"},{"hanzi":"过","pinyin":"guo","meaning":"Đã từng (trải nghiệm)"},{"hanzi":"还","pinyin":"hái","meaning":"Còn, vẫn"},{"hanzi":"还是","pinyin":"háishì","meaning":"Hay là (lựa chọn)"},{"hanzi":"孩子","pinyin":"háizi","meaning":"Đứa trẻ, con cái"},{"hanzi":"害怕","pinyin":"hàipà","meaning":"Sợ, sợ hãi"},{"hanzi":"汉语","pinyin":"Hànyǔ","meaning":"Tiếng Hán"},{"hanzi":"好","pinyin":"hǎo","meaning":"Tốt"},{"hanzi":"好吃","pinyin":"hǎochī","meaning":"Ngon"},{"hanzi":"号","pinyin":"hào","meaning":"Ngày (trong tháng)"},{"hanzi":"喝","pinyin":"hē","meaning":"Uống"},{"hanzi":"和","pinyin":"hé","meaning":"Và"},{"hanzi":"河","pinyin":"hé","meaning":"Con sông"},{"hanzi":"黑","pinyin":"hēi","meaning":"Màu đen"},{"hanzi":"黑板","pinyin":"hēibǎn","meaning":"Bảng đen"},{"hanzi":"很","pinyin":"hěn","meaning":"Rất"},{"hanzi":"红","pinyin":"hóng","meaning":"Màu đỏ"},{"hanzi":"后面","pinyin":"hòumiàn","meaning":"Phía sau"},{"hanzi":"护照","pinyin":"hùzhào","meaning":"Hộ chiếu"},{"hanzi":"花","pinyin":"huā","meaning":"Tiêu, xài (tiền)"},{"hanzi":"花园","pinyin":"huāyuán","meaning":"Vườn hoa"},{"hanzi":"画","pinyin":"huà","meaning":"Vẽ"},{"hanzi":"坏","pinyin":"huài","meaning":"Hỏng, xấu"},{"hanzi":"欢迎","pinyin":"huānyíng","meaning":"Hoan nghênh, chào đón"},{"hanzi":"还","pinyin":"huán","meaning":"Trả lại"},{"hanzi":"环境","pinyin":"huánjìng","meaning":"Môi trường"},{"hanzi":"换","pinyin":"huàn","meaning":"Đổi, thay"},{"hanzi":"黄","pinyin":"huáng","meaning":"Màu vàng"},{"hanzi":"回","pinyin":"huí","meaning":"Trở về"},{"hanzi":"回答","pinyin":"huídá","meaning":"Trả lời"},{"hanzi":"会","pinyin":"huì","meaning":"Biết, có thể (kỹ năng)"},{"hanzi":"会议","pinyin":"huìyì","meaning":"Cuộc họp"},{"hanzi":"火车站","pinyin":"huǒchēzhàn","meaning":"Ga tàu hỏa"},{"hanzi":"或者","pinyin":"huòzhě","meaning":"Hoặc"},{"hanzi":"机场","pinyin":"jīchǎng","meaning":"Sân bay"},{"hanzi":"鸡蛋","pinyin":"jīdàn","meaning":"Trứng gà"},{"hanzi":"几乎","pinyin":"jīhū","meaning":"Gần như, hầu như"},{"hanzi":"机会","pinyin":"jīhuì","meaning":"Cơ hội"},{"hanzi":"极","pinyin":"jí","meaning":"Cực kỳ"},{"hanzi":"几","pinyin":"jǐ","meaning":"Mấy, bao nhiêu"},{"hanzi":"记得","pinyin":"jìde","meaning":"Nhớ"},{"hanzi":"季节","pinyin":"jìjié","meaning":"Mùa (trong năm)"},{"hanzi":"家","pinyin":"jiā","meaning":"Nhà, gia đình"},{"hanzi":"检查","pinyin":"jiǎnchá","meaning":"Kiểm tra"},{"hanzi":"简单","pinyin":"jiǎndān","meaning":"Đơn giản"},{"hanzi":"件","pinyin":"jiàn","meaning":"Cái, chiếc (quần áo, việc)"},{"hanzi":"健康","pinyin":"jiànkāng","meaning":"Khỏe mạnh"},{"hanzi":"见面","pinyin":"jiànmiàn","meaning":"Gặp mặt"},{"hanzi":"讲","pinyin":"jiǎng","meaning":"Nói, kể, giảng"},{"hanzi":"教","pinyin":"jiāo","meaning":"Dạy"},{"hanzi":"角","pinyin":"jiǎo","meaning":"Hào (1/10 đồng)"},{"hanzi":"脚","pinyin":"jiǎo","meaning":"Cái chân"},{"hanzi":"叫","pinyin":"jiào","meaning":"Gọi, kêu"},{"hanzi":"教室","pinyin":"jiàoshì","meaning":"Lớp học, phòng học"},{"hanzi":"接","pinyin":"jiē","meaning":"Đón, tiếp nhận"},{"hanzi":"街道","pinyin":"jiēdào","meaning":"Đường phố"},{"hanzi":"结婚","pinyin":"jiéhūn","meaning":"Kết hôn"},{"hanzi":"结束","pinyin":"jiéshù","meaning":"Kết thúc"},{"hanzi":"节目","pinyin":"jiémù","meaning":"Chương trình (TV, biểu diễn)"},{"hanzi":"节日","pinyin":"jiérì","meaning":"Ngày lễ"},{"hanzi":"姐姐","pinyin":"jiějie","meaning":"Chị gái"},{"hanzi":"解决","pinyin":"jiějué","meaning":"Giải quyết"},{"hanzi":"借","pinyin":"jiè","meaning":"Mượn"},{"hanzi":"介绍","pinyin":"jièshào","meaning":"Giới thiệu"},{"hanzi":"今天","pinyin":"jīntiān","meaning":"Hôm nay"},{"hanzi":"进","pinyin":"jìn","meaning":"Vào"},{"hanzi":"近","pinyin":"jìn","meaning":"Gần"},{"hanzi":"经常","pinyin":"jīngcháng","meaning":"Thường xuyên"},{"hanzi":"经过","pinyin":"jīngguò","meaning":"Đi qua, trải qua"},{"hanzi":"经理","pinyin":"jīnglǐ","meaning":"Giám đốc, quản lý"},{"hanzi":"九","pinyin":"jiǔ","meaning":"Số 9"},{"hanzi":"久","pinyin":"jiǔ","meaning":"Lâu"},{"hanzi":"旧","pinyin":"jiù","meaning":"Cũ"},{"hanzi":"就","pinyin":"jiù","meaning":"Liền, ngay"},{"hanzi":"举行","pinyin":"jǔxíng","meaning":"Tổ chức, tiến hành"},{"hanzi":"句子","pinyin":"jùzi","meaning":"Câu (văn)"},{"hanzi":"觉得","pinyin":"juéde","meaning":"Cảm thấy, cho rằng"},{"hanzi":"决定","pinyin":"juédìng","meaning":"Quyết định"},{"hanzi":"咖啡","pinyin":"kāfēi","meaning":"Cà phê"},{"hanzi":"开","pinyin":"kāi","meaning":"Mở, lái (xe), bật"},{"hanzi":"开始","pinyin":"kāishǐ","meaning":"Bắt đầu"},{"hanzi":"看","pinyin":"kàn","meaning":"Nhìn, xem, đọc"},{"hanzi":"看见","pinyin":"kànjiàn","meaning":"Nhìn thấy"},{"hanzi":"考试","pinyin":"kǎoshì","meaning":"Kỳ thi, bài kiểm tra"},{"hanzi":"渴","pinyin":"kě","meaning":"Khát"},{"hanzi":"可爱","pinyin":"kě'ài","meaning":"Đáng yêu, dễ thương"},{"hanzi":"可能","pinyin":"kěnéng","meaning":"Có thể"},{"hanzi":"可以","pinyin":"kěyǐ","meaning":"Có thể, được phép"},{"hanzi":"刻","pinyin":"kè","meaning":"Phần tư giờ (15 phút)"},{"hanzi":"课","pinyin":"kè","meaning":"Tiết học, bài học"},{"hanzi":"客人","pinyin":"kèrén","meaning":"Khách"},{"hanzi":"空调","pinyin":"kōngtiáo","meaning":"Máy điều hòa"},{"hanzi":"口","pinyin":"kǒu","meaning":"Miệng (người), cái (đồ ăn)"},{"hanzi":"哭","pinyin":"kū","meaning":"Khóc"},{"hanzi":"裤子","pinyin":"kùzi","meaning":"Quần (tổng quát)"},{"hanzi":"块","pinyin":"kuài","meaning":"Đồng (tiền), miếng"},{"hanzi":"快","pinyin":"kuài","meaning":"Nhanh"},{"hanzi":"快乐","pinyin":"kuàilè","meaning":"Vui vẻ, hạnh phúc"},{"hanzi":"筷子","pinyin":"kuàizi","meaning":"Đũa"},{"hanzi":"来","pinyin":"lái","meaning":"Đến, tới"},{"hanzi":"蓝","pinyin":"lán","meaning":"Màu xanh da trời"},{"hanzi":"老","pinyin":"lǎo","meaning":"Già"},{"hanzi":"老师","pinyin":"lǎoshī","meaning":"Thầy/cô giáo"},{"hanzi":"了","pinyin":"le","meaning":"Đã, rồi (trợ từ)"},{"hanzi":"累","pinyin":"lèi","meaning":"Mệt"},{"hanzi":"冷","pinyin":"lěng","meaning":"Lạnh"},{"hanzi":"离","pinyin":"lí","meaning":"Cách xa, cách"},{"hanzi":"离开","pinyin":"líkāi","meaning":"Rời khỏi"},{"hanzi":"里","pinyin":"lǐ","meaning":"Trong"},{"hanzi":"礼物","pinyin":"lǐwù","meaning":"Quà tặng"},{"hanzi":"历史","pinyin":"lìshǐ","meaning":"Lịch sử"},{"hanzi":"脸","pinyin":"liǎn","meaning":"Khuôn mặt"},{"hanzi":"练习","pinyin":"liànxí","meaning":"Luyện tập"},{"hanzi":"两","pinyin":"liǎng","meaning":"Hai (đôi, cặp)"},{"hanzi":"辆","pinyin":"liàng","meaning":"Chiếc (xe cộ)"},{"hanzi":"了解","pinyin":"liǎojiě","meaning":"Hiểu biết, nắm bắt"},{"hanzi":"邻居","pinyin":"línjū","meaning":"Hàng xóm"},{"hanzi":"零","pinyin":"líng","meaning":"Số 0, không"},{"hanzi":"六","pinyin":"liù","meaning":"Số 6"},{"hanzi":"楼","pinyin":"lóu","meaning":"Tòa nhà, tầng"},{"hanzi":"路","pinyin":"lù","meaning":"Con đường"},{"hanzi":"旅游","pinyin":"lǚyóu","meaning":"Du lịch"},{"hanzi":"绿","pinyin":"lǜ","meaning":"Màu xanh lá"},{"hanzi":"妈妈","pinyin":"māma","meaning":"Mẹ"},{"hanzi":"马","pinyin":"mǎ","meaning":"Con ngựa"},{"hanzi":"马上","pinyin":"mǎshàng","meaning":"Ngay lập tức"},{"hanzi":"吗","pinyin":"ma","meaning":"Không (câu hỏi)"},{"hanzi":"买","pinyin":"mǎi","meaning":"Mua"},{"hanzi":"卖","pinyin":"mài","meaning":"Bán"},{"hanzi":"满意","pinyin":"mǎnyì","meaning":"Hài lòng"},{"hanzi":"慢","pinyin":"màn","meaning":"Chậm"},{"hanzi":"忙","pinyin":"máng","meaning":"Bận rộn"},{"hanzi":"猫","pinyin":"māo","meaning":"Con mèo"},{"hanzi":"帽子","pinyin":"màozi","meaning":"Cái mũ"},{"hanzi":"没","pinyin":"méi","meaning":"Chưa, không (quá khứ)"},{"hanzi":"没关系","pinyin":"méi guānxi","meaning":"Không sao, không có gì"},{"hanzi":"每","pinyin":"měi","meaning":"Mỗi"},{"hanzi":"妹妹","pinyin":"mèimei","meaning":"Em gái"},{"hanzi":"门","pinyin":"mén","meaning":"Cái cửa"},{"hanzi":"米","pinyin":"mǐ","meaning":"Mét"},{"hanzi":"米饭","pinyin":"mǐfàn","meaning":"Cơm"},{"hanzi":"面包","pinyin":"miànbāo","meaning":"Bánh mì"},{"hanzi":"面条","pinyin":"miàntiáo","meaning":"Mì sợi"},{"hanzi":"明白","pinyin":"míngbai","meaning":"Hiểu rõ"},{"hanzi":"明天","pinyin":"míngtiān","meaning":"Ngày mai"},{"hanzi":"名字","pinyin":"míngzi","meaning":"Tên"},{"hanzi":"拿","pinyin":"ná","meaning":"Cầm, lấy"},{"hanzi":"哪","pinyin":"nǎ","meaning":"Nào (hỏi)"},{"hanzi":"那","pinyin":"nà","meaning":"Kia, đó"},{"hanzi":"奶奶","pinyin":"nǎinai","meaning":"Bà nội/ngoại"},{"hanzi":"南","pinyin":"nán","meaning":"Nam"},{"hanzi":"男人","pinyin":"nánrén","meaning":"Đàn ông"},{"hanzi":"难","pinyin":"nán","meaning":"Khó"},{"hanzi":"难过","pinyin":"nánguò","meaning":"Buồn, đau khổ"},{"hanzi":"呢","pinyin":"ne","meaning":"Nhỉ, thì (ngữ khí)"},{"hanzi":"能","pinyin":"néng","meaning":"Có thể, có khả năng"},{"hanzi":"你","pinyin":"nǐ","meaning":"Bạn, anh, chị"},{"hanzi":"年","pinyin":"nián","meaning":"Năm"},{"hanzi":"年级","pinyin":"niánjí","meaning":"Niên khóa, lớp"},{"hanzi":"年轻","pinyin":"niánqīng","meaning":"Trẻ trung"},{"hanzi":"鸟","pinyin":"niǎo","meaning":"Con chim"},{"hanzi":"您","pinyin":"nín","meaning":"Ngài, quý vị (tôn kính)"},{"hanzi":"牛奶","pinyin":"niúnǎi","meaning":"Sữa bò"},{"hanzi":"努力","pinyin":"nǔlì","meaning":"Cố gắng, nỗ lực"},{"hanzi":"女儿","pinyin":"nǚ'ér","meaning":"Con gái"},{"hanzi":"女人","pinyin":"nǚrén","meaning":"Người phụ nữ"},{"hanzi":"爬山","pinyin":"páshān","meaning":"Leo núi"},{"hanzi":"盘子","pinyin":"pánzi","meaning":"Cái đĩa"},{"hanzi":"旁边","pinyin":"pángbiān","meaning":"Bên cạnh"},{"hanzi":"胖","pinyin":"pàng","meaning":"Béo, mập"},{"hanzi":"跑步","pinyin":"pǎobù","meaning":"Chạy bộ"},{"hanzi":"朋友","pinyin":"péngyou","meaning":"Bạn bè"},{"hanzi":"啤酒","pinyin":"píjiǔ","meaning":"Bia"},{"hanzi":"便宜","pinyin":"piányi","meaning":"Rẻ"},{"hanzi":"票","pinyin":"piào","meaning":"Vé"},{"hanzi":"漂亮","pinyin":"piàoliang","meaning":"Đẹp"},{"hanzi":"苹果","pinyin":"píngguǒ","meaning":"Quả táo"},{"hanzi":"葡萄","pinyin":"pútao","meaning":"Quả nho"},{"hanzi":"普通话","pinyin":"pǔtōnghuà","meaning":"Tiếng Phổ thông"},{"hanzi":"七","pinyin":"qī","meaning":"Số 7"},{"hanzi":"妻子","pinyin":"qīzi","meaning":"Vợ"},{"hanzi":"其实","pinyin":"qíshí","meaning":"Thực ra"},{"hanzi":"其他","pinyin":"qítā","meaning":"Khác"},{"hanzi":"骑","pinyin":"qí","meaning":"Cưỡi, đi (xe đạp)"},{"hanzi":"奇怪","pinyin":"qíguài","meaning":"Lạ, kỳ quặc"},{"hanzi":"起床","pinyin":"qǐchuáng","meaning":"Thức dậy"},{"hanzi":"千","pinyin":"qiān","meaning":"Nghìn"},{"hanzi":"铅笔","pinyin":"qiānbǐ","meaning":"Bút chì"},{"hanzi":"钱","pinyin":"qián","meaning":"Tiền"},{"hanzi":"前面","pinyin":"qiánmiàn","meaning":"Phía trước"},{"hanzi":"清楚","pinyin":"qīngchu","meaning":"Rõ ràng"},{"hanzi":"晴","pinyin":"qíng","meaning":"Trời nắng"},{"hanzi":"请","pinyin":"qǐng","meaning":"Mời, làm ơn"},{"hanzi":"秋","pinyin":"qiū","meaning":"Mùa thu"},{"hanzi":"去","pinyin":"qù","meaning":"Đi (đến)"},{"hanzi":"去年","pinyin":"qùnián","meaning":"Năm ngoái"},{"hanzi":"裙子","pinyin":"qúnzi","meaning":"Váy"},{"hanzi":"然后","pinyin":"ránhòu","meaning":"Sau đó"},{"hanzi":"让","pinyin":"ràng","meaning":"Để cho, cho phép"},{"hanzi":"热","pinyin":"rè","meaning":"Nóng"},{"hanzi":"热情","pinyin":"rèqíng","meaning":"Nhiệt tình"},{"hanzi":"人","pinyin":"rén","meaning":"Người"},{"hanzi":"认识","pinyin":"rènshi","meaning":"Quen biết, biết"},{"hanzi":"认为","pinyin":"rènwéi","meaning":"Cho rằng"},{"hanzi":"认真","pinyin":"rènzhēn","meaning":"Nghiêm túc, chăm chỉ"},{"hanzi":"日","pinyin":"rì","meaning":"Ngày, mặt trời"},{"hanzi":"容易","pinyin":"róngyì","meaning":"Dễ dàng"},{"hanzi":"如果","pinyin":"rúguǒ","meaning":"Nếu"},{"hanzi":"三","pinyin":"sān","meaning":"Số 3"},{"hanzi":"伞","pinyin":"sǎn","meaning":"Ô, dù"},{"hanzi":"商店","pinyin":"shāngdiàn","meaning":"Cửa hàng"},{"hanzi":"上","pinyin":"shàng","meaning":"Trên"},{"hanzi":"上班","pinyin":"shàngbān","meaning":"Đi làm"},{"hanzi":"上网","pinyin":"shàngwǎng","meaning":"Lên mạng"},{"hanzi":"上午","pinyin":"shàngwǔ","meaning":"Buổi sáng"},{"hanzi":"少","pinyin":"shǎo","meaning":"Ít"},{"hanzi":"谁","pinyin":"shéi","meaning":"Ai"},{"hanzi":"身体","pinyin":"shēntǐ","meaning":"Thân thể"},{"hanzi":"什么","pinyin":"shénme","meaning":"Cái gì"},{"hanzi":"生病","pinyin":"shēngbìng","meaning":"Bị bệnh"},{"hanzi":"生气","pinyin":"shēngqì","meaning":"Giận, tức giận"},{"hanzi":"生日","pinyin":"shēngrì","meaning":"Sinh nhật"},{"hanzi":"声音","pinyin":"shēngyīn","meaning":"Âm thanh, tiếng"},{"hanzi":"十","pinyin":"shí","meaning":"Số 10"},{"hanzi":"时候","pinyin":"shíhou","meaning":"Lúc, khi"},{"hanzi":"时间","pinyin":"shíjiān","meaning":"Thời gian"},{"hanzi":"使","pinyin":"shǐ","meaning":"Làm cho, khiến"},{"hanzi":"是","pinyin":"shì","meaning":"Là"},{"hanzi":"世界","pinyin":"shìjiè","meaning":"Thế giới"},{"hanzi":"事情","pinyin":"shìqing","meaning":"Việc, chuyện"},{"hanzi":"手表","pinyin":"shǒubiǎo","meaning":"Đồng hồ đeo tay"},{"hanzi":"手机","pinyin":"shǒujī","meaning":"Điện thoại di động"},{"hanzi":"瘦","pinyin":"shòu","meaning":"Gầy"},{"hanzi":"书","pinyin":"shū","meaning":"Sách"},{"hanzi":"舒服","pinyin":"shūfu","meaning":"Thoải mái"},{"hanzi":"叔叔","pinyin":"shūshu","meaning":"Chú, cậu, bác trai"},{"hanzi":"树","pinyin":"shù","meaning":"Cây"},{"hanzi":"数学","pinyin":"shùxué","meaning":"Toán học"},{"hanzi":"刷牙","pinyin":"shuā yá","meaning":"Đánh răng"},{"hanzi":"双","pinyin":"shuāng","meaning":"Đôi"},{"hanzi":"水","pinyin":"shuǐ","meaning":"Nước"},{"hanzi":"水果","pinyin":"shuǐguǒ","meaning":"Hoa quả"},{"hanzi":"水平","pinyin":"shuǐpíng","meaning":"Trình độ, mức độ"},{"hanzi":"睡觉","pinyin":"shuìjiào","meaning":"Ngủ"},{"hanzi":"说话","pinyin":"shuōhuà","meaning":"Nói chuyện"},{"hanzi":"司机","pinyin":"sījī","meaning":"Tài xế"},{"hanzi":"四","pinyin":"sì","meaning":"Số 4"},{"hanzi":"送","pinyin":"sòng","meaning":"Tiễn, tặng, đưa"},{"hanzi":"虽然","pinyin":"suīrán","meaning":"Tuy rằng"},{"hanzi":"岁","pinyin":"suì","meaning":"Tuổi"},{"hanzi":"所以","pinyin":"suǒyǐ","meaning":"Vì vậy, cho nên"},{"hanzi":"他","pinyin":"tā","meaning":"Anh ấy, ông ấy"},{"hanzi":"她","pinyin":"tā","meaning":"Cô ấy, bà ấy"},{"hanzi":"它","pinyin":"tā","meaning":"Nó (vật)"},{"hanzi":"抬","pinyin":"tái","meaning":"Nâng, bê"},{"hanzi":"太","pinyin":"tài","meaning":"Quá"},{"hanzi":"太阳","pinyin":"tàiyáng","meaning":"Mặt trời"},{"hanzi":"特别","pinyin":"tèbié","meaning":"Đặc biệt"},{"hanzi":"疼","pinyin":"téng","meaning":"Đau"},{"hanzi":"踢足球","pinyin":"tī zúqiú","meaning":"Đá bóng"},{"hanzi":"题","pinyin":"tí","meaning":"Đề, bài tập"},{"hanzi":"提高","pinyin":"tígāo","meaning":"Nâng cao, cải thiện"},{"hanzi":"体育","pinyin":"tǐyù","meaning":"Thể dục thể thao"},{"hanzi":"天气","pinyin":"tiānqì","meaning":"Thời tiết"},{"hanzi":"甜","pinyin":"tián","meaning":"Ngọt"},{"hanzi":"条","pinyin":"tiáo","meaning":"Cái (dài), con"},{"hanzi":"跳舞","pinyin":"tiàowǔ","meaning":"Nhảy múa"},{"hanzi":"听","pinyin":"tīng","meaning":"Nghe"},{"hanzi":"同事","pinyin":"tóngshì","meaning":"Đồng nghiệp"},{"hanzi":"同学","pinyin":"tóngxué","meaning":"Bạn học"},{"hanzi":"同意","pinyin":"tóngyì","meaning":"Đồng ý"},{"hanzi":"头发","pinyin":"tóufa","meaning":"Tóc"},{"hanzi":"突然","pinyin":"tūrán","meaning":"Đột nhiên"},{"hanzi":"图书馆","pinyin":"túshūguǎn","meaning":"Thư viện"},{"hanzi":"腿","pinyin":"tuǐ","meaning":"Cái chân"},{"hanzi":"外卖","pinyin":"wàimài","meaning":"Đồ ăn mang về"},{"hanzi":"完","pinyin":"wán","meaning":"Xong, hết"},{"hanzi":"完成","pinyin":"wánchéng","meaning":"Hoàn thành"},{"hanzi":"玩","pinyin":"wán","meaning":"Chơi"},{"hanzi":"晚上","pinyin":"wǎnshang","meaning":"Buổi tối"},{"hanzi":"碗","pinyin":"wǎn","meaning":"Cái bát"},{"hanzi":"万","pinyin":"wàn","meaning":"Vạn, mười nghìn"},{"hanzi":"往","pinyin":"wǎng","meaning":"Về phía, đến"},{"hanzi":"为什么","pinyin":"wèishénme","meaning":"Tại sao"},{"hanzi":"问","pinyin":"wèn","meaning":"Hỏi"},{"hanzi":"问题","pinyin":"wèntí","meaning":"Vấn đề, câu hỏi"},{"hanzi":"西瓜","pinyin":"xīguā","meaning":"Dưa hấu"},{"hanzi":"希望","pinyin":"xīwàng","meaning":"Hy vọng"},{"hanzi":"习惯","pinyin":"xíguàn","meaning":"Thói quen"},{"hanzi":"洗","pinyin":"xǐ","meaning":"Rửa, giặt"},{"hanzi":"洗澡","pinyin":"xǐzǎo","meaning":"Tắm"},{"hanzi":"喜欢","pinyin":"xǐhuan","meaning":"Thích"},{"hanzi":"下","pinyin":"xià","meaning":"Dưới"},{"hanzi":"下班","pinyin":"xiàbān","meaning":"Tan làm"},{"hanzi":"下次","pinyin":"xiàcì","meaning":"Lần sau"},{"hanzi":"下午","pinyin":"xiàwǔ","meaning":"Buổi chiều"},{"hanzi":"下雨","pinyin":"xià yǔ","meaning":"Mưa"},{"hanzi":"先","pinyin":"xiān","meaning":"Trước"},{"hanzi":"先生","pinyin":"xiānsheng","meaning":"Ông, thầy, anh (lịch sự)"},{"hanzi":"现在","pinyin":"xiànzài","meaning":"Bây giờ"},{"hanzi":"相信","pinyin":"xiāngxìn","meaning":"Tin tưởng"},{"hanzi":"想","pinyin":"xiǎng","meaning":"Nghĩ, muốn"},{"hanzi":"向","pinyin":"xiàng","meaning":"Hướng về, về phía"},{"hanzi":"像","pinyin":"xiàng","meaning":"Giống như"},{"hanzi":"小","pinyin":"xiǎo","meaning":"Nhỏ, bé"},{"hanzi":"小姐","pinyin":"xiǎojiě","meaning":"Cô, tiểu thư"},{"hanzi":"小心","pinyin":"xiǎoxīn","meaning":"Cẩn thận"},{"hanzi":"校长","pinyin":"xiàozhǎng","meaning":"Hiệu trưởng"},{"hanzi":"些","pinyin":"xiē","meaning":"Một số, một ít"},{"hanzi":"写","pinyin":"xiě","meaning":"Viết"},{"hanzi":"谢谢","pinyin":"xièxie","meaning":"Cảm ơn"},{"hanzi":"新","pinyin":"xīn","meaning":"Mới"},{"hanzi":"新闻","pinyin":"xīnwén","meaning":"Tin tức"},{"hanzi":"新鲜","pinyin":"xīnxiān","meaning":"Tươi"},{"hanzi":"信","pinyin":"xìn","meaning":"Thư tín"},{"hanzi":"星期","pinyin":"xīngqī","meaning":"Tuần, thứ"},{"hanzi":"行","pinyin":"xíng","meaning":"Được, có thể"},{"hanzi":"幸福","pinyin":"xìngfú","meaning":"Hạnh phúc"},{"hanzi":"姓","pinyin":"xìng","meaning":"Họ"},{"hanzi":"兴趣","pinyin":"xìngqù","meaning":"Hứng thú"},{"hanzi":"熊猫","pinyin":"xióngmāo","meaning":"Gấu trúc"},{"hanzi":"休息","pinyin":"xiūxi","meaning":"Nghỉ ngơi"},{"hanzi":"需要","pinyin":"xūyào","meaning":"Cần"},{"hanzi":"许多","pinyin":"xǔduō","meaning":"Nhiều"},{"hanzi":"雪","pinyin":"xuě","meaning":"Tuyết"},{"hanzi":"颜色","pinyin":"yánsè","meaning":"Màu sắc"},{"hanzi":"眼睛","pinyin":"yǎnjing","meaning":"Mắt"},{"hanzi":"羊肉","pinyin":"yángròu","meaning":"Thịt cừu"},{"hanzi":"样子","pinyin":"yàngzi","meaning":"Bề ngoài, dáng vẻ"},{"hanzi":"要求","pinyin":"yāoqiú","meaning":"Yêu cầu"},{"hanzi":"药","pinyin":"yào","meaning":"Thuốc"},{"hanzi":"要","pinyin":"yào","meaning":"Muốn, cần"},{"hanzi":"爷爷","pinyin":"yéye","meaning":"Ông nội/ngoại"},{"hanzi":"也","pinyin":"yě","meaning":"Cũng"},{"hanzi":"一","pinyin":"yī","meaning":"Số 1"},{"hanzi":"一般","pinyin":"yìbān","meaning":"Bình thường, thông thường"},{"hanzi":"一边","pinyin":"yìbiān","meaning":"Một bên, vừa... vừa..."},{"hanzi":"一定","pinyin":"yídìng","meaning":"Nhất định"},{"hanzi":"一共","pinyin":"yígòng","meaning":"Tổng cộng"},{"hanzi":"一会儿","pinyin":"yíhuìr","meaning":"Một lát"},{"hanzi":"一样","pinyin":"yíyàng","meaning":"Giống nhau"},{"hanzi":"一直","pinyin":"yìzhí","meaning":"Luôn luôn, mãi"},{"hanzi":"医生","pinyin":"yīshēng","meaning":"Bác sĩ"},{"hanzi":"医院","pinyin":"yīyuàn","meaning":"Bệnh viện"},{"hanzi":"椅子","pinyin":"yǐzi","meaning":"Cái ghế"},{"hanzi":"已经","pinyin":"yǐjīng","meaning":"Đã"},{"hanzi":"以后","pinyin":"yǐhòu","meaning":"Sau này, về sau"},{"hanzi":"以前","pinyin":"yǐqián","meaning":"Trước đây"},{"hanzi":"以为","pinyin":"yǐwéi","meaning":"Tưởng rằng, ngỡ rằng"},{"hanzi":"艺术","pinyin":"yìshù","meaning":"Nghệ thuật"},{"hanzi":"阴","pinyin":"yīn","meaning":"Âm u, trời râm"},{"hanzi":"因为","pinyin":"yīnwèi","meaning":"Bởi vì"},{"hanzi":"音乐","pinyin":"yīnyuè","meaning":"Âm nhạc"},{"hanzi":"银行","pinyin":"yínháng","meaning":"Ngân hàng"},{"hanzi":"应该","pinyin":"yīnggāi","meaning":"Nên"},{"hanzi":"影响","pinyin":"yǐngxiǎng","meaning":"Ảnh hưởng"},{"hanzi":"用","pinyin":"yòng","meaning":"Dùng, sử dụng"},{"hanzi":"又","pinyin":"yòu","meaning":"Lại"},{"hanzi":"有","pinyin":"yǒu","meaning":"Có"},{"hanzi":"有名","pinyin":"yǒumíng","meaning":"Nổi tiếng"},{"hanzi":"有趣","pinyin":"yǒuqù","meaning":"Thú vị"},{"hanzi":"友好","pinyin":"yǒuhǎo","meaning":"Thân thiện"},{"hanzi":"朋友","pinyin":"yǒupiàn","meaning":"Bạn bè"},{"hanzi":"右","pinyin":"yòu","meaning":"Phải, bên phải"},{"hanzi":"鱼","pinyin":"yú","meaning":"Cá"},{"hanzi":"愉快","pinyin":"yúkuài","meaning":"Vui vẻ"},{"hanzi":"雨","pinyin":"yǔ","meaning":"Mưa"},{"hanzi":"语法","pinyin":"yǔfǎ","meaning":"Ngữ pháp"},{"hanzi":"语言","pinyin":"yǔyán","meaning":"Ngôn ngữ"},{"hanzi":"遇到","pinyin":"yùdào","meaning":"Gặp phải"},{"hanzi":"元","pinyin":"yuán","meaning":"Đồng (tiền)"},{"hanzi":"愿意","pinyin":"yuànyì","meaning":"Sẵn lòng, muốn"},{"hanzi":"月","pinyin":"yuè","meaning":"Tháng, mặt trăng"},{"hanzi":"越来越","pinyin":"yuèláiyuè","meaning":"Càng ngày càng"},{"hanzi":"运动","pinyin":"yùndòng","meaning":"Thể thao, vận động"},{"hanzi":"再","pinyin":"zài","meaning":"Lại, nữa"},{"hanzi":"在","pinyin":"zài","meaning":"Ở, tại"},{"hanzi":"早上","pinyin":"zǎoshang","meaning":"Buổi sáng"},{"hanzi":"怎么","pinyin":"zěnme","meaning":"Thế nào, làm sao"},{"hanzi":"怎么样","pinyin":"zěnmeyàng","meaning":"Thế nào, ra sao"},{"hanzi":"站","pinyin":"zhàn","meaning":"Đứng"},{"hanzi":"张","pinyin":"zhāng","meaning":"Tờ (giấy), cái (bàn)"},{"hanzi":"长","pinyin":"zhǎng","meaning":"Mọc, trưởng thành"},{"hanzi":"丈夫","pinyin":"zhàngfu","meaning":"Chồng"},{"hanzi":"着","pinyin":"zhe","meaning":"Đang (tiếp diễn)"},{"hanzi":"真","pinyin":"zhēn","meaning":"Thật"},{"hanzi":"准备","pinyin":"zhǔnbèi","meaning":"Chuẩn bị"},{"hanzi":"中国","pinyin":"Zhōngguó","meaning":"Trung Quốc"},{"hanzi":"中间","pinyin":"zhōngjiān","meaning":"Giữa"},{"hanzi":"中午","pinyin":"zhōngwǔ","meaning":"Buổi trưa"},{"hanzi":"终于","pinyin":"zhōngyú","meaning":"Cuối cùng"},{"hanzi":"种","pinyin":"zhǒng","meaning":"Loại"},{"hanzi":"重要","pinyin":"zhòngyào","meaning":"Quan trọng"},{"hanzi":"周末","pinyin":"zhōumò","meaning":"Cuối tuần"},{"hanzi":"主要","pinyin":"zhǔyào","meaning":"Chủ yếu"},{"hanzi":"住","pinyin":"zhù","meaning":"Sống, ở"},{"hanzi":"注意","pinyin":"zhùyì","meaning":"Chú ý"},{"hanzi":"祝","pinyin":"zhù","meaning":"Chúc"},{"hanzi":"装","pinyin":"zhuāng","meaning":"Mặc (quần áo), đóng gói"},{"hanzi":"准备","pinyin":"zhǔnbèi","meaning":"Chuẩn bị"},{"hanzi":"桌子","pinyin":"zhuōzi","meaning":"Cái bàn"},{"hanzi":"自己","pinyin":"zìjǐ","meaning":"Tự mình, bản thân"},{"hanzi":"自行车","pinyin":"zìxíngchē","meaning":"Xe đạp"},{"hanzi":"字","pinyin":"zì","meaning":"Chữ, từ"},{"hanzi":"总","pinyin":"zǒng","meaning":"Luôn luôn"},{"hanzi":"走","pinyin":"zǒu","meaning":"Đi, chạy"},{"hanzi":"嘴","pinyin":"zuǐ","meaning":"Cái miệng"},{"hanzi":"最","pinyin":"zuì","meaning":"Nhất"},{"hanzi":"最近","pinyin":"zuìjìn","meaning":"Gần đây"},{"hanzi":"昨天","pinyin":"zuótiān","meaning":"Hôm qua"},{"hanzi":"左","pinyin":"zuǒ","meaning":"Trái, bên trái"},{"hanzi":"做","pinyin":"zuò","meaning":"Làm"},{"hanzi":"坐","pinyin":"zuò","meaning":"Ngồi"},{"hanzi":"作业","pinyin":"zuòyè","meaning":"Bài tập"},{"hanzi":"作用","pinyin":"zuòyòng","meaning":"Tác dụng"},{"hanzi":"作家","pinyin":"zuòjiā","meaning":"Nhà văn"},{"hanzi":"文章","pinyin":"wénzhāng","meaning":"Bài văn, bài báo"},{"hanzi":"文化","pinyin":"wénhuà","meaning":"Văn hóa"},{"hanzi":"节目","pinyin":"jiémù","meaning":"Chương trình"},{"hanzi":"会议","pinyin":"huìyì","meaning":"Cuộc họp"},{"hanzi":"意思","pinyin":"yìsi","meaning":"Ý nghĩa"},{"hanzi":"看法","pinyin":"kànfǎ","meaning":"Quan điểm"},{"hanzi":"方面","pinyin":"fāngmiàn","meaning":"Phương diện"},{"hanzi":"地位","pinyin":"dìwèi","meaning":"Địa vị"},{"hanzi":"水平","pinyin":"shuǐpíng","meaning":"Trình độ"},{"hanzi":"区别","pinyin":"qūbié","meaning":"Sự khác biệt"},{"hanzi":"经过","pinyin":"jīngguò","meaning":"Quá trình"},{"hanzi":"经验","pinyin":"jīngyàn","meaning":"Kinh nghiệm"},{"hanzi":"基础","pinyin":"jīchǔ","meaning":"Cơ sở, nền tảng"},{"hanzi":"结果","pinyin":"jiéguǒ","meaning":"Kết quả"},{"hanzi":"原因","pinyin":"yuányīn","meaning":"Nguyên nhân"},{"hanzi":"条件","pinyin":"tiáojiàn","meaning":"Điều kiện"},{"hanzi":"方法","pinyin":"fāngfǎ","meaning":"Phương pháp"},{"hanzi":"情况","pinyin":"qíngkuàng","meaning":"Tình hình"},{"hanzi":"环境","pinyin":"huánjìng","meaning":"Môi trường"},{"hanzi":"过程","pinyin":"guòchéng","meaning":"Quá trình"},{"hanzi":"好处","pinyin":"hǎochu","meaning":"Lợi ích"},{"hanzi":"坏处","pinyin":"huàichu","meaning":"Tác hại"},{"hanzi":"地方","pinyin":"dìfang","meaning":"Địa phương, chỗ"}];
+        
+        let shuffledList = [];
+        let currentIndex = 0;
+        let wrongAttemptsCurrent = 0;
+        let isProcessing = false;
+        let stats = {
+            total: 0,
+            correct: 0,
+            wrong: 0,
+            wrongWords: []
+        };
+        let synth = window.speechSynthesis;
+        let currentUtterance = null;
+        let isTTSSupported = true;
+        let audioContext = null;
+
+        if (!('speechSynthesis' in window)) {
+            isTTSSupported = false;
+        }
+
+        // Tối ưu cho iOS: Khởi tạo audio context sau tương tác đầu tiên
+        function initAudio() {
+            if (!audioContext && typeof AudioContext !== 'undefined') {
+                audioContext = new AudioContext();
+            }
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        function speak(text, rate = 0.8) {
+            if (!isTTSSupported) return;
+            
+            // iOS requirement: Phải có tương tác người dùng trước khi phát âm
+            initAudio();
+            
+            if (currentUtterance) {
+                synth.cancel();
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = rate;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            utterance.onstart = function() {
+                document.querySelector('.sound-btn').classList.add('playing');
+                document.getElementById('tts-status').textContent = 'Đang phát âm...';
+            };
+            
+            utterance.onend = function() {
+                document.querySelector('.sound-btn').classList.remove('playing');
+                document.getElementById('tts-status').textContent = '';
+            };
+            
+            utterance.onerror = function(event) {
+                document.querySelector('.sound-btn').classList.remove('playing');
+                document.getElementById('tts-status').textContent = 'Lỗi phát âm';
+                console.error('TTS Error:', event);
+            };
+            
+            currentUtterance = utterance;
+            synth.speak(utterance);
+        }
+
+        function replayAudio() {
+            if (currentIndex < shuffledList.length) {
+                const word = shuffledList[currentIndex];
+                speak(word.hanzi, 0.7);
+            }
+        }
+
+        function startQuiz() {
+            // Ẩn màn hình bắt đầu, hiện màn hình quiz
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('quiz-area').style.display = 'block';
+            
+            // Khởi tạo bài quiz
+            initQuiz();
+        }
+
+        function initQuiz() {
+            shuffledList = [...wordList].sort(() => Math.random() - 0.5);
+            document.getElementById('total-num').textContent = shuffledList.length;
+            
+            if (!isTTSSupported) {
+                document.getElementById('tts-status').textContent = 'Trình duyệt không hỗ trợ phát âm';
+                document.querySelector('.sound-btn').style.display = 'none';
+            }
+            
+            showCurrentWord();
+            
+            // Tối ưu sự kiện cho mobile
+            const input = document.getElementById('hanzi-input');
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    checkAnswer();
+                }
+            });
+            
+            // Xử lý sự kiện touch để mở bàn phím ảo tốt hơn trên mobile
+            input.addEventListener('focus', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+        }
+
+        function showCurrentWord() {
+            if (currentIndex >= shuffledList.length) {
+                stopQuiz();
+                return;
+            }
+            const word = shuffledList[currentIndex];
+            document.getElementById('pinyin-hint').textContent = word.pinyin;
+            document.getElementById('meaning-hint').textContent = word.meaning;
+            document.getElementById('current-num').textContent = currentIndex + 1;
+            document.getElementById('hanzi-input').value = '';
+            document.getElementById('message').textContent = '';
+            document.getElementById('hanzi-input').classList.remove('error');
+            wrongAttemptsCurrent = 0;
+            isProcessing = false;
+            
+            // Focus sau một chút delay để tránh scroll bất thường trên mobile
+            setTimeout(() => {
+                const input = document.getElementById('hanzi-input');
+                input.focus();
+                // Tự động phát âm sau khi hiển thị từ
+                speak(word.hanzi, 0.7);
+            }, 100);
+        }
+
+        function checkAnswer() {
+            if (isProcessing) return;
+            
+            const input = document.getElementById('hanzi-input');
+            const value = input.value.trim();
+            const currentWord = shuffledList[currentIndex];
+            const messageEl = document.getElementById('message');
+            
+            if (!value) {
+                input.focus();
+                return;
+            }
+            
+            // Haptic feedback nếu có
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            if (value === currentWord.hanzi) {
+                isProcessing = true;
+                stats.total++;
+                
+                if (wrongAttemptsCurrent === 0) {
+                    stats.correct++;
+                    messageEl.textContent = "Chúc mừng bạn! Đáp án đúng!";
+                    if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
+                } else {
+                    stats.wrong++;
+                    messageEl.textContent = "Lần này bạn đã nhập đúng!";
+                }
+                messageEl.className = "message success";
+                
+                setTimeout(() => {
+                    currentIndex++;
+                    showCurrentWord();
+                }, 1200);
+            } else {
+                wrongAttemptsCurrent++;
+                if (wrongAttemptsCurrent === 1) {
+                    if (!stats.wrongWords.find(w => w.hanzi === currentWord.hanzi)) {
+                        stats.wrongWords.push({...currentWord});
+                    }
+                }
+                
+                messageEl.textContent = "Sai rồi, hãy thử lại!";
+                messageEl.className = "message error";
+                
+                input.classList.add('error');
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                
+                setTimeout(() => {
+                    input.classList.remove('error');
+                    input.value = '';
+                    input.focus();
+                }, 400);
+            }
+        }
+
+        function stopQuiz() {
+            if (synth) {
+                synth.cancel();
+            }
+            
+            document.getElementById('quiz-area').style.display = 'none';
+            document.getElementById('report-area').classList.add('show');
+            
+            document.getElementById('total-stat').textContent = stats.total;
+            document.getElementById('correct-stat').textContent = stats.correct;
+            document.getElementById('wrong-stat').textContent = stats.wrong;
+            
+            const percent = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+            document.getElementById('percent-stat').textContent = percent + '%';
+            
+            const wrongListEl = document.getElementById('wrong-list');
+            if (stats.wrongWords.length === 0) {
+                wrongListEl.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Không có từ nào làm sai</p>';
+            } else {
+                wrongListEl.innerHTML = stats.wrongWords.map(w => 
+                    '<div class="wrong-item"><span class="wrong-hanzi">' + w.hanzi + '</span><div class="wrong-info"><div>' + w.pinyin + '</div><div>' + w.meaning + '</div></div></div>'
+                ).join('');
+            }
+            
+            // Scroll lên đầu
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Ngăn double tap zoom trên iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
