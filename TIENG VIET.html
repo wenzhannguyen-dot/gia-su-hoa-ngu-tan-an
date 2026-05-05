@@ -805,58 +805,55 @@
                 title: '越南语字母介绍',
                 titleVi: 'Chữ cái tiếng Việt',
                 data: [
-                    {vi: "A-a", cn: "啊"},
-                    {vi: "Ă-ă", cn: "短啊"},
-                    {vi: "Â-â", cn: "长啊"},
-                    {vi: "E-e", cn: "埃"},
-                    {vi: "Ê-ê", cn: "诶"},
-                    {vi: "I-i", cn: "衣"},
-                    {vi: "Y-y", cn: "衣"},
-                    {vi: "O-o", cn: "喔"},
-                    {vi: "Ô-ô", cn: "欧"},
-                    {vi: "Ơ-ơ", cn: "呃"},
-                    {vi: "U-u", cn: "乌"},
-                    {vi: "Ư-ư", cn: "迂"}
+                    {vi: "A-a", cn: "a"},
+                    {vi: "Ă-ă", cn: "á"},
+                    {vi: "Â-â", cn: "ớ"},
+                    {vi: "E-e", cn: "e"},
+                    {vi: "Ê-ê", cn: "ê"},
+                    {vi: "I-i", cn: "i"},
+                    {vi: "Y-y", cn: "i"},
+                    {vi: "O-o", cn: "o"},
+                    {vi: "Ô-ô", cn: "ô"},
+                    {vi: "Ơ-ơ", cn: "ơ"},
+                    {vi: "U-u", cn: "u"},
+                    {vi: "Ư-ư", cn: "ư"}
                 ]
             },
             phuamdon: {
                 title: '单辅音',
                 titleVi: 'Phụ âm đơn',
                 data: [
-                    {vi: "B-b", cn: "玻"},
-                    {vi: "P-p", cn: "坡"},
-                    {vi: "M-m", cn: "摸"},
-                    {vi: "T-t", cn: "特"},
-                    {vi: "Đ-đ", cn: "德"},
-                    {vi: "N-n", cn: "讷"},
-                    {vi: "C-c", cn: "格"},
-                    {vi: "K-k", cn: "科"},
-                    {vi: "G-g", cn: "哥"},
-                    {vi: "H-h", cn: "喝"},
-                    {vi: "V-v", cn: "乌"},
-                    {vi: "L-l", cn: "勒"},
-                    {vi: "D-d", cn: "日"},
-                    {vi: "R-r", cn: "热"},
-                    {vi: "X-x", cn: "思"},
-                    {vi: "S-s", cn: "诗"},
-                    {vi: "Q-q", cn: "姑"}
+                    {vi: "B-b", cn: "bờ"},
+                    {vi: "C-c", cn: "cờ"},
+                    {vi: "D-d", cn: "dờ"},
+                    {vi: "Đ-đ", cn: "đờ"},
+                    {vi: "G-g", cn: "gờ"},
+                    {vi: "H-h", cn: "hờ"},
+                    {vi: "L-l", cn: "lờ"},
+                    {vi: "M-m", cn: "mờ"},
+                    {vi: "N-n", cn: "nờ"},
+                    {vi: "R-r", cn: "rờ"},
+                    {vi: "S-s", cn: "sờ"},
+                    {vi: "T-t", cn: "tờ"},
+                    {vi: "V-v", cn: "vờ"},
+                    {vi: "X-x", cn: "xờ"}
                 ]
             },
             phuamdoi: {
                 title: '双辅音',
                 titleVi: 'Phụ âm đôi',
                 data: [
-                    {vi: "Ph", cn: "佛"},
-                    {vi: "Th", cn: "托"},
-                    {vi: "Tr", cn: "卓"},
-                    {vi: "Ch", cn: "基"},
-                    {vi: "Nh", cn: "尼"},
-                    {vi: "Qu", cn: "姑"},
-                    {vi: "Ng", cn: "吴"},
-                    {vi: "Ngh", cn: "吴"},
-                    {vi: "Gh", cn: "哥"},
-                    {vi: "Gi", cn: "吉"},
-                    {vi: "Kh", cn: "科"}
+                    {vi: "Ch", cn: "chờ"},
+                    {vi: "Tr", cn: "trờ"},
+                    {vi: "Th", cn: "thờ"},
+                    {vi: "Ph", cn: "phờ"},
+                    {vi: "Nh", cn: "nhờ"},
+                    {vi: "Ng", cn: "ngờ"},
+                    {vi: "Ngh", cn: "ngờ"},
+                    {vi: "Gh", cn: "gờ"},
+                    {vi: "Gi", cn: "di"},
+                    {vi: "Kh", cn: "khờ"},
+                    {vi: "Qu", cn: "quờ"}
                 ]
             },
             thanhdieu: {
@@ -3411,6 +3408,62 @@
             speechRate[tab] = parseFloat(val);
         }
 
+        // Function chuyển đổi văn bản theo quy tắc phát âm mới
+        // Chỉ áp dụng cho phần nguyên âm khi đang ở tab ngữ âm
+        // Ví dụ: "B-b" → "bờ", "Ch-ch" → "chờ"
+        function convertTextForTTS(text, tab) {
+            // Chỉ áp dụng khi đang ở tab ngữ âm
+            if (tab !== 'nguam') {
+                return text;
+            }
+            
+            // Quy tắc nguyên âm - chỉ đọc chữ phía sau
+            const nguyenAmMap = {
+                'A-a': 'a', 'Ă-ă': 'á', 'Â-â': 'ớ',
+                'E-e': 'e', 'Ê-ê': 'ê',
+                'I-i': 'i', 'Y-y': 'i',
+                'O-o': 'o', 'Ô-ô': 'ô', 'Ơ-ơ': 'ơ',
+                'U-u': 'u', 'Ư-ư': 'ư'
+            };
+            
+            // Quy tắc phụ âm đơn - chỉ đọc chữ phía sau
+            const phuAmDonMap = {
+                'B-b': 'bờ', 'C-c': 'cờ', 'D-d': 'dờ', 'Đ-đ': 'đờ',
+                'G-g': 'gờ', 'H-h': 'hờ', 'L-l': 'lờ', 'M-m': 'mờ',
+                'N-n': 'nờ', 'R-r': 'rờ', 'S-s': 'sờ', 'T-t': 'tờ',
+                'V-v': 'vờ', 'X-x': 'xờ'
+            };
+            
+            // Quy tắc phụ âm đôi - chỉ đọc chữ phía sau
+            const phuAmDoiMap = {
+                'Ch-ch': 'chờ', 'Tr-tr': 'trờ', 'Th-th': 'thờ', 'Ph-ph': 'phờ',
+                'Nh-nh': 'nhờ', 'Ng-ng': 'ngờ', 'Ngh-ngh': 'ngờ', 'Gh-gh': 'gờ',
+                'Gi-gi': 'di', 'Kh-kh': 'khờ', 'Qu-qu': 'quờ'
+            };
+            
+            let convertedText = text;
+            
+            // Áp dụng quy tắc phụ âm đôi trước (vì chúng dài hơn)
+            for (const [key, value] of Object.entries(phuAmDoiMap)) {
+                const regex = new RegExp(key, 'g');
+                convertedText = convertedText.replace(regex, value);
+            }
+            
+            // Áp dụng quy tắc phụ âm đơn
+            for (const [key, value] of Object.entries(phuAmDonMap)) {
+                const regex = new RegExp(key, 'g');
+                convertedText = convertedText.replace(regex, value);
+            }
+            
+            // Áp dụng quy tắc nguyên âm
+            for (const [key, value] of Object.entries(nguyenAmMap)) {
+                const regex = new RegExp(key, 'g');
+                convertedText = convertedText.replace(regex, value);
+            }
+            
+            return convertedText;
+        }
+
         function speak(tab, text, btnId) {
             if (!window.speechSynthesis) {
                 alert('浏览器不支持语音功能 / Trình duyệt không hỗ trợ đọc âm thanh');
@@ -3443,7 +3496,9 @@
             if (btn) btn.classList.add('playing');
 
             function doSpeak() {
-                const utterance = new SpeechSynthesisUtterance(text);
+                // Chuyển đổi văn bản theo quy tắc phát âm mới trước khi đưa vào TTS
+                const convertedText = convertTextForTTS(text, tab);
+                const utterance = new SpeechSynthesisUtterance(convertedText);
                 utterance.lang = 'vi-VN';
                 utterance.rate = speechRate[tab];
 
