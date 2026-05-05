@@ -805,55 +805,55 @@
                 title: '越南语字母介绍',
                 titleVi: 'Chữ cái tiếng Việt',
                 data: [
-                    {vi: "A-a", cn: "a"},
-                    {vi: "Ă-ă", cn: "á"},
-                    {vi: "Â-â", cn: "ớ"},
-                    {vi: "E-e", cn: "e"},
-                    {vi: "Ê-ê", cn: "ê"},
-                    {vi: "I-i", cn: "i"},
-                    {vi: "Y-y", cn: "i"},
-                    {vi: "O-o", cn: "o"},
-                    {vi: "Ô-ô", cn: "ô"},
-                    {vi: "Ơ-ơ", cn: "ơ"},
-                    {vi: "U-u", cn: "u"},
-                    {vi: "Ư-ư", cn: "ư"}
+                    {"label": "a", "sound": "a"},
+                    {"label": "ă", "sound": "á"},
+                    {"label": "â", "sound": "ớ"},
+                    {"label": "e", "sound": "e"},
+                    {"label": "ê", "sound": "ê"},
+                    {"label": "i", "sound": "i"},
+                    {"label": "y", "sound": "i"},
+                    {"label": "o", "sound": "o"},
+                    {"label": "ô", "sound": "ô"},
+                    {"label": "ơ", "sound": "ơ"},
+                    {"label": "u", "sound": "u"},
+                    {"label": "ư", "sound": "ư"}
                 ]
             },
             phuamdon: {
                 title: '单辅音',
                 titleVi: 'Phụ âm đơn',
                 data: [
-                    {vi: "B-b", cn: "bờ"},
-                    {vi: "C-c", cn: "cờ"},
-                    {vi: "D-d", cn: "dờ"},
-                    {vi: "Đ-đ", cn: "đờ"},
-                    {vi: "G-g", cn: "gờ"},
-                    {vi: "H-h", cn: "hờ"},
-                    {vi: "L-l", cn: "lờ"},
-                    {vi: "M-m", cn: "mờ"},
-                    {vi: "N-n", cn: "nờ"},
-                    {vi: "R-r", cn: "rờ"},
-                    {vi: "S-s", cn: "sờ"},
-                    {vi: "T-t", cn: "tờ"},
-                    {vi: "V-v", cn: "vờ"},
-                    {vi: "X-x", cn: "xờ"}
+                    {"label": "b", "sound": "bờ"},
+                    {"label": "c", "sound": "cờ"},
+                    {"label": "d", "sound": "dờ"},
+                    {"label": "đ", "sound": "đờ"},
+                    {"label": "g", "sound": "gờ"},
+                    {"label": "h", "sound": "hờ"},
+                    {"label": "l", "sound": "lờ"},
+                    {"label": "m", "sound": "mờ"},
+                    {"label": "n", "sound": "nờ"},
+                    {"label": "r", "sound": "rờ"},
+                    {"label": "s", "sound": "sờ"},
+                    {"label": "t", "sound": "tờ"},
+                    {"label": "v", "sound": "vờ"},
+                    {"label": "x", "sound": "xờ"}
                 ]
             },
             phuamdoi: {
                 title: '双辅音',
                 titleVi: 'Phụ âm đôi',
                 data: [
-                    {vi: "Ch", cn: "chờ"},
-                    {vi: "Tr", cn: "trờ"},
-                    {vi: "Th", cn: "thờ"},
-                    {vi: "Ph", cn: "phờ"},
-                    {vi: "Nh", cn: "nhờ"},
-                    {vi: "Ng", cn: "ngờ"},
-                    {vi: "Ngh", cn: "ngờ"},
-                    {vi: "Gh", cn: "gờ"},
-                    {vi: "Gi", cn: "di"},
-                    {vi: "Kh", cn: "khờ"},
-                    {vi: "Qu", cn: "quờ"}
+                    {"label": "ch", "sound": "chờ"},
+                    {"label": "tr", "sound": "trờ"},
+                    {"label": "th", "sound": "thờ"},
+                    {"label": "ph", "sound": "phờ"},
+                    {"label": "nh", "sound": "nhờ"},
+                    {"label": "ng", "sound": "ngờ"},
+                    {"label": "ngh", "sound": "ngờ"},
+                    {"label": "gh", "sound": "gờ"},
+                    {"label": "gi", "sound": "di"},
+                    {"label": "kh", "sound": "khờ"},
+                    {"label": "qu", "sound": "quờ"}
                 ]
             },
             thanhdieu: {
@@ -3379,11 +3379,16 @@
             lesson.data.forEach((item, idx) => {
                 const num = idx + 1;
                 const btnId = `btn-${tab}-${num}`;
+                
+                // Handle both old format (vi, cn) and new format (label, sound)
+                const viText = item.vi || item.label || '';
+                const cnText = item.cn || item.sound || '';
+                
                 html += `<tr>
                     <td class="col-num">${num}</td>
                     <td class="col-audio"><button class="audio-btn" id="${btnId}" data-tab="${tab}" data-index="${idx}" onclick="speakByIndex(this)">▶</button></td>
-                    <td class="vi-text">${item.vi}</td>
-                    <td class="cn-text">${item.cn}</td>
+                    <td class="vi-text">${viText}</td>
+                    <td class="cn-text">${cnText}</td>
                 </tr>`;
             });
 
@@ -3394,8 +3399,17 @@
         function speakByIndex(btn) {
             const tab = btn.dataset.tab;
             const idx = parseInt(btn.dataset.index);
-            const text = currentLessonData[tab][idx].vi;
-            speak(tab, text, btn.id);
+            const item = currentLessonData[tab][idx];
+            
+            // For pronunciation tab (nguam), use sound for TTS
+            if (tab === 'nguam') {
+                const text = item.sound || item.label || '';
+                speak(tab, text, btn.id);
+            } else {
+                // For other tabs, use vi or label
+                const text = item.vi || item.label || '';
+                speak(tab, text, btn.id);
+            }
         }
 
         function setVoice(tab, type) {
@@ -3417,47 +3431,50 @@
                 return text;
             }
             
-            // Quy tắc nguyên âm - chỉ đọc chữ phía sau
+            // Với định dạng mới, text đã là label (a, b, ch, etc.)
+            // Cần chuyển đổi sang cách đọc đúng
+            
+            // Quy tắc nguyên âm - đọc đúng âm
             const nguyenAmMap = {
-                'A-a': 'a', 'Ă-ă': 'á', 'Â-â': 'ớ',
-                'E-e': 'e', 'Ê-ê': 'ê',
-                'I-i': 'i', 'Y-y': 'i',
-                'O-o': 'o', 'Ô-ô': 'ô', 'Ơ-ơ': 'ơ',
-                'U-u': 'u', 'Ư-ư': 'ư'
+                'a': 'a', 'ă': 'á', 'â': 'ớ',
+                'e': 'e', 'ê': 'ê',
+                'i': 'i', 'y': 'i',
+                'o': 'o', 'ô': 'ô', 'ơ': 'ơ',
+                'u': 'u', 'ư': 'ư'
             };
             
-            // Quy tắc phụ âm đơn - chỉ đọc chữ phía sau
+            // Quy tắc phụ âm đơn - đọc đúng âm
             const phuAmDonMap = {
-                'B-b': 'bờ', 'C-c': 'cờ', 'D-d': 'dờ', 'Đ-đ': 'đờ',
-                'G-g': 'gờ', 'H-h': 'hờ', 'L-l': 'lờ', 'M-m': 'mờ',
-                'N-n': 'nờ', 'R-r': 'rờ', 'S-s': 'sờ', 'T-t': 'tờ',
-                'V-v': 'vờ', 'X-x': 'xờ'
+                'b': 'bờ', 'c': 'cờ', 'd': 'dờ', 'đ': 'đờ',
+                'g': 'gờ', 'h': 'hờ', 'l': 'lờ', 'm': 'mờ',
+                'n': 'nờ', 'p': 'pờ', 'r': 'rờ', 's': 'sờ', 't': 'tờ',
+                'v': 'vờ', 'x': 'sờ'
             };
             
-            // Quy tắc phụ âm đôi - chỉ đọc chữ phía sau
+            // Quy tắc phụ âm đôi - đọc đúng âm
             const phuAmDoiMap = {
-                'Ch-ch': 'chờ', 'Tr-tr': 'trờ', 'Th-th': 'thờ', 'Ph-ph': 'phờ',
-                'Nh-nh': 'nhờ', 'Ng-ng': 'ngờ', 'Ngh-ngh': 'ngờ', 'Gh-gh': 'gờ',
-                'Gi-gi': 'di', 'Kh-kh': 'khờ', 'Qu-qu': 'quờ'
+                'ch': 'chờ', 'tr': 'trờ', 'th': 'thờ', 'ph': 'phờ',
+                'nh': 'nhờ', 'ng': 'ngờ', 'ngh': 'ngờ', 'gh': 'gờ',
+                'gi': 'di', 'kh': 'khờ', 'qu': 'quờ'
             };
             
             let convertedText = text;
             
-            // Áp dụng quy tắc phụ âm đôi trước (vì chúng dài hơn)
+            // Áp dụng quy tắc phụ âm đôi trước (ưu tiên cho các chữ ghép)
             for (const [key, value] of Object.entries(phuAmDoiMap)) {
-                const regex = new RegExp(key, 'g');
+                const regex = new RegExp('\\b' + key + '\\b', 'g');
                 convertedText = convertedText.replace(regex, value);
             }
             
             // Áp dụng quy tắc phụ âm đơn
             for (const [key, value] of Object.entries(phuAmDonMap)) {
-                const regex = new RegExp(key, 'g');
+                const regex = new RegExp('\\b' + key + '\\b', 'g');
                 convertedText = convertedText.replace(regex, value);
             }
             
-            // Áp dụng quy tắc nguyên âm
+            // Áp dụng quy tắc nguyên âm cuối cùng
             for (const [key, value] of Object.entries(nguyenAmMap)) {
-                const regex = new RegExp(key, 'g');
+                const regex = new RegExp('\\b' + key + '\\b', 'g');
                 convertedText = convertedText.replace(regex, value);
             }
             
