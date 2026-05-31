@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>第三課 你的中文進步了</title>
+<base target="_blank">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+:root{
+  --g:#2e7d32;--g0:#e8f5e9;
+  --b:#1565c0;--b0:#dbeafe;
+  --r:#c62828;--r0:#fff3e0;
+  --s:#607d8b;--s0:#f0f4f5;
+  --k:#222;--w:#fff;
+  --sw:200px;
+  --fzh:32px;--fpy:19px;--fvi:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
+.zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
+
+/* SIDEBAR */
+#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
+.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
+.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
+.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
+.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
+.logo-area{text-align:center;padding:5px 0;}
+.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+.logo-container img{width:100%;height:100%;object-fit:contain;}
+nav{flex:1;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
+.nb:hover{background:rgba(255,255,255,.1);}
+.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+.nb .ic{font-size:18px;}
+.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
+.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
+.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
+.st-btn:hover{background:rgba(255,255,255,.1);}
+.st-btn.on{background:var(--g);border-color:var(--g);}
+
+/* MAIN */
+#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+.tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
+.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
+.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+
+/* SECTIONS */
+.sec{display:none;padding:20px 24px;}
+.sec.on{display:block;}
+.subnav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e0e0e0;flex-wrap:wrap;}
+.subtab{background:#f5f5f5;border:none;padding:10px 20px;font-size:14px;font-weight:600;color:#666;cursor:pointer;border-radius:8px 8px 0 0;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.subtab:hover{background:#e8e8e8;color:var(--b);}
+.subtab.on{background:var(--b);color:#fff;border-bottom-color:var(--r);}
+.sub-content{display:none;}
+.sub-content.on{display:block;}
+
+/* VOCAB TABLE */
+.vt-wrap{overflow-x:auto;margin-bottom:6px;}
+table.vt{border-collapse:collapse;background:var(--w);border-radius:8px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.09);table-layout:auto;width:auto;min-width:100%;}
+table.vt thead tr{background:var(--b);}
+table.vt thead th{padding:9px 12px;font-size:13px;font-weight:700;color:#fff;text-align:left;white-space:nowrap;}
+table.vt thead th.tc{text-align:center;}
+table.vt tbody tr{border-bottom:1px solid #e8ecf0;}
+table.vt tbody tr:last-child{border-bottom:none;}
+table.vt tbody tr:hover{background:#f5f8ff;}
+.c-stt{padding:10px 8px;text-align:center;white-space:nowrap;width:36px;font-size:14px;font-weight:600;color:var(--s);}
+.c-au{padding:10px 6px;text-align:center;white-space:nowrap;width:44px;}
+.c-zh,.c-py{padding:10px;white-space:nowrap;}
+.c-vi{padding:10px;}
+.c-tp{padding:10px 8px;text-align:center;white-space:nowrap;width:58px;}
+.c-st{padding:10px 8px;text-align:center;white-space:nowrap;width:48px;}
+.zh-word{font-size:var(--fzh);color:var(--k);letter-spacing:1px;}
+.py-text{font-size:var(--fpy);color:var(--r);font-weight:500;}
+.vi-text{font-size:var(--fvi);color:var(--b);line-height:1.4;}
+.tp-bd{display:inline-block;font-size:12px;color:#fff;background:var(--s);border-radius:4px;padding:2px 8px;font-weight:600;}
+.bau{background:var(--b);color:#fff;border:none;border-radius:7px;padding:7px 9px;font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.bau:hover{background:#0d47a1;}
+.bau:active{transform:scale(.92);}
+.bst{background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;color:var(--r);line-height:1;}
+.bst:hover{color:#7b0000;}
+
+/* STROKE OVERLAY */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;align-items:center;justify-content:center;}
+#ov.open{display:flex;}
+#obox{background:var(--w);border-radius:14px;padding:24px 28px;max-width:480px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;}
+#ocls{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:var(--s);margin-top:-6px;line-height:1;}
+#otitle{font-size:18px;font-weight:700;color:var(--b);margin-bottom:16px;font-family:'DFKai-SB',serif;}
+#oframes{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hw-cell{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.hw-cell span{font-size:13px;color:var(--s);}
+.hw-controls{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hw-btn{background:var(--b);color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;}
+.hw-btn:hover{background:#0d47a1;}
+.hw-btn.red{background:var(--r);}
+.hw-btn.red:hover{background:#8d1515;}
+
+/* DIALOGUE */
+.db{background:var(--w);border-radius:12px;padding:16px 20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:5px solid var(--b);}
+.db.dg{border-top-color:var(--g);}
+.dt{font-size:15px;font-weight:700;color:var(--b);margin-bottom:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.db.dg .dt{color:var(--g);}
+.dlb{background:var(--b);color:#fff;padding:2px 11px;border-radius:12px;font-size:12px;}
+.db.dg .dlb{background:var(--g);}
+.dab{margin-left:auto;background:var(--b);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:700;}
+.db.dg .dab{background:var(--g);}
+table.dt2{width:100%;border-collapse:collapse;}
+table.dt2 tr{border-bottom:1px solid #f0f0f0;}
+table.dt2 tr:last-child{border-bottom:none;}
+td.d-au{width:44px;padding:11px 6px 11px 0;vertical-align:top;}
+td.d-sp{width:80px;padding:11px 8px 11px 0;vertical-align:top;}
+td.d-tx{padding:11px 0;}
+.spk{display:inline-block;text-align:center;font-size:15px;color:#fff;background:var(--g);padding:5px 7px;border-radius:8px;line-height:1.3;min-width:66px;font-family:'DFKai-SB',serif;}
+.spk.b{background:var(--b);}.spk.c{background:var(--r);}.spk.y{background:#f57c00;}
+.spk small{font-size:11px;display:block;font-family:'Segoe UI',sans-serif;}
+.szh{font-size:var(--fzh);color:var(--k);line-height:1.6;letter-spacing:1px;}
+.spy{font-size:var(--fpy);color:var(--r);margin-top:3px;line-height:1.5;font-weight:500;}
+.svi{font-size:var(--fvi);color:var(--b);margin-top:3px;line-height:1.5;font-style:italic;}
+.spy.hd,.svi.hd{display:none;}
+
+/* GRAMMAR */
+.gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
+.gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
+.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
+.gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
+table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
+table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;text-align:left;font-weight:700;}
+table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
+table.ex tr:last-child td{border-bottom:none;}
+table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
+table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
+
+/* EXERCISES */
+.ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
+.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ei{margin-bottom:14px;}
+.eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
+.eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
+.eh{font-size:14px;color:var(--s);font-style:italic;}
+input.fi{border:2px solid #ccc;border-radius:6px;padding:4px 9px;font-size:19px;width:110px;outline:none;font-family:'DFKai-SB',serif;}
+input.fi:focus{border-color:var(--b);}
+input.fi.ok{border-color:var(--g);background:var(--g0);}
+input.fi.er{border-color:var(--r);background:var(--r0);}
+.bck{background:var(--b);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.bck:hover{background:#0d47a1;}
+.brs{background:var(--s);color:#fff;border:none;padding:9px 15px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin:10px 0 0 8px;}
+.ab{display:none;margin-top:9px;background:var(--g0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--g);}
+.ab.sh{display:block;}
+
+/* CULTURE */
+.culture-box{background:linear-gradient(135deg,#fff,#f5f7fa);border-left:5px solid #ff6b6b;padding:20px;border-radius:12px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.culture-box h3{color:#e74c3c;margin-bottom:10px;font-size:18px;}
+.culture-box p{line-height:1.8;margin-bottom:10px;text-align:justify;}
+
+/* EDITOR MODAL */
+#editorModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
+#editorModal.open{display:flex;}
+.editor-container{background:#fff;border-radius:12px;width:90%;max-width:900px;height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.editor-header{background:var(--b);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0;}
+.editor-header h3{margin:0;font-size:18px;}
+.editor-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.editor-close:hover{background:rgba(255,255,255,.2);}
+.editor-body{flex:1;display:flex;flex-direction:column;}
+#editor-toolbar{border-bottom:1px solid #ddd;}
+#editor-content{flex:1;font-size:16px;line-height:1.6;}
+#editor-content .ql-editor{min-height:100%;}
+.editor-footer{padding:15px 20px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 12px 12px;}
+.editor-status{font-size:13px;color:#666;}
+.editor-actions{display:flex;gap:10px;}
+.btn-save{background:var(--g);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-clear{background:transparent;color:var(--s);border:1px solid #ddd;padding:8px 20px;border-radius:6px;font-size:14px;cursor:pointer;}
+.btn-save:hover{background:#1b5e20;}
+.btn-clear:hover{background:#f5f5f5;}
+
+footer{margin-top:28px;padding:12px 24px;background:var(--k);color:#777;font-size:12px;text-align:center;}
+footer strong{color:var(--r);}
+</style>
+</head>
+<body>
+
+<!-- STROKE OVERLAY -->
+<div id="ov" onclick="ovClick(event)">
+  <div id="obox">
+    <button id="ocls" onclick="closeOv()">✕</button>
+    <div id="otitle"></div>
+    <div id="oframes"></div>
+    <div class="hw-controls" id="octrl"></div>
+  </div>
+</div>
+
+<!-- EDITOR MODAL -->
+<div id="editorModal">
+  <div class="editor-container">
+    <div class="editor-header">
+      <h3>Soạn thảo ghi chú - Bài 3 Quyển 3</h3>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div id="editor-toolbar">
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="1">Tiêu đề 1</option>
+            <option value="2">Tiêu đề 2</option>
+            <option selected>Tiêu đề thường</option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats"><button class="ql-clean"></button></span>
+      </div>
+      <div id="editor-content"></div>
+    </div>
+    <div class="editor-footer">
+      <span class="editor-status">Ghi chú tự động lưu vào trình duyệt</span>
+      <div class="editor-actions">
+        <button class="btn-clear" onclick="clearEditor()">Xóa tất cả</button>
+        <button class="btn-save" onclick="saveEditor()">Lưu ghi chú</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="lb">
+    <div class="logo-area">
+      <div class="logo-container">
+        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+      </div>
+    </div>
+    <div class="ln">GIA SU HOA NGU TAN AN</div>
+    <div class="la">9/1 Bach Van Tu, Tan An, Long An</div>
+    <div class="lz">Zalo: 0839 889 772</div>
+  </div>
+  <nav>
+    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic">🏠</span><span>VE TRANG CHU</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TU VUNG</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BAI KHOA</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGU PHAP</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BAI TAP</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VAN HOA</span></button>
+  </nav>
+  <div class="side-toggle" id="toggleContainer" style="display:none;">
+    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phien am</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tieng Viet</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mn">
+  <div class="topbar">
+    <div>
+      <div class="tzh">BAI 3 · 第三課</div>
+      <div class="tvi">你的中文進步了 · Tieng Trung cua ban da tien bo!</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:15px;">
+      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soan thao</span></button>
+      <div class="badge">當代中文課程 2</div>
+    </div>
+  </div>
+
+  <!-- TU VUNG -->
+  <div id="vocab" class="sec on">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Tu vung 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')">📖 Tu vung 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','c1')">📝 Cum tu 1 · 短語一</button>
+      <button class="subtab" onclick="goSub('vocab','c2')">📝 Cum tu 2 · 短語二</button>
+      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhan vat · 人物</button>
+    </div>
+    <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
+    <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
+    <div id="vocab-c1" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c1"></table></div></div>
+    <div id="vocab-c2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c2"></table></div></div>
+    <div id="vocab-nv" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-nv"></table></div></div>
+  </div>
+
+  <!-- BAI KHOA -->
+  <div id="baikoa" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hoi thoai · 對話</button>
+      <button class="subtab" onclick="goSub('baikoa','bk')">📖 Bai khoa · 課文</button>
+    </div>
+    <div id="baikoa-ht1" class="sub-content on">
+      <div class="db">
+        <div class="dt">
+          <span class="dlb">Hoi thoai · 對話</span>Hoc tieng Trung
+          <button class="dab" onclick="sayZh('早，你今天來得真早。是啊！我今天是搭捷運來的。今天的考試，你準備了嗎？準備得差不多了，應該可以考得不錯。你覺得聽寫很容易吧？是啊，日本人從小學就開始學寫漢字。我現在也覺得寫字不難，因為我在美國念高中的時候就學過了。你在這個語言中心學了多久了？我才學了半年，你呢？我來了快一年了，可是我說話，還說得不夠流利。雖然我只來了半年，但是我知道我的中文進步了。我覺得在說中文的環境裡學中文，進步得比較快。我同意。我希望回國的時候能看中文報紙。我想你一定可以。今天下了課，你要去哪裡？我要去活動中心跟語言交換的朋友見面。你說的活動中心在哪裡？在一樓有麵包店的那棟樓裡面，我們一起去聽過一次演講，記得嗎？噢，我想起來了。')">🔊 Toan bo</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('早，你今天來得真早。')">🔊</button></td><td class="d-sp"><div class="spk b">田中<small>Tianzhong</small></div></td><td class="d-tx"><div class="szh">早，你今天來得真早。</div><div class="spy">Zao, ni jintian lai de zhen zao.</div><div class="svi">Chao, hom nay ban den that som.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('是啊！我今天是搭捷運來的。')">🔊</button></td><td class="d-sp"><div class="spk">如玉<small>Ruyu</small></div></td><td class="d-tx"><div class="szh">是啊！我今天是搭捷運來的。</div><div class="spy">Shi a! Wo jintian shi da jieyun lai de.</div><div class="svi">Dung vay! Hom nay toi di tau dien ngam den.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('今天的考試，你準備了嗎？')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">今天的考試，你準備了嗎？</div><div class="spy">Jintian de kaoshi, ni zhunbei le ma?</div><div class="svi">Ky thi hom nay, ban da chuan bi chua?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('準備得差不多了，應該可以考得不錯。你覺得聽寫很容易吧？')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">準備得差不多了，應該可以考得不錯。你覺得聽寫很容易吧？</div><div class="spy">Zhunbei de cha bu duo le, yinggai keyi kao de bu cuo. Ni juede tingxie hen rongyi ba?</div><div class="svi">Chuan bi gan xong roi, chac co the thi tot. Ban thay chinh ta de dung khong?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('是啊，日本人從小學就開始學寫漢字。')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">是啊，日本人從小學就開始學寫漢字。</div><div class="spy">Shi a, Ribenren cong xiaoxue jiu kaishi xue xie Hanzi.</div><div class="svi">Dung vay, nguoi Nhat tu tieu hoc da bat dau hoc viet chu Han.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我現在也覺得寫字不難，因為我在美國念高中的時候就學過了。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">我現在也覺得寫字不難，因為我在美國念高中的時候就學過了。</div><div class="spy">Wo xianzai ye juede xie zi bu nan, yinwei wo zai Meiguo nian gaozhong de shihou jiu xue guo le.</div><div class="svi">Bay gio toi cung thay viet chu khong kho, vi toi hoc o My thi trung hoc da hoc roi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你在這個語言中心學了多久了？')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">你在這個語言中心學了多久了？</div><div class="spy">Ni zai zhege yuyan zhongxin xue le duo jiu le?</div><div class="svi">Ban hoc o trung tam ngon ngu nay duoc bao lau roi?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我才學了半年，你呢？')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">我才學了半年，你呢？</div><div class="spy">Wo cai xue le ban nian, ni ne?</div><div class="svi">Toi moi hoc co nua nam, con ban?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我來了快一年了，可是我說話，還說得不夠流利。')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">我來了快一年了，可是我說話，還說得不夠流利。</div><div class="spy">Wo lai le kuai yi nian le, keshi wo shuohua, hai shuo de bu gou liuli.</div><div class="svi">Toi den gan mot nam roi, nhung ma noi chuyen van chua du troi chay.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('雖然我只來了半年，但是我知道我的中文進步了。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">雖然我只來了半年，但是我知道我的中文進步了。</div><div class="spy">Suiran wo zhi lai le ban nian, danshi wo zhidao wo de Zhongwen jinbu le.</div><div class="svi">Tuy toi chi den nua nam, nhung toi biet tieng Trung cua toi da tien bo.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我覺得在說中文的環境裡學中文，進步得比較快。')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">我覺得在說中文的環境裡學中文，進步得比較快。</div><div class="spy">Wo juede zai shuo Zhongwen de huanjing li xue Zhongwen, jinbu de bijiao kuai.</div><div class="svi">Toi thay hoc tieng Trung trong moi truong noi tieng Trung, tien bo nhanh hon.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我同意。我希望回國的時候能看中文報紙。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">我同意。我希望回國的時候能看中文報紙。</div><div class="spy">Wo tongyi. Wo xiwang hui guo de shihou neng kan Zhongwen baozhi.</div><div class="svi">Toi dong y. Toi hy vong khi ve nuoc co the doc bao tieng Trung.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我想你一定可以。今天下了課，你要去哪裡？')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">我想你一定可以。今天下了課，你要去哪裡？</div><div class="spy">Wo xiang ni yiding keyi. Jintian xia le ke, ni yao qu nali?</div><div class="svi">Toi nghi ban chac chan co the. Hom nay tan hoc, ban muon di dau?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我要去活動中心跟語言交換的朋友見面。')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">我要去活動中心跟語言交換的朋友見面。</div><div class="spy">Wo yao qu huodong zhongxin gen yuyan jiaohuan de pengyou jianmian.</div><div class="svi">Toi muon den trung tam hoat dong gap ban trao doi ngon ngu.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你說的活動中心在哪裡？')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">你說的活動中心在哪裡？</div><div class="spy">Ni shuo de huodong zhongxin zai nali?</div><div class="svi">Trung tam hoat dong ban noi o dau?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('在一樓有麵包店的那棟樓裡面，我們一起去聽過一次演講，記得嗎？')">🔊</button></td><td class="d-sp"><div class="spk">如玉</div></td><td class="d-tx"><div class="szh">在一樓有麵包店的那棟樓裡面，我們一起去聽過一次演講，記得嗎？</div><div class="spy">Zai yi lou you mianbao dian de na dong lou limian, women yiqi qu ting guo yi ci yanjiang, ji de ma?</div><div class="svi">O trong toa nha co tiem banh mi o tang mot, chung ta cung di nghe bai thuyet trinh mot lan, nho khong?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('噢，我想起來了。')">🔊</button></td><td class="d-sp"><div class="spk b">田中</div></td><td class="d-tx"><div class="szh">噢，我想起來了。</div><div class="spy">O, wo xiang qilai le.</div><div class="svi">O, toi nho ra roi.</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="baikoa-bk" class="sub-content">
+      <div class="db" style="border-top-color:#764ba2;">
+        <div class="dt" style="color:#764ba2;">
+          <span class="dlb" style="background:#764ba2;">Bai khoa · 課文</span>
+          <button class="dab" style="background:#764ba2;" onclick="sayZh('馬安同到師大來學中文，他選了每天上三個小時的課，下了課要寫作業，還要準備第二天的課。馬安同剛開始學寫中國字，覺得真難，所以每天都練習寫字，常常半夜十二點多才睡覺。雖然有點累，但是他很高興現在會寫很多字了。周末，馬安同比平常輕鬆多了。他有時候搭捷運去貓空喝茶，有時候坐公車去陽明山爬山。爬山的時候，他認識了很多台灣人。台灣人對外國人很好，常常跟馬安同聊天，告訴他一些台灣的文化。馬安同有一個語言交換的朋友，他們一有空，就拿著地圖搭捷運去逛逛。安同喜歡看捷運上的廣告，要是有沒學過的字，他就會問那位朋友怎麼說。他覺得到處走走，可以了解台灣人的生活，也可以練習練習中文，哪裡都能學中文，真是不錯。')">🔊 Toan bo</button>
+        </div>
+        <div class="szh" style="font-size:22px;line-height:1.8;">馬安同到師大來學中文，他選了每天上三個小時的課，下了課要寫作業，還要準備第二天的課。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Ma Antong dao Shida lai xue Zhongwen, ta xuan le mei tian shang san ge xiaoshi de ke, xia le ke yao xie zuoye, hai yao zhunbei di er tian de ke.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Ma An Dong den Dai hoc Su pham hoc tieng Trung, anh chon khoa hoc ba tieng moi ngay, tan hoc phai viet bai tap, con phai chuan bi bai cho ngay hom sau.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">馬安同剛開始學寫中國字，覺得真難，所以每天都練習寫字，常常半夜十二點多才睡覺。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Ma Antong gang kaishi xue xie Zhongguo zi, juede zhen nan, suoyi mei tian dou lianxi xie zi, changchang banye shi er dian duo cai shuijiao.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Ma An Dong moi bat dau hoc viet chu Trung Quoc, thay that kho, nen moi ngay deu luyen tap viet chu, thuong nua dem 12 gio moi di ngu.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">雖然有點累，但是他很高興現在會寫很多字了。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Suiran you dian lei, danshi ta hen gaoxing xianzai hui xie hen duo zi le.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Tuy co chut met, nhung anh ay rat vui bay gio da viet duoc nhieu chu roi.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">周末，馬安同比平常輕鬆多了。他有時候搭捷運去貓空喝茶，有時候坐公車去陽明山爬山。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Zhoumo, Ma Antong bi pingchang qingsong duo le. Ta you shihou da jieyun qu Maokong he cha, you shihou zuo gongche qu Yangmingshan pa shan.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Cuoi tuan, Ma An Dong thoai mai hon binh thuong nhieu. Anh ay doi khi di tau dien ngam den Maokhong uong tra, doi khi di xe buyt len Duong Minh Son leo nui.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">爬山的時候，他認識了很多台灣人。台灣人對外國人很好，常常跟馬安同聊天，告訴他一些台灣的文化。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Pa shan de shihou, ta renshi le hen duo Taiwan ren. Taiwan ren dui waiguoren hen hao, changchang gen Ma Antong liao tian, gaosu ta yixie Taiwan de wenhua.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Khi leo nui, anh ay quen biet nhieu nguoi Dai Loan. Nguoi Dai Loan doi voi nguoi nuoc ngoai rat tot, thuong noi chuyen voi Ma An Dong, cho anh ay biet mot so van hoa Dai Loan.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">馬安同有一個語言交換的朋友，他們一有空，就拿著地圖搭捷運去逛逛。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Ma Antong you yige yuyan jiaohuan de pengyou, tamen yi you kong, jiu nazhe ditu da jieyun qu guangguang.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Ma An Dong co mot nguoi ban trao doi ngon ngu, ho vua ranh la cam ban do di tau dien ngam di dao choi.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">安同喜歡看捷運上的廣告，要是有沒學過的字，他就會問那位朋友怎麼說。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Antong xihuan kan jieyun shang de guanggao, yaoshi you mei xue guo de zi, ta jiu hui wen na wei pengyou zenme shuo.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">An Dong thich xem quang cao tren tau dien ngam, neu co chu chua hoc qua, anh ay se hoi nguoi ban ay noi the nao.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">他覺得到處走走，可以了解台灣人的生活，也可以練習練習中文，哪裡都能學中文，真是不錯。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Ta juede dao chu zou zou, keyi liaojie Taiwan ren de shenghuo, ye keyi lianxi lianxi Zhongwen, nali dou neng xue Zhongwen, zhen shi bu cuo.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;font-style:italic;">Anh ay thay di khap noi, co the hieu cuoc song nguoi Dai Loan, cung co the luyen tap tieng Trung, dau cung co the hoc tieng Trung, that la tot.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- NGU PHAP -->
+  <div id="ngupap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('ngupap','g1')">I · 差不多 · Gan nhu, xap xi</button>
+      <button class="subtab" onclick="goSub('ngupap','g2')">II · 過 · Trai nghiem trong qua khu</button>
+      <button class="subtab" onclick="goSub('ngupap','g3')">III · 才 chi · Chi, moi (it hon du kien)</button>
+      <button class="subtab" onclick="goSub('ngupap','g4')">IV · 想起來 · Nho lai</button>
+      <button class="subtab" onclick="goSub('ngupap','g5')">V · 才 cai · Lau hon du kien</button>
+      <button class="subtab" onclick="goSub('ngupap','g6')">VI · ABAB · Dong tu lap lai giam nhe</button>
+    </div>
+
+    <!-- I. 差不多 -->
+    <div id="ngupap-g1" class="sub-content on">
+      <div class="gc">
+        <div><span class="gn">I</span><span class="gtt">差不多 chabuduo - Gan nhu, xap xi</span></div>
+        <div class="gsb">差不多 nghia den la "khac khong nhieu", hoat dong nhu dong tu trang thai va pho tu trong nhieu ngu canh khac nhau.</div>
+        <div class="fm">差不多<div class="fn">chabuduo - Gan nhu, xap xi, gan xong</div></div>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">1. 差不多 Vs - Lam vi ngu, gan nhu tuong duong</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">我們開始學中文的時間差不多。</div></td><td><div class="py">Women kaishi xue Zhongwen de shijian cha bu duo.</div></td><td><div class="vi">Thoi gian chung toi bat dau hoc tieng Trung gan nhu nhau.</div></td></tr>
+          <tr><td><div class="zh">那幾家超市賣的東西都差不多。</div></td><td><div class="py">Na ji jia chaoshi mai de dongxi dou cha bu duo.</div></td><td><div class="vi">Do ban o may sieu thi do gan nhu nhau.</div></td></tr>
+          <tr><td><div class="zh">我們國家的夏天和這裡差不多。</div></td><td><div class="py">Women guojia de xiatian he zheli cha bu duo.</div></td><td><div class="vi">Mua he o nuoc chung toi va o day gan nhu nhau.</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">2. 差不多 Vs - Lam bo ngu dong tu, gan hoan thanh</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">我的功課寫得差不多了。</div></td><td><div class="py">Wo de gongke xie de cha bu duo le.</div></td><td><div class="vi">Bai tap cua toi viet gan xong roi.</div></td></tr>
+          <tr><td><div class="zh">我的旅行計畫得差不多了，你看一看吧！</div></td><td><div class="py">Wo de luxing jihua de cha bu duo le, ni kan yi kan ba!</div></td><td><div class="vi">Ke hoach du lich cua toi lap gan xong roi, ban xem thu di!</div></td></tr>
+          <tr><td><div class="zh">找工作的事準備得差不多了。</div></td><td><div class="py">Zhao gongzuo de shi zhunbei de cha bu duo le.</div></td><td><div class="vi">Viec chuan bi tim viec gan xong roi.</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">3. 差不多 - Pho tu, bo ngu cho dong tu, khoang, xap xi</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">從這裡到捷運站，差不多（走）十分鐘。</div></td><td><div class="py">Cong zheli dao jieyun zhan, cha bu duo (zou) shi fenzhong.</div></td><td><div class="vi">Tu day den tram tau dien ngam, khoang (di bo) muoi phut.</div></td></tr>
+          <tr><td><div class="zh">哥哥和弟弟差不多高。</div></td><td><div class="py">Gege he didi cha bu duo gao.</div></td><td><div class="vi">Anh hai va em trai gan nhu cao bang nhau.</div></td></tr>
+          <tr><td><div class="zh">我差不多學了四個月的中文了。</div></td><td><div class="py">Wo cha bu duo xue le si ge yue de Zhongwen le.</div></td><td><div class="vi">Toi hoc tieng Trung duoc gan bon thang roi.</div></td></tr>
+        </table>
+
+        <div class="gnote"> Nguoi Trung Quoc doi khi tra loi bang 差不多, khien nguoi nghe kho biet su that. Vi du: A: "Ban chuan bi do an Tet xong chua?" B: "差不多 了." / A: "Chung ta san sang di nha hang chua?" B: "差不多 了." / A: "Ban quen song o Hoa Lien chua?" B: "差不多 了."</div>
+      </div>
+    </div>
+
+    <!-- II. 過 guo -->
+    <div id="ngupap-g2" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">II</span><span class="gtt">過 guo - Tieu tu trai nghiem (Experience Particle)</span></div>
+        <div class="gsb">Tieu tu 過 duoc gan vao sau dong tu chi hanh dong, danh dau chu the da tung co trai nghiem voi hanh dong do.</div>
+        <div class="fm">S + V + 過 + O<div class="fn">Chu ngu + Dong tu + guo + Tan ngu</div></div>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Cau truc voi thoi gian/tan suat khong xac dinh</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">我在高中學過中文。</div></td><td><div class="py">Wo zai gaozhong xue guo Zhongwen.</div></td><td><div class="vi">Toi da hoc tieng Trung o trung hoc.</div></td></tr>
+          <tr><td><div class="zh">我去過那個語言中心。</div></td><td><div class="py">Wo qu guo nage yuyan zhongxin.</div></td><td><div class="vi">Toi da den trung tam ngon ngu do.</div></td></tr>
+          <tr><td><div class="zh">我教過他兩年西班牙文。</div></td><td><div class="py">Wo jiao guo ta liang nian Xibanyawen.</div></td><td><div class="vi">Toi da day anh ay tieng Tay Ban Nha hai nam.</div></td></tr>
+          <tr><td><div class="zh">我學過兩次西班牙文。</div></td><td><div class="py">Wo xue guo liang ci Xibanyawen.</div></td><td><div class="vi">Toi da hoc tieng Tay Ban Nha hai lan.</div></td></tr>
+          <tr><td><div class="zh">他在越南住過三年。</div></td><td><div class="py">Ta zai Yuenan zhu guo san nian.</div></td><td><div class="vi">Anh ay da song o Viet Nam ba nam.</div></td></tr>
+          <tr><td><div class="zh">你已經去過這麼多國家，還想去哪裡？</div></td><td><div class="py">Ni yijing qu guo zheme duo guojia, hai xiang qu nali?</div></td><td><div class="vi">Ban da di nhieu nuoc nhu vay, con muon di dau nua?</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Phu dinh: Chi dung 沒</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">我以前沒學過中文。</div></td><td><div class="py">Wo yiqian mei xue guo Zhongwen.</div></td><td><div class="vi">Truoc day toi chua hoc tieng Trung.</div></td></tr>
+          <tr><td><div class="zh">我沒去過法國。</div></td><td><div class="py">Wo mei qu guo Faguo.</div></td><td><div class="vi">Toi chua di Phap.</div></td></tr>
+          <tr><td><div class="zh">我沒買過那家的麵包。</div></td><td><div class="py">Wo mei mai guo na jia de mianbao.</div></td><td><div class="vi">Toi chua mua banh mi o tiem do.</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Cau hoi</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">他去過日本沒有？</div></td><td><div class="py">Ta qu guo Riben meiyou?</div></td><td><div class="vi">Anh ay da di Nhat chua?</div></td></tr>
+          <tr><td><div class="zh">王老師的課，你上過嗎？</div></td><td><div class="py">Wang laoshi de ke, ni shang guo ma?</div></td><td><div class="vi">Ban da hoc lop thay Vuong chua?</div></td></tr>
+          <tr><td><div class="zh">你是不是看過那本書？有意思嗎？</div></td><td><div class="py">Ni shi bu shi kan guo na ben shu? You yisi ma?</div></td><td><div class="vi">Ban da xem quyen sach do chua? Co hay khong?</div></td></tr>
+        </table>
+
+        <div class="gnote"> 過 thuong ket hop voi thoi gian khong xac dinh nhu 以前 (truoc day), 小時候 (luc nho), khong dung voi thoi gian cu the nhu 昨天 (hom qua) hay 上午十點半 (10:30 sang).<br><br><strong>Phan biet V+過 va V+了:</strong> Ca hai deu chi su kien trong qua khu, nhung 過 chi trai nghiem (co the lap lai), con 了 chi lan xay ra cu the trong qua khu. Vi du: 他去過很多國家 (cho den nay - trai nghiem) vs 他去了很多國家 (trong chuyen di gan day - lan cu the).</div>
+      </div>
+    </div>
+
+    <!-- III. 才 cai (merely, only) -->
+    <div id="ngupap-g3" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">III</span><span class="gtt">才 cai - Chi, moi (it hon du kien)</span></div>
+        <div class="gsb">Pho tu 才 trong ngu canh so luong co nghia la "chi, moi", the hien so luong it hon mong doi chung.</div>
+        <div class="fm">才 + so luong<div class="fn">Chi / moi + so luong (it hon du kien)</div></div>
+
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">法國，我才去過一次。</div></td><td><div class="py">Faguo, wo cai qu guo yi ci.</div></td><td><div class="vi">Phap, toi moi di co mot lan. (Khi nhieu nguoi thuong di nhieu lan)</div></td></tr>
+          <tr><td><div class="zh">這本書才五十塊。真便宜。</div></td><td><div class="py">Zhe ben shu cai wushi kuai. Zhen pianyi.</div></td><td><div class="vi">Quyen sach nay moi nam muoi dong. That re. (Khi o noi khac dat hon nhieu)</div></td></tr>
+          <tr><td><div class="zh">他才學了半年中文。</div></td><td><div class="py">Ta cai xue le ban nian Zhongwen.</div></td><td><div class="vi">Anh ay moi hoc tieng Trung co nua nam. (Ma tieng Trung anh ay gioi! Khi nguoi khac phai co gang rat lau)</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Cau hoi</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">你今天才吃了一個麵包嗎？</div></td><td><div class="py">Ni jintian cai chi le yi ge mianbao ma?</div></td><td><div class="vi">Hom nay ban moi an co mot cai banh mi thoi a?</div></td></tr>
+          <tr><td><div class="zh">他是不是才學了兩個星期的中文？</div></td><td><div class="py">Ta shi bu shi cai xue le liang ge xingqi de Zhongwen?</div></td><td><div class="vi">Anh ay co phai moi hoc tieng Trung co hai tuan khong?</div></td></tr>
+          <tr><td><div class="zh">台北捷運，你才坐過一次嗎？</div></td><td><div class="py">Taibei jieyun, ni cai zuo guo yi ci ma?</div></td><td><div class="vi">Tau dien ngam Dai Bac, ban moi di co mot lan thoi a?</div></td></tr>
+        </table>
+
+        <div class="gnote"> Trong ngu canh so luong, ca 才 va 只 deu co nghia "chi", vi du: 他才學了三個月的西班牙文 = 他只學了三個月的西班牙文. Tuy nhien, 只 chi mang tinh chat su that, con  them ham y hau het nguoi ta mat nhieu thoi gian hon de hoc ngoai ngu. 才 co the dung truc tiep voi bieu thi so luong, con 只 thi khong. Vi du: 這本書才五十塊錢 (duoc) nhung *這本書只五十塊錢 (khong duoc).</div>
+      </div>
+    </div>
+
+    <!-- IV. 想起來 -->
+    <div id="ngupap-g4" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">IV</span><span class="gtt">想起來 xiangqilai - Nho lai, nho ra</span></div>
+        <div class="gsb">Mau cau nay gom dong tu 想 theo sau la tieu tu 起來, chi viec gi do da duoc nho lai.</div>
+        <div class="fm">想 + 起來<div class="fn">Tuong + qilai - Nho lai, nho ra</div></div>
+
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">他的電話，我想起來了。</div></td><td><div class="py">Ta de dianhua, wo xiang qilai le.</div></td><td><div class="vi">So dien thoai cua anh ay, toi nho ra roi.</div></td></tr>
+          <tr><td><div class="zh">那位小姐姓張，我想起來了。</div></td><td><div class="py">Na wei xiaojie xing Zhang, wo xiang qilai le.</div></td><td><div class="vi">Co gai do ho Truong, toi nho ra roi.</div></td></tr>
+          <tr><td><div class="zh">回到學校以後，以前的事我都想起來了。</div></td><td><div class="py">Hui dao xuexiao yihou, yiqian de shi wo dou xiang qilai le.</div></td><td><div class="vi">Tro ve truong hoc roi, chuyen truoc day toi deu nho ra roi.</div></td></tr>
+          <tr><td><div class="zh">他姓張，早上見面的時候我怎麼沒想起來。</div></td><td><div class="py">Ta xing Zhang, zaoshang jianmian de shihou wo zenme mei xiang qilai.</div></td><td><div class="vi">Anh ay ho Truong, luc gap buoi sang toi sao khong nho ra.</div></td></tr>
+          <tr><td><div class="zh">他是誰，我還沒想起來。</div></td><td><div class="py">Ta shi shei, wo hai mei xiang qilai.</div></td><td><div class="vi">Anh ay la ai, toi van chua nho ra.</div></td></tr>
+          <tr><td><div class="zh">機車在哪裡，他一直沒想起來。</div></td><td><div class="py">Jiche zai nali, ta yizhi mei xiang qilai.</div></td><td><div class="vi">Xe may o dau, anh ay mai khong nho ra.</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Cau hoi</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">我們見過面。你想起來了嗎？</div></td><td><div class="py">Women jian guo mian. Ni xiang qilai le ma?</div></td><td><div class="vi">Chung ta da gap nhau. Ban nho ra chua?</div></td></tr>
+          <tr><td><div class="zh">他叫什麼名字？你是不是想起來了？</div></td><td><div class="py">Ta jiao shenme mingzi? Ni shi bu shi xiang qilai le?</div></td><td><div class="vi">Anh ay ten gi? Ban co nho ra khong?</div></td></tr>
+          <tr><td><div class="zh">你的東西在哪裡，想起來了沒有？</div></td><td><div class="py">Ni de dongxi zai nali, xiang qilai le meiyou?</div></td><td><div class="vi">Do cua ban o dau, nho ra chua?</div></td></tr>
+        </table>
+
+        <div class="gnote"> 起來 trong mau cau nay khac voi 起時間 trong Bai 1. Mau cau 想...想起來 khac voi 想起來 trong Bai 1 (V+起來 danh gia). Cach phan biet: 想一想起來 la "nghi thu xem co nho ra khong", con 想+O+起來 la "nho ra cai gi do".</div>
+      </div>
+    </div>
+
+    <!-- V. 才 cai (Longer/Later Than Expected) -->
+    <div id="ngupap-g5" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">V</span><span class="gtt">才 cai - Lau hon / muon hon du kien</span></div>
+        <div class="gsb">才 trong mau cau nay ham y su kien xay ra lau hon hoac muon hon mong doi.</div>
+        <div class="fm">Thoi gian + 才 + Su kien<div class="fn">Sau thoi gian bao lau thi su kien moi xay ra</div></div>
+
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">你現在才來，大家等你很久了。</div></td><td><div class="py">Ni xianzai cai lai, dajia deng ni hen jiu le.</div></td><td><div class="vi">Bay gio ban moi den, moi nguoi doi ban da lau roi.</div></td></tr>
+          <tr><td><div class="zh">他是昨天才到台北的，所以睡得不好。</div></td><td><div class="py">Ta shi zuotian cai dao Taibei de, suoyi shui de bu hao.</div></td><td><div class="vi">Anh ay la hom qua moi den Dai Bac, nen ngu khong tot.</div></td></tr>
+          <tr><td><div class="zh">我等了十分鐘，捷運才來。</div></td><td><div class="py">Wo deng le shi fenzhong, jieyun cai lai.</div></td><td><div class="vi">Toi doi muoi phut, tau dien ngam moi den.</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Phu dinh: Khong dung phu dinh 才 truc tiep, ma dung 不是</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">我跟你一起住了十年了，我不是現在才了解你的。</div></td><td><div class="py">Wo gen ni yiqi zhu le shi nian le, wo bu shi xianzai cai liaojie ni de.</div></td><td><div class="vi">Toi o voi ban da muoi nam roi, khong phai bay gio moi hieu ban.</div></td></tr>
+          <tr><td><div class="zh">他不是今天才告訴老闆他不能來上班的。</div></td><td><div class="py">Ta bu shi jintian cai gaosu laoban ta bu neng lai shangban de.</div></td><td><div class="vi">Khong phai anh ay hom nay moi noi voi sep la anh ay khong the di lam.</div></td></tr>
+          <tr><td><div class="zh">我們不是今天才認識的，是三年前就認識的。</div></td><td><div class="py">Women bu shi jintian cai renshi de, shi san nian qian jiu renshi de.</div></td><td><div class="vi">Chung ta khong phai hom nay moi quen, ma ba nam truoc da quen roi.</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Cau hoi</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">王先生這個月才來上班的嗎？</div></td><td><div class="py">Wang xiansheng zhege yue cai lai shangban de ma?</div></td><td><div class="vi">Ong Vuong thang nay moi di lam phai khong?</div></td></tr>
+          <tr><td><div class="zh">你是不是昨天晚上十點才打電話給他的？</div></td><td><div class="py">Ni shi bu shi zuotian wanshang shi dian cai da dianhua gei ta de?</div></td><td><div class="vi">Ban co phai toi hom qua 10 gio moi goi dien cho anh ay khong?</div></td></tr>
+          <tr><td><div class="zh">你什麼時候才可以跟我去看電影？</div></td><td><div class="py">Ni shenme shihou cai keyi gen wo qu kan dianying?</div></td><td><div class="vi">Khi nao ban moi co the di xem phim voi toi?</div></td></tr>
+        </table>
+
+        <div class="gnote"> Trong khi 就 chi su kien xay ra SOM HON du kien, thi 才 chi su kien xay ra LAU HON du kien. So sanh: 我等了十分鐘，捷運就來了 (Toi doi co muoi phut, tau dien ngam da den roi - nhanh hon nghi) vs 我等了十分鐘，捷運才來 (Toi doi het muoi phut, tau dien ngam moi den - lau hon nghi).</div>
+      </div>
+    </div>
+
+    <!-- VI. ABAB -->
+    <div id="ngupap-g6" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">VI</span><span class="gtt">ABAB - Dong tu lap lai giam nhe cam ket</span></div>
+        <div class="gsb">Khi dong tu (mot hoac hai am tiet) duoc lap lai, muc do cam ket voi hanh dong giam di. Mau cau nay thuong xuat hien trong cau menh lenh hoac de nghi.</div>
+        <div class="fm">AB → ABAB<div class="fn">Lap lai dong tu hai am tiet de giam nhe ngu y</div></div>
+
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">今天學的漢字，我還得練習練習。</div></td><td><div class="py">Jintian xue de Hanzi, wo hai dei lianxi lianxi.</div></td><td><div class="vi">Chu Han hoc hom nay, toi con phai luyen tap chut nua.</div></td></tr>
+          <tr><td><div class="zh">你有空的時候，應該去旅行，多認識認識一些台灣朋友。</div></td><td><div class="py">Ni you kong de shihou, yinggai qu luxing, duo renshi renshi yixie Taiwan pengyou.</div></td><td><div class="vi">Khi ban ranh, nen di du lich, quen biet them mot so nguoi ban Dai Loan.</div></td></tr>
+          <tr><td><div class="zh">我想了解了解你是怎麼學中文的，為什麼說得這麼流利。</div></td><td><div class="py">Wo xiang liaojie liaojie ni shi zenme xue Zhongwen de, wei shenme shuo de zheme liuli.</div></td><td><div class="vi">Toi muon hieu ro xem ban hoc tieng Trung nhu the nao, sao noi troi chay vay.</div></td></tr>
+        </table>
+
+        <div style="margin-top:14px;font-weight:700;color:var(--b);font-size:16px;">Cau hoi va cau phu dinh</div>
+        <table class="ex">
+          <tr><th>Vi du</th><th>Phien am</th><th>Nghia</th></tr>
+          <tr><td><div class="zh">下星期要考試，你怎麼不準備準備呢？</div></td><td><div class="py">Xia xingqi yao kaoshi, ni zenme bu zhunbei zhunbei ne?</div></td><td><div class="vi">Tuan sau co ki thi, sao ban khong chuan bi chut nao?</div></td></tr>
+          <tr><td><div class="zh">你不練習練習寫字，聽寫怎麼考得好？</div></td><td><div class="py">Ni bu lianxi lianxi xie zi, tingxie zenme kao de hao?</div></td><td><div class="vi">Ban khong luyen viet chu, chinh ta sao thi tot duoc?</div></td></tr>
+          <tr><td><div class="zh">我們不參觀參觀，怎麼知道這個學校好不好？</div></td><td><div class="py">Women bu canguan canguan, zenme zhidao zhege xuexiao hao bu hao?</div></td><td><div class="vi">Chung ta khong di tham quan tham, biet the nao truong nay co tot khong?</div></td></tr>
+          <tr><td><div class="zh">我是你男朋友，你是不是應該多關心關心我？</div></td><td><div class="py">Wo shi ni nan pengyou, ni shi bu shi yinggai duo guanxin guanxin wo?</div></td><td><div class="vi">Toi la ban trai cua ban, ban co nen quan tam toi nhieu hon khong?</div></td></tr>
+          <tr><td><div class="zh">這個週末，你要不要在家休息休息？</div></td><td><div class="py">Zhege zhoumo, ni yao bu yao zai jia xiuxi xiuxi?</div></td><td><div class="vi">Cuoi tuan nay, ban co muon o nha nghi ngoi khong?</div></td></tr>
+        </table>
+
+        <div class="gnote"> Vi dang lap lai da chi muc do giam nhe, nen khong dung ket hop voi 一下 hay 一點 (cung chi muc do giam). Vi du sai: *我得練習練習一下 (sai), *你得關心關心她一點 (sai).<br><br>Cac dong tu thuong dung voi ABAB: 練習, 準備, 認識, 了解, 休息, 參觀, 研究, 收拾, 打扮, 運動.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- BAI TAP -->
+  <div id="baitap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bai 1 · 差不多</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bai 2 · 過</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bai 3 · 才 (chi/moi)</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bai 4 · 想起來</button>
+      <button class="subtab" onclick="goSub('baitap','bt5')">📝 Bai 5 · 才 (lau hon)</button>
+      <button class="subtab" onclick="goSub('baitap','bt6')">📝 Bai 6 · ABAB</button>
+    </div>
+
+    <!-- Bai 1: 差不多 -->
+    <div id="baitap-bt1" class="sub-content on">
+      <div class="ec">
+        <div class="ett">📝 Bai 1 · Hoan thanh cau voi 差不多</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Tra loi cac cau hoi sau bang cach dung 差不多.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>A: 從學校到捷運站差不多得走多久？<br>B: <input class="fi" id="e1-1" style="width:160px;"> 。</div><div class="eh">→ Tu truong den tram tau dien ngam gan di bao lau?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>A: 你的考試準備得怎麼樣了？<br>B: <input class="fi" id="e1-2" style="width:160px;"> 。</div><div class="eh">→ Ky thi cua ban chuan bi den dau roi?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>A: 這兩個房間的房租是不是差不多？<br>B: <input class="fi" id="e1-3" style="width:160px;"> 。</div><div class="eh">→ Tien thue hai phong nay gan bang nhau phai khong?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>A: 你習慣這裡的生活了嗎？<br>B: <input class="fi" id="e1-4" style="width:160px;"> 。</div><div class="eh">→ Ban da quen song o day chua?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>A: 你新年要吃的東西都準備了嗎？<br>B: <input class="fi" id="e1-5" style="width:160px;"> 。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑥</span>A: 我們準備要去餐廳了嗎？<br>B: <input class="fi" id="e1-6" style="width:160px;"> 。</div></div>
+        <button class="bck" onclick="ckE1()">✅ Kiem tra</button>
+        <button class="brs" onclick="rsE1()">🔄 Lam lai</button>
+        <div class="ab" id="ab1"><strong>Dap an:</strong> ① 差不多十分鐘 ② 差不多了 ③ 差不多 ④ 差不多了 ⑤ 差不多了 ⑥ 差不多了 (cac dap an khac chap nhan duoc: 差不多)</div>
+      </div>
+    </div>
+
+    <!-- Bai 2: 過 -->
+    <div id="baitap-bt2" class="sub-content">
+      <div class="ec" style="border-top-color:var(--b)">
+        <div class="ett" style="color:var(--b)">📝 Bai 2 · Hoan thanh cau voi 過</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Dien 過 vao vi tri thich hop de chi trai nghiem.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>這個字，我 <input class="fi" id="e2-1" style="width:140px;"> ，可是我忘記了。</div><div class="eh">→ Chu nay, toi da... nhung ma quen mat roi.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>A: 你坐<input class="fi" id="e2-2" style="width:140px;"> 台北捷運嗎？<br>B: 可我是沒聽過<input class="fi" id="e2-3" style="width:140px;"> 。</div><div class="eh">→ A: Ban da di tau dien ngam Dai Bac chua? B: Nhung toi chua nghe thay.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>我們都看<input class="fi" id="e2-4" style="width:140px;"> ，我知道她去<input class="fi" id="e2-5" style="width:140px;">好幾次 。</div><div class="eh">→ Chung ta deu da xem..., toi biet co ay da di... may lan roi.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>A: 你在台灣看<input class="fi" id="e2-6" style="width:100px;">醫生、吃<input class="fi" id="e2-7" style="width:100px;">藥嗎？</div><div class="eh">→ Ban da kham bac si, uong thuoc o Dai Loan chua?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>王小姐 <input class="fi" id="e2-8" style="width:140px;">？我知道她<input class="fi" id="e2-9" style="width:140px;">好幾次。</div><div class="eh">→ Chi Vuong...? Toi biet co ay da di nhieu lan roi.</div></div>
+        <button class="bck" onclick="ckE2()">✅ Kiem tra</button>
+        <button class="brs" onclick="rsE2()">🔄 Lam lai</button>
+        <div class="ab" id="ab2"><strong>Dap an:</strong> ① 學過 ② 過, 這件事 ③ 過那本書, 過那家店 ④ 過, 過 ⑤ 去過沒有, 去過 (dap an co the thay doi)</div>
+      </div>
+    </div>
+
+    <!-- Bai 3: 才 (chi/moi) -->
+    <div id="baitap-bt3" class="sub-content">
+      <div class="ec" style="border-top-color:var(--r)">
+        <div class="ett" style="color:var(--r)">📝 Bai 3 · Hoan thanh cau voi 才</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Dien 才 vao vi tri thich hop.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>這支手機 <input class="fi" id="e3-1" style="width:160px;"> 一千塊，真便宜。</div><div class="eh">→ Dien thoai nay moi co nghin dong, that re.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>從這裡到捷運站 <input class="fi" id="e3-2" style="width:160px;"> 十分鐘，不遠。</div><div class="eh">→ Tu day den tram tau dien ngam moi co muoi phut, khong xa.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>這本書，我 <input class="fi" id="e3-3" style="width:160px;"> 看了三頁。</div><div class="eh">→ Quyen sach nay, toi moi xem co ba trang.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>他 <input class="fi" id="e3-4" style="width:160px;"> 學了一個月的中文。</div><div class="eh">→ Anh ay moi hoc tieng Trung co mot thang.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>A: 你常去貓空喝茶嗎？<br>B: 不常， <input class="fi" id="e3-5" style="width:160px;"> 。</div><div class="eh">→ A: Ban co thuong di Maokhong uong tra khong? B: Khong thuong,...</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑥</span>A: 今天要考的漢字，你都準備了嗎？<br>B: 還沒，我 <input class="fi" id="e3-6" style="width:160px;"> 。</div><div class="eh">→ A: Chu Han thi hom nay ban chuan bi het chua? B: Chua, toi...</div></div>
+        <button class="bck" onclick="ckE3()">✅ Kiem tra</button>
+        <button class="brs" onclick="rsE3()">🔄 Lam lai</button>
+        <div class="ab" id="ab3"><strong>Dap an:</strong> ① 才 ② 才 ③ 才 ④ 才 ⑤ 才去了兩次 ⑥ 才準備了一半 (cac dap an tuong duong chap nhan duoc)</div>
+      </div>
+    </div>
+
+    <!-- Bai 4: 想起來 -->
+    <div id="baitap-bt4" class="sub-content">
+      <div class="ec" style="border-top-color:#764ba2">
+        <div class="ett" style="color:#764ba2">📝 Bai 4 · Hoan thanh cau voi 想起來</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Dien 想起來 hoac phu dinh vao cau.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>甲：你好！<br>乙：請問你是…？<br>甲：我是你的高中同學啊！<br>乙：噢，我 <input class="fi" id="e4-1" style="width:160px;"> 。</div><div class="eh">→ O, toi nho ra roi.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>甲：我們幾點去？<br>乙：去哪裡？<br>甲：你不記得了啊！<br>乙：噢，<input class="fi" id="e4-2" style="width:160px;"> 。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>甲：你知道陳月美什麼時候回越南嗎？<br>乙：她跟我說過，我想<input class="fi" id="e4-3" style="width:120px;"> 。<br>甲：你想<input class="fi" id="e4-4" style="width:120px;">了嗎？<br>乙：我想起來了，是下個月一號。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>老師：你的作業本子呢？<br>學生：我不知道在哪裡。<br>老師：快想一想！<br>學生：好，我想一想，我 <input class="fi" id="e4-5" style="width:160px;"> 了，在家裡。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>甲：我忘了昨天看見的同學姓什麼。<br>乙：你沒想<input class="fi" id="e4-6" style="width:120px;">嗎？<br>甲：當然想過，可是我 <input class="fi" id="e4-7" style="width:140px;"> 。<br>乙：我想沒關係吧。</div></div>
+        <button class="bck" onclick="ckE4()">✅ Kiem tra</button>
+        <button class="brs" onclick="rsE4()">🔄 Lam lai</button>
+        <div class="ab" id="ab4"><strong>Dap an:</strong> ① 想起來了 ② 我想起來了 ③ 一想, 起來 ④ 想起來 ⑤ 一想, 還沒想起來</div>
+      </div>
+    </div>
+
+    <!-- Bai 5: 才 (lau hon) -->
+    <div id="baitap-bt5" class="sub-content">
+      <div class="ec" style="border-top-color:var(--g)">
+        <div class="ett" style="color:var(--g)">📝 Bai 5 · Hoan thanh cau voi 才 (lau hon du kien)</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Dien 才 vao vi tri thich hop.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我們八點上課，田中先生今天早上十一點 <input class="fi" id="e5-1" style="width:160px;"> 來。</div><div class="eh">→ Chung ta hoc 8 gio, ong Tiannang hom nay 11 gio moi den.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>我們要搭下午三點的飛機，可是陳先生 <input class="fi" id="e5-2" style="width:200px;"> 出門。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>平常，你等捷運要等十分鐘，今天只等了五分鐘，你會怎麼說？<br>我 <input class="fi" id="e5-3" style="width:300px;"> 。</div><div class="eh">→ Binh thuong doi tau 10 phut, hom nay chi 5 phut, ban noi sao?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>紐約去年十一月開始下雪，今年十二月 <input class="fi" id="e5-4" style="width:250px;">開始下雪。你想白如玉會怎麼說？<br>今年 <input class="fi" id="e5-5" style="width:300px;"> 。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>田中班上有個日本同學，他們以前不認識，到師大學中文以後認識的，你會怎麼說？<br>他們 <input class="fi" id="e5-6" style="width:350px;"> 。</div></div>
+        <button class="bck" onclick="ckE5()">✅ Kiem tra</button>
+        <button class="brs" onclick="rsE5()">🔄 Lam lai</button>
+        <div class="ab" id="ab5"><strong>Dap an:</strong> ① 才 ② 才 ③ 才等了五分鐘，捷運就來了 ④ 才, 十二月才開始下雪 ⑤ 到師大才認識的 (cac dap an tuong duong)</div>
+      </div>
+    </div>
+
+    <!-- Bai 6: ABAB -->
+    <div id="baitap-bt6" class="sub-content">
+      <div class="ec" style="border-top-color:#f57c00">
+        <div class="ett" style="color:#f57c00">📝 Bai 6 · Viet lai cau voi dong tu lap lai ABAB</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Chuyen cac cau sau sang dung dong tu lap lai ABAB.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我很累，我得休息。<br>→ 我很累，我得 <input class="fi" id="e6-1" style="width:160px;"> 。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>放假的時候，我想去參觀故宮。<br>→ 放假的時候，我想去 <input class="fi" id="e6-2" style="width:160px;">故宮。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>我得準備明天的聽寫，所以不能出去玩。<br>→ 我得 <input class="fi" id="e6-3" style="width:160px;">明天的聽寫，所以不能出去玩。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>同學生病了，我們得關心她。<br>→ 同學生病了，我們得 <input class="fi" id="e6-4" style="width:160px;">她。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>要是我常練習，就不會忘了怎麼寫漢字。<br>→ 要是我常 <input class="fi" id="e6-5" style="width:160px;">，就不會忘了怎麼寫漢字。</div></div>
+        <button class="bck" onclick="ckE6()">✅ Kiem tra</button>
+        <button class="brs" onclick="rsE6()">🔄 Lam lai</button>
+        <div class="ab" id="ab6"><strong>Dap an:</strong> ① 休息休息 ② 參觀參觀 ③ 準備準備 ④ 關心關心 ⑤ 練習練習</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VAN HOA -->
+  <div id="vanhoa" class="sec">
+    <div class="culture-box">
+      <h3>🌍 Tu vay muon ngoai lai · 外來詞</h3>
+      <div style="margin-bottom:14px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">外來語，特別是日語和英語，對台灣的詞彙有很大的影響。日本殖民時期，很多日語詞彙進入了台灣的日常生活。便當（bento，盒裝午餐）和麻糬（mochi，糯米食品）就是兩個例子。中國與西方接觸以後，像「幽默」（humor）和「邏輯」（logic）這樣的英語術語被音譯成中文。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Wailai yu, tebie shi Riyu he Yingyu, dui Taiwan de cihui you hen da de yingxiang. Riben zhimin shiqi, hen duo Riyu cihui jinrule Taiwan de richang shenghuo. Biandang (bento, hezhuang wucan) he mashi (mochi, nuomi shipin) jiu shi liang ge lizi. Zhongguo yu xifang jiechu yihou, xiang "youmo" (humor) he "luoji" (logic) zheyang de Yingyu shuyu bei yinyi cheng Zhongwen.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Ngon ngu nuoc ngoai, dac biet la tieng Nhat va tieng Anh, co anh huong lon den tu vung Dai Loan. Thoi ky thuoc dia Nhat Ban, nhieu tu tieng Nhat da di vao doi song hang ngay cua Dai Loan. Bentō (hop com trua) va mochi (banh nep) la hai vi du. Sau khi Trung Quoc tiep xuc voi phuong Tay, cac thuat ngu tieng Anh nhu "humor" va "logic" duoc am dich sang tieng Trung.</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">近幾十年來，旅遊的便利、科技的進步和頻繁的文化交流給台灣帶來了許多其他外來詞。英語詞彙如「嗨」（hi）和「T恤」（T-shirt）被音譯為嗨和T恤；「Bye-bye」變成了拜拜。最近還有一些有趣的組合——「小case」字面意思是「一個小案子」或「一件不重要的事」——翻譯為「很容易」或「沒什麼大不了」。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Jin ji shi nian lai, luyou de bianli, keji de jinbu he pinfan de wenhua jiaoliu gei Taiwan dailai le xuduo qita wailai ci. Yingyu cihui ru "hi" he "T-shirt" bei yinyi wei hai he T-xu; "Bye-bye" biancheng le baibai. Zuijin hai you yixie youqu de zuhe - "xiao case" zimian yisi shi "yige xiao anzi" huo "yijian bu zhongyao de shi" - fanyi wei "hen rongyi" huo "mei shenme da buliao".</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Trong vai thap ky gan day, su tien loi cua du lich, tien bo cong nghe va giao luu van hoa thuong xuyen da mang den nhieu tu vay muon khac cho Dai Loan. Cac tu tieng Anh nhu "hi" va "T-shirt" duoc am dich thanh hai va T-xu; "Bye-bye" tro thannh bai bai. Gan day con co mot so to hop thu vi - "xiao case" nghia den la "mot vu nho" hoac "mot viec khong quan trong" - dich la "rat de" hoac "khong co gi dau".</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">因為日語用漢字書寫，台灣人直接採用了日語詞彙如宅男（otaku，男性「極客」或「書呆子」）和宅女（otaku，女性「極客」），以及達人（tatsujin，技藝高超的人）。但是別混淆了。台灣人在借用外來詞時很有創意。例如，當兩個朋友很親密時，我們稱之為麻吉——聽起來像日語，對吧？實際上，這是我們對英語「match」的版本。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Yinwei Riyu yong Hanzi shuxie, Taiwan ren zhijie caiyong le Riyu cihui ru zhainan (otaku, nanxing "jike" huo "shudaizi") he zhai nu (otaku, nu xing "jike"), yiji daren (tatsujin, jiyi gaochao de ren). Danshi bie hunxiao le. Taiwan ren zai jieyong wailai ci shi hen you chuangyi. Li ru, dang liang ge pengyou hen qinmi shi, women cheng zhi wei maji - ting qilai xiang Riyu, dui ba? Shiji shang, zhe shi women dui Yingyu "match" de banben.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Vi tieng Nhat viet bang chu Han, nguoi Dai Loan da truc tiep chap nhan cac tu tieng Nhat nhu trai nam (otaku, dan ong "geek" hoc "muk thu") va trai nu (otaku, phu nu "geek"), cung nhu dat nhan (tatsujin, nguoi co ky nang cao). Nhung dung nham lan. Nguoi Dai Loan rat sang tao khi muon tu ngoai lai. Vi du, khi hai nguoi ban than thiet, chung ta goi la ma tat - nghe giong tieng Nhat, dung khong? Thuc te, day la phien ban cua chung ta tu tieng Anh "match".</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>GIA SU HOA NGU TAN AN</strong> &nbsp;·&nbsp; 9/1 Bach Van Tu, Tan An, Long An &nbsp;·&nbsp; Zalo: 0839 889 772<br>
+    當代中文課程 2 · 第三課 你的中文進步了 — Tai lieu giang day noi bo
+  </footer>
+</div>
+
+<script>
+// ── DU LIEU TU VUNG ──────────────────────────────────────────
+const TV1=[
+  {n:'1', zh:'進步', py:'jinbu', vi:'tien bo, su tien bo', t:'Vp'},
+  {n:'2', zh:'早', py:'zao', vi:'som', t:'N/Adv'},
+  {n:'3', zh:'考試', py:'kaoshi', vi:'ki thi, bai thi', t:'N/V'},
+  {n:'4', zh:'準備', py:'zhunbei', vi:'chuan bi, san sang', t:'V'},
+  {n:'5', zh:'考', py:'kao', vi:'thi, lam bai thi', t:'N/V'},
+  {n:'6', zh:'聽寫', py:'tingxie', vi:'chinh ta, nghe viet', t:'N'},
+  {n:'7', zh:'容易', py:'rongyi', vi:'de dang, de', t:'Vs'},
+  {n:'8', zh:'小學', py:'xiaoxue', vi:'tieu hoc', t:'N'},
+  {n:'9', zh:'漢字', py:'hanzi', vi:'chu Han', t:'N'},
+  {n:'10', zh:'高中', py:'gaozhong', vi:'trung hoc pho thong', t:'N'},
+  {n:'11', zh:'過', py:'guo', vi:'tieu tu trai nghiem', t:'Ptc'},
+  {n:'12', zh:'才', py:'cai', vi:'chi, moi', t:'Adv'},
+  {n:'13', zh:'說話', py:'shuohua', vi:'noi chuyen, noi', t:'V-sep'},
+  {n:'14', zh:'不夠', py:'bu gou', vi:'khong du, chua du', t:'Adv'},
+  {n:'15', zh:'流利', py:'liuli', vi:'troi chay, luu loat', t:'Vs'},
+  {n:'16', zh:'雖然', py:'suiran', vi:'tuy rang, mac du', t:'NConj'},
+  {n:'17', zh:'環境', py:'huanjing', vi:'moi truong', t:'N'},
+  {n:'18', zh:'同意', py:'tongyi', vi:'dong y', t:'Vst'},
+  {n:'19', zh:'報紙', py:'baozhi', vi:'bao chi, to bao', t:'N'},
+  {n:'20', zh:'麵包', py:'mianbao', vi:'banh mi', t:'N'},
+  {n:'21', zh:'演講', py:'yanjiang', vi:'bai thuyet trinh', t:'N'},
+  {n:'22', zh:'噢', py:'o', vi:'o, o (tieng than)', t:'Ptc'},
+];
+
+const CT1=[
+  {n:'23', zh:'活動中心', py:'huodong zhongxin', vi:'trung tam hoat dong'},
+  {n:'24', zh:'想起來', py:'xiang qilai', vi:'nho ra, nho lai'},
+];
+
+const TV2=[
+  {n:'1', zh:'選', py:'xuan', vi:'chon, tuyen chon', t:'V'},
+  {n:'2', zh:'作業', py:'zuoye', vi:'bai tap', t:'N'},
+  {n:'3', zh:'練習', py:'lianxi', vi:'luyen tap', t:'V'},
+  {n:'4', zh:'半夜', py:'banye', vi:'nua dem', t:'N'},
+  {n:'5', zh:'高興', py:'gaoxing', vi:'vui, vui mung', t:'Vs'},
+  {n:'6', zh:'平常', py:'pingchang', vi:'binh thuong, thuong', t:'Adv'},
+  {n:'7', zh:'爬山', py:'pa shan', vi:'leo nui', t:'V-sep'},
+  {n:'8', zh:'認識', py:'renshi', vi:'quen biet, biet', t:'Vpt'},
+  {n:'9', zh:'聊天', py:'liao tian', vi:'noi chuyen, tam su', t:'V-sep'},
+  {n:'10', zh:'文化', py:'wenhua', vi:'van hoa', t:'N'},
+  {n:'11', zh:'廣告', py:'guanggao', vi:'quang cao', t:'N'},
+  {n:'12', zh:'位', py:'wei', vi:'vi (luong tu lich su cho nguoi)', t:'M'},
+  {n:'13', zh:'了解', py:'liaojie', vi:'hieu ro, tim hieu', t:'V'},
+  {n:'14', zh:'生活', py:'shenghuo', vi:'cuoc song, sinh hoat', t:'N'},
+  {n:'15', zh:'陽明山', py:'Yangming Shan', vi:'Duong Minh Son', t:'NR'},
+];
+
+const CT2=[
+  {n:'16', zh:'外國人', py:'waiguoren', vi:'nguoi nuoc ngoai'},
+  {n:'17', zh:'一些', py:'yixie', vi:'mot it, mot so'},
+];
+
+const NV=[
+  {n:'1', zh:'田中', py:'Tianzhong', vi:'Tianzhong (Ten nguoi Nhat)'},
+  {n:'2', zh:'王如玉', py:'Wang Ruyu', vi:'Vuong Nhu Ngoc (Ten nguoi)'},
+  {n:'3', zh:'馬安同', py:'Ma Antong', vi:'Ma An Dong (Ten nguoi)'},
+  {n:'4', zh:'陳月美', py:'Chen Yuemei', vi:'Tran Nguyet My (Ten nguoi)'},
+];
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+const HW=new Set('進步早考試準備聽寫容易小學漢字高中過才說話不夠流利雖然環境同意報紙麵包演講噢活動中心想起來選作業練習半夜高興平常爬山認識聊天文化廣告位了解生活陽明山外國人一些田中王如玉馬安同陳月美'.split(''));
+function canStroke(zh){return[...zh].some(c=>HW.has(c));}
+
+// ── BUILD TABLE ───────────────────────────────────────────────
+function buildTable(id,arr,hasType){
+  const th=`<thead><tr>
+    <th class="tc" style="width:36px">STT</th>
+    <th class="tc" style="width:44px">🔊</th>
+    <th>Chu Han</th><th>Phien am</th><th>Nghia tieng Viet</th>
+    ${hasType?'<th class="tc" style="width:58px">Tu loai</th>':''}
+    <th class="tc" style="width:48px">Bi thuan</th>
+  </tr></thead>`;
+  const tb=arr.map(w=>{
+    const s=w.zh.replace(/'/g,"\\'");
+    return`<tr>
+      <td class="c-stt">${w.n}</td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
+      <td class="c-py"><span class="py-text">${w.py}</span></td>
+      <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
+      ${hasType?`<td class="c-tp">${w.t?`<span class="tp-bd">${w.t}</span>`:''}</td>`:''}
+      <td class="c-st">${canStroke(w.zh)?`<button class="bst" onclick="openStroke('${s}')">Bi</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById(id).innerHTML=th+'<tbody>'+tb+'</tbody>';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTable('t-t1',TV1,true);
+  buildTable('t-t2',TV2,true);
+  buildTable('t-c1',CT1,false);
+  buildTable('t-c2',CT2,false);
+  buildTable('t-nv',NV,false);
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb[data-sec]').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`.nb[data-sec="${id}"]`)?.classList.add('on');
+  document.getElementById('toggleContainer').style.display=id==='baikoa'?'block':'none';
+  window.scrollTo(0,0);
+}
+function goSub(sec,sub){
+  document.querySelectorAll(`#${sec} .sub-content`).forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll(`#${sec} .subtab`).forEach(e=>e.classList.remove('on'));
+  document.getElementById(`${sec}-${sub}`).classList.add('on');
+  event.target.classList.add('on');
+}
+
+// ── TOGGLE ────────────────────────────────────────────────────
+let sPY=true,sVI=true;
+function tog(l){
+  if(l==='py'){
+    sPY=!sPY;
+    document.querySelectorAll('.spy').forEach(e=>e.classList.toggle('hd',!sPY));
+    document.getElementById('tp').classList.toggle('on',sPY);
+  }else{
+    sVI=!sVI;
+    document.querySelectorAll('.svi').forEach(e=>e.classList.toggle('hd',!sVI));
+    document.getElementById('tv').classList.toggle('on',sVI);
+  }
+}
+
+// ── BAI TAP ──────────────────────────────────────────────────
+function setField(id,ok){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.toggle('ok',ok);
+  el.classList.toggle('er',!ok&&el.value.trim().length>0);
+}
+function resetFields(ids,abId){
+  ids.forEach(k=>{const el=document.getElementById(k);el.value='';el.classList.remove('ok','er');});
+  document.getElementById(abId).classList.remove('sh');
+}
+function showAns(id){document.getElementById(id).classList.add('sh');}
+
+// Bai 1: 差不多
+function ckE1(){
+  const ans=['差不多十分鐘','差不多了','差不多','差不多了','差不多了','差不多了'];
+  for(let i=1;i<=6;i++){
+    const v=document.getElementById('e1-'+i)?.value.trim()||'';
+    setField('e1-'+i, v.includes('差不多'));
+  }
+  showAns('ab1');
+}
+function rsE1(){resetFields(['e1-1','e1-2','e1-3','e1-4','e1-5','e1-6'],'ab1');}
+
+// Bai 2: 過
+function ckE2(){
+  const checks=[
+    ['e2-1','學過'],['e2-2','過'],['e2-3','這件事'],['e2-4','過那本書'],['e2-5','過那家店'],
+    ['e2-6','過'],['e2-7','過'],['e2-8','去過沒有'],['e2-9','去過']
+  ];
+  checks.forEach(([k,a])=>{
+    const v=document.getElementById(k)?.value.trim()||'';
+    setField(k,v.includes(a)||(k==='e2-3'&&v.length>0)||(k==='e2-8'&&v.includes('過')));
+  });
+  showAns('ab2');
+}
+function rsE2(){resetFields(['e2-1','e2-2','e2-3','e2-4','e2-5','e2-6','e2-7','e2-8','e2-9'],'ab2');}
+
+// Bai 3: 才 (chi/moi)
+function ckE3(){
+  for(let i=1;i<=6;i++){
+    const v=document.getElementById('e3-'+i)?.value.trim()||'';
+    setField('e3-'+i,v.includes('才'));
+  }
+  showAns('ab3');
+}
+function rsE3(){resetFields(['e3-1','e3-2','e3-3','e3-4','e3-5','e3-6'],'ab3');}
+
+// Bai 4: 想起來
+function ckE4(){
+  const v1=document.getElementById('e4-1')?.value.trim()||'';
+  setField('e4-1',v1.includes('想起來'));
+  const v2=document.getElementById('e4-2')?.value.trim()||'';
+  setField('e4-2',v2.includes('想起來'));
+  const v3=document.getElementById('e4-3')?.value.trim()||'';
+  setField('e4-3',v3.includes('一想'));
+  const v4=document.getElementById('e4-4')?.value.trim()||'';
+  setField('e4-4',v4.includes('起來'));
+  const v5=document.getElementById('e4-5')?.value.trim()||'';
+  setField('e4-5',v5.includes('想起來'));
+  const v6=document.getElementById('e4-6')?.value.trim()||'';
+  setField('e4-6',v6.includes('一想'));
+  const v7=document.getElementById('e4-7')?.value.trim()||'';
+  setField('e4-7',v7.includes('沒想起來')||v7.includes('還沒'));
+  showAns('ab4');
+}
+function rsE4(){resetFields(['e4-1','e4-2','e4-3','e4-4','e4-5','e4-6','e4-7'],'ab4');}
+
+// Bai 5: 才 (lau hon)
+function ckE5(){
+  for(let i=1;i<=6;i++){
+    const v=document.getElementById('e5-'+i)?.value.trim()||'';
+    setField('e5-'+i,v.includes('才'));
+  }
+  showAns('ab5');
+}
+function rsE5(){resetFields(['e5-1','e5-2','e5-3','e5-4','e5-5','e5-6'],'ab5');}
+
+// Bai 6: ABAB
+function ckE6(){
+  const checks=[['e6-1','休息休息'],['e6-2','參觀參觀'],['e6-3','準備準備'],['e6-4','關心關心'],['e6-5','練習練習']];
+  checks.forEach(([k,a])=>{
+    const v=document.getElementById(k)?.value.trim()||'';
+    setField(k,v.includes(a));
+  });
+  showAns('ab6');
+}
+function rsE6(){resetFields(['e6-1','e6-2','e6-3','e6-4','e6-5'],'ab6');}
+
+// ── TTS ───────────────────────────────────────────────────────
+let VX=window.speechSynthesis.getVoices();
+window.speechSynthesis.onvoiceschanged=()=>{VX=window.speechSynthesis.getVoices();};
+function sayZh(t){
+  if(!window.speechSynthesis){alert('Trinh duyet khong ho tro TTS.');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  let v=null;
+  for(const p of['zh-TW','zh-CN','zh','cmn']){
+    v=VX.find(x=>x.lang?.toLowerCase().startsWith(p.toLowerCase()));
+    if(v)break;
+  }
+  if(v)u.voice=v;
+  u.lang='zh-TW';u.rate=0.82;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+let hwInstances=[];
+function openStroke(word){
+  const chars=[...word].filter(c=>HW.has(c));
+  if(!chars.length)return;
+  hwInstances.forEach(h=>{try{h.writer.cancelAnimation();}catch(e){}});
+  hwInstances=[];
+  document.getElementById('otitle').textContent='Bi thuan · '+word;
+  const framesEl=document.getElementById('oframes');
+  framesEl.innerHTML='';
+  const SIZE=chars.length>3?110:140;
+  chars.forEach((ch,i)=>{
+    const cell=document.createElement('div');cell.className='hw-cell';
+    const svg=document.createElement('div');svg.id='hw-svg-'+i;
+    svg.style.cssText=`width:${SIZE}px;height:${SIZE}px;border:2px solid #e0e0e0;border-radius:8px;background:#fafafa;`;
+    const lbl=document.createElement('span');lbl.textContent=ch;
+    cell.appendChild(svg);cell.appendChild(lbl);framesEl.appendChild(cell);
+    try{
+      const w=HanziWriter.create(svg.id,ch,{
+        width:SIZE,height:SIZE,padding:10,
+        strokeColor:'#c62828',outlineColor:'#e0e0e0',
+        strokeAnimationSpeed:1,delayBetweenStrokes:200,
+        showCharacter:true,showOutline:true,
+        charDataLoader:(char,onLoad,onError)=>{
+          fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${char}.json`)
+            .then(r=>r.json()).then(d=>onLoad(d))
+            .catch(()=>fetch(`https://raw.githubusercontent.com/chanind/hanzi-writer-data/master/${char}.json`)
+              .then(r=>r.json()).then(d=>onLoad(d)).catch(err=>onError(err)));
+        }
+      });
+      hwInstances.push({writer:w});
+    }catch(e){console.warn('HanziWriter error',ch,e);}
+  });
+  const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
+  [['▶ Hoat anh',hwAnimAll,''],['🔄 Lap',hwLoopAll,''],['✕ Dong',closeOv,'red']].forEach(([txt,fn,cls])=>{
+    const b=document.createElement('button');
+    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+  });
+  document.getElementById('ov').classList.add('open');
+}
+function hwAnimAll(){hwInstances.forEach((h,i)=>setTimeout(()=>h.writer.animateCharacter(),i*600));}
+function hwLoopAll(){let i=0;(function next(){if(i>=hwInstances.length)i=0;hwInstances[i].writer.animateCharacter({onComplete:()=>{i++;next();}});})();}
+function closeOv(){document.getElementById('ov').classList.remove('open');}
+function ovClick(e){if(e.target===document.getElementById('ov'))closeOv();}
+
+// ── EDITOR ────────────────────────────────────────────────────
+let quill;
+function openEditor(){
+  document.getElementById('editorModal').classList.add('open');
+  if(!quill){
+    quill=new Quill('#editor-content',{
+      theme:'snow',
+      placeholder:'Viet ghi chu Bai 3 Quyen 2 o day...',
+      modules:{toolbar:'#editor-toolbar'}
+    });
+    const saved=localStorage.getItem('bai3_q2_notes');
+    if(saved)quill.root.innerHTML=saved;
+  }
+}
+function closeEditor(){document.getElementById('editorModal').classList.remove('open');}
+function saveEditor(){if(quill){localStorage.setItem('bai3_q2_notes',quill.root.innerHTML);alert('Da luu ghi chu!');}}
+function clearEditor(){if(quill&&confirm('Xoa tat ca ghi chu?')){quill.root.innerHTML='';localStorage.removeItem('bai3_q2_notes');}}
+setInterval(()=>{
+  if(quill&&document.getElementById('editorModal').classList.contains('open'))
+    localStorage.setItem('bai3_q2_notes',quill.root.innerHTML);
+},30000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditor();closeOv();}});
+</script>
+</body>
+</html>
