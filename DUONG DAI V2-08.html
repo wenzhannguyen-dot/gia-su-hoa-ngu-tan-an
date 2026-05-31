@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>第八課 學功夫</title>
+<base target="_blank">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+:root{
+  --g:#2e7d32;--g0:#e8f5e9;
+  --b:#1565c0;--b0:#dbeafe;
+  --r:#c62828;--r0:#fff3e0;
+  --s:#607d8b;--s0:#f0f4f5;
+  --k:#222;--w:#fff;
+  --sw:200px;
+  --fzh:32px;--fpy:19px;--fvi:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
+.zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
+
+/* SIDEBAR */
+#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
+.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
+.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
+.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
+.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
+.logo-area{text-align:center;padding:5px 0;}
+.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+.logo-container img{width:100%;height:100%;object-fit:contain;}
+nav{flex:1;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
+.nb:hover{background:rgba(255,255,255,.1);}
+.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+.nb .ic{font-size:18px;}
+.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
+.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
+.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
+.st-btn:hover{background:rgba(255,255,255,.1);}
+.st-btn.on{background:var(--g);border-color:var(--g);}
+
+/* MAIN */
+#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+.tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
+.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
+.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+
+/* SECTIONS */
+.sec{display:none;padding:20px 24px;}
+.sec.on{display:block;}
+.subnav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e0e0e0;flex-wrap:wrap;}
+.subtab{background:#f5f5f5;border:none;padding:10px 20px;font-size:14px;font-weight:600;color:#666;cursor:pointer;border-radius:8px 8px 0 0;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.subtab:hover{background:#e8e8e8;color:var(--b);}
+.subtab.on{background:var(--b);color:#fff;border-bottom-color:var(--r);}
+.sub-content{display:none;}
+.sub-content.on{display:block;}
+
+/* VOCAB TABLE */
+.vt-wrap{overflow-x:auto;margin-bottom:6px;}
+table.vt{border-collapse:collapse;background:var(--w);border-radius:8px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.09);table-layout:auto;width:auto;min-width:100%;}
+table.vt thead tr{background:var(--b);}
+table.vt thead th{padding:9px 12px;font-size:13px;font-weight:700;color:#fff;text-align:left;white-space:nowrap;}
+table.vt thead th.tc{text-align:center;}
+table.vt tbody tr{border-bottom:1px solid #e8ecf0;}
+table.vt tbody tr:last-child{border-bottom:none;}
+table.vt tbody tr:hover{background:#f5f8ff;}
+.c-stt{padding:10px 8px;text-align:center;white-space:nowrap;width:36px;font-size:14px;font-weight:600;color:var(--s);}
+.c-au{padding:10px 6px;text-align:center;white-space:nowrap;width:44px;}
+.c-zh,.c-py{padding:10px;white-space:nowrap;}
+.c-vi{padding:10px;}
+.c-tp{padding:10px 8px;text-align:center;white-space:nowrap;width:58px;}
+.c-st{padding:10px 8px;text-align:center;white-space:nowrap;width:48px;}
+.zh-word{font-size:var(--fzh);color:var(--k);letter-spacing:1px;}
+.py-text{font-size:var(--fpy);color:var(--r);font-weight:500;}
+.vi-text{font-size:var(--fvi);color:var(--b);line-height:1.4;}
+.tp-bd{display:inline-block;font-size:12px;color:#fff;background:var(--s);border-radius:4px;padding:2px 8px;font-weight:600;}
+.bau{background:var(--b);color:#fff;border:none;border-radius:7px;padding:7px 9px;font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.bau:hover{background:#0d47a1;}
+.bau:active{transform:scale(.92);}
+.bst{background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;color:var(--r);line-height:1;}
+.bst:hover{color:#7b0000;}
+
+/* STROKE OVERLAY */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;align-items:center;justify-content:center;}
+#ov.open{display:flex;}
+#obox{background:var(--w);border-radius:14px;padding:24px 28px;max-width:480px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;}
+#ocls{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:var(--s);margin-top:-6px;line-height:1;}
+#otitle{font-size:18px;font-weight:700;color:var(--b);margin-bottom:16px;font-family:'DFKai-SB',serif;}
+#oframes{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hw-cell{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.hw-cell span{font-size:13px;color:var(--s);}
+.hw-controls{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hw-btn{background:var(--b);color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;}
+.hw-btn:hover{background:#0d47a1;}
+.hw-btn.red{background:var(--r);}
+.hw-btn.red:hover{background:#8d1515;}
+
+/* DIALOGUE */
+.db{background:var(--w);border-radius:12px;padding:16px 20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:5px solid var(--b);}
+.db.dg{border-top-color:var(--g);}
+.dt{font-size:15px;font-weight:700;color:var(--b);margin-bottom:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.db.dg .dt{color:var(--g);}
+.dlb{background:var(--b);color:#fff;padding:2px 11px;border-radius:12px;font-size:12px;}
+.db.dg .dlb{background:var(--g);}
+.dab{margin-left:auto;background:var(--b);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:700;}
+.db.dg .dab{background:var(--g);}
+table.dt2{width:100%;border-collapse:collapse;}
+table.dt2 tr{border-bottom:1px solid #f0f0f0;}
+table.dt2 tr:last-child{border-bottom:none;}
+td.d-au{width:44px;padding:11px 6px 11px 0;vertical-align:top;}
+td.d-sp{width:80px;padding:11px 8px 11px 0;vertical-align:top;}
+td.d-tx{padding:11px 0;}
+.spk{display:inline-block;text-align:center;font-size:15px;color:#fff;background:var(--g);padding:5px 7px;border-radius:8px;line-height:1.3;min-width:66px;font-family:'DFKai-SB',serif;}
+.spk.b{background:var(--b);}.spk.c{background:var(--r);}.spk.y{background:#f57c00;}
+.spk small{font-size:11px;display:block;font-family:'Segoe UI',sans-serif;}
+.szh{font-size:var(--fzh);color:var(--k);line-height:1.6;letter-spacing:1px;}
+.spy{font-size:var(--fpy);color:var(--r);margin-top:3px;line-height:1.5;font-weight:500;}
+.svi{font-size:var(--fvi);color:var(--b);margin-top:3px;line-height:1.5;font-style:italic;}
+.spy.hd,.svi.hd{display:none;}
+
+/* GRAMMAR */
+.gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
+.gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
+.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
+.gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
+table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
+table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;text-align:left;font-weight:700;}
+table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
+table.ex tr:last-child td{border-bottom:none;}
+table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
+table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
+
+/* EXERCISES */
+.ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
+.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ei{margin-bottom:14px;}
+.eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
+.eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
+.eh{font-size:14px;color:var(--s);font-style:italic;}
+input.fi{border:2px solid #ccc;border-radius:6px;padding:4px 9px;font-size:19px;width:110px;outline:none;font-family:'DFKai-SB',serif;}
+input.fi:focus{border-color:var(--b);}
+input.fi.ok{border-color:var(--g);background:var(--g0);}
+input.fi.er{border-color:var(--r);background:var(--r0);}
+.bck{background:var(--b);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.bck:hover{background:#0d47a1;}
+.brs{background:var(--s);color:#fff;border:none;padding:9px 15px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin:10px 0 0 8px;}
+.ab{display:none;margin-top:9px;background:var(--g0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--g);}
+.ab.sh{display:block;}
+
+/* CULTURE */
+.culture-box{background:linear-gradient(135deg,#fff,#f5f7fa);border-left:5px solid #ff6b6b;padding:20px;border-radius:12px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.culture-box h3{color:#e74c3c;margin-bottom:10px;font-size:18px;}
+.culture-box p{line-height:1.8;margin-bottom:10px;text-align:justify;}
+
+/* EDITOR MODAL */
+#editorModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
+#editorModal.open{display:flex;}
+.editor-container{background:#fff;border-radius:12px;width:90%;max-width:900px;height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.editor-header{background:var(--b);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0;}
+.editor-header h3{margin:0;font-size:18px;}
+.editor-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.editor-close:hover{background:rgba(255,255,255,.2);}
+.editor-body{flex:1;display:flex;flex-direction:column;}
+#editor-toolbar{border-bottom:1px solid #ddd;}
+#editor-content{flex:1;font-size:16px;line-height:1.6;}
+#editor-content .ql-editor{min-height:100%;}
+.editor-footer{padding:15px 20px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 12px 12px;}
+.editor-status{font-size:13px;color:#666;}
+.editor-actions{display:flex;gap:10px;}
+.btn-save{background:var(--g);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-clear{background:transparent;color:var(--s);border:1px solid #ddd;padding:8px 20px;border-radius:6px;font-size:14px;cursor:pointer;}
+.btn-save:hover{background:#1b5e20;}
+.btn-clear:hover{background:#f5f5f5;}
+
+footer{margin-top:28px;padding:12px 24px;background:var(--k);color:#777;font-size:12px;text-align:center;}
+footer strong{color:var(--r);}
+</style>
+</head>
+<body>
+
+<!-- STROKE OVERLAY -->
+<div id="ov" onclick="ovClick(event)">
+  <div id="obox">
+    <button id="ocls" onclick="closeOv()">✕</button>
+    <div id="otitle"></div>
+    <div id="oframes"></div>
+    <div class="hw-controls" id="octrl"></div>
+  </div>
+</div>
+
+<!-- EDITOR MODAL -->
+<div id="editorModal">
+  <div class="editor-container">
+    <div class="editor-header">
+      <h3>📝 Soạn thảo ghi chú - Bài 8 Quyển 2</h3>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div id="editor-toolbar">
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="1">Tiêu đề 1</option>
+            <option value="2">Tiêu đề 2</option>
+            <option selected>Tiêu đề thường</option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats"><button class="ql-clean"></button></span>
+      </div>
+      <div id="editor-content"></div>
+    </div>
+    <div class="editor-footer">
+      <span class="editor-status">💡 Ghi chú tự động lưu vào trình duyệt</span>
+      <div class="editor-actions">
+        <button class="btn-clear" onclick="clearEditor()">Xóa tất cả</button>
+        <button class="btn-save" onclick="saveEditor()">Lưu ghi chú</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="lb">
+    <div class="logo-area">
+      <div class="logo-container">
+        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+      </div>
+    </div>
+    <div class="ln">GIA SƯ HOA NGỮ TÂN AN</div>
+    <div class="la">9/1 Bạch Văn Tư, Tân An, Long An</div>
+    <div class="lz">Zalo: 0839 889 772</div>
+  </div>
+  <nav>
+    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic">🏠</span><span>VỀ TRANG CHỦ</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TỪ VỰNG</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BÀI KHÓA</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGỮ PHÁP</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BÀI TẬP</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VĂN HÓA</span></button>
+  </nav>
+  <div class="side-toggle" id="toggleContainer" style="display:none;">
+    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phiên âm</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tiếng Việt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mn">
+  <div class="topbar">
+    <div>
+      <div class="tzh">BÀI 8 · 第八課</div>
+      <div class="tvi">學功夫 · Học Kungfu</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:15px;">
+      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soạn thảo</span></button>
+      <div class="badge">當代中文課程 2</div>
+    </div>
+  </div>
+
+  <!-- TỪ VỰNG -->
+  <div id="vocab" class="sec on">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Từ vựng 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')">📖 Từ vựng 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','c1')">📝 Cụm từ 1 · 短語一</button>
+      <button class="subtab" onclick="goSub('vocab','c2')">📝 Cụm từ 2 · 短語二</button>
+      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhân vật · 人物</button>
+    </div>
+    <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
+    <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
+    <div id="vocab-c1" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c1"></table></div></div>
+    <div id="vocab-c2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c2"></table></div></div>
+    <div id="vocab-nv" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-nv"></table></div></div>
+  </div>
+
+  <!-- BÀI KHÓA -->
+  <div id="baikoa" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hội thoại · 對話</button>
+      <button class="subtab" onclick="goSub('baikoa','bk')">📖 Bài khóa · 課文</button>
+    </div>
+    <div id="baikoa-ht1" class="sub-content on">
+      <div class="db">
+        <div class="dt">
+          <span class="dlb">Hội thoại · 對話</span>Học Kungfu
+          <button class="dab" onclick="sayZh('東健：安同！安同！安同：東健！對不起，沒聽見你叫我。東健：音樂那麼吵，你當然聽不見。安同：有什麼事嗎？東健：沒事，只是一到學校門口，就看見你推著腳踏車走過來。安同：你下午要做什麼？東健：我要去體育館運動。對了，你現在還在學太極拳嗎？安同：是啊！我的師父說我有天分，學得不錯。東健：你師父是台灣人吧？他說中文你聽得懂嗎？安同：剛開始我都聽不懂，可是現在沒問題了。東健：太極拳難嗎？你學了多久了？安同：不太容易，而且要很早起來。我學了三個多月了，才學會了一點。東健：可是太極拳的動作看起來慢慢的，輕輕的，應該很輕鬆。安同：那些動作好像很容易，但是剛開始的時候，我早上常常累得起不來，腿也痛得走不了路。東健：那你怎麼還學得下去？安同：雖然很累，可是這是我的興趣。東健：你下午沒事吧？要不要跟我一起去運動？安同：好啊！我先去圖書館借書，下午再跟你去運動。')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：安同！安同！')">🔊</button></td><td class="d-sp"><div class="spk b">東健<small>Dōngjiàn</small></div></td><td class="d-tx"><div class="szh">東健：安同！安同！</div><div class="spy">Dōngjiàn: Āntóng! Āntóng!</div><div class="svi">Đông Kiện: An Đồng! An Đồng!</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：東健！對不起，沒聽見你叫我。')">🔊</button></td><td class="d-sp"><div class="spk">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">安同：東健！對不起，沒聽見你叫我。</div><div class="spy">Āntóng: Dōngjiàn! Duìbùqǐ, méi tīngjiàn nǐ jiào wǒ.</div><div class="svi">An Đồng: Đông Kiện! Xin lỗi, tôi không nghe thấy anh gọi tôi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：音樂那麼吵，你當然聽不見。')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：音樂那麼吵，你當然聽不見。</div><div class="spy">Dōngjiàn: Yīnyuè nàme chǎo, nǐ dāngrán tīngbujiàn.</div><div class="svi">Đông Kiện: Nhạc ồn ào như vậy, đương nhiên là bạn không nghe thấy rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：有什麼事嗎？')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：有什麼事嗎？</div><div class="spy">Āntóng: Yǒu shénme shì ma?</div><div class="svi">An Đồng: Có chuyện gì không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：沒事，只是一到學校門口，就看見你推著腳踏車走過來。')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：沒事，只是一到學校門口，就看見你推著腳踏車走過來。</div><div class="spy">Dōngjiàn: Méi shì, zhǐshì yí dào xuéxiào ménkǒu, jiù kànjiàn nǐ tuīzhe jiǎotàchē zǒu guòlái.</div><div class="svi">Đông Kiện: Không có gì, chỉ là vừa đến cổng trường, đã thấy bạn đẩy xe đạp đi tới.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：你下午要做什麼？')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：你下午要做什麼？</div><div class="spy">Āntóng: Nǐ xiàwǔ yào zuò shénme?</div><div class="svi">An Đồng: Buổi chiều bạn muốn làm gì?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：我要去體育館運動。對了，你現在還在學太極拳嗎？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：我要去體育館運動。對了，你現在還在學太極拳嗎？</div><div class="spy">Dōngjiàn: Wǒ yào qù tǐyùguǎn yùndòng. Duìle, nǐ xiànzài hái zài xué tàijíquán ma?</div><div class="svi">Đông Kiện: Tôi muốn đến nhà thi đấu thể thao tập thể dục. À đúng rồi, bạn hiện tại còn đang học Thái Cực Quyền không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：是啊！我的師父說我有天分，學得不錯。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：是啊！我的師父說我有天分，學得不錯。</div><div class="spy">Āntóng: Shì a! Wǒ de shīfu shuō wǒ yǒu tiānfèn, xué de búcuò.</div><div class="svi">An Đồng: Đúng vậy! Sư phụ của tôi nói tôi có thiên phú, học được khá tốt.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：你師父是台灣人吧？他說中文你聽得懂嗎？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：你師父是台灣人吧？他說中文你聽得懂嗎？</div><div class="spy">Dōngjiàn: Nǐ shīfu shì Táiwān rén ba? Tā shuō Zhōngwén nǐ tīng de dǒng ma?</div><div class="svi">Đông Kiện: Sư phụ của bạn là ngườii Đài Loan phải không? Ông ấy nói tiếng Trung bạn nghe có hiểu không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：剛開始我都聽不懂，可是現在沒問題了。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：剛開始我都聽不懂，可是現在沒問題了。</div><div class="spy">Āntóng: Gāng kāishǐ wǒ dōu tīng bù dǒng, kěshì xiànzài méi wèntí le.</div><div class="svi">An Đồng: Lúc mới bắt đầu tôi đều nghe không hiểu, nhưng bây giờ không có vấn đề gì rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：太極拳難嗎？你學了多久了？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：太極拳難嗎？你學了多久了？</div><div class="spy">Dōngjiàn: Tàijíquán nán ma? Nǐ xué le duōjiǔ le?</div><div class="svi">Đông Kiện: Thái Cực Quyền có khó không? Bạn học được bao lâu rồi?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：不太容易，而且要很早起來。我學了三個多月了，才學會了一點。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：不太容易，而且要很早起來。我學了三個多月了，才學會了一點。</div><div class="spy">Āntóng: Bú tài róngyì, érqiě yào hěn zǎo qǐlái. Wǒ xué le sān ge duō yuè le, cái xué huì le yìdiǎn.</div><div class="svi">An Đồng: Không dễ lắm, và còn phải dậy rất sớm. Tôi học được hơn ba tháng rồi, mới chỉ học được một chút.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：可是太極拳的動作看起來慢慢的，輕輕的，應該很輕鬆。')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：可是太極拳的動作看起來慢慢的，輕輕的，應該很輕鬆。</div><div class="spy">Dōngjiàn: Kěshì tàijíquán de dòngzuò kàn qǐlái màn man de, qīng qīng de, yīnggāi hěn qīngsōng.</div><div class="svi">Đông Kiện: Nhưng mà động tác Thái Cực Quyền trông có vẻ chậm chậm, nhẹ nhẹ, hẳn là rất nhẹ nhàng.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：那些動作好像很容易，但是剛開始的時候，我早上常常累得起不來，腿也痛得走不了路。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：那些動作好像很容易，但是剛開始的時候，我早上常常累得起不來，腿也痛得走不了路。</div><div class="spy">Āntóng: Nàxiē dòngzuò hǎoxiàng hěn róngyì, dànshì gāng kāishǐ de shíhou, wǒ zǎoshang chángcháng lèi de qǐ bù lái, tuǐ yě tòng de zǒu bù liǎo lù.</div><div class="svi">An Đồng: Những động tác đó hình như rất dễ, nhưng lúc mới bắt đầu, buổi sáng tôi thường mệt đến nỗi không thể dậy nổi, chân cũng đau đến mức không thể đi được.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：那你怎麼還學得下去？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：那你怎麼還學得下去？</div><div class="spy">Dōngjiàn: Nà nǐ zěnme hái xué de xiàqù?</div><div class="svi">Đông Kiện: Vậy sao bạn còn học được tiếp?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：雖然很累，可是這是我的興趣。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：雖然很累，可是這是我的興趣。</div><div class="spy">Āntóng: Suīrán hěn lèi, kěshì zhè shì wǒ de xìngqù.</div><div class="svi">An Đồng: Tuy rất mệt, nhưng đây là sở thích của tôi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('東健：你下午沒事吧？要不要跟我一起去運動？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">東健：你下午沒事吧？要不要跟我一起去運動？</div><div class="spy">Dōngjiàn: Nǐ xiàwǔ méi shì ba? Yào búyào gēn wǒ yìqǐ qù yùndòng?</div><div class="svi">Đông Kiện: Buổi chiều bạn rảnh phải không? Có muốn cùng tôi đi tập thể dục không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同：好啊！我先去圖書館借書，下午再跟你去運動。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">安同：好啊！我先去圖書館借書，下午再跟你去運動。</div><div class="spy">Āntóng: Hǎo a! Wǒ xiān qù túshūguǎn jiè shū, xiàwǔ zài gēn nǐ qù yùndòng.</div><div class="svi">An Đồng: Được thôi! Tôi trước đến thư viện mượn sách, buổi chiều lại cùng anh đi tập thể dục.</div></td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="baikoa-bk" class="sub-content">
+      <div class="db" style="border-top-color:#764ba2;">
+        <div class="dt" style="color:#764ba2;">
+          <span class="dlb" style="background:#764ba2;">Bài khóa · 課文</span>
+          <button class="dab" style="background:#764ba2;" onclick="sayZh('今天李東健跟馬安同在體育館運動的時候，安同一直跟他說學太極拳的好處，還問他有沒有興趣，下次練習的時候可以帶他一起去。東健想起安同剛開始學功夫的時候，常跟他抱怨，師父每次練習以前，都要大家先跑一千公尺，安同總是最後一個跑完，有的時候還跑不完。現在，東健發現安同的體力比三個月以前好多了，上了整天的課，安同還是很有精神。李東健本來以為學功夫要花很多時間，安同可能沒有時間念書了，但是安同為了多練習，每天下課，就回宿舍念書、做功課。做完了功課，再去練習。雖然練習的時間不少，但是一點都沒影響安同的成績。李東健看馬安同學了太極拳以後，身體健康了，功課也進步了，覺得練太極拳的好處真不少，決定明天就跟安同說他也要學太極拳。')">🔊 Toàn bộ</button>
+        </div>
+        <div class="szh" style="font-size:22px;line-height:1.8;">今天李東健跟馬安同在體育館運動的時候，安同一直跟他說學太極拳的好處，還問他有沒有興趣，下次練習的時候可以帶他一起去。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Jīntiān Lǐ Dōngjiàn gēn Mǎ Āntóng zài tǐyùguǎn yùndòng de shíhou, Āntóng yìzhí gēn tā shuō xué tàijíquán de hǎochu, hái wèn tā yǒu méiyǒu xìngqù, xià cì liànxí de shíhou kěyǐ dài tā yìqǐ qù.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Hôm nay khi Lý Đông Kiện và Mã An Đồng đang tập thể dục ở nhà thi đấu thể thao, An Đồng luôn nói với anh ấy về lợi ích của việc học Thái Cực Quyền, còn hỏi anh ấy có hứng thú không, lần tập luyện tới có thể dẫn anh ấy cùng đi.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">東健想起安同剛開始學功夫的時候，常跟他抱怨，師父每次練習以前，都要大家先跑一千公尺，安同總是最後一個跑完，有的時候還跑不完。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Dōngjiàn xiǎngqǐ Āntóng gāng kāishǐ xué gōngfu de shíhou, cháng gēn tā bàoyuàn, shīfu měi cì liànxí yǐqián, dōu yào dàjiā xiān pǎo yì qiān gōngchǐ, Āntóng zǒngshì zuìhòu yí ge pǎo wán, yǒu de shíhou hái pǎo bù wán.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Đông Kiện nhớ lại lúc An Đồng mới bắt đầu học võ công, thường than phiền với anh ấy, mỗi lần trước khi tập luyện sư phụ đều bắt mọi ngườii chạy một nghìn mét trước, An Đồng luôn là ngườii chạy cuối cùng, có khi còn chạy không hết.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">現在，東健發現安同的體力比三個月以前好多了，上了整天的課，安同還是很有精神。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Xiànzài, Dōngjiàn fāxiàn Āntóng de tǐlì bǐ sān ge yuè yǐqián hǎo duō le, shàngle zhěng tiān de kè, Āntóng háishì hěn yǒu jīngshén.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Bây giờ, Đông Kiện phát hiện thể lực của An Đồng tốt hơn nhiều so với ba tháng trước, đã học cả ngày, An Đồng vẫn còn rất có tinh thần.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">李東健本來以為學功夫要花很多時間，安同可能沒有時間念書了，但是安同為了多練習，每天下課，就回宿舍念書、做功課。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Lǐ Dōngjiàn běnlái yǐwéi xué gōngfu yào huā hěn duō shíjiān, Āntóng kěnéng méiyǒu shíjiān niànshū le, dànshì Āntóng wèile duō liànxí, měi tiān xià kè, jiù huí sùshè niànshū, zuò gōngkè.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Lý Đông Kiện vốn tưởng rằng học võ công phải tốn nhiều thờii gian, An Đồng có thể không có thờii gian đọc sách nữa, nhưng An Đồng để luyện tập nhiều hơn, mỗi ngày tan học, liền về ký túc xá đọc sách, làm bài tập.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">做完了功課，再去練習。雖然練習的時間不少，但是一點都沒影響安同的成績。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Zuò wán le gōngkè, zài qù liànxí. Suīrán liànxí de shíjiān bù shǎo, dànshì yìdiǎn dōu méi yǐngxiǎng Āntóng de chéngjì.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Làm xong bài tập, mới đi luyện tập. Tuy thờii gian luyện tập không ít, nhưng một chút cũng không ảnh hưởng đến thành tích của An Đồng.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">李東健看馬安同學了太極拳以後，身體健康了，功課也進步了，覺得練太極拳的好處真不少，決定明天就跟安同說他也要學太極拳。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Lǐ Dōngjiàn kàn Mǎ Āntóng xué le tàijíquán yǐhòu, shēntǐ jiànkāng le, gōngkè yě jìnbù le, juéde liàn tàijíquán de hǎochu zhēn bù shǎo, juédìng míngtiān jiù gēn Āntóng shuō tā yě yào xué tàijíquán.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;font-style:italic;">Lý Đông Kiện thấy Mã An Đồng sau khi học Thái Cực Quyền, cơ thể khỏe mạnh hơn, bài tập cũng tiến bộ, cảm thấy lợi ích của việc luyện Thái Cực Quyền thật không ít, quyết định ngày mai sẽ nói với An Đồng là anh ấy cũng muốn học Thái Cực Quyền.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGỮ PHÁP -->
+  <div id="ngupap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('ngupap','g1')">1 · 見 · Kết quả nhận thức</button>
+      <button class="subtab" onclick="goSub('ngupap','g2')">2 · 懂 · Kết quả nhận thức (hiểu)</button>
+      <button class="subtab" onclick="goSub('ngupap','g3')">3 · 會 · Kết quả thành tựu</button>
+      <button class="subtab" onclick="goSub('ngupap','g4')">4 · 得/不 · Năng lực tiềm ẩn</button>
+      <button class="subtab" onclick="goSub('ngupap','g5')">5 · 了 · Bổ ngữ năng lực</button>
+      <button class="subtab" onclick="goSub('ngupap','g6')">6 · 得 · So...that...</button>
+      <button class="subtab" onclick="goSub('ngupap','g7')">7 · 下去 · Tiếp tục hành động</button>
+      <button class="subtab" onclick="goSub('ngupap','g8')">8 · 完 · Hoàn thành hành động</button>
+    </div>
+
+    <div id="ngupap-g1" class="sub-content on">
+      <div class="gc">
+        <div><span class="gn">1</span><span class="gtt">Kết quả nhận thức với 見</span></div>
+        <div class="gsb">Khi 見 theo sau động từ nhận thức (như 看, 聽), nó chỉ ra rằng đối tượng của hành động đã được nhận thức, tức là "nhìn thấy" hoặc "nghe thấy".</div>
+        <div class="fm">V (nhận thức) + 見 + O<div class="fn">Động từ nhận thức + 見 + Tân ngữ</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">昨天我在夜市看見小美了。</div></td><td><div class="py">Zuótiān wǒ zài yèshì kànjiàn Xiǎoměi le.</div></td><td><div class="vi">Hôm qua tôi đã nhìn thấy Tiểu Mỹ ở chợ đêm.</div></td></tr>
+          <tr><td><div class="zh">你說的，我都聽見了。</div></td><td><div class="py">Nǐ shuō de, wǒ dōu tīngjiàn le.</div></td><td><div class="vi">Những gì bạn nói, tôi đều nghe thấy rồi.</div></td></tr>
+          <tr><td><div class="zh">你為什麼在找書？我們都看見你把書拿回去了。</div></td><td><div class="py">Nǐ wèishénme zài zhǎo shū? Wǒmen dōu kànjiàn nǐ bǎ shū ná huíqù le.</div></td><td><div class="vi">Tại sao bạn đang tìm sách? Chúng tôi đều nhìn thấy bạn mang sách về rồi.</div></td></tr>
+        </table>
+        <div class="gnote">💡 <strong>Phủ định:</strong> 東西在哪裡？我沒看見啊！ / 我沒聽見他說什麼。 / 請你再說一次，我沒聽見。</div>
+        <div class="gnote">💡 <strong>Câu hỏi:</strong> 我的背包，你看見了沒有？ / 老師說的，你是不是聽見了？ / 張先生呢？你看見他走出來了嗎？</div>
+        <div class="gnote">💡 <strong>Lưu ý:</strong> Có sự khác biệt rõ ràng giữa dùng động từ nhận thức một mình và kèm theo 見. Ví dụ: 我沒聽他說話 (Tôi không nghe anh ấy nói - chủ động không nghe) vs. 我沒聽見他說話 (Tôi không nghe thấy anh ấy nói - không nghe được).</div>
+      </div>
+    </div>
+
+    <div id="ngupap-g2" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">2</span><span class="gtt">Kết quả nhận thức với 懂 (hiểu)</span></div>
+        <div class="gsb">Khi động từ được theo sau bởi 懂, sự kết hợp chỉ ra rằng sự "hiểu biết" đã xảy ra, tức là "nghe hiểu" (聽懂) hoặc "đọc hiểu" (看懂).</div>
+        <div class="fm">V + 懂 + O<div class="fn">Động từ + 懂 + Tân ngữ (hiểu được qua nghe/đọc)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">老師說的，我都聽懂了。</div></td><td><div class="py">Lǎoshī shuō de, wǒ dōu tīng dǒng le.</div></td><td><div class="vi">Những gì thầy giáo nói, tôi đều nghe hiểu rồi.</div></td></tr>
+          <tr><td><div class="zh">老師給的功課我只聽了一次，就聽懂了。</div></td><td><div class="py">Lǎoshī gěi de gōngkè wǒ zhǐ tīng le yí cì, jiù tīng dǒng le.</div></td><td><div class="vi">Bài tập thầy giáo cho tôi chỉ nghe một lần, là nghe hiểu rồi.</div></td></tr>
+          <tr><td><div class="zh">老師寫的那些字，學生都看不懂。</div></td><td><div class="py">Lǎoshī xiě de nàxiē zì, xuéshēng dōu kàn bù dǒng.</div></td><td><div class="vi">Những chữ thầy giáo viết, học sinh đều đọc không hiểu.</div></td></tr>
+        </table>
+        <div class="gnote">💡 <strong>Phủ định:</strong> Luôn dùng 沒: 他說什麼？我沒聽懂。 / 那個電影我第一次沒看懂，第二次才看懂了。 / 老師說明了半天，可是我沒聽懂。</div>
+        <div class="gnote">💡 <strong>So sánh:</strong> (1) 老師教的，你懂了嗎？ (Bạn hiểu những gì thầy dạy chưa?) - (2) 老師教的，你聽懂了嗎？ (Bạn nghe hiểu những gì thầy dạy chưa?) - (3) 老師教的，你看懂了嗎？ (Bạn đọc hiểu những gì thầy dạy chưa?)</div>
+      </div>
+    </div>
+
+    <div id="ngupap-g3" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">3</span><span class="gtt">Kết quả thành tựu với 會</span></div>
+        <div class="gsb">會 là động từ trợ lực nhưng cũng có thể làm bổ ngữ của các động từ như 學, 教, 練 để diễn tả kết quả "thành thạo" và "đạt được".</div>
+        <div class="fm">V + 會 + O<div class="fn">Động từ + 會 + Tân ngữ (học/dạy/luyện thành thạo)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我在大學的時候學會怎麼開車。</div></td><td><div class="py">Wǒ zài dàxué de shíhou xué huì zěnme kāi chē.</div></td><td><div class="vi">Tôi khi ở đại học đã học được cách lái xe.</div></td></tr>
+          <tr><td><div class="zh">只有一個鐘頭的課，老師要教會學生怎麼寫書法很難。</div></td><td><div class="py">Zhǐ yǒu yí ge zhōngtóu de kè, lǎoshī yào jiāo huì xuéshēng zěnme xiě shūfǎ hěn nán.</div></td><td><div class="vi">Chỉ có một tiếng học, thầy giáo muốn dạy học sinh viết thư pháp rất khó.</div></td></tr>
+          <tr><td><div class="zh">學生學會了用中文介紹自己。</div></td><td><div class="py">Xuéshēng xué huì le yòng Zhōngwén jièshào zìjǐ.</div></td><td><div class="vi">Học sinh đã học được dùng tiếng Trung giới thiệu bản thân.</div></td></tr>
+        </table>
+        <div class="gnote">💡 <strong>Phủ định:</strong> 我學游泳只學了一個禮拜，還沒學會。 / 師父教了兩個星期了，還沒教會馬安同太極拳最難的動作。 / 我們都沒學會怎麼騎腳踏車。</div>
+        <div class="gnote">💡 學會 chỉ ra chủ thể đạt được khả năng thông qua học tập, trong khi 教會 chỉ ra ngườii học được hướng dẫn và do đó đạt được khả năng.</div>
+      </div>
+    </div>
+
+    <div id="ngupap-g4" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">4</span><span class="gtt">Năng lực tiềm ẩn với 得/不</span></div>
+        <div class="gsb">Khi 得 hoặc 不 được xen vào giữa động từ và bổ ngữ kết quả/bổ ngữ hướng, mẫu câu diễn tả khả năng đạt được kết quả hay không.</div>
+        <div class="fm">V + 得/不 + bổ ngữ kết quả<div class="fn">Động từ + 得/不 + kết quả (có thể/không thể đạt kết quả)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我看得懂中國電影。</div></td><td><div class="py">Wǒ kàn de dǒng Zhōngguó diànyǐng.</div></td><td><div class="vi">Tôi xem hiểu được phim Trung Quốc.</div></td></tr>
+          <tr><td><div class="zh">垃圾車的音樂雖然很小，但是我聽得見。</div></td><td><div class="py">Lājī chē de yīnyuè suīrán hěn xiǎo, dànshì wǒ tīng de jiàn.</div></td><td><div class="vi">Nhạc xe rác tuy nhỏ, nhưng tôi nghe được.</div></td></tr>
+          <tr><td><div class="zh">早上八點，我當然起得來。</div></td><td><div class="py">Zǎoshang bā diǎn, wǒ dāngrán qǐ de lái.</div></td><td><div class="vi">Tám giờ sáng, đương nhiên tôi dậy được.</div></td></tr>
+          <tr><td><div class="zh">師父教的這個動作很容易，每個人都學得會。</div></td><td><div class="py">Shīfu jiāo de zhège dòngzuò hěn róngyì, měi ge rén dōu xué de huì.</div></td><td><div class="vi">Động tác này sư phụ dạy rất dễ, mọi ngườii đều học được.</div></td></tr>
+        </table>
+        <div class="gnote">💡 <strong>Phủ định:</strong> 我認識他，但是他的名字我想不起來。 / 夜市太吵了，他聽不見我叫他。 / 半夜三點太早了，誰也起不來。</div>
+        <div class="gnote">💡 <strong>Lưu ý quan trọng:</strong> 沒+V là kết quả chưa đạt được, V+不 là không thể đạt được. Ví dụ: 沒看見 = chưa nhìn thấy (có thể do chưa có cơ hội), 看不見 = không nhìn thấy (khả năng không cho phép).</div>
+      </div>
+    </div>
+
+    <div id="ngupap-g5" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">5</span><span class="gtt">Bổ ngữ năng lực với 了 liǎo</span></div>
+        <div class="gsb">了 là bổ ngữ năng lực, chỉ dùng trong cấu trúc tiềm năng. 了 có nghĩa là một kết quả có thể đạt được.</div>
+        <div class="fm">V + 得了/不了 + O<div class="fn">Động từ + 得了/不了 + Tân ngữ (làm được/không làm được)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">這碗牛肉麵，我一個人吃得不了。</div></td><td><div class="py">Zhè wǎn niúròu miàn, wǒ yí ge rén chī de liǎo.</div></td><td><div class="vi">Tô một mình tôi ăn được.</div></td></tr>
+          <tr><td><div class="zh">這麼多書，我拿不了。</div></td><td><div class="py">Zhème duō shū, wǒ ná bù liǎo.</div></td><td><div class="vi">Nhiều sách như vậy, tôi cầm không nổi.</div></td></tr>
+          <tr><td><div class="zh">颱風來了，今天晚上的喜宴我們去不了了。</div></td><td><div class="py">Táifēng lái le, jīntiān wǎnshang de xǐyàn wǒmen qù bù liǎo le.</div></td><td><div class="vi">Bão đến rồi, tiệc cưới tối nay chúng tôi không thể đi được.</div></td></tr>
+          <tr><td><div class="zh">到現在我還忘不了第一個女朋友。</div></td><td><div class="py">Dào xiànzài wǒ hái wàng bù liǎo dì yí ge nǚ péngyǒu.</div></td><td><div class="vi">Đến giờ tôi còn không thể quên được ngườii bạn gái đầu tiên.</div></td></tr>
+        </table>
+        <div class="gnote">💡 了 là bổ ngữ bất quy tắc, chỉ dùng trong cách tiềm năng. Các bổ ngữ thông thường có thể dùng ở cả thể thực tế và tiềm năng, nhưng 了 chỉ dùng ở tiềm năng.</div>
+        <div class="gnote">💡 <strong>Phân biệt:</strong> 走得了 (đi được - khả năng) vs. 走到了 (đã đi đến - kết quả thực tế).</div>
+      </div>
+    </div>
+
+    <div id="ngupap-g6" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">6</span><span class="gtt">So...that... với Vs + 得 + bổ ngữ</span></div>
+        <div class="gsb">Mẫu câu này diễn tả mức độ/kết quả đạt đến mức "đến nỗi mà...", trong đó "that" tương ứng với 得.</div>
+        <div class="fm">Tính từ trạng thái + 得 + kết quả<div class="fn">Tính từ trạng thái + đến nỗi + kết quả</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我常常累得起不來，腿也痛得走不了路。</div></td><td><div class="py">Wǒ chángcháng lèi de qǐ bù lái, tuǐ yě tòng de zǒu bù liǎo lù.</div></td><td><div class="vi">Tôi thường mệt đến nỗi không dậy nổi, chân cũng đau đến mức không đi được đường.</div></td></tr>
+          <tr><td><div class="zh">天氣冷得很多人不想去上班。</div></td><td><div class="py">Tiānqì lěng de hěn duō rén bù xiǎng qù shàngbān.</div></td><td><div class="vi">Thờii tiết lạnh đến nỗi nhiều ngườii không muốn đi làm.</div></td></tr>
+          <tr><td><div class="zh">夜市裡到處都是人，熱鬧得像過年。</div></td><td><div class="py">Yèshì lǐ dàochù dōu shì rén, rènao de xiàng guònián.</div></td><td><div class="vi">Trong chợ đêm khắp nơi đều là ngườii, náo nhiệt đến nỗi như đang đón Tết.</div></td></tr>
+          <tr><td><div class="zh">他去夜市買了很多東西，多得拿不了。</div></td><td><div class="py">Tā qù yèshì mǎi le hěn duō dōngxi, duō de ná bù liǎo.</div></td><td><div class="vi">Anh ấy đi chợ đêm mua nhiều đồ lắm, nhiều đến nỗi cầm không nổi.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Mẫu câu này thường dùng với sự phóng đại. Ví dụ: 我餓得吃得了一百個小籠包 (Tôi đói đến nỗi có thể ăn được trăm cái bánh bao). / 這個地方好玩得我不想離開 (Chỗ này vui đến nỗi tôi không muốn rồi đi).</div>
+      </div>
+    </div>
+
+    <div id="ngupap-g7" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">7</span><span class="gtt">Tiếp tục hành động với 下去</span></div>
+        <div class="gsb">下去 là động từ hướng vị trí. Trong bài này, nó dùng như bổ ngữ thờii gian cho động từ hành động, có nghĩa là "tiếp tục, làm tiếp".</div>
+        <div class="fm">V + 下去<div class="fn">Động từ + 下去 (tiếp tục làm việc gì)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">你說得很好，請你再說下去。</div></td><td><div class="py">Nǐ shuō de hěn hǎo, qǐng nǐ zài shuō xiàqù.</div></td><td><div class="vi">Anh nói rất hay, xin anh nói tiếp đi.</div></td></tr>
+          <tr><td><div class="zh">我們在夜市逛了很久了，你還要逛下去嗎？</div></td><td><div class="py">Wǒmen zài yèshì guàng le hěn jiǔ le, nǐ hái yào guàng xiàqù ma?</div></td><td><div class="vi">Chúng tôi đi dạo chợ đêm được lâu rồi, bạn còn muốn đi tiếp không?</div></td></tr>
+          <tr><td><div class="zh">雖然學費不便宜，但是我還想念下去。</div></td><td><div class="py">Suīrán xuéfèi bù piányi, dànshì wǒ hái xiǎng niàn xiàqù.</div></td><td><div class="vi">Tuy học phí không rẻ, nhưng tôi vẫn muốn học tiếp.</div></td></tr>
+          <tr><td><div class="zh">這份工作不錯，雖然薪水少，可是我還要做下去。</div></td><td><div class="py">Zhè fèn gōngzuò búcuò, suīrán xīnshuǐ shǎo, kěshì wǒ hái yào zuò xiàqù.</div></td><td><div class="vi">Công việc này không tệ, tuy lương ít, nhưng tôi vẫn muốn làm tiếp.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Khi 下去 kết hợp với động từ chuyển tải, tân ngữ của chúng phải được chuyển ra trước câu hoặc được lược bỏ nếu ngữ cảnh đủ rõ. Ví dụ: 這個工作，我想一直做下去。 (Công việc này, tôi muốn làm tiếp mãi.)</div>
+      </div>
+    </div>
+
+    <div id="ngupap-g8" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">8</span><span class="gtt">Hoàn thành hành động với V + 完</span></div>
+        <div class="gsb">Khi tiểu từ 完 theo sau động từ hành động, nó chỉ ra sự hoàn thành của hành động đó.</div>
+        <div class="fm">V + 完 + O<div class="fn">Động từ + 完 + Tân ngữ (hoàn thành hành động)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">他們已經喝完咖啡了。</div></td><td><div class="py">Tāmen yǐjīng hē wán kāfēi le.</div></td><td><div class="vi">Họ đã uống xong cà phê rồi.</div></td></tr>
+          <tr><td><div class="zh">你借給我的書，我都看完了。</div></td><td><div class="py">Nǐ jiè gěi wǒ de shū, wǒ dōu kàn wán le.</div></td><td><div class="vi">Sách bạn cho tôi mượn, tôi đều đọc xong rồi.</div></td></tr>
+          <tr><td><div class="zh">這個月的薪水，我都用完了。</div></td><td><div class="py">Zhège yuè de xīnshuǐ, wǒ dōu yòng wán le.</div></td><td><div class="vi">Lương tháng này, tôi đều dùng hết rồi.</div></td></tr>
+          <tr><td><div class="zh">你們吃完飯，可以去夜市逛逛。</div></td><td><div class="py">Nǐmen chī wán fàn, kěyǐ qù yèshì guàng guang.</div></td><td><div class="vi">Các bạn ăn xong cơm, có thể đi chợ đêm dạo chơi.</div></td></tr>
+        </table>
+        <div class="gnote">💡 完 là phụ tố giai đoạn, gắn vào động từ hành động. Khi kết hợp với động từ tách được, 完 được xen vào giữa động từ. Ví dụ: 我考完試，想去看電影。 (Tôi thi xong, muốn đi xem phim.) - không nói "考試完".</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÀI TẬP -->
+  <div id="baitap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bài 1 · 見/懂</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bài 2 · 會/學會</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bài 3 · 得/不 (năng lực)</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bài 4 · 了 (năng lực)</button>
+      <button class="subtab" onclick="goSub('baitap','bt5')">📝 Bài 5 · 下去</button>
+    </div>
+
+    <div id="baitap-bt1" class="sub-content on">
+      <div class="ec">
+        <div class="ett">📝 Bài 1 · Hoàn thành câu với 見/懂</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 見 hoặc 懂 vào chỗ trống để tạo thành câu hoàn chỉnh.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>你說什麼？我沒聽<input class="fi" id="e1-1" style="width:60px;">。</div><div class="eh">→ Tôi không nghe hiểu.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>東西在哪裡？我沒看<input class="fi" id="e1-2" style="width:60px;">啊！</div><div class="eh">→ Không nhìn thấy đồ đâu cả.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>老師說的，你是不是聽<input class="fi" id="e1-3" style="width:60px;">了？</div><div class="eh">→ Bạn đã nghe hiểu những gì thầy nói chưa?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>張先生呢？你看<input class="fi" id="e1-4" style="width:60px;">他走出來了嗎？</div><div class="eh">→ Bạn có thấy anh Trương đi ra không?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>老師寫的那些字，學生都看<input class="fi" id="e1-5" style="width:60px;">了。</div><div class="eh">→ Học sinh đều đọc hiểu những chữ thầy viết.</div></div>
+        <button class="bck" onclick="ckE1()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE1()">🔄 Làm lại</button>
+        <div class="ab" id="ab1"><strong>Đáp án:</strong> ① 懂 &nbsp; ② 見 &nbsp; ③ 懂 &nbsp; ④ 見 &nbsp; ⑤ 懂</div>
+      </div>
+    </div>
+
+    <div id="baitap-bt2" class="sub-content">
+      <div class="ec" style="border-top-color:var(--b)">
+        <div class="ett" style="color:var(--b)">📝 Bài 2 · Hoàn thành câu với 會/學會</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 會/學會 vào chỗ trống để tạo thành câu hoàn chỉnh.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我在大學的時候學<input class="fi" id="e2-1" style="width:120px;">怎麼開車。</div><div class="eh">→ Tôi khi ở đại học đã học được cách lái xe.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>學生<input class="fi" id="e2-2" style="width:120px;">了用中文介紹自己。</div><div class="eh">→ Học sinh đã học được dùng tiếng Trung giới thiệu bản thân.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>我學游泳只學了一個禮拜，還沒學<input class="fi" id="e2-3" style="width:60px;">。</div><div class="eh">→ Chưa học được/học thành thạo.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>師父教了兩個星期了，還沒教<input class="fi" id="e2-4" style="width:60px;">馬安同太極拳最難的動作。</div><div class="eh">→ Chưa dạy thành công.</div></div>
+        <button class="bck" onclick="ckE2()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE2()">🔄 Làm lại</button>
+        <div class="ab" id="ab2"><strong>Đáp án:</strong> ① 學會 &nbsp; ② 學會 &nbsp; ③ 會 &nbsp; ④ 會</div>
+      </div>
+    </div>
+
+    <div id="baitap-bt3" class="sub-content">
+      <div class="ec" style="border-top-color:var(--r)">
+        <div class="ett" style="color:var(--r)">📝 Bài 3 · Hoàn thành câu với 得/不 (năng lực tiềm ẩn)</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 得/不 vào chỗ trống để tạo thành câu năng lực tiềm ẩn.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我看得<input class="fi" id="e3-1" style="width:60px;">中國電影。</div><div class="eh">→ Tôi xem hiểu được phim Trung Quốc.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>夜市太吵了，他聽<input class="fi" id="e3-2" style="width:60px;">見我叫他。</div><div class="eh">→ Anh ấy không nghe thấy tôi gọi.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>早上八點，我當然起<input class="fi" id="e3-3" style="width:60px;">來。</div><div class="eh">→ Tám giờ sáng đương nhiên dậy được.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>師父教的這個動作很容易，每個人都學<input class="fi" id="e3-4" style="width:60px;">會。</div><div class="eh">→ Mọi ngườii đều học được.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>半夜三點太早了，誰也起<input class="fi" id="e3-5" style="width:60px;">來。</div><div class="eh">→ Ba giờ sáng quá sớm, ai cũng dậy không nổi.</div></div>
+        <button class="bck" onclick="ckE3()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE3()">🔄 Làm lại</button>
+        <div class="ab" id="ab3"><strong>Đáp án:</strong> ① 得 &nbsp; ② 不 &nbsp; ③ 得 &nbsp; ④ 得 &nbsp; ⑤ 不</div>
+      </div>
+    </div>
+
+    <div id="baitap-bt4" class="sub-content">
+      <div class="ec" style="border-top-color:#764ba2">
+        <div class="ett" style="color:#764ba2">📝 Bài 4 · Hoàn thành câu với 了 (năng lực)</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 得了/不了 vào chỗ trống để tạo thành câu năng lực.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>這麼多書，我拿<input class="fi" id="e4-1" style="width:80px;">。</div><div class="eh">→ Nhiều sách như vậy, tôi cầm không nổi.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>颱風來了，今天晚上的喜宴我們去<input class="fi" id="e4-2" style="width:80px;">了。</div><div class="eh">→ Bão đến rồi, tiệc cưới tối nay không thể đi được.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>還要走半個小時，你走<input class="fi" id="e4-3" style="width:80px;">走<input class="fi" id="e4-4" style="width:80px;">？</div><div class="eh">→ Còn phải đi nửa tiếng, bạn đi được không?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>我們點了五個菜，吃<input class="fi" id="e4-5" style="width:80px;">吃<input class="fi" id="e4-6" style="width:80px;">？</div><div class="eh">→ Chúng tôi gọi năm món, ăn hết được không?</div></div>
+        <button class="bck" onclick="ckE4()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE4()">🔄 Làm lại</button>
+        <div class="ab" id="ab4"><strong>Đáp án:</strong> ① 不了 &nbsp; ② 不了 &nbsp; ③ 得了, 不了 &nbsp; ④ 得了, 不了</div>
+      </div>
+    </div>
+
+    <div id="baitap-bt5" class="sub-content">
+      <div class="ec" style="border-top-color:var(--g)">
+        <div class="ett" style="color:var(--g)">📝 Bài 5 · Hoàn thành câu với 下去</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 下去 vào vị trí thích hợp để diễn tả sự tiếp tục.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>這附近太吵了，我不想<input class="fi" id="e5-1" style="width:100px;">。</div><div class="eh">→ không muốn làm tiếp ở đây.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>已經下課了，可是學生還想<input class="fi" id="e5-2" style="width:100px;">。</div><div class="eh">→ học sinh còn muốn học tiếp.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>中文很有用，我要<input class="fi" id="e5-3" style="width:100px;">。</div><div class="eh">→ tôi phải học tiếp.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>你說得很好，請你再說<input class="fi" id="e5-4" style="width:100px;">。</div><div class="eh">→ xin nói tiếp.</div></div>
+        <div class="ei"><div class="eq"><span class="nm">⑤</span>雖然學費不便宜，但是我還想念<input class="fi" id="e5-5" style="width:100px;">。</div><div class="eh">→ tôi vẫn muốn học tiếp.</div></div>
+        <button class="bck" onclick="ckE5()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE5()">🔄 Làm lại</button>
+        <div class="ab" id="ab5"><strong>Đáp án:</strong> ① 住下去/念下去 &nbsp; ② 念下去/學下去 &nbsp; ③ 學下去/念下去 &nbsp; ④ 下去 &nbsp; ⑤ 下去</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VĂN HÓA -->
+  <div id="vanhoa" class="sec">
+    <div class="culture-box">
+      <h3>🌅 Sinh hoạt buổi sáng trong công viên · 公園的早晨</h3>
+      <div style="margin-bottom:14px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">在台灣，老年人和家庭主婦都喜歡在早晨運動。年輕人呢？因為學校和工作的壓力，很少有學生和上班族有時間在早上運動。但是老年人習慣早起，家庭主婦做完家事以後，就可以自由活動了。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Zài Táiwān, lǎonián rén hé jiātíng zhǔfù dōu xǐhuan zài zǎochen yùndòng. Niánqīng rén ne? Yīnwèi xuéxiào hé gōngzuò de yālì, hěn shǎo yǒu xuéshēng hé shàngbānzú yǒu shíjiān zài zǎoshang yùndòng. Dànshì lǎonián rén xíguàn zǎo qǐ, jiātíng zhǔfù zuò wán jiāshì yǐhòu, jiù kěyǐ zìyóu huódòng le.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Ở Đài Loan, ngườii cao tuổi và các bà nội trợ đều thích tập thể dục vào buổi sáng. Còn ngườii trẻ? Vì áp lực học hành và công việc, rất ít sinh viên và dân văn phòng có thờii gian tập thể dục buổi sáng. Nhưng ngườii cao tuổi quen dậy sớm, các bà nội trợ sau khi làm xong việc nhà thì có thể tự do sinh hoạt.</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">老年人和家庭主婦常常在早上八點以前，約朋友、鄰居一起到附近的公園、廣場去。如果你在這個時候經過那裡，你可能會看見一位老先生在樹下打太極拳，或者一群老太太在草地上跳土風舞。在公園的另一個地方，你也許可以看見一群穿著運動衣的家庭主婦正在跳有氧舞蹈。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Lǎonián rén hé jiātíng zhǔfù chángcháng zài zǎoshang bā diǎn yǐqián, yuē péngyǒu, línjū yìqǐ dào fùjìn de gōngyuán, guǎngchǎng qù. Rúguǒ nǐ zài zhège shíhou jīngguò nàlǐ, nǐ kěnéng huì kànjiàn yí wèi lǎo xiānsheng zài shù xià dǎ tàijíquán, huòzhě yì qún lǎo tàitai zài cǎodì shang tiào tǔfēngwǔ. Zài gōngyuán de lìng yí ge dìfāng, nǐ yěxǔ kěyǐ kànjiàn yì qún chuān zhe yùndòngyī de jiātíng zhǔfù zhèngzài tiào yǒuyǎng wǔdǎo.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Ngườii cao tuổi và các bà nội trợ thường trước tám giờ sáng, rủ bạn bè, hàng xóm cùng đến công viên, quảng trường gần nhà. Nếu bạn đi ngang qua đó lúc này, bạn có thể thấy một cụ ông đang đánh Thái Cực Quyền dưới gốc cây, hoặc một nhóm các cụ bà đang nhảy múa dân gian trên bãi cỏ. Ở một góc khác của công viên, bạn cũng có thể nhìn thấy một nhóm các bà nội trợ mặc đồ thể thao đang nhảy aerobic.</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">早上十點，一首歌曲從公園的涼亭傳出來——原來是卡拉OK社的男女會員又來了。在不遠的地方，有兩位老先生完全不受噪音的影響，正在下象棋，旁邊還有一群觀眾在出主意。將近中午的時候，公園裡的人群就慢慢散了。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Zǎoshang shí diǎn, yì shǒu gēqǔ cóng gōngyuán de liángtíng chuán chūlái —— yuánlái shì kǎlā OK shè de nánnǚ huìyuán yòu lái le. Zài bù yuǎn de dìfāng, yǒu liǎng wèi lǎo xiānsheng wánquán bù shòu zǎoyīn de yǐngxiǎng, zhèngzài xià xiàngqí, pángbiān hái yǒu yì qún guānzhòng zài chū zhǔyì. Jiāngjìn zhōngwǔ de shíhou, gōngyuán lǐ de rénqún jiù mànman sàn le.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Mưới giờ sáng, một bài hát vọng ra từ đình nghỉ mát trong công viên —— hóa ra là các thành viên nam nữ của câu lạc bộ karaoke lại đến. Ở nơi không xa, hai cụ ông hoàn toàn không bị ảnh hưởng bởi tiếng ồn, đang chơi cờ tướng, bên cạnh còn có một nhóm khán giả đang góp ý. Gần đến giờ trưa, đám đông trong công viên dần dần giải tán.</div>
+      </div>
+    </div>
+    <div class="culture-box" style="border-left-color:#9c27b0;">
+      <h3 style="color:#7b1fa2;">🥋 Võ công Trung Hoa · 中國功夫</h3>
+      <div style="margin-bottom:14px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">功夫，又稱武術，是中國傳統的體育項目。中國功夫歷史悠久，流派眾多，最有名的包括少林、武當、峨眉等。每個流派都有自己的特色，有的注重力量，有的注重柔軟，有的注重速度。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Gōngfu, yòu chēng wǔshù, shì Zhōngguó chuántǒng de tǐyù xiàngmù. Zhōngguó gōngfu lìshǐ yōujiǔ, liūpài zhòngduō, zuì yǒumíng de bāokuò Shàolín, Wǔdāng, Éméi děng. Měi ge liūpài dōu yǒu zìjǐ de tèsè, yǒu de zhùzhòng lìliang, yǒu de zhùzhòng róuruǎn, yǒu de zhùzhòng sùdù.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Kungfu, còn gọi là võ thuật, là môn thể thao truyền thống của Trung Quốc. Võ công Trung Hoa có lịch sử lâu đờii, nhiều phái phái, nổi tiếng nhất bao gồm Thiếu Lâm, Võ Đang, Nga My v.v. Mỗi phái đều có đặc sắc riêng, có phái chú trọng sức mạnh, có phái chú trọng sự mềm dẻo, có phái chú trọng tốc độ.</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">太極拳是中國功夫中最普及的一種，特別受老年人歡迎。太極拳的動作柔軟、緩慢，講究以柔克剛。練太極拳不但可以強身健體，還可以修身養性。現在，太極拳已經傳播到世界各地，很多外國人也喜歡學太極拳。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Tàijíquán shì Zhōngguó gōngfu zhōng zuì pǔjí de yì zhǒng, tèbié shòu lǎonián rén huānyíng. Tàijíquán de dòngzuò róuruǎn, huǎnmàn, jiǎngjiù yǐ róu kè gāng. Liàn tàijíquán bù dàn kěyǐ qiángshēn jiàntǐ, hái kěyǐ xiūshēn yǎngxìng. Xiànzài, tàijíquán yǐjīng chuánbō dào shìjiè gèdì, hěn duō wàiguó rén yě xǐhuan xué tàijíquán.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Thái Cực Quyền là loại võ công phổ biến nhất ở Trung Quốc, đặc biệt được ngườii cao tuổi ưa chuộng. Động tác Thái Cực Quyền mềm mại, chậm rãi, chú trọng lấy mềm thắng cứng. Luyện Thái Cực Quyền không những có thể rèn luyện cơ thể, còn có thể tu dưỡng tính tình. Bây giờ, Thái Cực Quyền đã truyền bá đến khắp nơi trên thế giới, nhiều ngườii nước ngoài cũng thích học Thái Cực Quyền.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>GIA SƯ HOA NGỮ TÂN AN</strong> &nbsp;·&nbsp; 9/1 Bạch Văn Tư, Tân An, Long An &nbsp;·&nbsp; Zalo: 0839 889 772<br>
+    當代中文課程 2 · 第八課 學功夫 — Tài liệu giảng dạy nội bộ
+  </footer>
+</div>
+
+<script>
+// ── DỮ LIỆU TỪ VỰNG ──────────────────────────────────────────
+const TV1=[
+  {n:'1', zh:'功夫', py:'gōngfu', vi:'võ công, võ thuật', t:'N'},
+  {n:'2', zh:'叫', py:'jiào', vi:'gọi', t:'V'},
+  {n:'3', zh:'見', py:'jiàn', vi:'hoàn thành (nhận thức)', t:'Ptc'},
+  {n:'4', zh:'推', py:'tuī', vi:'đẩy', t:'V'},
+  {n:'5', zh:'體育館', py:'tǐyùguǎn', vi:'nhà thi đấu thể thao', t:'N'},
+  {n:'6', zh:'太極拳', py:'tàijíquán', vi:'Thái Cực Quyền', t:'N'},
+  {n:'7', zh:'師父', py:'shīfu', vi:'sư phụ', t:'N'},
+  {n:'8', zh:'天分', py:'tiānfèn', vi:'thiên phú', t:'N'},
+  {n:'9', zh:'懂', py:'dǒng', vi:'hiểu', t:'Vpt'},
+  {n:'10', zh:'起來', py:'qǐlái', vi:'thức dậy', t:'Vp'},
+  {n:'11', zh:'動作', py:'dòngzuò', vi:'động tác', t:'N'},
+  {n:'12', zh:'輕', py:'qīng', vi:'nhẹ, dịu', t:'Vs'},
+  {n:'13', zh:'腿', py:'tuǐ', vi:'chân', t:'N'},
+  {n:'14', zh:'了', py:'liǎo', vi:'bổ ngữ năng lực', t:'Ptc'},
+  {n:'15', zh:'下去', py:'xiàqu', vi:'tiếp tục', t:'Ptc'},
+];
+
+const CT1=[
+  {n:'16', zh:'興趣', py:'xìngqu', vi:'sở thích'},
+  {n:'17', zh:'借', py:'jiè', vi:'mượn'},
+];
+
+const TV2=[
+  {n:'1', zh:'好處', py:'hǎochu', vi:'lợi ích', t:'N'},
+  {n:'2', zh:'抱怨', py:'bàoyuàn', vi:'than phiền', t:'Vi'},
+  {n:'3', zh:'公尺', py:'gōngchǐ', vi:'mét', t:'N'},
+  {n:'4', zh:'總是', py:'zǒngshì', vi:'luôn luôn', t:'Adv'},
+  {n:'5', zh:'體力', py:'tǐlì', vi:'thể lực', t:'N'},
+  {n:'6', zh:'整天', py:'zhěngtiān', vi:'cả ngày', t:'N'},
+  {n:'7', zh:'精神', py:'jīngshén', vi:'tinh thần', t:'N'},
+  {n:'8', zh:'本來', py:'běnlái', vi:'vốn dĩ', t:'Adv'},
+  {n:'9', zh:'可能', py:'kěnéng', vi:'có thể', t:'Vaux'},
+  {n:'10', zh:'回', py:'huí', vi:'trở về', t:'V'},
+  {n:'11', zh:'影響', py:'yǐngxiǎng', vi:'ảnh hưởng', t:'N/V'},
+  {n:'12', zh:'身體', py:'shēntǐ', vi:'cơ thể', t:'N'},
+  {n:'13', zh:'練', py:'liàn', vi:'luyện tập', t:'V'},
+];
+
+const CT2=[
+  {n:'14', zh:'想起', py:'xiǎngqǐ', vi:'nhớ lại'},
+];
+
+const NV=[
+  {n:'1', zh:'東健', py:'Dōngjiàn', vi:'Đông Kiện (Lý Đông Kiện)'},
+  {n:'2', zh:'安同', py:'Āntóng', vi:'An Đồng (Mã An Đồng)'},
+  {n:'3', zh:'馬安同', py:'Mǎ Āntóng', vi:'Mã An Đồng'},
+  {n:'4', zh:'李東健', py:'Lǐ Dōngjiàn', vi:'Lý Đông Kiện'},
+];
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+const HW=new Set('功夫叫見推體育館太極拳師父天分懂起來動作輕腿了下去興趣借好處抱怨公尺總是體力整天精神本來可能回影響身體練想起東健安同馬李'.split(''));
+function canStroke(zh){return[...zh].some(c=>HW.has(c));}
+
+// ── BUILD TABLE ───────────────────────────────────────────────
+function buildTable(id,arr,hasType){
+  const th=`<thead><tr>
+    <th class="tc" style="width:36px">STT</th>
+    <th class="tc" style="width:44px">🔊</th>
+    <th>Chữ Hán</th><th>Phiên âm</th><th>Nghĩa tiếng Việt</th>
+    ${hasType?'<th class="tc" style="width:58px">Từ loại</th>':''}
+    <th class="tc" style="width:48px">筆順</th>
+  </tr></thead>`;
+  const tb=arr.map(w=>{
+    const s=w.zh.replace(/'/g,"\\'");
+    return`<tr>
+      <td class="c-stt">${w.n}</td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
+      <td class="c-py"><span class="py-text">${w.py}</span></td>
+      <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
+      ${hasType?`<td class="c-tp">${w.t?`<span class="tp-bd">${w.t}</span>`:''}</td>`:''}
+      <td class="c-st">${canStroke(w.zh)?`<button class="bst" onclick="openStroke('${s}')">筆</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById(id).innerHTML=th+'<tbody>'+tb+'</tbody>';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTable('t-t1',TV1,true);
+  buildTable('t-t2',TV2,true);
+  buildTable('t-c1',CT1,false);
+  buildTable('t-c2',CT2,false);
+  buildTable('t-nv',NV,false);
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb[data-sec]').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`.nb[data-sec="${id}"]`)?.classList.add('on');
+  document.getElementById('toggleContainer').style.display=id==='baikoa'?'block':'none';
+  window.scrollTo(0,0);
+}
+function goSub(sec,sub){
+  document.querySelectorAll(`#${sec} .sub-content`).forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll(`#${sec} .subtab`).forEach(e=>e.classList.remove('on'));
+  document.getElementById(`${sec}-${sub}`).classList.add('on');
+  event.target.classList.add('on');
+}
+
+// ── TOGGLE ────────────────────────────────────────────────────
+let sPY=true,sVI=true;
+function tog(l){
+  if(l==='py'){
+    sPY=!sPY;
+    document.querySelectorAll('.spy').forEach(e=>e.classList.toggle('hd',!sPY));
+    document.getElementById('tp').classList.toggle('on',sPY);
+  }else{
+    sVI=!sVI;
+    document.querySelectorAll('.svi').forEach(e=>e.classList.toggle('hd',!sVI));
+    document.getElementById('tv').classList.toggle('on',sVI);
+  }
+}
+
+// ── BÀI TẬP ──────────────────────────────────────────────────
+function setField(id,ok){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.toggle('ok',ok);
+  el.classList.toggle('er',!ok&&el.value.trim().length>0);
+}
+function resetFields(ids,abId){
+  ids.forEach(k=>{const el=document.getElementById(k);el.value='';el.classList.remove('ok','er');});
+  document.getElementById(abId).classList.remove('sh');
+}
+function showAns(id){document.getElementById(id).classList.add('sh');}
+
+function ckE1(){
+  [['e1-1','懂'],['e1-2','見'],['e1-3','懂'],['e1-4','見'],['e1-5','懂']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab1');
+}
+function rsE1(){resetFields(['e1-1','e1-2','e1-3','e1-4','e1-5'],'ab1');}
+
+function ckE2(){
+  [['e2-1','學會'],['e2-2','學會'],['e2-3','會'],['e2-4','會']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab2');
+}
+function rsE2(){resetFields(['e2-1','e2-2','e2-3','e2-4'],'ab2');}
+
+function ckE3(){
+  [['e3-1','得'],['e3-2','不'],['e3-3','得'],['e3-4','得'],['e3-5','不']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab3');
+}
+function rsE3(){resetFields(['e3-1','e3-2','e3-3','e3-4','e3-5'],'ab3');}
+
+function ckE4(){
+  [['e4-1','不了'],['e4-2','不了'],['e4-3','得了'],['e4-4','不了'],['e4-5','得了'],['e4-6','不了']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab4');
+}
+function rsE4(){resetFields(['e4-1','e4-2','e4-3','e4-4','e4-5','e4-6'],'ab4');}
+
+function ckE5(){
+  [['e5-1','住下去'],['e5-2','念下去'],['e5-3','學下去'],['e5-4','下去'],['e5-5','下去']]
+    .forEach(([k,v])=>{
+      const el=document.getElementById(k);
+      if(el){
+        const val=el.value.trim();
+        const ok=val===v||val==='念下去'||val==='學下去'||val==='住下去';
+        setField(k,ok);
+      }
+    });
+  showAns('ab5');
+}
+function rsE5(){resetFields(['e5-1','e5-2','e5-3','e5-4','e5-5'],'ab5');}
+
+// ── TTS ───────────────────────────────────────────────────────
+let VX=window.speechSynthesis.getVoices();
+window.speechSynthesis.onvoiceschanged=()=>{VX=window.speechSynthesis.getVoices();};
+function sayZh(t){
+  if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ TTS.');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  let v=null;
+  for(const p of['zh-TW','zh-CN','zh','cmn']){
+    v=VX.find(x=>x.lang?.toLowerCase().startsWith(p.toLowerCase()));
+    if(v)break;
+  }
+  if(v)u.voice=v;
+  u.lang='zh-TW';u.rate=0.82;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+let hwInstances=[];
+function openStroke(word){
+  const chars=[...word].filter(c=>HW.has(c));
+  if(!chars.length)return;
+  hwInstances.forEach(h=>{try{h.writer.cancelAnimation();}catch(e){}});
+  hwInstances=[];
+  document.getElementById('otitle').textContent='筆順 · '+word;
+  const framesEl=document.getElementById('oframes');
+  framesEl.innerHTML='';
+  const SIZE=chars.length>3?110:140;
+  chars.forEach((ch,i)=>{
+    const cell=document.createElement('div');cell.className='hw-cell';
+    const svg=document.createElement('div');svg.id='hw-svg-'+i;
+    svg.style.cssText=`width:${SIZE}px;height:${SIZE}px;border:2px solid #e0e0e0;border-radius:8px;background:#fafafa;`;
+    const lbl=document.createElement('span');lbl.textContent=ch;
+    cell.appendChild(svg);cell.appendChild(lbl);framesEl.appendChild(cell);
+    try{
+      const w=HanziWriter.create(svg.id,ch,{
+        width:SIZE,height:SIZE,padding:10,
+        strokeColor:'#c62828',outlineColor:'#e0e0e0',
+        strokeAnimationSpeed:1,delayBetweenStrokes:200,
+        showCharacter:true,showOutline:true,
+        charDataLoader:(char,onLoad,onError)=>{
+          fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${char}.json`)
+            .then(r=>r.json()).then(d=>onLoad(d))
+            .catch(()=>fetch(`https://raw.githubusercontent.com/chanind/hanzi-writer-data/master/${char}.json`)
+              .then(r=>r.json()).then(d=>onLoad(d)).catch(err=>onError(err)));
+        }
+      });
+      hwInstances.push({writer:w});
+    }catch(e){console.warn('HanziWriter error',ch,e);}
+  });
+  const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
+  [['▶ Hoạt ảnh',hwAnimAll,''],['🔄 Lặp',hwLoopAll,''],['✕ Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+    const b=document.createElement('button');
+    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+  });
+  document.getElementById('ov').classList.add('open');
+}
+function hwAnimAll(){hwInstances.forEach((h,i)=>setTimeout(()=>h.writer.animateCharacter(),i*600));}
+function hwLoopAll(){let i=0;(function next(){if(i>=hwInstances.length)i=0;hwInstances[i].writer.animateCharacter({onComplete:()=>{i++;next();}});})();}
+function closeOv(){document.getElementById('ov').classList.remove('open');}
+function ovClick(e){if(e.target===document.getElementById('ov'))closeOv();}
+
+// ── EDITOR ────────────────────────────────────────────────────
+let quill;
+function openEditor(){
+  document.getElementById('editorModal').classList.add('open');
+  if(!quill){
+    quill=new Quill('#editor-content',{
+      theme:'snow',
+      placeholder:'Viết ghi chú Bài 8 Quyển 2 ở đây...',
+      modules:{toolbar:'#editor-toolbar'}
+    });
+    const saved=localStorage.getItem('bai8_q2_notes');
+    if(saved)quill.root.innerHTML=saved;
+  }
+}
+function closeEditor(){document.getElementById('editorModal').classList.remove('open');}
+function saveEditor(){if(quill){localStorage.setItem('bai8_q2_notes',quill.root.innerHTML);alert('✅ Đã lưu ghi chú!');}}
+function clearEditor(){if(quill&&confirm('Xóa tất cả ghi chú?')){quill.root.innerHTML='';localStorage.removeItem('bai8_q2_notes');}}
+setInterval(()=>{
+  if(quill&&document.getElementById('editorModal').classList.contains('open'))
+    localStorage.setItem('bai8_q2_notes',quill.root.innerHTML);
+},30000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditor();closeOv();}});
+</script>
+</body>
+</html>
