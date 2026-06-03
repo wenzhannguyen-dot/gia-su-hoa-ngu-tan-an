@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>第一課 請問，到師大怎麼走？</title>
+<base target="_blank">
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+:root{
+  --g:#2e7d32;--g0:#e8f5e9;
+  --b:#1565c0;--b0:#dbeafe;
+  --r:#c62828;--r0:#fff3e0;
+  --s:#607d8b;--s0:#f0f4f5;
+  --k:#222;--w:#fff;
+  --sw:200px;
+  --fzh:32px;--fpy:19px;--fvi:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
+.zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
+
+/* SIDEBAR */
+#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
+.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
+.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
+.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
+.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
+.logo-area{text-align:center;padding:5px 0;}
+.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
+.logo-container img{width:100%;height:100%;object-fit:contain;}
+nav{flex:1;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
+.nb:hover{background:rgba(255,255,255,.1);}
+.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+.nb .ic{font-size:18px;}
+.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
+.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
+.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
+.st-btn:hover{background:rgba(255,255,255,.1);}
+.st-btn.on{background:var(--g);border-color:var(--g);}
+
+/* MAIN */
+#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+.tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
+.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
+.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+
+/* SECTIONS */
+.sec{display:none;padding:20px 24px;}
+.sec.on{display:block;}
+.subnav{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid #e0e0e0;flex-wrap:wrap;}
+.subtab{background:#f5f5f5;border:none;padding:10px 20px;font-size:14px;font-weight:600;color:#666;cursor:pointer;border-radius:8px 8px 0 0;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.subtab:hover{background:#e8e8e8;color:var(--b);}
+.subtab.on{background:var(--b);color:#fff;border-bottom-color:var(--r);}
+.sub-content{display:none;}
+.sub-content.on{display:block;}
+
+/* VOCAB TABLE */
+.vt-wrap{overflow-x:auto;margin-bottom:6px;}
+table.vt{border-collapse:collapse;background:var(--w);border-radius:8px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.09);table-layout:auto;width:auto;min-width:100%;}
+table.vt thead tr{background:var(--b);}
+table.vt thead th{padding:9px 12px;font-size:13px;font-weight:700;color:#fff;text-align:left;white-space:nowrap;}
+table.vt thead th.tc{text-align:center;}
+table.vt tbody tr{border-bottom:1px solid #e8ecf0;}
+table.vt tbody tr:last-child{border-bottom:none;}
+table.vt tbody tr:hover{background:#f5f8ff;}
+.c-stt{padding:10px 8px;text-align:center;white-space:nowrap;width:36px;font-size:14px;font-weight:600;color:var(--s);}
+.c-au{padding:10px 6px;text-align:center;white-space:nowrap;width:44px;}
+.c-zh,.c-py{padding:10px;white-space:nowrap;}
+.c-vi{padding:10px;}
+.c-tp{padding:10px 8px;text-align:center;white-space:nowrap;width:58px;}
+.c-st{padding:10px 8px;text-align:center;white-space:nowrap;width:48px;}
+.zh-word{font-size:var(--fzh);color:var(--k);letter-spacing:1px;}
+.py-text{font-size:var(--fpy);color:var(--r);font-weight:500;}
+.vi-text{font-size:var(--fvi);color:var(--b);line-height:1.4;}
+.tp-bd{display:inline-block;font-size:12px;color:#fff;background:var(--s);border-radius:4px;padding:2px 8px;font-weight:600;}
+.bau{background:var(--b);color:#fff;border:none;border-radius:7px;padding:7px 9px;font-size:17px;cursor:pointer;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.bau:hover{background:#0d47a1;}
+.bau:active{transform:scale(.92);}
+.bst{background:none;border:none;cursor:pointer;font-size:20px;padding:4px 6px;color:var(--r);line-height:1;}
+.bst:hover{color:#7b0000;}
+
+/* STROKE OVERLAY */
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;align-items:center;justify-content:center;}
+#ov.open{display:flex;}
+#obox{background:var(--w);border-radius:14px;padding:24px 28px;max-width:480px;width:94%;box-shadow:0 8px 40px rgba(0,0,0,.4);text-align:center;}
+#ocls{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:var(--s);margin-top:-6px;line-height:1;}
+#otitle{font-size:18px;font-weight:700;color:var(--b);margin-bottom:16px;font-family:'DFKai-SB',serif;}
+#oframes{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hw-cell{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.hw-cell span{font-size:13px;color:var(--s);}
+.hw-controls{margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hw-btn{background:var(--b);color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:14px;font-weight:600;cursor:pointer;}
+.hw-btn:hover{background:#0d47a1;}
+.hw-btn.red{background:var(--r);}
+.hw-btn.red:hover{background:#8d1515;}
+
+/* DIALOGUE */
+.db{background:var(--w);border-radius:12px;padding:16px 20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-top:5px solid var(--b);}
+.db.dg{border-top-color:var(--g);}
+.dt{font-size:15px;font-weight:700;color:var(--b);margin-bottom:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+.db.dg .dt{color:var(--g);}
+.dlb{background:var(--b);color:#fff;padding:2px 11px;border-radius:12px;font-size:12px;}
+.db.dg .dlb{background:var(--g);}
+.dab{margin-left:auto;background:var(--b);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:700;}
+.db.dg .dab{background:var(--g);}
+table.dt2{width:100%;border-collapse:collapse;}
+table.dt2 tr{border-bottom:1px solid #f0f0f0;}
+table.dt2 tr:last-child{border-bottom:none;}
+td.d-au{width:44px;padding:11px 6px 11px 0;vertical-align:top;}
+td.d-sp{width:80px;padding:11px 8px 11px 0;vertical-align:top;}
+td.d-tx{padding:11px 0;}
+.spk{display:inline-block;text-align:center;font-size:15px;color:#fff;background:var(--g);padding:5px 7px;border-radius:8px;line-height:1.3;min-width:66px;font-family:'DFKai-SB',serif;}
+.spk.b{background:var(--b);}.spk.c{background:var(--r);}.spk.y{background:#f57c00;}
+.spk small{font-size:11px;display:block;font-family:'Segoe UI',sans-serif;}
+.szh{font-size:var(--fzh);color:var(--k);line-height:1.6;letter-spacing:1px;}
+.spy{font-size:var(--fpy);color:var(--r);margin-top:3px;line-height:1.5;font-weight:500;}
+.svi{font-size:var(--fvi);color:var(--b);margin-top:3px;line-height:1.5;font-style:italic;}
+.spy.hd,.svi.hd{display:none;}
+
+/* GRAMMAR */
+.gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
+.gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
+.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
+.gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
+table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
+table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;text-align:left;font-weight:700;}
+table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
+table.ex tr:last-child td{border-bottom:none;}
+table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
+table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
+
+/* EXERCISES */
+.ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
+.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ei{margin-bottom:14px;}
+.eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
+.eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
+.eh{font-size:14px;color:var(--s);font-style:italic;}
+input.fi{border:2px solid #ccc;border-radius:6px;padding:4px 9px;font-size:19px;width:110px;outline:none;font-family:'DFKai-SB',serif;}
+input.fi:focus{border-color:var(--b);}
+input.fi.ok{border-color:var(--g);background:var(--g0);}
+input.fi.er{border-color:var(--r);background:var(--r0);}
+.bck{background:var(--b);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px;}
+.bck:hover{background:#0d47a1;}
+.brs{background:var(--s);color:#fff;border:none;padding:9px 15px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin:10px 0 0 8px;}
+.ab{display:none;margin-top:9px;background:var(--g0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--g);}
+.ab.sh{display:block;}
+
+/* CULTURE */
+.culture-box{background:linear-gradient(135deg,#fff,#f5f7fa);border-left:5px solid #ff6b6b;padding:20px;border-radius:12px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.culture-box h3{color:#e74c3c;margin-bottom:10px;font-size:18px;}
+.culture-box p{line-height:1.8;margin-bottom:10px;text-align:justify;}
+
+/* EDITOR MODAL */
+#editorModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
+#editorModal.open{display:flex;}
+.editor-container{background:#fff;border-radius:12px;width:90%;max-width:900px;height:80vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.editor-header{background:var(--b);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-radius:12px 12px 0 0;}
+.editor-header h3{margin:0;font-size:18px;}
+.editor-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.2s;}
+.editor-close:hover{background:rgba(255,255,255,.2);}
+.editor-body{flex:1;display:flex;flex-direction:column;}
+#editor-toolbar{border-bottom:1px solid #ddd;}
+#editor-content{flex:1;font-size:16px;line-height:1.6;}
+#editor-content .ql-editor{min-height:100%;}
+.editor-footer{padding:15px 20px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 12px 12px;}
+.editor-status{font-size:13px;color:#666;}
+.editor-actions{display:flex;gap:10px;}
+.btn-save{background:var(--g);color:#fff;border:none;padding:8px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-clear{background:transparent;color:var(--s);border:1px solid #ddd;padding:8px 20px;border-radius:6px;font-size:14px;cursor:pointer;}
+.btn-save:hover{background:#1b5e20;}
+.btn-clear:hover{background:#f5f5f5;}
+
+footer{margin-top:28px;padding:12px 24px;background:var(--k);color:#777;font-size:12px;text-align:center;}
+footer strong{color:var(--r);}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<!-- STROKE OVERLAY -->
+<div id="ov" onclick="ovClick(event)">
+  <div id="obox">
+    <button id="ocls" onclick="closeOv()">✕</button>
+    <div id="otitle"></div>
+    <div id="oframes"></div>
+    <div class="hw-controls" id="octrl"></div>
+  </div>
+</div>
+
+<!-- EDITOR MODAL -->
+<div id="editorModal">
+  <div class="editor-container">
+    <div class="editor-header">
+      <h3>📝 Soạn thảo ghi chú - Bài 1 Quyển 2</h3>
+      <button class="editor-close" onclick="closeEditor()">✕</button>
+    </div>
+    <div class="editor-body">
+      <div id="editor-toolbar">
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="1">Tiêu đề 1</option>
+            <option value="2">Tiêu đề 2</option>
+            <option selected>Tiêu đề thường</option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <select class="ql-color"></select>
+          <select class="ql-background"></select>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats"><button class="ql-clean"></button></span>
+      </div>
+      <div id="editor-content"></div>
+    </div>
+    <div class="editor-footer">
+      <span class="editor-status">💡 Ghi chú tự động lưu vào trình duyệt</span>
+      <div class="editor-actions">
+        <button class="btn-clear" onclick="clearEditor()">Xóa tất cả</button>
+        <button class="btn-save" onclick="saveEditor()">Lưu ghi chú</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sb">
+  <div class="lb">
+    <div class="logo-area">
+      <div class="logo-container">
+        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
+      </div>
+    </div>
+    <div class="ln">GIA SƯ HOA NGỮ TÂN AN</div>
+    <div class="la">9/1 Bạch Văn Tư, Tân An, Long An</div>
+    <div class="lz">Zalo: 0839 889 772</div>
+  </div>
+  <nav>
+    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic">🏠</span><span>VỀ TRANG CHỦ</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TỪ VỰNG</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BÀI KHÓA</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGỮ PHÁP</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BÀI TẬP</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VĂN HÓA</span></button>
+  </nav>
+  <div class="side-toggle" id="toggleContainer" style="display:none;">
+    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phiên âm</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tiếng Việt</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mn">
+  <div class="topbar">
+    <div>
+      <div class="tzh">BÀI 1 · 第一課</div>
+      <div class="tvi">請問，到師大怎麼走？· Xin hỏi, đến ĐH Sư phạm đi như thế nào?</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:15px;">
+      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soạn thảo</span></button>
+      <div class="badge">當代中文課程 2</div>
+    </div>
+  </div>
+
+  <!-- TỪ VỰNG -->
+  <div id="vocab" class="sec on">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Từ vựng 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')">📖 Từ vựng 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','c1')">📝 Cụm từ 1 · 短語一</button>
+      <button class="subtab" onclick="goSub('vocab','c2')">📝 Cụm từ 2 · 短語二</button>
+      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhân vật · 人物</button>
+    </div>
+    <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
+    <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
+    <div id="vocab-c1" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c1"></table></div></div>
+    <div id="vocab-c2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-c2"></table></div></div>
+    <div id="vocab-nv" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-nv"></table></div></div>
+  </div>
+
+  <!-- BÀI KHÓA -->
+  <div id="baikoa" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hội thoại 1 · 對話一</button>
+      
+      <button class="subtab" onclick="goSub('baikoa','bk')">📖 Bài khóa · 課文</button>
+    </div>
+    <div id="baikoa-ht1" class="sub-content on">
+      <div class="db">
+        <div class="dt">
+          <span class="dlb">Hội thoại · 對話</span>Hỏi đường &amp; Tìm cây ATM
+          <button class="dab" onclick="sayZh('你需要我幫忙嗎？我好像迷路了。你要去哪裡？請問，到師大怎麼走？你從這裡往前走，到了下一個路口，右轉。右轉就到了嗎？聽起來不遠。還沒到！你右轉以後，是和平東路一段，再往前一直走，過了第二個紅綠燈，就看見師大了。謝謝，我知道了。你的中文很好。謝謝，我還得多學一點。能不能再告訴我，這附近有沒有提款機？從這裡往和平東路走，好像沒有銀行，不過大部分的超商裡應該都有。你說的超商是7-11那種便利商店嗎？是的。對了，郵局也可以提錢。我看見了，那邊有一家便利商店。謝謝，謝謝！不客氣。')">🔊 Toàn bộ</button>
+        </div>
+        <table class="dt2">
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你需要我幫忙嗎？')">🔊</button></td><td class="d-sp"><div class="spk b">路人<small>Lùrén</small></div></td><td class="d-tx"><div class="szh">你需要我幫忙嗎？</div><div class="spy">Nǐ xūyào wǒ bāngmáng ma?</div><div class="svi">Bạn có cần tôi giúp không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我好像迷路了。')">🔊</button></td><td class="d-sp"><div class="spk">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">我好像迷路了。</div><div class="spy">Wǒ hǎoxiàng mílù le.</div><div class="svi">Tôi hình như bị lạc đường rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你要去哪裡？')">🔊</button></td><td class="d-sp"><div class="spk b">路人</div></td><td class="d-tx"><div class="szh">你要去哪裡？</div><div class="spy">Nǐ yào qù nǎlǐ?</div><div class="svi">Bạn muốn đi đâu?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('請問，到師大怎麼走？')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">請問，到師大怎麼走？</div><div class="spy">Qǐngwèn, dào Shīdà zěnme zǒu?</div><div class="svi">Xin hỏi, đến ĐH Sư phạm đi như thế nào?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你從這裡往前走，到了下一個路口，右轉。')">🔊</button></td><td class="d-sp"><div class="spk b">路人</div></td><td class="d-tx"><div class="szh">你從這裡往前走，到了下一個路口，右轉。</div><div class="spy">Nǐ cóng zhèlǐ wǎng qián zǒu, dàole xià yí ge lùkǒu, yòu zhuǎn.</div><div class="svi">Bạn từ đây đi thẳng về phía trước, đến ngã tư tiếp theo thì rẽ phải.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('右轉就到了嗎？聽起來不遠。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">右轉就到了嗎？聽起來不遠。</div><div class="spy">Yòu zhuǎn jiù dàole ma? Tīng qǐlái bù yuǎn.</div><div class="svi">Rẽ phải là đến ngay à? Nghe có vẻ không xa.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('還沒到！你右轉以後，是和平東路一段，再往前一直走，過了第二個紅綠燈，就看見師大了。')">🔊</button></td><td class="d-sp"><div class="spk b">路人</div></td><td class="d-tx"><div class="szh">還沒到！你右轉以後，是和平東路一段，再往前一直走，過了第二個紅綠燈，就看見師大了。</div><div class="spy">Hái méi dào! Nǐ yòu zhuǎn yǐhòu, shì Hépíng Dōng Lù yí duàn, zài wǎng qián yìzhí zǒu, guòle dì èr ge hónglǜdēng, jiù kànjiàn Shīdà le.</div><div class="svi">Chưa đến đâu! Sau khi bạn rẽ phải, là đường Hòa Bình Đông đoạn 1, rồi đi thẳng về phía trước, qua đèn giao thông thứ hai, là thấy ĐH Sư phạm rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝，我知道了。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">謝謝，我知道了。</div><div class="spy">Xièxie, wǒ zhīdào le.</div><div class="svi">Cảm ơn, tôi biết rồi.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你的中文很好。')">🔊</button></td><td class="d-sp"><div class="spk b">路人</div></td><td class="d-tx"><div class="szh">你的中文很好。</div><div class="spy">Nǐ de Zhōngwén hěn hǎo.</div><div class="svi">Tiếng Trung của bạn rất giỏi.</div></td></tr>
+        
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝，我還得多學一點。能不能再告訴我，這附近有沒有提款機？')">🔊</button></td><td class="d-sp"><div class="spk">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">謝謝，我還得多學一點。能不能再告訴我，這附近有沒有提款機？</div><div class="spy">Xièxie, wǒ hái děi duō xué yìdiǎn. Néng bùnéng zài gàosu wǒ, zhè fùjìn yǒu méiyǒu tíkuǎnjī?</div><div class="svi">Cảm ơn, tôi còn phải học thêm nhiều. Có thể nói cho tôi biết, gần đây có máy ATM không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('從這裡往和平東路走，好像沒有銀行，不過大部分的超商裡應該都有。')">🔊</button></td><td class="d-sp"><div class="spk b">路人<small>Lùrén</small></div></td><td class="d-tx"><div class="szh">從這裡往和平東路走，好像沒有銀行，不過大部分的超商裡應該都有。</div><div class="spy">Cóng zhèlǐ wǎng Hépíng Dōng Lù zǒu, hǎoxiàng méiyǒu yínháng, búguò dà bùfèn de chāoshāng lǐ yīnggāi dōu yǒu.</div><div class="svi">Từ đây đi về phía đường Hòa Bình Đông, hình như không có ngân hàng, nhưng hầu hết các cửa hàng tiện lợi đều có.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你說的「超商」是「7-11」那種便利商店嗎？')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">你說的「超商」是「7-11」那種便利商店嗎？</div><div class="spy">Nǐ shuō de "chāoshāng" shì "7-11" nà zhǒng biànlì shāngdiàn ma?</div><div class="svi">"Siêu thương" anh nói là loại cửa hàng tiện lợi "7-11" đó à?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('是的。對了，郵局也可以提錢。')">🔊</button></td><td class="d-sp"><div class="spk b">路人</div></td><td class="d-tx"><div class="szh">是的。對了，郵局也可以提錢。</div><div class="spy">Shìde. Duìle, yóujú yě kěyǐ tí qián.</div><div class="svi">Đúng rồi. À đúng rồi, bưu điện cũng có thể rút tiền.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我看見了，那邊有一家便利商店。謝謝，謝謝！')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">我看見了，那邊有一家便利商店。謝謝，謝謝！</div><div class="spy">Wǒ kànjiàn le, nàbiān yǒu yì jiā biànlì shāngdiàn. Xièxie, xièxie!</div><div class="svi">Tôi thấy rồi, bên kia có một cửa hàng tiện lợi. Cảm ơn, cảm ơn rất nhiều!</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('不客氣。')">🔊</button></td><td class="d-sp"><div class="spk b">路人</div></td><td class="d-tx"><div class="szh">不客氣。</div><div class="spy">Bú kèqi.</div><div class="svi">Không có gì đâu.</div></td></tr></table>
+      </div>
+    </div>
+    
+    <div id="baikoa-bk" class="sub-content">
+      <div class="db" style="border-top-color:#764ba2;">
+        <div class="dt" style="color:#764ba2;">
+          <span class="dlb" style="background:#764ba2;">Bài khóa · 課文</span>
+          <button class="dab" style="background:#764ba2;" onclick="sayZh('馬安同下載了新的地圖到手機裡，他找白如玉跟他在師大附近走走，試試地圖好用不好用。他們看著地圖，從學校門口往左轉，過了和平東路就到了師大路。在師大路上，他們看見很多賣小吃的店，也有賣衣服和日用品的商店。他們經過兩個小巷子再右轉，這邊的商店比師大路的多。他們逛了半天，白如玉覺得有一點餓，所以他們到一家麵店，點了兩碗牛肉麵。他們一邊吃麵，一邊看著手機裡的地圖，發現離麵店不遠的巷子裡有一家賣背包的店。馬安同正好想買一個背包，所以決定吃了麵就到這家店去看看。最後，馬安同買了一個背包，白如玉也在附近買了兩枝筆和一本本子。馬安同和白如玉都覺得，逛師大附近的店真有意思，吃的東西和日用品也很便宜。')">🔊 Toàn bộ</button>
+        </div>
+        <div class="szh" style="font-size:22px;line-height:1.8;">馬安同下載了新的地圖到手機裡，他找白如玉跟他在師大附近走走，試試地圖好用不好用。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Mǎ Āntóng xiàzǎile xīn de dìtú dào shǒujī lǐ, tā zhǎo Bái Rúyù gēn tā zài Shīdà fùjìn zǒuzou, shìshi dìtú hǎoyòng bù hǎoyòng.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Mã An Đồng tải bản đồ mới về điện thoại, anh tìm Bạch Như Ngọc cùng đi dạo quanh khu vực gần ĐH Sư phạm để thử xem bản đồ có dễ dùng không.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">他們看著地圖，從學校門口往左轉，過了和平東路就到了師大路。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Tāmen kànzhe dìtú, cóng xuéxiào ménkǒu wǎng zuǒ zhuǎn, guòle Hépíng Dōng Lù jiù dàole Shīdà Lù.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Họ nhìn bản đồ, từ cổng trường rẽ trái, qua đường Hòa Bình Đông là đến đường Sư phạm.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">在師大路上，他們看見很多賣小吃的店，也有賣衣服和日用品的商店。他們經過兩個小巷子再右轉，這邊的商店比師大路的多。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Zài Shīdà Lù shang, tāmen kànjiàn hěn duō mài xiǎochī de diàn, yě yǒu mài yīfu hé rìyòngpǐn de shāngdiàn. Tāmen jīngguò liǎng ge xiǎo xiàngzi zài yòu zhuǎn, zhè biān de shāngdiàn bǐ Shīdà Lù de duō.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Trên đường Sư phạm, họ nhìn thấy nhiều cửa hàng bán đồ ăn vặt, cũng có cửa hàng bán quần áo và đồ dùng hàng ngày. Họ đi ngang qua hai con ngõ nhỏ rồi rẽ phải, bên này có nhiều cửa hàng hơn đường Sư phạm.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">他們逛了半天，白如玉覺得有一點餓，所以他們到一家麵店，點了兩碗牛肉麵。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Tāmen guàngle bàn tiān, Bái Rúyù juéde yǒu yìdiǎn è, suǒyǐ tāmen dào yì jiā miàn diàn, diǎnle liǎng wǎn niúròu miàn.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Họ đi dạo được một lúc, Bạch Như Ngọc thấy hơi đói, nên họ đến một tiệm mì, gọi hai tô mì bò.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">他們一邊吃麵，一邊看著手機裡的地圖，發現離麵店不遠的巷子裡有一家賣背包的店。馬安同正好想買一個背包，所以決定吃了麵就到這家店去看看。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Tāmen yìbiān chī miàn, yìbiān kànzhe shǒujī lǐ de dìtú, fāxiàn lí miàn diàn bù yuǎn de xiàngzi lǐ yǒu yì jiā mài bēibāo de diàn. Mǎ Āntóng zhènghǎo xiǎng mǎi yí ge bēibāo, suǒyǐ juédìng chīle miàn jiù dào zhè jiā diàn qù kànkan.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;margin-bottom:14px;font-style:italic;">Họ vừa ăn mì, vừa nhìn bản đồ trên điện thoại, phát hiện trong ngõ không xa tiệm mì có một cửa hàng bán ba lô. Mã An Đồng vừa đúng lúc muốn mua một cái ba lô, nên quyết định ăn xong mì sẽ đến cửa hàng này xem thử.</div>
+
+        <div class="szh" style="font-size:22px;line-height:1.8;">最後，馬安同買了一個背包，白如玉也在附近買了兩枝筆和一本本子。馬安同和白如玉都覺得，逛師大附近的店真有意思，吃的東西和日用品也很便宜。</div>
+        <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Zuìhòu, Mǎ Āntóng mǎile yí ge bēibāo, Bái Rúyù yě zài fùjìn mǎile liǎng zhī bǐ hé yì běn běnzi. Mǎ Āntóng hé Bái Rúyù dōu juéde, guàng Shīdà fùjìn de diàn zhēn yǒu yìsi, chī de dōngxi hé rìyòngpǐn yě hěn piányi.</div>
+        <div class="svi" style="font-size:16px;color:var(--b);line-height:1.6;font-style:italic;">Cuối cùng, Mã An Đồng đã mua một cái ba lô, Bạch Như Ngọc cũng mua hai cây bút và một quyển vở gần đó. Mã An Đồng và Bạch Như Ngọc đều cảm thấy, đi dạo các cửa hàng gần ĐH Sư phạm thật thú vị, đồ ăn và đồ dùng hàng ngày cũng rất rẻ.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NGỮ PHÁP -->
+  <div id="ngupap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('ngupap','g1')">1 · 從…往… · Chỉ phương hướng</button>
+      <button class="subtab" onclick="goSub('ngupap','g2')">2 · V-起來 · Cảm nhận, đánh giá</button>
+      <button class="subtab" onclick="goSub('ngupap','g3')">3 · 著 zhe · Hành động tiếp diễn</button>
+      <button class="subtab" onclick="goSub('ngupap','g4')">4 · 一邊…一邊… · Hai hành động đồng thờ</button>
+      <button class="subtab" onclick="goSub('ngupap','g5')">5 · 離 · Khoảng cách</button>
+    </div>
+    <div id="ngupap-g1" class="sub-content on">
+      <div class="gc">
+        <div><span class="gn">1</span><span class="gtt">Chỉ phương hướng với 從…往…</span></div>
+        <div class="gsb">Mẫu câu này diễn tả hướng đi từ điểm xuất phát đến điểm đến. 從 đánh dấu điểm bắt đầu, 往 đánh dấu điểm kết thúc của chuyển động.</div>
+        <div class="fm">從 + điểm xuất phát + 往 + điểm đến + V<div class="fn">Từ... đi về hướng... + Động từ</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">你從這裡往前一直走，就到師大了。</div></td><td><div class="py">Nǐ cóng zhèlǐ wǎng qián yìzhí zǒu, jiù dào Shīdà le.</div></td><td><div class="vi">Bạn từ đây đi thẳng về phía trước, là đến ĐH Sư phạm.</div></td></tr>
+          <tr><td><div class="zh">從這個路口往右轉，你可以到學校宿舍。</div></td><td><div class="py">Cóng zhège lùkǒu wǎng yòu zhuǎn, nǐ kěyǐ dào xuéxiào sùshè.</div></td><td><div class="vi">Từ ngã tư này rẽ phải, bạn có thể đến ký túc xá trường.</div></td></tr>
+          <tr><td><div class="zh">從學校大門往裡面走十分鐘，就可以到語言中心。</div></td><td><div class="py">Cóng xuéxiào dàmén wǎng lǐmiàn zǒu shí fēnzhōng, jiù kěyǐ dào yǔyán zhōngxīn.</div></td><td><div class="vi">Từ cổng trường đi vào trong mưới phút, là có thể đến trung tâm ngôn ngữ.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Nếu điểm xuất phát đã rõ từ ngữ cảnh, 從… có thể lược bỏ, chỉ dùng 往… đứng một mình. Ví dụ: 你往前一直走，就到了。</div>
+        <div class="gnote">💡 <strong>Phủ định:</strong> 你不能從這裡往前走，前面沒有路了。/ 你不可以從這個路口往左轉，只可以往右轉。</div>
+      </div>
+    </div>
+    <div id="ngupap-g2" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">2</span><span class="gtt">Cảm nhận, đánh giá với V-起來</span></div>
+        <div class="gsb">Mẫu câu này truyền đạt sự đánh giá hoặc nhận xét của ngườii nói về một tình huống.</div>
+        <div class="fm">V + 起來 + tính từ / đánh giá<div class="fn">Động từ + qǐlái + (rất) + tính từ trạng thái</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">白小姐笑起來很美。</div></td><td><div class="py">Bái xiǎojiě xiào qǐlái hěn měi.</div></td><td><div class="vi">Cô Bạch cườI lên trông rất đẹp.</div></td></tr>
+          <tr><td><div class="zh">那裡賣的小吃看起來很好吃。</div></td><td><div class="py">Nàlǐ mài de xiǎochī kàn qǐlái hěn hǎo chī.</div></td><td><div class="vi">Đồ ăn vặt bán ở đó trông có vẻ rất ngon.</div></td></tr>
+          <tr><td><div class="zh">這個房子很小，我住起來不習慣。</div></td><td><div class="py">Zhège fángzi hěn xiǎo, wǒ zhù qǐlái bù xíguàn.</div></td><td><div class="vi">Căn nhà này rất nhỏ, tôi ở không quen.</div></td></tr>
+          <tr><td><div class="zh">你說的事聽起來不難。不過，做起來有點難。</div></td><td><div class="py">Nǐ shuō de shì tīng qǐlái bù nán. Búguò, zuò qǐlái yǒudiǎn nán.</div></td><td><div class="vi">Chuyện anh nói nghe có vẻ không khó. Nhưng mà, làm thì hơi khó.</div></td></tr>
+        </table>
+        <div class="gnote">💡 <strong>Phủ định:</strong> Phần đánh giá (起來) không thể phủ định trực tiếp, nhưng tính từ trạng thái sau nó có thể phủ định. Các động từ thường dùng trước 起來: 看, 聽, 吃, 喝, 坐, 穿, 寫, 說, 學, 念, 住, 拍(照), 逛, 走, 笑.</div>
+      </div>
+    </div>
+    <div id="ngupap-g3" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">3</span><span class="gtt">Hành động đang tiếp diễn với 著 zhe</span></div>
+        <div class="gsb">Khi thêm tiểu từ 著 vào động từ hành động, nghĩa là hoạt động đang diễn ra, đang tiếp tục.</div>
+        <div class="fm">S + V + 著 + O<div class="fn">Chủ ngữ + Động từ + zhe + Tân ngữ</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">他在門口等著你，你快去吧！</div></td><td><div class="py">Tā zài ménkǒu děngzhe nǐ, nǐ kuài qù ba!</div></td><td><div class="vi">Anh ấy đang đợi bạn ở cửa, bạn mau đi đi!</div></td></tr>
+          <tr><td><div class="zh">李明華拿著一杯冰咖啡。</div></td><td><div class="py">Lǐ Mínghuá názhe yì bēi bīng kāfēi.</div></td><td><div class="vi">Lý Minh Hoa đang cầm một ly cà phê đá.</div></td></tr>
+          <tr><td><div class="zh">他看著我，什麼也沒說。</div></td><td><div class="py">Tā kànzhe wǒ, shénme yě méi shuō.</div></td><td><div class="vi">Anh ấy nhìn tôi, không nói gì cả.</div></td></tr>
+        </table>
+        <div class="gnote">💡 Động từ đi kèm 著 thường là động từ một âm tiết. 沒 phủ định mẫu câu này. Ví dụ: 他沒帶著地圖。/ 你別帶著咖啡到圖書館去，裡面不能喝東西。</div>
+      </div>
+    </div>
+    <div id="ngupap-g4" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">4</span><span class="gtt">Hai hành động đồng thờii với 一邊…一邊…</span></div>
+        <div class="gsb">Mẫu câu này dùng để diễn tả hai hành động xảy ra cùng một lúc.</div>
+        <div class="fm">一邊 + V1 + O，一邊 + V2 + O<div class="fn">Vừa... vừa... (hai động từ hành động đồng thờii)</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我常常一邊走路，一邊聽歌。</div></td><td><div class="py">Wǒ chángcháng yìbiān zǒulù, yìbiān tīng gē.</div></td><td><div class="vi">Tôi thường vừa đi bộ vừa nghe nhạc.</div></td></tr>
+          <tr><td><div class="zh">那個小姐喜歡一邊吃飯，一邊看電視。</div></td><td><div class="py">Nàge xiǎojiě xǐhuān yìbiān chīfàn, yìbiān kàn diànshì.</div></td><td><div class="vi">Cô gái đó thích vừa ăn cơm vừa xem TV.</div></td></tr>
+          <tr><td><div class="zh">田中誠一常常一邊逛夜市，一邊照相。</div></td><td><div class="py">Tiánzhōng Chéngyī chángcháng yìbiān guàng yèshì, yìbiān zhàoxiàng.</div></td><td><div class="vi">Tiền Trung Thành Nhất thường vừa đi chợ đêm vừa chụp ảnh.</div></td></tr>
+          <tr><td><div class="zh">他們一邊吃麵，一邊看著手機裡的地圖。</div></td><td><div class="py">Tāmen yìbiān chī miàn, yìbiān kànzhe shǒujī lǐ de dìtú.</div></td><td><div class="vi">Họ vừa ăn mì vừa nhìn bản đồ trên điện thoại.</div></td></tr>
+        </table>
+        <div class="gnote">💡 <strong>Phủ định:</strong> 你不可以一邊騎機車，一邊打電話。/ 請你不要一邊上課，一邊吃早餐。/ 他沒一邊工作，一邊玩手機。</div>
+      </div>
+    </div>
+    <div id="ngupap-g5" class="sub-content">
+      <div class="gc">
+        <div><span class="gn">5</span><span class="gtt">Khoảng cách với 離</span></div>
+        <div class="gsb">Giới từ 離 đánh dấu khoảng cách giữa hai điểm. Khác với hầu hết các giới từ khác, 離 không thể phủ định trực tiếp.</div>
+        <div class="fm">A + 離 + B + 很/不 + 遠/近<div class="fn">A cách B xa/gần...</div></div>
+        <table class="ex">
+          <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
+          <tr><td><div class="zh">我家離學校很遠。</div></td><td><div class="py">Wǒ jiā lí xuéxiào hěn yuǎn.</div></td><td><div class="vi">Nhà tôi cách trường học rất xa.</div></td></tr>
+          <tr><td><div class="zh">離火車站很近的地方，有一家牛肉麵店的牛肉麵很好吃。</div></td><td><div class="py">Lí huǒchē zhàn hěn jìn de dìfāng, yǒu yì jiā niúròu miàn diàn de niúròu miàn hěn hǎo chī.</div></td><td><div class="vi">Ở nơi gần ga tàu lửa, có một tiệm mì bò rất ngon.</div></td></tr>
+          <tr><td><div class="zh">你從這裡往左邊走，離學校不遠的地方，可以看到海。</div></td><td><div class="py">Nǐ cóng zhèlǐ wǎng zuǒbiān zǒu, lí xuéxiào bù yuǎn de dìfāng, kěyǐ kàndào hǎi.</div></td><td><div class="vi">Bạn từ đây đi về bên trái, ở nơi không xa trường, có thể nhìn thấy biển.</div></td></tr>
+          <tr><td><div class="zh">銀行離學校不遠，你走路去應該就可以了。</div></td><td><div class="py">Yínháng lí xuéxiào bù yuǎn, nǐ zǒulù qù yīnggāi jiù kěyǐ le.</div></td><td><div class="vi">Ngân hàng cách trường không xa, bạn đi bộ đến là được.</div></td></tr>
+        </table>
+        <div class="gnote">💡 離 không thể phủ định trực tiếp. Muốn nói "không xa" thì dùng 不遠, không dùng 沒離...不远.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BÀI TẬP -->
+  <div id="baitap" class="sec">
+    <div class="subnav">
+      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bài 1 · 從…往…</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bài 2 · V-起來</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bài 3 · 著</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bài 4 · 一邊…一邊…</button>
+      <button class="subtab" onclick="goSub('baitap','bt5')">📝 Bài 5 · 離</button>
+    </div>
+    <div id="baitap-bt1" class="sub-content on">
+      <div class="ec">
+        <div class="ett">📝 Bài 1 · Hoàn thành câu với 從…往…</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu chỉ phương hướng.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span><input class="fi" id="e1-1" style="width:80px;"> 這裡 <input class="fi" id="e1-2" style="width:80px;"> 前 <input class="fi" id="e1-3" style="width:80px;"> ，就到師大了。</div><div class="eh">→ Từ đây đi về phía trước...</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span><input class="fi" id="e1-4" style="width:80px;"> 學校大門 <input class="fi" id="e1-5" style="width:80px;"> 裡面 <input class="fi" id="e1-6" style="width:80px;"> ，可以 <input class="fi" id="e1-7" style="width:80px;"> 語言中心。</div><div class="eh">→ Từ cổng trường đi vào trong...</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>這公車不 <input class="fi" id="e1-8" style="width:80px;"> 師大 <input class="fi" id="e1-9" style="width:80px;"> ， <input class="fi" id="e1-10" style="width:80px;"> 火車站 <input class="fi" id="e1-11" style="width:80px;"> 。</div><div class="eh">→ Xe buýt này không đi về ĐH Sư phạm, mà đi về ga tàu.</div></div>
+        <button class="bck" onclick="ckE1()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE1()">🔄 Làm lại</button>
+        <div class="ab" id="ab1"><strong>Đáp án:</strong> ① 從, 往, 走 &nbsp; ② 從, 往, 走, 到 &nbsp; ③ 是往, 的, 是往, 的</div>
+      </div>
+    </div>
+    <div id="baitap-bt2" class="sub-content">
+      <div class="ec" style="border-top-color:var(--b)">
+        <div class="ett" style="color:var(--b)">📝 Bài 2 · Hoàn thành câu với V-起來</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền động từ thích hợp + 起來 để tạo thành câu đánh giá.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>白小姐笑<input class="fi" id="e2-1" style="width:120px;">很美。</div><div class="eh">→ cườI lên trông rất đẹp</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>那裡賣的小吃<input class="fi" id="e2-2" style="width:120px;">很好吃。</div><div class="eh">→ nhìn có vẻ rất ngon</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>這個房子很小，我住<input class="fi" id="e2-3" style="width:120px;">不習慣。</div><div class="eh">→ ở không quen</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>你說的事<input class="fi" id="e2-4" style="width:120px;">不難。</div><div class="eh">→ nghe có vẻ không khó</div></div>
+        <button class="bck" onclick="ckE2()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE2()">🔄 Làm lại</button>
+        <div class="ab" id="ab2"><strong>Đáp án:</strong> ① 起來 &nbsp; ② 看起來 &nbsp; ③ 起來 &nbsp; ④ 聽起來</div>
+      </div>
+    </div>
+    <div id="baitap-bt3" class="sub-content">
+      <div class="ec" style="border-top-color:var(--r)">
+        <div class="ett" style="color:var(--r)">📝 Bài 3 · Hoàn thành câu với 著</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 著 vào vị trí thích hợp để diễn tả hành động tiếp diễn.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>他在門口等<input class="fi" id="e3-1" style="width:60px;">你，你快去吧！</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>李明華拿<input class="fi" id="e3-2" style="width:60px;">一杯冰咖啡。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>他看<input class="fi" id="e3-3" style="width:60px;">我，什麼也沒說。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>你不要一直坐<input class="fi" id="e3-4" style="width:60px;">，我們去運動吧！</div></div>
+        <button class="bck" onclick="ckE3()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE3()">🔄 Làm lại</button>
+        <div class="ab" id="ab3"><strong>Đáp án:</strong> ① 著 &nbsp; ② 著 &nbsp; ③ 著 &nbsp; ④ 著</div>
+      </div>
+    </div>
+    <div id="baitap-bt4" class="sub-content">
+      <div class="ec" style="border-top-color:#764ba2">
+        <div class="ett" style="color:#764ba2">📝 Bài 4 · Hoàn thành câu với 一邊…一邊…</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu với hai hành động đồng thờii.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我常常<input class="fi" id="e4-1" style="width:80px;">走路，<input class="fi" id="e4-2" style="width:80px;">聽歌。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span>那個小姐喜歡<input class="fi" id="e4-3" style="width:80px;">吃飯，<input class="fi" id="e4-4" style="width:80px;">看電視。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>他們<input class="fi" id="e4-5" style="width:80px;">吃麵，<input class="fi" id="e4-6" style="width:80px;">看著手機裡的地圖。</div></div>
+        <button class="bck" onclick="ckE4()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE4()">🔄 Làm lại</button>
+        <div class="ab" id="ab4"><strong>Đáp án:</strong> ① 一邊, 一邊 &nbsp; ② 一邊, 一邊 &nbsp; ③ 一邊, 一邊</div>
+      </div>
+    </div>
+    <div id="baitap-bt5" class="sub-content">
+      <div class="ec" style="border-top-color:var(--g)">
+        <div class="ett" style="color:var(--g)">📝 Bài 5 · Hoàn thành câu với 離</div>
+        <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 離 vào vị trí thích hợp để chỉ khoảng cách.</p>
+        <div class="ei"><div class="eq"><span class="nm">①</span>我家<input class="fi" id="e5-1" style="width:60px;">學校很遠。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">②</span><input class="fi" id="e5-2" style="width:60px;">火車站很近的地方，有一家牛肉麵店。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">③</span>銀行<input class="fi" id="e5-3" style="width:60px;">學校不遠，你走路去就可以了。</div></div>
+        <div class="ei"><div class="eq"><span class="nm">④</span>花蓮<input class="fi" id="e5-4" style="width:60px;">台北不很遠，可是到那裡要花不少時間。</div></div>
+        <button class="bck" onclick="ckE5()">✅ Kiểm tra</button>
+        <button class="brs" onclick="rsE5()">🔄 Làm lại</button>
+        <div class="ab" id="ab5"><strong>Đáp án:</strong> ① 離 &nbsp; ② 離 &nbsp; ③ 離 &nbsp; ④ 離</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VĂN HÓA -->
+  <div id="vanhoa" class="sec">
+    <div class="culture-box">
+      <h3>🛣️ Đường phố ở Đài Loan · 台灣的道路</h3>
+      <div style="margin-bottom:14px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">在台灣的城鎮裡，「路」比「街」寬。路和街通常分成「巷」和「弄」。巷比弄大。路和巷垂直相交。從路分出來的巷標示為「某某路某某巷」。如果巷夠長夠寬，還可能再分出一條巷，這條小一些的巷就標示為「某某巷某某弄」。住在弄裡的地址就讀作「某某路／街某某巷某某弄某號」。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Zài Táiwān de chéngzhèn lǐ, "lù" bǐ "jiē" kuān. Lù hé jiē tōngcháng fēn chéng "xiàng" hé "nòng". Xiàng bǐ nòng dà. Lù hé xiàng chuízhí xiāngjiāo. Cóng lù fēn chūlái de xiàng biāoshì wéi "Mǒu mǒu lù mǒu mǒu xiàng". Rúguǒ xiàng gòu cháng gòu kuān, hái kěnéng zài fēn chū yì tiáo xiàng, zhè tiáo xiǎo yìxiē de xiàng jiù biāoshì wéi "mǒu mǒu xiàng mǒu mǒu nòng". Zhù zài nòng lǐ de dìzhǐ jiù dú zuò "mǒu mǒu lù/jiē mǒu mǒu xiàng mǒu mǒu nòng mǒu hào".</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Ở các thị trấn và thành phố Đài Loan, "đường" (路) thường rộng hơn "phố" (街). Đường và phố thường chia thành ngõ (巷) và hẻm (弄). Ngõ lớn hơn hẻm. Đường và ngõ giao nhau theo phương vuông góc. Một ngõ nhánh từ đường được đánh dấu "Tên đường, Ngõ số". Nếu ngõ dài và đủ rộng, một "ngõ" khác có thể nhánh từ nó. Ngõ nhỏ hơn này sẽ được đánh dấu "Ngõ số, Hẻm số". Địa chỉ nhà ở trong hẻm sẽ đọc là "Tên đường/phố, Ngõ số, Hẻm số, (số nhà)".</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">巷和弄垂直相交，所以弄永遠跟路平行。熟悉這些台北路名，對了解中國大陸許多城市的地理位置大有幫助。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Xiàng hé nòng chuízhí xiāngjiāo, suǒyǐ nòng yǒngyuǎn gēn lù píngxíng. Shúxī zhèxiē Táiběi lùmíng, duì liǎojiě Zhōngguó dàlù xǔduō chéngshì de dìlǐ wèizhì dà yǒu bāngzhù.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Ngõ và hẻm giao nhau vuông góc, nên hẻm luôn song song với đường. Việc làm quen với tên đường phố ở Đài Bắc có thể giúp bạn hiểu rất nhiều về vị trí địa lý của nhiều thành phố và tỉnh ở Trung Quốc đại lục.</div>
+      </div>
+    </div>
+    <div class="culture-box" style="border-left-color:#9c27b0;">
+      <h3 style="color:#7b1fa2;">🏙️ Tên đường phố ở Đài Bắc · 台北市道路名稱</h3>
+      <div style="margin-bottom:14px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">台北是台灣的行政和財經中心。從1950年代到1970年代末，都市發展主要集中於市區的西部。1945年，中華民國自日本接收台灣。為了配合當時的政治氣氛，台北的街道以中國大陸的地名命名，使這座城市成為中國地理的縮影。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Táiběi shì Táiwān de xíngzhèng hé cáijīng zhōngxīn. Cóng 1950 niándài dào 1970 niándài mò, dūshì fāzhǎn zhǔyào jízhōng yú shìqū de xībù. 1945 nián, Zhōnghuá Mínguó zì Rìběn jiēshōu Táiwān. Wèile pèihé dāngshí de zhèngzhì qìfēn, Táiběi de jiēdào yǐ Zhōngguó dàlù de dìmíng mìngmíng, shǐ zhè zuò chéngshì chéngwéi Zhōngguó dìlǐ de suōyǐng.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Đài Bắc là trung tâm hành chính và tài chính của Đài Loan. Từ những năm 1950 đến cuối những năm 1970, sự phát triển đô thị chủ yếu tập trung ở các quận phía tây thành phố. Năm 1945, Trung Hoa Dân Quốc nhận lại Đài Loan từ Nhật Bản. Theo khí chất chính trị của thờii đại đó, các con đường và phố ở Đài Bắc được đặt theo tên các địa danh ở Trung Quốc đại lục, biến thành phố trở thành một bản đồ thu nhỏ về địa lý của Trung Quốc.</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div class="szh" style="font-size:18px;line-height:1.7;">台北的發展以台北車站為中心，向東延伸至建國南北路，向南到公館地區，向西到西門町及淡水河，向北到圓山。因此，車站附近的路名對應中國北部的省市名，如北平東路、鄭州路、懷寧街、武昌街、漢口街。古亭到公館一帶的路名則取自中國東南沿海的地區，如廣州街、福州街、潮州街、溫州街。</div>
+        <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Táiběi de fāzhǎn yǐ Táiběi chēzhàn wéi zhōngxīn, xiàng dōng yánshēn zhì Jiànguó Nán Běi Lù, xiàng nán dào Gōngguǎn dìqū, xiàng xī dào Xīméndīng jí Dànshuǐ Hé, xiàng běi dào Yuánshān. Yīncǐ, chēzhàn fùjìn de lùmíng duìyìng Zhōngguó běibù de shěngshì míng, rú Běipíng Dōng Lù, Zhèngzhōu Lù, Huáiníng Jiē, Wǔchāng Jiē, Hànkǒu Jiē. Gǔtíng dào Gōngguǎn yídài de lùmíng zé qǔ zì Zhōngguó dōngnán yánhǎi de dìqū, rú Guǎngzhōu Jiē, Fúzhōu Jiē, Cháozhōu Jiē, Wēnzhōu Jiē.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Đài Bắc phát triển xung quanh ga Đài Bắc, mở rộng về phía đông đến Kiến Quốc Nam Bắc Lộ, về phía nam đến khu vực Công Quán, về phía tây đến Tây Môn Đinh và sông Đạm Thủy, về phía bắc đến Viên Sơn. Do đó, tên đường phố gần ga tàu chính tương ứng với tên các thành phố và tỉnh ở miền bắc Trung Quốc, ví dụ: Bắc Bình Đông Lộ, Trịnh Châu Lộ, Hoài Ninh Nhai, Vũ Xương Nhai. Ở khu vực giữa Cổ Đình và Công Quán, đường được đặt tên theo các vùng dọc theo bờ biển phía đông nam Trung Quốc, ví dụ: Quảng Châu Nhai, Phúc Châu Nhai.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <strong>GIA SƯ HOA NGỮ TÂN AN</strong> &nbsp;·&nbsp; 9/1 Bạch Văn Tư, Tân An, Long An &nbsp;·&nbsp; Zalo: 0839 889 772<br>
+    當代中文課程 2 · 第一課 請問，到師大怎麼走？— Tài liệu giảng dạy nội bộ
+  </footer>
+</div>
+
+<script>
+// ── DỮ LIỆU TỪ VỰNG ──────────────────────────────────────────
+const TV1=[
+  {n:'1', zh:'走', py:'zǒu', vi:'đi, đi đến', t:'V'},
+  {n:'2', zh:'路人', py:'lùrén', vi:'ngườii qua đường', t:'N'},
+  {n:'3', zh:'幫忙', py:'bāngmáng', vi:'giúp đỡ', t:'V-sep'},
+  {n:'4', zh:'迷路', py:'mílù', vi:'bị lạc đường', t:'Vp-sep'},
+  {n:'5', zh:'路', py:'lù', vi:'đường, hướng đi', t:'N'},
+  {n:'6', zh:'下個', py:'xiàge', vi:'cái tiếp theo', t:'N'},
+  {n:'7', zh:'路口', py:'lùkǒu', vi:'ngã tư, ngã rẽ', t:'N'},
+  {n:'8', zh:'段', py:'duàn', vi:'đoạn (đường)', t:'N'},
+  {n:'9', zh:'過', py:'guò', vi:'đi qua, vượt qua', t:'V'},
+  {n:'10', zh:'第', py:'dì', vi:'dùng chỉ thứ tự', t:'Det'},
+  {n:'11', zh:'紅綠燈', py:'hónglǜdēng', vi:'đèn giao thông', t:'N'},
+  {n:'12', zh:'告訴', py:'gàosu', vi:'nói cho, bảo', t:'V'},
+  {n:'13', zh:'提款機', py:'tíkuǎnjī', vi:'máy ATM', t:'N'},
+  {n:'14', zh:'超商', py:'chāoshāng', vi:'cửa hàng tiện lợi', t:'N'},
+  {n:'15', zh:'應該', py:'yīnggāi', vi:'nên, có lẽ', t:'Vaux'},
+  {n:'16', zh:'郵局', py:'yóujú', vi:'bưu điện', t:'N'},
+  {n:'17', zh:'提', py:'tí', vi:'rút (tiền)', t:'V'},
+  {n:'18', zh:'那邊', py:'nàbiān', vi:'bên kia, phía bên kia', t:'N'},
+  {n:'19', zh:'師大', py:'Shīdà', vi:'ĐH Sư phạm Quốc gia Đài Loan (NTNU)', t:'NR'},
+  {n:'20', zh:'和平東路', py:'Hépíng Dōng Lù', vi:'Đường Hòa Bình Đông', t:'NR'},
+];
+
+const CT1=[
+  {n:'20', zh:'往前', py:'wǎng qián', vi:'đi về phía trước'},
+  {n:'21', zh:'右轉', py:'yòu zhuǎn', vi:'rẽ phải'},
+  {n:'22', zh:'聽起來', py:'tīng qǐlái', vi:'nghe có vẻ, nghe chừng'},
+  {n:'23', zh:'看見', py:'kànjiàn', vi:'nhìn thấy, trông thấy'},
+];
+
+const TV2=[
+  {n:'1', zh:'下載', py:'xiàzǎi', vi:'tải xuống', t:'V'},
+  {n:'2', zh:'地圖', py:'dìtú', vi:'bản đồ', t:'N'},
+  {n:'3', zh:'好用', py:'hǎoyòng', vi:'dễ dùng, tiện lợi', t:'Vs'},
+  {n:'4', zh:'著', py:'zhe', vi:'tiểu từ tiếp diễn', t:'Ptc'},
+  {n:'5', zh:'日用品', py:'rìyòngpǐn', vi:'đồ dùng hàng ngày', t:'N'},
+  {n:'6', zh:'經過', py:'jīngguò', vi:'đi ngang qua', t:'V'},
+  {n:'7', zh:'巷子', py:'xiàngzi', vi:'ngõ, hẻm', t:'N'},
+  {n:'8', zh:'餓', py:'è', vi:'đói', t:'Vs'},
+  {n:'9', zh:'一邊', py:'yìbiān', vi:'vừa... vừa...', t:'Adv'},
+  {n:'10', zh:'發現', py:'fāxiàn', vi:'phát hiện', t:'Vpt'},
+  {n:'11', zh:'離', py:'lí', vi:'cách (khoảng cách)', t:'Prep'},
+  {n:'12', zh:'正好', py:'zhènghǎo', vi:'vừa đúng lúc, vừa vặn', t:'Adv'},
+  {n:'13', zh:'背包', py:'bēibāo', vi:'ba lô', t:'N'},
+  {n:'14', zh:'最後', py:'zuìhòu', vi:'cuối cùng', t:'MAdv'},
+  {n:'15', zh:'枝', py:'zhī', vi:'cái, chi (đếm bút)', t:'M'},
+  {n:'16', zh:'筆', py:'bǐ', vi:'bút', t:'N'},
+  {n:'17', zh:'本', py:'běn', vi:'quyển (đếm sách)', t:'M'},
+  {n:'18', zh:'本子', py:'běnzi', vi:'vở', t:'N'},
+];
+
+const CT2=[
+  {n:'19', zh:'左轉', py:'zuǒ zhuǎn', vi:'rẽ trái'},
+  {n:'20', zh:'師大路上', py:'Shīdà lù shang', vi:'trên đường Sư phạm'},
+  {n:'21', zh:'麵店', py:'miàn diàn', vi:'tiệm mì'},
+];
+
+const NV=[
+  {n:'1', zh:'路人', py:'lùrén', vi:'ngườii qua đường'},
+  {n:'2', zh:'安同', py:'Āntóng', vi:'An Đồng (Mã An Đồng)'},
+  {n:'3', zh:'白如玉', py:'Bái Rúyù', vi:'Bạch Như Ngọc'},
+];
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+const HW=new Set('走路人幫忙迷下個路口段過第紅綠燈告訴提款機超商應該郵局提那邊師大和平東路往前右轉聽起來看見下載地圖好用著日用品經過巷子餓一邊發現離正好背包最後枝筆本本子左轉麵店'.split(''));
+function canStroke(zh){return[...zh].some(c=>HW.has(c));}
+
+// ── BUILD TABLE ───────────────────────────────────────────────
+function buildTable(id,arr,hasType){
+  const th=`<thead><tr>
+    <th class="tc" style="width:36px">STT</th>
+    <th class="tc" style="width:44px">🔊</th>
+    <th>Chữ Hán</th><th>Phiên âm</th><th>Nghĩa tiếng Việt</th>
+    ${hasType?'<th class="tc" style="width:58px">Từ loại</th>':''}
+    <th class="tc" style="width:48px">筆順</th>
+  </tr></thead>`;
+  const tb=arr.map(w=>{
+    const s=w.zh.replace(/'/g,"\\'");
+    return`<tr>
+      <td class="c-stt">${w.n}</td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
+      <td class="c-py"><span class="py-text">${w.py}</span></td>
+      <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
+      ${hasType?`<td class="c-tp">${w.t?`<span class="tp-bd">${w.t}</span>`:''}</td>`:''}
+      <td class="c-st">${canStroke(w.zh)?`<button class="bst" onclick="openStroke('${s}')">筆</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById(id).innerHTML=th+'<tbody>'+tb+'</tbody>';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  buildTable('t-t1',TV1,true);
+  buildTable('t-t2',TV2,true);
+  buildTable('t-c1',CT1,false);
+  buildTable('t-c2',CT2,false);
+  buildTable('t-nv',NV,false);
+});
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb[data-sec]').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelector(`.nb[data-sec="${id}"]`)?.classList.add('on');
+  document.getElementById('toggleContainer').style.display=id==='baikoa'?'block':'none';
+  window.scrollTo(0,0);
+}
+function goSub(sec,sub){
+  document.querySelectorAll(`#${sec} .sub-content`).forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll(`#${sec} .subtab`).forEach(e=>e.classList.remove('on'));
+  document.getElementById(`${sec}-${sub}`).classList.add('on');
+  event.target.classList.add('on');
+}
+
+// ── TOGGLE ────────────────────────────────────────────────────
+let sPY=true,sVI=true;
+function tog(l){
+  if(l==='py'){
+    sPY=!sPY;
+    document.querySelectorAll('.spy').forEach(e=>e.classList.toggle('hd',!sPY));
+    document.getElementById('tp').classList.toggle('on',sPY);
+  }else{
+    sVI=!sVI;
+    document.querySelectorAll('.svi').forEach(e=>e.classList.toggle('hd',!sVI));
+    document.getElementById('tv').classList.toggle('on',sVI);
+  }
+}
+
+// ── BÀI TẬP ──────────────────────────────────────────────────
+function setField(id,ok){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.toggle('ok',ok);
+  el.classList.toggle('er',!ok&&el.value.trim().length>0);
+}
+function resetFields(ids,abId){
+  ids.forEach(k=>{const el=document.getElementById(k);el.value='';el.classList.remove('ok','er');});
+  document.getElementById(abId).classList.remove('sh');
+}
+function showAns(id){document.getElementById(id).classList.add('sh');}
+
+function ckE1(){
+  [['e1-1','從'],['e1-2','往'],['e1-3','走'],['e1-4','從'],['e1-5','往'],['e1-6','走'],['e1-7','到'],['e1-8','是往'],['e1-9','的'],['e1-10','是往'],['e1-11','的']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab1');
+}
+function rsE1(){resetFields(['e1-1','e1-2','e1-3','e1-4','e1-5','e1-6','e1-7','e1-8','e1-9','e1-10','e1-11'],'ab1');}
+
+function ckE2(){
+  [['e2-1','起來'],['e2-2','看起來'],['e2-3','起來'],['e2-4','聽起來']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab2');
+}
+function rsE2(){resetFields(['e2-1','e2-2','e2-3','e2-4'],'ab2');}
+
+function ckE3(){
+  [['e3-1','著'],['e3-2','著'],['e3-3','著'],['e3-4','著']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab3');
+}
+function rsE3(){resetFields(['e3-1','e3-2','e3-3','e3-4'],'ab3');}
+
+function ckE4(){
+  [['e4-1','一邊'],['e4-2','一邊'],['e4-3','一邊'],['e4-4','一邊'],['e4-5','一邊'],['e4-6','一邊']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab4');
+}
+function rsE4(){resetFields(['e4-1','e4-2','e4-3','e4-4','e4-5','e4-6'],'ab4');}
+
+function ckE5(){
+  [['e5-1','離'],['e5-2','離'],['e5-3','離'],['e5-4','離']]
+    .forEach(([k,v])=>setField(k,document.getElementById(k).value.trim()===v));
+  showAns('ab5');
+}
+function rsE5(){resetFields(['e5-1','e5-2','e5-3','e5-4'],'ab5');}
+
+// ── TTS ───────────────────────────────────────────────────────
+let VX=window.speechSynthesis.getVoices();
+window.speechSynthesis.onvoiceschanged=()=>{VX=window.speechSynthesis.getVoices();};
+function sayZh(t){
+  if(!window.speechSynthesis){alert('Trình duyệt không hỗ trợ TTS.');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  let v=null;
+  for(const p of['zh-TW','zh-CN','zh','cmn']){
+    v=VX.find(x=>x.lang?.toLowerCase().startsWith(p.toLowerCase()));
+    if(v)break;
+  }
+  if(v)u.voice=v;
+  u.lang='zh-TW';u.rate=0.82;u.pitch=1;
+  window.speechSynthesis.speak(u);
+}
+
+// ── HANZI WRITER ──────────────────────────────────────────────
+let hwInstances=[];
+function openStroke(word){
+  const chars=[...word].filter(c=>HW.has(c));
+  if(!chars.length)return;
+  hwInstances.forEach(h=>{try{h.writer.cancelAnimation();}catch(e){}});
+  hwInstances=[];
+  document.getElementById('otitle').textContent='筆順 · '+word;
+  const framesEl=document.getElementById('oframes');
+  framesEl.innerHTML='';
+  const SIZE=chars.length>3?110:140;
+  chars.forEach((ch,i)=>{
+    const cell=document.createElement('div');cell.className='hw-cell';
+    const svg=document.createElement('div');svg.id='hw-svg-'+i;
+    svg.style.cssText=`width:${SIZE}px;height:${SIZE}px;border:2px solid #e0e0e0;border-radius:8px;background:#fafafa;`;
+    const lbl=document.createElement('span');lbl.textContent=ch;
+    cell.appendChild(svg);cell.appendChild(lbl);framesEl.appendChild(cell);
+    try{
+      const w=HanziWriter.create(svg.id,ch,{
+        width:SIZE,height:SIZE,padding:10,
+        strokeColor:'#c62828',outlineColor:'#e0e0e0',
+        strokeAnimationSpeed:1,delayBetweenStrokes:200,
+        showCharacter:true,showOutline:true,
+        charDataLoader:(char,onLoad,onError)=>{
+          fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@latest/${char}.json`)
+            .then(r=>r.json()).then(d=>onLoad(d))
+            .catch(()=>fetch(`https://raw.githubusercontent.com/chanind/hanzi-writer-data/master/${char}.json`)
+              .then(r=>r.json()).then(d=>onLoad(d)).catch(err=>onError(err)));
+        }
+      });
+      hwInstances.push({writer:w});
+    }catch(e){console.warn('HanziWriter error',ch,e);}
+  });
+  const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
+  [['▶ Hoạt ảnh',hwAnimAll,''],['🔄 Lặp',hwLoopAll,''],['✕ Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+    const b=document.createElement('button');
+    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+  });
+  document.getElementById('ov').classList.add('open');
+}
+function hwAnimAll(){hwInstances.forEach((h,i)=>setTimeout(()=>h.writer.animateCharacter(),i*600));}
+function hwLoopAll(){let i=0;(function next(){if(i>=hwInstances.length)i=0;hwInstances[i].writer.animateCharacter({onComplete:()=>{i++;next();}});})();}
+function closeOv(){document.getElementById('ov').classList.remove('open');}
+function ovClick(e){if(e.target===document.getElementById('ov'))closeOv();}
+
+// ── EDITOR ────────────────────────────────────────────────────
+let quill;
+function openEditor(){
+  document.getElementById('editorModal').classList.add('open');
+  if(!quill){
+    quill=new Quill('#editor-content',{
+      theme:'snow',
+      placeholder:'Viết ghi chú Bài 1 Quyển 2 ở đây...',
+      modules:{toolbar:'#editor-toolbar'}
+    });
+    const saved=localStorage.getItem('bai1_q2_notes');
+    if(saved)quill.root.innerHTML=saved;
+  }
+}
+function closeEditor(){document.getElementById('editorModal').classList.remove('open');}
+function saveEditor(){if(quill){localStorage.setItem('bai1_q2_notes',quill.root.innerHTML);alert('✅ Đã lưu ghi chú!');}}
+function clearEditor(){if(quill&&confirm('Xóa tất cả ghi chú?')){quill.root.innerHTML='';localStorage.removeItem('bai1_q2_notes');}}
+setInterval(()=>{
+  if(quill&&document.getElementById('editorModal').classList.contains('open'))
+    localStorage.setItem('bai1_q2_notes',quill.root.innerHTML);
+},30000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditor();closeOv();}});
+</script>
+</body>
+</html>
