@@ -178,12 +178,19 @@
             padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; 
         }
         .vocab-animation { 
-            width: 140px; height: 140px; background: white; border: 2px solid #e0e0e0; 
-            border-radius: 8px; position: relative; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); 
+            min-width: 140px; padding: 10px; background: transparent; 
+            position: relative; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
         }
-        .writer-container { width: 100px; height: 100px; }
-        .animation-controls { position: absolute; bottom: 5px; display: flex; gap: 8px; }
+        .writer-container { 
+            display: flex; align-items: center; justify-content: center; 
+            background: white; border: 2px solid #e0e0e0; border-radius: 8px; 
+            padding: 4px; box-shadow: inset 0 0 12px rgba(0,0,0,0.03); 
+        }
+        .writers-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; }
+        /* Tắt transition toàn cục cho nét chữ SVG để hanzi-writer chạy mượt, không giật */
+        .writer-container svg, .writer-container svg * { transition: none !important; animation: none !important; }
+        .animation-controls { position: absolute; bottom: 0; display: flex; gap: 8px; }
         .anim-btn { 
             width: 28px; height: 28px; border: none; background: #f3e5f5; color: #8e44ad; 
             border-radius: 50%; cursor: pointer; display: flex; align-items: center; 
@@ -723,8 +730,8 @@
         <select id="audio-speed" onchange="setAudioSpeed(this.value)" style="padding: 5px 10px; border-radius: 4px; border: none; font-size: 13px; font-family: Arial, sans-serif; cursor: pointer; background: white; color: #8e44ad; font-weight: 600; outline: none;">
             <option value="0.5">0.5x</option>
             <option value="0.7">0.7x</option>
+            <option value="0.8">0.8x</option>
             <option value="1.0" selected>1.0x</option>
-            <option value="1.0">1.0x</option>
             <option value="1.2">1.2x</option>
             <option value="1.5">1.5x</option>
         </select>
@@ -1549,7 +1556,7 @@
 </div>
 
 <script>
-    let audioSpeed = 0.8;
+    let audioSpeed = 1.0;
 
     const vocabulary = [
         { id: 1, chinese: '前边', pinyin: 'qiánbian', meaning: 'Phía trước', category: 'n', lesson: 'text1', example: '学校前边有一家电影院。' },
@@ -1559,23 +1566,22 @@
         { id: 5, chinese: '外边', pinyin: 'wàibian', meaning: 'Bên ngoài', category: 'n', lesson: 'text1', example: '在电影院外边见' },
         { id: 6, chinese: '椅子', pinyin: 'yǐzi', meaning: 'Cái ghế', category: 'n', lesson: 'text2', example: '椅子上有一本书。' },
         { id: 7, chinese: '上', pinyin: 'shàng', meaning: 'Trên; phía trên', category: 'suf', lesson: 'text2', example: '椅子上，桌子上' },
-        { id: 8, chinese: '书', pinyin: 'shū', meaning: 'Quyển sách', category: 'n', lesson: 'text2', example: '中文书，一本书' },
-        { id: 9, chinese: '第', pinyin: 'dì', meaning: 'Tiền tố cho số thứ tự', category: 'pref', lesson: 'text2', example: '第二本书' },
-        { id: 10, chinese: '上', pinyin: 'shàng', meaning: 'Đi đến', category: 'v', lesson: 'text2', example: '上午，上学' },
-        { id: 11, chinese: '下午', pinyin: 'xiàwǔ', meaning: 'Buổi chiều', category: 'n', lesson: 'text2', example: '明天下午' },
-        { id: 12, chinese: '中午', pinyin: 'zhōngwǔ', meaning: 'Buổi trưa', category: 'n', lesson: 'text2', example: '明天中午' },
-        { id: 13, chinese: '上午', pinyin: 'shàngwǔ', meaning: 'Buổi sáng', category: 'n', lesson: 'text2', example: '明天上午' },
-        { id: 14, chinese: '做', pinyin: 'zuò', meaning: 'Làm', category: 'v', lesson: 'text3', example: '做饭，做什么' },
-        { id: 15, chinese: '白天', pinyin: 'báitiān', meaning: 'Ban ngày', category: 'n', lesson: 'text3', example: '白天在家里' },
-        { id: 16, chinese: '读书', pinyin: 'dúshū', meaning: 'Đọc sách', category: 'v', lesson: 'text3', example: '在家里读书' },
-        { id: 17, chinese: '和', pinyin: 'hé', meaning: 'Và/cùng với', category: 'prep', lesson: 'text3', example: '和朋友们' },
-        { id: 18, chinese: '朋友', pinyin: 'péngyou', meaning: 'Bạn bè', category: 'n', lesson: 'text3', example: '朋友们' },
-        { id: 19, chinese: '唱', pinyin: 'chàng', meaning: 'Hát', category: 'v', lesson: 'text3', example: '唱歌' },
-        { id: 20, chinese: '歌', pinyin: 'gē', meaning: 'Bài hát', category: 'n', lesson: 'text3', example: '唱歌' },
-        { id: 21, chinese: '好听', pinyin: 'hǎotīng', meaning: 'Hay nghe/dễ nghe', category: 'adj', lesson: 'text3', example: '唱歌很好听' },
-        { id: 22, chinese: '电视', pinyin: 'diànshì', meaning: 'Ti vi', category: 'n', lesson: 'text3', example: '看电视' },
-        { id: 23, chinese: '狗', pinyin: 'gǒu', meaning: 'Con chó', category: 'n', lesson: 'text3', example: '小狗' },
-        { id: 24, chinese: '玩', pinyin: 'wán', meaning: 'Chơi', category: 'v', lesson: 'text3', example: '和孩子玩' }
+        { id: 8, chinese: '本', pinyin: 'běn', meaning: 'Lượng từ cho sách', category: 'm', lesson: 'text2', example: '一本书，第二本书' },
+        { id: 9, chinese: '书', pinyin: 'shū', meaning: 'Quyển sách', category: 'n', lesson: 'text2', example: '中文书，一本书' },
+        { id: 10, chinese: '那', pinyin: 'nà', meaning: 'Đó/kia', category: 'pron', lesson: 'text2', example: '那个，那本书' },
+        { id: 11, chinese: '第', pinyin: 'dì', meaning: 'Tiền tố cho số thứ tự', category: 'pref', lesson: 'text2', example: '第二本书' },
+        { id: 12, chinese: '学习', pinyin: 'xuéxí', meaning: 'Học tập', category: 'v', lesson: 'text2', example: '在学校学习' },
+        { id: 13, chinese: '做', pinyin: 'zuò', meaning: 'Làm', category: 'v', lesson: 'text3', example: '做饭，做什么' },
+        { id: 14, chinese: '白天', pinyin: 'báitiān', meaning: 'Ban ngày', category: 'n', lesson: 'text3', example: '白天在家里' },
+        { id: 15, chinese: '读书', pinyin: 'dúshū', meaning: 'Đọc sách', category: 'v', lesson: 'text3', example: '在家里读书' },
+        { id: 16, chinese: '和', pinyin: 'hé', meaning: 'Và/cùng với', category: 'prep', lesson: 'text3', example: '和朋友们' },
+        { id: 17, chinese: '朋友', pinyin: 'péngyou', meaning: 'Bạn bè', category: 'n', lesson: 'text3', example: '朋友们' },
+        { id: 18, chinese: '唱', pinyin: 'chàng', meaning: 'Hát', category: 'v', lesson: 'text3', example: '唱歌' },
+        { id: 19, chinese: '歌', pinyin: 'gē', meaning: 'Bài hát', category: 'n', lesson: 'text3', example: '唱歌' },
+        { id: 20, chinese: '好听', pinyin: 'hǎotīng', meaning: 'Hay nghe/dễ nghe', category: 'adj', lesson: 'text3', example: '唱歌很好听' },
+        { id: 21, chinese: '电视', pinyin: 'diànshì', meaning: 'Ti vi', category: 'n', lesson: 'text3', example: '看电视' },
+        { id: 22, chinese: '狗', pinyin: 'gǒu', meaning: 'Con chó', category: 'n', lesson: 'text3', example: '小狗' },
+        { id: 23, chinese: '玩', pinyin: 'wán', meaning: 'Chơi', category: 'v', lesson: 'text3', example: '和孩子玩' }
     ];
 
     const writers = {};
@@ -1608,38 +1614,64 @@
     }
 
     function _playNextQueue() {
+        console.log('⏭️ Kiểm tra queue, còn lại:', _ttsQueue.length, 'câu');
         _ttsPlaying = false;
         if (_ttsQueue.length > 0) {
             const next = _ttsQueue.shift();
+            console.log('⏳ Chờ 350ms trước khi phát câu tiếp theo:', next);
             setTimeout(() => _playOne(next), 350);
+        } else {
+            console.log('✅ Đã phát hết tất cả các câu');
         }
     }
 
     function _playOne(text) {
+        console.log('🔊 Bắt đầu phát:', text, '- Tốc độ:', audioSpeed + 'x');
         _ttsPlaying = true;
         const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(text);
         const audio = _getAudio();
         audio.src = url;
+        audio.playbackRate = audioSpeed;
         const playPromise = audio.play();
         if (playPromise !== undefined) {
-            playPromise.catch(() => {
+            playPromise.then(() => {
+                console.log('✓ Phát thành công bằng Google TTS:', text, '- Tốc độ:', audioSpeed + 'x');
+            }).catch((err) => {
+                console.log('⚠️ Google TTS thất bại, chuyển sang Web Speech API:', err.message);
                 _speakWithSynthesis(text, _playNextQueue);
             });
         }
     }
 
     function _speakWithSynthesis(text, onEnd) {
-        if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+        if (!('speechSynthesis' in window)) { 
+            console.log('❌ Trình duyệt không hỗ trợ Web Speech API');
+            if (onEnd) onEnd(); 
+            return; 
+        }
+        console.log('🗣️ Sử dụng Web Speech API cho:', text);
         speechSynthesis.cancel();
         function doSpeak() {
             const voices = speechSynthesis.getVoices();
+            console.log('🎤 Số giọng đọc có sẵn:', voices.length);
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'zh-CN';
             utterance.rate = audioSpeed;
             const zhVoice = voices.find(v => v.lang && (v.lang.startsWith('zh') || v.lang.startsWith('cmn')));
-            if (zhVoice) utterance.voice = zhVoice;
-            utterance.onend = onEnd || null;
-            utterance.onerror = onEnd || null;
+            if (zhVoice) {
+                utterance.voice = zhVoice;
+                console.log('✓ Đã chọn giọng tiếng Trung:', zhVoice.name);
+            } else {
+                console.log('⚠️ Không tìm thấy giọng tiếng Trung, dùng giọng mặc định');
+            }
+            utterance.onend = () => {
+                console.log('✓ Web Speech API đã phát xong:', text);
+                if (onEnd) onEnd();
+            };
+            utterance.onerror = (err) => {
+                console.log('❌ Lỗi Web Speech API:', err);
+                if (onEnd) onEnd();
+            };
             speechSynthesis.speak(utterance);
         }
         if (speechSynthesis.getVoices().length === 0) {
@@ -1660,16 +1692,26 @@
 
     function speakAllText(textId) {
         const container = document.getElementById(textId);
-        if (!container) return;
+        if (!container) {
+            console.log('❌ Không tìm thấy container:', textId);
+            return;
+        }
         const lines = container.querySelectorAll('.dialogue-chinese');
         if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
         if ('speechSynthesis' in window) speechSynthesis.cancel();
         _ttsQueue = [];
         _ttsPlaying = false;
         const texts = [...lines].map(l => l.textContent.trim()).filter(Boolean);
-        if (texts.length === 0) return;
+        console.log('📖 Tổng số câu tìm thấy:', texts.length);
+        console.log('📝 Danh sách câu:', texts);
+        if (texts.length === 0) {
+            console.log('❌ Không có câu nào để đọc');
+            return;
+        }
         const first = texts.shift();
         _ttsQueue = texts;
+        console.log('🎵 Đang phát câu đầu tiên:', first);
+        console.log('📋 Queue còn lại:', _ttsQueue.length, 'câu');
         _playOne(first);
     }
 
@@ -1701,11 +1743,10 @@
         loadNoteEditor();
         initDragAndDrop();
         
-        const savedSpeed = localStorage.getItem('hsk1_audio_speed');
-        if (savedSpeed) {
-            audioSpeed = parseFloat(savedSpeed);
-            document.getElementById('audio-speed').value = savedSpeed;
-        }
+        // Reset về tốc độ mặc định 1.0 (xóa localStorage cũ)
+        localStorage.removeItem('hsk1_audio_speed');
+        audioSpeed = 1.0;
+        document.getElementById('audio-speed').value = '1.0';
     });
 
     function toggleFeature(feature, btn, className, iconShow, iconHide) {
@@ -1734,13 +1775,11 @@
 
     function renderVocabulary(filter) {
         const grid = document.getElementById('vocab-grid');
-        Object.keys(writers).forEach(id => {
-            try { writers[id]?.cancelAnimation(); } catch(e) {}
-            delete writers[id];
-        });
+        Object.keys(writers).forEach(id => { try { writers[id]?.forEach(w => w.cancelAnimation()); } catch(e) {} delete writers[id]; });
         grid.innerHTML = '';
-        const filtered = (filter === 'all') ? vocabulary
-            : (filter.startsWith('text')) ? vocabulary.filter(v => v.lesson === filter)
+        const lessonLabels = { text1: '课文 1', text2: '课文 2', text3: '课文 3' };
+        const filtered = filter === 'all' ? vocabulary
+            : filter.startsWith('text') ? vocabulary.filter(v => v.lesson === filter)
             : vocabulary.filter(v => v.category === filter);
         filtered.forEach(item => {
             const card = document.createElement('div');
@@ -1752,14 +1791,19 @@
                         <div class="vocab-chinese chinese-text">${item.chinese}</div>
                         <div class="vocab-pinyin pinyin-text">${item.pinyin}</div>
                         <div class="vocab-meaning">${item.meaning}</div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                            <span style="font-size:11px;background:#f3e5f5;color:#8e44ad;border:1px solid #8e44ad;border-radius:10px;padding:2px 8px;font-family:Arial;">${lessonLabels[item.lesson]}</span>
+                        </div>
                         ${item.example ? `<div class="vocab-example">"${item.example}"</div>` : ''}
                     </div>
-                    <button class="audio-btn" onclick="speak('${item.chinese}'); event.stopPropagation();">
+                    <button class="audio-btn" onclick="speak('${item.chinese}');event.stopPropagation();">
                         <i class="bi bi-volume-up"></i>
                     </button>
                 </div>
                 <div class="vocab-animation">
-                    <div id="writer-${item.id}" class="writer-container"></div>
+                    <div class="writers-row">
+                        ${[...item.chinese].map((ch, i) => `<div id="writer-${item.id}-${i}" class="writer-container"></div>`).join('')}
+                    </div>
                     <div class="animation-controls">
                         <button class="anim-btn" onclick="replayAnimation(${item.id})" title="Viết lại"><i class="bi bi-arrow-clockwise"></i></button>
                     </div>
@@ -1769,18 +1813,24 @@
         });
         filtered.forEach((item, index) => {
             setTimeout(() => {
-                const containerId = `writer-${item.id}`;
-                const container = document.getElementById(containerId);
-                if (container && !writers[item.id] && typeof HanziWriter !== 'undefined') {
-                    const char = item.chinese.charAt(0);
-                    writers[item.id] = HanziWriter.create(containerId, char, {
-                        width: 100, height: 100, padding: 5,
+                if (writers[item.id] || typeof HanziWriter === 'undefined') return;
+                const chars = [...item.chinese];
+                const size = 72;
+                const instances = [];
+                chars.forEach((ch, i) => {
+                    const containerId = `writer-${item.id}-${i}`;
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+                    const w = HanziWriter.create(containerId, ch, {
+                        width: size, height: size, padding: 3,
                         strokeColor: '#333', radicalColor: '#8e44ad',
                         strokeWidth: 3, showCharacter: false, showOutline: true,
                         strokeAnimationSpeed: 1, delayBetweenStrokes: 50
                     });
-                    writers[item.id].animateCharacter();
-                }
+                    instances.push(w);
+                });
+                writers[item.id] = instances;
+                animateSequence(instances);
             }, index * 300);
         });
     }
@@ -1791,7 +1841,17 @@
         renderVocabulary(category);
     }
 
-    function replayAnimation(id) { writers[id]?.animateCharacter(); }
+    function animateSequence(instances) {
+        if (!instances || !instances.length) return;
+        let i = 0;
+        const next = () => {
+            if (i >= instances.length) return;
+            instances[i].animateCharacter({ onComplete: () => { i++; next(); } });
+        };
+        next();
+    }
+
+    function replayAnimation(id) { animateSequence(writers[id]); }
     function showCharacter(id) { writers[id]?.showCharacter(); }
 
     function showText(textId, btn) {
