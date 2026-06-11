@@ -1139,92 +1139,40 @@ Tôi thích ăn món Trung Quốc nhất</title>
     let draggedElement = null;
     let draggedFrom = null;
 
-    // ==================== AUDIO ENGINE (HSK1 Style) ====================
-    let _session = 0;
-    let _queue = [];
-    let _busy = false;
-    let _audio = new Audio();
-    let _timeoutId = null;
-
-    function _stopAll() {
-        _session++;
-        _queue = [];
-        _busy = false;
-        clearTimeout(_timeoutId);
-        _audio.onended = null;
-        _audio.onerror = null;
-        _audio.pause();
-        _audio.src = '';
-    }
-
-    function _next(sid) {
-        if (sid !== _session) return;
-        _busy = false;
-        clearTimeout(_timeoutId);
-        if (_queue.length > 0) {
-            const text = _queue.shift();
-            setTimeout(() => _playOne(text, sid), 400);
-        }
-    }
-
-    function _playOne(text, sid) {
-        if (sid !== _session) return;
-        if (_busy) return;
-        _busy = true;
-        _timeoutId = setTimeout(() => _next(sid), 12000);
-        const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(text);
-        _audio.onended = function() { _next(sid); };
-        _audio.onerror = function() {
-            if (sid !== _session) return;
-            clearTimeout(_timeoutId);
-            if (window.speechSynthesis) {
-                const voices = speechSynthesis.getVoices();
-                const zh = voices.find(v => v.lang === 'zh-CN') || voices.find(v => v.lang === 'zh_CN');
-                const utt = new SpeechSynthesisUtterance(text);
-                utt.lang = 'zh-CN';
-                utt.rate = audioSpeed;
-                if (zh) utt.voice = zh;
-                utt.onend = function() { _next(sid); };
-                utt.onerror = function() { _next(sid); };
-                _timeoutId = setTimeout(() => { speechSynthesis.cancel(); _next(sid); }, 12000);
-                speechSynthesis.cancel();
-                speechSynthesis.speak(utt);
-            } else {
-                _next(sid);
-            }
-        };
-        _audio.src = url;
-        _audio.playbackRate = audioSpeed;
-        const p = _audio.play();
-        if (p && typeof p.catch === 'function') {
-            p.catch(function() {
-                if (sid === _session) _audio.onerror && _audio.onerror();
-            });
-        }
-    }
-
+    // ===== TTS =====
     function setAudioSpeed(speed) {
         audioSpeed = parseFloat(speed);
         localStorage.setItem('hsk2_audio_speed', audioSpeed);
     }
 
     function speak(text) {
-        if (!text) return;
-        _stopAll();
-        const sid = _session;
-        _playOne(text, sid);
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'zh-CN';
+            utter.rate = audioSpeed;
+            utter.pitch = 1;
+            window.speechSynthesis.speak(utter);
+        }
     }
 
     function speakAllText(textId) {
         const container = document.getElementById(textId);
         if (!container) return;
-        _stopAll();
-        const sid = _session;
-        const texts = [...container.querySelectorAll('.dialogue-chinese')]
-            .map(l => l.textContent.trim()).filter(Boolean);
-        if (!texts.length) return;
-        _queue = texts.slice(1);
-        _playOne(texts[0], sid);
+        const lines = container.querySelectorAll('.dialogue-chinese');
+        let index = 0;
+        function speakNext() {
+            if (index >= lines.length) return;
+            const text = lines[index].textContent.trim();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'zh-CN';
+            utter.rate = audioSpeed;
+            utter.pitch = 1;
+            utter.onend = () => { index++; speakNext(); };
+            window.speechSynthesis.speak(utter);
+        }
+        window.speechSynthesis.cancel();
+        speakNext();
     }
 
     // ==================== NGỮ PHÁP ====================
