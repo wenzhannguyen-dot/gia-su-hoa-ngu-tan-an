@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HSK3 Exam - Student Mode</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css    ">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; transition: none !important; animation: none !important; }
         body { font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif; background: #f5f5f5; min-height: 100vh; color: #000; }
@@ -170,7 +170,7 @@
             </div>
         </div>
         <a href="DE THI HSK 03.html" class="home-button" style="background: #2e7d32; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;">
-            <i class="bi bi-house-door"></i> Tr&#x1EDF; v&#x1EC1; trang ch&#x1EE7;
+            <i class="bi bi-house-door"></i> Trở về trang chủ
         </a>
     </header>
 
@@ -306,9 +306,34 @@
                 images = window.PRELOADED_IMAGES || {};
                 audioFiles = window.PRELOADED_AUDIO || {};
                 logoImage = window.PRELOADED_LOGO;
+                
+                // Auto-detect MP3 files based on exam code pattern
+                autoDetectAudioFiles();
             } else {
                 questions = [];
             }
+        }
+
+        function autoDetectAudioFiles() {
+            let pathName = window.location.pathname;
+            pathName = pathName.replace(/\\/g, '/');
+            const fileName = pathName.substring(pathName.lastIndexOf('/') + 1);
+            const examCode = fileName.replace(/\.html?$/i, '');
+            if (!examCode) return;
+            let baseUrl = pathName.substring(0, pathName.lastIndexOf('/') + 1);
+            if (baseUrl.startsWith('/') && window.location.protocol === 'file:') {
+                baseUrl = baseUrl.substring(1);
+            }
+            questions.forEach(q => {
+                if (q.section === 'listening') {
+                    const paddedNum = q.num.toString().padStart(2, '0');
+                    const audioFileName = `${examCode}-${paddedNum}.mp3`;
+                    const audioUrl = baseUrl + audioFileName;
+                    if (!audioFiles[q.num]) {
+                        audioFiles[q.num] = audioUrl;
+                    }
+                }
+            });
         }
 
         function startTimer() {
@@ -586,8 +611,20 @@
             isPlaying = true;
             updateAudioUI(true);
             currentAudio.onended = () => stopAudio();
-            currentAudio.onerror = () => stopAudio();
-            currentAudio.play().catch(() => stopAudio());
+            currentAudio.onerror = () => {
+                stopAudio();
+                const q = Utils.getQ(currentQ);
+                if (q && q.script) {
+                    setTimeout(() => playSpeech(q.script), 100);
+                }
+            };
+            currentAudio.play().catch(() => {
+                stopAudio();
+                const q = Utils.getQ(currentQ);
+                if (q && q.script) {
+                    setTimeout(() => playSpeech(q.script), 100);
+                }
+            });
         }
 
         function playSpeech(text) {
@@ -697,7 +734,11 @@
                 
                 if (userAns !== undefined) {
                     if (q.type === 'arrange') {
-                        isCorrect = Array.isArray(userAns) ? userAns.join('') === q.answer : false;
+                        const normalize = (str) => str.replace(/[，。？！、；：“”‘’（）【】[]]/g, '').replace(/\s+/g, '').trim();
+                        const userAnswer = Array.isArray(userAns) ? userAns.join('') : String(userAns);
+                        const normalizedUser = normalize(userAnswer);
+                        const possibleAnswers = String(q.answer || '').split('|').map(a => normalize(a.trim()));
+                        isCorrect = possibleAnswers.includes(normalizedUser);
                     } else if (q.type === 'character') {
                         isCorrect = userAns === q.answer;
                     } else if (q.type === 'tf') {
