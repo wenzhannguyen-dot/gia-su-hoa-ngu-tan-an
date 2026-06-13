@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HSK3 Exam - Student Mode</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css    ">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; transition: none !important; animation: none !important; }
         body { font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif; background: #f5f5f5; min-height: 100vh; color: #000; }
@@ -306,9 +306,46 @@
                 images = window.PRELOADED_IMAGES || {};
                 audioFiles = window.PRELOADED_AUDIO || {};
                 logoImage = window.PRELOADED_LOGO;
+                
+                // Auto-detect MP3 files based on exam code pattern
+                autoDetectAudioFiles();
             } else {
                 questions = [];
             }
+        }
+
+        function autoDetectAudioFiles() {
+            // Extract exam code from current filename (e.g., "H31333" from "H31333.html")
+            let pathName = window.location.pathname;
+            // Normalize Windows backslashes to forward slashes
+            pathName = pathName.replace(/\\/g, '/');
+            
+            const fileName = pathName.substring(pathName.lastIndexOf('/') + 1);
+            const examCode = fileName.replace(/\.html?$/i, '');
+            
+            if (!examCode) return;
+            
+            // Build base URL (directory of current HTML file)
+            let baseUrl = pathName.substring(0, pathName.lastIndexOf('/') + 1);
+            // Remove leading slash for file:// URLs on Windows (e.g., /C:/ -> C:/)
+            if (baseUrl.startsWith('/') && window.location.protocol === 'file:') {
+                baseUrl = baseUrl.substring(1);
+            }
+            
+            // Find all listening questions and map to MP3 files
+            // Pattern: H31333-01.mp3 for question 1, H31333-02.mp3 for question 2, etc.
+            questions.forEach(q => {
+                if (q.section === 'listening') {
+                    const paddedNum = q.num.toString().padStart(2, '0');
+                    const audioFileName = `${examCode}-${paddedNum}.mp3`;
+                    const audioUrl = baseUrl + audioFileName;
+                    
+                    // Only add if not already defined in PRELOADED_AUDIO
+                    if (!audioFiles[q.num]) {
+                        audioFiles[q.num] = audioUrl;
+                    }
+                }
+            });
         }
 
         function startTimer() {
@@ -586,8 +623,22 @@
             isPlaying = true;
             updateAudioUI(true);
             currentAudio.onended = () => stopAudio();
-            currentAudio.onerror = () => stopAudio();
-            currentAudio.play().catch(() => stopAudio());
+            currentAudio.onerror = () => {
+                // When MP3 fails, fallback to TTS if script is available
+                stopAudio();
+                const q = Utils.getQ(currentQ);
+                if (q && q.script) {
+                    setTimeout(() => playSpeech(q.script), 100);
+                }
+            };
+            currentAudio.play().catch(() => {
+                // When play fails, fallback to TTS if script is available
+                stopAudio();
+                const q = Utils.getQ(currentQ);
+                if (q && q.script) {
+                    setTimeout(() => playSpeech(q.script), 100);
+                }
+            });
         }
 
         function playSpeech(text) {
