@@ -169,7 +169,7 @@
                 <p>Địa chỉ: 9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
             </div>
         </div>
-        <a href="DE THI HSK 03.html" class="home-button" style="background: #2e7d32; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;">
+        <a href="../DE THI HSK 03.html" class="home-button" style="background: #2e7d32; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.3s ease;">
             <i class="bi bi-house-door"></i> Trở về trang chủ
         </a>
     </header>
@@ -592,12 +592,21 @@
 
         function playSpeech(text) {
             if (!window.speechSynthesis) return;
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = 'zh-CN'; utter.rate = 0.85;
-            isPlaying = true; updateAudioUI(true);
-            utter.onend = () => stopAudio();
-            utter.onerror = () => stopAudio();
-            window.speechSynthesis.speak(utter);
+            window.speechSynthesis.cancel();
+            function doSpeak() {
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'zh-CN'; utter.rate = 0.85; utter.volume = 1;
+                const voices = window.speechSynthesis.getVoices();
+                const zhVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh_CN' || v.lang.startsWith('zh'));
+                if (zhVoice) utter.voice = zhVoice;
+                isPlaying = true; updateAudioUI(true);
+                utter.onend = () => stopAudio();
+                utter.onerror = () => stopAudio();
+                window.speechSynthesis.speak(utter);
+            }
+            const voices = window.speechSynthesis.getVoices();
+            if (voices && voices.length > 0) { setTimeout(doSpeak, 50); }
+            else { window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.onvoiceschanged = null; setTimeout(doSpeak, 50); }; setTimeout(doSpeak, 300); }
         }
 
         function updateAudioUI(playing) {
