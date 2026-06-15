@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HSK3 Exam - Student Mode</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css    ">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; transition: none !important; animation: none !important; }
         body { font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif; background: #f5f5f5; min-height: 100vh; color: #000; }
@@ -306,34 +306,9 @@
                 images = window.PRELOADED_IMAGES || {};
                 audioFiles = window.PRELOADED_AUDIO || {};
                 logoImage = window.PRELOADED_LOGO;
-                
-                // Auto-detect MP3 files based on exam code pattern
-                autoDetectAudioFiles();
             } else {
                 questions = [];
             }
-        }
-
-        function autoDetectAudioFiles() {
-            var pathName = window.location.pathname;
-            pathName = pathName.replace(/\\/g, '/');
-            var fileName = pathName.substring(pathName.lastIndexOf('/') + 1);
-            var examCode = fileName.replace(/\.html?$/i, '');
-            if (!examCode) return;
-            var baseUrl = pathName.substring(0, pathName.lastIndexOf('/') + 1);
-            if (baseUrl.charAt(0) === '/' && window.location.protocol === 'file:') {
-                baseUrl = baseUrl.substring(1);
-            }
-            questions.forEach(function(q) {
-                if (q.section === 'listening') {
-                    var paddedNum = (q.num < 10 ? '0' : '') + q.num;
-                    var audioFileName = examCode + '-' + paddedNum + '.mp3';
-                    var audioUrl = baseUrl + audioFileName;
-                    if (!audioFiles[q.num]) {
-                        audioFiles[q.num] = audioUrl;
-                    }
-                }
-            });
         }
 
         function startTimer() {
@@ -647,22 +622,8 @@
             isPlaying = true;
             updateAudioUI(true);
             currentAudio.onended = () => stopAudio();
-            currentAudio.onerror = () => {
-                // Fallback to TTS when MP3 fails
-                stopAudio();
-                const q = Utils.getQ(currentQ);
-                if (q && q.script) {
-                    setTimeout(() => playSpeech(q.script), 100);
-                }
-            };
-            currentAudio.play().catch(() => {
-                // Fallback to TTS when play fails
-                stopAudio();
-                const q = Utils.getQ(currentQ);
-                if (q && q.script) {
-                    setTimeout(() => playSpeech(q.script), 100);
-                }
-            });
+            currentAudio.onerror = () => stopAudio();
+            currentAudio.play().catch(() => stopAudio());
         }
 
         function playSpeech(text) {
@@ -772,14 +733,7 @@
                 
                 if (userAns !== undefined) {
                     if (q.type === 'arrange') {
-                        // Normalize: remove punctuation and extra spaces for comparison
-                        const normalize = (str) => str.replace(/[，。？！、；：“”‘’（）【】[]]/g, '').replace(/\s+/g, '').trim();
-                        const userAnswer = Array.isArray(userAns) ? userAns.join('') : String(userAns);
-                        const normalizedUser = normalize(userAnswer);
-                        
-                        // Support multiple correct answers separated by | (e.g., "我在家吃饭|我在家里吃饭")
-                        const possibleAnswers = String(q.answer || '').split('|').map(a => normalize(a.trim()));
-                        isCorrect = possibleAnswers.includes(normalizedUser);
+                        isCorrect = Array.isArray(userAns) ? userAns.join('') === q.answer : false;
                     } else if (q.type === 'character') {
                         isCorrect = userAns === q.answer;
                     } else if (q.type === 'tf') {
