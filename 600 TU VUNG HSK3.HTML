@@ -196,6 +196,7 @@
             .sidebar-container {
                 transform: translateX(-100%);
                 transition: transform 0.3s;
+                z-index: 200;
             }
             .sidebar-container.open {
                 transform: translateX(0);
@@ -203,7 +204,10 @@
             .main-content {
                 margin-left: 0;
             }
+            .mobile-menu-btn { display: inline-flex !important; }
         }
+        .mobile-menu-btn { display: none; }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 199; }
 
         .fixed-header {
             position: fixed;
@@ -246,6 +250,9 @@
                 </div>
             </div>
             
+            <button onclick="toggleSidebar()" class="mobile-menu-btn items-center gap-1 bg-white text-purple-700 px-3 py-2 rounded-lg text-sm font-bold">
+                ☰ Menu
+            </button>
             <a href="https://giasuhoangu.com" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
@@ -284,6 +291,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Sidebar overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar Menu - Dynamic Generated -->
     <div class="sidebar-container" id="sidebar">
@@ -826,9 +836,9 @@
             { stt: 382, hanzi: "完", pinyin: "wán", type: "Động từ", subtype: "Động từ tồn tại", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Xong, hết", examples: [{ usage: "Hoàn thành", sentence: "我吃完饭了。", pinyin: "Wǒ chī wán fàn le.", meaning: "Tôi ăn cơm xong rồi." }] },
             { stt: 371, hanzi: "出现", pinyin: "chūxiàn", type: "Động từ", subtype: "Động từ tồn tại", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Xuất hiện", examples: [{ usage: "Hiện ra", sentence: "太阳出现了。", pinyin: "Tàiyáng chūxiàn le.", meaning: "Mặt trời đã xuất hiện." }] },
             { stt: 389, hanzi: "遇到", pinyin: "yùdào", type: "Động từ", subtype: "Động từ tồn tại", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Gặp phải", examples: [{ usage: "Gặp gỡ", sentence: "我遇到了一个老朋友。", pinyin: "Wǒ yùdào le yí ge lǎo péngyou.", meaning: "Tôi đã gặp một người bạn cũ." }] },
-            { stt: 368, hanzi: "表示", pinyin: "biǎoshì", type: "Động từ", subtype: "Động từ/Danh từ", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Biểu thị, biểu đạt", examples: [{ usage: "Thể hiện", sentence: "我表示感谢。", pinyin: "Wǒ biǎoshì gǎnxiè.", meaning: "Tôi bày tỏ lòng biết ơn." }] },
-            { stt: 369, hanzi: "表演", pinyin: "biǎoyǎn", type: "Động từ", subtype: "Động từ/Danh từ", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Biểu diễn", examples: [{ usage: "Nghệ thuật", sentence: "她在表演舞蹈。", pinyin: "Tā zài biǎoyǎn wǔdǎo.", meaning: "Cô ấy đang biểu diễn múa." }] },
-            { stt: 367, hanzi: "变化", pinyin: "biànhuà", type: "Động từ", subtype: "Động từ/Danh từ", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Thay đổi, biến đổi", examples: [{ usage: "Sự thay đổi", sentence: "这里变化很大。", pinyin: "Zhèlǐ biànhuà hěn dà.", meaning: "Nơi này thay đổi rất nhiều." }] },
+            { stt: 368, hanzi: "表示", pinyin: "biǎoshì", type: "Động từ", subtype: "Động từ hành động", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Biểu thị, biểu đạt", examples: [{ usage: "Thể hiện", sentence: "我表示感谢。", pinyin: "Wǒ biǎoshì gǎnxiè.", meaning: "Tôi bày tỏ lòng biết ơn." }] },
+            { stt: 369, hanzi: "表演", pinyin: "biǎoyǎn", type: "Động từ", subtype: "Động từ hành động", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Biểu diễn", examples: [{ usage: "Nghệ thuật", sentence: "她在表演舞蹈。", pinyin: "Tā zài biǎoyǎn wǔdǎo.", meaning: "Cô ấy đang biểu diễn múa." }] },
+            { stt: 367, hanzi: "变化", pinyin: "biànhuà", type: "Động từ", subtype: "Động từ hành động", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Thay đổi, biến đổi", examples: [{ usage: "Sự thay đổi", sentence: "这里变化很大。", pinyin: "Zhèlǐ biànhuà hěn dà.", meaning: "Nơi này thay đổi rất nhiều." }] },
             { stt: 291, hanzi: "看", pinyin: "kàn", type: "Động từ", subtype: "Động từ hành động", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Nhìn, xem, đọc", examples: [{ usage: "Thị giác", sentence: "我在看书。", pinyin: "Wǒ zài kàn shū.", meaning: "Tôi đang đọc sách." }] },
             { stt: 292, hanzi: "看见", pinyin: "kànjiàn", type: "Động từ", subtype: "Động từ hành động", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Nhìn thấy", examples: [{ usage: "Trông thấy", sentence: "我看见他了。", pinyin: "Wǒ kànjiàn tā le.", meaning: "Tôi đã nhìn thấy anh ấy." }] },
             { stt: 307, hanzi: "听", pinyin: "tīng", type: "Động từ", subtype: "Động từ hành động", theme: "16. Hành động & Động từ", subgroup: "Hành động & xử lý công việc", meaning: "Nghe", examples: [{ usage: "Thính giác", sentence: "我在听音乐。", pinyin: "Wǒ zài tīng yīnyuè.", meaning: "Tôi đang nghe nhạc." }] },
@@ -892,7 +902,7 @@
             { stt: 206, hanzi: "姓", pinyin: "xìng", type: "Danh từ", subtype: "Danh từ trừu tượng", theme: "18. Khái niệm trừu tượng & Giao tiếp xã hội", subgroup: "Tên gọi, thông tin & tiền bạc", meaning: "Họ", examples: [{ usage: "Tên gọi", sentence: "你姓什么？", pinyin: "Nǐ xìng shénme?", meaning: "Bạn họ gì?" }] },
             { stt: 159, hanzi: "电子邮件", pinyin: "diànzǐ yóujiàn", type: "Danh từ", subtype: "Danh từ trừu tượng", theme: "18. Khái niệm trừu tượng & Giao tiếp xã hội", subgroup: "Tên gọi, thông tin & tiền bạc", meaning: "Email, thư điện tử", examples: [{ usage: "Liên lạc", sentence: "我发电子邮件给你。", pinyin: "Wǒ fā diànzǐ yóujiàn gěi nǐ.", meaning: "Tôi gửi email cho bạn." }] },
             { stt: 188, hanzi: "钱", pinyin: "qián", type: "Danh từ", subtype: "Danh từ trừu tượng", theme: "18. Khái niệm trừu tượng & Giao tiếp xã hội", subgroup: "Tên gọi, thông tin & tiền bạc", meaning: "Tiền", examples: [{ usage: "Tiền bạc", sentence: "我没带钱。", pinyin: "Wǒ méi dài qián.", meaning: "Tôi không mang tiền." }] },
-            { stt: 423, hanzi: "没关系", pinyin: "méi guānxi", type: "Tính từ", subtype: "Thành ngữ giao tiếp", theme: "18. Khái niệm trừu tượng & Giao tiếp xã hội", subgroup: "Thành ngữ giao tiếp xã giao", meaning: "Không sao, không có gì", examples: [{ usage: "Đáp lại lời xin lỗi", sentence: "没关系！", pinyin: "Méi guānxi!", meaning: "Không có gì!" }] },
+            { stt: 423, hanzi: "没关系", pinyin: "méi guānxi", type: "Thành ngữ", subtype: "Thành ngữ giao tiếp", theme: "18. Khái niệm trừu tượng & Giao tiếp xã hội", subgroup: "Thành ngữ giao tiếp xã giao", meaning: "Không sao, không có gì", examples: [{ usage: "Đáp lại lời xin lỗi", sentence: "没关系！", pinyin: "Méi guānxi!", meaning: "Không có gì!" }] },
             { stt: 599, hanzi: "不客气", pinyin: "bú kèqi", type: "Thành ngữ", subtype: "Thành ngữ giao tiếp", theme: "18. Khái niệm trừu tượng & Giao tiếp xã hội", subgroup: "Thành ngữ giao tiếp xã giao", meaning: "Khách sáo (không)", examples: [{ usage: "Đáp lại cảm ơn", sentence: "不客气！", pinyin: "Bú kèqi!", meaning: "Không có gì!/Không khách sáo!" }] },
             { stt: 600, hanzi: "对不起", pinyin: "duìbuqǐ", type: "Thành ngữ", subtype: "Thành ngữ giao tiếp", theme: "18. Khái niệm trừu tượng & Giao tiếp xã hội", subgroup: "Thành ngữ giao tiếp xã giao", meaning: "Xin lỗi", examples: [{ usage: "Xin lỗi", sentence: "对不起，我迟到了。", pinyin: "Duìbuqǐ, wǒ chídào le.", meaning: "Xin lỗi, tôi đến muộn rồi." }] },
             { stt: 513, hanzi: "你", pinyin: "nǐ", type: "Đại từ", subtype: "Đại từ nhân xưng", theme: "19. Đại từ", subgroup: "Đại từ nhân xưng", meaning: "Bạn, anh, chị", examples: [{ usage: "Xưng hô", sentence: "你好吗？", pinyin: "Nǐ hǎo ma?", meaning: "Bạn khỏe không?" }] },
@@ -1061,14 +1071,19 @@
             const filterBar = document.getElementById('filterBar');
             const tableArea = document.getElementById('tableArea');
             if (!header) return;
-            const h = header.offsetHeight;          // chiều cao thật của topbar
+            const h = header.offsetHeight;
             const gap = 8;
-            const topOffset = h + gap;              // chừa khoảng hở dưới topbar
+            const topOffset = h + gap;
+            const isMobile = window.innerWidth <= 768;
+            const leftOffset = isMobile ? '10px' : '300px';
+            const rightOffset = '10px';
             if (sidebar) { sidebar.style.top = topOffset + 'px'; sidebar.style.height = 'calc(100vh - ' + topOffset + 'px)'; }
-            if (filterBar) filterBar.style.top = topOffset + 'px';
+            if (filterBar) { filterBar.style.top = topOffset + 'px'; filterBar.style.left = leftOffset; filterBar.style.right = rightOffset; }
             if (tableArea) {
                 const fbH = filterBar ? filterBar.offsetHeight : 56;
                 tableArea.style.top = (topOffset + fbH + gap) + 'px';
+                tableArea.style.left = leftOffset;
+                tableArea.style.right = rightOffset;
             }
         }
         window.addEventListener('load', adjustLayoutOffsets);
@@ -1092,16 +1107,16 @@
             for (let index = 0; index < data.length; index++) {
                 const item = data[index];
                 let typeClass = 'type-noun';
-                if (item.type === '动词') typeClass = 'type-verb';
-                else if (item.type === '形容词') typeClass = 'type-adj';
-                else if (item.type === '数词') typeClass = 'type-num';
-                else if (item.type === '量词') typeClass = 'type-measure';
-                else if (item.type === '代词') typeClass = 'type-pronoun';
-                else if (item.type === '副词') typeClass = 'type-adv';
-                else if (item.type === '介词') typeClass = 'type-prep';
-                else if (item.type === '连词') typeClass = 'type-conj';
-                else if (item.type === '助词') typeClass = 'type-particle';
-                else if (item.type === '叹词') typeClass = 'type-interj';
+                if (item.type === 'Động từ') typeClass = 'type-verb';
+                else if (item.type === 'Tính từ') typeClass = 'type-adj';
+                else if (item.type === 'Số từ') typeClass = 'type-num';
+                else if (item.type === 'Lượng từ') typeClass = 'type-measure';
+                else if (item.type === 'Đại từ') typeClass = 'type-pronoun';
+                else if (item.type === 'Phó từ') typeClass = 'type-adv';
+                else if (item.type === 'Giới từ') typeClass = 'type-prep';
+                else if (item.type === 'Liên từ') typeClass = 'type-conj';
+                else if (item.type === 'Trợ từ') typeClass = 'type-particle';
+                else if (item.type === 'Thán từ') typeClass = 'type-interj';
                 rows[index] = `<tr class="hover:bg-gray-50 transition-colors">
                     <td class="px-3 py-3 text-center font-semibold text-purple-700">${index + 1}</td>
                     <td class="px-2 py-3 text-center"><button onclick="speak('${item.hanzi}')" class="icon-btn audio-btn text-white" title="Phát âm">🔊</button></td>
@@ -1165,7 +1180,8 @@
                         <span class="text-xs bg-gray-200 px-2 py-0.5 rounded-full">${children.count}</span>
                     </div>
                     <div class="sb-children" style="display:none">`;
-                children.subs.forEach(S => {
+                const sortedSubs = [...children.subs].sort((a, b) => a.count - b.count);
+                sortedSubs.forEach(S => {
                     const safeSub = S.name.replace(/'/g, "\\'");
                     const fn = parentFilterKind === 'theme' ? 'filterBySubgroup' : 'filterBySubtype';
                     let disp = S.name;
@@ -1248,17 +1264,50 @@
             }
         }
 
-        // TTS Function
+        // Toggle sidebar mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+        }
+
+        // TTS Function - iOS 12/13/14/15/16 Safari compatible
         function speak(text) {
-            if ('speechSynthesis' in window) {
+            if (!('speechSynthesis' in window)) {
+                alert('Trình duyệt không hỗ trợ phát âm');
+                return;
+            }
+            window.speechSynthesis.cancel();
+
+            function doSpeak() {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'zh-CN';
                 utterance.rate = 0.8;
-                speechSynthesis.speak(utterance);
+                utterance.volume = 1;
+                const voices = window.speechSynthesis.getVoices();
+                const zhVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh_CN' || v.lang.startsWith('zh'));
+                if (zhVoice) utterance.voice = zhVoice;
+                window.speechSynthesis.speak(utterance);
+            }
+
+            const voices = window.speechSynthesis.getVoices();
+            if (voices && voices.length > 0) {
+                setTimeout(doSpeak, 50);
             } else {
-                alert('Trình duyệt không hỗ trợ phát âm');
+                window.speechSynthesis.onvoiceschanged = function() {
+                    window.speechSynthesis.onvoiceschanged = null;
+                    setTimeout(doSpeak, 50);
+                };
+                setTimeout(doSpeak, 300);
             }
         }
+
+        // Preload voices on first touch (required for iOS)
+        document.addEventListener('touchstart', function initVoices() {
+            if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
+            document.removeEventListener('touchstart', initVoices);
+        }, { once: true });
 
         // Stroke Order Modal
         let currentWriters = [];
