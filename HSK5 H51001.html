@@ -1653,45 +1653,29 @@
             }
 
             playTTS(text) {
-                if (!('speechSynthesis' in window)) return;
-
-                window.speechSynthesis.cancel();
-
+                if (!window.speechSynthesis) {
+                    alert('Trình duyệt không hỗ trợ phát âm');
+                    return;
+                }
+                
+                this.stop();
+                const utter = new SpeechSynthesisUtterance(text);
+                utter.lang = 'zh-CN';
+                utter.rate = 0.85;
+                utter.pitch = 1;
+                
                 const status = document.getElementById('audioStatus');
                 if (status) status.textContent = '正在播放...';
-
-                function doSpeak() {
-                    const voices = window.speechSynthesis.getVoices();
-                    
-                    const utter = new SpeechSynthesisUtterance(text);
-                    utter.lang = 'zh-CN';
-                    utter.rate = 0.85;
-                    utter.pitch = 1;
-
-                    const zhVoice = voices.find(v =>
-                        v.lang &&
-                        (v.lang.startsWith('zh') ||
-                         v.lang.startsWith('cmn'))
-                    );
-
-                    if (zhVoice) utter.voice = zhVoice;
-
-                    utter.onend = () => {
-                        if (status) status.textContent = '点击播放录音';
-                    };
-                    
-                    utter.onerror = () => {
-                        if (status) status.textContent = 'Audio không sẵn có';
-                    };
-
-                    window.speechSynthesis.speak(utter);
-                }
-
-                if (window.speechSynthesis.getVoices().length === 0) {
-                    window.speechSynthesis.onvoiceschanged = doSpeak;
-                } else {
-                    doSpeak();
-                }
+                
+                utter.onend = () => {
+                    if (status) status.textContent = '点击播放录音';
+                };
+                
+                utter.onerror = () => {
+                    if (status) status.textContent = 'Lỗi phát âm';
+                };
+                
+                window.speechSynthesis.speak(utter);
             }
 
             stop() {
