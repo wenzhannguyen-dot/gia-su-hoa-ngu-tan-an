@@ -1653,29 +1653,45 @@
             }
 
             playTTS(text) {
-                if (!window.speechSynthesis) {
-                    alert('Trình duyệt không hỗ trợ phát âm');
-                    return;
-                }
+                if (!('speechSynthesis' in window)) return;
 
-                this.stop();
-                const utter = new SpeechSynthesisUtterance(text);
-                utter.lang = 'zh-CN';
-                utter.rate = 0.85;
-                utter.pitch = 1;
+                window.speechSynthesis.cancel();
 
                 const status = document.getElementById('audioStatus');
                 if (status) status.textContent = '正在播放...';
 
-                utter.onend = () => {
-                    if (status) status.textContent = '点击播放录音';
-                };
+                function doSpeak() {
+                    const voices = window.speechSynthesis.getVoices();
+                    
+                    const utter = new SpeechSynthesisUtterance(text);
+                    utter.lang = 'zh-CN';
+                    utter.rate = 0.85;
+                    utter.pitch = 1;
 
-                utter.onerror = () => {
-                    if (status) status.textContent = '正在播放';
-                };
+                    const zhVoice = voices.find(v =>
+                        v.lang &&
+                        (v.lang.startsWith('zh') ||
+                         v.lang.startsWith('cmn'))
+                    );
 
-                window.speechSynthesis.speak(utter);
+                    if (zhVoice) utter.voice = zhVoice;
+
+                    utter.onend = () => {
+                        if (status) status.textContent = '点击播放录音';
+                    };
+                    
+                    utter.onerror = () => {
+                        if (status) status.textContent = 'Audio không sẵn có';
+                    };
+
+                    window.speechSynthesis.speak(utter);
+                }
+
+                if (window.speechSynthesis.getVoices().length === 0) {
+                    window.speechSynthesis.onvoiceschanged = doSpeak;
+                } else {
+                    doSpeak();
+                }
             }
 
             stop() {
@@ -3180,25 +3196,35 @@
                     return false;
                 }
                 this.stop();
-                this.currentUtterance = new SpeechSynthesisUtterance(text);
 
-                const voices = this.synthesis.getVoices();
-                const chineseVoice = voices.find(voice => 
-                    voice.lang.includes('zh') || voice.name.includes('Chinese')
-                );
+                const doSpeak = () => {
+                    this.currentUtterance = new SpeechSynthesisUtterance(text);
 
-                if (chineseVoice) {
-                    this.currentUtterance.voice = chineseVoice;
+                    const voices = this.synthesis.getVoices();
+                    const chineseVoice = voices.find(voice => 
+                        voice.lang && (voice.lang.startsWith('zh') || voice.lang.startsWith('cmn'))
+                    );
+
+                    if (chineseVoice) {
+                        this.currentUtterance.voice = chineseVoice;
+                    } else {
+                        this.currentUtterance.lang = 'zh-CN';
+                    }
+
+                    this.currentUtterance.rate = options.rate || 0.8;
+                    this.currentUtterance.pitch = options.pitch || 1;
+                    this.currentUtterance.volume = options.volume || 1;
+
+                    this.synthesis.speak(this.currentUtterance);
+                    return true;
+                };
+
+                if (this.synthesis.getVoices().length === 0) {
+                    this.synthesis.onvoiceschanged = doSpeak;
+                    return true;
                 } else {
-                    this.currentUtterance.lang = 'zh-CN';
+                    return doSpeak();
                 }
-
-                this.currentUtterance.rate = options.rate || 0.8;
-                this.currentUtterance.pitch = options.pitch || 1;
-                this.currentUtterance.volume = options.volume || 1;
-
-                this.synthesis.speak(this.currentUtterance);
-                return true;
             }
 
             stop() {
