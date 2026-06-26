@@ -215,17 +215,21 @@ body{
 }
 
 .sidebar-menu a{
-    display:block;
-    padding:12px 16px;
+    display:flex;
+    align-items:center;
+    height:52px;
+    padding:6px 14px;
+    background-color:#ebedf0;
     color:#1a1a1a;
     text-decoration:none;
     border-radius:6px;
     font-size:14px;
+    line-height:1.25;
     transition:background-color 0.2s;
 }
 
 .sidebar-menu a:hover{
-    background-color:#e9ecef;
+    background-color:#dde1e6;
     color:#0066cc;
 }
 
@@ -310,7 +314,7 @@ body{
     <div class="sidebar">
         <ul class="sidebar-menu">
             <li style="margin-bottom:8px;">
-                <a href="https://giasuhoangu.com" style="background:#0066cc; color:white; text-align:center; border-radius:6px;">
+                <a href="https://giasuhoangu.com" style="background:#0066cc; color:white; justify-content:center; border-radius:6px;">
                     🌐 Trang chủ
                 </a>
             </li>
@@ -747,12 +751,7 @@ body{
 </tbody>
 </table>
     </div>
-    <b style="color:#27ae60;">✅ HOÀN THÀNH ĐẦY ĐỦ 214 BỘ THỦ TIẾNG TRUNG!</b>
 </div>
-
-        <div class="rule" style="margin-top: 15px;">
-            
-        </div>
     </div>
 
         <div class="section tab-content" id="hsk4">
@@ -765,11 +764,10 @@ body{
             <script>
             document.getElementById("charInput").addEventListener("input", function () {
                 let char = this.value.trim();
+                document.getElementById("writer").innerHTML = "";
                 if (char === "") {
-                    document.getElementById("writer").innerHTML = "";
                     return;
                 }
-                document.getElementById("writer").innerHTML = "";
                 HanziWriter.create('writer', char, {
                     width: 300,
                     height: 300,
@@ -788,39 +786,30 @@ body{
 </div>
 
 <script>
-console.log("Tab script loading...");
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM loaded");
     const menuLinks = document.querySelectorAll(".sidebar-menu a");
     const tabContents = document.querySelectorAll(".tab-content");
-    console.log("Found " + menuLinks.length + " menu links");
-    console.log("Found " + tabContents.length + " tab contents");
-    
+
     const firstTab = document.getElementById("net-coban");
     const firstLink = document.querySelector("a[href=\"#net-coban\"]");
-    if (firstTab) {
-        firstTab.classList.add("active");
-        console.log("First tab activated");
-    }
+    if (firstTab) firstTab.classList.add("active");
     if (firstLink) firstLink.classList.add("active");
-    
+
     menuLinks.forEach(link => {
         link.addEventListener("click", function(e) {
+            const href = this.getAttribute("href");
+            // Bỏ qua các liên kết ngoài (vd: nút Trang chủ) để chúng chuyển trang bình thường
+            if (!href || href.charAt(0) !== "#") {
+                return;
+            }
             e.preventDefault();
-            console.log("Clicked: " + this.getAttribute("href"));
-            
+
             menuLinks.forEach(l => l.classList.remove("active"));
             tabContents.forEach(tab => tab.classList.remove("active"));
-            
+
             this.classList.add("active");
-            const targetId = this.getAttribute("href").substring(1);
-            const targetTab = document.getElementById(targetId);
-            if (targetTab) {
-                targetTab.classList.add("active");
-                console.log("Activated tab: " + targetId);
-            } else {
-                console.error("Tab not found: " + targetId);
-            }
+            const targetTab = document.getElementById(href.substring(1));
+            if (targetTab) targetTab.classList.add("active");
         });
     });
 });
@@ -835,7 +824,7 @@ document.addEventListener("DOMContentLoaded", function() {
         { id: "hanzi-1d", char: "\u5343" },
         { id: "hanzi-2", char: "\u4EBA" },
         { id: "hanzi-2b", char: "\u516B" },
-        { id: "hanzi-2c", char: "\u4EBA" },
+        { id: "hanzi-2c", char: "\u5929" },
         { id: "hanzi-2d", char: "\u5927" },
         { id: "hanzi-3", char: "\u4E09" },
         { id: "hanzi-3b", char: "\u4E8C" },
@@ -899,23 +888,43 @@ document.addEventListener("DOMContentLoaded", function() {
         { id: "hanzi-17d", char: "\u8868" }
     ];
 
-    characters.forEach(item => {
+    function makeWriter(item) {
         const element = document.getElementById(item.id);
-        if (element) {
-            const writer = HanziWriter.create(item.id, item.char, {
-                width: 100,
-                height: 100,
-                padding: 5,
-                showOutline: true,
-                strokeAnimationSpeed: 2,
-                delayBetweenStrokes: 200,
-                strokeColor: "#e74c3c",
-                outlineColor: "#ddd",
-                radicalColor: "#168"
+        if (!element || element.dataset.built) return;
+        element.dataset.built = "1";
+        const writer = HanziWriter.create(item.id, item.char, {
+            width: 100,
+            height: 100,
+            padding: 5,
+            showOutline: true,
+            strokeAnimationSpeed: 2,
+            delayBetweenStrokes: 200,
+            strokeColor: "#e74c3c",
+            outlineColor: "#ddd",
+            radicalColor: "#168"
+        });
+        writer.loopCharacterAnimation();
+    }
+
+    // Chỉ tạo animation khi ô lọt vào màn hình (tức là khi mở tab tương ứng),
+    // giúp trang nhẹ và mở nhanh hơn. Trình duyệt cũ không hỗ trợ thì tạo như cũ.
+    if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(function(entries) {
+            entries.forEach(function(en) {
+                if (en.isIntersecting) {
+                    const item = characters.find(function(c) { return c.id === en.target.id; });
+                    if (item) makeWriter(item);
+                    io.unobserve(en.target);
+                }
             });
-            writer.loopCharacterAnimation();
-        }
-    });
+        }, { rootMargin: "100px" });
+        characters.forEach(function(item) {
+            const el = document.getElementById(item.id);
+            if (el) io.observe(el);
+        });
+    } else {
+        characters.forEach(makeWriter);
+    }
 });
 </script>
 
