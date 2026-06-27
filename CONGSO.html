@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gia Sư Hoa Ngữ Tân An | Giáo trình Tiếng Hoa Công xưởng</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5.0/dist/hanzi-writer.min.js"></script>
 <style>
 /* ── PALETTE ─────────────────────────────────────
@@ -56,19 +57,22 @@ body {
    ══════════════════════════════════════════ */
 #sidebar {
   position: fixed;
-  top: 0; left: 0;
-  width: 240px;
-  height: 100%;
-  background: var(--green);
-  color: var(--white);
+  top: 70px; left: 0;
+  width: 180px;
+  height: calc(100% - 70px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  color: var(--black);
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 100;
   display: flex;
   flex-direction: column;
+  margin: 10px;
 }
 #sidebar::-webkit-scrollbar { width: 3px; }
-#sidebar::-webkit-scrollbar-thumb { background: var(--green-b); }
+#sidebar::-webkit-scrollbar-thumb { background: #d0d0d0; }
 
 .sb-logo { padding: 18px 16px 14px; border-bottom: 1px solid var(--green-b); }
 .sb-logo-cn {
@@ -78,7 +82,13 @@ body {
 .sb-logo-vn { font-size: 20px; color: var(--gray-m); margin-top: 3px; line-height: 1.4; }
 .sb-progress { height: 2px; background: var(--green-b); margin-top: 10px; }
 .sb-progress-fill { height: 100%; background: var(--orange); width: 0%; transition: width 0.4s; }
-.sb-section { font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-m); padding: 14px 16px 6px; }
+.sb-section { font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--white); padding: 12px 16px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; }
+.tool-btn { width: 100%; padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; color: #666666; cursor: pointer; font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; transition: all 0.15s; }
+.tool-btn:last-child { margin-bottom: 0; }
+.tool-btn:hover { background: #e3f2fd; border-color: #4472c4; color: #4472c4; }
+.tool-btn.active { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; font-weight: 600; }
 
 .nav-item {
   display: flex; align-items: center; gap: 10px;
@@ -103,21 +113,55 @@ body {
 
 /* ══ MAIN ════════════════════════════════════ */
 #main {
-  margin-left: 240px;
-  width: calc(100% - 240px);
+  margin-left: 180px;
+  width: calc(100% - 180px);
   min-height: 100vh;
   display: flex; flex-direction: column;
+  padding-top: 70px;
 }
 
 #topbar {
-  height: 48px; background: var(--green);
-  display: flex; align-items: center; padding: 0 24px;
-  position: sticky; top: 0; z-index: 50;
+  height: 70px; background: var(--green);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
   border-bottom: 1px solid var(--green-b);
+}
+#topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+#topbar-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+#topbar-brand {
+  display: flex;
+  flex-direction: column;
+}
+#topbar-brand-cn {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px; 
+  font-weight: 700; 
+  color: var(--white);
+  line-height: 1.2;
+}
+#topbar-brand-vn {
+  font-size: 12px; 
+  color: var(--gray-m);
+  line-height: 1.2;
+}
+#topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 #topbar-title {
   font-family: 'Noto Serif SC', serif;
-  font-size: 20px; font-weight: 600; color: var(--white);
+  font-size: 16px; 
+  font-weight: 600; 
+  color: var(--white);
 }
 
 #content { padding: 24px 32px; width: 100%; flex: 1; }
@@ -163,6 +207,19 @@ body {
 .td-vn { color: var(--gray-d); font-weight: 500; font-size: 20px; }
 .td-ex { color: var(--gray-m); font-family: 'Noto Serif SC', serif; font-size: 20px; }
 
+body.hide-pinyin .td-py { display: none !important; }
+body.hide-pinyin .pat-expy { display: none !important; }
+body.hide-pinyin .line-py { display: none !important; }
+body.hide-pinyin .cmd-py { display: none !important; }
+body.hide-pinyin .ex-py { display: none !important; }
+body.hide-vietnamese .td-vn { display: none !important; }
+body.hide-vietnamese .td-ex { display: none !important; }
+body.hide-vietnamese .pat-exvn { display: none !important; }
+body.hide-vietnamese .line-vn { display: none !important; }
+body.hide-vietnamese .cmd-vn { display: none !important; }
+body.hide-vietnamese .nav-vn { display: none !important; }
+body.hide-vietnamese .ex-vn { display: none !important; }
+
 /* ══ DIALOGUE ════════════════════════════════ */
 .dialogue-box {
   background: var(--white); border: 1px solid var(--gray-l);
@@ -198,7 +255,7 @@ body {
 .speaker-badge.female { color: var(--orange); }
 .dlg-content { flex: 1; }
 .line-cn { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--black); line-height: 1.6; }
-.line-py { font-size: 20px; color: var(--orange); font-style: italic; margin-top: 2px; display: none; }
+.line-py { font-size: 20px; color: var(--orange); font-style: italic; margin-top: 2px; }
 .line-vn { font-size: 20px; color: var(--gray-d); margin-top: 4px; line-height: 1.5; }
 .dlg-play-btn { color: var(--gray-l); font-size: 20px; padding-top: 4px; flex-shrink: 0; background: none; border: none; cursor: pointer; }
 .dlg-line:hover .dlg-play-btn { color: var(--blue); }
@@ -222,6 +279,8 @@ body {
 /* ══ EXERCISE ════════════════════════════════ */
 .exercise-box { background: var(--white); border: 1px solid var(--gray-l); border-radius: 6px; padding: 18px 20px; margin-bottom: 10px; }
 .ex-type { font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+.lesson-block { margin-bottom: 24px; }
+.lesson-header { font-size: 20px; font-weight: 700; color: var(--green); padding: 12px 16px; background: var(--green-b); border-radius: 6px; margin-bottom: 12px; }
 .ex-q { font-family: 'Noto Serif SC', serif; font-size: 20px; color: var(--black); margin-bottom: 14px; line-height: 1.6; }
 .ex-q .blank { display: inline-block; min-width: 60px; border-bottom: 2px solid var(--orange); color: var(--orange); font-weight: 700; text-align: center; }
 .ex-opts { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -305,7 +364,7 @@ body {
 
 /* ══ AUDIO BAR ═══════════════════════════════ */
 #audio-bar {
-  position: fixed; bottom: 0; left: 240px; right: 0;
+  position: fixed; bottom: 0; left: 180px; right: 0;
   height: 52px; background: var(--green);
   border-top: 1px solid var(--green-b);
   display: flex; align-items: center; padding: 0 20px; gap: 16px;
@@ -357,8 +416,12 @@ details[open] summary { color: var(--blue); }
   #main { margin-left: 0; width: 100%; }
   #audio-bar { left: 0; }
   #menu-btn { display: flex; }
-  #content { padding: 14px; padding-top: 62px; }
+  #content { padding: 14px; }
   #topbar { padding: 0 14px 0 52px; }
+  #topbar-logo { width: 32px; height: 32px; }
+  #topbar-brand-cn { font-size: 16px; }
+  #topbar-brand-vn { font-size: 11px; }
+  #topbar-title { display: none; }
 }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -366,42 +429,43 @@ details[open] summary { color: var(--blue); }
 </style>
 </head>
 <body>
-<button id="menu-btn" onclick="toggleSidebar()">☰</button>
+<button id="menu-btn" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
 
 <nav id="sidebar">
-  <div class="sb-logo">
-    <div style="display:flex;justify-content:center;margin-bottom:10px;">
-      <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACgAKADASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAYHBAUIAwEC/8QASBAAAQMEAAMFBAUIBwYHAAAAAQIDBAAFBhEHEiETIjFBUQgUMmEVFldxlBc2UnSBkbLRIzU3Qnah0yQzQ0Sxs1NiY3KD4fH/xAAaAQEAAwEBAQAAAAAAAAAAAAAAAgMEAQUG/8QANBEAAQQABAMFBQgDAAAAAAAAAQACAxEEEiExBUFRE2FxkaEVIjKBwRQzQlKx0eHxIzTw/9oADAMBAAIRAxEAPwDjKlKURKUpREpSlESlKURKUpREpSlESlKURKUpREpSlESlKURKUpREpSlESlK9IrD0qS1GjNLeedWENtoSSpaidAADxJNDoi86Vc8D2e7+i2syskyXHcbee6ojTpQC9fMjpv5AmvX8gbWv7UMM/GD+dYfaWF/P+qu7CToqTpV2jgE19qGF/jB/Ovn5AmvtQwz8WP509pYb83of2TsJOipOlXYeATP2oYX+MH86fkCa+1DC/wAYP509pYb83of2TsJOipOlWdlPCUWh2JAtuYWfIrxOcDcO3WoKeddO+pJHdSB1OyR4VdnCL2fLHjKoNyzwN3e9yDzR7WjvMMkDaiv/AMTl2Nk90dB3iRvTHOyVuZmyrcwtNFcvOYvf2sVGUvWuQzZlSExm5TieVDjigSAnfxdEnqOnStNXSPtu5bFk3iz4PblNhq1oMiUhsaShxYAQjQ6DlQN68ucfOubqsBtRSlKV1EpSlESlKURKUpREq4vZHgRJHE+RcpTXaqtNrfmspPhzgpTv9yzVO1dXsh/ntkP+HpH8bdYeJGsK/wAFdB94FVWW3+45PkUy93WQ4/JlOlZK1b5RvokegA6AVqqVIeHWOMZbl0OwSLzFs6ZXMEyZA2gKCSQnxHUkaGyK1EshZewA9Aq9XHvKj1dJ8I+GPDvOeDCrs5b5MW8sJfZkS0SnCUuoHMFcp7mikpOtfLe6xl+zhZbSFvZJxJt8OOgAk9khojfrzuVMcDkcJuHWM3PGkcS25zd25i4ttznLe08h5OyCglRHr6D0rwsfxBs8YGGc7MCNgVrhhLHf5AK+S5EPj47rMslruF6u0W02qI7LnSnA0wy2NqWo+A/+/Kup8jsvs/8AD2Qm233H5BckNpdbcfYkPhaSP7q96+8DwNZ/ArEcKwyNfuLjqno1kcWsWQy29utxd8vMlPVRWtW0IHiU6/Sr0sLjxidWsIHIkaFUSQ9nuQpBw4wjH+CWIx5sqKLrl1yKYyAz1dkPq8I7JPwoHipXoCo9NCps8Pqvi92ybK8gYh3F1nnlzw2FNREj4GWEK+JKSegPVajs+Oh8we1XW4z15vkzSmrnKaKLbb3E6Friq6hB/wDWXoFxX3JHQVT13kTsq9pa14pld+tt9t0JLkn6LgoWmNFeQklAc2f6Rwee968OnUVbPKIo3SHkLUWNzODVy9mFzRecouV0bdmPIlSFuJcluBbywT8SyABzHxOhoeA6Vqqzb6AL5PAAAElzoP8A3GsKtINhVlKUpXUSlKURKUpREpSlESrq9kT89ch/w9I/jbqlaun2RPz1yH/D0j+NusPEv9V/grsP94FS1KUrcqVYfC3MsStEr3bNMMg32M+eR2c4pa5DST06Aq5ToeGgk/Oppc+CAk5pj1xwqWbpiF4lIWJKe+YaAeZSV/IAEAnXXunr40xYLLdb/dGrXZYD86Y6e40ynZPzPoPmeldSYdcbJ7P+Kw7Jld4enXW6yUvOxIqudEJB6FYHkB5nxUR0HTdeJxBzoH3Affd+He++uVeS1wAPFPGg5qN8cHl8TePFi4d2x4e429zsZK0qPK2o959Xp3EJ18iD19LsxeJHzq/RbjHZDeD444GLHGSf6OfIa7vvJHm23rlb8dnmV6VSCsRtFn4l36VjN7flWB22h+7y2yXH2m31giIw4Pidf2lIPxBK1fOofnPHXPLhbBjFvZYxK2RWxFEKA2ptxCE9A2paiVjQABA1vr6mtmAaxuHY2PalVMSXklWp7RnH+62a6TcOxBpEWS13JNz7ZDi07Hg1yEhJ6+JPMPQGqs9ktbjvHKA64tS3FsSFKUo7KiUHZJ9aqGrc9kb+222/q0j/ALZrvEBWEk8CkH3jfFVhfv68n/rLn8RrCrNv39eT/wBZc/iNYVbG/CFUd0pSlSXEpSlESlKURKUpREq6fZF/PXIf8PSP426pap1wWyC42LI5rNrkW2HJukBcD3y4PpbYipUpKlOkq6EgJOh6kdD4Vkx7C/DvaFbCaeCoLUkwq6YjbVuryfFpV+JI7JDdyMVAGuoUEoJPkRoj9tdLcOrhwH4f2/3FjJLTOuH/ADM91hTq3FefKoIISj0CT+0+NS1u+cFctPZKlYfOcdPZBMhptt1RPknnAV+6vLn4sTY7J2XrqP8AvNaGYbnmF+a54m8c5lutblrwDFrRiMdwAKeYT2sgj5rUACfHqQT1qDYxYcl4hZQtLXv0+Q6sOzpqm3H+xQTouucoKtD/APK6Q4j+zpjd4hOTsLc+iZ5BW2yXCuK98gTso36gkfKvHgdfYPC7hEy9lN5j2gqvst2RFQlLsqQGglnsUoHX/eIUSrwATrfe2NPDpsJI0mAUed7+et+arnZI00/ZavJM2wvhHdsVwuxMrvVnt27ldJDDqeeRLWjlbcPkSgd7k2ANpG9prx4h8YODOUEpu2F3G8ucg5ZPZoYcHny9oFheulV5j2GX3jVxJvt7tyFwbXJnuyH5cnvhhK1FSW//ADL5SBof5CuiMa4OcMsMt6ZVxhRZjjY2ubd3ElJIB2QlWkAdT00f8qx8Tlwccwc8kvA/Ca/pWwNlc2hVd640yGRaJV0cesltft0IgcjD8nt1pPntfKnf7v31Zfsj/wBttt/VpH/bNdFOZ3wasyREbvOLsoKfgiMJcRr/AONJFVvlU7h/DyFviDwsyfHYmQQQpci3vKDDE5sjS0pCwkJWR+jrfyNcdxB+IidCYi0EUCbI+Zr11QQhjg7MDS5uv39eT/1lz+I1hV7TnzKnPyinkLzinOXe9bO9V419E0UAsJSlKV1EpSlESlKURKUpRF6xWfeJLTHatNdosJ53FcqE7PiT5AVe/DmLwpafjWex4lc+IWRBAdecXpmOdfEUJWobSCQO8k7HU1QdbrCMkuOI5TByC1qAkRHOblJ7rifBSFfIgkftrJjMO6ZhDSQel0Ce+tfVWxPDTqFciuO+P2h96Ha+EljiNocIUglCFcw6HYS3rfSvN7jVw9u6XDkXCO2OuuJCC4wW+fl+SuQKH7DXhe5/AbOZ7t+uky+4rc5Ku0lsss9q244fFQ0lQ6nqT02T4VgfVz2e/tByT8Cf9KvJbDhQPeieHc/iPqFoL5OThXyU2xLK+HvvnacPs3ueFSlHQtt4SXbe6fIEFSgjfTqFggCs7iPhNvzu0OwmbDEsmdKf99Qtt0Lj3NskBxTL56LRrv8AJ0KSD06kmu/q57Pf2gZJ+BP+lW4h3fhvYbSm247xJmTYRc5nLfe7a+7HB1rnbLSUrbXonqk94Eg9DVL4srw+HPY6tPqa1HcfMKYdYp1V4hWXFu8TFMNYx7D51tslkgDsZWTXFI7J57++Y7fQyHCd974RrQ3rpXN3zrg5EmKlXCLkfEG5hQJl3N0pZJ6nuoJASB+jya1WFfGuDGQyG5eQcUcjmSkNpbHJbi202AAOVtsNENoGuiR4Vr/q57Pn2g5J+BP+lSCCNurw+zvTXDzNX+g7ke9x0FeYW2b484tbXVpsXCaxx2lkE77NCj9/K3W6xXibZc/uTkBXBS23aY1HU6EsFkqS2PiO1oGvEeB8TUPGOez39oOR/gT/AKVZFw4gYFg+LXGx8LYk6Rcri2WJN6mp5VhsjR5B0I+XQAE766FWvw8DxUMTs3U5h5kkKIkePicK+S0PExPCu8Q3LhhnvuPXOP3XrVMbJbeA8S2sKUAoehI3ry86xpSvchi7JuXMT4rG92Y3SUpSrlFKUpREpSlESlKURKyLdDk3C4R4ENpT0mS6lpltI6qWo6AH7TWPUm4WXiJYOIthvE9Da4saa2p7tBsJSTor+9O+YfMCoSuLWEtFkBdaASAVYN54dcMsLLVszjNLiu+KbCn49rjBaIxI2OYnx/6nx0OlanAuHuM5dxbm4rbchlSbK3GW/GnttBK3AEoOilQ6dVEHp5VO87xO/RONc/Jm8FZzWzXtKTF1zOMp5gjvko+EjlPU9NK8ak2OWO0Y97Vr1tslvYgQ02ArDTKeVOyE7OvnXzv21whLhIS4tJ5UDpy3FbLd2QLqrS+9c74NiSsn4kRMUZccS09LU046ACpDSSSpXpsJB/bqt7xx4dQ8Dm2p2z3N26Wm5R1LakrA6rSrShtPdI0Ukftqd8ArdEs7Ga57dbi1amGlOW6JMdbUoNOOK7ywANkjaBoep3WwySyWK/ezpKtVgyVnJpGKvGYiShlbS0NEkqQQrrrlKj06d0eYrTJj3txQAPuCgdNLPO+7RQbCDH37qpeC+BflByxdqdmqgw48dUmS8lHOoIBA0kepJ/yP3V757a+F8axrfw/Ib1JuTUhDSo06LyBxBCuZaSB00QOh0etYnByRm0PLVzcCjqk3SPFW46yEpUHGOZIUCk+I2U9B19PCrb4nQ05NwUnZfmmIRsWyWNIbRGdQ12S5mykHmQe91HN0Vsjl34VdiJnx4ptu900KBG56jcg9ygxgdGaGqrHi5gcDC7bi8qHOkylXm3CW6HUpAbUQk6Try73nUgynhZi+P8O7ZlU3Jn23Z9p95ZiKCOd2SpKChtA8SgFRKj5AD1qRcaMfu+bYDw+veKW+TeI7VtER4RW+dTawEDSgOo7yVA+muta/2mVJt2JcP8YlKQm6W+2Ay2AsEtbQ2kA6PqlX7qzw4mWXsWZ9SXZtr0vdTdG1uY1ppSoylKV7yxpSlKIlKUoiUpSiJSlKIpIjDLuvh4vOQuL9Fom+5FPaHte00D8Ota6+O69X8FvLPDmPni3Yf0U/IMdCQ4e25wojqnWtd0+dW7w6OKJ9mF85mi4KtP0+rmEHXa8/Kjl8fLx3WbxA+qa/ZrtP1YE5NgN6SEiaR2o76+fevLe9fKvFdxCQSZK/HV1pXTxWoQNy3fK1EOHWDcYbjjEeZaMjk2C0OjcVMm7ORkOg+aEJ30PjvQ35bqGZZDz3Acwd+lZ1zt94Wgn3xqWrmfbV4lLoO1JOvX76n/tfqeRl1hixy4m0N2hswkJ32Q7ygSny3yhG/lqs/PrbcMi4LcK7dN2u+TpRjx1OdXOxUSEk+ZHL2R/duowYhxySvDcsl6VqNzvz21XXsGrRdhQheD8QXeECspXcnFY0pZlKgqlOcxPachd7IjlPXrzb8OtQa03q8WluS3a7pNgolI7OQmO+psOp691QB7w6nofWuzo2P3wZe9iyrYBg31cTakul5rRcAPf7MHm33iPAf9K4wyC2SLLfZ1olpKX4UhbDg15pURv7jrdW8NxgxRe11dRXQ9e8c1GeLs6IUsyvEM24XPW26Lmrhm4MFTEy3SVjoQCUFQCSDog6/lX54jW3No9kxu7ZVfn7rHvMZUm3pdmuPqbTpBOwv4T30+G66KzqfZsgusHhVkJbYYvFhjybZL11ZmDnA/eEjXroj+9UZze0i05DwQsl8baSYf8As8hKlDk5kqZHj6bArJBxFziwyNGbU7biiRXzFFWvgAujp9bChuE8LeL8azIet1/GLsSSHERn7suMtzY+IoRvR+/RqI2/h/mGU55erBJlsLvdvaXImuzJRXzBBSDpYCuY94fsqa8SIVqvfH++W7iLdrtAYKkN2oxWwvaVFIbABBASQSSfXe+u6lXCvFI2H+0Fk+NQpkmahqwEIckEFxZUGVa6em9D5CpHGSRsdISMxbmHu+HO9d1zsmkhvK63+ih2Gx8KzuTNsON8OmWLuzbHPd35F3cDXRKUl5aQDtYUrYA6HzqrMpx25Y1NjQrq2lqQ/Ealdl1Cm0uDYSsEApUPMeVWl7JaVs8V7mkgpU3aZIV6pIW3VQ3mdKud1kz5sp6XIfcK3HnVlS1n1JPU1uw2ZuJfGD7oA3JJ1vqVVJRjDjvqsSlKV6SzpSlKIlKUoiUpSiKSIzS7o4eLwYIi/RS5vvpV2Z7XtNAfFvWunhqvSRnN6e4dR8EWiJ9FR5JkoUGz2vOSo9Vb1raj5VF6VV2EfTnfz6qWd3VWZjHGbIrTYo1kuVss2QQ4aeWGm5RA4pgAAAJPoAPPr862MbJuLN3yKFxK+rb9yagsOe5L+j1mFHQAUqUhKSANaVs78R8hqoqlVmvsWLw2v9idfeTMmzobsdIB5eRsPc+z5fGnp51llwcTbdGwWdDpyO/8qxsrjoStrM+mbT9E8VPpiO7cp9xXLbYVHfA50rJVpakhCwD0ICum9VgcQk5fkWUXe/XzHnYc1ttp6elqIptDSVAJQtQO9c3TqfEmpTmWa4nd8Hl4fDRKbj2xmKq0SVpJDzrY5Xdo/wCHz86zvZ3yjejW4zDinjt+xrMLe4l0zZLbUe1SuwIL0YLQvsnPTkUFFJPkrVZmSTNc1wj128G2K9D6KwtaQRm/vVQO/ZBmHEnIIcxm3rkXC1QEobFuYVzNstKJ7QgEnYKvH7qys9zHOOIFot97u0Hmh2VZYTPix1ISlxfIe+vZHMeVJHh4168J80tGD26ZPVHelXiTMYbCEK7PkioPO539HfOoJSU+YB35VILNnmI45bLxZIHaz7Ncb8tbsVTJR2luca5SB+itJ0R80+lTfmjfTIry/D9f4XBRGrt9/ovI8asytivo3KMest0ukD+iQ/c7ePeWSD4K8OoP3H169aiTvErK18Rvr6mUy3eSRsoaAbKQkI5CnzSUjR67+e6wOJt2g33iBfLxbVrXDmTFusqWnlUUk9NjyNRytEGDhDc2QAkajx3CrfK+6vZWnfeOGTT7TKhwLVY7K/ObLc2bAiBt98H4u9vpvr8+vjVWUpV8OHigFRilF73P+IpSlKuUEpSlESlKURKUpREpSlESlKURKUpREpSlESlKURKUpREpSlESlKURf//Z" style="width:60px;height:60px;border-radius:6px;" alt="Logo">
-    </div>
-    <div style="font-size:13px;color:#8a9ab0;line-height:1.7;border-top:1px solid var(--green-b);padding-top:8px;">
-      <div>9/1 Bạch Văn Tư, Tân An, LA</div>
-      <div>Zalo: 0839 889 772</div>
-    </div>
-    <div class="sb-progress" style="margin-top:10px;"><div class="sb-progress-fill" id="progress-fill"></div></div>
+  <div class="tools-section">
+    <button class="tool-btn" onclick="showPage('home')">
+      <i class="bi bi-book"></i><span>Bài khóa</span>
+    </button>
+    <button class="tool-btn" onclick="showPage('exercises')">
+      <i class="bi bi-pencil-square"></i><span>Bài tập</span>
+    </button>
+    <button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+      <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+    </button>
+    <button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+      <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+    </button>
+    <button class="tool-btn" onclick="openNoteEditor()">
+      <i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+    </button>
   </div>
-  <div class="sb-section">Trang chủ</div>
-  <div class="nav-item active" id="nav-home" onclick="showPage('home')"><div class="nav-num">~</div><div class="nav-text"><div class="nav-cn">Tổng quan</div><div class="nav-vn">Giới thiệu</div></div></div>
-  <div class="sb-section">Công xưởng</div>
-  <div class="nav-item" id="nav-l1" onclick="showPage('l1')"><div class="nav-num">1</div><div class="nav-text"><div class="nav-cn">走进工厂</div><div class="nav-vn">Bước vào công xưởng</div></div></div>
-  <div class="nav-item" id="nav-l2" onclick="showPage('l2')"><div class="nav-num">2</div><div class="nav-text"><div class="nav-cn">车间工作</div><div class="nav-vn">Làm việc tại xưởng</div></div></div>
-  <div class="nav-item" id="nav-l3" onclick="showPage('l3')"><div class="nav-num">3</div><div class="nav-text"><div class="nav-cn">生产操作</div><div class="nav-vn">Vận hành sản xuất</div></div></div>
-  <div class="nav-item" id="nav-l4" onclick="showPage('l4')"><div class="nav-num">4</div><div class="nav-text"><div class="nav-cn">设备维护</div><div class="nav-vn">Bảo trì thiết bị</div></div></div>
-  <div class="nav-item" id="nav-l5" onclick="showPage('l5')"><div class="nav-num">5</div><div class="nav-text"><div class="nav-cn">仓库管理</div><div class="nav-vn">Quản lý kho</div></div></div>
-  <div class="nav-item" id="nav-l6" onclick="showPage('l6')"><div class="nav-num">6</div><div class="nav-text"><div class="nav-cn">物流运输</div><div class="nav-vn">Vận tải & Logistics</div></div></div>
-  <div class="sb-section">Văn phòng</div>
-  <div class="nav-item" id="nav-l7" onclick="showPage('l7')"><div class="nav-num">7</div><div class="nav-text"><div class="nav-cn">办公室日常</div><div class="nav-vn">Văn phòng hàng ngày</div></div></div>
-  <div class="nav-item" id="nav-l8" onclick="showPage('l8')"><div class="nav-num">8</div><div class="nav-text"><div class="nav-cn">邮件与文档</div><div class="nav-vn">Email & Tài liệu</div></div></div>
-  <div class="nav-item" id="nav-l9" onclick="showPage('l9')"><div class="nav-num">9</div><div class="nav-text"><div class="nav-cn">人事行政</div><div class="nav-vn">Nhân sự & Hành chính</div></div></div>
-  <div class="nav-item" id="nav-l10" onclick="showPage('l10')"><div class="nav-num">10</div><div class="nav-text"><div class="nav-cn">财务报销</div><div class="nav-vn">Kế toán & Thanh toán</div></div></div>
-  <div class="nav-item" id="nav-l11" onclick="showPage('l11')"><div class="nav-num">11</div><div class="nav-text"><div class="nav-cn">客户沟通</div><div class="nav-vn">Giao tiếp khách hàng</div></div></div>
-  <div class="nav-item" id="nav-l12" onclick="showPage('l12')"><div class="nav-num">12</div><div class="nav-text"><div class="nav-cn">综合应用</div><div class="nav-vn">Tổng hợp ứng dụng</div></div></div>
-  <div class="sb-section">Phụ lục</div>
-  <div class="nav-item" id="nav-appendix" onclick="showPage('appendix')"><div class="nav-num">A</div><div class="nav-text"><div class="nav-cn">附录</div><div class="nav-vn">Biển báo, số đếm, ca</div></div></div>
-  <div class="nav-item" id="nav-hanzi" onclick="showPage('hanzi')"><div class="nav-num">W</div><div class="nav-text"><div class="nav-cn">练习写汉字</div><div class="nav-vn">Luyện viết chữ Hán</div></div></div>
 </nav>
 
+<div id="topbar">
+  <div id="topbar-left">
+    <img id="topbar-logo" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo" style="width:40px;height:40px;border-radius:4px;object-fit:cover;flex-shrink:0;">
+    <div id="topbar-brand" style="flex-shrink:0;">
+      <div id="topbar-brand-cn">GIA SƯ HOA NGỮ TÂN AN</div>
+      <div id="topbar-brand-vn">9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</div>
+    </div>
+  </div>
+  <div id="topbar-right">
+    <a href="https://giasuhoangu.com" target="_blank" style="padding:5px 16px;background:var(--green-b);color:#fff;text-decoration:none;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;">🌍 Về trang chủ</a>
+    <button onclick="exportPDF()" id="pdf-btn" style="padding:5px 16px;background:var(--orange);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;">⬇ Xuất PDF</button>
+  </div>
+</div>
+
 <div id="main">
-  <div id="topbar" style="justify-content:space-between;"><div id="topbar-title">工厂汉语</div><button onclick="exportPDF()" id="pdf-btn" style="padding:5px 16px;background:var(--orange);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;">⬇ Xuất PDF</button></div>
   <div id="content"></div>
 </div>
 
@@ -409,10 +473,10 @@ details[open] summary { color: var(--blue); }
   <div class="ab-text"><div class="ab-cn" id="ab-cn">–</div><div class="ab-vn" id="ab-vn">–</div></div>
   <div class="ab-progress"><div class="ab-progress-fill" id="ab-fill"></div></div>
   <div class="ab-ctrl">
-    <button class="ab-btn" onclick="prevLine()">⏮</button>
-    <button class="ab-btn" id="ab-play" onclick="togglePause()">⏸</button>
-    <button class="ab-btn" onclick="nextLine()">⏭</button>
-    <button class="ab-btn" onclick="closeBar()">✕</button>
+    <button class="ab-btn" onclick="prevLine()"><i class="bi bi-skip-backward-fill"></i></button>
+    <button class="ab-btn" id="ab-play" onclick="togglePause()"><i class="bi bi-pause-fill"></i></button>
+    <button class="ab-btn" onclick="nextLine()"><i class="bi bi-skip-forward-fill"></i></button>
+    <button class="ab-btn" onclick="closeBar()"><i class="bi bi-x-lg"></i></button>
   </div>
 </div>
 
@@ -828,11 +892,13 @@ function showPage(id) {
   c.innerHTML = '';
   const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
   const idx = lessonIds.indexOf(id);
-  document.getElementById('progress-fill').style.width = idx >= 0 ? Math.round((idx+1)/lessonIds.length*100)+'%' : '0%';
-  if (id === 'home') { renderHome(c); document.getElementById('topbar-title').textContent = 'GIA SƯ HOA NGỮ TÂN AN'; }
-  else if (id === 'appendix') { renderAppendix(c); document.getElementById('topbar-title').textContent = '附录'; }
-  else if (id === 'hanzi') { renderHanzi(c); document.getElementById('topbar-title').textContent = '练习写汉字'; }
-  else if (LESSONS[id]) { renderLesson(id, c, LESSONS[id]); document.getElementById('topbar-title').textContent = LESSONS[id].num + ' ' + LESSONS[id].cn; }
+  const progressFill = document.getElementById('progress-fill');
+  if (progressFill) progressFill.style.width = idx >= 0 ? Math.round((idx+1)/lessonIds.length*100)+'%' : '0%';
+  if (id === 'home') { renderHome(c); }
+  else if (id === 'exercises') { renderExercises(c); }
+  else if (id === 'appendix') { renderAppendix(c); }
+  else if (id === 'hanzi') { renderHanzi(c); }
+  else if (LESSONS[id]) { renderLesson(id, c, LESSONS[id]); }
   document.getElementById('sidebar').classList.remove('open');
 }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
@@ -854,6 +920,8 @@ function renderHome(c) {
     ['l10','财务报销','Kế toán & Thanh toán',['报销','发票','费用']],
     ['l11','客户沟通','Giao tiếp khách hàng',['订单','投诉','售后']],
     ['l12','综合应用','Tổng hợp ứng dụng',['跨部门','流程','协作']],
+    ['appendix','附录','Biển báo, số đếm, ca',[]],
+    ['hanzi','练习写汉字','Luyện viết chữ Hán',[]],
   ];
   let h = `<div class="page-content">
     <div class="lesson-hero">
@@ -867,7 +935,6 @@ function renderHome(c) {
       <div class="home-num">Bài ${i+1}</div>
       <div class="home-cn">${cn}</div>
       <div class="home-vn">${vn}</div>
-      <div class="home-tags">${tags.map(t=>`<span class="home-tag">${t}</span>`).join('')}</div>
     </div>`;
   });
   h += `</div></div>`;
@@ -884,28 +951,26 @@ function renderLesson(id, c, L) {
     <div style="overflow-x:auto;border:1px solid var(--gray-l);border-radius:6px;overflow:hidden;">
     <table class="vocab-table">
       <thead><tr>
-        <th style="width:44px;text-align:center;">🔊</th>
+        <th style="width:44px;text-align:center;"><i class="bi bi-volume-up"></i></th>
         <th>中文</th><th>拼音</th><th>Tiếng Việt</th><th>Ví dụ</th>
-        <th style="width:40px;text-align:right;padding-right:14px;">✍</th>
+        <th style="width:40px;text-align:right;padding-right:14px;"><i class="bi bi-pencil"></i></th>
       </tr></thead>
       <tbody>${L.vocab.map((v,i)=>`<tr>
         <td style="text-align:center;padding:10px 8px;">
-          <button onclick="speak('${esc(v.cn)}','${esc(v.vn)}')" style="border:none;background:none;cursor:pointer;font-size: 20px;color:var(--blue);padding:0;">🔊</button>
+          <button onclick="speak('${esc(v.cn)}','${esc(v.vn)}')" style="border:none;background:none;cursor:pointer;font-size: 20px;color:var(--blue);padding:0;"><i class="bi bi-volume-up"></i></button>
         </td>
         <td class="td-cn">${v.cn}</td>
         <td class="td-py">${v.py}</td>
         <td class="td-vn">${v.vn}</td>
         <td class="td-ex">${v.ex||''}</td>
         <td style="text-align:right;padding-right:12px;">
-          <button onclick="showHanziModal('${esc(v.cn)}')" title="Xem thứ tự nét bút" style="border:none;background:none;cursor:pointer;font-size: 20px;color:var(--gray-d);padding:0;">✍</button>
+          <button onclick="showHanziModal('${esc(v.cn)}')" title="Xem thứ tự nét bút" style="border:none;background:none;cursor:pointer;font-size: 20px;color:var(--gray-d);padding:0;"><i class="bi bi-pencil"></i></button>
         </td>
       </tr>`).join('')}</tbody>
     </table></div>`;
   }
   if (L.dialogues) {
     h += `<div class="sec-title">实用对话 — Hội thoại thực dụng</div>`;
-    const tId = `tog-${id}`;
-    h += `<div class="toggle-row">Hiện phiên âm 拼音 <div class="toggle" id="${tId}" onclick="toggleDlgPinyin('${tId}','${id}')"></div></div>`;
     L.dialogues.forEach((d,di) => {
       h += `<div class="dialogue-box" id="dlg-${id}-${di}">
         <div class="dlg-header">
@@ -914,7 +979,7 @@ function renderLesson(id, c, L) {
             <select class="dlg-speed" onchange="setSpeechRate(this.value)">
               <option value="0.7">Chậm</option><option value="0.85" selected>Vừa</option><option value="1.0">Nhanh</option>
             </select>
-            <button class="dlg-btn" onclick="playDialogue('${id}',${di})">▶ Nghe hội thoại</button>
+            <button class="dlg-btn" onclick="playDialogue('${id}',${di})"><i class="bi bi-play-fill"></i> Nghe hội thoại</button>
           </div>
         </div>
         <div class="dlg-body">
@@ -923,10 +988,10 @@ function renderLesson(id, c, L) {
               <div class="speaker-badge ${ln.gender}">${ln.speaker}</div>
               <div class="dlg-content">
                 <div class="line-cn">${ln.cn}</div>
-                <div class="line-py" style="display:none;">${ln.py||''}</div>
+                <div class="line-py">${ln.py||''}</div>
                 <div class="line-vn">${ln.vn}</div>
               </div>
-              <button class="dlg-play-btn">🔊</button>
+              <button class="dlg-play-btn"><i class="bi bi-volume-up"></i></button>
             </div>`).join('')}
         </div>
       </div>`;
@@ -934,7 +999,7 @@ function renderLesson(id, c, L) {
   }
   if (L.commands) {
     h += `<div class="sec-title">车间常用指令 — Chỉ thị thường dùng</div><div class="cmd-grid">`;
-    L.commands.forEach(cmd => { h += `<div class="cmd-item" onclick="speak('${esc(cmd.cn)}','${cmd.vn}')"><div class="cmd-cn">${cmd.cn}</div>${cmd.py?`<div style='font-size:20px;color:var(--orange);font-style:italic;margin-top:3px;'>${cmd.py}</div>`:''}<div class="cmd-vn">${cmd.vn}</div></div>`; });
+    L.commands.forEach(cmd => { h += `<div class="cmd-item" onclick="speak('${esc(cmd.cn)}','${cmd.vn}')"><div class="cmd-cn">${cmd.cn}</div>${cmd.py?`<div class="cmd-py" style='font-size:20px;color:var(--orange);font-style:italic;margin-top:3px;'>${cmd.py}</div>`:''}<div class="cmd-vn">${cmd.vn}</div></div>`; });
     h += `</div>`;
   }
   if (L.report) {
@@ -967,7 +1032,7 @@ function renderLesson(id, c, L) {
   if (L.exercises) {
     h += `<div class="sec-title">练习 — Luyện tập</div>`;
     L.exercises.forEach((ex,ei) => {
-      const q = ex.q.replace(ex.blank, `<span class="blank" id="bl-${id}-${ei}">___</span>`);
+      const q = ex.q.replace(ex.blank, `<span class="blank" id="bl-${id}-${ei}"></span>`);
       // Shuffle options with Fisher-Yates
       const opts = [...ex.options];
       for (let i = opts.length - 1; i > 0; i--) {
@@ -979,8 +1044,8 @@ function renderLesson(id, c, L) {
         const safeAns = ex.answer.replace(/'/g, "\'");
         return `<button class="ex-opt" onclick="checkAns(this,'${safeOpt}','${safeAns}','bl-${id}-${ei}')">${opt}</button>`;
       }).join('');
-      const qvnHtml = ex.qvn ? `<div style="font-size:20px;color:var(--gray-d);margin:2px 0 6px;">${ex.qvn.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
-      const qpyHtml = ex.qpy ? `<div style="font-size:20px;color:var(--orange);font-style:italic;margin:2px 0 10px;">${ex.qpy.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+      const qvnHtml = ex.qvn ? `<div class="ex-vn" style="font-size:20px;color:var(--gray-d);margin:2px 0 6px;">${ex.qvn.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+      const qpyHtml = ex.qpy ? `<div class="ex-py" style="font-size:20px;color:var(--orange);font-style:italic;margin:2px 0 10px;">${ex.qpy.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
       h += `<div class="exercise-box"><div class="ex-q">${q}</div>${qvnHtml}${qpyHtml}<div class="ex-opts">${optBtns}</div></div>`;
     });
   }
@@ -1044,10 +1109,10 @@ function renderHanzi(c) {
           <div class="hz-char-big" id="hz-big">${init}</div>
           <div style="font-size: 20px;color:var(--gray-m);margin-bottom:14px;" id="hz-desc">Nhấn nút bên dưới để bắt đầu</div>
           <div class="hz-controls">
-            <button class="hz-btn-action primary" onclick="hzAnimate()">▶ Xem nét bút</button>
-            <button class="hz-btn-action" onclick="hzQuiz()">✏️ Tự viết</button>
-            <button class="hz-btn-action" onclick="hzReset()">↺ Xóa</button>
-            <button class="hz-btn-action accent" onclick="speak(currentHzChar,'')">🔊 Nghe</button>
+            <button class="hz-btn-action primary" onclick="hzAnimate()"><i class="bi bi-play-fill"></i> Xem nét bút</button>
+            <button class="hz-btn-action" onclick="hzQuiz()"><i class="bi bi-pencil"></i> Tự viết</button>
+            <button class="hz-btn-action" onclick="hzReset()"><i class="bi bi-arrow-counterclockwise"></i> Xóa</button>
+            <button class="hz-btn-action accent" onclick="speak(currentHzChar,'')"><i class="bi bi-volume-up"></i> Nghe</button>
           </div>
           <div class="hz-hint-text" id="hz-hint" style="display:none;"></div>
         </div>
@@ -1056,6 +1121,45 @@ function renderHanzi(c) {
   </div>`;
   c.innerHTML = h;
   setTimeout(() => initHz(init), 80);
+}
+
+// ══════════════════════════════════════════════
+// EXERCISES
+// ══════════════════════════════════════════════
+function renderExercises(c) {
+  let h = `<div class="page-content">
+    <div class="sec-title">Tất cả bài tập — All Exercises</div>`;
+  const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
+  lessonIds.forEach(id => {
+    const L = LESSONS[id];
+    if (L && L.exercises) {
+      h += `<div class="lesson-block">
+        <div class="lesson-header">${L.num} ${L.cn} — ${L.vn}</div>`;
+      L.exercises.forEach((ex,ei) => {
+        const q = ex.q.replace(ex.blank, `<span class="blank" id="bl-${id}-${ei}"></span>`);
+        const opts = [...ex.options];
+        for (let i = opts.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [opts[i], opts[j]] = [opts[j], opts[i]];
+        }
+        const optBtns = opts.map(opt => {
+          const safeOpt = opt.replace(/'/g, "\'");
+          const safeAns = ex.answer.replace(/'/g, "\'");
+          return `<button class="ex-opt" onclick="checkAns(this,'${safeOpt}','${safeAns}','bl-${id}-${ei}')">${opt}</button>`;
+        }).join('');
+        const qvnHtml = ex.qvn ? `<div class="ex-vn" style="font-size:20px;color:var(--gray-d);margin:2px 0 6px;">${ex.qvn.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+        const qpyHtml = ex.qpy ? `<div class="ex-py" style="font-size:20px;color:var(--orange);font-style:italic;margin:2px 0 10px;">${ex.qpy.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+        h += `<div class="exercise-box">
+          <div class="ex-q">${q}</div>
+          ${qvnHtml}${qpyHtml}
+          <div class="ex-opts">${optBtns}</div>
+        </div>`;
+      });
+      h += `</div>`;
+    }
+  });
+  h += `</div>`;
+  c.innerHTML = h;
 }
 
 function initHz(char) {
@@ -1166,11 +1270,11 @@ function showHanziModal(word) {
   const ctrl = document.createElement('div');
   ctrl.style.cssText = 'margin-top:22px;display:flex;gap:10px;';
   const btnPlay = document.createElement('button');
-  btnPlay.textContent = '▶ Xem lại';
+  btnPlay.innerHTML = '<i class="bi bi-play-fill"></i> Xem lại';
   btnPlay.style.cssText = 'padding:8px 20px;background:#1565c0;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:20px;font-weight:600;';
   btnPlay.onclick = () => modalPlayAll();
   const btnClose = document.createElement('button');
-  btnClose.textContent = '✕ Đóng';
+  btnClose.innerHTML = '<i class="bi bi-x-lg"></i> Đóng';
   btnClose.style.cssText = 'padding:8px 20px;background:#fff;color:#4a5568;border:1px solid #d0d8e4;border-radius:4px;cursor:pointer;font-size:20px;';
   btnClose.onclick = closeHanziModal;
   ctrl.appendChild(btnPlay);
@@ -1322,23 +1426,11 @@ function closeBar() {
 }
 function togglePause() {
   if (!window.speechSynthesis) return;
-  if (window.speechSynthesis.paused) { window.speechSynthesis.resume(); document.getElementById('ab-play').textContent = '⏸'; }
-  else { window.speechSynthesis.pause(); document.getElementById('ab-play').textContent = '▶'; }
+  if (window.speechSynthesis.paused) { window.speechSynthesis.resume(); document.getElementById('ab-play').innerHTML = '<i class="bi bi-pause-fill"></i>'; }
+  else { window.speechSynthesis.pause(); document.getElementById('ab-play').innerHTML = '<i class="bi bi-play-fill"></i>'; }
 }
 function prevLine() { if (isPlaying && dlgIndex > 0) { window.speechSynthesis.cancel(); dlgIndex = Math.max(0, dlgIndex-2); setTimeout(playNext, 100); } }
 function nextLine() { if (isPlaying) { window.speechSynthesis.cancel(); dlgIndex++; setTimeout(playNext, 100); } }
-
-// ══════════════════════════════════════════════
-// PINYIN
-// ══════════════════════════════════════════════
-function toggleDlgPinyin(toggleId, lessonId) {
-  const t = document.getElementById(toggleId);
-  t.classList.toggle('on');
-  const on = t.classList.contains('on');
-  document.querySelectorAll(`[id^="dlg-${lessonId}-"]`).forEach(box => {
-    box.querySelectorAll('.line-py').forEach(el => { el.style.display = on ? 'block' : 'none'; });
-  });
-}
 
 // ══════════════════════════════════════════════
 // EXERCISES
@@ -1355,6 +1447,51 @@ function checkAns(btn, selected, correct, blankId) {
 // ══════════════════════════════════════════════
 function esc(s) { return (s||'').replace(/'/g,"\\'"); }
 window.speechSynthesis && window.speechSynthesis.addEventListener('voiceschanged', () => {});
+
+// ══════════════════════════════════════════════
+// TOGGLE FUNCTIONS
+// ══════════════════════════════════════════════
+let toggleStates = { pinyin: false, vietnamese: false };
+
+function togglePinyin(btn) {
+  toggleStates.pinyin = !toggleStates.pinyin;
+  document.body.classList.toggle('hide-pinyin', toggleStates.pinyin);
+  btn.classList.toggle('active', toggleStates.pinyin);
+  btn.querySelector('span').textContent = toggleStates.pinyin ? '👁️ Hiện Pinyin' : '👁️ Ẩn/Hiện Pinyin';
+}
+
+function toggleVietnamese(btn) {
+  toggleStates.vietnamese = !toggleStates.vietnamese;
+  document.body.classList.toggle('hide-vietnamese', toggleStates.vietnamese);
+  btn.classList.toggle('active', toggleStates.vietnamese);
+  btn.querySelector('span').textContent = toggleStates.vietnamese ? '👁️ Hiện Nghĩa' : '👁️ Ẩn/Hiện Nghĩa';
+}
+
+function openNoteEditor() {
+  const notes = localStorage.getItem('congso-notes') || '';
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:2000;';
+  modal.innerHTML = `
+    <div style="background:white;border-radius:8px;padding:20px;width:90%;max-width:600px;max-height:80vh;display:flex;flex-direction:column;">
+      <div style="font-size:18px;font-weight:600;margin-bottom:12px;">📝 Bảng ghi chú</div>
+      <textarea id="note-textarea" style="flex:1;padding:12px;border:1px solid #ddd;border-radius:4px;font-size:16px;resize:none;min-height:300px;">${notes}</textarea>
+      <div style="display:flex;gap:10px;margin-top:12px;justify-content:flex-end;">
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="padding:8px 16px;border:1px solid #ddd;background:white;border-radius:4px;cursor:pointer;">Đóng</button>
+        <button onclick="saveNotes(this)" style="padding:8px 16px;background:var(--orange);color:white;border:none;border-radius:4px;cursor:pointer;">Lưu</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+function saveNotes(btn) {
+  const textarea = document.getElementById('note-textarea');
+  if (textarea) {
+    localStorage.setItem('congso-notes', textarea.value);
+    alert('Đã lưu ghi chú!');
+    btn.closest('div[style*=fixed]').remove();
+  }
+}
 
 
 // ══════════════════════════════════════════════
@@ -1503,7 +1640,15 @@ ${lessonBlocks.join('')}
   iframe.srcdoc = fullHTML;
 }
 
-document.addEventListener('DOMContentLoaded', () => showPage('home'));
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    showPage('home');
+  } catch (e) {
+    console.error('Error loading page:', e);
+    document.getElementById('content').innerHTML = '<div style="padding:20px;color:red;">Lỗi tải trang: ' + e.message + '</div>';
+  }
+});
 </script>
 </body>
 </html>
+
