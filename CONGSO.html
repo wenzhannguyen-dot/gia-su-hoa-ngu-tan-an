@@ -207,18 +207,15 @@ body {
 .td-vn { color: var(--gray-d); font-weight: 500; font-size: 20px; }
 .td-ex { color: var(--gray-m); font-family: 'Noto Serif SC', serif; font-size: 20px; }
 
-body.hide-pinyin .td-py { display: none !important; }
 body.hide-pinyin .pat-expy { display: none !important; }
 body.hide-pinyin .line-py { display: none !important; }
 body.hide-pinyin .cmd-py { display: none !important; }
-body.hide-pinyin .ex-py { display: none !important; }
-body.hide-vietnamese .td-vn { display: none !important; }
-body.hide-vietnamese .td-ex { display: none !important; }
+.ex-py { font-size:20px;color:var(--orange);font-style:italic;margin:2px 0 10px; }
 body.hide-vietnamese .pat-exvn { display: none !important; }
 body.hide-vietnamese .line-vn { display: none !important; }
 body.hide-vietnamese .cmd-vn { display: none !important; }
 body.hide-vietnamese .nav-vn { display: none !important; }
-body.hide-vietnamese .ex-vn { display: none !important; }
+.ex-vn { font-size:20px;color:var(--gray-d);margin:2px 0 6px; }
 
 /* ══ DIALOGUE ════════════════════════════════ */
 .dialogue-box {
@@ -461,8 +458,7 @@ details[open] summary { color: var(--blue); }
   </div>
   <div id="topbar-right">
     <a href="https://giasuhoangu.com" target="_blank" style="padding:5px 16px;background:var(--green-b);color:#fff;text-decoration:none;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;"><i class="bi bi-globe"></i> Về trang chủ</a>
-    <button onclick="exportPDF()" id="pdf-btn" style="padding:5px 16px;background:var(--orange);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;"><i class="bi bi-download"></i> Xuất PDF</button>
-  </div>
+      </div>
 </div>
 
 <div id="main">
@@ -885,13 +881,22 @@ let fakeProgressTimer = null;
 // NAVIGATION
 // ══════════════════════════════════════════════
 function showPage(id) {
+  // Password check for lessons 6+
+  const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
+  const idx = lessonIds.indexOf(id);
+  if (idx >= 5) { // l6 onwards (index 5)
+    const password = prompt('Nhập mật khẩu để truy cập bài học này:');
+    if (password !== 'thaychiencs') {
+      alert('Mật khẩu không đúng!');
+      return;
+    }
+  }
+  
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
   const nav = document.getElementById('nav-' + id);
   if (nav) nav.classList.add('active');
   const c = document.getElementById('content');
   c.innerHTML = '';
-  const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
-  const idx = lessonIds.indexOf(id);
   const progressFill = document.getElementById('progress-fill');
   if (progressFill) progressFill.style.width = idx >= 0 ? Math.round((idx+1)/lessonIds.length*100)+'%' : '0%';
   if (id === 'home') { renderHome(c); }
@@ -1044,8 +1049,8 @@ function renderLesson(id, c, L) {
         const safeAns = ex.answer.replace(/'/g, "\'");
         return `<button class="ex-opt" onclick="checkAns(this,'${safeOpt}','${safeAns}','bl-${id}-${ei}')">${opt}</button>`;
       }).join('');
-      const qvnHtml = ex.qvn ? `<div class="ex-vn" style="font-size:20px;color:var(--gray-d);margin:2px 0 6px;">${ex.qvn.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
-      const qpyHtml = ex.qpy ? `<div class="ex-py" style="font-size:20px;color:var(--orange);font-style:italic;margin:2px 0 10px;">${ex.qpy.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+      const qvnHtml = ex.qvn ? `<div class="ex-vn">${ex.qvn.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
+      const qpyHtml = ex.qpy ? `<div class="ex-py">${ex.qpy.replace('___','<span style="color:var(--orange);">___</span>')}</div>` : '';
       h += `<div class="exercise-box"><div class="ex-q">${q}</div>${qvnHtml}${qpyHtml}<div class="ex-opts">${optBtns}</div></div>`;
     });
   }
@@ -1502,151 +1507,6 @@ function saveNotes(btn) {
 }
 
 
-// ══════════════════════════════════════════════
-// PDF EXPORT
-// ══════════════════════════════════════════════
-function exportPDF() {
-  const btn = document.getElementById('pdf-btn');
-  if (btn) { btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Đang tạo...'; btn.disabled = true; }
-
-  const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
-  let tocItems = [];
-  let lessonBlocks = [];
-
-  lessonIds.forEach((id, idx) => {
-    const L = LESSONS[id];
-    if (!L) return;
-    tocItems.push(`<div style="display:flex;justify-content:space-between;padding:4pt 0;border-bottom:0.5pt dotted #ccc;font-size:11pt;">
-      <span><strong>${L.num}</strong>&nbsp;&nbsp;${L.cn}&nbsp;—&nbsp;${L.vn}</span>
-      <span style="color:#888;">Trang ${idx+2}</span>
-    </div>`);
-
-    let block = `<div style="page-break-before:always;padding-top:10pt;">
-      <h1 style="font-family:'Noto Serif SC',serif;font-size:18pt;color:#1b5e20;border-bottom:2pt solid #1b5e20;padding-bottom:5pt;margin-bottom:10pt;">
-        ${L.num}&nbsp;&nbsp;${L.cn}&nbsp;<span style="font-size:12pt;color:#555;font-weight:400;">— ${L.vn}</span>
-      </h1>`;
-
-    if (L.vocab) {
-      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">核心词汇 — Từ vựng cốt lõi</h2>
-        <table style="width:100%;border-collapse:collapse;margin-bottom:10pt;">
-          <thead><tr style="background:#1b5e20;color:white;">
-            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">中文</th>
-            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">拼音</th>
-            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">Tiếng Việt</th>
-            <th style="padding:4pt 7pt;text-align:left;font-size:9pt;">Ví dụ</th>
-          </tr></thead><tbody>`;
-      L.vocab.forEach((v,i) => {
-        block += `<tr style="background:${i%2===0?'#f8f9fb':'white'};">
-          <td style="padding:4pt 7pt;font-family:'Noto Serif SC',serif;font-size:13pt;color:#1565c0;">${v.cn}</td>
-          <td style="padding:4pt 7pt;color:#e65100;font-style:italic;font-size:10pt;">${v.py}</td>
-          <td style="padding:4pt 7pt;font-size:10pt;">${v.vn}</td>
-          <td style="padding:4pt 7pt;font-family:'Noto Serif SC',serif;color:#888;font-size:10pt;">${v.ex||''}</td>
-        </tr>`;
-      });
-      block += `</tbody></table>`;
-    }
-
-    if (L.dialogues) {
-      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">实用对话 — Hội thoại thực dụng</h2>`;
-      L.dialogues.forEach(d => {
-        block += `<div style="margin-bottom:8pt;">
-          <div style="background:#1b5e20;color:white;padding:4pt 8pt;font-family:'Noto Serif SC',serif;font-size:11pt;font-weight:700;">${d.title} <span style="font-size:9pt;font-weight:400;opacity:0.85;">— ${d.titleVn}</span></div>
-          <table style="width:100%;border-collapse:collapse;">`;
-        d.lines.forEach((ln,i) => {
-          block += `<tr style="background:${i%2===0?'#f0f7f0':'white'};">
-            <td style="padding:4pt 8pt;font-size:9pt;font-weight:700;color:${ln.gender==='male'?'#1565c0':'#e65100'};width:60pt;vertical-align:top;">${ln.speaker}</td>
-            <td style="padding:4pt 8pt;">
-              <div style="font-family:'Noto Serif SC',serif;font-size:12pt;">${ln.cn}</div>
-              ${ln.py?`<div style="font-size:9pt;color:#e65100;font-style:italic;">${ln.py}</div>`:''}
-              <div style="font-size:9pt;color:#555;">${ln.vn}</div>
-            </td>
-          </tr>`;
-        });
-        block += `</table></div>`;
-      });
-    }
-
-    if (L.patterns) {
-      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">关键句型 — Mẫu câu then chốt</h2>`;
-      L.patterns.forEach(p => {
-        block += `<div style="border:0.5pt solid #d0d8e4;border-radius:3pt;padding:6pt 9pt;margin-bottom:5pt;page-break-inside:avoid;">
-          <div style="font-size:8pt;font-weight:700;color:#e65100;margin-bottom:2pt;">${p.num}</div>
-          <div style="font-family:'Noto Serif SC',serif;font-size:12pt;">${p.cn.replace(/<[^>]+>/g,'')}</div>
-          <div style="font-size:9pt;color:#555;margin:2pt 0 4pt;">${p.vn}</div>
-          <div style="font-family:'Noto Serif SC',serif;font-size:10pt;background:#f5f5f5;padding:4pt 7pt;">${p.ex}</div>
-          ${p.expy?`<div style="font-size:9pt;color:#e65100;font-style:italic;margin-top:2pt;">${p.expy}</div>`:''}
-          ${p.exvn?`<div style="font-size:9pt;color:#666;">${p.exvn}</div>`:''}
-        </div>`;
-      });
-    }
-
-    if (L.exercises) {
-      block += `<h2 style="font-size:12pt;color:#1565c0;margin:8pt 0 5pt;font-family:'Noto Serif SC',serif;">练习 — Luyện tập</h2>`;
-      L.exercises.forEach((ex,i) => {
-        block += `<div style="margin-bottom:6pt;padding:5pt 9pt;border:0.5pt solid #d0d8e4;page-break-inside:avoid;">
-          <div style="font-family:'Noto Serif SC',serif;font-size:11pt;font-weight:700;">${i+1}. ${ex.q}</div>
-          ${ex.qvn?`<div style="font-size:9pt;color:#555;margin:1pt 0;">${ex.qvn}</div>`:''}
-          ${ex.qpy?`<div style="font-size:9pt;color:#e65100;font-style:italic;margin-bottom:3pt;">${ex.qpy}</div>`:''}
-          <div style="display:flex;gap:8pt;flex-wrap:wrap;margin-top:3pt;">
-            ${ex.options.map((opt,oi)=>`<span style="padding:1pt 7pt;border:0.5pt solid #ccc;font-size:9pt;">${String.fromCharCode(65+oi)}. ${opt}</span>`).join('')}
-          </div>
-          <div style="font-size:8pt;color:#27ae60;margin-top:3pt;"><i class="bi bi-check"></i> ${ex.answer}</div>
-        </div>`;
-      });
-    }
-
-    block += `</div>`;
-    lessonBlocks.push(block);
-  });
-
-  const fullHTML = `<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Giáo trình Tiếng Hoa — Gia Sư Hoa Ngữ Tân An</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-* { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:'IBM Plex Sans',sans-serif; color:#111; background:white; font-size:10pt; line-height:1.5; }
-@page { margin:15mm 14mm; size:A4; }
-</style>
-</head>
-<body>
-<div style="text-align:center;padding:32pt 0 24pt;border-bottom:3pt solid #1b5e20;margin-bottom:16pt;">
-  <div style="font-family:'Noto Serif SC',serif;font-size:24pt;color:#1b5e20;font-weight:700;margin-bottom:6pt;">工厂与办公室汉语</div>
-  <div style="font-size:14pt;color:#333;margin-bottom:14pt;">Giáo trình Tiếng Hoa Công xưởng & Văn phòng</div>
-  <div style="font-size:11pt;color:#555;line-height:2;">
-    <div style="font-weight:700;font-size:13pt;color:#1b5e20;">GIA SƯ HOA NGỮ TÂN AN</div>
-    <div>9/1 Bạch Văn Tư, Tân An, Long An</div>
-    <div>Zalo: 0839 889 772</div>
-  </div>
-</div>
-<div style="page-break-after:always;padding-top:14pt;">
-  <h1 style="font-size:16pt;color:#1b5e20;border-bottom:2pt solid #1b5e20;padding-bottom:5pt;margin-bottom:10pt;">Mục Lục</h1>
-  ${tocItems.join('')}
-</div>
-${lessonBlocks.join('')}
-</body></html>`;
-
-  // Use hidden iframe — no popup needed
-  let iframe = document.getElementById('pdf-iframe');
-  if (!iframe) {
-    iframe = document.createElement('iframe');
-    iframe.id = 'pdf-iframe';
-    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:210mm;height:297mm;border:none;';
-    document.body.appendChild(iframe);
-  }
-
-  iframe.onload = function() {
-    setTimeout(function() {
-      iframe.contentWindow.focus();
-      iframe.contentWindow.print();
-      if (btn) { btn.innerHTML = '<i class="bi bi-download"></i> Xuất PDF'; btn.disabled = false; }
-    }, 1500);
-  };
-
-  iframe.srcdoc = fullHTML;
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   try {
