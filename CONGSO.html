@@ -460,8 +460,8 @@ details[open] summary { color: var(--blue); }
     </div>
   </div>
   <div id="topbar-right">
-    <a href="https://giasuhoangu.com" target="_blank" style="padding:5px 16px;background:var(--green-b);color:#fff;text-decoration:none;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;">🌍 Về trang chủ</a>
-    <button onclick="exportPDF()" id="pdf-btn" style="padding:5px 16px;background:var(--orange);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;">⬇ Xuất PDF</button>
+    <a href="https://giasuhoangu.com" target="_blank" style="padding:5px 16px;background:var(--green-b);color:#fff;text-decoration:none;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;"><i class="bi bi-globe"></i> Về trang chủ</a>
+    <button onclick="exportPDF()" id="pdf-btn" style="padding:5px 16px;background:var(--orange);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:15px;font-weight:600;flex-shrink:0;letter-spacing:0.3px;"><i class="bi bi-download"></i> Xuất PDF</button>
   </div>
 </div>
 
@@ -1407,7 +1407,7 @@ function showBar(cn, vn, speaker) {
   document.getElementById('ab-cn').textContent = (speaker ? speaker+'：' : '') + cn;
   document.getElementById('ab-vn').textContent = vn || '';
   document.getElementById('audio-bar').classList.add('visible');
-  document.getElementById('ab-play').textContent = '⏸';
+  document.getElementById('ab-play').innerHTML = '<i class="bi bi-pause-fill"></i>';
 }
 function startFakeProgress() {
   clearInterval(fakeProgressTimer);
@@ -1457,14 +1457,22 @@ function togglePinyin(btn) {
   toggleStates.pinyin = !toggleStates.pinyin;
   document.body.classList.toggle('hide-pinyin', toggleStates.pinyin);
   btn.classList.toggle('active', toggleStates.pinyin);
-  btn.querySelector('span').textContent = toggleStates.pinyin ? '👁️ Hiện Pinyin' : '👁️ Ẩn/Hiện Pinyin';
+  const icon = btn.querySelector('i');
+  if (icon) {
+    icon.className = toggleStates.pinyin ? 'bi bi-eye' : 'bi bi-eye-slash';
+  }
+  btn.querySelector('span').textContent = toggleStates.pinyin ? 'Hiện Pinyin' : 'Ẩn/Hiện Pinyin';
 }
 
 function toggleVietnamese(btn) {
   toggleStates.vietnamese = !toggleStates.vietnamese;
   document.body.classList.toggle('hide-vietnamese', toggleStates.vietnamese);
   btn.classList.toggle('active', toggleStates.vietnamese);
-  btn.querySelector('span').textContent = toggleStates.vietnamese ? '👁️ Hiện Nghĩa' : '👁️ Ẩn/Hiện Nghĩa';
+  const icon = btn.querySelector('i');
+  if (icon) {
+    icon.className = toggleStates.vietnamese ? 'bi bi-eye' : 'bi bi-eye-slash';
+  }
+  btn.querySelector('span').textContent = toggleStates.vietnamese ? 'Hiện Nghĩa' : 'Ẩn/Hiện Nghĩa';
 }
 
 function openNoteEditor() {
@@ -1473,7 +1481,7 @@ function openNoteEditor() {
   modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:2000;';
   modal.innerHTML = `
     <div style="background:white;border-radius:8px;padding:20px;width:90%;max-width:600px;max-height:80vh;display:flex;flex-direction:column;">
-      <div style="font-size:18px;font-weight:600;margin-bottom:12px;">📝 Bảng ghi chú</div>
+      <div style="font-size:18px;font-weight:600;margin-bottom:12px;"><i class="bi bi-journal-text"></i> Bảng ghi chú</div>
       <textarea id="note-textarea" style="flex:1;padding:12px;border:1px solid #ddd;border-radius:4px;font-size:16px;resize:none;min-height:300px;">${notes}</textarea>
       <div style="display:flex;gap:10px;margin-top:12px;justify-content:flex-end;">
         <button onclick="this.closest('div[style*=fixed]').remove()" style="padding:8px 16px;border:1px solid #ddd;background:white;border-radius:4px;cursor:pointer;">Đóng</button>
@@ -1499,7 +1507,7 @@ function saveNotes(btn) {
 // ══════════════════════════════════════════════
 function exportPDF() {
   const btn = document.getElementById('pdf-btn');
-  if (btn) { btn.textContent = '⏳ Đang tạo...'; btn.disabled = true; }
+  if (btn) { btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Đang tạo...'; btn.disabled = true; }
 
   const lessonIds = ['l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','l12'];
   let tocItems = [];
@@ -1582,7 +1590,7 @@ function exportPDF() {
           <div style="display:flex;gap:8pt;flex-wrap:wrap;margin-top:3pt;">
             ${ex.options.map((opt,oi)=>`<span style="padding:1pt 7pt;border:0.5pt solid #ccc;font-size:9pt;">${String.fromCharCode(65+oi)}. ${opt}</span>`).join('')}
           </div>
-          <div style="font-size:8pt;color:#27ae60;margin-top:3pt;">✓ ${ex.answer}</div>
+          <div style="font-size:8pt;color:#27ae60;margin-top:3pt;"><i class="bi bi-check"></i> ${ex.answer}</div>
         </div>`;
       });
     }
@@ -1633,7 +1641,7 @@ ${lessonBlocks.join('')}
     setTimeout(function() {
       iframe.contentWindow.focus();
       iframe.contentWindow.print();
-      if (btn) { btn.textContent = '⬇ Xuất PDF'; btn.disabled = false; }
+      if (btn) { btn.innerHTML = '<i class="bi bi-download"></i> Xuất PDF'; btn.disabled = false; }
     }, 1500);
   };
 
