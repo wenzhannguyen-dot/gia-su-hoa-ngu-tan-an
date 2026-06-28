@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>第九課 那個城市好漂亮</title>
 <base target="_blank">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -22,34 +23,38 @@
 body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
 .zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
 
+/* TOPBAR */
+.header{position:fixed;top:0;left:0;right:0;height:70px;background:#4472c4;color:#fff;padding:10px 20px;display:flex;align-items:center;z-index:1001;box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.logo{display:flex;align-items:center;gap:15px;}
+.logo-img{width:50px;height:50px;background:#fff;border-radius:8px;padding:3px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.logo-img img{width:100%;height:100%;object-fit:contain;}
+.logo-text h1{font-size:16px;font-weight:700;margin-bottom:2px;font-family:Arial,sans-serif;}
+.logo-text p{font-size:12px;opacity:.9;font-family:Arial,sans-serif;}
 /* SIDEBAR */
-#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
-.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
-.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
-.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
-.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
-.logo-area{text-align:center;padding:5px 0;}
-.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
-.logo-container img{width:100%;height:100%;object-fit:contain;}
-nav{flex:1;padding:5px 0;}
-.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
-.nb:hover{background:rgba(255,255,255,.1);}
-.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+#sb{width:var(--sw);height:calc(100vh - 70px);background:#fff;border:1px solid #d0d0d0;border-radius:8px;display:flex;flex-direction:column;position:fixed;top:70px;left:10px;z-index:100;overflow-y:auto;}
+.nav-section{border-bottom:1px solid #e0e0e0;}
+.nav-title{padding:13px 15px;color:#333;font-size:14px;font-weight:700;font-family:Arial,sans-serif;display:flex;align-items:center;gap:8px;background:#f8f9fa;border-bottom:2px solid #4472c4;}
+
+
+nav{flex:0 0 auto;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#666;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;text-align:left;transition:all .2s;}
+.nb:hover{background:#e3f2fd;color:#4472c4;}
+.nb.on{background:#e8f5e9;color:#2e7d32;}
 .nb .ic{font-size:18px;}
-.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
-.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
-.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
-.st-btn:hover{background:rgba(255,255,255,.1);}
-.st-btn.on{background:var(--g);border-color:var(--g);}
+.side-toggle{padding:15px;background:#fafafa;border-top:1px solid #e0e0e0;}
+.side-toggle-label{font-size:13px;color:#333;margin-bottom:10px;font-family:Arial,sans-serif;display:flex;align-items:center;gap:6px;font-weight:700;}
+.st-btn{display:flex;align-items:center;justify-content:flex-start;gap:8px;width:100%;margin-bottom:6px;border:1px solid #e0e0e0;background:#f8f9fa;color:#666;padding:8px;border-radius:5px;font-size:12px;font-family:Arial,sans-serif;cursor:pointer;font-weight:normal;transition:all .1s;}
+.st-btn:hover{background:#e3f2fd;border-color:#4472c4;color:#4472c4;}
+.st-btn.on{background:#e3f2fd;border-color:#4472c4;color:#4472c4;font-weight:600;}
 
 /* MAIN */
-#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
-.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+#mn{margin-left:calc(var(--sw) + 10px);flex:1;padding-top:70px;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:space-between;position:sticky;top:70px;z-index:90;}
 .tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
-.tvi{font-size:14px;color:var(--s);margin-top:2px;}
-.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
-.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
-.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;font-family:Arial,sans-serif;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;font-family:Arial,sans-serif;}
+.btn-editor{background:#ed7d31;color:#fff;border:1px solid #ed7d31;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .1s;}
+.btn-editor:hover{background:#d35400;border-color:#d35400;}
 
 /* SECTIONS */
 .sec{display:none;padding:20px 24px;}
@@ -127,9 +132,9 @@ td.d-tx{padding:11px 0;}
 /* GRAMMAR */
 .gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
 .gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
-.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gtt{font-size:18px;font-weight:700;vertical-align:middle;}
 .gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
-.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;font-family:Arial,'DFKai-SB','標楷體',serif!important;}
 .fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
 .gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
 table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
@@ -137,12 +142,12 @@ table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;
 table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
 table.ex tr:last-child td{border-bottom:none;}
 table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
-table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .py{font-size:15px;color:var(--r);margin-top:2px;}
 table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
 
 /* EXERCISES */
 .ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
-.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ett{font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px;}
 .ei{margin-bottom:14px;}
 .eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
 .eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
@@ -192,7 +197,7 @@ footer strong{color:var(--r);}
 <!-- STROKE OVERLAY -->
 <div id="ov" onclick="ovClick(event)">
   <div id="obox">
-    <button id="ocls" onclick="closeOv()">✕</button>
+    <button id="ocls" onclick="closeOv()"><i class="bi bi-x-lg"></i></button>
     <div id="otitle"></div>
     <div id="oframes"></div>
     <div class="hw-controls" id="octrl"></div>
@@ -203,8 +208,8 @@ footer strong{color:var(--r);}
 <div id="editorModal">
   <div class="editor-container">
     <div class="editor-header">
-      <h3>📝 Soạn thảo ghi chú - Bài 9 Quyển 2</h3>
-      <button class="editor-close" onclick="closeEditor()">✕</button>
+      <h3><i class="bi bi-journal-text"></i> Soạn thảo ghi chú - Bài 9 Quyển 2</h3>
+      <button class="editor-close" onclick="closeEditor()"><i class="bi bi-x-lg"></i></button>
     </div>
     <div class="editor-body">
       <div id="editor-toolbar">
@@ -233,7 +238,7 @@ footer strong{color:var(--r);}
       <div id="editor-content"></div>
     </div>
     <div class="editor-footer">
-      <span class="editor-status">💡 Ghi chú tự động lưu vào trình duyệt</span>
+      <span class="editor-status"><i class="bi bi-info-circle"></i> Ghi chú tự động lưu vào trình duyệt</span>
       <div class="editor-actions">
         <button class="btn-clear" onclick="clearEditor()">Xóa tất cả</button>
         <button class="btn-save" onclick="saveEditor()">Lưu ghi chú</button>
@@ -242,53 +247,53 @@ footer strong{color:var(--r);}
   </div>
 </div>
 
+<div class="header">
+  <div class="logo">
+    <div class="logo-img"><img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="GIA SƯ HOA NGỮ TÂN AN"></div>
+    <div class="logo-text">
+      <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+      <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
+    </div>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+    <div style="text-align:right;">
+      <div class="tzh" style="color:#fff;font-size:18px;"><span style="font-family:Arial,sans-serif;">BÀI 9</span> <span style="font-size:14px;opacity:.7;">·</span> <span style="font-family:'DFKai-SB','標楷體',serif;">第九課</span></div>
+      <div class="tvi" style="color:rgba(255,255,255,.85);font-size:11px;margin-top:2px;">那個城市好漂亮 · Thành phố đó thật đẹp</div>
+    </div>
+    <button class="btn-editor" onclick="openEditor()"><span><i class="bi bi-journal-text"></i></span><span>Soạn thảo</span></button>
+    <div class="badge">當代中文課程 2</div>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <div id="sb">
-  <div class="lb">
-    <div class="logo-area">
-      <div class="logo-container">
-        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
-      </div>
-    </div>
-    <div class="ln">GIA SƯ HOA NGỮ TÂN AN</div>
-    <div class="la">9/1 Bạch Văn Tư, Tân An, Long An</div>
-    <div class="lz">Zalo: 0839 889 772</div>
-  </div>
+  <div class="nav-section">
+    <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung bài học</span></div>
   <nav>
-    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic">🏠</span><span>VỀ TRANG CHỦ</span></button>
-    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TỪ VỰNG</span></button>
-    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BÀI KHÓA</span></button>
-    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGỮ PHÁP</span></button>
-    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BÀI TẬP</span></button>
-    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VĂN HÓA</span></button>
+    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic"><i class="bi bi-house-door"></i></span><span>Về trang chủ</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic"><i class="bi bi-alphabet"></i></span><span>Từ vựng</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic"><i class="bi bi-book"></i></span><span>Bài khóa</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic"><i class="bi bi-diagram-3"></i></span><span>Ngữ pháp</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic"><i class="bi bi-pencil-square"></i></span><span>Bài tập</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic"><i class="bi bi-building"></i></span><span>Văn hóa</span></button>
   </nav>
+  </div>
   <div class="side-toggle" id="toggleContainer" style="display:none;">
-    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phiên âm</button>
-    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tiếng Việt</button>
+    <button class="st-btn on" id="tp" onclick="tog('py')"><i class="bi bi-eye-slash"></i> Phiên âm</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')"><i class="bi bi-eye-slash"></i> Tiếng Việt</button>
   </div>
 </div>
 
 <!-- MAIN -->
 <div id="mn">
-  <div class="topbar">
-    <div>
-      <div class="tzh">BÀI 9 · 第九課</div>
-      <div class="tvi">那個城市好漂亮 · Thành phố đó thật đẹp</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:15px;">
-      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soạn thảo</span></button>
-      <div class="badge">當代中文課程 2</div>
-    </div>
-  </div>
-
   <!-- TỪ VỰNG -->
   <div id="vocab" class="sec on">
     <div class="subnav">
-      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Từ vựng 1 · 生詞一</button>
-      <button class="subtab" onclick="goSub('vocab','v2')">📖 Từ vựng 2 · 生詞二</button>
-      <button class="subtab" onclick="goSub('vocab','c1')">📝 Cụm từ 1 · 短語一</button>
-      <button class="subtab" onclick="goSub('vocab','c2')">📝 Cụm từ 2 · 短語二</button>
-      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhân vật · 人物</button>
+      <button class="subtab on" onclick="goSub('vocab','v1')"><i class="bi bi-book-half"></i> Từ vựng 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')"><i class="bi bi-book-half"></i> Từ vựng 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','c1')"><i class="bi bi-journal-text"></i> Cụm từ 1 · 短語一</button>
+      <button class="subtab" onclick="goSub('vocab','c2')"><i class="bi bi-journal-text"></i> Cụm từ 2 · 短語二</button>
+      <button class="subtab" onclick="goSub('vocab','nv')"><i class="bi bi-people"></i> Nhân vật · 人物</button>
     </div>
     <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
     <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
@@ -300,35 +305,35 @@ footer strong{color:var(--r);}
   <!-- BÀI KHÓA -->
   <div id="baikoa" class="sec">
     <div class="subnav">
-      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hội thoại 1 · 對話一</button>
-      <button class="subtab" onclick="goSub('baikoa','bk')">📖 Bài khóa · 課文</button>
+      <button class="subtab on" onclick="goSub('baikoa','ht1')"><i class="bi bi-chat-left-text"></i> Hội thoại 1 · 對話一</button>
+      <button class="subtab" onclick="goSub('baikoa','bk')"><i class="bi bi-book-half"></i> Bài khóa · 課文</button>
     </div>
     <div id="baikoa-ht1" class="sub-content on">
       <div class="db">
         <div class="dt">
           <span class="dlb">Hội thoại 1 · 對話一</span>Thành phố đó thật đẹp
-          <button class="dab" onclick="sayZh('我放春假的時候到泰國去玩了一個星期，你呢？我哪裡也沒去，忙著搬家。都搬好了嗎？都搬好了。泰國怎麼樣？我好喜歡，沒想到泰國這麼有特色，玩一個星期也不夠。真的啊！有些什麼特色呢？那裡的房子很漂亮，跟法國比起來，顏色比較多。聽說泰國的廟很多。是。泰國到處都是廟，就像法國有很多教堂一樣。泰國的海邊怎麼樣？美極了。我到南部的小島去潛水，藍藍的海水非常乾淨，看得見各種顏色的魚。聽起來好美啊！除了到處去玩，妳一定也吃了很多泰國菜吧？當然啊，在那裡吃的泰國菜跟我在法國吃的不一樣。有什麼不一樣？在法國，沒有那麼多酸酸辣辣的菜，但是在泰國，很多菜都放了檸檬，味道比較酸。泰國這麼好玩，妳不想回來吧？對啊！這些都是忘不了的經驗。如果不必上課，我一定要多住一個月。妳下次去的時候，我可以跟妳一起去嗎？好，沒問題。')">🔊 Toàn bộ</button>
+          <button class="dab" onclick="sayZh('我放春假的時候到泰國去玩了一個星期，你呢？我哪裡也沒去，忙著搬家。都搬好了嗎？都搬好了。泰國怎麼樣？我好喜歡，沒想到泰國這麼有特色，玩一個星期也不夠。真的啊！有些什麼特色呢？那裡的房子很漂亮，跟法國比起來，顏色比較多。聽說泰國的廟很多。是。泰國到處都是廟，就像法國有很多教堂一樣。泰國的海邊怎麼樣？美極了。我到南部的小島去潛水，藍藍的海水非常乾淨，看得見各種顏色的魚。聽起來好美啊！除了到處去玩，妳一定也吃了很多泰國菜吧？當然啊，在那裡吃的泰國菜跟我在法國吃的不一樣。有什麼不一樣？在法國，沒有那麼多酸酸辣辣的菜，但是在泰國，很多菜都放了檸檬，味道比較酸。泰國這麼好玩，妳不想回來吧？對啊！這些都是忘不了的經驗。如果不必上課，我一定要多住一個月。妳下次去的時候，我可以跟妳一起去嗎？好，沒問題。')"><i class="bi bi-play-fill"></i> Toàn bộ</button>
         </div>
         <table class="dt2">
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('我放春假的時候到泰國去玩了一個星期，你呢？')">🔊</button></td><td class="d-sp"><div class="spk">美玲<small>Měilíng</small></div></td><td class="d-tx"><div class="szh">我放春假的時候到泰國去玩了一個星期，你呢？</div><div class="spy">Wǒ fàng chūnjià de shíhòu dào Tàiguó qù wánle yí ge xīngqī, nǐ ne?</div><div class="svi">Tôi đi chơi Thái Lan được một tuần trong dịp nghỉ xuân, còn bạn thì sao?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('我哪裡也沒去，忙著搬家。')">🔊</button></td><td class="d-sp"><div class="spk b">東健<small>Dōngjiàn</small></div></td><td class="d-tx"><div class="szh">我哪裡也沒去，忙著搬家。</div><div class="spy">Wǒ nǎlǐ yě méi qù, mángzhe bānjiā.</div><div class="svi">Tôi đâu cũng không đi, bận chuyển nhà.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('都搬好了嗎？')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">都搬好了嗎？</div><div class="spy">Dōu bān hǎo le ma?</div><div class="svi">Chuyển xong hết chưa?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('都搬好了。泰國怎麼樣？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">都搬好了。泰國怎麼樣？</div><div class="spy">Dōu bān hǎo le. Tàiguó zěnme yàng?</div><div class="svi">Chuyển xong hết rồi. Thái Lan thế nào?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('我好喜歡，沒想到泰國這麼有特色，玩一個星期也不夠。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">我好喜歡，沒想到泰國這麼有特色，玩一個星期也不夠。</div><div class="spy">Wǒ hǎo xǐhuān, méi xiǎngdào Tàiguó zhème yǒu tèsè, wán yí ge xīngqī yě bù gòu.</div><div class="svi">Tôi rất thích, không ngờ Thái Lan lại có nhiều nét đặc sắc như vậy, chơi một tuần cũng không đủ.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('真的啊！有些什麼特色呢？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">真的啊！有些什麼特色呢？</div><div class="spy">Zhēn de a! Yǒu xiē shénme tèsè ne?</div><div class="svi">Thật à! Có những nét đặc sắc gì vậy?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('那裡的房子很漂亮，跟法國比起來，顏色比較多。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">那裡的房子很漂亮，跟法國比起來，顏色比較多。</div><div class="spy">Nàlǐ de fángzi hěn piàoliang, gēn Fàguó bǐ qǐlái, yánsè bǐjiào duō.</div><div class="svi">Nhà ở đó rất đẹp, so với Pháp thì màu sắc nhiều hơn.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('聽說泰國的廟很多。')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">聽說泰國的廟很多。</div><div class="spy">Tīngshuō Tàiguó de miào hěn duō.</div><div class="svi">Nghe nói Thái Lan có nhiều chùa.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('是。泰國到處都是廟，就像法國有很多教堂一樣。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">是。泰國到處都是廟，就像法國有很多教堂一樣。</div><div class="spy">Shì. Tàiguó dàochù dōu shì miào, jiù xiàng Fàguó yǒu hěn duō jiàotáng yíyàng.</div><div class="svi">Đúng vậy. Thái Lan đâu đâu cũng có chùa, giống như Pháp có nhiều nhà thờ vậy.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('泰國的海邊怎麼樣？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">泰國的海邊怎麼樣？</div><div class="spy">Tàiguó de hǎibiān zěnme yàng?</div><div class="svi">Biển ở Thái Lan thế nào?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('美極了。我到南部的小島去潛水，藍藍的海水非常乾淨，看得見各種顏色的魚。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">美極了。我到南部的小島去潛水，藍藍的海水非常乾淨，看得見各種顏色的魚。</div><div class="spy">Měi jí le. Wǒ dào nánbù de xiǎo dǎo qù qiánshuǐ, lánlán de hǎishuǐ fēicháng gānjìng, kàndejiàn gè zhǒng yánsè de yú.</div><div class="svi">Đẹp cực kỳ. Tôi đến đảo nhỏ ở miền Nam để lặn, nước biển xanh rất sạch, nhìn thấy được cá đủ màu sắc.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('聽起來好美啊！除了到處去玩，妳一定也吃了很多泰國菜吧？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">聽起來好美啊！除了到處去玩，妳一定也吃了很多泰國菜吧？</div><div class="spy">Tīng qǐlái hǎo měi a! Chúle dàochù qù wán, nǐ yídìng yě chīle hěn duō Tàiguó cài ba?</div><div class="svi">Nghe có vẻ đẹp quá! Ngoài việc đi chơi khắp nơi, bạn chắc cũng đã ăn nhiều món Thái rồi nhỉ?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('當然啊，在那裡吃的泰國菜跟我在法國吃的不一樣。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">當然啊，在那裡吃的泰國菜跟我在法國吃的不一樣。</div><div class="spy">Dāngrán a, zài nàlǐ chī de Tàiguó cài gēn wǒ zài Fàguó chī de bù yíyàng.</div><div class="svi">Tất nhiên rồi, món Thái ăn ở đó khác với món Thái tôi ăn ở Pháp.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('有什麼不一樣？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">有什麼不一樣？</div><div class="spy">Yǒu shénme bù yíyàng?</div><div class="svi">Có gì khác nhau?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('在法國，沒有那麼多酸酸辣辣的菜，但是在泰國，很多菜都放了檸檬，味道比較酸。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">在法國，沒有那麼多酸酸辣辣的菜，但是在泰國，很多菜都放了檸檬，味道比較酸。</div><div class="spy">Zài Fàguó, méiyǒu nàme duō suān suān là là de cài, dànshì zài Tàiguó, hěn duō cài dōu fàngle níngméng, wèidào bǐjiào suān.</div><div class="svi">Ở Pháp, không có nhiều món chua chua cay cay như vậy, nhưng ở Thái Lan, nhiều món đều cho chanh vào, vị chua hơn.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('泰國這麼好玩，妳不想回來吧？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">泰國這麼好玩，妳不想回來吧？</div><div class="spy">Tàiguó zhème hǎowán, nǐ bù xiǎng huílái ba?</div><div class="svi">Thái Lan vui như vậy, bạn không muốn về lại chứ?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('對啊！這些都是忘不了的經驗。如果不必上課，我一定要多住一個月。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">對啊！這些都是忘不了的經驗。如果不必上課，我一定要多住一個月。</div><div class="spy">Duì a! Zhèxiē dōu shì wàng bù liǎo de jīngyàn. Rúguǒ búbì shàngkè, wǒ yídìng yào duō zhù yí ge yuè.</div><div class="svi">Đúng vậy! Đây đều là những trải nghiệm không thể quên. Nếu không phải đi học, tôi nhất định sẽ ở thêm một tháng.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('妳下次去的時候，我可以跟妳一起去嗎？')">🔊</button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">妳下次去的時候，我可以跟妳一起去嗎？</div><div class="spy">Nǐ xià cì qù de shíhòu, wǒ kěyǐ gēn nǐ yìqǐ qù ma?</div><div class="svi">Lần sau bạn đi, tôi có thể đi cùng bạn không?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('好，沒問題。')">🔊</button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">好，沒問題。</div><div class="spy">Hǎo, méi wèntí.</div><div class="svi">Được, không vấn đề gì.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我放春假的時候到泰國去玩了一個星期，你呢？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲<small>Měilíng</small></div></td><td class="d-tx"><div class="szh">我放春假的時候到泰國去玩了一個星期，你呢？</div><div class="spy">Wǒ fàng chūnjià de shíhòu dào Tàiguó qù wánle yí ge xīngqī, nǐ ne?</div><div class="svi">Tôi đi chơi Thái Lan được một tuần trong dịp nghỉ xuân, còn bạn thì sao?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我哪裡也沒去，忙著搬家。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健<small>Dōngjiàn</small></div></td><td class="d-tx"><div class="szh">我哪裡也沒去，忙著搬家。</div><div class="spy">Wǒ nǎlǐ yě méi qù, mángzhe bānjiā.</div><div class="svi">Tôi đâu cũng không đi, bận chuyển nhà.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('都搬好了嗎？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">都搬好了嗎？</div><div class="spy">Dōu bān hǎo le ma?</div><div class="svi">Chuyển xong hết chưa?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('都搬好了。泰國怎麼樣？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">都搬好了。泰國怎麼樣？</div><div class="spy">Dōu bān hǎo le. Tàiguó zěnme yàng?</div><div class="svi">Chuyển xong hết rồi. Thái Lan thế nào?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我好喜歡，沒想到泰國這麼有特色，玩一個星期也不夠。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">我好喜歡，沒想到泰國這麼有特色，玩一個星期也不夠。</div><div class="spy">Wǒ hǎo xǐhuān, méi xiǎngdào Tàiguó zhème yǒu tèsè, wán yí ge xīngqī yě bù gòu.</div><div class="svi">Tôi rất thích, không ngờ Thái Lan lại có nhiều nét đặc sắc như vậy, chơi một tuần cũng không đủ.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('真的啊！有些什麼特色呢？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">真的啊！有些什麼特色呢？</div><div class="spy">Zhēn de a! Yǒu xiē shénme tèsè ne?</div><div class="svi">Thật à! Có những nét đặc sắc gì vậy?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('那裡的房子很漂亮，跟法國比起來，顏色比較多。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">那裡的房子很漂亮，跟法國比起來，顏色比較多。</div><div class="spy">Nàlǐ de fángzi hěn piàoliang, gēn Fàguó bǐ qǐlái, yánsè bǐjiào duō.</div><div class="svi">Nhà ở đó rất đẹp, so với Pháp thì màu sắc nhiều hơn.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('聽說泰國的廟很多。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">聽說泰國的廟很多。</div><div class="spy">Tīngshuō Tàiguó de miào hěn duō.</div><div class="svi">Nghe nói Thái Lan có nhiều chùa.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('是。泰國到處都是廟，就像法國有很多教堂一樣。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">是。泰國到處都是廟，就像法國有很多教堂一樣。</div><div class="spy">Shì. Tàiguó dàochù dōu shì miào, jiù xiàng Fàguó yǒu hěn duō jiàotáng yíyàng.</div><div class="svi">Đúng vậy. Thái Lan đâu đâu cũng có chùa, giống như Pháp có nhiều nhà thờ vậy.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('泰國的海邊怎麼樣？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">泰國的海邊怎麼樣？</div><div class="spy">Tàiguó de hǎibiān zěnme yàng?</div><div class="svi">Biển ở Thái Lan thế nào?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('美極了。我到南部的小島去潛水，藍藍的海水非常乾淨，看得見各種顏色的魚。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">美極了。我到南部的小島去潛水，藍藍的海水非常乾淨，看得見各種顏色的魚。</div><div class="spy">Měi jí le. Wǒ dào nánbù de xiǎo dǎo qù qiánshuǐ, lánlán de hǎishuǐ fēicháng gānjìng, kàndejiàn gè zhǒng yánsè de yú.</div><div class="svi">Đẹp cực kỳ. Tôi đến đảo nhỏ ở miền Nam để lặn, nước biển xanh rất sạch, nhìn thấy được cá đủ màu sắc.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('聽起來好美啊！除了到處去玩，妳一定也吃了很多泰國菜吧？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">聽起來好美啊！除了到處去玩，妳一定也吃了很多泰國菜吧？</div><div class="spy">Tīng qǐlái hǎo měi a! Chúle dàochù qù wán, nǐ yídìng yě chīle hěn duō Tàiguó cài ba?</div><div class="svi">Nghe có vẻ đẹp quá! Ngoài việc đi chơi khắp nơi, bạn chắc cũng đã ăn nhiều món Thái rồi nhỉ?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('當然啊，在那裡吃的泰國菜跟我在法國吃的不一樣。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">當然啊，在那裡吃的泰國菜跟我在法國吃的不一樣。</div><div class="spy">Dāngrán a, zài nàlǐ chī de Tàiguó cài gēn wǒ zài Fàguó chī de bù yíyàng.</div><div class="svi">Tất nhiên rồi, món Thái ăn ở đó khác với món Thái tôi ăn ở Pháp.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('有什麼不一樣？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">有什麼不一樣？</div><div class="spy">Yǒu shénme bù yíyàng?</div><div class="svi">Có gì khác nhau?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('在法國，沒有那麼多酸酸辣辣的菜，但是在泰國，很多菜都放了檸檬，味道比較酸。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">在法國，沒有那麼多酸酸辣辣的菜，但是在泰國，很多菜都放了檸檬，味道比較酸。</div><div class="spy">Zài Fàguó, méiyǒu nàme duō suān suān là là de cài, dànshì zài Tàiguó, hěn duō cài dōu fàngle níngméng, wèidào bǐjiào suān.</div><div class="svi">Ở Pháp, không có nhiều món chua chua cay cay như vậy, nhưng ở Thái Lan, nhiều món đều cho chanh vào, vị chua hơn.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('泰國這麼好玩，妳不想回來吧？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">泰國這麼好玩，妳不想回來吧？</div><div class="spy">Tàiguó zhème hǎowán, nǐ bù xiǎng huílái ba?</div><div class="svi">Thái Lan vui như vậy, bạn không muốn về lại chứ?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('對啊！這些都是忘不了的經驗。如果不必上課，我一定要多住一個月。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">對啊！這些都是忘不了的經驗。如果不必上課，我一定要多住一個月。</div><div class="spy">Duì a! Zhèxiē dōu shì wàng bù liǎo de jīngyàn. Rúguǒ búbì shàngkè, wǒ yídìng yào duō zhù yí ge yuè.</div><div class="svi">Đúng vậy! Đây đều là những trải nghiệm không thể quên. Nếu không phải đi học, tôi nhất định sẽ ở thêm một tháng.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('妳下次去的時候，我可以跟妳一起去嗎？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">東健</div></td><td class="d-tx"><div class="szh">妳下次去的時候，我可以跟妳一起去嗎？</div><div class="spy">Nǐ xià cì qù de shíhòu, wǒ kěyǐ gēn nǐ yìqǐ qù ma?</div><div class="svi">Lần sau bạn đi, tôi có thể đi cùng bạn không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('好，沒問題。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">美玲</div></td><td class="d-tx"><div class="szh">好，沒問題。</div><div class="spy">Hǎo, méi wèntí.</div><div class="svi">Được, không vấn đề gì.</div></td></tr>
         </table>
       </div>
     </div>
@@ -336,7 +341,7 @@ footer strong{color:var(--r);}
       <div class="db" style="border-top-color:#764ba2;">
         <div class="dt" style="color:#764ba2;">
           <span class="dlb" style="background:#764ba2;">Bài khóa · 課文</span>
-          <button class="dab" style="background:#764ba2;" onclick="sayZh('高美玲利用放假的時候到處去旅行，她喜歡台北這個大城市，也喜歡中南部鄉下。因為她家在巴黎，已經習慣大城市熱鬧的氣氛，但是她覺得台灣鄉下小鎮也很有意思。高美玲發現中南部跟台北有很多不同的地方。台北市區現代的公寓、大樓比較多，馬路寬、汽車多。中南部除了新建築，也看得見傳統的老房子。她在高雄市看見很多三層樓的房子，朋友告訴她，買得起房子的南部人，比較喜歡這種房子。台灣不是很大，但是南部的天氣比北部好多了。夏天雖然熱得很，可是冬天不冷，而且不常下雨。美玲覺得可能天氣好，所以南部人很熱情。台北跟中南部比起來，雖然生活費高，環境比較擠，但是美玲還是喜歡住在台北。她覺得台北到處都有餐廳、便利商店，百貨公司也很多，什麼時候都吃得到飯，也買得到飲料，所以她越來越喜歡生活方便的台北了。')">🔊 Toàn bộ</button>
+          <button class="dab" style="background:#764ba2;" onclick="sayZh('高美玲利用放假的時候到處去旅行，她喜歡台北這個大城市，也喜歡中南部鄉下。因為她家在巴黎，已經習慣大城市熱鬧的氣氛，但是她覺得台灣鄉下小鎮也很有意思。高美玲發現中南部跟台北有很多不同的地方。台北市區現代的公寓、大樓比較多，馬路寬、汽車多。中南部除了新建築，也看得見傳統的老房子。她在高雄市看見很多三層樓的房子，朋友告訴她，買得起房子的南部人，比較喜歡這種房子。台灣不是很大，但是南部的天氣比北部好多了。夏天雖然熱得很，可是冬天不冷，而且不常下雨。美玲覺得可能天氣好，所以南部人很熱情。台北跟中南部比起來，雖然生活費高，環境比較擠，但是美玲還是喜歡住在台北。她覺得台北到處都有餐廳、便利商店，百貨公司也很多，什麼時候都吃得到飯，也買得到飲料，所以她越來越喜歡生活方便的台北了。')"><i class="bi bi-play-fill"></i> Toàn bộ</button>
         </div>
         <div class="szh" style="font-size:22px;line-height:1.8;">高美玲利用放假的時候到處去旅行，她喜歡台北這個大城市，也喜歡中南部鄉下。因為她家在巴黎，已經習慣大城市熱鬧的氣氛，但是她覺得台灣鄉下小鎮也很有意思。</div>
         <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Gāo Měilíng lìyòng fàngjià de shíhòu dàochù qù lǚxíng, tā xǐhuān Táiběi zhège dà chéngshì, yě xǐhuān zhōngnánbù xiāngxia. Yīnwèi tā jiā zài Bālí, yǐjīng xíguàn dà chéngshì rènao de qìfēn, dànshì tā juéde Táiwān xiāngxia xiǎo zhèn yě hěn yǒu yìsi.</div>
@@ -379,9 +384,9 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">明天的考試，我都準備好了。</div></td><td><div class="py">Míngtiān de kǎoshì, wǒ dōu zhǔnbèi hǎo le.</div></td><td><div class="vi">Kỳ thi ngày mai, tôi đã chuẩn bị xong hết rồi.</div></td></tr>
           <tr><td><div class="zh">我把去旅行的時候需要的資料都找好了。</div></td><td><div class="py">Wǒ bǎ qù lǚxíng de shíhòu xūyào de zīliào dōu zhǎo hǎo le.</div></td><td><div class="vi">Tôi đã tìm xong tài liệu cần thiết cho chuyến đi.</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Phủ định:</strong> 雖然我已經寫了三個小時的功課，可是還沒寫好。/ 下星期我要參加太極拳比賽，但是我還沒準備好。/ 我還沒想好搭什麼車到台南去。</div>
-        <div class="gnote">💡 <strong>Câu hỏi:</strong> 你是不是買好火車票了？/ 她結婚需要的禮服，都準備好了沒有？/ 這個新的工作，你一個人做得好做不好？</div>
-        <div class="gnote">💡 好 và 完 có nghĩa chồng chéo nhau. Một số động từ kết hợp đầy đủ với 好: 搬, 寫, 想, 做, 準備, 買. Các động từ như 吃 không dùng với 好.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Phủ định:</strong> 雖然我已經寫了三個小時的功課，可是還沒寫好。/ 下星期我要參加太極拳比賽，但是我還沒準備好。/ 我還沒想好搭什麼車到台南去。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Câu hỏi:</strong> 你是不是買好火車票了？/ 她結婚需要的禮服，都準備好了沒有？/ 這個新的工作，你一個人做得好做不好？</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> 好 và 完 có nghĩa chồng chéo nhau. Một số động từ kết hợp đầy đủ với 好: 搬, 寫, 想, 做, 準備, 買. Các động từ như 吃 không dùng với 好.</div>
       </div>
     </div>
     <div id="ngupap-g2" class="sub-content">
@@ -395,10 +400,10 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">我找了很久，才找到了我的手機。</div></td><td><div class="py">Wǒ zhǎole hěn jiǔ, cái zhǎodào le wǒ de shǒujī.</div></td><td><div class="vi">Tôi tìm rất lâu, mới tìm thấy điện thoại của mình.</div></td></tr>
           <tr><td><div class="zh">李東健沒想到搬家麻煩極了。</div></td><td><div class="py">Lǐ Dōngjiàn méi xiǎngdào bānjiā máfan jí le.</div></td><td><div class="vi">Lý Đông Kiện không ngờ chuyển nhà phiền phức cực kỳ.</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Phủ định:</strong> 今年我在台灣過生日，所以沒吃到媽媽做的蛋糕。/ 我在百貨公司看了半天，可是我沒找到我要的。</div>
-        <div class="gnote">💡 <strong>Câu hỏi:</strong> 十樓聽得到聽不到汽車的聲音？/ 你喜歡的水果，在台灣是不是買得到？/ 小美的電話，你找到了沒有？</div>
-        <div class="gnote">💡 Động từ tri giác như 看 và 聽 có thể kết hợp với 到 hoặc 見 với nghĩa giống nhau. 到 thông dụng hơn ở Đài Loan, còn 見 thông dụng hơn ở Trung Quốc đại lục.</div>
-        <div class="gnote">💡 沒想到 đã trở thành thành ngữ, thường ở đầu câu diễn tả sự ngạc nhiên. 想不到 có nghĩa và cách dùng giống 沒想到.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Phủ định:</strong> 今年我在台灣過生日，所以沒吃到媽媽做的蛋糕。/ 我在百貨公司看了半天，可是我沒找到我要的。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Câu hỏi:</strong> 十樓聽得到聽不到汽車的聲音？/ 你喜歡的水果，在台灣是不是買得到？/ 小美的電話，你找到了沒有？</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Động từ tri giác như 看 và 聽 có thể kết hợp với 到 hoặc 見 với nghĩa giống nhau. 到 thông dụng hơn ở Đài Loan, còn 見 thông dụng hơn ở Trung Quốc đại lục.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> 沒想到 đã trở thành thành ngữ, thường ở đầu câu diễn tả sự ngạc nhiên. 想不到 có nghĩa và cách dùng giống 沒想到.</div>
       </div>
     </div>
     <div id="ngupap-g3" class="sub-content">
@@ -412,10 +417,10 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">中文跟英文比起來，李東健覺得中文容易一點。</div></td><td><div class="py">Zhōngwén gēn Yīngwén bǐ qǐlái, Lǐ Dōngjiàn juéde Zhōngwén róngyì yìdiǎn.</div></td><td><div class="vi">So sánh tiếng Trung và tiếng Anh, Lý Đông Kiện thấy tiếng Trung dễ hơn một chút.</div></td></tr>
           <tr><td><div class="zh">跟住在大城市比起來，鄉下舒服多了。</div></td><td><div class="py">Gēn zhù zài dà chéngshì bǐ qǐlái, xiāngxia shūfu duō le.</div></td><td><div class="vi">So với sống ở thành phố lớn, ở quê thoải mái hơn nhiều.</div></td></tr>
         </table>
-        <div class="gnote">💡 Mẫu câu này không thể phủ định trực tiếp.</div>
-        <div class="gnote">💡 <strong>Câu hỏi:</strong> 巴黎跟紐約比起來，哪個城市的冬天比較冷？/ 打太極拳跟踢足球比起來，哪個比較累？/ 跟那家店的麵包比起來，這家店的怎麼樣？</div>
-        <div class="gnote">💡 Trong mẫu "A跟B比起來，…", A có thể lược bỏ nếu A cũng là chủ ngữ trong mệnh đề chính. Ví dụ: (泰國菜) 跟法國菜比起來，泰國菜比較酸。</div>
-        <div class="gnote">💡 Giới từ 跟 trong mẫu này có thể thay bằng 和. Trong mệnh đề chính, phải dùng phó từ hoặc bổ ngữ mức độ như 比較, 多了, 一點兒.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Mẫu câu này không thể phủ định trực tiếp.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Câu hỏi:</strong> 巴黎跟紐約比起來，哪個城市的冬天比較冷？/ 打太極拳跟踢足球比起來，哪個比較累？/ 跟那家店的麵包比起來，這家店的怎麼樣？</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Trong mẫu "A跟B比起來，…", A có thể lược bỏ nếu A cũng là chủ ngữ trong mệnh đề chính. Ví dụ: (泰國菜) 跟法國菜比起來，泰國菜比較酸。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Giới từ 跟 trong mẫu này có thể thay bằng 和. Trong mệnh đề chính, phải dùng phó từ hoặc bổ ngữ mức độ như 比較, 多了, 一點兒.</div>
       </div>
     </div>
     <div id="ngupap-g4" class="sub-content">
@@ -430,9 +435,9 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">他很有錢，買房子就像買車子一樣容易。</div></td><td><div class="py">Tā hěn yǒu qián, mǎi fángzi jiù xiàng mǎi chēzi yíyàng róngyì.</div></td><td><div class="vi">Anh ấy rất giàu, mua nhà dễ như mua xe vậy.</div></td></tr>
           <tr><td><div class="zh">學語言像學做菜一樣，多練習就會學得好。</div></td><td><div class="py">Xué yǔyán xiàng xué zuòcài yíyàng, duō liànxí jiù huì xué de hǎo.</div></td><td><div class="vi">Học ngôn ngữ giống như học nấu ăn, luyện tập nhiều là học tốt.</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Phủ định:</strong> 妹妹不像姐姐一樣，那麼常買新衣服。/ 馬安同今年過生日的氣氛不像去年一樣熱鬧。</div>
-        <div class="gnote">💡 <strong>Câu hỏi:</strong> 高美玲的中文是不是說得像台灣人一樣好？/ 你覺得教英文是不是像教西班牙文一樣容易？</div>
-        <div class="gnote">💡 Mẫu A-not-A có thể dùng với "A跟B一樣" nhưng không dùng với "A像B一樣". Ví dụ đúng: 小籠包跟包子一樣不一樣？ Ví dụ sai: *小籠包像包子一樣不一樣？</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Phủ định:</strong> 妹妹不像姐姐一樣，那麼常買新衣服。/ 馬安同今年過生日的氣氛不像去年一樣熱鬧。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Câu hỏi:</strong> 高美玲的中文是不是說得像台灣人一樣好？/ 你覺得教英文是不是像教西班牙文一樣容易？</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Mẫu A-not-A có thể dùng với "A跟B一樣" nhưng không dùng với "A像B一樣". Ví dụ đúng: 小籠包跟包子一樣不一樣？ Ví dụ sai: *小籠包像包子一樣不一樣？</div>
       </div>
     </div>
     <div id="ngupap-g5" class="sub-content">
@@ -447,9 +452,9 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">張教授婚禮的氣氛熱鬧得不得了。</div></td><td><div class="py">Zhāng jiàoshòu hūnlǐ de qìfēn rènao de bùdéliǎo.</div></td><td><div class="vi">Không khí đám cưới giáo sư Trương náo nhiệt vô cùng.</div></td></tr>
           <tr><td><div class="zh">打了太極拳以後，精神好得很。</div></td><td><div class="py">Dǎle tàijíquán yǐhòu, jīngshén hǎo de hěn.</div></td><td><div class="vi">Sau khi tập Thái Cực Quyền, tinh thần tốt lắm.</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Có 得:</strong> V + 得 + (多, 不得了, 很) — Ví dụ: 房租便宜比光線好重要得多。/ 這個小鎮的氣氛比以前熱鬧得多。</div>
-        <div class="gnote">💡 <strong>Không 得:</strong> V + (極了, 多了, 一點) — Ví dụ: 泰國菜比日本菜辣多了。/ 大城市有捷運，交通會方便一點。</div>
-        <div class="gnote">💡 Các bổ ngữ 極了, 得不得了, 得很 không thể dùng cùng với 比. Tuy nhiên 得多 và 多了 có thể dùng cùng 比. Ví dụ sai: *巴黎的建築比高雄的漂亮極了。/ *大城市的馬路比鄉下的寬得很。 Ví dụ đúng: 用提款機提錢比到銀行去便利多了。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Có 得:</strong> V + 得 + (多, 不得了, 很) — Ví dụ: 房租便宜比光線好重要得多。/ 這個小鎮的氣氛比以前熱鬧得多。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Không 得:</strong> V + (極了, 多了, 一點) — Ví dụ: 泰國菜比日本菜辣多了。/ 大城市有捷運，交通會方便一點。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Các bổ ngữ 極了, 得不得了, 得很 không thể dùng cùng với 比. Tuy nhiên 得多 và 多了 có thể dùng cùng 比. Ví dụ sai: *巴黎的建築比高雄的漂亮極了。/ *大城市的馬路比鄉下的寬得很。 Ví dụ đúng: 用提款機提錢比到銀行去便利多了。</div>
       </div>
     </div>
     <div id="ngupap-g6" class="sub-content">
@@ -464,9 +469,9 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">誰都吃得起台灣小吃。</div></td><td><div class="py">Shéi dōu chī de qǐ Táiwān xiǎochī.</div></td><td><div class="vi">Ai cũng ăn nổi đồ ăn vặt Đài Loan.</div></td></tr>
           <tr><td><div class="zh">我是學生，付不起一個月兩萬塊的房租。</div></td><td><div class="py">Wǒ shì xuésheng, fù bu qǐ yí ge yuè liǎng wàn kuài de fángzū.</div></td><td><div class="vi">Tôi là sinh viên, không trả nổi tiền thuê nhà hai vạn một tháng.</div></td></tr>
         </table>
-        <div class="gnote">💡 得起 chỉ dùng trong mẫu tiềm năng: V+得+起, V+不+起. Không dùng trực tiếp: *買起, *沒買起.</div>
-        <div class="gnote">💡 Một số động từ thường dùng với 得起: 吃, 喝, 買, 住, 租, 穿, 用, 付. 得起 cũng có thể kết hợp với 看: 看得起 (tôn trọng ai), 看不起 (khinh thường ai).</div>
-        <div class="gnote">💡 <strong>Câu hỏi:</strong> 這件新娘禮服這麼貴，要結婚的人租得起嗎？/ 我們住得起住不起一個晚上一萬多塊的旅館？</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> 得起 chỉ dùng trong mẫu tiềm năng: V+得+起, V+不+起. Không dùng trực tiếp: *買起, *沒買起.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Một số động từ thường dùng với 得起: 吃, 喝, 買, 住, 租, 穿, 用, 付. 得起 cũng có thể kết hợp với 看: 看得起 (tôn trọng ai), 看不起 (khinh thường ai).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Câu hỏi:</strong> 這件新娘禮服這麼貴，要結婚的人租得起嗎？/ 我們住得起住不起一個晚上一萬多塊的旅館？</div>
       </div>
     </div>
   </div>
@@ -474,92 +479,92 @@ footer strong{color:var(--r);}
   <!-- BÀI TẬP -->
   <div id="baitap" class="sec">
     <div class="subnav">
-      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bài 1 · 好</button>
-      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bài 2 · 到</button>
-      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bài 3 · 比起來</button>
-      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bài 4 · 像…一樣</button>
-      <button class="subtab" onclick="goSub('baitap','bt5')">📝 Bài 5 · 極了/得不得了/得很</button>
-      <button class="subtab" onclick="goSub('baitap','bt6')">📝 Bài 6 · 得起</button>
+      <button class="subtab on" onclick="goSub('baitap','bt1')"><i class="bi bi-pencil-square"></i> Bài 1 · 好</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')"><i class="bi bi-pencil-square"></i> Bài 2 · 到</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')"><i class="bi bi-pencil-square"></i> Bài 3 · 比起來</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')"><i class="bi bi-pencil-square"></i> Bài 4 · 像…一樣</button>
+      <button class="subtab" onclick="goSub('baitap','bt5')"><i class="bi bi-pencil-square"></i> Bài 5 · 極了/得不得了/得很</button>
+      <button class="subtab" onclick="goSub('baitap','bt6')"><i class="bi bi-pencil-square"></i> Bài 6 · 得起</button>
     </div>
     <div id="baitap-bt1" class="sub-content on">
       <div class="ec">
-        <div class="ett">📝 Bài 1 · Hoàn thành câu với 好</div>
+        <div class="ett"><i class="bi bi-pencil-square"></i> Bài 1 · Hoàn thành câu với 好</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu với bổ ngữ 好.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>老師要我們寫的作業，我都<input class="fi" id="e1-1" style="width:100px;">。</div><div class="eh">→ Tôi đã viết xong hết bài tập thầy yêu cầu.</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>下禮拜去旅行的事，我都<input class="fi" id="e1-2" style="width:100px;">。</div><div class="eh">→ Tôi đã chuẩn bị xong chuyện đi du lịch tuần sau.</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>放心，明天的考試我都<input class="fi" id="e1-3" style="width:100px;">。</div><div class="eh">→ Yên tâm, tôi đã luyện tập xong cho kỳ thi ngày mai.</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>菜已經<input class="fi" id="e1-4" style="width:100px;">，大家吃飯吧！</div><div class="eh">→ Đồ ăn đã làm xong rồi, mọi người ăn cơm thôi!</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>我昨天搬家，能這麼快<input class="fi" id="e1-5" style="width:100px;">，都是因為你的幫忙。</div><div class="eh">→ Hôm qua tôi chuyển nhà, chuyển xong nhanh như vậy là nhờ sự giúp đỡ của bạn.</div></div>
-        <button class="bck" onclick="ckE1()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE1()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE1()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE1()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab1"><strong>Đáp án:</strong> ① 寫好了 &nbsp; ② 準備好了 &nbsp; ③ 練習好了 &nbsp; ④ 做好了 &nbsp; ⑤ 搬好</div>
       </div>
     </div>
     <div id="baitap-bt2" class="sub-content">
       <div class="ec" style="border-top-color:var(--b)">
-        <div class="ett" style="color:var(--b)">📝 Bài 2 · Hoàn thành câu với 到</div>
+        <div class="ett" style="color:var(--b)"><i class="bi bi-pencil-square"></i> Bài 2 · Hoàn thành câu với 到</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu với bổ ngữ 到.</p>
-        <div class="ei"><div class="eq"><span class="nm">①</span>外面好吵，你<input class="fi" id="e2-1" style="width:120px;">老師說的話嗎？</div><div class="eh">→ Bên ngoài ồn quá, bạn nghe được lờii thầy giáo nói không?</div></div>
+        <div class="ei"><div class="eq"><span class="nm">①</span>外面好吵，你<input class="fi" id="e2-1" style="width:120px;">老師說的話嗎？</div><div class="eh">→ Bên ngoài ồn quá, bạn nghe được lời thầy giáo nói không?</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>你喜歡的那枝筆，你<input class="fi" id="e2-2" style="width:120px;">了嗎？</div><div class="eh">→ Cây bút bạn thích, bạn đã mua được chưa?</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>我在百貨公司看了半天，可是沒<input class="fi" id="e2-3" style="width:120px;">我要的。</div><div class="eh">→ Tôi xem ở công ty bách hóa cả buổi nhưng không tìm được thứ tôi muốn.</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>我想騎腳踏車到陽明山去，可是我覺得我<input class="fi" id="e2-4" style="width:120px;">。</div><div class="eh">→ Tôi muốn đạp xe lên Dương Minh Sơn nhưng tôi nghĩ tôi không đạp nổi.</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>在日本<input class="fi" id="e2-5" style="width:120px;">到跟台灣一樣的牛肉麵嗎？</div><div class="eh">→ Ở Nhật có ăn được mì bò giống ở Đài Loan không?</div></div>
-        <button class="bck" onclick="ckE2()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE2()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE2()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE2()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab2"><strong>Đáp án:</strong> ① 聽得到 &nbsp; ② 買到 &nbsp; ③ 找到 &nbsp; ④ 騎不到 &nbsp; ⑤ 吃得到</div>
       </div>
     </div>
     <div id="baitap-bt3" class="sub-content">
       <div class="ec" style="border-top-color:var(--r)">
-        <div class="ett" style="color:var(--r)">📝 Bài 3 · Hoàn thành câu với 比起來</div>
+        <div class="ett" style="color:var(--r)"><i class="bi bi-pencil-square"></i> Bài 3 · Hoàn thành câu với 比起來</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu so sánh với 比起來.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span><input class="fi" id="e3-1" style="width:80px;">美國的書<input class="fi" id="e3-2" style="width:80px;">，台灣的<input class="fi" id="e3-3" style="width:100px;">。</div><div class="eh">→ So với sách Mỹ, sách Đài Loan rẻ hơn.</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span><input class="fi" id="e3-4" style="width:80px;">住在大城市<input class="fi" id="e3-5" style="width:80px;">，鄉下<input class="fi" id="e3-6" style="width:100px;">。</div><div class="eh">→ So với sống ở thành phố lớn, ở quê thoải mái hơn nhiều.</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span><input class="fi" id="e3-7" style="width:80px;">那家店的麵包<input class="fi" id="e3-8" style="width:80px;">，這家店的<input class="fi" id="e3-9" style="width:120px;">？</div><div class="eh">→ So với bánh mì tiệm kia, tiệm này thế nào?</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span><input class="fi" id="e3-10" style="width:80px;">巴黎<input class="fi" id="e3-11" style="width:80px;">，紐約的冬天<input class="fi" id="e3-12" style="width:100px;">。</div><div class="eh">→ So với Paris, mùa đông New York lạnh hơn.</div></div>
-        <button class="bck" onclick="ckE3()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE3()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE3()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE3()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab3"><strong>Đáp án:</strong> ① 跟, 比起來, 比較便宜 &nbsp; ② 跟, 比起來, 舒服多了 &nbsp; ③ 跟, 比起來, 怎麼樣 &nbsp; ④ 跟, 比起來, 比較冷</div>
       </div>
     </div>
     <div id="baitap-bt4" class="sub-content">
       <div class="ec" style="border-top-color:#764ba2">
-        <div class="ett" style="color:#764ba2">📝 Bài 4 · Hoàn thành câu với 像…一樣</div>
+        <div class="ett" style="color:#764ba2"><i class="bi bi-pencil-square"></i> Bài 4 · Hoàn thành câu với 像…一樣</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu với mẫu 像…一樣.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>泰國到處都是廟，就<input class="fi" id="e4-1" style="width:140px;">有很多教堂<input class="fi" id="e4-2" style="width:60px;">。</div><div class="eh">→ Thái Lan đâu đâu cũng có chùa, giống như Pháp có nhiều nhà thờ vậy.</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>他很有錢，買房子就<input class="fi" id="e4-3" style="width:140px;">買車子<input class="fi" id="e4-4" style="width:80px;">容易。</div><div class="eh">→ Anh ấy rất giàu, mua nhà dễ như mua xe vậy.</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>學語言<input class="fi" id="e4-5" style="width:140px;">學做菜<input class="fi" id="e4-6" style="width:80px;">，多練習就會學得好。</div><div class="eh">→ Học ngôn ngữ giống như học nấu ăn, luyện tập nhiều là học tốt.</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>他的體力很好，跑三千公尺就<input class="fi" id="e4-7" style="width:140px;">走路<input class="fi" id="e4-8" style="width:80px;">輕鬆。</div><div class="eh">→ Sức lực anh ấy rất tốt, chạy 3000 mét nhẹ nhàng như đi bộ vậy.</div></div>
-        <button class="bck" onclick="ckE4()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE4()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE4()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE4()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab4"><strong>Đáp án:</strong> ① 像法國, 一樣 &nbsp; ② 像, 一樣 &nbsp; ③ 像, 一樣 &nbsp; ④ 像, 一樣</div>
       </div>
     </div>
     <div id="baitap-bt5" class="sub-content">
       <div class="ec" style="border-top-color:var(--g)">
-        <div class="ett" style="color:var(--g)">📝 Bài 5 · Hoàn thành câu với 極了/得不得了/得很</div>
+        <div class="ett" style="color:var(--g)"><i class="bi bi-pencil-square"></i> Bài 5 · Hoàn thành câu với 極了/得不得了/得很</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để nhấn mạnh mức độ.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>你做的日本菜好吃<input class="fi" id="e5-1" style="width:100px;">。</div><div class="eh">→ Món Nhật bạn làm ngon cực kỳ.</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>我沒吃中飯，現在餓<input class="fi" id="e5-2" style="width:100px;">。</div><div class="eh">→ Tôi không ăn cơm trưa, bây giờ đói cực kỳ.</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>張教授婚禮的氣氛熱鬧<input class="fi" id="e5-3" style="width:120px;">。</div><div class="eh">→ Không khí đám cưới giáo sư Trương náo nhiệt vô cùng.</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>打了太極拳以後，精神好<input class="fi" id="e5-4" style="width:100px;">。</div><div class="eh">→ Sau khi tập Thái Cực Quyền, tinh thần tốt lắm.</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>這個小鎮的氣氛比以前熱鬧<input class="fi" id="e5-5" style="width:100px;">。</div><div class="eh">→ Không khí thị trấn này náo nhiệt hơn trước nhiều.</div></div>
-        <button class="bck" onclick="ckE5()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE5()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE5()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE5()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab5"><strong>Đáp án:</strong> ① 極了 &nbsp; ② 極了 &nbsp; ③ 得不得了 &nbsp; ④ 得很 &nbsp; ⑤ 得多</div>
       </div>
     </div>
     <div id="baitap-bt6" class="sub-content">
       <div class="ec" style="border-top-color:#f57c00">
-        <div class="ett" style="color:#f57c00">📝 Bài 6 · Hoàn thành câu với 得起</div>
+        <div class="ett" style="color:#f57c00"><i class="bi bi-pencil-square"></i> Bài 6 · Hoàn thành câu với 得起</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu với 得起/不起.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>那件西裝一萬多塊，雖然好看，但是我<input class="fi" id="e6-1" style="width:120px;">。</div><div class="eh">→ Bộ vest hơn một vạn, tuy đẹp nhưng tôi không mua nổi.</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>那家餐廳的小籠包有點貴，你<input class="fi" id="e6-2" style="width:140px;">嗎？</div><div class="eh">→ Tiểu long bao nhà hàng đó hơi đắt, bạn mở nổi không?</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>打工的薪水還沒發，我現在<input class="fi" id="e6-3" style="width:140px;">這麼貴的餐廳。</div><div class="eh">→ Lương làm thêm chưa phát, tôi bây giờ không trả nổi nhà hàng đắt như vậy.</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>雖然這間套房每個月房租要六千塊，我還<input class="fi" id="e6-4" style="width:120px;">。</div><div class="eh">→ Tuy căn hộ này mỗi tháng sáu nghìn, tôi vẫn thuê nổi.</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>一杯咖啡五百塊，誰<input class="fi" id="e6-5" style="width:140px;">這麼貴的咖啡？</div><div class="eh">→ Một ly cà phê năm trăm, ai uống nổi cà phê đắt như vậy?</div></div>
-        <button class="bck" onclick="ckE6()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE6()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE6()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE6()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab6"><strong>Đáp án:</strong> ① 買不起 &nbsp; ② 請得起 &nbsp; ③ 付不起 &nbsp; ④ 租得起 &nbsp; ⑤ 喝得起</div>
       </div>
     </div>
@@ -666,7 +671,7 @@ function canStroke(zh){return[...zh].some(c=>HW.has(c));}
 function buildTable(id,arr,hasType){
   const th=`<thead><tr>
     <th class="tc" style="width:36px">STT</th>
-    <th class="tc" style="width:44px">🔊</th>
+    <th class="tc" style="width:44px"><i class="bi bi-volume-up-fill"></i></th>
     <th>Chữ Hán</th><th>Phiên âm</th><th>Nghĩa tiếng Việt</th>
     ${hasType?'<th class="tc" style="width:58px">Từ loại</th>':''}
     <th class="tc" style="width:48px">筆順</th>
@@ -675,7 +680,7 @@ function buildTable(id,arr,hasType){
     const s=w.zh.replace(/'/g,"\\'");
     return`<tr>
       <td class="c-stt">${w.n}</td>
-      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')"><i class="bi bi-volume-up-fill"></i></button></td>
       <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
       <td class="c-py"><span class="py-text">${w.py}</span></td>
       <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
@@ -828,9 +833,9 @@ function openStroke(word){
     }catch(e){console.warn('HanziWriter error',ch,e);}
   });
   const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
-  [['▶ Hoạt ảnh',hwAnimAll,''],['🔄 Lặp',hwLoopAll,''],['✕ Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+  [['<i class="bi bi-play-fill"></i> Hoạt ảnh',hwAnimAll,''],['<i class="bi bi-arrow-repeat"></i> Lặp',hwLoopAll,''],['<i class="bi bi-x-lg"></i> Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
     const b=document.createElement('button');
-    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+    b.className='hw-btn'+(cls?' '+cls:'');b.innerHTML=txt;b.onclick=fn;ctrl.appendChild(b);
   });
   document.getElementById('ov').classList.add('open');
 }

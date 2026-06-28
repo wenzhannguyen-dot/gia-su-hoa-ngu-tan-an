@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>第二課 還是坐捷運吧！</title>
 <base target="_blank">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -22,34 +23,38 @@
 body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
 .zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
 
+/* TOPBAR */
+.header{position:fixed;top:0;left:0;right:0;height:70px;background:#4472c4;color:#fff;padding:10px 20px;display:flex;align-items:center;z-index:1001;box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.logo{display:flex;align-items:center;gap:15px;}
+.logo-img{width:50px;height:50px;background:#fff;border-radius:8px;padding:3px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.logo-img img{width:100%;height:100%;object-fit:contain;}
+.logo-text h1{font-size:16px;font-weight:700;margin-bottom:2px;font-family:Arial,sans-serif;}
+.logo-text p{font-size:12px;opacity:.9;font-family:Arial,sans-serif;}
 /* SIDEBAR */
-#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
-.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
-.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
-.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
-.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
-.logo-area{text-align:center;padding:5px 0;}
-.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
-.logo-container img{width:100%;height:100%;object-fit:contain;}
-nav{flex:1;padding:5px 0;}
-.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
-.nb:hover{background:rgba(255,255,255,.1);}
-.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+#sb{width:var(--sw);height:calc(100vh - 70px);background:#fff;border:1px solid #d0d0d0;border-radius:8px;display:flex;flex-direction:column;position:fixed;top:70px;left:10px;z-index:100;overflow-y:auto;}
+.nav-section{border-bottom:1px solid #e0e0e0;}
+.nav-title{padding:13px 15px;color:#333;font-size:14px;font-weight:700;font-family:Arial,sans-serif;display:flex;align-items:center;gap:8px;background:#f8f9fa;border-bottom:2px solid #4472c4;}
+
+
+nav{flex:0 0 auto;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#666;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;text-align:left;transition:all .2s;}
+.nb:hover{background:#e3f2fd;color:#4472c4;}
+.nb.on{background:#e8f5e9;color:#2e7d32;}
 .nb .ic{font-size:18px;}
-.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
-.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
-.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
-.st-btn:hover{background:rgba(255,255,255,.1);}
-.st-btn.on{background:var(--g);border-color:var(--g);}
+.side-toggle{padding:15px;background:#fafafa;border-top:1px solid #e0e0e0;}
+.side-toggle-label{font-size:13px;color:#333;margin-bottom:10px;font-family:Arial,sans-serif;display:flex;align-items:center;gap:6px;font-weight:700;}
+.st-btn{display:flex;align-items:center;justify-content:flex-start;gap:8px;width:100%;margin-bottom:6px;border:1px solid #e0e0e0;background:#f8f9fa;color:#666;padding:8px;border-radius:5px;font-size:12px;font-family:Arial,sans-serif;cursor:pointer;font-weight:normal;transition:all .1s;}
+.st-btn:hover{background:#e3f2fd;border-color:#4472c4;color:#4472c4;}
+.st-btn.on{background:#e3f2fd;border-color:#4472c4;color:#4472c4;font-weight:600;}
 
 /* MAIN */
-#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
-.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+#mn{margin-left:calc(var(--sw) + 10px);flex:1;padding-top:70px;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:space-between;position:sticky;top:70px;z-index:90;}
 .tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
-.tvi{font-size:14px;color:var(--s);margin-top:2px;}
-.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
-.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
-.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;font-family:Arial,sans-serif;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;font-family:Arial,sans-serif;}
+.btn-editor{background:#ed7d31;color:#fff;border:1px solid #ed7d31;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .1s;}
+.btn-editor:hover{background:#d35400;border-color:#d35400;}
 
 /* SECTIONS */
 .sec{display:none;padding:20px 24px;}
@@ -127,9 +132,9 @@ td.d-tx{padding:11px 0;}
 /* GRAMMAR */
 .gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
 .gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
-.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gtt{font-size:18px;font-weight:700;vertical-align:middle;}
 .gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
-.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;font-family:Arial,'DFKai-SB','標楷體',serif!important;}
 .fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
 .gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
 table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
@@ -137,12 +142,12 @@ table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;
 table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
 table.ex tr:last-child td{border-bottom:none;}
 table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
-table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .py{font-size:15px;color:var(--r);margin-top:2px;}
 table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
 
 /* EXERCISES */
 .ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
-.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ett{font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px;}
 .ei{margin-bottom:14px;}
 .eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
 .eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
@@ -191,7 +196,7 @@ footer strong{color:var(--r);}
 <!-- STROKE OVERLAY -->
 <div id="ov" onclick="ovClick(event)">
   <div id="obox">
-    <button id="ocls" onclick="closeOv()">✕</button>
+    <button id="ocls" onclick="closeOv()"><i class="bi bi-x-lg"></i></button>
     <div id="otitle"></div>
     <div id="oframes"></div>
     <div class="hw-controls" id="octrl"></div>
@@ -202,8 +207,8 @@ footer strong{color:var(--r);}
 <div id="editorModal">
   <div class="editor-container">
     <div class="editor-header">
-      <h3>Soạn thảo ghi chú - Bài 2 Quyển 2</h3>
-      <button class="editor-close" onclick="closeEditor()">✕</button>
+      <h3><i class="bi bi-journal-text"></i> Soạn thảo ghi chú - Bài 2 Quyển 2</h3>
+      <button class="editor-close" onclick="closeEditor()"><i class="bi bi-x-lg"></i></button>
     </div>
     <div class="editor-body">
       <div id="editor-toolbar">
@@ -241,53 +246,53 @@ footer strong{color:var(--r);}
   </div>
 </div>
 
+<div class="header">
+  <div class="logo">
+    <div class="logo-img"><img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="GIA SƯ HOA NGỮ TÂN AN"></div>
+    <div class="logo-text">
+      <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+      <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
+    </div>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+    <div style="text-align:right;">
+      <div class="tzh" style="color:#fff;font-size:18px;"><span style="font-family:Arial,sans-serif;">BÀI 2</span> <span style="font-size:14px;opacity:.7;">·</span> <span style="font-family:'DFKai-SB','標楷體',serif;">第二課</span></div>
+      <div class="tvi" style="color:rgba(255,255,255,.85);font-size:11px;margin-top:2px;">還是坐捷運吧！· Vẫn là đi tàu điện ngầm đi!</div>
+    </div>
+    <button class="btn-editor" onclick="openEditor()"><span><i class="bi bi-journal-text"></i></span><span>Soạn thảo</span></button>
+    <div class="badge">當代中文課程 2</div>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <div id="sb">
-  <div class="lb">
-    <div class="logo-area">
-      <div class="logo-container">
-        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
-      </div>
-    </div>
-    <div class="ln">GIA SƯ HOA NGỮ TÂN AN</div>
-    <div class="la">9/1 Bạch Văn Tư, Tân An, Long An</div>
-    <div class="lz">Zalo: 0839 889 772</div>
-  </div>
+  <div class="nav-section">
+    <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung bài học</span></div>
   <nav>
-    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic">🏠</span><span>VỀ TRANG CHỦ</span></button>
-    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">📖</span><span>TỪ VỰNG</span></button>
-    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">💬</span><span>BÀI KHÓA</span></button>
-    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">📐</span><span>NGỮ PHÁP</span></button>
-    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">✏️</span><span>BÀI TẬP</span></button>
-    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">🏛️</span><span>VĂN HÓA</span></button>
+    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic"><i class="bi bi-house-door"></i></span><span>Về trang chủ</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic"><i class="bi bi-alphabet"></i></span><span>Từ vựng</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic"><i class="bi bi-book"></i></span><span>Bài khóa</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic"><i class="bi bi-diagram-3"></i></span><span>Ngữ pháp</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic"><i class="bi bi-pencil-square"></i></span><span>Bài tập</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic"><i class="bi bi-building"></i></span><span>Văn hóa</span></button>
   </nav>
+  </div>
   <div class="side-toggle" id="toggleContainer" style="display:none;">
-    <button class="st-btn on" id="tp" onclick="tog('py')">🔊 Phiên âm</button>
-    <button class="st-btn on" id="tv" onclick="tog('vi')">🇻🇳 Tiếng Việt</button>
+    <button class="st-btn on" id="tp" onclick="tog('py')"><i class="bi bi-eye-slash"></i> Phiên âm</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')"><i class="bi bi-eye-slash"></i> Tiếng Việt</button>
   </div>
 </div>
 
 <!-- MAIN -->
 <div id="mn">
-  <div class="topbar">
-    <div>
-      <div class="tzh">BÀI 2 · 第二課</div>
-      <div class="tvi">還是坐捷運吧！· Vẫn là đi tàu điện ngầm đi!</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:15px;">
-      <button class="btn-editor" onclick="openEditor()"><span>📝</span><span>Soạn thảo</span></button>
-      <div class="badge">當代中文課程 2</div>
-    </div>
-  </div>
-
   <!-- TỪ VỰNG -->
   <div id="vocab" class="sec on">
     <div class="subnav">
-      <button class="subtab on" onclick="goSub('vocab','v1')">📖 Từ vựng 1 · 生詞一</button>
-      <button class="subtab" onclick="goSub('vocab','v2')">📖 Từ vựng 2 · 生詞二</button>
-      <button class="subtab" onclick="goSub('vocab','c1')">📝 Cụm từ 1 · 短語一</button>
-      <button class="subtab" onclick="goSub('vocab','c2')">📝 Cụm từ 2 · 短語二</button>
-      <button class="subtab" onclick="goSub('vocab','nv')">👥 Nhân vật · 人物</button>
+      <button class="subtab on" onclick="goSub('vocab','v1')"><i class="bi bi-book-half"></i> Từ vựng 1 · 生詞一</button>
+      <button class="subtab" onclick="goSub('vocab','v2')"><i class="bi bi-book-half"></i> Từ vựng 2 · 生詞二</button>
+      <button class="subtab" onclick="goSub('vocab','c1')"><i class="bi bi-journal-text"></i> Cụm từ 1 · 短語一</button>
+      <button class="subtab" onclick="goSub('vocab','c2')"><i class="bi bi-journal-text"></i> Cụm từ 2 · 短語二</button>
+      <button class="subtab" onclick="goSub('vocab','nv')"><i class="bi bi-people"></i> Nhân vật · 人物</button>
     </div>
     <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
     <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
@@ -299,31 +304,31 @@ footer strong{color:var(--r);}
   <!-- BÀI KHÓA -->
   <div id="baikoa" class="sec">
     <div class="subnav">
-      <button class="subtab on" onclick="goSub('baikoa','ht1')">💬 Hội thoại 1 · 對話一</button>
-      <button class="subtab" onclick="goSub('baikoa','bk')">📖 Bài khóa · 課文</button>
+      <button class="subtab on" onclick="goSub('baikoa','ht1')"><i class="bi bi-chat-left-text"></i> Hội thoại 1 · 對話一</button>
+      <button class="subtab" onclick="goSub('baikoa','bk')"><i class="bi bi-book-half"></i> Bài khóa · 課文</button>
     </div>
     <div id="baikoa-ht1" class="sub-content on">
       <div class="db">
         <div class="dt">
           <span class="dlb">Hội thoại 1 · 對話一</span>Giao thông ở Đài Bắc
-          <button class="dab" onclick="sayZh('安同，早！你要去哪裡？早！我約了朋友一起去看電影，你呢？我要去看電腦展。你去哪裡看電腦展？世貿展覽館，我現在要去對面坐公車。那裡離台北101不遠，妳怎麼不坐捷運呢？朋友告訴我公車直接到展覽館，不必換車。坐捷運也很方便。妳先坐2號線到台北車站，再換車到展覽館。聽起來坐捷運比較麻煩。一點也不麻煩，捷運比較快，坐公車要花一個多小時。你還是坐捷運吧！捷運站遠嗎？捷運站就在前面。謝謝！我得趕快走了。別急，走慢一點。捷運的班次很多。好，我們下禮拜見。')">🔊 Toàn bộ</button>
+          <button class="dab" onclick="sayZh('安同，早！你要去哪裡？早！我約了朋友一起去看電影，你呢？我要去看電腦展。你去哪裡看電腦展？世貿展覽館，我現在要去對面坐公車。那裡離台北101不遠，妳怎麼不坐捷運呢？朋友告訴我公車直接到展覽館，不必換車。坐捷運也很方便。妳先坐2號線到台北車站，再換車到展覽館。聽起來坐捷運比較麻煩。一點也不麻煩，捷運比較快，坐公車要花一個多小時。你還是坐捷運吧！捷運站遠嗎？捷運站就在前面。謝謝！我得趕快走了。別急，走慢一點。捷運的班次很多。好，我們下禮拜見。')"><i class="bi bi-play-fill"></i> Toàn bộ</button>
         </div>
         <table class="dt2">
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同，早！你要去哪裡？')">🔊</button></td><td class="d-sp"><div class="spk b">如玉<small>Rúyù</small></div></td><td class="d-tx"><div class="szh">安同，早！你要去哪裡？</div><div class="spy">Āntóng, zǎo! Nǐ yào qù nǎlǐ?</div><div class="svi">An Đồng, chào buổi sáng! Bạn định đi đâu?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('早！我約了朋友一起去看電影，你呢？')">🔊</button></td><td class="d-sp"><div class="spk">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">早！我約了朋友一起去看電影，你呢？</div><div class="spy">Zǎo! Wǒ yuèle péngyou yìqǐ qù kàn diànyǐng, nǐ ne?</div><div class="svi">Chào buổi sáng! Tôi hẹn bạn bè cùng đi xem phim, còn bạn?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('我要去看電腦展。')">🔊</button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">我要去看電腦展。</div><div class="spy">Wǒ yào qù kàn diànnǎo zhǎn.</div><div class="svi">Tôi định đi xem triển lãm máy tính.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('你去哪裡看電腦展？')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">你去哪裡看電腦展？</div><div class="spy">Nǐ qù nǎlǐ kàn diànnǎo zhǎn?</div><div class="svi">Bạn đi đâu xem triển lãm máy tính?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('世貿展覽館，我現在要去對面坐公車。')">🔊</button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">世貿展覽館，我現在要去對面坐公車。</div><div class="spy">Shìmào zhǎnlǎn guǎn, wǒ xiànzài yào qù duìmiàn zuò gōngchē.</div><div class="svi">Hội trường triển lãm WTC, bây giờ tôi định sang đối diện bắt xe buýt.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('那裡離台北101不遠，妳怎麼不坐捷運呢？')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">那裡離台北101不遠，妳怎麼不坐捷運呢？</div><div class="spy">Nàlǐ lí Táiběi 101 bù yuǎn, nǐ zěnme bù zuò jiéyùn ne?</div><div class="svi">Chỗ đó cách Taipei 101 không xa, sao bạn không đi tàu điện ngầm?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('朋友告訴我公車直接到展覽館，不必換車。')">🔊</button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">朋友告訴我公車直接到展覽館，不必換車。</div><div class="spy">Péngyou gàosu wǒ gōngchē zhíjiē dào zhǎnlǎn guǎn, bùbì huàn chē.</div><div class="svi">Bạn bè nói với tôi xe buýt đi thẳng đến hội trường triển lãm, không cần chuyển xe.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('坐捷運也很方便。妳先坐2號線到台北車站，再換車到展覽館。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">坐捷運也很方便。妳先坐2號線到台北車站，再換車到展覽館。</div><div class="spy">Zuò jiéyùn yě hěn fāngbiàn. Nǐ xiān zuò èr hào xiàn dào Táiběi chēzhàn, zài huàn chē dào zhǎnlǎn guǎn.</div><div class="svi">Đi tàu điện ngầm cũng rất tiện. Bạn đi tuyến 2 đến ga Đài Bắc trước, rồi chuyển xe đến hội trường triển lãm.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('聽起來坐捷運比較麻煩。')">🔊</button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">聽起來坐捷運比較麻煩。</div><div class="spy">Tīng qǐlái zuò jiéyùn bǐjiào máfan.</div><div class="svi">Nghe có vẻ đi tàu điện ngầm phiền phức hơn.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('一點也不麻煩，捷運比較快，坐公車要花一個多小時。你還是坐捷運吧！')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">一點也不麻煩，捷運比較快，坐公車要花一個多小時。你還是坐捷運吧！</div><div class="spy">Yìdiǎn yě bù máfan, jiéyùn bǐjiào kuài, zuò gōngchē yào huā yí ge duō xiǎoshí. Nǐ háishì zuò jiéyùn ba!</div><div class="svi">Chẳng phiền phức chút nào, tàu điện ngầm nhanh hơn, đi xe buýt mất hơn một tiếng. Bạn nên đi tàu điện ngầm đi!</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('捷運站遠嗎？')">🔊</button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">捷運站遠嗎？</div><div class="spy">Jiéyùn zhàn yuǎn ma?</div><div class="svi">Ga tàu điện ngầm có xa không?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('捷運站就在前面。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">捷運站就在前面。</div><div class="spy">Jiéyùn zhàn jiù zài qiánmiàn.</div><div class="svi">Ga tàu điện ngầm ngay phía trước.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝！我得趕快走了。')">🔊</button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">謝謝！我得趕快走了。</div><div class="spy">Xièxie! Wǒ děi gǎnkuài zǒu le.</div><div class="svi">Cảm ơn! Tôi phải đi nhanh đây.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('別急，走慢一點。捷運的班次很多。')">🔊</button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">別急，走慢一點。捷運的班次很多。</div><div class="spy">Bié jí, zǒu màn yìdiǎn. Jiéyùn de bāncì hěn duō.</div><div class="svi">Đừng vội, đi chậm một chút. Tàu điện ngầm có nhiều chuyến lắm.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('好，我們下禮拜見。')">🔊</button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">好，我們下禮拜見。</div><div class="spy">Hǎo, wǒmen xià lǐbài jiàn.</div><div class="svi">Được, tuần sau chúng ta gặp lại.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同，早！你要去哪裡？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉<small>Rúyù</small></div></td><td class="d-tx"><div class="szh">安同，早！你要去哪裡？</div><div class="spy">Āntóng, zǎo! Nǐ yào qù nǎlǐ?</div><div class="svi">An Đồng, chào buổi sáng! Bạn định đi đâu?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('早！我約了朋友一起去看電影，你呢？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">安同<small>Āntóng</small></div></td><td class="d-tx"><div class="szh">早！我約了朋友一起去看電影，你呢？</div><div class="spy">Zǎo! Wǒ yuèle péngyou yìqǐ qù kàn diànyǐng, nǐ ne?</div><div class="svi">Chào buổi sáng! Tôi hẹn bạn bè cùng đi xem phim, còn bạn?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('我要去看電腦展。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">我要去看電腦展。</div><div class="spy">Wǒ yào qù kàn diànnǎo zhǎn.</div><div class="svi">Tôi định đi xem triển lãm máy tính.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你去哪裡看電腦展？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">你去哪裡看電腦展？</div><div class="spy">Nǐ qù nǎlǐ kàn diànnǎo zhǎn?</div><div class="svi">Bạn đi đâu xem triển lãm máy tính?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('世貿展覽館，我現在要去對面坐公車。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">世貿展覽館，我現在要去對面坐公車。</div><div class="spy">Shìmào zhǎnlǎn guǎn, wǒ xiànzài yào qù duìmiàn zuò gōngchē.</div><div class="svi">Hội trường triển lãm WTC, bây giờ tôi định sang đối diện bắt xe buýt.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('那裡離台北101不遠，妳怎麼不坐捷運呢？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">那裡離台北101不遠，妳怎麼不坐捷運呢？</div><div class="spy">Nàlǐ lí Táiběi 101 bù yuǎn, nǐ zěnme bù zuò jiéyùn ne?</div><div class="svi">Chỗ đó cách Taipei 101 không xa, sao bạn không đi tàu điện ngầm?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('朋友告訴我公車直接到展覽館，不必換車。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">朋友告訴我公車直接到展覽館，不必換車。</div><div class="spy">Péngyou gàosu wǒ gōngchē zhíjiē dào zhǎnlǎn guǎn, bùbì huàn chē.</div><div class="svi">Bạn bè nói với tôi xe buýt đi thẳng đến hội trường triển lãm, không cần chuyển xe.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('坐捷運也很方便。妳先坐2號線到台北車站，再換車到展覽館。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">坐捷運也很方便。妳先坐2號線到台北車站，再換車到展覽館。</div><div class="spy">Zuò jiéyùn yě hěn fāngbiàn. Nǐ xiān zuò èr hào xiàn dào Táiběi chēzhàn, zài huàn chē dào zhǎnlǎn guǎn.</div><div class="svi">Đi tàu điện ngầm cũng rất tiện. Bạn đi tuyến 2 đến ga Đài Bắc trước, rồi chuyển xe đến hội trường triển lãm.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('聽起來坐捷運比較麻煩。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">聽起來坐捷運比較麻煩。</div><div class="spy">Tīng qǐlái zuò jiéyùn bǐjiào máfan.</div><div class="svi">Nghe có vẻ đi tàu điện ngầm phiền phức hơn.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('一點也不麻煩，捷運比較快，坐公車要花一個多小時。你還是坐捷運吧！')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">一點也不麻煩，捷運比較快，坐公車要花一個多小時。你還是坐捷運吧！</div><div class="spy">Yìdiǎn yě bù máfan, jiéyùn bǐjiào kuài, zuò gōngchē yào huā yí ge duō xiǎoshí. Nǐ háishì zuò jiéyùn ba!</div><div class="svi">Chẳng phiền phức chút nào, tàu điện ngầm nhanh hơn, đi xe buýt mất hơn một tiếng. Bạn nên đi tàu điện ngầm đi!</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('捷運站遠嗎？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">捷運站遠嗎？</div><div class="spy">Jiéyùn zhàn yuǎn ma?</div><div class="svi">Ga tàu điện ngầm có xa không?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('捷運站就在前面。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">捷運站就在前面。</div><div class="spy">Jiéyùn zhàn jiù zài qiánmiàn.</div><div class="svi">Ga tàu điện ngầm ngay phía trước.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝！我得趕快走了。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">謝謝！我得趕快走了。</div><div class="spy">Xièxie! Wǒ děi gǎnkuài zǒu le.</div><div class="svi">Cảm ơn! Tôi phải đi nhanh đây.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('別急，走慢一點。捷運的班次很多。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">安同</div></td><td class="d-tx"><div class="szh">別急，走慢一點。捷運的班次很多。</div><div class="spy">Bié jí, zǒu màn yìdiǎn. Jiéyùn de bāncì hěn duō.</div><div class="svi">Đừng vội, đi chậm một chút. Tàu điện ngầm có nhiều chuyến lắm.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('好，我們下禮拜見。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">如玉</div></td><td class="d-tx"><div class="szh">好，我們下禮拜見。</div><div class="spy">Hǎo, wǒmen xià lǐbài jiàn.</div><div class="svi">Được, tuần sau chúng ta gặp lại.</div></td></tr>
         </table>
       </div>
     </div>
@@ -332,7 +337,7 @@ footer strong{color:var(--r);}
       <div class="db" style="border-top-color:#764ba2;">
         <div class="dt" style="color:#764ba2;">
           <span class="dlb" style="background:#764ba2;">Bài khóa · 課文</span>
-          <button class="dab" style="background:#764ba2;" onclick="sayZh('如玉的朋友美美從法國到台灣來玩兩個禮拜，她先從歐洲坐飛機到越南，再轉機到台灣。到了機場，美美直接坐巴士到台北。如玉告訴她，在市區坐捷運是最方便的，所以她下了巴士，就坐捷運到旅館去了。美美覺得台北的交通非常便利，到處都有公車、計程車，還有捷運，去哪裡都很方便。台北捷運的路線不複雜，車票也不貴，買一張悠遊卡，誰都可以輕輕鬆鬆地去逛逛。美美住在法國東部，沒有什麼機會到海邊。聽說台灣附近的小島，風景都很美，所以她決定到綠島去看看。綠島在台灣的東南邊，到那裡不太方便。美美得先坐火車到台東，再搭船或是飛機到綠島。她打算第二個星期去綠島，好好地玩一玩。')">🔊 Toàn bộ</button>
+          <button class="dab" style="background:#764ba2;" onclick="sayZh('如玉的朋友美美從法國到台灣來玩兩個禮拜，她先從歐洲坐飛機到越南，再轉機到台灣。到了機場，美美直接坐巴士到台北。如玉告訴她，在市區坐捷運是最方便的，所以她下了巴士，就坐捷運到旅館去了。美美覺得台北的交通非常便利，到處都有公車、計程車，還有捷運，去哪裡都很方便。台北捷運的路線不複雜，車票也不貴，買一張悠遊卡，誰都可以輕輕鬆鬆地去逛逛。美美住在法國東部，沒有什麼機會到海邊。聽說台灣附近的小島，風景都很美，所以她決定到綠島去看看。綠島在台灣的東南邊，到那裡不太方便。美美得先坐火車到台東，再搭船或是飛機到綠島。她打算第二個星期去綠島，好好地玩一玩。')"><i class="bi bi-play-fill"></i> Toàn bộ</button>
         </div>
         <div class="szh" style="font-size:22px;line-height:1.8;">如玉的朋友美美從法國到台灣來玩兩個禮拜，她先從歐洲坐飛機到越南，再轉機到台灣。</div>
         <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">Rúyù de péngyou Měiměi cóng Fǎguó dào Táiwān lái wán liǎng ge lǐbài, tā xiān cóng Ōuzhōu zuò fēijī dào Yuènán, zài zhuǎnjī dào Táiwān.</div>
@@ -390,9 +395,9 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">這支手機是不是一點也不好用？所以沒人買。</div></td><td><div class="py">Zhè zhī shǒujī shì búshì yìdiǎn yě bù hǎoyòng? Suǒyǐ méi rén mǎi.</div></td><td><div class="vi">Chiếc điện thoại này có phải dùng chẳng ra gì không? Nên chẳng ai mua.</div></td></tr>
           <tr><td><div class="zh">我們來這裡玩，你怎麼一點也不開心？</div></td><td><div class="py">Wǒmen lái zhèlǐ wán, nǐ zěnme yìdiǎn yě bù kāixīn?</div></td><td><div class="vi">Chúng ta đến đây chơi, sao bạn chẳng vui chút nào?</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Lưu ý về tân ngữ:</strong> Nếu tân ngữ không được đưa lên đầu câu làm chủ đề, nó phải đứng sau "一點" và trước "也/都", không đứng sau động từ. Ví dụ: 他昨天一點飯也沒吃 (√) / *他昨天一點也沒吃飯 (✗).</div>
-        <div class="gnote">💡 <strong>也 và 都:</strong> 也 trong mẫu này có thể thay bằng 都. 都 mang nghĩa phủ định toàn phần mạnh hơn 也. Ví dụ: 我一點都不累。/ 捷運車票一點都不貴。/ 他一點都不想去。</div>
-        <div class="gnote">💡 <strong>不 vs. 沒:</strong> Dùng với động từ hành động: 沒 phủ định sự kiện đã xảy ra trong quá khứ; 不 chỉ sự từ chối làm việc gì (dù quá khứ hay tương lai). Ví dụ: (a) 他昨天一點功課也不做 (từ chối) / (b) 他昨天一點功課也沒做 (không xảy ra).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Lưu ý về tân ngữ:</strong> Nếu tân ngữ không được đưa lên đầu câu làm chủ đề, nó phải đứng sau "一點" và trước "也/都", không đứng sau động từ. Ví dụ: 他昨天一點飯也沒吃 (√) / *他昨天一點也沒吃飯 (✗).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>也 và 都:</strong> 也 trong mẫu này có thể thay bằng 都. 都 mang nghĩa phủ định toàn phần mạnh hơn 也. Ví dụ: 我一點都不累。/ 捷運車票一點都不貴。/ 他一點都不想去。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>不 vs. 沒:</strong> Dùng với động từ hành động: 沒 phủ định sự kiện đã xảy ra trong quá khứ; 不 chỉ sự từ chối làm việc gì (dù quá khứ hay tương lai). Ví dụ: (a) 他昨天一點功課也不做 (từ chối) / (b) 他昨天一點功課也沒做 (không xảy ra).</div>
       </div>
     </div>
 
@@ -407,7 +412,7 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">已經晚上十一點了，我還是明天早上再給老師打電話吧！</div></td><td><div class="py">Yǐjīng wǎnshang shíyī diǎn le, wǒ háishì míngtiān zǎoshang zài gěi lǎoshī dǎ diànhuà ba!</div></td><td><div class="vi">Đã 11 giờ đêm rồi, tôi nên sáng mai hãy gọi điện cho thầy!</div></td></tr>
           <tr><td><div class="zh">去學校，可以坐公車，也可以坐捷運，但是坐捷運比較快，我們還是坐捷運去吧！</div></td><td><div class="py">Qù xuéxiào, kěyǐ zuò gōngchē, yě kěyǐ zuò jiéyùn, dànshì zuò jiéyùn bǐjiào kuài, wǒmen háishì zuò jiéyùn qù ba!</div></td><td><div class="vi">Đến trường có thể đi xe buýt hoặc tàu điện ngầm, nhưng tàu điện ngầm nhanh hơn, chúng ta nên đi tàu điện ngầm!</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Phủ định:</strong> Dùng 不要/別 để phủ định. Ví dụ: 坐公車很慢，我們還是不要坐公車吧！/ 雨下得很大，今天你還是別回家吧！/ 他聽了一定不開心，你還是別告訴他吧！</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Phủ định:</strong> Dùng 不要/別 để phủ định. Ví dụ: 坐公車很慢，我們還是不要坐公車吧！/ 雨下得很大，今天你還是別回家吧！/ 他聽了一定不開心，你還是別告訴他吧！</div>
       </div>
     </div>
 
@@ -423,8 +428,8 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">你的字要寫好看一點！</div></td><td><div class="py">Nǐ de zì yào xiě hǎokàn yìdiǎn!</div></td><td><div class="vi">Chữ của bạn phải viết đẹp một chút!</div></td></tr>
           <tr><td><div class="zh">你說得太快了。可以說慢一點嗎？</div></td><td><div class="py">Nǐ shuō de tài kuài le. Kěyǐ shuō màn yìdiǎn ma?</div></td><td><div class="vi">Anh nói quá nhanh. Có thể nói chậm một chút không?</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Phủ định:</strong> 你不寫好看一點，老師說要再寫一次。/ 要是你不唱好聽一點，就不能去比賽了。/ 你不走快一點，就不能跟朋友見面了。</div>
-        <div class="gnote">💡 <strong>Câu hỏi:</strong> 要上課了。你還不走快一點嗎？/ 路上車那麼多。你是不是騎慢一點比較好？</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Phủ định:</strong> 你不寫好看一點，老師說要再寫一次。/ 要是你不唱好聽一點，就不能去比賽了。/ 你不走快一點，就不能跟朋友見面了。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Câu hỏi:</strong> 要上課了。你還不走快一點嗎？/ 路上車那麼多。你是不是騎慢一點比較好？</div>
       </div>
     </div>
 
@@ -436,14 +441,14 @@ footer strong{color:var(--r);}
         <table class="ex">
           <tr><th>Ví dụ</th><th>Phiên âm</th><th>Nghĩa</th></tr>
           <tr><td><div class="zh">他們開開心心地一起吃飯。</div></td><td><div class="py">Tāmen kāikāixīnxīn de yìqǐ chīfàn.</div></td><td><div class="vi">Họ cùng nhau ăn cơm một cách vui vẻ.</div></td></tr>
-          <tr><td><div class="zh">王老闆客客氣氣地跟人說話。</div></td><td><div class="py">Wáng lǎobǎn kèkèqìqì de gēn rén shuōhuà.</div></td><td><div class="vi">Ông chủ Vương nói chuyện với ngưới ta rất lễ phép.</div></td></tr>
+          <tr><td><div class="zh">王老闆客客氣氣地跟人說話。</div></td><td><div class="py">Wáng lǎobǎn kèkèqìqì de gēn rén shuōhuà.</div></td><td><div class="vi">Ông chủ Vương nói chuyện với người ta rất lễ phép.</div></td></tr>
           <tr><td><div class="zh">我要租一個乾乾淨淨的房間，比較舒服。</div></td><td><div class="py">Wǒ yào zū yí ge gāngānjìngjìng de fángjiān, bǐjiào shūfu.</div></td><td><div class="vi">Tôi muốn thuê một căn phòng sạch sẽ, thoải mái hơn.</div></td></tr>
           <tr><td><div class="zh">他寫字寫得漂漂亮亮的。</div></td><td><div class="py">Tā xiě zì xiě de piàopiàoliangliang de.</div></td><td><div class="vi">Anh ấy viết chữ rất đẹp.</div></td></tr>
           <tr><td><div class="zh">房間乾乾淨淨的，看起來真舒服。</div></td><td><div class="py">Fángjiān gāngānjìngjìng de, kàn qǐlái zhēn shūfu.</div></td><td><div class="vi">Phòng sạch sẽ, trông thật thoải mái.</div></td></tr>
           <tr><td><div class="zh">我跟同學在花蓮玩得開開心心的。</div></td><td><div class="py">Wǒ gēn tóngxué zài Huālián wán de kāikāixīnxīn de.</div></td><td><div class="vi">Tôi cùng bạn học chơi ở Hoa Liên rất vui vẻ.</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Cấu trúc:</strong> (1) AABB + 地 + V: 大家開開心心地幫他過生日。/ (2) AABB + 的 + N: 大家都想找輕輕鬆鬆的工作。/ (3) AABB + 的 (vị ngữ): 他對人客客氣氣的。/ (4) V + 得 + AABB + 的: 他住得舒舒服服的。</div>
-        <div class="gnote">💡 <strong>Lưu ý:</strong> Không phải tính từ hai âm tiết nào cũng lặp lại được. Ví dụ KHÔNG lặp được: 便宜, 好看, 傳統, 難看, 麻煩, 不錯, 便利, 可怕, 年輕, 有名, 特別. Không dùng phó từ nhấn mạnh trước tính từ lặp lại: *大家很開開心心地回家了 (✗).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Cấu trúc:</strong> (1) AABB + 地 + V: 大家開開心心地幫他過生日。/ (2) AABB + 的 + N: 大家都想找輕輕鬆鬆的工作。/ (3) AABB + 的 (vị ngữ): 他對人客客氣氣的。/ (4) V + 得 + AABB + 的: 他住得舒舒服服的。</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Lưu ý:</strong> Không phải tính từ hai âm tiết nào cũng lặp lại được. Ví dụ KHÔNG lặp được: 便宜, 好看, 傳統, 難看, 麻煩, 不錯, 便利, 可怕, 年輕, 有名, 特別. Không dùng phó từ nhấn mạnh trước tính từ lặp lại: *大家很開開心心地回家了 (✗).</div>
       </div>
     </div>
 
@@ -459,8 +464,8 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">多穿一點衣服。今天不太冷！</div></td><td><div class="py">Duō chuān yìdiǎn yīfu. Jīntiān bú tài lěng!</div></td><td><div class="vi">Mặc thêm áo vào. Hôm nay không lạnh lắm!</div></td></tr>
           <tr><td><div class="zh">這杯茶不太熱。</div></td><td><div class="py">Zhè bēi chá bú tài rè.</div></td><td><div class="vi">Chén trà này không nóng lắm.</div></td></tr>
         </table>
-        <div class="gnote">💡 "不太" cơ bản đã mất nghĩa đen và đơn giản chỉ có nghĩa "không lắm". Tùy ngữ cảnh có thể mang nghĩa tiêu cực hoặc lịch sự.</div>
-        <div class="gnote">💡 "不很 + Vs": Ít phổ biến hơn "不太". Gần nghĩa với "不是很", mang nghĩa khách quan, thẳng thắn hơn, không có hàm ý lịch sự.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> "不太" cơ bản đã mất nghĩa đen và đơn giản chỉ có nghĩa "không lắm". Tùy ngữ cảnh có thể mang nghĩa tiêu cực hoặc lịch sự.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> "不很 + Vs": Ít phổ biến hơn "不太". Gần nghĩa với "不是很", mang nghĩa khách quan, thẳng thắn hơn, không có hàm ý lịch sự.</div>
       </div>
     </div>
 
@@ -476,9 +481,9 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">台灣東邊的大海非常乾淨。</div></td><td><div class="py">Táiwān dōngbiān de dàhǎi fēicháng gānjìng.</div></td><td><div class="vi">Biển phía đông Đài Loan rất sạch.</div></td></tr>
           <tr><td><div class="zh">那個地方西邊有山，南邊有海。</div></td><td><div class="py">Nàge dìfāng xībiān yǒu shān, nánbiān yǒu hǎi.</div></td><td><div class="vi">Chỗ đó phía tây có núi, phía nam có biển.</div></td></tr>
         </table>
-        <div class="gnote">💡 <strong>Các phương vị:</strong> 東邊/東部 (phía đông), 西邊/西部 (phía tây), 南邊/南部 (phía nam), 北邊/北部 (phía bắc), 東南邊/東南部 (đông nam), 東北邊/東北部 (đông bắc), 西南邊/西南部 (tây nam), 西北邊/西北部 (tây bắc).</div>
-        <div class="gnote">💡 Có "中部" cho vùng trung tâm, nhưng không có "*中邊".</div>
-        <div class="gnote">💡 Khi nói về một quốc gia, 部 dùng cho khu vực trong nước, 邊 dùng cho vùng bên ngoài biên giới.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Các phương vị:</strong> 東邊/東部 (phía đông), 西邊/西部 (phía tây), 南邊/南部 (phía nam), 北邊/北部 (phía bắc), 東南邊/東南部 (đông nam), 東北邊/東北部 (đông bắc), 西南邊/西南部 (tây nam), 西北邊/西北部 (tây bắc).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Có "中部" cho vùng trung tâm, nhưng không có "*中邊".</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> Khi nói về một quốc gia, 部 dùng cho khu vực trong nước, 邊 dùng cho vùng bên ngoài biên giới.</div>
       </div>
     </div>
   </div>
@@ -486,100 +491,100 @@ footer strong{color:var(--r);}
   <!-- BÀI TẬP -->
   <div id="baitap" class="sec">
     <div class="subnav">
-      <button class="subtab on" onclick="goSub('baitap','bt1')">📝 Bài 1 · 一點也不</button>
-      <button class="subtab" onclick="goSub('baitap','bt2')">📝 Bài 2 · 還是…吧</button>
-      <button class="subtab" onclick="goSub('baitap','bt3')">📝 Bài 3 · V+一點</button>
-      <button class="subtab" onclick="goSub('baitap','bt4')">📝 Bài 4 · AABB</button>
-      <button class="subtab" onclick="goSub('baitap','bt5')">📝 Bài 5 · 不太</button>
-      <button class="subtab" onclick="goSub('baitap','bt6')">📝 Bài 6 · 部/邊</button>
+      <button class="subtab on" onclick="goSub('baitap','bt1')"><i class="bi bi-pencil-square"></i> Bài 1 · 一點也不</button>
+      <button class="subtab" onclick="goSub('baitap','bt2')"><i class="bi bi-pencil-square"></i> Bài 2 · 還是…吧</button>
+      <button class="subtab" onclick="goSub('baitap','bt3')"><i class="bi bi-pencil-square"></i> Bài 3 · V+一點</button>
+      <button class="subtab" onclick="goSub('baitap','bt4')"><i class="bi bi-pencil-square"></i> Bài 4 · AABB</button>
+      <button class="subtab" onclick="goSub('baitap','bt5')"><i class="bi bi-pencil-square"></i> Bài 5 · 不太</button>
+      <button class="subtab" onclick="goSub('baitap','bt6')"><i class="bi bi-pencil-square"></i> Bài 6 · 部/邊</button>
     </div>
 
     <div id="baitap-bt1" class="sub-content on">
       <div class="ec">
-        <div class="ett">📝 Bài 1 · Hoàn thành câu với 一點也不/一點也沒</div>
+        <div class="ett"><i class="bi bi-pencil-square"></i> Bài 1 · Hoàn thành câu với 一點也不/一點也沒</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền vào chỗ trống để tạo thành câu phủ định nhấn mạnh.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>出去的時候，記得多穿一點衣服。可是我覺得今天<input class="fi" id="e1-1" style="width:120px;">。</div><div class="eh">→ Hôm nay không lạnh chút nào</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>我們趕快去吃飯吧！你自己去吧！我很累，<input class="fi" id="e1-2" style="width:140px;">。</div><div class="eh">→ Tôi không đói chút nào</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>你有錢嗎？現在我<input class="fi" id="e1-3" style="width:120px;">。</div><div class="eh">→ Bây giờ tôi không có chút tiền nào</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>你先休息吧！沒關係，我<input class="fi" id="e1-4" style="width:140px;">。</div><div class="eh">→ Tôi chút nào cũng không mệt</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>你會說西班牙文嗎？我<input class="fi" id="e1-5" style="width:140px;">。</div><div class="eh">→ Tôi chút tiếng Tây Ban Nha cũng không biết nói</div></div>
-        <button class="bck" onclick="ckE1()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE1()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE1()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE1()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab1"><strong>Đáp án:</strong> ① 一點也不冷 &nbsp; ② 一點也不餓 &nbsp; ③ 一點錢也沒有 &nbsp; ④ 一點也不累 &nbsp; ⑤ 一點西班牙文也不會說</div>
       </div>
     </div>
 
     <div id="baitap-bt2" class="sub-content">
       <div class="ec" style="border-top-color:var(--b)">
-        <div class="ett" style="color:var(--b)">📝 Bài 2 · Hoàn thành câu với 還是…吧</div>
+        <div class="ett" style="color:var(--b)"><i class="bi bi-pencil-square"></i> Bài 2 · Hoàn thành câu với 還是…吧</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Dùng 還是…吧 để đưa ra đề nghị phù hợp.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>我想買那個日本手機。那個手機有一點貴，<input class="fi" id="e2-1" style="width:200px;">。</div><div class="eh">→ Nên mua cái kia đi</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>我們去看電影吧！我不太舒服，<input class="fi" id="e2-2" style="width:200px;">。</div><div class="eh">→ Nên ở nhà nghỉ đi</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>我現在就去買背包。快要上課了，<input class="fi" id="e2-3" style="width:200px;">。</div><div class="eh">→ Nên đi sau giờ học đi</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>我們明天去買車票吧！我怕明天車票就沒有了，<input class="fi" id="e2-4" style="width:220px;">。</div><div class="eh">→ Nên hôm nay đi mua đi</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>我們坐捷運回去吧！下雨了，<input class="fi" id="e2-5" style="width:200px;">。</div><div class="eh">→ Nên đi taxi đi</div></div>
-        <button class="bck" onclick="ckE2()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE2()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE2()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE2()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab2"><strong>Đáp án:</strong> ① 你還是買別的吧 &nbsp; ② 我們還是待在家休息吧 &nbsp; ③ 你還是下課以後再去吧 &nbsp; ④ 我們還是今天去買吧 &nbsp; ⑤ 我們還是坐計程車吧</div>
       </div>
     </div>
 
     <div id="baitap-bt3" class="sub-content">
       <div class="ec" style="border-top-color:var(--r)">
-        <div class="ett" style="color:var(--r)">📝 Bài 3 · Hoàn thành câu với V+一點</div>
+        <div class="ett" style="color:var(--r)"><i class="bi bi-pencil-square"></i> Bài 3 · Hoàn thành câu với V+一點</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền tính từ + 一點 để tạo thành câu khuyên.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>你跟朋友一起騎車，他騎得很慢。→ 你騎<input class="fi" id="e3-1" style="width:100px;">！</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>公車快來了，朋友走路走得很慢。→ 你走<input class="fi" id="e3-2" style="width:100px;">！</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>台灣人說中文說得太快了。→ 你可以說<input class="fi" id="e3-3" style="width:100px;">嗎？</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>快要上課了，朋友還在吃飯。→ 你吃<input class="fi" id="e3-4" style="width:100px;">！</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>朋友寫字寫得太難看了。→ 你寫<input class="fi" id="e3-5" style="width:120px;">！</div></div>
-        <button class="bck" onclick="ckE3()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE3()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE3()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE3()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab3"><strong>Đáp án:</strong> ① 快一點 &nbsp; ② 快一點 &nbsp; ③ 慢一點 &nbsp; ④ 快一點 &nbsp; ⑤ 好看一點</div>
       </div>
     </div>
 
     <div id="baitap-bt4" class="sub-content">
       <div class="ec" style="border-top-color:#764ba2">
-        <div class="ett" style="color:#764ba2">📝 Bài 4 · Điền tính từ lặp lại AABB</div>
+        <div class="ett" style="color:#764ba2"><i class="bi bi-pencil-square"></i> Bài 4 · Điền tính từ lặp lại AABB</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Chọn tính từ thích hợp và viết dạng lặp lại AABB.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>有了捷運，我每天都能<input class="fi" id="e4-1" style="width:130px;">上學。</div><div class="eh">→ nhẹ nhàng</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>下雨天我只想<input class="fi" id="e4-2" style="width:130px;">在家睡覺。</div><div class="eh">→ thoải mái</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>我希望大家每天都過得<input class="fi" id="e4-3" style="width:130px;">。</div><div class="eh">→ vui vẻ</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>我們找一家餐廳<input class="fi" id="e4-4" style="width:130px;">吃飯吧！</div><div class="eh">→ sạch sẽ</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>這幾個學生的字都寫得<input class="fi" id="e4-5" style="width:130px;">。</div><div class="eh">→ đẹp đẽ</div></div>
-        <button class="bck" onclick="ckE4()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE4()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE4()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE4()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab4"><strong>Đáp án:</strong> ① 輕輕鬆鬆地 &nbsp; ② 舒舒服服地 &nbsp; ③ 開開心心地 / 快快樂樂地 &nbsp; ④ 乾乾淨淨的 &nbsp; ⑤ 漂漂亮亮的</div>
       </div>
     </div>
 
     <div id="baitap-bt5" class="sub-content">
       <div class="ec" style="border-top-color:var(--g)">
-        <div class="ett" style="color:var(--g)">📝 Bài 5 · Hoàn thành câu với 不太</div>
+        <div class="ett" style="color:var(--g)"><i class="bi bi-pencil-square"></i> Bài 5 · Hoàn thành câu với 不太</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Điền 不太 + tính từ trạng thái để tạo thành câu phủ định nhẹ nhàng.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>去法國的飛機<input class="fi" id="e5-1" style="width:130px;">，只有中華和大華兩家公司。</div><div class="eh">→ không nhiều lắm</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>聽說你打算明天去海邊游泳，可是這幾天的天氣<input class="fi" id="e5-2" style="width:130px;">。</div><div class="eh">→ không tốt lắm</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>你怎麼臉色這麼難看？我覺得<input class="fi" id="e5-3" style="width:130px;">。</div><div class="eh">→ không khỏe lắm</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>我家附近沒有捷運，去很多地方都<input class="fi" id="e5-4" style="width:130px;">。</div><div class="eh">→ không tiện lắm</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>這家超巿的東西<input class="fi" id="e5-5" style="width:130px;">，我們去學校附近的商店買吧！</div><div class="eh">→ không rẻ lắm</div></div>
-        <button class="bck" onclick="ckE5()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE5()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE5()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE5()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab5"><strong>Đáp án:</strong> ① 不太多 &nbsp; ② 不太好 &nbsp; ③ 不太舒服 &nbsp; ④ 不太方便 &nbsp; ⑤ 不太便宜</div>
       </div>
     </div>
 
     <div id="baitap-bt6" class="sub-content">
       <div class="ec" style="border-top-color:#ff6b6b">
-        <div class="ett" style="color:#ff6b6b">📝 Bài 6 · Điền 部/邊 vào câu</div>
+        <div class="ett" style="color:#ff6b6b"><i class="bi bi-pencil-square"></i> Bài 6 · Điền 部/邊 vào câu</div>
         <p style="font-size:14px;color:var(--s);margin-bottom:13px;">Chọn 部 hoặc 邊 thích hợp điền vào chỗ trống.</p>
         <div class="ei"><div class="eq"><span class="nm">①</span>台灣的<input class="fi" id="e6-1" style="width:60px;">有很多山。</div><div class="eh">→ Phía đông Đài Loan</div></div>
         <div class="ei"><div class="eq"><span class="nm">②</span>中國在台灣的<input class="fi" id="e6-2" style="width:60px;">。</div><div class="eh">→ Phía tây (bên ngoài biên giới)</div></div>
         <div class="ei"><div class="eq"><span class="nm">③</span>台北在台灣的<input class="fi" id="e6-3" style="width:60px;">。</div><div class="eh">→ Vùng phía bắc</div></div>
         <div class="ei"><div class="eq"><span class="nm">④</span>花蓮在台灣的<input class="fi" id="e6-4" style="width:80px;">。</div><div class="eh">→ Phía đông</div></div>
         <div class="ei"><div class="eq"><span class="nm">⑤</span>那個地方<input class="fi" id="e6-5" style="width:80px;">有海，<input class="fi" id="e6-6" style="width:80px;">有山。</div><div class="eh">→ Phía nam có biển, phía bắc có núi</div></div>
-        <button class="bck" onclick="ckE6()">✅ Kiểm tra</button>
-        <button class="brs" onclick="rsE6()">🔄 Làm lại</button>
+        <button class="bck" onclick="ckE6()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+        <button class="brs" onclick="rsE6()"><i class="bi bi-arrow-clockwise"></i> Làm lại</button>
         <div class="ab" id="ab6"><strong>Đáp án:</strong> ① 東部 &nbsp; ② 西邊 &nbsp; ③ 北部 &nbsp; ④ 東部/東邊 &nbsp; ⑤ 南邊, 北邊</div>
       </div>
     </div>
@@ -592,25 +597,25 @@ footer strong{color:var(--r);}
       <div style="margin-bottom:14px;">
         <div class="szh" style="font-size:18px;line-height:1.7;">第一次坐捷運的人，都會對捷運的多語廣播覺得很有興趣，也很好奇。在英語之前，車站的名字會先用國語、閩南語、客家話廣播。</div>
         <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Dì yī cì zuò jiéyùn de rén, dōu huì duì jiéyùn de duō yǔ guǎngbō juéde hěn yǒu xìngqù, yě hěn hàoqí. Zài Yīngyǔ zhīqián, chēzhàn de míngzì huì xiān yòng Guóyǔ, Mǐnnányǔ, Kèjiāhuà guǎngbō.</div>
-        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Những ngưới lần đầu đi tàu điện ngầm đều cảm thấy rất thú vị và tò mò về hệ thống thông báo đa ngôn ngữ trên tàu điện ngầm. Trước tiếng Anh, tên các ga sẽ được thông báo bằng tiếng Phổ thông (Quốc ngữ), tiếng Mân Nam, và tiếng Khách Gia.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Những người lần đầu đi tàu điện ngầm đều cảm thấy rất thú vị và tò mò về hệ thống thông báo đa ngôn ngữ trên tàu điện ngầm. Trước tiếng Anh, tên các ga sẽ được thông báo bằng tiếng Phổ thông (Quốc ngữ), tiếng Mân Nam, và tiếng Khách Gia.</div>
       </div>
       <div style="margin-bottom:14px;">
         <div class="szh" style="font-size:18px;line-height:1.7;">那麼，為什麼捷運站名要用四種不同的語言廣播呢？首先，市政府知道台北在全球的重要性越來越大，所以英語——國際通用語——是必要的。另外，在台北地區住著說三種不同漢語方言的人，市政府也考慮到了他們的需要。</div>
         <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Nàme, wèishénme jiéyùn zhàn míng yào yòng sì zhǒng bùtóng de yǔyán guǎngbō ne? Shǒuxiān, shì zhèngfǔ zhīdào Táiběi zài quánqiú de zhòngyàoxìng yuèlái yuè dà, suǒyǐ Yīngyǔ — guójì tōngyòng yǔ — shì bìyào de. Lìngwài, zài Táiběi dìqū zhùzhe shuō sān zhǒng bùtóng de Hànyǔ fāngyán de rén, shì zhèngfǔ yě kǎolǜ dàole tāmen de xūyào.</div>
-        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Vậy tại sao tên ga tàu điện ngầm lại được phát bằng bốn ngôn ngữ khác nhau? Trước hết, chính quyền thành phố biết rằng tầm quan trọng của Đài Bắc trên toàn cầu ngày càng tăng, nên tiếng Anh — ngôn ngữ chung quốc tế — là cần thiết. Ngoài ra, ở khu vực Đài Bắc có ngưới nói ba phương ngữ Hán ngữ khác nhau, chính quyền thành phố cũng đã cân nhắc đến nhu cầu của họ.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Vậy tại sao tên ga tàu điện ngầm lại được phát bằng bốn ngôn ngữ khác nhau? Trước hết, chính quyền thành phố biết rằng tầm quan trọng của Đài Bắc trên toàn cầu ngày càng tăng, nên tiếng Anh — ngôn ngữ chung quốc tế — là cần thiết. Ngoài ra, ở khu vực Đài Bắc có người nói ba phương ngữ Hán ngữ khác nhau, chính quyền thành phố cũng đã cân nhắc đến nhu cầu của họ.</div>
       </div>
       <div style="margin-bottom:10px;">
         <div class="szh" style="font-size:18px;line-height:1.7;">不過，也有人覺得用四種語言不太實際，認為只要用國語和英語廣播就夠了。畢竟，幾乎所有的台灣人都懂國語，而英語也能滿足大部分外國遊客的需要。但是，不管實不實際，多語廣播現在已經是捷運的標準配備了。</div>
         <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Búguò, yě yǒu rén juéde yòng sì zhǒng yǔyán bú tài shíjì, rènwéi zhǐyào yòng Guóyǔ hé Yīngyǔ guǎngbō jiù gòu le. Bìjìng, jīhū suǒyǒu de Táiwān rén dōu dǒng Guóyǔ, ér Yīngyǔ yě néng mǎnzú dà bùfèn wàiguó yóukè de xūyào. Dànshì, bùguǎn shí bù shíjì, duō yǔ guǎngbō xiànzài yǐjīng shì jiéyùn de biāozhǔn pèibèi le.</div>
-        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Tuy nhiên, cũng có ngưới cho rằng dùng bốn ngôn ngữ không được thực tế lắm, cho rằng chỉ cần phát bằng tiếng Phổ thông và tiếng Anh là đủ. Dù sao, hầu hết ngưới Đài Loan đều hiểu tiếng Phổ thông, và tiếng Anh cũng đáp ứng được nhu cầu của hầu hết du khách nước ngoài. Nhưng dù thực tế hay không, thông báo đa ngôn ngữ hiện đã là một đặc điểm tiêu chuẩn của tàu điện ngầm.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Tuy nhiên, cũng có người cho rằng dùng bốn ngôn ngữ không được thực tế lắm, cho rằng chỉ cần phát bằng tiếng Phổ thông và tiếng Anh là đủ. Dù sao, hầu hết người Đài Loan đều hiểu tiếng Phổ thông, và tiếng Anh cũng đáp ứng được nhu cầu của hầu hết du khách nước ngoài. Nhưng dù thực tế hay không, thông báo đa ngôn ngữ hiện đã là một đặc điểm tiêu chuẩn của tàu điện ngầm.</div>
       </div>
     </div>
     <div class="culture-box" style="border-left-color:#9c27b0;">
-      <h3 style="color:#7b1fa2;">🚇 Hệ thống tàu điện ngầm Đài Bắc · 台北捷運系統</h3>
+      <h3 style="color:#7b1fa2;"><i class="bi bi-train-front"></i> Hệ thống tàu điện ngầm Đài Bắc · 台北捷運系統</h3>
       <div style="margin-bottom:14px;">
         <div class="szh" style="font-size:18px;line-height:1.7;">台北捷運是台灣最大的大眾運輸系統，每天載送數百萬人次。捷運路線涵蓋台北市及周邊地區，是市民和遊客最重要的交通工具之一。</div>
         <div class="spy" style="font-size:14px;color:var(--r);line-height:1.5;margin:4px 0;">Táiběi jiéyùn shì Táiwān zuìdà de dàzhòng yùnshū xìtǒng, měitiān zàisòng shù bǎi wàn rén cì. Jiéyùn lùxiàn hángài Táiběi Shì jí zhōubiān dìqū, shì shìmín hé yóukè zuì zhòngyào de jiāotōng gōngjù zhī yī.</div>
-        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Tàu điện ngầm Đài Bắc là hệ thống vận tải hành khách công cộng lớn nhất Đài Loan, mỗi ngày vận chuyển hàng triệu lượt ngưới. Tuyến đường tàu điện ngầm bao phủ thành phố Đài Bắc và các khu vực lân cận, là một trong những phương tiện giao thông quan trọng nhất của ngưới dân và du khách.</div>
+        <div class="svi" style="font-size:15px;color:var(--b);line-height:1.6;font-style:italic;">Tàu điện ngầm Đài Bắc là hệ thống vận tải hành khách công cộng lớn nhất Đài Loan, mỗi ngày vận chuyển hàng triệu lượt người. Tuyến đường tàu điện ngầm bao phủ thành phố Đài Bắc và các khu vực lân cận, là một trong những phương tiện giao thông quan trọng nhất của người dân và du khách.</div>
       </div>
       <div style="margin-bottom:10px;">
         <div class="szh" style="font-size:18px;line-height:1.7;">悠遊卡是台北捷運最常用的電子票證，可以在捷運站、超商和公車上使用。有了悠遊卡，乘客不需要每次買票，只要「嗶」一下就可以進出站，非常方便。</div>
@@ -677,7 +682,7 @@ const TV2=[
 ];
 
 const CT2=[
-  {n:'19', zh:'美美', py:'Měiměi', vi:'Mỹ Mỹ (tên ngưới)'},
+  {n:'19', zh:'美美', py:'Měiměi', vi:'Mỹ Mỹ (tên người)'},
   {n:'20', zh:'法國', py:'Fǎguó', vi:'Pháp'},
   {n:'21', zh:'歐洲', py:'Ōuzhōu', vi:'châu Âu'},
   {n:'22', zh:'悠遊卡', py:'yōuyóukǎ', vi:'thẻ EasyCard (MRT)'},
@@ -700,7 +705,7 @@ function canStroke(zh){return[...zh].some(c=>HW.has(c));}
 function buildTable(id,arr,hasType){
   const th=`<thead><tr>
     <th class="tc" style="width:36px">STT</th>
-    <th class="tc" style="width:44px">🔊</th>
+    <th class="tc" style="width:44px"><i class="bi bi-volume-up-fill"></i></th>
     <th>Chữ Hán</th><th>Phiên âm</th><th>Nghĩa tiếng Việt</th>
     ${hasType?'<th class="tc" style="width:58px">Từ loại</th>':''}
     <th class="tc" style="width:48px">筆順</th>
@@ -709,7 +714,7 @@ function buildTable(id,arr,hasType){
     const s=w.zh.replace(/\'/g,"\\'");
     return`<tr>
       <td class="c-stt">${w.n}</td>
-      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">🔊</button></td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')"><i class="bi bi-volume-up-fill"></i></button></td>
       <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
       <td class="c-py"><span class="py-text">${w.py}</span></td>
       <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
@@ -862,9 +867,9 @@ function openStroke(word){
     }catch(e){console.warn('HanziWriter error',ch,e);}
   });
   const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
-  [['▶ Hoạt ảnh',hwAnimAll,''],['🔄 Lặp',hwLoopAll,''],['✕ Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+  [['<i class="bi bi-play-fill"></i> Hoạt ảnh',hwAnimAll,''],['<i class="bi bi-arrow-repeat"></i> Lặp',hwLoopAll,''],['<i class="bi bi-x-lg"></i> Đóng',closeOv,'red']].forEach(([txt,fn,cls])=>{
     const b=document.createElement('button');
-    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+    b.className='hw-btn'+(cls?' '+cls:'');b.innerHTML=txt;b.onclick=fn;ctrl.appendChild(b);
   });
   document.getElementById('ov').classList.add('open');
 }

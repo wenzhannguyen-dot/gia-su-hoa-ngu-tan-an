@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>第五課 吃喜酒</title>
 <base target="_blank">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -22,34 +23,38 @@
 body{font-family:'Segoe UI','Noto Sans',sans-serif;background:var(--s0);color:var(--k);display:flex;min-height:100vh;}
 .zh,.szh,.zh-word,.spk,.fm{font-family:'DFKai-SB','標楷體','BiauKai',serif!important;font-weight:400!important;}
 
+/* TOPBAR */
+.header{position:fixed;top:0;left:0;right:0;height:70px;background:#4472c4;color:#fff;padding:10px 20px;display:flex;align-items:center;z-index:1001;box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.logo{display:flex;align-items:center;gap:15px;}
+.logo-img{width:50px;height:50px;background:#fff;border-radius:8px;padding:3px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.logo-img img{width:100%;height:100%;object-fit:contain;}
+.logo-text h1{font-size:16px;font-weight:700;margin-bottom:2px;font-family:Arial,sans-serif;}
+.logo-text p{font-size:12px;opacity:.9;font-family:Arial,sans-serif;}
 /* SIDEBAR */
-#sb{width:var(--sw);min-height:100vh;background:var(--b);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
-.lb{background:#0d1b2a;padding:13px 10px;text-align:center;}
-.ln{color:var(--r);font-size:12px;font-weight:700;line-height:1.5;}
-.la{color:#aaa;font-size:10px;margin-top:3px;line-height:1.5;}
-.lz{color:#64b5f6;font-size:11px;margin-top:2px;}
-.logo-area{text-align:center;padding:5px 0;}
-.logo-container{width:80px;height:80px;margin:0 auto;display:flex;align-items:center;justify-content:center;}
-.logo-container img{width:100%;height:100%;object-fit:contain;}
-nav{flex:1;padding:5px 0;}
-.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#cfe8ff;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:background .2s;}
-.nb:hover{background:rgba(255,255,255,.1);}
-.nb.on{background:rgba(255,255,255,.18);color:#fff;}
+#sb{width:var(--sw);height:calc(100vh - 70px);background:#fff;border:1px solid #d0d0d0;border-radius:8px;display:flex;flex-direction:column;position:fixed;top:70px;left:10px;z-index:100;overflow-y:auto;}
+.nav-section{border-bottom:1px solid #e0e0e0;}
+.nav-title{padding:13px 15px;color:#333;font-size:14px;font-weight:700;font-family:Arial,sans-serif;display:flex;align-items:center;gap:8px;background:#f8f9fa;border-bottom:2px solid #4472c4;}
+
+
+nav{flex:0 0 auto;padding:5px 0;}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;background:transparent;border:none;color:#666;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;text-align:left;transition:all .2s;}
+.nb:hover{background:#e3f2fd;color:#4472c4;}
+.nb.on{background:#e8f5e9;color:#2e7d32;}
 .nb .ic{font-size:18px;}
-.side-toggle{padding:15px 10px;border-top:1px solid rgba(255,255,255,.2);margin-top:auto;}
-.side-toggle-label{font-size:11px;color:#90caf9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:block;font-weight:600;}
-.st-btn{display:block;width:100%;margin-bottom:8px;border:2px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:8px 10px;border-radius:20px;font-size:13px;cursor:pointer;font-weight:600;transition:background .2s;text-align:center;}
-.st-btn:hover{background:rgba(255,255,255,.1);}
-.st-btn.on{background:var(--g);border-color:var(--g);}
+.side-toggle{padding:15px;background:#fafafa;border-top:1px solid #e0e0e0;}
+.side-toggle-label{font-size:13px;color:#333;margin-bottom:10px;font-family:Arial,sans-serif;display:flex;align-items:center;gap:6px;font-weight:700;}
+.st-btn{display:flex;align-items:center;justify-content:flex-start;gap:8px;width:100%;margin-bottom:6px;border:1px solid #e0e0e0;background:#f8f9fa;color:#666;padding:8px;border-radius:5px;font-size:12px;font-family:Arial,sans-serif;cursor:pointer;font-weight:normal;transition:all .1s;}
+.st-btn:hover{background:#e3f2fd;border-color:#4472c4;color:#4472c4;}
+.st-btn.on{background:#e3f2fd;border-color:#4472c4;color:#4472c4;font-weight:600;}
 
 /* MAIN */
-#mn{margin-left:var(--sw);flex:1;padding-bottom:50px;min-width:0;}
-.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:90;}
+#mn{margin-left:calc(var(--sw) + 10px);flex:1;padding-top:70px;padding-bottom:50px;min-width:0;}
+.topbar{background:var(--w);border-bottom:4px solid var(--b);padding:13px 26px;font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:space-between;position:sticky;top:70px;z-index:90;}
 .tzh{font-size:22px;color:var(--b);font-weight:400;font-family:'DFKai-SB','標楷體',serif;}
-.tvi{font-size:14px;color:var(--s);margin-top:2px;}
-.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;}
-.btn-editor{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:10px 20px;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 15px rgba(102,126,234,.4);transition:all .3s;}
-.btn-editor:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,126,234,.6);}
+.tvi{font-size:14px;color:var(--s);margin-top:2px;font-family:Arial,sans-serif;}
+.badge{background:var(--r);color:#fff;font-size:13px;padding:5px 16px;border-radius:20px;font-weight:700;font-family:Arial,sans-serif;}
+.btn-editor{background:#ed7d31;color:#fff;border:1px solid #ed7d31;padding:8px 16px;border-radius:5px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .1s;}
+.btn-editor:hover{background:#d35400;border-color:#d35400;}
 
 /* SECTIONS */
 .sec{display:none;padding:20px 24px;}
@@ -127,9 +132,9 @@ td.d-tx{padding:11px 0;}
 /* GRAMMAR */
 .gc{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:18px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--r);}
 .gn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--r);color:#fff;font-size:15px;font-weight:700;margin-right:7px;vertical-align:middle;}
-.gtt{font-size:19px;font-weight:700;vertical-align:middle;}
+.gtt{font-size:18px;font-weight:700;vertical-align:middle;}
 .gsb{font-size:15px;color:var(--s);margin:6px 0 11px;}
-.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;}
+.fm{background:var(--r0);border-radius:8px;padding:11px 14px;font-size:20px;color:var(--r);letter-spacing:1px;margin:9px 0;font-family:Arial,'DFKai-SB','標楷體',serif!important;}
 .fm .fn{font-size:14px;color:var(--s);font-family:'Segoe UI',sans-serif;font-weight:400;margin-top:3px;}
 .gnote{background:var(--b0);border-radius:8px;padding:9px 13px;font-size:15px;color:var(--b);margin-top:9px;line-height:1.7;}
 table.ex{width:100%;border-collapse:collapse;margin-top:10px;}
@@ -137,12 +142,12 @@ table.ex th{background:var(--s0);font-size:13px;color:var(--s);padding:8px 12px;
 table.ex td{padding:10px 12px;border-bottom:1px solid #eee;}
 table.ex tr:last-child td{border-bottom:none;}
 table.ex .zh{font-size:20px;color:var(--k);font-family:'DFKai-SB','標楷體',serif;}
-table.ex .py{font-size:14px;color:var(--r);margin-top:2px;}
+table.ex .py{font-size:15px;color:var(--r);margin-top:2px;}
 table.ex .vi{font-size:15px;color:var(--b);margin-top:2px;}
 
 /* EXERCISES */
 .ec{background:var(--w);border-radius:12px;padding:18px 22px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-top:4px solid var(--g);}
-.ett{font-size:17px;font-weight:700;color:var(--g);margin-bottom:12px;}
+.ett{font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px;}
 .ei{margin-bottom:14px;}
 .eq{font-size:21px;color:var(--k);margin-bottom:4px;font-family:'DFKai-SB','標楷體',serif;}
 .eq .nm{color:var(--r);font-weight:700;font-family:'Segoe UI',sans-serif;}
@@ -192,7 +197,7 @@ footer strong{color:var(--r);}
 <!-- STROKE OVERLAY -->
 <div id="ov" onclick="ovClick(event)">
   <div id="obox">
-    <button id="ocls" onclick="closeOv()">&#10005;</button>
+    <button id="ocls" onclick="closeOv()"><i class="bi bi-x-lg"></i></button>
     <div id="otitle"></div>
     <div id="oframes"></div>
     <div class="hw-controls" id="octrl"></div>
@@ -203,8 +208,8 @@ footer strong{color:var(--r);}
 <div id="editorModal">
   <div class="editor-container">
     <div class="editor-header">
-      <h3>&#128221; So&#7841;n th&#7843;o ghi ch&#250; - B&#224;i 5 Quy&#7875;n 2</h3>
-      <button class="editor-close" onclick="closeEditor()">&#10005;</button>
+      <h3><i class="bi bi-journal-text"></i> So&#7841;n th&#7843;o ghi ch&#250; - B&#224;i 5 Quy&#7875;n 2</h3>
+      <button class="editor-close" onclick="closeEditor()"><i class="bi bi-x-lg"></i></button>
     </div>
     <div class="editor-body">
       <div id="editor-toolbar">
@@ -233,7 +238,7 @@ footer strong{color:var(--r);}
       <div id="editor-content"></div>
     </div>
     <div class="editor-footer">
-      <span class="editor-status">&#128161; Ghi ch&#250; t&#7921; &#273;&#7897;ng l&#432;u v&#224;o tr&#236;nh duy&#7879;t</span>
+      <span class="editor-status"><i class="bi bi-info-circle"></i> Ghi ch&#250; t&#7921; &#273;&#7897;ng l&#432;u v&#224;o tr&#236;nh duy&#7879;t</span>
       <div class="editor-actions">
         <button class="btn-clear" onclick="clearEditor()">X&#243;a t&#7845;t c&#7843;</button>
         <button class="btn-save" onclick="saveEditor()">L&#432;u ghi ch&#250;</button>
@@ -242,45 +247,45 @@ footer strong{color:var(--r);}
   </div>
 </div>
 
+<div class="header">
+  <div class="logo">
+    <div class="logo-img"><img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="GIA SƯ HOA NGỮ TÂN AN"></div>
+    <div class="logo-text">
+      <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+      <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
+    </div>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+    <div style="text-align:right;">
+      <div class="tzh" style="color:#fff;font-size:18px;font-family:Arial,sans-serif;">B&#192;I 5 &#183; &#31532;&#20116;&#35506;</div>
+      <div class="tvi" style="color:rgba(255,255,255,.85);font-size:11px;margin-top:2px;">&#21507;&#21916;&#37202; &#183; D&#7921; ti&#7879;c c&#432;&#7899;i</div>
+    </div>
+    <button class="btn-editor" onclick="openEditor()"><span><i class="bi bi-journal-text"></i></span><span>So&#7841;n th&#7843;o</span></button>
+    <div class="badge">&#30070;&#20195;&#20013;&#25991;&#35506;&#31243; 2</div>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <div id="sb">
-  <div class="lb">
-    <div class="logo-area">
-      <div class="logo-container">
-        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo">
-      </div>
-    </div>
-    <div class="ln">GIA S&#431; HOA NG&#7918; T&#194;N AN</div>
-    <div class="la">9/1 B&#7841;ch V&#259;n T&#432;, T&#226;n An, Long An</div>
-    <div class="lz">Zalo: 0839 889 772</div>
-  </div>
+  <div class="nav-section">
+    <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung bài học</span></div>
   <nav>
-    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic">&#127968;</span><span>V&#7872; TRANG CH&#7910;</span></button>
-    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic">&#128214;</span><span>T&#431;&#803; V&#7920;NG</span></button>
-    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic">&#128172;</span><span>B&#192;I KH&#211;A</span></button>
-    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic">&#128208;</span><span>NG&#7918; PH&#193;P</span></button>
-    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic">&#9999;&#65039;</span><span>B&#192;I T&#7852;P</span></button>
-    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic">&#127963;&#65039;</span><span>V&#258;N H&#211;A</span></button>
+    <button class="nb" onclick="window.location='DUONG DAI V2.html'"><span class="ic"><i class="bi bi-house-door"></i></span><span>V&#7872; TRANG CH&#7910;</span></button>
+    <button class="nb on" data-sec="vocab" onclick="go('vocab')"><span class="ic"><i class="bi bi-alphabet"></i></span><span>T&#431;&#803; V&#7920;NG</span></button>
+    <button class="nb" data-sec="baikoa" onclick="go('baikoa')"><span class="ic"><i class="bi bi-book"></i></span><span>B&#192;I KH&#211;A</span></button>
+    <button class="nb" data-sec="ngupap" onclick="go('ngupap')"><span class="ic"><i class="bi bi-diagram-3"></i></span><span>NG&#7918; PH&#193;P</span></button>
+    <button class="nb" data-sec="baitap" onclick="go('baitap')"><span class="ic"><i class="bi bi-pencil-square"></i></span><span>B&#192;I T&#7852;P</span></button>
+    <button class="nb" data-sec="vanhoa" onclick="go('vanhoa')"><span class="ic"><i class="bi bi-building"></i></span><span>V&#258;N H&#211;A</span></button>
   </nav>
+  </div>
   <div class="side-toggle" id="toggleContainer" style="display:none;">
-    <button class="st-btn on" id="tp" onclick="tog('py')">&#128266; Phi&#234;n &#226;m</button>
-    <button class="st-btn on" id="tv" onclick="tog('vi')">&#127483;&#47596; Ti&#7871;ng Vi&#7879;t</button>
+    <button class="st-btn on" id="tp" onclick="tog('py')"><i class="bi bi-eye-slash"></i> Phi&#234;n &#226;m</button>
+    <button class="st-btn on" id="tv" onclick="tog('vi')"><i class="bi bi-eye-slash"></i> Ti&#7871;ng Vi&#7879;t</button>
   </div>
 </div>
 
 <!-- MAIN -->
 <div id="mn">
-  <div class="topbar">
-    <div>
-      <div class="tzh">B&#192;I 5 &#183; &#31532;&#20116;&#35506;</div>
-      <div class="tvi">&#21507;&#21916;&#37202; &#183; D&#7921; ti&#7879;c c&#432;&#7899;i</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:15px;">
-      <button class="btn-editor" onclick="openEditor()"><span>&#128221;</span><span>So&#7841;n th&#7843;o</span></button>
-      <div class="badge">&#30070;&#20195;&#20013;&#25991;&#35506;&#31243; 2</div>
-    </div>
-  </div>
-
   <!-- T&#431;&#768; V&#7920;NG -->
   <div id="vocab" class="sec on">
     <div class="subnav">
@@ -288,7 +293,7 @@ footer strong{color:var(--r);}
       <button class="subtab" onclick="goSub('vocab','v2')">&#128214; T&#7915; v&#7921;ng 2 &#183; &#29983;&#35422;&#20108;</button>
       <button class="subtab" onclick="goSub('vocab','c1')">&#128221; C&#7909;m t&#7915; 1 &#183; &#30701;&#35486;&#19968;</button>
       <button class="subtab" onclick="goSub('vocab','c2')">&#128221; C&#7909;m t&#7915; 2 &#183; &#30701;&#35486;&#20108;</button>
-      <button class="subtab" onclick="goSub('vocab','nv')">&#128101; Nh&#226;n v&#7853;t &#183; &#20154;&#29289;</button>
+      <button class="subtab" onclick="goSub('vocab','nv')"><i class="bi bi-people"></i> Nh&#226;n v&#7853;t &#183; &#20154;&#29289;</button>
     </div>
     <div id="vocab-v1" class="sub-content on"><div class="vt-wrap"><table class="vt" id="t-t1"></table></div></div>
     <div id="vocab-v2" class="sub-content"><div class="vt-wrap"><table class="vt" id="t-t2"></table></div></div>
@@ -300,34 +305,34 @@ footer strong{color:var(--r);}
   <!-- B&#192;I KH&#211;A -->
   <div id="baikoa" class="sec">
     <div class="subnav">
-      <button class="subtab on" onclick="goSub('baikoa','ht1')">&#128172; H&#7897;i tho&#7841;i 1 &#183; &#23565;&#35441;&#19968;</button>
-      <button class="subtab" onclick="goSub('baikoa','bk')">&#128214; B&#224;i kh&#243;a &#183; &#35506;&#25991;</button>
+      <button class="subtab on" onclick="goSub('baikoa','ht1')"><i class="bi bi-chat-left-text"></i> H&#7897;i tho&#7841;i 1 &#183; &#23565;&#35441;&#19968;</button>
+      <button class="subtab" onclick="goSub('baikoa','bk')"><i class="bi bi-book-half"></i> B&#224;i kh&#243;a &#183; &#35506;&#25991;</button>
     </div>
     <div id="baikoa-ht1" class="sub-content on">
       <div class="db">
         <div class="dt">
           <span class="dlb">H&#7897;i tho&#7841;i 1 &#183; &#23565;&#35441;&#19968;</span>D&#7921; ti&#7879;c c&#432;&#7899;i
-          <button class="dab" onclick="sayZh('安同，你們來了。恭喜！恭喜！明華，這是我常跟你說的高美玲。美玲，他就是新娘的哥哥，李明華。李先生，恭喜你們！謝謝你請我們來參加你妹妹的婚禮。你太客氣了。安同，你今天穿西裝真好看。謝謝，參加婚禮應該要穿得很正式。客人怎麼都還沒到？現在才六點，婚禮六點半開始，時間還早。明華，手裡拿著照相機的那個人是誰？他是新郎的弟弟。新郎呢？他在門口站著跟客人說話。哪一個？就是穿著白西裝的那個。新郎看起來好帥。你看，那邊那位穿著紅色禮服，跟客人說話的太太是誰？那是新郎的媽媽。她看起來好高興啊！怎麼沒看見新娘呢？等一下你們就會看見她了。婚禮要開始了，我帶你們去你們的座位吧！')">&#128266; To&#224;n b&#7897;</button>
+          <button class="dab" onclick="sayZh('安同，你們來了。恭喜！恭喜！明華，這是我常跟你說的高美玲。美玲，他就是新娘的哥哥，李明華。李先生，恭喜你們！謝謝你請我們來參加你妹妹的婚禮。你太客氣了。安同，你今天穿西裝真好看。謝謝，參加婚禮應該要穿得很正式。客人怎麼都還沒到？現在才六點，婚禮六點半開始，時間還早。明華，手裡拿著照相機的那個人是誰？他是新郎的弟弟。新郎呢？他在門口站著跟客人說話。哪一個？就是穿著白西裝的那個。新郎看起來好帥。你看，那邊那位穿著紅色禮服，跟客人說話的太太是誰？那是新郎的媽媽。她看起來好高興啊！怎麼沒看見新娘呢？等一下你們就會看見她了。婚禮要開始了，我帶你們去你們的座位吧！')"><i class="bi bi-play-fill"></i> To&#224;n b&#7897;</button>
         </div>
         <table class="dt2">
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同，你們來了。')">&#128266;</button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;<small>L&#464; M&#237;nghu&#225;</small></div></td><td class="d-tx"><div class="szh">&#23433;&#21516;&#65292;&#20320;&#20497;&#20358;&#20102;&#12290;</div><div class="spy">&#256;n t&#243;ng, n&#464;men l&#225;i le.</div><div class="svi">An &#272;&#7891;ng, c&#225;c b&#7841;n &#273;&#7871;n r&#7891;i.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('恭喜！恭喜！明華，這是我常跟你說的高美玲。美玲，他就是新娘的哥哥，李明華。')">&#128266;</button></td><td class="d-sp"><div class="spk">&#23433;&#21516;<small>&#256;n T&#243;ng</small></div></td><td class="d-tx"><div class="szh">&#24685;&#21916;&#65281;&#24685;&#21916;&#65281;&#26126;&#33775;&#65292;&#36889;&#26159;&#25105;&#24120;&#36319;&#20320;&#35498;&#30340;&#39640;&#32654;&#29618;&#12290;&#32654;&#29618;&#65292;&#20182;&#23601;&#26159;&#26032;&#23064;&#30340;&#21733;&#21733;&#65292;&#26446;&#26126;&#33775;&#12290;</div><div class="spy">G&#333;ngx&#301;! G&#333;ngx&#301;! M&#237;nghu&#225;, zh&#232; sh&#236; w&#243; ch&#225;ng g&#275;n n&#301; shu&#333; de G&#257;o M&#283;il&#237;ng. M&#283;il&#237;ng, t&#257; ji&#249; sh&#236; x&#299;ni&#225;ng de g&#275;ge, L&#301; M&#237;nghu&#225;.</div><div class="svi">Ch&#250;c m&#7915;ng! Ch&#250;c m&#7915;ng! Minh Hoa, &#273;&#226;y l&#224; Cao M&#7929; Linh m&#224; t&#244;i th&#432;&#7901;ng n&#243;i v&#7899;i b&#7841;n &#273;&#243;. M&#7929; Linh, anh &#7845;y ch&#237;nh l&#224; anh trai c&#244; d&#226;u, L&#253; Minh Hoa.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('李先生，恭喜你們！謝謝你請我們來參加你妹妹的婚禮。')">&#128266;</button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;<small>G&#257;o M&#283;il&#237;ng</small></div></td><td class="d-tx"><div class="szh">&#26446;&#20808;&#29983;&#65292;&#24685;&#21916;&#20320;&#20497;&#65281;&#35613;&#35613;&#20320;&#35531;&#25105;&#20497;&#20358;&#21443;&#21152;&#20320;&#22969;&#22969;&#30340;&#23130;&#31150;&#12290;</div><div class="spy">L&#301; xi&#257;nsheng, g&#333;ngx&#301; n&#301;men! Xi&#232;xie n&#301; q&#301;ng w&#243;men l&#225;i c&#257;nji&#257; n&#301; m&#232;imei de h&#363;nl&#301;.</div><div class="svi">Anh L&#253;, ch&#250;c m&#7915;ng gia &#273;&#236;nh anh! C&#7843;m &#417;n anh &#273;&#227; m&#7901;i ch&#250;ng t&#244;i &#273;&#7871;n d&#7921; &#273;&#225;m c&#432;&#7899;i c&#7911;a em g&#225;i anh.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('你太客氣了。安同，你今天穿西裝真好看。')">&#128266;</button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#20320;&#22826;&#23458;&#27683;&#20102;&#12290;&#23433;&#21516;&#65292;&#20320;&#20170;&#22825;&#31359;&#35199;&#35037;&#30495;&#22909;&#30475;&#12290;</div><div class="spy">N&#301; t&#224;i k&#232;q&#236; le. &#256;n t&#243;ng, n&#301; j&#299;nti&#257;n chu&#257;n x&#299;zhu&#257;ng zh&#275;n h&#462;ok&#224;n.</div><div class="svi">B&#7841;n qu&#225; kh&#225;ch kh&#237; r&#7891;i. An &#272;&#7891;ng, h&#244;m nay b&#7841;n m&#7863;c vest tr&#244;ng &#273;&#7865;p trai th&#7853;t.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝，參加婚禮應該要穿得很正式。')">&#128266;</button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#35613;&#35613;&#65292;&#21443;&#21152;&#23130;&#31150;&#25033;&#35442;&#35201;&#31359;&#24471;&#24456;&#27491;&#24335;&#12290;</div><div class="spy">Xi&#232;xie, c&#257;nji&#257; h&#363;nl&#301; y&#299;ngg&#257;i y&#224;o chu&#257;n de h&#283;n zh&#232;ngsh&#236;.</div><div class="svi">C&#7843;m &#417;n, tham d&#7921; l&#7877; c&#432;&#7899;i n&#234;n m&#7863;c trang tr&#7885;ng.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('客人怎麼都還沒到？')">&#128266;</button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#23458;&#20154;&#24590;&#40636;&#37117;&#36996;&#27794;&#21040;&#65311;</div><div class="spy">K&#232;r&#233;n z&#283;nme d&#333;u h&#225;i m&#233;i d&#224;o?</div><div class="svi">Sao kh&#225;ch &#273;&#7871;n gi&#7901; v&#7851;n ch&#432;a &#273;&#7871;n?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('現在才六點，婚禮六點半開始，時間還早。')">&#128266;</button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#29694;&#22312;&#25165;&#20845;&#40670;&#65292;&#23130;&#31150;&#20845;&#40670;&#21322;&#38283;&#22987;&#65292;&#26178;&#38291;&#36996;&#26089;&#12290;</div><div class="spy">Xi&#224;nz&#224;i c&#225;i li&#249; di&#462;n, h&#363;nl&#301; li&#249; di&#462;n b&#224;n k&#257;ish&#301;, sh&#237;ji&#257;n h&#225;i z&#462;o.</div><div class="svi">B&#226;y gi&#7901; m&#7899;i s&#225;u gi&#7901;, l&#7877; c&#432;&#7899;i s&#225;u gi&#7901; r&#432;&#7905;i b&#7855;t &#273;&#7847;u, c&#242;n s&#7899;m.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('明華，手裡拿著照相機的那個人是誰？')">&#128266;</button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#26126;&#33775;&#65292;&#25163;&#35023;&#25343;&#33879;&#29031;&#30456;&#27231;&#30340;&#37027;&#20491;&#20154;&#26159;&#35504;&#65311;</div><div class="spy">M&#237;nghu&#225;, sh&#243;u l&#301; n&#225;zhe zh&#224;oxi&#224;ngj&#299; de n&#224;ge r&#233;n sh&#236; sh&#233;i?</div><div class="svi">Minh Hoa, ng&#432;&#7901;i &#273;ang c&#7847;m m&#225;y &#7843;nh trong tay l&#224; ai v&#7853;y?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('他是新郎的弟弟。')">&#128266;</button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#20182;&#26159;&#26032;&#37070;&#30340;&#24351;&#24351;&#12290;</div><div class="spy">T&#257; sh&#236; x&#299;nl&#225;ng de d&#236;di.</div><div class="svi">Anh &#7845;y l&#224; em trai ch&#250; r&#7875;.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('新郎呢？')">&#128266;</button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#26032;&#37070;&#21602;&#65311;</div><div class="spy">X&#299;nl&#225;ng ne?</div><div class="svi">C&#242;n ch&#250; r&#7875; &#273;&#226;u?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('他在門口站著跟客人說話。')">&#128266;</button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#20182;&#22312;&#38272;&#21475;&#31449;&#33879;&#36319;&#23458;&#20154;&#35498;&#35441;&#12290;</div><div class="spy">T&#257; z&#224;i m&#233;nk&#301;u zh&#224;nzhe g&#275;n k&#232;r&#233;n shu&#333;hu&#224;.</div><div class="svi">Anh &#7845;y &#273;ang &#273;&#7913;ng &#7903; c&#7917;a n&#243;i chuy&#7879;n v&#7899;i kh&#225;ch.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('哪一個？')">&#128266;</button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#21738;&#19968;&#20491;&#65311;</div><div class="spy">N&#462; y&#237; ge?</div><div class="svi">Ng&#432;&#7901;i n&#224;o?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('就是穿著白西裝的那個。')">&#128266;</button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#23601;&#26159;&#31359;&#33879;&#30333;&#35199;&#35037;&#30340;&#37027;&#20491;&#12290;</div><div class="spy">Ji&#249; sh&#236; chu&#257;nzhe b&#225;i x&#299;zhu&#257;ng de n&#224;ge.</div><div class="svi">L&#224; ng&#432;&#7901;i m&#7863;c vest tr&#7855;ng &#273;&#243;.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('新郎看起來好帥。')">&#128266;</button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#26032;&#37070;&#30475;&#36215;&#20358;&#22909;&#24101;&#12290;</div><div class="spy">X&#299;nl&#225;ng k&#224;n q&#301;l&#225;i h&#462;o shu&#224;i.</div><div class="svi">Ch&#250; r&#7875; tr&#244;ng &#273;&#7865;p trai qu&#225;.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('你看，那邊那位穿著紅色禮服，跟客人說話的太太是誰？')">&#128266;</button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#20320;&#30475;&#65292;&#37027;&#37002;&#37027;&#20301;&#31359;&#33879;&#32005;&#33394;&#31150;&#26381;&#65292;&#36319;&#23458;&#20154;&#35498;&#35441;&#30340;&#22826;&#22826;&#26159;&#35504;&#65311;</div><div class="spy">N&#301; k&#224;n, n&#224;bi&#257;n n&#224; w&#232;i chu&#257;nzhe h&#243;ngs&#232; l&#301;f&#250;, g&#275;n k&#232;r&#233;n shu&#333;hu&#224; de t&#224;itai sh&#236; sh&#233;i?</div><div class="svi">Anh xem, b&#234;n kia ng&#432;&#7901;i ph&#7909; n&#7919; m&#7863;c l&#7877; ph&#7909;c m&#224;u &#273;&#7887; &#273;ang n&#243;i chuy&#7879;n v&#7899;i kh&#225;ch l&#224; ai v&#7853;y?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('那是新郎的媽媽。')">&#128266;</button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#37027;&#26159;&#26032;&#37070;&#30340;&#23229;&#23229;&#12290;</div><div class="spy">N&#224; sh&#236; x&#299;nl&#225;ng de m&#257;ma.</div><div class="svi">&#208; &#273;&#243; l&#224; m&#7865; ch&#250; r&#7875;.</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('她看起來好高興啊！怎麼沒看見新娘呢？')">&#128266;</button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#22905;&#30475;&#36215;&#20358;&#22909;&#39640;&#33288;&#21834;&#65281;&#24590;&#40636;&#27794;&#30475;&#35211;&#26032;&#23064;&#21602;&#65311;</div><div class="spy">T&#257; k&#224;n q&#301;l&#225;i h&#462;o g&#257;ox&#236;ng a! Z&#283;nme m&#233;i k&#224;nji&#224;n x&#299;ni&#225;ng ne?</div><div class="svi">B&#224; &#7845;y tr&#244;ng vui qu&#225;! Sao kh&#244;ng th&#7845;y c&#244; d&#226;u &#273;&#226;u?</div></td></tr>
-          <tr><td class="d-au"><button class="bau" onclick="sayZh('等一下你們就會看見她了。婚禮要開始了，我帶你們去你們的座位吧！')">&#128266;</button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#31561;&#19968;&#19979;&#20320;&#20497;&#23601;&#26371;&#30475;&#35211;&#22905;&#20102;&#12290;&#23130;&#31150;&#35201;&#38283;&#22987;&#20102;&#65292;&#25105;&#24118;&#20320;&#20497;&#21435;&#20320;&#20497;&#30340;&#24231;&#20301;&#21543;&#65281;</div><div class="spy">D&#283;ng y&#237;xi&#224; n&#301;men ji&#249; hu&#236; k&#224;nji&#224;n t&#257; le. H&#363;nl&#301; y&#224;o k&#257;ish&#301; le, w&#243; d&#224;i n&#301;men q&#249; n&#301;men de zu&#242;w&#232;i ba!</div><div class="svi">Ch&#7897; m&#7897;t ch&#250;t c&#225;c b&#7841;n s&#7869; th&#7845;y c&#244; &#7845;y th&#244;i. L&#7877; c&#432;&#7899;i s&#7855;p b&#7855;t &#273;&#7847;u r&#7891;i, t&#244;i d&#7851;n c&#225;c b&#7841;n &#273;&#7871;n ch&#7895; ng&#7891;i c&#7911;a c&#225;c b&#7841;n nh&#233;!</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('安同，你們來了。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;<small>L&#464; M&#237;nghu&#225;</small></div></td><td class="d-tx"><div class="szh">&#23433;&#21516;&#65292;&#20320;&#20497;&#20358;&#20102;&#12290;</div><div class="spy">&#256;n t&#243;ng, n&#464;men l&#225;i le.</div><div class="svi">An &#272;&#7891;ng, c&#225;c b&#7841;n &#273;&#7871;n r&#7891;i.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('恭喜！恭喜！明華，這是我常跟你說的高美玲。美玲，他就是新娘的哥哥，李明華。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">&#23433;&#21516;<small>&#256;n T&#243;ng</small></div></td><td class="d-tx"><div class="szh">&#24685;&#21916;&#65281;&#24685;&#21916;&#65281;&#26126;&#33775;&#65292;&#36889;&#26159;&#25105;&#24120;&#36319;&#20320;&#35498;&#30340;&#39640;&#32654;&#29618;&#12290;&#32654;&#29618;&#65292;&#20182;&#23601;&#26159;&#26032;&#23064;&#30340;&#21733;&#21733;&#65292;&#26446;&#26126;&#33775;&#12290;</div><div class="spy">G&#333;ngx&#301;! G&#333;ngx&#301;! M&#237;nghu&#225;, zh&#232; sh&#236; w&#243; ch&#225;ng g&#275;n n&#301; shu&#333; de G&#257;o M&#283;il&#237;ng. M&#283;il&#237;ng, t&#257; ji&#249; sh&#236; x&#299;ni&#225;ng de g&#275;ge, L&#301; M&#237;nghu&#225;.</div><div class="svi">Ch&#250;c m&#7915;ng! Ch&#250;c m&#7915;ng! Minh Hoa, &#273;&#226;y l&#224; Cao M&#7929; Linh m&#224; t&#244;i th&#432;&#7901;ng n&#243;i v&#7899;i b&#7841;n &#273;&#243;. M&#7929; Linh, anh &#7845;y ch&#237;nh l&#224; anh trai c&#244; d&#226;u, L&#253; Minh Hoa.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('李先生，恭喜你們！謝謝你請我們來參加你妹妹的婚禮。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;<small>G&#257;o M&#283;il&#237;ng</small></div></td><td class="d-tx"><div class="szh">&#26446;&#20808;&#29983;&#65292;&#24685;&#21916;&#20320;&#20497;&#65281;&#35613;&#35613;&#20320;&#35531;&#25105;&#20497;&#20358;&#21443;&#21152;&#20320;&#22969;&#22969;&#30340;&#23130;&#31150;&#12290;</div><div class="spy">L&#301; xi&#257;nsheng, g&#333;ngx&#301; n&#301;men! Xi&#232;xie n&#301; q&#301;ng w&#243;men l&#225;i c&#257;nji&#257; n&#301; m&#232;imei de h&#363;nl&#301;.</div><div class="svi">Anh L&#253;, ch&#250;c m&#7915;ng gia &#273;&#236;nh anh! C&#7843;m &#417;n anh &#273;&#227; m&#7901;i ch&#250;ng t&#244;i &#273;&#7871;n d&#7921; &#273;&#225;m c&#432;&#7899;i c&#7911;a em g&#225;i anh.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你太客氣了。安同，你今天穿西裝真好看。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#20320;&#22826;&#23458;&#27683;&#20102;&#12290;&#23433;&#21516;&#65292;&#20320;&#20170;&#22825;&#31359;&#35199;&#35037;&#30495;&#22909;&#30475;&#12290;</div><div class="spy">N&#301; t&#224;i k&#232;q&#236; le. &#256;n t&#243;ng, n&#301; j&#299;nti&#257;n chu&#257;n x&#299;zhu&#257;ng zh&#275;n h&#462;ok&#224;n.</div><div class="svi">B&#7841;n qu&#225; kh&#225;ch kh&#237; r&#7891;i. An &#272;&#7891;ng, h&#244;m nay b&#7841;n m&#7863;c vest tr&#244;ng &#273;&#7865;p trai th&#7853;t.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('謝謝，參加婚禮應該要穿得很正式。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#35613;&#35613;&#65292;&#21443;&#21152;&#23130;&#31150;&#25033;&#35442;&#35201;&#31359;&#24471;&#24456;&#27491;&#24335;&#12290;</div><div class="spy">Xi&#232;xie, c&#257;nji&#257; h&#363;nl&#301; y&#299;ngg&#257;i y&#224;o chu&#257;n de h&#283;n zh&#232;ngsh&#236;.</div><div class="svi">C&#7843;m &#417;n, tham d&#7921; l&#7877; c&#432;&#7899;i n&#234;n m&#7863;c trang tr&#7885;ng.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('客人怎麼都還沒到？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#23458;&#20154;&#24590;&#40636;&#37117;&#36996;&#27794;&#21040;&#65311;</div><div class="spy">K&#232;r&#233;n z&#283;nme d&#333;u h&#225;i m&#233;i d&#224;o?</div><div class="svi">Sao kh&#225;ch &#273;&#7871;n gi&#7901; v&#7851;n ch&#432;a &#273;&#7871;n?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('現在才六點，婚禮六點半開始，時間還早。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#29694;&#22312;&#25165;&#20845;&#40670;&#65292;&#23130;&#31150;&#20845;&#40670;&#21322;&#38283;&#22987;&#65292;&#26178;&#38291;&#36996;&#26089;&#12290;</div><div class="spy">Xi&#224;nz&#224;i c&#225;i li&#249; di&#462;n, h&#363;nl&#301; li&#249; di&#462;n b&#224;n k&#257;ish&#301;, sh&#237;ji&#257;n h&#225;i z&#462;o.</div><div class="svi">B&#226;y gi&#7901; m&#7899;i s&#225;u gi&#7901;, l&#7877; c&#432;&#7899;i s&#225;u gi&#7901; r&#432;&#7905;i b&#7855;t &#273;&#7847;u, c&#242;n s&#7899;m.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('明華，手裡拿著照相機的那個人是誰？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#26126;&#33775;&#65292;&#25163;&#35023;&#25343;&#33879;&#29031;&#30456;&#27231;&#30340;&#37027;&#20491;&#20154;&#26159;&#35504;&#65311;</div><div class="spy">M&#237;nghu&#225;, sh&#243;u l&#301; n&#225;zhe zh&#224;oxi&#224;ngj&#299; de n&#224;ge r&#233;n sh&#236; sh&#233;i?</div><div class="svi">Minh Hoa, ng&#432;&#7901;i &#273;ang c&#7847;m m&#225;y &#7843;nh trong tay l&#224; ai v&#7853;y?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('他是新郎的弟弟。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#20182;&#26159;&#26032;&#37070;&#30340;&#24351;&#24351;&#12290;</div><div class="spy">T&#257; sh&#236; x&#299;nl&#225;ng de d&#236;di.</div><div class="svi">Anh &#7845;y l&#224; em trai ch&#250; r&#7875;.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('新郎呢？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#26032;&#37070;&#21602;&#65311;</div><div class="spy">X&#299;nl&#225;ng ne?</div><div class="svi">C&#242;n ch&#250; r&#7875; &#273;&#226;u?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('他在門口站著跟客人說話。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#20182;&#22312;&#38272;&#21475;&#31449;&#33879;&#36319;&#23458;&#20154;&#35498;&#35441;&#12290;</div><div class="spy">T&#257; z&#224;i m&#233;nk&#301;u zh&#224;nzhe g&#275;n k&#232;r&#233;n shu&#333;hu&#224;.</div><div class="svi">Anh &#7845;y &#273;ang &#273;&#7913;ng &#7903; c&#7917;a n&#243;i chuy&#7879;n v&#7899;i kh&#225;ch.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('哪一個？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#21738;&#19968;&#20491;&#65311;</div><div class="spy">N&#462; y&#237; ge?</div><div class="svi">Ng&#432;&#7901;i n&#224;o?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('就是穿著白西裝的那個。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#23601;&#26159;&#31359;&#33879;&#30333;&#35199;&#35037;&#30340;&#37027;&#20491;&#12290;</div><div class="spy">Ji&#249; sh&#236; chu&#257;nzhe b&#225;i x&#299;zhu&#257;ng de n&#224;ge.</div><div class="svi">L&#224; ng&#432;&#7901;i m&#7863;c vest tr&#7855;ng &#273;&#243;.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('新郎看起來好帥。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk">&#23433;&#21516;</div></td><td class="d-tx"><div class="szh">&#26032;&#37070;&#30475;&#36215;&#20358;&#22909;&#24101;&#12290;</div><div class="spy">X&#299;nl&#225;ng k&#224;n q&#301;l&#225;i h&#462;o shu&#224;i.</div><div class="svi">Ch&#250; r&#7875; tr&#244;ng &#273;&#7865;p trai qu&#225;.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('你看，那邊那位穿著紅色禮服，跟客人說話的太太是誰？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#20320;&#30475;&#65292;&#37027;&#37002;&#37027;&#20301;&#31359;&#33879;&#32005;&#33394;&#31150;&#26381;&#65292;&#36319;&#23458;&#20154;&#35498;&#35441;&#30340;&#22826;&#22826;&#26159;&#35504;&#65311;</div><div class="spy">N&#301; k&#224;n, n&#224;bi&#257;n n&#224; w&#232;i chu&#257;nzhe h&#243;ngs&#232; l&#301;f&#250;, g&#275;n k&#232;r&#233;n shu&#333;hu&#224; de t&#224;itai sh&#236; sh&#233;i?</div><div class="svi">Anh xem, b&#234;n kia ng&#432;&#7901;i ph&#7909; n&#7919; m&#7863;c l&#7877; ph&#7909;c m&#224;u &#273;&#7887; &#273;ang n&#243;i chuy&#7879;n v&#7899;i kh&#225;ch l&#224; ai v&#7853;y?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('那是新郎的媽媽。')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#37027;&#26159;&#26032;&#37070;&#30340;&#23229;&#23229;&#12290;</div><div class="spy">N&#224; sh&#236; x&#299;nl&#225;ng de m&#257;ma.</div><div class="svi">&#208; &#273;&#243; l&#224; m&#7865; ch&#250; r&#7875;.</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('她看起來好高興啊！怎麼沒看見新娘呢？')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk c">&#39640;&#32654;&#29618;</div></td><td class="d-tx"><div class="szh">&#22905;&#30475;&#36215;&#20358;&#22909;&#39640;&#33288;&#21834;&#65281;&#24590;&#40636;&#27794;&#30475;&#35211;&#26032;&#23064;&#21602;&#65311;</div><div class="spy">T&#257; k&#224;n q&#301;l&#225;i h&#462;o g&#257;ox&#236;ng a! Z&#283;nme m&#233;i k&#224;nji&#224;n x&#299;ni&#225;ng ne?</div><div class="svi">B&#224; &#7845;y tr&#244;ng vui qu&#225;! Sao kh&#244;ng th&#7845;y c&#244; d&#226;u &#273;&#226;u?</div></td></tr>
+          <tr><td class="d-au"><button class="bau" onclick="sayZh('等一下你們就會看見她了。婚禮要開始了，我帶你們去你們的座位吧！')"><i class="bi bi-volume-up-fill"></i></button></td><td class="d-sp"><div class="spk b">&#26446;&#26126;&#33775;</div></td><td class="d-tx"><div class="szh">&#31561;&#19968;&#19979;&#20320;&#20497;&#23601;&#26371;&#30475;&#35211;&#22905;&#20102;&#12290;&#23130;&#31150;&#35201;&#38283;&#22987;&#20102;&#65292;&#25105;&#24118;&#20320;&#20497;&#21435;&#20320;&#20497;&#30340;&#24231;&#20301;&#21543;&#65281;</div><div class="spy">D&#283;ng y&#237;xi&#224; n&#301;men ji&#249; hu&#236; k&#224;nji&#224;n t&#257; le. H&#363;nl&#301; y&#224;o k&#257;ish&#301; le, w&#243; d&#224;i n&#301;men q&#249; n&#301;men de zu&#242;w&#232;i ba!</div><div class="svi">Ch&#7897; m&#7897;t ch&#250;t c&#225;c b&#7841;n s&#7869; th&#7845;y c&#244; &#7845;y th&#244;i. L&#7877; c&#432;&#7899;i s&#7855;p b&#7855;t &#273;&#7847;u r&#7891;i, t&#244;i d&#7851;n c&#225;c b&#7841;n &#273;&#7871;n ch&#7895; ng&#7891;i c&#7911;a c&#225;c b&#7841;n nh&#233;!</div></td></tr>
         </table>
       </div>
     </div>
@@ -335,7 +340,7 @@ footer strong{color:var(--r);}
       <div class="db" style="border-top-color:#764ba2;">
         <div class="dt" style="color:#764ba2;">
           <span class="dlb" style="background:#764ba2;">B&#224;i kh&#243;a &#183; &#35506;&#25991;</span>
-          <button class="dab" style="background:#764ba2;" onclick="sayZh('李明華請安同和美玲去參加他妹妹的婚禮，這是安同他們第一次去吃喜酒。李明華告訴他們，在台灣，要結婚的人大部分都會找一個好日子，請親戚、朋友一起吃飯，熱熱鬧鬧地慶祝這件喜事。請客的那天，新郎、新娘，還有來吃喜酒的客人都穿得漂漂亮亮的。來參加的客人都會準備一個紅包送新人。等客人都到了，喜宴就開始了。大家吃了一會兒，有的人忙著到處敬酒，有的人忙著跟朋友聊天，大人有說有笑，小孩有吃有喝，熱鬧得不得了。大家吃著吃著，新郎、新娘和他們的父母就來敬酒了。客人也會祝新人百年好合、早生貴子。等喜酒吃得差不多了，新娘會換另外一件漂亮的禮服，跟新郎拿著糖在門口送客人離開。這個時候很多人會跟新人一起照相，再多說幾句祝福的話。等客人都回去了，喜宴就結束了。')">&#128266; To&#224;n b&#7897;</button>
+          <button class="dab" style="background:#764ba2;" onclick="sayZh('李明華請安同和美玲去參加他妹妹的婚禮，這是安同他們第一次去吃喜酒。李明華告訴他們，在台灣，要結婚的人大部分都會找一個好日子，請親戚、朋友一起吃飯，熱熱鬧鬧地慶祝這件喜事。請客的那天，新郎、新娘，還有來吃喜酒的客人都穿得漂漂亮亮的。來參加的客人都會準備一個紅包送新人。等客人都到了，喜宴就開始了。大家吃了一會兒，有的人忙著到處敬酒，有的人忙著跟朋友聊天，大人有說有笑，小孩有吃有喝，熱鬧得不得了。大家吃著吃著，新郎、新娘和他們的父母就來敬酒了。客人也會祝新人百年好合、早生貴子。等喜酒吃得差不多了，新娘會換另外一件漂亮的禮服，跟新郎拿著糖在門口送客人離開。這個時候很多人會跟新人一起照相，再多說幾句祝福的話。等客人都回去了，喜宴就結束了。')"><i class="bi bi-play-fill"></i> To&#224;n b&#7897;</button>
         </div>
         <div class="szh" style="font-size:22px;line-height:1.8;">&#26446;&#26126;&#33775;&#35531;&#23433;&#21516;&#21644;&#32654;&#29618;&#21435;&#21443;&#21152;&#20182;&#22969;&#22969;&#30340;&#23130;&#31150;&#65292;&#36889;&#26159;&#23433;&#21516;&#20182;&#20497;&#31532;&#19968;&#27425;&#21435;&#21507;&#21916;&#37202;&#12290;&#26446;&#26126;&#33775;&#21578;&#35380;&#20182;&#20497;&#65292;&#22312;&#21488;&#28771;&#65292;&#35201;&#32080;&#23130;&#30340;&#20154;&#22823;&#37096;&#20998;&#37117;&#26371;&#25214;&#19968;&#20491;&#22909;&#26085;&#23376;&#65292;&#35531;&#35242;&#25114;&#12289;&#26379;&#21451;&#19968;&#36215;&#21507;&#39151;&#65292;&#29105;&#29105;&#39719;&#39719;&#22320;&#24950;&#31069;&#36889;&#20214;&#21916;&#20107;&#12290;</div>
         <div class="spy" style="font-size:16px;color:var(--r);line-height:1.6;margin:4px 0;">L&#301; M&#237;nghu&#225; q&#301;ng &#256;n T&#243;ng h&#233; M&#283;il&#237;ng q&#249; c&#257;nji&#257; t&#257; m&#232;imei de h&#363;nl&#301;, zh&#232; sh&#236; &#256;n T&#243;ng t&#257;men d&#236; y&#237; c&#236; q&#249; ch&#299; x&#301;ji&#365;. L&#301; M&#237;nghu&#225; g&#224;os&#249; t&#257;men, z&#224;i T&#225;iw&#257;n, y&#224;o ji&#233;h&#363;n de r&#233;n d&#224;b&#249;f&#232;n d&#333;u hu&#236; zh&#462;o y&#237; ge h&#462;o r&#236;zi, q&#301;ng q&#299;nqi, p&#233;ngyou y&#236;q&#301; ch&#299;f&#224;n, r&#232;re n&#224;on&#224;o de q&#236;ngzh&#249; zh&#232; ji&#224;n x&#301;sh&#236;.</div>
@@ -377,9 +382,9 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">&#29694;&#22312;&#22825;&#27683;&#36996;&#22826;&#20919;&#65292;&#19981;&#21487;&#20197;&#21435;&#28216;&#27891;&#12290;</div></td><td><div class="py">Xi&#224;nz&#224;i ti&#257;nq&#236; h&#225;i t&#224;i l&#283;ng, b&#249; k&#283;y&#301; q&#249; y&#243;uy&#466;ng.</div></td><td><div class="vi">B&#226;y gi&#7901; th&#7901;i ti&#7871;t v&#7851;n c&#242;n l&#7841;nh qu&#225;, kh&#244;ng th&#7875; &#273;i b&#417;i.</div></td></tr>
           <tr><td><div class="zh">&#25105;&#30340;&#37666;&#36996;&#19981;&#22816;&#65292;&#19981;&#33021;&#20184;&#23416;&#36027;&#12290;</div></td><td><div class="py">W&#466;de qi&#225;n h&#225;i b&#249; g&#242;u, b&#249;n&#233;ng f&#249; xu&#233;f&#232;i.</div></td><td><div class="vi">Ti&#7873;n c&#7911;a t&#244;i v&#7851;n ch&#432;a &#273;&#7911;, kh&#244;ng th&#7875; tr&#7843; h&#7885;c ph&#237;.</div></td></tr>
         </table>
-        <div class="gnote">&#128161; <strong>V&#7883; tr&#237;:</strong> Khi c&#243; nhi&#7873;u ph&#243; t&#7915; trong c&#226;u, &#36996; &#273;&#7913;ng tr&#432;&#7899;c c&#225;c ph&#243; t&#7915; kh&#225;c (tr&#7915; ph&#7911; &#273;&#7883;nh). V&#237; d&#7909;: &#36996;&#27794;&#21040; (v&#7851;n ch&#432;a &#273;&#7871;n), &#36996;&#19981;&#22816; (v&#7851;n ch&#432;a &#273;&#7911;).</div>
-        <div class="gnote">&#128161; <strong>C&#226;u h&#7887;i:</strong> D&#249;ng c&#7845;u tr&#250;c &#26159;&#19981;&#26159; &#273;&#7863;t tr&#432;&#7899;c &#36996;. V&#237; d&#7909;: &#20320;&#30340;&#37666;&#26159;&#19981;&#26159;&#36996;&#19981;&#22816;&#31199;&#22871;&#25151;&#65311;</div>
-        <div class="gnote">&#128161; <strong>Ngh&#297;a kh&#225;c:</strong> "ngo&#224;i ra, c&#242;n n&#7919;a" v&#7899;i &#273;&#7897;ng t&#7915; h&#224;nh &#273;&#7897;ng. V&#237; d&#7909;: &#25105;&#36996;&#35201;&#28310;&#20633;&#31532;&#20108;&#22825;&#30340;&#35506; (T&#244;i c&#242;n ph&#7843;i chu&#7849;n b&#7883; b&#224;i ng&#224;y h&#244;m sau).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>V&#7883; tr&#237;:</strong> Khi c&#243; nhi&#7873;u ph&#243; t&#7915; trong c&#226;u, &#36996; &#273;&#7913;ng tr&#432;&#7899;c c&#225;c ph&#243; t&#7915; kh&#225;c (tr&#7915; ph&#7911; &#273;&#7883;nh). V&#237; d&#7909;: &#36996;&#27794;&#21040; (v&#7851;n ch&#432;a &#273;&#7871;n), &#36996;&#19981;&#22816; (v&#7851;n ch&#432;a &#273;&#7911;).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>C&#226;u h&#7887;i:</strong> D&#249;ng c&#7845;u tr&#250;c &#26159;&#19981;&#26159; &#273;&#7863;t tr&#432;&#7899;c &#36996;. V&#237; d&#7909;: &#20320;&#30340;&#37666;&#26159;&#19981;&#26159;&#36996;&#19981;&#22816;&#31199;&#22871;&#25151;&#65311;</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Ngh&#297;a kh&#225;c:</strong> "ngo&#224;i ra, c&#242;n n&#7919;a" v&#7899;i &#273;&#7897;ng t&#7915; h&#224;nh &#273;&#7897;ng. V&#237; d&#7909;: &#25105;&#36996;&#35201;&#28310;&#20633;&#31532;&#20108;&#22825;&#30340;&#35506; (T&#244;i c&#242;n ph&#7843;i chu&#7849;n b&#7883; b&#224;i ng&#224;y h&#244;m sau).</div>
       </div>
     </div>
     <div id="ngupap-g2" class="sub-content">
@@ -394,8 +399,8 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">&#37027;&#35023;&#30340;&#36335;&#24456;&#24489;&#38620;&#65292;&#20320;&#36996;&#26159;&#24118;&#33879;&#22320;&#22294;&#21435;&#21543;&#65281;</div></td><td><div class="py">N&#224;l&#301; de l&#249; h&#283;n f&#249;z&#225;, n&#301; h&#225;ish&#236; d&#257;izhe d&#236;t&#250; q&#249; ba!</div></td><td><div class="vi">&#272;&#432;&#7901;ng &#273;&#243; ph&#7913;c t&#7841;p l&#7855;m, b&#7841;n n&#234;n mang theo b&#7843;n &#273;&#7891; &#273;i nh&#233;!</div></td></tr>
           <tr><td><div class="zh">&#25105;&#24120;&#30475;&#33879;&#38651;&#35222;&#21507;&#39151;&#12290;</div></td><td><div class="py">W&#466; ch&#225;ng k&#224;nzhe di&#224;nsh&#236; ch&#299;f&#224;n.</div></td><td><div class="vi">T&#244;i th&#432;&#7901;ng v&#7915;a xem TV v&#7915;a &#259;n c&#417;m.</div></td></tr>
         </table>
-        <div class="gnote">&#128161; <strong>Kh&#225;c v&#7899;i &#19968;&#37002;...&#19968;&#37002;:</strong> V-&#33879; ch&#7881; c&#225;ch th&#7913;c, c&#242;n &#19968;&#37002; ch&#7881; hai h&#224;nh &#273;&#7897;ng &#273;&#7891;ng th&#7901;i. V-&#33879; &#273;&#432;&#7907;c d&#249;ng ph&#7893; bi&#7871;n h&#417;n &#7903; &#208;&#224;i Loan.</div>
-        <div class="gnote">&#128161; M&#7897;t s&#7889; &#273;&#7897;ng t&#7911; tr&#7841;ng th&#225;i chuy&#7875;n ti&#7871;p c&#361;ng d&#249;ng &#273;&#432;&#7907;c: &#24537;&#33879; (b&#7853;n), &#24613;&#33879; (v&#7897;i).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Kh&#225;c v&#7899;i &#19968;&#37002;...&#19968;&#37002;:</strong> V-&#33879; ch&#7881; c&#225;ch th&#7913;c, c&#242;n &#19968;&#37002; ch&#7881; hai h&#224;nh &#273;&#7897;ng &#273;&#7891;ng th&#7901;i. V-&#33879; &#273;&#432;&#7907;c d&#249;ng ph&#7893; bi&#7871;n h&#417;n &#7903; &#208;&#224;i Loan.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> M&#7897;t s&#7889; &#273;&#7897;ng t&#7911; tr&#7841;ng th&#225;i chuy&#7875;n ti&#7871;p c&#361;ng d&#249;ng &#273;&#432;&#7907;c: &#24537;&#33879; (b&#7853;n), &#24613;&#33879; (v&#7897;i).</div>
       </div>
     </div>
     <div id="ngupap-g3" class="sub-content">
@@ -410,8 +415,8 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">&#25105;&#36319;&#24351;&#24351;&#21435;&#27231;&#22580;&#25509;&#26379;&#21451;&#12290;</div></td><td><div class="py">W&#466; g&#275;n d&#236;di q&#249; j&#299;ch&#462;ng ji&#275; p&#233;ngyou.</div></td><td><div class="vi">T&#244;i c&#249;ng em trai &#273;i s&#226;n bay &#273;&#243;n b&#7841;n.</div></td></tr>
           <tr><td><div class="zh">&#26126;&#33775;&#36865;&#29240;&#29240;&#21435;&#39640;&#37941;&#31449;&#12290;</div></td><td><div class="py">M&#237;nghu&#225; s&#242;ng b&#224;ba q&#249; g&#257;oti&#283; zh&#224;n.</div></td><td><div class="vi">Minh Hoa ti&#7877;n b&#7889; &#273;i ga t&#224;u cao t&#7889;c.</div></td></tr>
         </table>
-        <div class="gnote">&#128161; <strong>Ph&#7911; &#273;&#7883;nh:</strong> Ph&#7911; &#273;&#7883;nh &#273;&#7863;t tr&#432;&#7899;c &#273;&#7897;ng t&#7915; th&#7913; nh&#7845;t. V&#237; d&#7909;: &#25105;&#36996;&#26377;&#20107;&#65292;&#25105;&#19981;&#36865;&#22905;&#22238;&#23478;&#20102;.</div>
-        <div class="gnote">&#128161; <strong>Thay &#273;&#7893;i th&#7913; t&#7921;:</strong> Thay &#273;&#7893;i th&#7913; t&#7921; VP s&#7869; thay &#273;&#7893;i ngh&#297;a. V&#237; d&#7909;: &#36865;&#26379;&#21451;&#21435;&#27231;&#22580; (ti&#7877;n b&#7841;n &#273;i s&#226;n bay) vs &#21435;&#27231;&#22580;&#36865;&#26379;&#21451; (&#273;i s&#226;n bay ti&#7877;n b&#7841;n).</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Ph&#7911; &#273;&#7883;nh:</strong> Ph&#7911; &#273;&#7883;nh &#273;&#7863;t tr&#432;&#7899;c &#273;&#7897;ng t&#7915; th&#7913; nh&#7845;t. V&#237; d&#7909;: &#25105;&#36996;&#26377;&#20107;&#65292;&#25105;&#19981;&#36865;&#22905;&#22238;&#23478;&#20102;.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Thay &#273;&#7893;i th&#7913; t&#7921;:</strong> Thay &#273;&#7893;i th&#7913; t&#7921; VP s&#7869; thay &#273;&#7893;i ngh&#297;a. V&#237; d&#7909;: &#36865;&#26379;&#21451;&#21435;&#27231;&#22580; (ti&#7877;n b&#7841;n &#273;i s&#226;n bay) vs &#21435;&#27231;&#22580;&#36865;&#26379;&#21451; (&#273;i s&#226;n bay ti&#7877;n b&#7841;n).</div>
       </div>
     </div>
     <div id="ngupap-g4" class="sub-content">
@@ -425,8 +430,8 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">&#31561;&#22799;&#22825;&#21040;&#20102;&#65292;&#21435;&#28023;&#37002;&#30340;&#20154;&#23601;&#22810;&#20102;&#12290;</div></td><td><div class="py">D&#283;ng xi&#224;ti&#257;n d&#224;o le, q&#249; h&#462;ibi&#257;n de r&#233;n ji&#249; du&#333; le.</div></td><td><div class="vi">Ch&#7901; m&#249;a h&#232; &#273;&#7871;n, ng&#432;&#7901;i &#273;i bi&#7875;n s&#7869; nhi&#7873;u l&#234;n.</div></td></tr>
           <tr><td><div class="zh">&#31561;&#20320;&#28310;&#20633;&#25214;&#24037;&#20316;&#30340;&#26178;&#20505;&#65292;&#25105;&#23601;&#26371;&#32102;&#20320;&#19968;&#20123;&#24314;&#35696;&#12290;</div></td><td><div class="py">D&#283;ng n&#301; zh&#365;nb&#232;i zh&#462;o g&#333;ngzu&#242; de sh&#237;hou, w&#466; ji&#249; hu&#236; g&#275;i n&#301; y&#236;xi&#275; ji&#224;ny&#236;.</div></td><td><div class="vi">Ch&#7901; b&#7841;n chu&#7849;n b&#7883; t&#236;m vi&#7879;c, t&#244;i s&#7869; cho b&#7841;n v&#224;i l&#7901;i khuy&#234;n.</div></td></tr>
         </table>
-        <div class="gnote">&#128161; <strong>C&#225;c ph&#243; t&#7915; trong m&#7879;nh &#273;&#7873; B:</strong> &#20877; (ti&#7871;p theo), &#25165; (&#273;i&#7873;u ki&#7879;n), &#23601; (ngay l&#7853;p t&#7913;c). V&#237; d&#7909;: &#31561;&#20182;&#20358;&#20102;&#65292;&#25105;&#20877;&#38626;&#38283; / &#25105;&#25165;&#38626;&#38283; / &#25105;&#23601;&#38626;&#38283;.</div>
-        <div class="gnote">&#128161; <strong>Ph&#7911; &#273;&#7883;nh &#273;&#7863;c bi&#7879;t:</strong> &#19981;&#31561;... (ch&#432;a &#273;&#7907;i... &#273;&#227;...). V&#237; d&#7909;: &#19981;&#31561;&#36275;&#29699;&#27604;&#36093;&#32080;&#26463;&#65292;&#21152;&#27833;&#30340;&#23416;&#29983;&#23601;&#36208;&#20102;.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>C&#225;c ph&#243; t&#7915; trong m&#7879;nh &#273;&#7873; B:</strong> &#20877; (ti&#7871;p theo), &#25165; (&#273;i&#7873;u ki&#7879;n), &#23601; (ngay l&#7853;p t&#7913;c). V&#237; d&#7909;: &#31561;&#20182;&#20358;&#20102;&#65292;&#25105;&#20877;&#38626;&#38283; / &#25105;&#25165;&#38626;&#38283; / &#25105;&#23601;&#38626;&#38283;.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>Ph&#7911; &#273;&#7883;nh &#273;&#7863;c bi&#7879;t:</strong> &#19981;&#31561;... (ch&#432;a &#273;&#7907;i... &#273;&#227;...). V&#237; d&#7909;: &#19981;&#31561;&#36275;&#29699;&#27604;&#36093;&#32080;&#26463;&#65292;&#21152;&#27833;&#30340;&#23416;&#29983;&#23601;&#36208;&#20102;.</div>
       </div>
     </div>
     <div id="ngupap-g5" class="sub-content">
@@ -441,8 +446,8 @@ footer strong{color:var(--r);}
           <tr><td><div class="zh">&#25105;&#23567;&#26178;&#20505;&#27599;&#22825;&#30475;&#23229;&#23229;&#20570;&#39151;&#65292;&#30475;&#33879;&#30475;&#33879;&#65292;&#23601;&#26371;&#20102;&#12290;</div></td><td><div class="py">W&#466; xi&#462;osh&#237;hou m&#283;iti&#257;n k&#224;n m&#257;ma zu&#242;f&#224;n, k&#224;nzhe k&#224;nzhe, ji&#249; hu&#236; le.</div></td><td><div class="vi">H&#7891;i nh&#7887; t&#244;i ng&#224;y n&#224;o c&#361;ng xem m&#7865; n&#7845;u &#259;n, xem m&#227;i r&#7891;i c&#361;ng bi&#7871;t l&#224;m.</div></td></tr>
           <tr><td><div class="zh">&#23433;&#21516;&#22312;&#25463;&#36939;&#19978;&#30475;&#26360;&#65292;&#30475;&#33879;&#30475;&#33879;&#65292;&#23601;&#24536;&#20102;&#25563;&#36554;&#20102;&#12290;</div></td><td><div class="py">&#256;n T&#243;ng z&#224;i ji&#233;y&#249;n shang k&#224;nsh&#363;, k&#224;nzhe k&#224;nzhe, ji&#249; w&#224;ng le hu&#224;n ch&#275; le.</div></td><td><div class="vi">An &#272;&#7891;ng &#273;&#7885;c s&#225;ch tr&#234;n t&#224;u &#273;i&#7879;n ng&#7847;m, &#273;&#7885;c m&#227;i r&#7891;i qu&#234;n chuy&#7875;n t&#224;u.</div></td></tr>
         </table>
-        <div class="gnote">&#128161; <strong>L&#432;u &#253;:</strong> N&#7871;u &#273;&#7897;ng t&#7911; c&#243; t&#226;n ng&#7919;, t&#226;n ng&#7919; ph&#7843;i chuy&#7875;n l&#234;n tr&#432;&#7899;c l&#224;m ch&#7911; &#273;&#7873;. V&#237; d&#7909;: &#36889;&#20491;&#27468;&#65292;&#25105;&#32893;&#33879;&#32893;&#33879;&#23601;&#26371;&#21809;&#20102;.</div>
-        <div class="gnote">&#128161; M&#7851;u n&#224;y th&#432;&#7901;ng mang ngh&#297;a b&#7845;t ng&#7901; ho&#7863;c qu&#225; tr&#236;nh t&#7921; nhi&#234;n d&#7851;n &#273;&#7871;n k&#7871;t qu&#7843;.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> <strong>L&#432;u &#253;:</strong> N&#7871;u &#273;&#7897;ng t&#7911; c&#243; t&#226;n ng&#7919;, t&#226;n ng&#7919; ph&#7843;i chuy&#7875;n l&#234;n tr&#432;&#7899;c l&#224;m ch&#7911; &#273;&#7873;. V&#237; d&#7909;: &#36889;&#20491;&#27468;&#65292;&#25105;&#32893;&#33879;&#32893;&#33879;&#23601;&#26371;&#21809;&#20102;.</div>
+        <div class="gnote"><i class="bi bi-lightbulb"></i> M&#7851;u n&#224;y th&#432;&#7901;ng mang ngh&#297;a b&#7845;t ng&#7901; ho&#7863;c qu&#225; tr&#236;nh t&#7921; nhi&#234;n d&#7851;n &#273;&#7871;n k&#7871;t qu&#7843;.</div>
       </div>
     </div>
   </div>
@@ -465,7 +470,7 @@ footer strong{color:var(--r);}
         <div class="ei"><div class="eq"><span class="nm">&#9314;</span>&#22825;&#27683;<input class="fi" id="e1-3" style="width:120px;">&#65292;&#19981;&#21487;&#20197;&#21435;&#28216;&#27891;&#12290;</div><div class="eh">&rarr; Th&#7901;i ti&#7871;t v&#7851;n c&#242;n l&#7841;nh, kh&#244;ng th&#7875; &#273;i b&#417;i.</div></div>
         <div class="ei"><div class="eq"><span class="nm">&#9315;</span>&#25105;&#30340;&#37666;<input class="fi" id="e1-4" style="width:120px;">&#65292;&#19981;&#33021;&#36023;&#26360;&#12290;</div><div class="eh">&rarr; Ti&#7873;n c&#7911;a t&#244;i v&#7851;n ch&#432;a &#273;&#7911;, kh&#244;ng th&#7875; mua s&#225;ch.</div></div>
         <button class="bck" onclick="ckE1()">&#9989; Ki&#7875;m tra</button>
-        <button class="brs" onclick="rsE1()">&#128260; L&#224;m l&#7841;i</button>
+        <button class="brs" onclick="rsE1()"><i class="bi bi-arrow-clockwise"></i> L&#224;m l&#7841;i</button>
         <div class="ab" id="ab1"><strong>&#272;&#225;p &#225;n:</strong> &#9312; &#26178;&#38291;&#36996;&#26089; &nbsp; &#9313; &#36996;&#27794;&#21040;&#12288; &nbsp; &#9314; &#36996;&#22826;&#20919; &nbsp; &#9315; &#36996;&#19981;&#22816;</div>
       </div>
     </div>
@@ -478,7 +483,7 @@ footer strong{color:var(--r);}
         <div class="ei"><div class="eq"><span class="nm">&#9314;</span>&#26032;&#37070;&#31449;<input class="fi" id="e2-3" style="width:60px;">&#36319;&#23458;&#20154;&#35498;&#35441;&#12290;</div></div>
         <div class="ei"><div class="eq"><span class="nm">&#9315;</span>&#22823;&#23478;&#21507;<input class="fi" id="e2-4" style="width:60px;">&#65292;&#26032;&#37070;&#23601;&#20358;&#25964;&#37202;&#20102;&#12290;</div></div>
         <button class="bck" onclick="ckE2()">&#9989; Ki&#7875;m tra</button>
-        <button class="brs" onclick="rsE2()">&#128260; L&#224;m l&#7841;i</button>
+        <button class="brs" onclick="rsE2()"><i class="bi bi-arrow-clockwise"></i> L&#224;m l&#7841;i</button>
         <div class="ab" id="ab2"><strong>&#272;&#225;p &#225;n:</strong> &#9312; &#33879; &nbsp; &#9313; &#33879; &nbsp; &#9314; &#33879; &nbsp; &#9315; &#33879;</div>
       </div>
     </div>
@@ -490,7 +495,7 @@ footer strong{color:var(--r);}
         <div class="ei"><div class="eq"><span class="nm">&#9313;</span>&#23433;&#21516; &#8212; &#36865; &#8212; &#32654;&#29618; &#8212; &#22238; &#8212; &#23487;&#33293;<input class="fi" id="e3-2" style="width:200px;"></div></div>
         <div class="ei"><div class="eq"><span class="nm">&#9314;</span>&#26126;&#33775; &#8212; &#36865; &#8212; &#29240;&#29240; &#8212; &#21435; &#8212; &#39640;&#37941;&#31449;<input class="fi" id="e3-3" style="width:200px;"></div></div>
         <button class="bck" onclick="ckE3()">&#9989; Ki&#7875;m tra</button>
-        <button class="brs" onclick="rsE3()">&#128260; L&#224;m l&#7841;i</button>
+        <button class="brs" onclick="rsE3()"><i class="bi bi-arrow-clockwise"></i> L&#224;m l&#7841;i</button>
         <div class="ab" id="ab3"><strong>&#272;&#225;p &#225;n:</strong> &#9312; &#25105;&#24118;&#20320;&#20497;&#21435;&#24231;&#20301; &nbsp; &#9313; &#23433;&#21516;&#36865;&#32654;&#29618;&#22238;&#23487;&#33293; &nbsp; &#9314; &#26126;&#33775;&#36865;&#29240;&#29240;&#21435;&#39640;&#37941;&#31449;</div>
       </div>
     </div>
@@ -502,7 +507,7 @@ footer strong{color:var(--r);}
         <div class="ei"><div class="eq"><span class="nm">&#9313;</span><input class="fi" id="e4-2" style="width:60px;">&#22799;&#22825;&#21040;&#20102;&#65292;&#23601;&#21487;&#20197;&#21435;&#28023;&#37002;&#12290;</div></div>
         <div class="ei"><div class="eq"><span class="nm">&#9314;</span>&#20320;&#28310;&#20633;&#22909;&#20102;&#65292;&#25105;&#20497;&#23601;<input class="fi" id="e4-3" style="width:120px;">&#12290;</div><div class="eh">&rarr; Ch&#7901; b&#7841;n chu&#7849;n b&#7883; xong, ch&#250;ng ta s&#7869;...</div></div>
         <button class="bck" onclick="ckE4()">&#9989; Ki&#7875;m tra</button>
-        <button class="brs" onclick="rsE4()">&#128260; L&#224;m l&#7841;i</button>
+        <button class="brs" onclick="rsE4()"><i class="bi bi-arrow-clockwise"></i> L&#224;m l&#7841;i</button>
         <div class="ab" id="ab4"><strong>&#272;&#225;p &#225;n:</strong> &#9312; &#31561; &nbsp; &#9313; &#31561; &nbsp; &#9314; &#38283;&#22987;/&#20986;&#30332;</div>
       </div>
     </div>
@@ -514,7 +519,7 @@ footer strong{color:var(--r);}
         <div class="ei"><div class="eq"><span class="nm">&#9313;</span>&#25105;&#30475;<input class="fi" id="e5-3" style="width:60px;">&#30475;<input class="fi" id="e5-4" style="width:60px;">&#23601;&#26371;&#20102;&#12290;</div></div>
         <div class="ei"><div class="eq"><span class="nm">&#9314;</span>&#23433;&#21516;&#31561;<input class="fi" id="e5-5" style="width:60px;">&#31561;<input class="fi" id="e5-6" style="width:60px;">&#65292;&#20844;&#36554;&#23601;&#20358;&#20102;&#12290;</div></div>
         <button class="bck" onclick="ckE5()">&#9989; Ki&#7875;m tra</button>
-        <button class="brs" onclick="rsE5()">&#128260; L&#224;m l&#7841;i</button>
+        <button class="brs" onclick="rsE5()"><i class="bi bi-arrow-clockwise"></i> L&#224;m l&#7841;i</button>
         <div class="ab" id="ab5"><strong>&#272;&#225;p &#225;n:</strong> &#9312; &#33879;, &#33879; &nbsp; &#9313; &#33879;, &#33879; &nbsp; &#9314; &#33879;, &#33879;</div>
       </div>
     </div>
@@ -627,7 +632,7 @@ function canStroke(zh){return[...zh].some(c=>HW.has(c));}
 function buildTable(id,arr,hasType){
   const th=`<thead><tr>
     <th class="tc" style="width:36px">STT</th>
-    <th class="tc" style="width:44px">&#128266;</th>
+    <th class="tc" style="width:44px"><i class="bi bi-volume-up-fill"></i></th>
     <th>Ch&#7919; H&#225;n</th><th>Phi&#234;n &#226;m</th><th>Ngh&#297;a ti&#7871;ng Vi&#7879;t</th>
     ${hasType?'<th class="tc" style="width:58px">T&#7915; lo&#7841;i</th>':''}
     <th class="tc" style="width:48px">&#31558;&#38918;</th>
@@ -636,7 +641,7 @@ function buildTable(id,arr,hasType){
     const s=w.zh.replace(/'/g,"\\'");
     return`<tr>
       <td class="c-stt">${w.n}</td>
-      <td class="c-au"><button class="bau" onclick="sayZh('${s}')">&#128266;</button></td>
+      <td class="c-au"><button class="bau" onclick="sayZh('${s}')"><i class="bi bi-volume-up-fill"></i></button></td>
       <td class="c-zh"><span class="zh-word">${w.zh}</span></td>
       <td class="c-py"><span class="py-text">${w.py}</span></td>
       <td class="c-vi"><span class="vi-text">${w.vi}</span></td>
@@ -782,9 +787,9 @@ function openStroke(word){
     }catch(e){console.warn('HanziWriter error',ch,e);}
   });
   const ctrl=document.getElementById('octrl');ctrl.innerHTML='';
-  [['&#9654; Ho&#7841;t &#7843;nh',hwAnimAll,''],['&#128260; L&#7863;p',hwLoopAll,''],['&#10005; &#272;&#243;ng',closeOv,'red']].forEach(([txt,fn,cls])=>{
+  [['<i class="bi bi-play-fill"></i> Ho&#7841;t &#7843;nh',hwAnimAll,''],['<i class="bi bi-arrow-repeat"></i> L&#7863;p',hwLoopAll,''],['<i class="bi bi-x-lg"></i> &#272;&#243;ng',closeOv,'red']].forEach(([txt,fn,cls])=>{
     const b=document.createElement('button');
-    b.className='hw-btn'+(cls?' '+cls:'');b.textContent=txt;b.onclick=fn;ctrl.appendChild(b);
+    b.className='hw-btn'+(cls?' '+cls:'');b.innerHTML=txt;b.onclick=fn;ctrl.appendChild(b);
   });
   document.getElementById('ov').classList.add('open');
 }
