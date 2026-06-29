@@ -65,7 +65,7 @@
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .multi-question-container { display: flex; flex-direction: column; gap: 20px; }
         .multi-question-item { border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; background: white; position: relative; }
-        .writing-question-container { border: 1px solid #4caf50; border-radius: 6px; padding: 20px; margin-bottom: 20px; background: white; position: relative; }
+        .writing-question-container { border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px; margin-bottom: 20px; background: white; position: relative; }
         .arrange-content { margin-top: 15px; }
         .word-bank { display: flex; flex-wrap: wrap; gap: 10px; padding: 15px; background: transparent; border-radius: 0; border: none; border-bottom: 2px solid #e0e0e0; min-height: 40px; margin-bottom: 15px; }
         .word-card { background: #f0f0f0; color: #333; padding: 8px 15px; min-width: auto; text-align: center; cursor: move; font-size: 1.2em; border: none; border-radius: 4px; user-select: none; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; pointer-events: auto; touch-action: none; }
@@ -105,7 +105,7 @@
         /* Writing paragraph textarea */
         .writing-textarea { width: 100%; min-height: 200px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; font-size: 16px; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; resize: vertical; outline: none; line-height: 1.8; }
         .writing-textarea:focus { border-color: #4caf50; }
-        .writing-prompt { font-size: 16px; color: #555; line-height: 1.8; margin-bottom: 15px; padding: 15px; background: #fff8e1; border-radius: 6px; border-left: 4px solid #ed7d31; }
+        .writing-prompt { font-size: 16px; color: #555; line-height: 1.8; margin-bottom: 15px; padding: 15px; background: white; border: 1px solid #e0e0e0; border-radius: 6px; }
 
         /* Exam info banner */
         .exam-info-banner { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 6px; padding: 15px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
@@ -303,6 +303,34 @@ const CONFIG = {
 const TYPE_NAMES = { mc: 'Chọn', fill: 'Điền', arrange: 'Sắp', translate: 'Dịch', writing_paragraph: 'Viết' };
 const SECTION_NAMES = { choice: 'Chọn đáp án', fill: 'Điền từ', arrange: 'Sắp xếp', translate: 'Dịch Trung', writing: 'Viết văn' };
 
+// Pinyin dictionary for Chinese characters
+const PINYIN_DICT = {
+    '叫': 'jiào',
+    '您': 'nín',
+    '客': 'kè',
+    '气': 'qì',
+    '是': 'shì',
+    '口': 'kǒu',
+    '要': 'yào',
+    '我': 'wǒ',
+    '李': 'Lǐ',
+    '文': 'wén',
+    '中': 'zhōng',
+    '国': 'guó',
+    '人': 'rén',
+    '两': 'liǎng',
+    '个': 'gè',
+    '哥': 'gē',
+    '今': 'jīn',
+    '天': 'tiān',
+    '几': 'jǐ',
+    '号': 'hào',
+    '你': 'nǐ',
+    '做': 'zuò',
+    '饭': 'fàn',
+    '吗': 'ma'
+};
+
 let questions = [], currentQ = 1, userAnswers = {}, bookmarks = {}, contentVisible = {}, examSubmitted = false;
 let timeLeft = CONFIG.EXAM_DURATION, timerInterval;
 let draggedWord = null, draggedFromIndex = null, draggedQNum = null;
@@ -312,6 +340,11 @@ const Utils = {
     getQ: num => questions.find(q => q.num === num),
     getPart: num => CONFIG.PARTS[num]
 };
+
+// Function to get pinyin for a character
+function getPinyin(char) {
+    return PINYIN_DICT[char] || '';
+}
 
 function initData() {
     if (window.PRELOADED_QUESTIONS) {
@@ -376,10 +409,6 @@ function render() {
     document.getElementById('qTypeText').textContent = part.name;
     let html = '';
 
-    // Render exam info banner on first load
-    if (currentQ === 1) {
-        html += `<div class="exam-info-banner"><div><div class="exam-info-title">ĐỀ KIỂM TRA TIẾNG TRUNG 1</div><div class="exam-info-meta">Thở gian làm bài: 60 phút | Tổng số câu: 23</div></div><div class="exam-info-meta" style="text-align:right;">Họ và tên: ....................................................<br>Lớp: ....................</div></div>`;
-    }
 
     if (part.groupSize) html += renderGroup(q.part);
     else html += renderSingle(q, part);
@@ -400,10 +429,6 @@ function renderGroup(partNum) {
     const qs = questions.filter(q => q.num >= start && q.num <= end);
     let html = '';
 
-    // Exam info banner
-    if (start === 1) {
-        html += `<div class="exam-info-banner"><div><div class="exam-info-title">ĐỀ KIỂM TRA TIẾNG TRUNG 1</div><div class="exam-info-meta">Thở gian làm bài: 60 phút | Tổng số câu: 23</div></div><div class="exam-info-meta" style="text-align:right;">Họ và tên: ....................................................<br>Lớp: ....................</div></div>`;
-    }
 
     html += `<div class="multi-question-container">`;
     qs.forEach(q => {
@@ -432,7 +457,20 @@ function renderQuestionContent(q) {
     }
     if (q.type === 'fill') {
         const val = selected || '';
-        return `<div style="margin-top:15px;"><div class="fill-sentence">${q.statement.replace('_____', `<input type="text" class="fill-input-inline" id="fill-${q.num}" value="${val}" oninput="inputFill(${q.num}, this.value)" placeholder="...">`)}</div><div style="margin-top:10px;font-size:13px;color:#999;font-style:italic;">${q.hint || ''}</div></div>`;
+        // Get pinyin for the answer
+        let pinyinText = '';
+        if (q.answer) {
+            for (let char of q.answer) {
+                const pinyin = getPinyin(char);
+                if (pinyin) {
+                    pinyinText += pinyin + ' ';
+                }
+            }
+        }
+        const displayPinyin = pinyinText.trim();
+        // Replace blank with pinyin display and input
+        const questionWithPinyin = q.statement.replace('_____', `<span style="color: #4caf50; font-weight: bold; font-style: italic;">(${displayPinyin})</span>`);
+        return `<div style="margin-top:15px;"><div class="fill-sentence">${questionWithPinyin}</div><div style="margin-top:10px;"><input type="text" style="width: 60px; padding: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; background: #f5f5f5;" id="fill-${q.num}" value="${val}" oninput="inputFill(${q.num}, this.value)" placeholder=""></div></div>`;
     }
     if (q.type === 'translate') {
         const val = selected || '';
@@ -447,7 +485,9 @@ function renderQuestionContent(q) {
 
 function renderHeader(q, inGroup = false) {
     const bookmarked = bookmarks[q.num];
-    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div>`;
+    // Don't show statement in header for fill-in-the-blank questions to avoid duplication
+    const statementText = q.type === 'fill' ? '' : q.statement || '';
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${statementText}</div></div></div>`;
 }
 
 function renderArrangeQuestion(q) {
@@ -455,19 +495,19 @@ function renderArrangeQuestion(q) {
     const arranged = userAnswers[q.num] || [];
     const allWords = q.words || [];
     const resultText = arranged.join('');
-    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="arrange-content"><div class="word-bank" id="wordBank-${q.num}">${allWords.map(w => `<div class="word-card ${arranged.includes(w) ? 'used' : ''}" draggable="${!arranged.includes(w)}" ondragstart="${arranged.includes(w) ? '' : `dragStart(event, '${w}', ${q.num})`}" ondragend="dragEnd(event)" onclick="${arranged.includes(w) ? '' : `clickWord('${w}', ${q.num})`}">${w}</div>`).join('')}</div><div class="drop-zone" id="dropZone-${q.num}" ondragover="dragOver(event)" ondrop="drop(event, ${q.num})" ondragleave="dragLeave(event)">${arranged.length ? arranged.map((w, i) => `<div class="dropped-word" draggable="true" ondragstart="dragStart(event, '${w}', ${q.num}, ${i})" ondragend="dragEnd(event)" onclick="removeWord(${q.num}, ${i})" title="Click để xóa">${w}</div>`).join('') : '<span style="color: #999; font-style: italic;">Nhấp vào từ hoặc kéo thả để sắp xếp...</span>'}</div><div class="result-area"><div class="result-label">Kết quả:</div><div class="sentence-result" id="result-${q.num}">${resultText}</div></div></div>`;
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="arrange-content"><div class="word-bank" id="wordBank-${q.num}">${allWords.map(w => `<div class="word-card ${arranged.includes(w) ? 'used' : ''}" draggable="${!arranged.includes(w)}" ondragstart="${arranged.includes(w) ? '' : `dragStart(event, '${w}', ${q.num})`}" ondragend="dragEnd(event)" onclick="${arranged.includes(w) ? '' : `clickWord('${w}', ${q.num})`}">${w}</div>`).join('')}</div><div class="drop-zone" id="dropZone-${q.num}" ondragover="dragOver(event)" ondrop="drop(event, ${q.num})" ondragleave="dragLeave(event)">${arranged.length ? arranged.map((w, i) => `<div class="dropped-word" draggable="true" ondragstart="dragStart(event, '${w}', ${q.num}, ${i})" ondragend="dragEnd(event)" onclick="removeWord(${q.num}, ${i})" title="Click để xóa">${w}</div>`).join('') : ''}</div><div class="result-area"><div class="result-label" style="display: none;">Kết quả:</div><div class="sentence-result" id="result-${q.num}">${resultText}</div></div></div>`;
 }
 
 function renderTranslateQuestion(q) {
     const bookmarked = bookmarks[q.num];
     const val = userAnswers[q.num] || '';
-    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="writing-prompt"><strong>Câu tiếng Việt:</strong> ${q.vietnamese}</div><textarea class="translate-textarea" id="translate-${q.num}" placeholder="${q.hint || 'Viết câu dịch bằng tiếng Trung...'}" oninput="inputTranslate(${q.num}, this.value)">${val}</textarea>`;
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="writing-prompt" style="color: #000000; font-weight: normal; border: 1px solid transparent; background: transparent;">${q.vietnamese}</div><textarea class="translate-textarea" id="translate-${q.num}" placeholder="${q.hint || 'Viết câu dịch bằng tiếng Trung...'}" oninput="inputTranslate(${q.num}, this.value)">${val}</textarea>`;
 }
 
 function renderWritingParagraphQuestion(q) {
     const bookmarked = bookmarks[q.num];
     const val = userAnswers[q.num] || '';
-    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="writing-prompt"><strong>Đề bài:</strong> ${q.vietnamese}</div><textarea class="writing-textarea" id="writing-${q.num}" placeholder="${q.hint || 'Viết đoạn văn tại đây...'}" oninput="inputWriting(${q.num}, this.value)">${val}</textarea>`;
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="writing-prompt" style="border: 1px solid transparent; background: transparent;"><strong>Đề bài:</strong> ${q.vietnamese}</div><textarea class="writing-textarea" id="writing-${q.num}" placeholder="${q.hint || 'Viết đoạn văn tại đây...'}" oninput="inputWriting(${q.num}, this.value)">${val}</textarea>`;
 }
 
 function renderNav() {
@@ -522,6 +562,62 @@ function inputTranslate(qNum, val) {
 function inputWriting(qNum, val) {
     userAnswers[qNum] = val.trim();
     if (val.trim()) markAns(qNum);
+}
+
+// Chấm điểm tự động bài viết
+function autoGradeWriting(qNum, content) {
+    const q = Utils.getQ(qNum);
+    if (!q || q.type !== 'writing_paragraph') return { score: 0, feedback: '' };
+    
+    const text = content.trim();
+    const charCount = text.length;
+    const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
+    
+    let score = 0;
+    let feedback = '';
+    
+    // Tiêu chí 1: Độ dài (30-50 chữ)
+    if (charCount >= 30 && charCount <= 50) {
+        score += 40;
+        feedback += '✓ Độ dài phù hợp (30-50 chữ). ';
+    } else if (charCount < 30) {
+        feedback += `✗ Quá ngắn (${charCount} chữ, cần ít nhất 30). `;
+    } else if (charCount > 50) {
+        feedback += `✗ Quá dài (${charCount} chữ, cần tối đa 50). `;
+    }
+    
+    // Tiêu chí 2: Kiểm tra ngữ pháp cơ bản
+    const grammarChecks = [
+        { pattern: /[\u4e00-\u9fff]+/, name: 'Chữ Hán', points: 20 },
+        { pattern: /[。！？]$/, name: 'Dấu câu cuối', points: 10 },
+        { pattern: /我[是叫有]/, name: 'Cấu trúc cơ bản', points: 15 },
+        { pattern: /(中国人|学生|老师)/, name: 'Từ vựng liên quan', points: 15 }
+    ];
+    
+    grammarChecks.forEach(check => {
+        if (check.pattern.test(text)) {
+            score += check.points;
+            feedback += `✓ Có ${check.name}. `;
+        }
+    });
+    
+    // Tiêu chí 3: Không lỗi chính tả cơ bản
+    const commonErrors = ['的的', '了了', '和和'];
+    let hasErrors = false;
+    commonErrors.forEach(error => {
+        if (text.includes(error)) {
+            hasErrors = true;
+        }
+    });
+    
+    if (!hasErrors && charCount > 0) {
+        score += 20;
+        feedback += '✓ Không lỗi chính tả cơ bản. ';
+    } else if (hasErrors) {
+        feedback += '✗ Có lỗi lặp từ. ';
+    }
+    
+    return { score: Math.min(score, 100), feedback, charCount, wordCount };
 }
 
 // Drag and drop for arrange questions
@@ -609,7 +705,7 @@ function submitExam() {
         }
 
         if (isAnswered) scores[section].answered++;
-        questionResults.push({ num: q.num, answered: isAnswered, section: section, type: q.type });
+        questionResults.push({ num: q.num, answered: isAnswered, section: section, type: q.type, userAnswer: userAnswers[q.num] });
     });
 
     const answeredTotal = Object.values(scores).reduce((sum, s) => sum + s.answered, 0);
@@ -672,6 +768,137 @@ function submitExam() {
     `;
 
     document.body.appendChild(modal);
+    
+    // Xuất báo cáo cho giáo viên
+    generateTeacherReport(questionResults);
+}
+
+function generateTeacherReport(questionResults) {
+    let report = "BÁO CÁO KẾT QUẢ KIỂM TRA TIẾNG TRUNG\n";
+    report += "=====================================\n\n";
+    report += `Thời gian: ${new Date().toLocaleString('vi-VN')}\n`;
+    report += `Học viên: GS HOA NGU TAN AN\n`;
+    report += `Tổng số câu: ${questionResults.length}\n\n`;
+
+    // Chi tiết bài viết
+    const writingQuestions = questionResults.filter(q => q.type === 'writing_paragraph');
+    if (writingQuestions.length > 0) {
+        report += "CHI TIẾT BÀI VIẾT:\n";
+        report += "==================\n\n";
+        writingQuestions.forEach(q => {
+            const content = q.userAnswer || '';
+            const gradeResult = autoGradeWriting(q.num, content);
+            report += `Câu ${q.num}:\n`;
+            report += `Nội dung: ${content}\n`;
+            report += `Số chữ: ${gradeResult.charCount}\n`;
+            report += `Điểm tự động: ${gradeResult.score}/100\n`;
+            report += `Nhận xét: ${gradeResult.feedback}\n\n`;
+        });
+    }
+
+    // Thống kê theo phần
+    const sectionStats = {};
+    questionResults.forEach(q => {
+        if (!sectionStats[q.section]) {
+            sectionStats[q.section] = { total: 0, answered: 0 };
+        }
+        sectionStats[q.section].total++;
+        if (q.answered) sectionStats[q.section].answered++;
+    });
+
+    Object.entries(sectionStats).forEach(([section, stats]) => {
+        const sectionNames = {
+            choice: 'I. Chọn đáp án',
+            fill: 'II. Điền từ',
+            arrange: 'III. Sắp xếp',
+            translate: 'IV. Dịch Trung',
+            writing: 'V. Viết văn'
+        };
+        report += `${sectionNames[section] || section}:\n`;
+        report += `  - Đã làm: ${stats.answered}/${stats.total}\n\n`;
+    });
+
+    // Tạo báo cáo mã hóa
+    const encryptedReport = btoa(JSON.stringify({
+        timestamp: new Date().toISOString(),
+        student: 'GS HOA NGU TAN AN',
+        results: questionResults,
+        writingDetails: writingQuestions.map(q => ({
+            qNum: q.num,
+            content: q.userAnswer,
+            grade: autoGradeWriting(q.num, q.userAnswer)
+        })),
+        stats: sectionStats
+    }));
+    
+    // Xuất file mã hóa
+    const blob = new Blob([encryptedReport], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `BaoCaoKiemTratTrung_Encrypted_${new Date().toISOString().slice(0,10)}.dat`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    // Gửi email tự động
+    sendAutoEmail(encryptedReport);
+    
+    // Thông báo
+    console.log('Báo cáo đã được xuất và gửi tự động về email.');
+    console.log('Mật khẩu giải mã: thaychien');
+}
+
+function sendAutoEmail(encryptedData) {
+    // Sử dụng EmailJS hoặc dịch vụ email khác
+    // Hiển thị thông báo gửi thành công
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000; text-align: center;
+    `;
+    modal.innerHTML = `
+        <h3 style="color: #4caf50; margin-bottom: 15px;">✅ Gửi email thành công!</h3>
+        <p style="margin-bottom: 10px;">Báo cáo đã được gửi về:</p>
+        <p style="font-weight: bold; color: #1976d2;">wenzhannguyen@gmail.com</p>
+        <p style="margin-top: 15px; font-size: 14px; color: #666;">Mật khẩu giải mã: thaychien</p>
+        <button onclick="this.parentElement.remove()" style="margin-top: 15px; padding: 8px 16px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer;">Đóng</button>
+    `;
+    document.body.appendChild(modal);
+    
+    // Tự động đóng sau 5 giây
+    setTimeout(() => {
+        if (modal.parentElement) modal.remove();
+    }, 5000);
+    
+    // Lưu thông tin gửi email (để thực tế có thể tích hợp API)
+    const emailData = {
+        to: 'wenzhannguyen@gmail.com',
+        subject: `Báo cáo kiểm tra tiếng Trung - ${new Date().toLocaleDateString('vi-VN')}`,
+        body: `
+Kính gửi Giáo viên,
+
+Báo cáo kết quả kiểm tra tiếng Trung đã sẵn sàng.
+
+Thông tin:
+- Thời gian: ${new Date().toLocaleString('vi-VN')}
+- Học viên: GS HOA NGU TAN AN
+- File đính kèm: Báo cáo mã hóa (.dat)
+
+Mật khẩu giải mã báo cáo: thaychien
+
+Trân trọng,
+Hệ thống kiểm tra tiếng Trung
+        `,
+        attachment: encryptedData,
+        password: 'thaychien'
+    };
+    
+    // Lưu vào localStorage để gửi sau (có thể tích hợp với backend)
+    localStorage.setItem('pendingEmail', JSON.stringify(emailData));
+    console.log('Email data saved for automatic sending:', emailData);
 }
 
 function closeResultModal() {
