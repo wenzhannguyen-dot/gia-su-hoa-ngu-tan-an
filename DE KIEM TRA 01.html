@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ĐỀ KIỂM TRA TIẾNG TRUNG 1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: none !important; animation: none !important; }
+        body { font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif; background: #f5f5f5; min-height: 100vh; color: #000; }
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #4472c4; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .logo { display: flex; align-items: center; gap: 12px; height: 100%; }
+        .logo-image { height: 80px; width: auto; object-fit: contain; flex-shrink: 0; }
+        .logo-text { display: flex; flex-direction: column; justify-content: center; }
+        .logo-text h1 { font-size: 15px; font-weight: 600; margin-bottom: 2px; white-space: nowrap; }
+        .logo-text p { font-size: 11px; opacity: 0.9; white-space: nowrap; }
+        .main-container { display: flex; min-height: 100vh; padding: 80px 15px 15px 15px; gap: 15px; }
+        .sidebar-left { width: 170px; background: white; border: 1px solid #d0d0d0; border-radius: 6px; overflow: hidden; flex-shrink: 0; position: sticky; top: 80px; height: fit-content; max-height: calc(100vh - 95px); overflow-y: auto; }
+        .nav-section { border-bottom: 1px solid #e0e0e0; }
+        .nav-title { padding: 12px 15px; color: #000; font-size: 13px; display: flex; align-items: center; gap: 8px; background: #f0f0f0; }
+        .nav-icon { font-size: 14px; color: #4caf50; }
+        .nav-item, .part-header-simple { padding: 10px 12px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: #000; font-size: 13px; border-left: 3px solid transparent; background: white; }
+        .nav-item.active, .part-header-simple.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; border-left-color: #4caf50; }
+        .nav-prefix { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #4caf50; color: white; margin-right: 8px; font-size: 10px; border-radius: 3px; font-weight: bold; }
+        .nav-status { display: flex; align-items: center; gap: 5px; }
+        .icon-pen, .icon-star { font-size: 13px; opacity: 0.3; color: #666; }
+        .icon-star { color: #ed7d31; cursor: pointer; }
+        .nav-item.answered { color: #2e7d32; font-weight: 600; background: #e8f5e9; }
+        .nav-item.answered .icon-pen { opacity: 1; color: #4caf50; }
+        .nav-item.bookmarked .icon-star { opacity: 1; color: #ed7d31; }
+        .sub-nav { background: #fafafa; display: none; }
+        .sub-nav.show { display: block; }
+        .sub-nav .nav-item { padding-left: 25px; font-size: 12px; }
+        .sub-nav .nav-item.active { background: #fff3e0; color: #ed7d31; border-left: 3px solid #ed7d31; }
+        .content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 6px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+        .content-header { position: sticky; top: 0; background: #f5f5f5; padding: 12px 20px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .question-title { font-size: 15px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .title-badge { background: #4caf50; color: white; padding: 4px 10px; border-radius: 4px; font-size: 13px; }
+        .timer-container { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+        .timer-text { color: #ed7d31; font-size: 13px; font-weight: 600; }
+        .timer-bar { width: 120px; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; }
+        .timer-progress { height: 100%; width: 85%; background: #4caf50; border-radius: 3px; }
+        .content-body { flex: 1; padding: 20px; overflow-y: auto; }
+        .question-answer-container { border: 1px solid #4caf50; border-radius: 6px; padding: 20px; margin-top: 15px; background: white; position: relative; }
+        .question-star { position: absolute; top: 10px; right: 10px; font-size: 20px; color: #ccc; cursor: pointer; z-index: 100; }
+        .question-star.active { color: #ed7d31; }
+        .toggle-content-btn { position: absolute; top: 10px; right: 40px; background: #4472c4; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 5px; z-index: 10; }
+        .question-header { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #c8e6c9; }
+        .question-number-box { background: #4caf50; color: white; padding: 8px 12px; border-radius: 4px; font-weight: bold; font-size: 16px; flex-shrink: 0; min-width: 50px; text-align: center; }
+        .question-text-content { flex: 1; font-size: 16px; color: #333; line-height: 1.6; padding-top: 5px; }
+        .hidden-content { display: none !important; }
+        .content-display-box { background: #f0f8ff; border: 1px solid #90caf9; border-radius: 6px; padding: 15px; margin-bottom: 15px; }
+        .chinese-text { font-size: 18px; color: #333; margin-bottom: 10px; line-height: 1.8; font-weight: 500; }
+        .pinyin-text { font-size: 16px; color: #666; font-style: italic; margin-bottom: 10px; line-height: 1.6; }
+        .vietnamese-text { font-size: 15px; color: #2e7d32; line-height: 1.6; border-top: 1px dashed #90caf9; padding-top: 10px; margin-top: 10px; }
+        .options-list { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; }
+        .option-plain { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 0; }
+        .option-plain input[type="radio"] { width: 18px; height: 18px; margin: 0; cursor: pointer; accent-color: #4caf50; }
+        .option-label-text { font-size: 16px; color: #333; }
+        .navigation-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e0e0; }
+        .btn { padding: 10px 25px; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; font-weight: 600; min-width: 100px; }
+        .btn-prev { background: #ed7d31; color: white; }
+        .btn-prev:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-next { background: #4caf50; color: white; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .multi-question-container { display: flex; flex-direction: column; gap: 20px; }
+        .multi-question-item { border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; background: white; position: relative; }
+        .writing-question-container { border: 1px solid #4caf50; border-radius: 6px; padding: 20px; margin-bottom: 20px; background: white; position: relative; }
+        .arrange-content { margin-top: 15px; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; padding: 15px; background: transparent; border-radius: 0; border: none; border-bottom: 2px solid #e0e0e0; min-height: 40px; margin-bottom: 15px; }
+        .word-card { background: #f0f0f0; color: #333; padding: 8px 15px; min-width: auto; text-align: center; cursor: move; font-size: 1.2em; border: none; border-radius: 4px; user-select: none; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; pointer-events: auto; touch-action: none; }
+        .word-card.used { background: #e0e0e0; color: #999; cursor: not-allowed; opacity: 0.5; border-color: #ccc; pointer-events: auto; }
+        .drop-zone { min-height: 40px; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-start; padding: 15px; background: transparent; border-radius: 0; border: none; border-bottom: 2px solid #e0e0e0; margin-bottom: 15px; }
+        .dropped-word { background: #f0f0f0; color: #333; padding: 8px 15px; min-width: auto; text-align: center; cursor: move; font-size: 1.2em; border: none; border-radius: 4px; user-select: none; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; pointer-events: auto; touch-action: none; }
+        .result-area { margin-top: 20px; padding: 15px; background: transparent; border-radius: 0; border: none; }
+        .result-label { font-size: 0.9em; color: #666; margin-bottom: 10px; font-weight: 600; }
+        .sentence-result { font-size: 1.4em; line-height: 2; color: #000; min-height: 40px; font-weight: bold; padding: 10px; background: transparent; border-radius: 0; border: none; border-bottom: 2px solid #e0e0e0; word-break: break-all; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; }
+        .sidebar-right { width: 240px; display: flex; flex-direction: column; gap: 15px; flex-shrink: 0; position: sticky; top: 80px; height: fit-content; }
+        .user-card { background: #4caf50; color: white; padding: 15px; border-radius: 6px; }
+        .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .user-avatar { width: 50px; height: 50px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .user-name { font-size: 14px; font-weight: bold; }
+        .user-role { font-size: 11px; opacity: 0.9; margin-top: 2px; }
+        .user-info { font-size: 12px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px; }
+        .info-row { display: flex; justify-content: space-between; padding: 4px 0; }
+        .info-label { opacity: 0.9; }
+        .info-value { font-weight: 600; text-align: right; }
+        .action-buttons { background: white; border: 1px solid #d0d0d0; border-radius: 6px; padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .action-btn { padding: 10px; border: 1px solid #d0d0d0; border-radius: 4px; background: #f5f5f5; cursor: pointer; font-size: 13px; color: #000; text-align: center; }
+        .action-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; grid-column: span 2; }
+        .answer-reveal { margin-top: 15px; padding: 15px; background: #e8f5e9; border: 2px solid #4caf50; border-radius: 6px; display: none; }
+        .answer-reveal.show { display: block; }
+        .answer-reveal-title { font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+        .answer-reveal-content { font-size: 16px; color: #333; }
+
+        /* Fill-in-the-blank styles */
+        .fill-input-inline { border: none; border-bottom: 2px solid #333; width: 80px; text-align: center; font-size: 18px; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; outline: none; background: transparent; color: #d32f2f; font-weight: bold; }
+        .fill-input-inline:focus { border-bottom-color: #4caf50; }
+        .fill-sentence { font-size: 18px; line-height: 2.2; color: #333; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; }
+
+        /* Translate textarea styles */
+        .translate-textarea { width: 100%; min-height: 80px; border: 1px solid #ccc; border-radius: 6px; padding: 12px; font-size: 16px; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; resize: vertical; outline: none; }
+        .translate-textarea:focus { border-color: #4caf50; }
+
+        /* Writing paragraph textarea */
+        .writing-textarea { width: 100%; min-height: 200px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; font-size: 16px; font-family: "SimSun", "\5b8b\4f53", "STSong", serif; resize: vertical; outline: none; line-height: 1.8; }
+        .writing-textarea:focus { border-color: #4caf50; }
+        .writing-prompt { font-size: 16px; color: #555; line-height: 1.8; margin-bottom: 15px; padding: 15px; background: #fff8e1; border-radius: 6px; border-left: 4px solid #ed7d31; }
+
+        /* Exam info banner */
+        .exam-info-banner { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 6px; padding: 15px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .exam-info-title { font-size: 18px; font-weight: bold; color: #1565c0; }
+        .exam-info-meta { font-size: 14px; color: #555; }
+
+        /* RESULT MODAL STYLES */
+        .result-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .result-modal-content { background: white; border-radius: 12px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3); animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .result-modal-header { background: linear-gradient(135deg, #4472c4, #2d5aa0); color: white; padding: 20px; text-align: center; border-radius: 12px 12px 0 0; }
+        .result-modal-header h2 { margin: 0; font-size: 24px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .result-modal-body { padding: 25px; }
+        .result-section { margin-bottom: 20px; padding: 15px; border-radius: 8px; border-left: 4px solid; }
+        .result-section.choice { background: #e3f2fd; border-color: #1976d2; }
+        .result-section.fill { background: #fff8e1; border-color: #f57c00; }
+        .result-section.arrange { background: #f3e5f5; border-color: #7b1fa2; }
+        .result-section.translate { background: #e8f5e9; border-color: #388e3c; }
+        .result-section.writing { background: #fce4ec; border-color: #c62828; }
+        .result-section-title { font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .result-section.choice .result-section-title { color: #1976d2; }
+        .result-section.fill .result-section-title { color: #f57c00; }
+        .result-section.arrange .result-section-title { color: #7b1fa2; }
+        .result-section.translate .result-section-title { color: #388e3c; }
+        .result-section.writing .result-section-title { color: #c62828; }
+        .result-detail { display: flex; justify-content: space-between; margin: 5px 0; font-size: 14px; }
+        .result-total { margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #f5f5f5, #e0e0e0); border-radius: 8px; text-align: center; border: 2px solid #333; }
+        .result-total-score { font-size: 32px; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .result-total-text { font-size: 16px; color: #666; }
+        .result-questions-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 15px; max-height: 120px; overflow-y: auto; padding: 10px; background: #f5f5f5; border-radius: 6px; }
+        .result-question-item { text-align: center; padding: 5px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .result-question-item.correct { background: #c8e6c9; color: #2e7d32; }
+        .result-question-item.incorrect { background: #ffcdd2; color: #c62828; }
+        .result-modal-footer { padding: 20px; display: flex; gap: 10px; border-top: 1px solid #e0e0e0; }
+        .btn-close-modal { flex: 1; padding: 12px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .btn-retry { flex: 1; padding: 12px; background: #4caf50; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-close-modal:hover { background: #555; }
+        .btn-retry:hover { background: #45a049; }
+    </style>
+</head>
+<body class="student-mode">
+
+<script>
+window.PRELOADED_QUESTIONS = [
+    // ===== I. CHỌN ĐÁP ÁN ĐÚNG (6 câu) =====
+    {"num":1,"part":1,"type":"mc","section":"choice","statement":"你好 có nghĩa là:","options":[{"label":"A","text":"Cảm ơn"},{"label":"B","text":"Xin chào"},{"label":"C","text":"Tạm biệt"}],"answer":"B"},
+    {"num":2,"part":1,"type":"mc","section":"choice","statement":"请问, 你叫什么名字？ nghĩa là:","options":[{"label":"A","text":"Bạn bao nhiêu tuổi?"},{"label":"B","text":"Bạn tên là gì?"},{"label":"C","text":"Bạn ở đâu?"}],"answer":"B"},
+    {"num":3,"part":1,"type":"mc","section":"choice","statement":"对不起! – Đáp lại phù hợp là:","options":[{"label":"A","text":"谢谢"},{"label":"B","text":"没关系"},{"label":"C","text":"再见"}],"answer":"B"},
+    {"num":4,"part":1,"type":"mc","section":"choice","statement":"我是中国人。 nghĩa là:","options":[{"label":"A","text":"Tôi là ngưởi Trung Quốc"},{"label":"B","text":"Tôi là giáo viên"},{"label":"C","text":"Tôi là học sinh"}],"answer":"A"},
+    {"num":5,"part":1,"type":"mc","section":"choice","statement":"你家有几口人？ nghĩa là:","options":[{"label":"A","text":"Nhà bạn có mấy ngưởi?"},{"label":"B","text":"Bạn có mấy quyển sách?"},{"label":"C","text":"Bạn bao nhiêu tuổi?"}],"answer":"A"},
+    {"num":6,"part":1,"type":"mc","section":"choice","statement":"今天几号？ dùng để hỏi:","options":[{"label":"A","text":"Thứ mấy"},{"label":"B","text":"Ngày tháng"},{"label":"C","text":"Giờ"}],"answer":"B"},
+
+    // ===== II. ĐIỀN TỪ (6 câu) =====
+    {"num":7,"part":2,"type":"fill","section":"fill","statement":"A: 你_____什么名字？ B: 我叫李文。","answer":"叫","hint":"Điền 1 chữ"},
+    {"num":8,"part":2,"type":"fill","section":"fill","statement":"老师，_____好！","answer":"您","hint":"Điền 1 chữ"},
+    {"num":9,"part":2,"type":"fill","section":"fill","statement":"A: 谢谢！ B: 不_____！","answer":"客气","hint":"Điền 2 chữ"},
+    {"num":10,"part":2,"type":"fill","section":"fill","statement":"我_____中国人。","answer":"是","hint":"Điền 1 chữ"},
+    {"num":11,"part":2,"type":"fill","section":"fill","statement":"我家有四_____人。","answer":"口","hint":"Điền 1 chữ"},
+    {"num":12,"part":2,"type":"fill","section":"fill","statement":"今天我_____休息。","answer":"要","hint":"Điền 1 chữ"},
+
+    // ===== III. SẮP XẾP CÂU (5 câu) =====
+    {"num":13,"part":3,"type":"arrange","section":"arrange","statement":"Sắp xếp các từ sau thành câu hoàn chỉnh:","words":["我","李文","叫"],"answer":"我叫李文"},
+    {"num":14,"part":3,"type":"arrange","section":"arrange","statement":"Sắp xếp các từ sau thành câu hoàn chỉnh:","words":["是","中国人","我"],"answer":"我是中国人"},
+    {"num":15,"part":3,"type":"arrange","section":"arrange","statement":"Sắp xếp các từ sau thành câu hoàn chỉnh:","words":["有","两个","哥哥","我"],"answer":"我有两个哥哥"},
+    {"num":16,"part":3,"type":"arrange","section":"arrange","statement":"Sắp xếp các từ sau thành câu hoàn chỉnh:","words":["今天","几号","是"],"answer":"今天是几号"},
+    {"num":17,"part":3,"type":"arrange","section":"arrange","statement":"Sắp xếp các từ sau thành câu hoàn chỉnh:","words":["你","做饭","会","吗"],"answer":"你会做饭吗"},
+
+    // ===== IV. DỊCH SANG TIẾNG TRUNG (5 câu) =====
+    {"num":18,"part":4,"type":"translate","section":"translate","statement":"Dịch câu sau sang tiếng Trung:","vietnamese":"Xin chào, cô Vương!","hint":"Viết câu dịch bằng tiếng Trung"},
+    {"num":19,"part":4,"type":"translate","section":"translate","statement":"Dịch câu sau sang tiếng Trung:","vietnamese":"Tôi là giáo viên tiếng Trung.","hint":"Viết câu dịch bằng tiếng Trung"},
+    {"num":20,"part":4,"type":"translate","section":"translate","statement":"Dịch câu sau sang tiếng Trung:","vietnamese":"Nhà tôi có 5 ngưởi.","hint":"Viết câu dịch bằng tiếng Trung"},
+    {"num":21,"part":4,"type":"translate","section":"translate","statement":"Dịch câu sau sang tiếng Trung:","vietnamese":"Hôm nay là Chủ nhật.","hint":"Viết câu dịch bằng tiếng Trung"},
+    {"num":22,"part":4,"type":"translate","section":"translate","statement":"Dịch câu sau sang tiếng Trung:","vietnamese":"Tôi biết nấu mì.","hint":"Viết câu dịch bằng tiếng Trung"},
+
+    // ===== V. VIẾT ĐOẠN VĂN (1 câu) =====
+    {"num":23,"part":5,"type":"writing_paragraph","section":"writing","statement":"Viết đoạn văn ngắn","vietnamese":"Viết đoạn văn 30-50 chữ giới thiệu bản thân: tên, quốc tịch, gia đình và khả năng của bạn.","hint":"Viết đoạn văn 30-50 chữ"}
+];
+</script>
+
+<header class="header">
+    <div class="logo">
+        <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo" class="logo-image" id="headerLogo">
+        <div class="logo-text">
+            <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+            <p>Địa chỉ: 9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
+        </div>
+    </div>
+    <a href="DE THI HSK 03.html" class="home-button" style="background: #2e7d32; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+        <i class="bi bi-house-door"></i> Trở về trang chủ
+    </a>
+</header>
+
+<div class="main-container">
+    <aside class="sidebar-left">
+        <div class="nav-section">
+            <div class="nav-title"><i class="nav-icon bi bi-check-circle"></i> I. Chọn đáp án</div>
+            <div class="sub-nav show">
+                <div class="nav-item" id="nav-1"><span><span class="nav-prefix">❱</span>1</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-2"><span><span class="nav-prefix">❱</span>2</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-3"><span><span class="nav-prefix">❱</span>3</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-4"><span><span class="nav-prefix">❱</span>4</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-5"><span><span class="nav-prefix">❱</span>5</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-6"><span><span class="nav-prefix">❱</span>6</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title"><i class="nav-icon bi bi-input-cursor-text"></i> II. Điền từ</div>
+            <div class="sub-nav show">
+                <div class="nav-item" id="nav-7"><span><span class="nav-prefix">❱</span>7</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-8"><span><span class="nav-prefix">❱</span>8</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-9"><span><span class="nav-prefix">❱</span>9</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-10"><span><span class="nav-prefix">❱</span>10</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-11"><span><span class="nav-prefix">❱</span>11</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-12"><span><span class="nav-prefix">❱</span>12</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title"><i class="nav-icon bi bi-shuffle"></i> III. Sắp xếp</div>
+            <div class="sub-nav show">
+                <div class="nav-item" id="nav-13"><span><span class="nav-prefix">❱</span>13</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-14"><span><span class="nav-prefix">❱</span>14</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-15"><span><span class="nav-prefix">❱</span>15</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-16"><span><span class="nav-prefix">❱</span>16</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-17"><span><span class="nav-prefix">❱</span>17</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title"><i class="nav-icon bi bi-translate"></i> IV. Dịch Trung</div>
+            <div class="sub-nav show">
+                <div class="nav-item" id="nav-18"><span><span class="nav-prefix">❱</span>18</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-19"><span><span class="nav-prefix">❱</span>19</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-20"><span><span class="nav-prefix">❱</span>20</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-21"><span><span class="nav-prefix">❱</span>21</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+                <div class="nav-item" id="nav-22"><span><span class="nav-prefix">❱</span>22</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title"><i class="nav-icon bi bi-pencil-square"></i> V. Viết văn</div>
+            <div class="sub-nav show">
+                <div class="nav-item" id="nav-23"><span><span class="nav-prefix">❱</span>23</span><span class="nav-status"><i class="icon-pen bi bi-pencil"></i><i class="icon-star bi bi-star"></i></span></div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="content-area">
+        <div class="content-header">
+            <h2 class="question-title"><span class="title-badge" id="qBadge">第 1 题</span><span id="qTypeText">ĐỀ KIỂM TRA TIẾNG TRUNG 1</span></h2>
+            <div class="timer-container">
+                <div class="timer-text" id="timerText">考试剩余时间 60:00</div>
+                <div class="timer-bar"><div class="timer-progress" id="timerProgress" style="width: 100%;"></div></div>
+            </div>
+        </div>
+        <div class="content-body" id="contentBody">
+        </div>
+    </main>
+
+    <aside class="sidebar-right">
+        <div class="user-card">
+            <div class="user-header">
+                <div class="user-avatar">👤</div>
+                <div>
+                    <div class="user-name">GIA SƯ HOA NGU TAN AN</div>
+                    <div class="user-role">Học viên</div>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="info-row"><span class="info-label">考试类型：</span><span class="info-value">KIỂM TRA</span></div>
+                <div class="info-row"><span class="info-label">考试科目：</span><span class="info-value">TIẾNG TRUNG 1</span></div>
+                <div class="info-row"><span class="info-label">姓名：</span><span class="info-value">GS HOA NGU TAN AN</span></div>
+                <div class="info-row"><span class="info-label">性别：</span><span class="info-value">--</span></div>
+                <div class="info-row"><span class="info-label">国籍：</span><span class="info-value">Viet Nam</span></div>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn">答题卡</button>
+            <button class="action-btn">字体大小</button>
+            <button class="action-btn primary" onclick="submitExam()">提交</button>
+        </div>
+    </aside>
+</div>
+
+<script>
+const CONFIG = {
+    EXAM_DURATION: 60 * 60,
+    TOTAL_QUESTIONS: 23,
+    PARTS: {
+        1: { name: 'I. Chọn đáp án đúng (20 điểm)', range: [1, 6], type: 'choice', qType: 'mc', groupSize: 6 },
+        2: { name: 'II. Điền từ thích hợp (20 điểm)', range: [7, 12], type: 'fill', qType: 'fill', groupSize: 6 },
+        3: { name: 'III. Sắp xếp thành câu (20 điểm)', range: [13, 17], type: 'arrange', qType: 'arrange', groupSize: 5 },
+        4: { name: 'IV. Dịch sang tiếng Trung (20 điểm)', range: [18, 22], type: 'translate', qType: 'translate', groupSize: 5 },
+        5: { name: 'V. Viết đoạn văn ngắn (20 điểm)', range: [23, 23], type: 'writing', qType: 'writing_paragraph', groupSize: 1 }
+    }
+};
+
+const TYPE_NAMES = { mc: 'Chọn', fill: 'Điền', arrange: 'Sắp', translate: 'Dịch', writing_paragraph: 'Viết' };
+const SECTION_NAMES = { choice: 'Chọn đáp án', fill: 'Điền từ', arrange: 'Sắp xếp', translate: 'Dịch Trung', writing: 'Viết văn' };
+
+let questions = [], currentQ = 1, userAnswers = {}, bookmarks = {}, contentVisible = {}, examSubmitted = false;
+let timeLeft = CONFIG.EXAM_DURATION, timerInterval;
+let draggedWord = null, draggedFromIndex = null, draggedQNum = null;
+
+const Utils = {
+    formatTime: s => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`,
+    getQ: num => questions.find(q => q.num === num),
+    getPart: num => CONFIG.PARTS[num]
+};
+
+function initData() {
+    if (window.PRELOADED_QUESTIONS) {
+        questions = window.PRELOADED_QUESTIONS;
+    } else {
+        questions = [];
+    }
+}
+
+function startTimer() {
+    updateTimer();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) { clearInterval(timerInterval); submitExam(); return; }
+        updateTimer();
+    }, 1000);
+}
+
+function updateTimer() {
+    document.getElementById('timerText').textContent = `考试剩余时间 ${Utils.formatTime(timeLeft)}`;
+    const p = (timeLeft / CONFIG.EXAM_DURATION) * 100;
+    const bar = document.getElementById('timerProgress');
+    bar.style.width = `${p}%`;
+    bar.style.background = p < 20 ? '#f44336' : p < 50 ? '#ed7d31' : '#4caf50';
+}
+
+function buildNav() {
+    questions.forEach(q => {
+        const navItem = document.getElementById(`nav-${q.num}`);
+        if (navItem) {
+            navItem.onclick = () => goToQuestion(q.num);
+            if (q.num === currentQ) navItem.classList.add('active'); else navItem.classList.remove('active');
+            const answered = userAnswers.hasOwnProperty(q.num);
+            const bookmarked = bookmarks[q.num];
+            if (answered) navItem.classList.add('answered'); else navItem.classList.remove('answered');
+            if (bookmarked) navItem.classList.add('bookmarked'); else navItem.classList.remove('bookmarked');
+            const penIcon = navItem.querySelector('.icon-pen');
+            const starIcon = navItem.querySelector('.icon-star');
+            if (penIcon) penIcon.className = `icon-pen bi bi-pencil${answered ? '-fill' : ''}`;
+            if (starIcon) starIcon.className = `icon-star bi bi-star${bookmarked ? '-fill' : ''}`;
+            starIcon.onclick = (e) => { e.stopPropagation(); toggleBookmark(q.num); };
+        }
+    });
+}
+
+function goToQuestion(num) {
+    currentQ = num;
+    render();
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    const nav = document.getElementById(`nav-${num}`);
+    if (nav) nav.classList.add('active');
+}
+
+function prevQ() { if (currentQ > 1) goToQuestion(currentQ - 1); }
+function nextQ() { if (currentQ < CONFIG.TOTAL_QUESTIONS) goToQuestion(currentQ + 1); }
+
+function render() {
+    const q = Utils.getQ(currentQ);
+    if (!q) return;
+    const part = Utils.getPart(q.part);
+    document.getElementById('qBadge').textContent = `第 ${q.num} 题`;
+    document.getElementById('qTypeText').textContent = part.name;
+    let html = '';
+
+    // Render exam info banner on first load
+    if (currentQ === 1) {
+        html += `<div class="exam-info-banner"><div><div class="exam-info-title">ĐỀ KIỂM TRA TIẾNG TRUNG 1</div><div class="exam-info-meta">Thở gian làm bài: 60 phút | Tổng số câu: 23</div></div><div class="exam-info-meta" style="text-align:right;">Họ và tên: ....................................................<br>Lớp: ....................</div></div>`;
+    }
+
+    if (part.groupSize) html += renderGroup(q.part);
+    else html += renderSingle(q, part);
+
+    document.getElementById('contentBody').innerHTML = html;
+}
+
+function renderSingle(q, part) {
+    let html = `<div class="question-answer-container">${renderHeader(q)}`;
+    html += renderQuestionContent(q);
+    html += `</div>${renderNav()}`;
+    return html;
+}
+
+function renderGroup(partNum) {
+    const part = Utils.getPart(partNum);
+    const [start, end] = part.range;
+    const qs = questions.filter(q => q.num >= start && q.num <= end);
+    let html = '';
+
+    // Exam info banner
+    if (start === 1) {
+        html += `<div class="exam-info-banner"><div><div class="exam-info-title">ĐỀ KIỂM TRA TIẾNG TRUNG 1</div><div class="exam-info-meta">Thở gian làm bài: 60 phút | Tổng số câu: 23</div></div><div class="exam-info-meta" style="text-align:right;">Họ và tên: ....................................................<br>Lớp: ....................</div></div>`;
+    }
+
+    html += `<div class="multi-question-container">`;
+    qs.forEach(q => {
+        html += `<div class="${q.type === 'arrange' ? 'writing-question-container' : 'multi-question-item'}"${q.type === 'arrange' ? ' data-question-id="' + q.num + '"' : ''}>`;
+        if (q.type === 'arrange') {
+            html += renderArrangeQuestion(q);
+        } else if (q.type === 'translate') {
+            html += renderTranslateQuestion(q);
+        } else if (q.type === 'writing_paragraph') {
+            html += renderWritingParagraphQuestion(q);
+        } else {
+            html += renderHeader(q, true);
+            html += renderQuestionContent(q);
+        }
+        html += `</div>`;
+    });
+    html += `</div>${renderNav()}`;
+    return html;
+}
+
+function renderQuestionContent(q) {
+    const selected = userAnswers[q.num];
+    if (q.type === 'mc') {
+        const opts = q.options || [];
+        return `<div class="options-list">${opts.map(opt => `<label class="option-plain"><input type="radio" name="ans-${q.num}" value="${opt.label}" ${selected === opt.label ? 'checked' : ''} onchange="selectAns('${opt.label}', ${q.num})"><span class="option-label-text"><strong>${opt.label}</strong>. ${opt.text}</span></label>`).join('')}</div>`;
+    }
+    if (q.type === 'fill') {
+        const val = selected || '';
+        return `<div style="margin-top:15px;"><div class="fill-sentence">${q.statement.replace('_____', `<input type="text" class="fill-input-inline" id="fill-${q.num}" value="${val}" oninput="inputFill(${q.num}, this.value)" placeholder="...">`)}</div><div style="margin-top:10px;font-size:13px;color:#999;font-style:italic;">${q.hint || ''}</div></div>`;
+    }
+    if (q.type === 'translate') {
+        const val = selected || '';
+        return `<div class="writing-prompt"><strong>Câu tiếng Việt:</strong> ${q.vietnamese}</div><textarea class="translate-textarea" id="translate-${q.num}" placeholder="${q.hint || 'Viết câu dịch bằng tiếng Trung...'}" oninput="inputTranslate(${q.num}, this.value)">${val}</textarea>`;
+    }
+    if (q.type === 'writing_paragraph') {
+        const val = selected || '';
+        return `<div class="writing-prompt"><strong>Đề bài:</strong> ${q.vietnamese}</div><textarea class="writing-textarea" id="writing-${q.num}" placeholder="${q.hint || 'Viết đoạn văn tại đây...'}" oninput="inputWriting(${q.num}, this.value)">${val}</textarea>`;
+    }
+    return '';
+}
+
+function renderHeader(q, inGroup = false) {
+    const bookmarked = bookmarks[q.num];
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div>`;
+}
+
+function renderArrangeQuestion(q) {
+    const bookmarked = bookmarks[q.num];
+    const arranged = userAnswers[q.num] || [];
+    const allWords = q.words || [];
+    const resultText = arranged.join('');
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="arrange-content"><div class="word-bank" id="wordBank-${q.num}">${allWords.map(w => `<div class="word-card ${arranged.includes(w) ? 'used' : ''}" draggable="${!arranged.includes(w)}" ondragstart="${arranged.includes(w) ? '' : `dragStart(event, '${w}', ${q.num})`}" ondragend="dragEnd(event)" onclick="${arranged.includes(w) ? '' : `clickWord('${w}', ${q.num})`}">${w}</div>`).join('')}</div><div class="drop-zone" id="dropZone-${q.num}" ondragover="dragOver(event)" ondrop="drop(event, ${q.num})" ondragleave="dragLeave(event)">${arranged.length ? arranged.map((w, i) => `<div class="dropped-word" draggable="true" ondragstart="dragStart(event, '${w}', ${q.num}, ${i})" ondragend="dragEnd(event)" onclick="removeWord(${q.num}, ${i})" title="Click để xóa">${w}</div>`).join('') : '<span style="color: #999; font-style: italic;">Nhấp vào từ hoặc kéo thả để sắp xếp...</span>'}</div><div class="result-area"><div class="result-label">Kết quả:</div><div class="sentence-result" id="result-${q.num}">${resultText}</div></div></div>`;
+}
+
+function renderTranslateQuestion(q) {
+    const bookmarked = bookmarks[q.num];
+    const val = userAnswers[q.num] || '';
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="writing-prompt"><strong>Câu tiếng Việt:</strong> ${q.vietnamese}</div><textarea class="translate-textarea" id="translate-${q.num}" placeholder="${q.hint || 'Viết câu dịch bằng tiếng Trung...'}" oninput="inputTranslate(${q.num}, this.value)">${val}</textarea>`;
+}
+
+function renderWritingParagraphQuestion(q) {
+    const bookmarked = bookmarks[q.num];
+    const val = userAnswers[q.num] || '';
+    return `<i class="bi bi-star${bookmarked ? '-fill' : ''} question-star ${bookmarked ? 'active' : ''}" onclick="toggleBookmark(${q.num})"></i><div class="question-header"><div class="question-number-box">${q.num}</div><div class="question-text-content"><div style="font-size: 16px; color: #333; line-height: 1.6;">${q.statement || ''}</div></div></div><div class="writing-prompt"><strong>Đề bài:</strong> ${q.vietnamese}</div><textarea class="writing-textarea" id="writing-${q.num}" placeholder="${q.hint || 'Viết đoạn văn tại đây...'}" oninput="inputWriting(${q.num}, this.value)">${val}</textarea>`;
+}
+
+function renderNav() {
+    return `<div class="navigation-buttons"><button class="btn btn-prev" onclick="prevQ()" ${currentQ === 1 ? 'disabled' : ''}>上一题</button><button class="btn btn-next" onclick="nextQ()" ${currentQ === CONFIG.TOTAL_QUESTIONS ? 'disabled' : ''}>下一题</button></div>`;
+}
+
+function selectAns(val, qNum) {
+    userAnswers[qNum] = val;
+    markAns(qNum);
+    if (currentQ < CONFIG.TOTAL_QUESTIONS) {
+        setTimeout(() => goToQuestion(currentQ + 1), 300);
+    } else {
+        render();
+    }
+}
+
+function markAns(num) {
+    const nav = document.getElementById(`nav-${num}`);
+    if (nav) {
+        nav.classList.add('answered');
+        const pen = nav.querySelector('.icon-pen');
+        if (pen) {
+            pen.classList.remove('bi-pencil');
+            pen.classList.add('bi-pencil-fill');
+        }
+    }
+}
+
+function toggleBookmark(num) {
+    bookmarks[num] = !bookmarks[num];
+    buildNav();
+    const star = document.querySelector('.question-star');
+    if (star) {
+        const isBookmarked = bookmarks[num];
+        star.className = `bi bi-star${isBookmarked ? '-fill' : ''} question-star ${isBookmarked ? 'active' : ''}`;
+    }
+}
+
+// Fill-in-the-blank input
+function inputFill(qNum, val) {
+    userAnswers[qNum] = val.trim();
+    if (val.trim()) markAns(qNum);
+}
+
+// Translate textarea input
+function inputTranslate(qNum, val) {
+    userAnswers[qNum] = val.trim();
+    if (val.trim()) markAns(qNum);
+}
+
+// Writing paragraph textarea input
+function inputWriting(qNum, val) {
+    userAnswers[qNum] = val.trim();
+    if (val.trim()) markAns(qNum);
+}
+
+// Drag and drop for arrange questions
+function dragStart(ev, word, qNum, fromIndex = null) {
+    if (ev.target.classList.contains('used')) { ev.preventDefault(); return false; }
+    draggedWord = word; draggedQNum = qNum; draggedFromIndex = fromIndex;
+    ev.target.style.opacity = '0.5';
+    ev.dataTransfer.effectAllowed = 'move';
+}
+
+function dragEnd(ev) { ev.target.style.opacity = '1'; document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drag-over')); }
+function dragOver(ev) { ev.preventDefault(); ev.currentTarget.classList.add('drag-over'); }
+function dragLeave(ev) { ev.currentTarget.classList.remove('drag-over'); }
+
+function drop(ev, targetQNum) {
+    ev.preventDefault(); ev.currentTarget.classList.remove('drag-over');
+    if (draggedQNum !== targetQNum) return;
+    const arranged = [...(userAnswers[targetQNum] || [])];
+    if (draggedFromIndex === null) {
+        if (!arranged.includes(draggedWord)) {
+            arranged.push(draggedWord);
+            userAnswers[targetQNum] = arranged;
+            markAns(targetQNum);
+        }
+    } else {
+        const dropTarget = ev.target.closest('.dropped-word');
+        if (dropTarget) {
+            const allDropped = Array.from(dropTarget.parentElement.querySelectorAll('.dropped-word'));
+            const targetIndex = allDropped.indexOf(dropTarget);
+            if (targetIndex !== -1 && targetIndex !== draggedFromIndex) {
+                [arranged[draggedFromIndex], arranged[targetIndex]] = [arranged[targetIndex], arranged[draggedFromIndex]];
+                userAnswers[targetQNum] = arranged;
+            }
+        }
+    }
+    draggedWord = draggedFromIndex = draggedQNum = null;
+    render();
+}
+
+function clickWord(word, qNum) {
+    const arranged = [...(userAnswers[qNum] || [])];
+    if (!arranged.includes(word)) {
+        arranged.push(word);
+        userAnswers[qNum] = arranged;
+        markAns(qNum);
+        render();
+    }
+}
+
+function removeWord(qNum, index) {
+    const arranged = [...(userAnswers[qNum] || [])];
+    arranged.splice(index, 1);
+    userAnswers[qNum] = arranged;
+    render();
+}
+
+function submitExam() {
+    clearInterval(timerInterval);
+    examSubmitted = true;
+    render();
+
+    const scores = {
+        choice: { answered: 0, total: 6 },
+        fill: { answered: 0, total: 6 },
+        arrange: { answered: 0, total: 5 },
+        translate: { answered: 0, total: 5 },
+        writing: { answered: 0, total: 1 }
+    };
+
+    const questionResults = [];
+
+    questions.forEach(q => {
+        const section = q.section;
+        if (!scores[section]) return;
+
+        const userAns = userAnswers[q.num];
+        let isAnswered = false;
+
+        if (userAns !== undefined && userAns !== '' && userAns !== null) {
+            if (q.type === 'arrange') {
+                isAnswered = Array.isArray(userAns) ? userAns.length > 0 : false;
+            } else {
+                isAnswered = String(userAns).trim().length > 0;
+            }
+        }
+
+        if (isAnswered) scores[section].answered++;
+        questionResults.push({ num: q.num, answered: isAnswered, section: section, type: q.type });
+    });
+
+    const answeredTotal = Object.values(scores).reduce((sum, s) => sum + s.answered, 0);
+    const totalQuestions = CONFIG.TOTAL_QUESTIONS;
+
+    const modal = document.createElement('div');
+    modal.className = 'result-modal-overlay';
+    modal.id = 'resultModal';
+
+    modal.innerHTML = `
+        <div class="result-modal-content">
+            <div class="result-modal-header">
+                <h2><i class="bi bi-clipboard-check"></i> KẾT QUẢ BÀI LÀM</h2>
+            </div>
+            <div class="result-modal-body">
+                <div class="result-section choice">
+                    <div class="result-section-title">I. Chọn đáp án đúng</div>
+                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.choice.answered}/${scores.choice.total} câu</strong></div>
+                </div>
+                <div class="result-section fill">
+                    <div class="result-section-title">II. Điền từ thích hợp</div>
+                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.fill.answered}/${scores.fill.total} câu</strong></div>
+                </div>
+                <div class="result-section arrange">
+                    <div class="result-section-title">III. Sắp xếp câu</div>
+                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.arrange.answered}/${scores.arrange.total} câu</strong></div>
+                </div>
+                <div class="result-section translate">
+                    <div class="result-section-title">IV. Dịch sang tiếng Trung</div>
+                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.translate.answered}/${scores.translate.total} câu</strong></div>
+                </div>
+                <div class="result-section writing">
+                    <div class="result-section-title">V. Viết đoạn văn</div>
+                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.writing.answered}/${scores.writing.total} câu</strong></div>
+                </div>
+                <div class="result-total">
+                    <div class="result-total-score">${answeredTotal}/${totalQuestions}</div>
+                    <div class="result-total-text">Câu đã làm</div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <strong>Chi tiết:</strong>
+                    <div class="result-questions-grid">
+                        ${questionResults.map(r => `
+                            <div class="result-question-item ${r.answered ? 'correct' : 'incorrect'}" title="Câu ${r.num}">
+                                ${r.num}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="result-modal-footer">
+                <button class="btn-close-modal" onclick="closeResultModal()">
+                    <i class="bi bi-x-lg"></i> Đóng
+                </button>
+                <button class="btn-retry" onclick="retryExam()">
+                    <i class="bi bi-arrow-clockwise"></i> Làm lại
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+
+function closeResultModal() {
+    const modal = document.getElementById('resultModal');
+    if (modal) modal.remove();
+}
+
+function retryExam() {
+    if (!confirm('Bạn có chắc muốn làm lại bài thi?\nTất cả câu trả lờ sẽ bị xóa.')) return;
+    userAnswers = {};
+    bookmarks = {};
+    examSubmitted = false;
+    timeLeft = CONFIG.EXAM_DURATION;
+    currentQ = 1;
+    contentVisible = {};
+    closeResultModal();
+    clearInterval(timerInterval);
+    startTimer();
+    buildNav();
+    render();
+    window.scrollTo(0, 0);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initData();
+    buildNav();
+    render();
+    startTimer();
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') prevQ();
+        if (e.key === 'ArrowRight') nextQ();
+    });
+});
+</script>
+</body>
+</html>
