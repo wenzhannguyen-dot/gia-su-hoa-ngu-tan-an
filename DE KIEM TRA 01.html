@@ -329,14 +329,6 @@ const Utils = {
     getPart: num => CONFIG.PARTS[num]
 };
 
-// Base64 an toàn UTF-8 (tiếng Việt, tiếng Trung)
-function utf8_to_b64(str) {
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
-}
-function b64_to_utf8(str) {
-    return decodeURIComponent(atob(str).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-}
-
 // Function to get pinyin for a character
 function getPinyin(char) {
     return PINYIN_DICT[char] || '';
@@ -745,6 +737,9 @@ function submitExam() {
                 <button class="btn-close-modal" onclick="closeResultModal()">
                     <i class="bi bi-x-lg"></i> Đóng
                 </button>
+                <button class="btn-retry" onclick="exportStudentTxt()" style="background:#ed7d31;">
+                    <i class="bi bi-download"></i> Xuất file gửi GV
+                </button>
                 <button class="btn-retry" onclick="retryExam()">
                     <i class="bi bi-arrow-clockwise"></i> Làm lại
                 </button>
@@ -753,143 +748,57 @@ function submitExam() {
     `;
 
     document.body.appendChild(modal);
-
-    generateTeacherReport(questionResults, score, completionRate, ranking);
 }
 
-function generateTeacherReport(questionResults, score, completionRate, ranking) {
-    const totalCorrect = questionResults.filter(r => r.status === 'correct').length;
-    const totalWrong = questionResults.filter(r => r.status === 'wrong').length;
-    const totalUnanswered = questionResults.filter(r => r.status === 'unanswered').length;
-    const totalPending = questionResults.filter(r => r.status === 'pending').length;
+function exportStudentTxt() {
+    const now = new Date();
+    const timestamp = now.toLocaleString('vi-VN');
+    const dateSlug = now.toISOString().slice(0, 10);
+    const safeName = (studentName || 'HocVien').replace(/[^a-zA-Z0-9\u00C0-\u1EF9\s]/g, '_').replace(/\s+/g, '_');
 
-    let report = "BÁO CÁO KẾT QUẢ KIỂM TRA TIẾNG TRUNG\n";
-    report += "=====================================\n\n";
-    report += `Thời gian nộp bài: ${new Date().toLocaleString('vi-VN')}\n`;
-    report += `Học viên: ${studentName}\n`;
-    report += `Tổng số câu: ${questionResults.length}\n\n`;
+    let txt = '=== BAO CAO HOC VIEN ===\n';
+    txt += `HOC_VIEN: ${studentName}\n`;
+    txt += `DE_THI: ĐỀ KIỂM TRA TIẾNG TRUNG 1\n`;
+    txt += `THOI_GIAN_NOP: ${timestamp}\n`;
+    txt += `TONG_CAU: ${CONFIG.TOTAL_QUESTIONS}\n\n`;
 
-    report += "TỔNG KẾT:\n";
-    report += `Số câu đúng: ${totalCorrect}\n`;
-    report += `Số câu sai: ${totalWrong}\n`;
-    report += `Số câu chưa làm: ${totalUnanswered}\n`;
-    report += `Số câu chờ giáo viên chấm: ${totalPending}\n`;
-    report += `Điểm toàn bài: ${score.toFixed(1)}/100\n`;
-    report += `Tỷ lệ hoàn thành: ${completionRate.toFixed(1)}%\n`;
-    report += `Xếp loại: ${ranking}\n\n`;
-
-    report += "CHI TIẾT TỪNG CÂU:\n";
-    report += "==================\n\n";
-    questionResults.forEach(r => {
-        const q = Utils.getQ(r.num);
-        report += `Câu ${r.num} (${SECTION_NAMES[r.section] || r.section}):\n`;
-        report += `  Đáp án học viên: ${r.userAnswerDisplay || '(chưa làm)'}\n`;
-        if (r.correctAnswerDisplay) {
-            report += `  Đáp án đúng: ${r.correctAnswerDisplay}\n`;
+    questions.forEach(q => {
+        const raw = userAnswers[q.num];
+        const ansDisplay = Array.isArray(raw) ? raw.join('') : (raw || '');
+        txt += `--Cau ${q.num}--\n`;
+        txt += `Loai: ${q.type}\n`;
+        txt += `De_bai: ${(q.statement || '').replace(/\n/g, ' ')}\n`;
+        if (q.type === 'mc' && q.options) {
+            txt += `Lua_chon: ${q.options.map(o => `${o.label}. ${o.text}`).join(' | ')}\n`;
         }
-        report += `  Kết quả: ${formatStatus(r.status)}\n\n`;
+        if (q.type === 'arrange' && q.words) {
+            txt += `Tung_tu: ${q.words.join(', ')}\n`;
+        }
+        if (q.type === 'translate' && q.vietnamese) {
+            txt += `Cau_tieng_viet: ${q.vietnamese}\n`;
+        }
+        if (q.type === 'writing_paragraph' && q.vietnamese) {
+            txt += `Yeu_cau: ${q.vietnamese}\n`;
+        }
+        if (q.hint) {
+            txt += `Goi_y: ${q.hint}\n`;
+        }
+        txt += `Dap_an_hoc_vien: ${ansDisplay.replace(/\n/g, ' ').replace(/\r/g, '')}\n`;
+        if (q.type === 'writing_paragraph') {
+            txt += `So_chu: ${ansDisplay.length}\n`;
+        }
+        txt += '\n';
     });
 
-    const translateQuestions = questionResults.filter(r => r.section === 'translate');
-    if (translateQuestions.length > 0) {
-        report += "NỘI DUNG PHẦN DỊCH:\n";
-        report += "==================\n\n";
-        translateQuestions.forEach(r => {
-            const q = Utils.getQ(r.num);
-            report += `Câu ${r.num}:\n`;
-            report += `  Câu tiếng Việt: ${q ? (q.vietnamese || '') : ''}\n`;
-            report += `  Bài dịch: ${r.userAnswerDisplay || '(chưa làm)'}\n\n`;
-        });
-    }
-
-    const writingQuestions = questionResults.filter(r => r.section === 'writing');
-    if (writingQuestions.length > 0) {
-        report += "NỘI DUNG BÀI VIẾT:\n";
-        report += "==================\n\n";
-        writingQuestions.forEach(r => {
-            const q = Utils.getQ(r.num);
-            report += `Câu ${r.num}:\n`;
-            report += `  Đề bài: ${q ? (q.vietnamese || '') : ''}\n`;
-            report += `  Bài viết: ${r.userAnswerDisplay || '(chưa làm)'}\n\n`;
-        });
-    }
-
-    const encryptedPayload = {
-        timestamp: new Date().toISOString(),
-        student: studentName,
-        submitTime: new Date().toLocaleString('vi-VN'),
-        results: questionResults,
-        translateDetails: translateQuestions.map(r => ({ qNum: r.num, vietnamese: (Utils.getQ(r.num) || {}).vietnamese, content: r.userAnswerDisplay })),
-        writingDetails: writingQuestions.map(r => ({ qNum: r.num, vietnamese: (Utils.getQ(r.num) || {}).vietnamese, content: r.userAnswerDisplay })),
-        summary: { totalCorrect, totalWrong, totalUnanswered, totalPending, score, completionRate, ranking }
-    };
-
-    const encryptedReport = utf8_to_b64(JSON.stringify(encryptedPayload));
-
-    // Xuất file mã hóa
-    const blob = new Blob([encryptedReport], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `BaoCaoKiemTratTrung_Encrypted_${new Date().toISOString().slice(0,10)}.dat`;
+    a.download = `BaoCao_${safeName}_${dateSlug}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-
-    // Gửi email tự động
-    sendAutoEmail(encryptedReport, score, completionRate, ranking);
-
-    // Thông báo
-    console.log('Báo cáo đã được xuất và đã mở sẵn email Gmail để gửi.');
-    console.log('Mật khẩu giải mã: thaychien');
-}
-
-function sendAutoEmail(encryptedData, score, completionRate, ranking) {
-    const subject = `Báo cáo kiểm tra tiếng Trung - ${studentName} - ${new Date().toLocaleDateString('vi-VN')}`;
-    const body =
-`Kính gửi Giáo viên,
-
-Báo cáo kết quả kiểm tra tiếng Trung của học viên đã hoàn tất.
-
-Thông tin:
-- Thời gian nộp bài: ${new Date().toLocaleString('vi-VN')}
-- Học viên: ${studentName}
-- Tổng số câu: ${CONFIG.TOTAL_QUESTIONS}
-- Điểm tạm tính (thang 100): ${score.toFixed(1)}
-- Tỷ lệ hoàn thành: ${completionRate.toFixed(1)}%
-- Xếp loại tạm tính: ${ranking}
-
-Lưu ý: Phần dịch tiếng Trung và viết đoạn văn chưa chấm tự động, cần giáo viên xem xét trong file báo cáo mã hóa đính kèm.
-
-Mật khẩu giải mã báo cáo đính kèm: thaychien
-
-File báo cáo mã hóa (.dat) đã được tự động tải xuống về máy học viên, vui lòng đính kèm file đó vào email trước khi gửi.
-
-Trân trọng,
-Hệ thống kiểm tra tiếng Trung`;
-
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent('wenzhannguyen@gmail.com')}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    // Mở Gmail compose ở tab mới với nội dung đã điền sẵn (dùng tài khoản Gmail đang đăng nhập sẵn của học viên)
-    window.open(gmailUrl, '_blank');
-
-    // Thông báo hướng dẫn học viên bấm Gửi
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 10000; text-align: center; max-width: 360px;
-    `;
-    modal.innerHTML = `
-        <h3 style="color: #4caf50; margin-bottom: 15px;">📧 Đã mở sẵn email!</h3>
-        <p style="margin-bottom: 10px;">Một tab Gmail đã được mở với nội dung báo cáo điền sẵn, gửi đến:</p>
-        <p style="font-weight: bold; color: #1976d2;">wenzhannguyen@gmail.com</p>
-        <p style="margin-top: 10px; font-size: 14px; color: #d35400; font-weight:600;">Vui lòng kiểm tra tab vừa mở và bấm "Gửi" để hoàn tất.</p>
-        <p style="margin-top: 10px; font-size: 13px; color: #666;">File báo cáo mã hóa (.dat) đã được tải về máy, hãy đính kèm file này vào email trước khi gửi.</p>
-        <button onclick="this.parentElement.remove()" style="margin-top: 15px; padding: 8px 16px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer;">Đóng</button>
-    `;
-    document.body.appendChild(modal);
 }
 
 function closeResultModal() {
