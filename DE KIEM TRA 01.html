@@ -329,6 +329,14 @@ const Utils = {
     getPart: num => CONFIG.PARTS[num]
 };
 
+// Base64 an toàn UTF-8 (tiếng Việt, tiếng Trung)
+function utf8_to_b64(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(parseInt(p1, 16))));
+}
+function b64_to_utf8(str) {
+    return decodeURIComponent(atob(str).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+}
+
 // Function to get pinyin for a character
 function getPinyin(char) {
     return PINYIN_DICT[char] || '';
@@ -556,60 +564,60 @@ function inputWriting(qNum, val) {
     if (val.trim()) markAns(qNum);
 }
 
-// Chấm điểm tự động bài viết
-function autoGradeWriting(qNum, content) {
-    const q = Utils.getQ(qNum);
-    if (!q || q.type !== 'writing_paragraph') return { score: 0, feedback: '' };
-    
-    const text = content.trim();
-    const charCount = text.length;
-    const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
-    
-    let score = 0;
-    let feedback = '';
-    
-    // Tiêu chí 1: Độ dài (30-50 chữ)
-    if (charCount >= 30 && charCount <= 50) {
-        score += 40;
-        feedback += '✓ Độ dài phù hợp (30-50 chữ). ';
-    } else if (charCount < 30) {
-        feedback += `✗ Quá ngắn (${charCount} chữ, cần ít nhất 30). `;
-    } else if (charCount > 50) {
-        feedback += `✗ Quá dài (${charCount} chữ, cần tối đa 50). `;
-    }
-    
-    // Tiêu chí 2: Kiểm tra ngữ pháp cơ bản
-    const grammarChecks = [
-        { pattern: /[\u4e00-\u9fff]+/, name: 'Chữ Hán', points: 20 },
-        { pattern: /[。！？]$/, name: 'Dấu câu cuối', points: 10 },
-        { pattern: /我[是叫有]/, name: 'Cấu trúc cơ bản', points: 15 },
-        { pattern: /(中国人|学生|老师)/, name: 'Từ vựng liên quan', points: 15 }
-    ];
-    
-    grammarChecks.forEach(check => {
-        if (check.pattern.test(text)) {
-            score += check.points;
-            feedback += `✓ Có ${check.name}. `;
+// Chấm điểm từng câu hỏi theo yêu cầu mới
+function gradeQuestion(q) {
+    const userRaw = userAnswers[q.num];
+    const isArrange = q.type === 'arrange';
+    const isPending = q.type === 'translate' || q.type === 'writing_paragraph';
+
+    let isAnswered = false;
+    if (userRaw !== undefined && userRaw !== null && userRaw !== '') {
+        if (isArrange) {
+            isAnswered = Array.isArray(userRaw) && userRaw.length > 0;
+        } else {
+            isAnswered = String(userRaw).trim().length > 0;
         }
-    });
-    
-    // Tiêu chí 3: Không lỗi chính tả cơ bản
-    const commonErrors = ['的的', '了了', '和和'];
-    let hasErrors = false;
-    commonErrors.forEach(error => {
-        if (text.includes(error)) {
-            hasErrors = true;
-        }
-    });
-    
-    if (!hasErrors && charCount > 0) {
-        score += 20;
-        feedback += '✓ Không lỗi chính tả cơ bản. ';
-    } else if (hasErrors) {
-        feedback += '✗ Có lỗi lặp từ. ';
     }
-    
-    return { score: Math.min(score, 100), feedback, charCount, wordCount };
+
+    if (!isAnswered) {
+        return { status: 'unanswered', userAnswerDisplay: '', correctAnswerDisplay: getCorrectAnswerDisplay(q) };
+    }
+
+    if (isPending) {
+        const display = isArrange ? userRaw.join('') : String(userRaw).trim();
+        return { status: 'pending', userAnswerDisplay: display, correctAnswerDisplay: '' };
+    }
+
+    let userAnswerDisplay = '';
+    if (isArrange) {
+        userAnswerDisplay = userRaw.join('');
+    } else {
+        userAnswerDisplay = String(userRaw).trim();
+    }
+
+    const correctAnswerDisplay = getCorrectAnswerDisplay(q);
+    const status = userAnswerDisplay === correctAnswerDisplay ? 'correct' : 'wrong';
+
+    return { status, userAnswerDisplay, correctAnswerDisplay };
+}
+
+function getCorrectAnswerDisplay(q) {
+    if (q.type === 'arrange') return q.answer || '';
+    if (q.type === 'fill') return (q.answer || '').trim();
+    if (q.type === 'mc') return String(q.answer || '').trim();
+    return q.answer || '';
+}
+
+function formatStatus(status) {
+    const map = { correct: 'Đúng', wrong: 'Sai', unanswered: 'Chưa làm', pending: 'Chờ giáo viên chấm' };
+    return map[status] || status;
+}
+
+function getStatusGridStyle(status) {
+    if (status === 'correct') return '';
+    if (status === 'wrong') return '';
+    if (status === 'pending') return 'background:#fff3e0;color:#e65100;';
+    return 'background:#eeeeee;color:#757575;';
 }
 
 // Drag and drop for arrange questions
@@ -671,37 +679,34 @@ function submitExam() {
     examSubmitted = true;
     render();
 
-    const scores = {
-        choice: { answered: 0, total: 6 },
-        fill: { answered: 0, total: 6 },
-        arrange: { answered: 0, total: 5 },
-        translate: { answered: 0, total: 5 },
-        writing: { answered: 0, total: 1 }
-    };
-
-    const questionResults = [];
-
-    questions.forEach(q => {
-        const section = q.section;
-        if (!scores[section]) return;
-
-        const userAns = userAnswers[q.num];
-        let isAnswered = false;
-
-        if (userAns !== undefined && userAns !== '' && userAns !== null) {
-            if (q.type === 'arrange') {
-                isAnswered = Array.isArray(userAns) ? userAns.length > 0 : false;
-            } else {
-                isAnswered = String(userAns).trim().length > 0;
-            }
-        }
-
-        if (isAnswered) scores[section].answered++;
-        questionResults.push({ num: q.num, answered: isAnswered, section: section, type: q.type, userAnswer: userAnswers[q.num] });
+    const questionResults = questions.map(q => {
+        const grade = gradeQuestion(q);
+        return {
+            num: q.num,
+            section: q.section,
+            type: q.type,
+            status: grade.status,
+            userAnswerDisplay: grade.userAnswerDisplay,
+            correctAnswerDisplay: grade.correctAnswerDisplay
+        };
     });
 
-    const answeredTotal = Object.values(scores).reduce((sum, s) => sum + s.answered, 0);
-    const totalQuestions = CONFIG.TOTAL_QUESTIONS;
+    const totalCorrect = questionResults.filter(r => r.status === 'correct').length;
+    const totalWrong = questionResults.filter(r => r.status === 'wrong').length;
+    const totalUnanswered = questionResults.filter(r => r.status === 'unanswered').length;
+    const totalPending = questionResults.filter(r => r.status === 'pending').length;
+    const totalAnswered = totalCorrect + totalWrong + totalPending;
+
+    const autoGradableTotal = questions.filter(q => q.type !== 'translate' && q.type !== 'writing_paragraph').length;
+    const score = (totalCorrect / autoGradableTotal) * 100;
+    const completionRate = (totalAnswered / CONFIG.TOTAL_QUESTIONS) * 100;
+
+    let ranking = '';
+    if (score >= 90) ranking = 'Xuất sắc';
+    else if (score >= 80) ranking = 'Giỏi';
+    else if (score >= 65) ranking = 'Khá';
+    else if (score >= 50) ranking = 'Trung bình';
+    else ranking = 'Cần cố gắng';
 
     const modal = document.createElement('div');
     modal.className = 'result-modal-overlay';
@@ -713,39 +718,26 @@ function submitExam() {
                 <h2><i class="bi bi-clipboard-check"></i> KẾT QUẢ BÀI LÀM</h2>
             </div>
             <div class="result-modal-body">
-                <div class="result-detail" style="margin-bottom:15px; font-size:15px;"><span>Học viên:</span><strong>${studentName}</strong></div>
-                <div class="result-section choice">
-                    <div class="result-section-title">I. Chọn đáp án đúng</div>
-                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.choice.answered}/${scores.choice.total} câu</strong></div>
-                </div>
-                <div class="result-section fill">
-                    <div class="result-section-title">II. Điền từ thích hợp</div>
-                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.fill.answered}/${scores.fill.total} câu</strong></div>
-                </div>
-                <div class="result-section arrange">
-                    <div class="result-section-title">III. Sắp xếp câu</div>
-                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.arrange.answered}/${scores.arrange.total} câu</strong></div>
-                </div>
-                <div class="result-section translate">
-                    <div class="result-section-title">IV. Dịch sang tiếng Trung</div>
-                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.translate.answered}/${scores.translate.total} câu</strong></div>
-                </div>
-                <div class="result-section writing">
-                    <div class="result-section-title">V. Viết đoạn văn</div>
-                    <div class="result-detail"><span>Đã làm:</span><strong>${scores.writing.answered}/${scores.writing.total} câu</strong></div>
-                </div>
+                <div class="result-detail" style="margin-bottom:10px; font-size:15px;"><span>Học viên:</span><strong>${studentName}</strong></div>
+                <div class="result-detail" style="margin-bottom:15px; font-size:14px;"><span>Thời gian nộp:</span><strong>${new Date().toLocaleString('vi-VN')}</strong></div>
+
                 <div class="result-total">
-                    <div class="result-total-score">${answeredTotal}/${totalQuestions}</div>
-                    <div class="result-total-text">Câu đã làm</div>
+                    <div class="result-total-score">${score.toFixed(1)}</div>
+                    <div class="result-total-text">Điểm toàn bài / 100</div>
+                    <div style="margin-top:12px; font-size:14px; line-height:1.8;">
+                        <div>Đúng: <strong>${totalCorrect}</strong> &nbsp;|&nbsp; Sai: <strong>${totalWrong}</strong> &nbsp;|&nbsp; Chưa làm: <strong>${totalUnanswered}</strong> &nbsp;|&nbsp; Chờ chấm: <strong>${totalPending}</strong></div>
+                        <div>Tỷ lệ hoàn thành: <strong>${completionRate.toFixed(1)}%</strong></div>
+                        <div style="font-size:20px; font-weight:bold; color:#1565c0; margin-top:8px;">${ranking}</div>
+                    </div>
                 </div>
                 <div style="margin-top: 20px;">
                     <strong>Chi tiết:</strong>
                     <div class="result-questions-grid">
-                        ${questionResults.map(r => `
-                            <div class="result-question-item ${r.answered ? 'correct' : 'incorrect'}" title="Câu ${r.num}">
-                                ${r.num}
-                            </div>
-                        `).join('')}
+                        ${questionResults.map(r => {
+                            const style = getStatusGridStyle(r.status);
+                            const cls = 'result-question-item' + (r.status === 'correct' ? ' correct' : r.status === 'wrong' ? ' incorrect' : '');
+                            return `<div class="${cls}" style="${style}" title="Câu ${r.num}: ${formatStatus(r.status)}">${r.num}</div>`;
+                        }).join('')}
                     </div>
                 </div>
             </div>
@@ -761,69 +753,79 @@ function submitExam() {
     `;
 
     document.body.appendChild(modal);
-    
-    // Xuất báo cáo cho giáo viên
-    generateTeacherReport(questionResults);
+
+    generateTeacherReport(questionResults, score, completionRate, ranking);
 }
 
-function generateTeacherReport(questionResults) {
+function generateTeacherReport(questionResults, score, completionRate, ranking) {
+    const totalCorrect = questionResults.filter(r => r.status === 'correct').length;
+    const totalWrong = questionResults.filter(r => r.status === 'wrong').length;
+    const totalUnanswered = questionResults.filter(r => r.status === 'unanswered').length;
+    const totalPending = questionResults.filter(r => r.status === 'pending').length;
+
     let report = "BÁO CÁO KẾT QUẢ KIỂM TRA TIẾNG TRUNG\n";
     report += "=====================================\n\n";
-    report += `Thời gian: ${new Date().toLocaleString('vi-VN')}\n`;
+    report += `Thời gian nộp bài: ${new Date().toLocaleString('vi-VN')}\n`;
     report += `Học viên: ${studentName}\n`;
     report += `Tổng số câu: ${questionResults.length}\n\n`;
 
-    // Chi tiết bài viết
-    const writingQuestions = questionResults.filter(q => q.type === 'writing_paragraph');
-    if (writingQuestions.length > 0) {
-        report += "CHI TIẾT BÀI VIẾT:\n";
+    report += "TỔNG KẾT:\n";
+    report += `Số câu đúng: ${totalCorrect}\n`;
+    report += `Số câu sai: ${totalWrong}\n`;
+    report += `Số câu chưa làm: ${totalUnanswered}\n`;
+    report += `Số câu chờ giáo viên chấm: ${totalPending}\n`;
+    report += `Điểm toàn bài: ${score.toFixed(1)}/100\n`;
+    report += `Tỷ lệ hoàn thành: ${completionRate.toFixed(1)}%\n`;
+    report += `Xếp loại: ${ranking}\n\n`;
+
+    report += "CHI TIẾT TỪNG CÂU:\n";
+    report += "==================\n\n";
+    questionResults.forEach(r => {
+        const q = Utils.getQ(r.num);
+        report += `Câu ${r.num} (${SECTION_NAMES[r.section] || r.section}):\n`;
+        report += `  Đáp án học viên: ${r.userAnswerDisplay || '(chưa làm)'}\n`;
+        if (r.correctAnswerDisplay) {
+            report += `  Đáp án đúng: ${r.correctAnswerDisplay}\n`;
+        }
+        report += `  Kết quả: ${formatStatus(r.status)}\n\n`;
+    });
+
+    const translateQuestions = questionResults.filter(r => r.section === 'translate');
+    if (translateQuestions.length > 0) {
+        report += "NỘI DUNG PHẦN DỊCH:\n";
         report += "==================\n\n";
-        writingQuestions.forEach(q => {
-            const content = q.userAnswer || '';
-            const gradeResult = autoGradeWriting(q.num, content);
-            report += `Câu ${q.num}:\n`;
-            report += `Nội dung: ${content}\n`;
-            report += `Số chữ: ${gradeResult.charCount}\n`;
-            report += `Điểm tự động: ${gradeResult.score}/100\n`;
-            report += `Nhận xét: ${gradeResult.feedback}\n\n`;
+        translateQuestions.forEach(r => {
+            const q = Utils.getQ(r.num);
+            report += `Câu ${r.num}:\n`;
+            report += `  Câu tiếng Việt: ${q ? (q.vietnamese || '') : ''}\n`;
+            report += `  Bài dịch: ${r.userAnswerDisplay || '(chưa làm)'}\n\n`;
         });
     }
 
-    // Thống kê theo phần
-    const sectionStats = {};
-    questionResults.forEach(q => {
-        if (!sectionStats[q.section]) {
-            sectionStats[q.section] = { total: 0, answered: 0 };
-        }
-        sectionStats[q.section].total++;
-        if (q.answered) sectionStats[q.section].answered++;
-    });
+    const writingQuestions = questionResults.filter(r => r.section === 'writing');
+    if (writingQuestions.length > 0) {
+        report += "NỘI DUNG BÀI VIẾT:\n";
+        report += "==================\n\n";
+        writingQuestions.forEach(r => {
+            const q = Utils.getQ(r.num);
+            report += `Câu ${r.num}:\n`;
+            report += `  Đề bài: ${q ? (q.vietnamese || '') : ''}\n`;
+            report += `  Bài viết: ${r.userAnswerDisplay || '(chưa làm)'}\n\n`;
+        });
+    }
 
-    Object.entries(sectionStats).forEach(([section, stats]) => {
-        const sectionNames = {
-            choice: 'I. Chọn đáp án',
-            fill: 'II. Điền từ',
-            arrange: 'III. Sắp xếp',
-            translate: 'IV. Dịch Trung',
-            writing: 'V. Viết văn'
-        };
-        report += `${sectionNames[section] || section}:\n`;
-        report += `  - Đã làm: ${stats.answered}/${stats.total}\n\n`;
-    });
-
-    // Tạo báo cáo mã hóa
-    const encryptedReport = btoa(JSON.stringify({
+    const encryptedPayload = {
         timestamp: new Date().toISOString(),
         student: studentName,
+        submitTime: new Date().toLocaleString('vi-VN'),
         results: questionResults,
-        writingDetails: writingQuestions.map(q => ({
-            qNum: q.num,
-            content: q.userAnswer,
-            grade: autoGradeWriting(q.num, q.userAnswer)
-        })),
-        stats: sectionStats
-    }));
-    
+        translateDetails: translateQuestions.map(r => ({ qNum: r.num, vietnamese: (Utils.getQ(r.num) || {}).vietnamese, content: r.userAnswerDisplay })),
+        writingDetails: writingQuestions.map(r => ({ qNum: r.num, vietnamese: (Utils.getQ(r.num) || {}).vietnamese, content: r.userAnswerDisplay })),
+        summary: { totalCorrect, totalWrong, totalUnanswered, totalPending, score, completionRate, ranking }
+    };
+
+    const encryptedReport = utf8_to_b64(JSON.stringify(encryptedPayload));
+
     // Xuất file mã hóa
     const blob = new Blob([encryptedReport], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -834,16 +836,16 @@ function generateTeacherReport(questionResults) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     // Gửi email tự động
-    sendAutoEmail(encryptedReport);
-    
+    sendAutoEmail(encryptedReport, score, completionRate, ranking);
+
     // Thông báo
     console.log('Báo cáo đã được xuất và đã mở sẵn email Gmail để gửi.');
     console.log('Mật khẩu giải mã: thaychien');
 }
 
-function sendAutoEmail(encryptedData) {
+function sendAutoEmail(encryptedData, score, completionRate, ranking) {
     const subject = `Báo cáo kiểm tra tiếng Trung - ${studentName} - ${new Date().toLocaleDateString('vi-VN')}`;
     const body =
 `Kính gửi Giáo viên,
@@ -854,10 +856,15 @@ Thông tin:
 - Thời gian nộp bài: ${new Date().toLocaleString('vi-VN')}
 - Học viên: ${studentName}
 - Tổng số câu: ${CONFIG.TOTAL_QUESTIONS}
+- Điểm tạm tính (thang 100): ${score.toFixed(1)}
+- Tỷ lệ hoàn thành: ${completionRate.toFixed(1)}%
+- Xếp loại tạm tính: ${ranking}
+
+Lưu ý: Phần dịch tiếng Trung và viết đoạn văn chưa chấm tự động, cần giáo viên xem xét trong file báo cáo mã hóa đính kèm.
 
 Mật khẩu giải mã báo cáo đính kèm: thaychien
 
-(Lưu ý: file báo cáo mã hóa (.dat) đã được tự động tải xuống về máy học viên, vui lòng đính kèm file đó vào email trước khi gửi.)
+File báo cáo mã hóa (.dat) đã được tự động tải xuống về máy học viên, vui lòng đính kèm file đó vào email trước khi gửi.
 
 Trân trọng,
 Hệ thống kiểm tra tiếng Trung`;
