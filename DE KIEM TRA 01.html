@@ -148,6 +148,16 @@
 </head>
 <body class="student-mode">
 
+<div id="nameGateOverlay" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.55); z-index:99999; display:flex; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:10px; padding:30px; width:90%; max-width:380px; box-shadow:0 8px 24px rgba(0,0,0,0.3); text-align:center;">
+        <h2 style="color:#4caf50; margin-bottom:10px; font-size:18px;">NHẬP TÊN HỌC VIÊN</h2>
+        <p style="color:#555; font-size:13px; margin-bottom:18px;">Vui lòng nhập họ tên để bắt đầu làm bài kiểm tra.</p>
+        <input type="text" id="nameGateInput" placeholder="Nhập họ và tên..." style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; font-size:15px; margin-bottom:8px;">
+        <div id="nameGateError" style="color:#e53935; font-size:12px; min-height:16px; margin-bottom:10px;"></div>
+        <button onclick="startExamWithName()" style="width:100%; padding:10px; background:#4caf50; color:#fff; border:none; border-radius:6px; font-size:15px; font-weight:600; cursor:pointer;">Bắt đầu làm bài</button>
+    </div>
+</div>
+
 <script>
 window.PRELOADED_QUESTIONS = [
     // ===== I. CHỌN ĐÁP ÁN ĐÚNG (6 câu) =====
@@ -262,29 +272,6 @@ window.PRELOADED_QUESTIONS = [
         </div>
     </main>
 
-    <aside class="sidebar-right">
-        <div class="user-card">
-            <div class="user-header">
-                <div class="user-avatar">👤</div>
-                <div>
-                    <div class="user-name">GIA SƯ HOA NGU TAN AN</div>
-                    <div class="user-role">Học viên</div>
-                </div>
-            </div>
-            <div class="user-info">
-                <div class="info-row"><span class="info-label">考试类型：</span><span class="info-value">KIỂM TRA</span></div>
-                <div class="info-row"><span class="info-label">考试科目：</span><span class="info-value">TIẾNG TRUNG 1</span></div>
-                <div class="info-row"><span class="info-label">姓名：</span><span class="info-value">GS HOA NGU TAN AN</span></div>
-                <div class="info-row"><span class="info-label">性别：</span><span class="info-value">--</span></div>
-                <div class="info-row"><span class="info-label">国籍：</span><span class="info-value">Viet Nam</span></div>
-            </div>
-        </div>
-        <div class="action-buttons">
-            <button class="action-btn">答题卡</button>
-            <button class="action-btn">字体大小</button>
-            <button class="action-btn primary" onclick="submitExam()">提交</button>
-        </div>
-    </aside>
 </div>
 
 <script>
@@ -332,6 +319,7 @@ const PINYIN_DICT = {
 };
 
 let questions = [], currentQ = 1, userAnswers = {}, bookmarks = {}, contentVisible = {}, examSubmitted = false;
+let studentName = '';
 let timeLeft = CONFIG.EXAM_DURATION, timerInterval;
 let draggedWord = null, draggedFromIndex = null, draggedQNum = null;
 
@@ -511,7 +499,11 @@ function renderWritingParagraphQuestion(q) {
 }
 
 function renderNav() {
-    return `<div class="navigation-buttons"><button class="btn btn-prev" onclick="prevQ()" ${currentQ === 1 ? 'disabled' : ''}>上一题</button><button class="btn btn-next" onclick="nextQ()" ${currentQ === CONFIG.TOTAL_QUESTIONS ? 'disabled' : ''}>下一题</button></div>`;
+    const isLast = currentQ === CONFIG.TOTAL_QUESTIONS;
+    const nextOrSubmitBtn = isLast
+        ? `<button class="btn btn-next action-btn primary" onclick="submitExam()" style="background:#ed7d31;border-color:#ed7d31;color:#fff;">提交</button>`
+        : `<button class="btn btn-next" onclick="nextQ()">下一题</button>`;
+    return `<div class="navigation-buttons"><button class="btn btn-prev" onclick="prevQ()" ${currentQ === 1 ? 'disabled' : ''}>上一题</button>${nextOrSubmitBtn}</div>`;
 }
 
 function selectAns(val, qNum) {
@@ -721,6 +713,7 @@ function submitExam() {
                 <h2><i class="bi bi-clipboard-check"></i> KẾT QUẢ BÀI LÀM</h2>
             </div>
             <div class="result-modal-body">
+                <div class="result-detail" style="margin-bottom:15px; font-size:15px;"><span>Học viên:</span><strong>${studentName}</strong></div>
                 <div class="result-section choice">
                     <div class="result-section-title">I. Chọn đáp án đúng</div>
                     <div class="result-detail"><span>Đã làm:</span><strong>${scores.choice.answered}/${scores.choice.total} câu</strong></div>
@@ -777,7 +770,7 @@ function generateTeacherReport(questionResults) {
     let report = "BÁO CÁO KẾT QUẢ KIỂM TRA TIẾNG TRUNG\n";
     report += "=====================================\n\n";
     report += `Thời gian: ${new Date().toLocaleString('vi-VN')}\n`;
-    report += `Học viên: GS HOA NGU TAN AN\n`;
+    report += `Học viên: ${studentName}\n`;
     report += `Tổng số câu: ${questionResults.length}\n\n`;
 
     // Chi tiết bài viết
@@ -821,7 +814,7 @@ function generateTeacherReport(questionResults) {
     // Tạo báo cáo mã hóa
     const encryptedReport = btoa(JSON.stringify({
         timestamp: new Date().toISOString(),
-        student: 'GS HOA NGU TAN AN',
+        student: studentName,
         results: questionResults,
         writingDetails: writingQuestions.map(q => ({
             qNum: q.num,
@@ -846,59 +839,50 @@ function generateTeacherReport(questionResults) {
     sendAutoEmail(encryptedReport);
     
     // Thông báo
-    console.log('Báo cáo đã được xuất và gửi tự động về email.');
+    console.log('Báo cáo đã được xuất và đã mở sẵn email Gmail để gửi.');
     console.log('Mật khẩu giải mã: thaychien');
 }
 
 function sendAutoEmail(encryptedData) {
-    // Sử dụng EmailJS hoặc dịch vụ email khác
-    // Hiển thị thông báo gửi thành công
+    const subject = `Báo cáo kiểm tra tiếng Trung - ${studentName} - ${new Date().toLocaleDateString('vi-VN')}`;
+    const body =
+`Kính gửi Giáo viên,
+
+Báo cáo kết quả kiểm tra tiếng Trung của học viên đã hoàn tất.
+
+Thông tin:
+- Thời gian nộp bài: ${new Date().toLocaleString('vi-VN')}
+- Học viên: ${studentName}
+- Tổng số câu: ${CONFIG.TOTAL_QUESTIONS}
+
+Mật khẩu giải mã báo cáo đính kèm: thaychien
+
+(Lưu ý: file báo cáo mã hóa (.dat) đã được tự động tải xuống về máy học viên, vui lòng đính kèm file đó vào email trước khi gửi.)
+
+Trân trọng,
+Hệ thống kiểm tra tiếng Trung`;
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent('wenzhannguyen@gmail.com')}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    // Mở Gmail compose ở tab mới với nội dung đã điền sẵn (dùng tài khoản Gmail đang đăng nhập sẵn của học viên)
+    window.open(gmailUrl, '_blank');
+
+    // Thông báo hướng dẫn học viên bấm Gửi
     const modal = document.createElement('div');
     modal.style.cssText = `
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
         background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 10000; text-align: center;
+        z-index: 10000; text-align: center; max-width: 360px;
     `;
     modal.innerHTML = `
-        <h3 style="color: #4caf50; margin-bottom: 15px;">✅ Gửi email thành công!</h3>
-        <p style="margin-bottom: 10px;">Báo cáo đã được gửi về:</p>
+        <h3 style="color: #4caf50; margin-bottom: 15px;">📧 Đã mở sẵn email!</h3>
+        <p style="margin-bottom: 10px;">Một tab Gmail đã được mở với nội dung báo cáo điền sẵn, gửi đến:</p>
         <p style="font-weight: bold; color: #1976d2;">wenzhannguyen@gmail.com</p>
-        <p style="margin-top: 15px; font-size: 14px; color: #666;">Mật khẩu giải mã: thaychien</p>
+        <p style="margin-top: 10px; font-size: 14px; color: #d35400; font-weight:600;">Vui lòng kiểm tra tab vừa mở và bấm "Gửi" để hoàn tất.</p>
+        <p style="margin-top: 10px; font-size: 13px; color: #666;">File báo cáo mã hóa (.dat) đã được tải về máy, hãy đính kèm file này vào email trước khi gửi.</p>
         <button onclick="this.parentElement.remove()" style="margin-top: 15px; padding: 8px 16px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer;">Đóng</button>
     `;
     document.body.appendChild(modal);
-    
-    // Tự động đóng sau 5 giây
-    setTimeout(() => {
-        if (modal.parentElement) modal.remove();
-    }, 5000);
-    
-    // Lưu thông tin gửi email (để thực tế có thể tích hợp API)
-    const emailData = {
-        to: 'wenzhannguyen@gmail.com',
-        subject: `Báo cáo kiểm tra tiếng Trung - ${new Date().toLocaleDateString('vi-VN')}`,
-        body: `
-Kính gửi Giáo viên,
-
-Báo cáo kết quả kiểm tra tiếng Trung đã sẵn sàng.
-
-Thông tin:
-- Thời gian: ${new Date().toLocaleString('vi-VN')}
-- Học viên: GS HOA NGU TAN AN
-- File đính kèm: Báo cáo mã hóa (.dat)
-
-Mật khẩu giải mã báo cáo: thaychien
-
-Trân trọng,
-Hệ thống kiểm tra tiếng Trung
-        `,
-        attachment: encryptedData,
-        password: 'thaychien'
-    };
-    
-    // Lưu vào localStorage để gửi sau (có thể tích hợp với backend)
-    localStorage.setItem('pendingEmail', JSON.stringify(emailData));
-    console.log('Email data saved for automatic sending:', emailData);
 }
 
 function closeResultModal() {
@@ -922,12 +906,35 @@ function retryExam() {
     window.scrollTo(0, 0);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function startExamWithName() {
+    const input = document.getElementById('nameGateInput');
+    const errorEl = document.getElementById('nameGateError');
+    const name = input.value.trim();
+    if (!name) {
+        errorEl.textContent = 'Bạn phải nhập tên trước khi vào làm bài!';
+        input.focus();
+        return;
+    }
+    studentName = name;
+    const overlay = document.getElementById('nameGateOverlay');
+    if (overlay) overlay.remove();
+
     initData();
     buildNav();
     render();
     startTimer();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('nameGateInput');
+    if (input) {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') startExamWithName();
+        });
+        input.focus();
+    }
     document.addEventListener('keydown', (e) => {
+        if (document.getElementById('nameGateOverlay')) return;
         if (e.key === 'ArrowLeft') prevQ();
         if (e.key === 'ArrowRight') nextQ();
     });
