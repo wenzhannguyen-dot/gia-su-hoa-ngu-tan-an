@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 9: 阳光总在风雨后 - HSK4</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, "Helvetica Neue", sans-serif; background: #f5f5f5; min-height: 100vh; color: #333; }
+        .chinese-text, .question-chinese, .dialogue-chinese, .text-chinese, .example-chinese, .grammar-structure { color: #000 !important; font-family: "Microsoft YaHei", "SimHei", serif; font-size: 20px; }
+        .vocab-chinese { color: #000 !important; font-family: "DFKai-SB", "KaiTi", "楷体", "STKaiti", serif; font-size: 32px; }
+        .pinyin-text, .vocab-pinyin, .question-pinyin, .dialogue-pinyin, .text-pinyin, .example-pinyin { font-family: Arial, sans-serif; font-style: normal; font-size: 20px; color: #c62828; }
+        body.hide-pinyin .dialogue-pinyin, body.hide-pinyin .vocab-pinyin, body.hide-pinyin .example-pinyin, body.hide-pinyin .pinyin-text { display: none !important; }
+        body.hide-vietnamese .dialogue-vietnamese, body.hide-vietnamese .example-vietnamese { display: none !important; }
+        .tool-btn.active-toggle { background: #fce4ec; border-color: #c62828; color: #c62828; font-weight: 600; }
+
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #c62828; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+        .logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+
+        .main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+
+        .sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
+        .nav-section { border-bottom: 1px solid #e0e0e0; }
+        .nav-title { padding: 15px; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #c62828; font-family: Arial, sans-serif; }
+        .nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666; font-size: 13px; transition: background 0.1s ease, color 0.1s ease; font-family: Arial, sans-serif; }
+        .nav-item:hover { background: #fce4ec; color: #c62828; }
+        .nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; }
+        .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+
+        .tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+        .tool-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .tool-card:last-child { margin-bottom: 0; }
+        .tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; }
+        .tool-btn { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; cursor: pointer; font-size: 12px; color: #666; margin-bottom: 6px; display: flex; align-items: center; justify-content: flex-start; gap: 8px; transition: all 0.1s; font-family: Arial, sans-serif; }
+        .tool-btn:hover { background: #fce4ec; border-color: #c62828; color: #c62828; }
+        .tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+        .tool-btn.primary:hover { background: #d35400; }
+        .tool-btn.success { background: #4caf50; color: white; border-color: #4caf50; font-weight: 600; }
+        .tool-btn.success:hover { background: #388e3c; }
+
+        .content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #fce4ec); padding: 20px; border-bottom: 2px solid #c62828; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+        .section-badge { background: #c62828; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
+        .content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+
+        .section-content { display: none; animation: fadeIn 0.4s ease; }
+        .section-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .objective-card { background: linear-gradient(to right, #fce4ec, #f8f9fa); border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .objective-card i { font-size: 24px; color: #c62828; margin-bottom: 10px; }
+        .objective-card h3 { font-size: 16px; color: #333; margin-bottom: 8px; font-family: Arial, sans-serif; }
+        .objective-card p { font-size: 14px; color: #666; line-height: 1.6; font-family: Arial, sans-serif; }
+
+        .vocab-container { background: white; border-radius: 8px; padding: 20px; }
+        .vocab-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; flex-wrap: wrap; }
+        .vocab-tab { padding: 8px 16px; background: #f5f5f5; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; color: #666; transition: all 0.2s; font-family: Arial, sans-serif; }
+        .vocab-tab:hover { background: #e0e0e0; }
+        .vocab-tab.active { background: #c62828; color: white; font-weight: 600; }
+
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 20px; }
+        .vocab-card { background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #c62828; display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+        .vocab-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(198,40,40,0.15); border-color: #c62828; border-style: solid; }
+        .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .vocab-number { width: 45px; height: 45px; background: #4caf50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(76,175,80,0.3); font-family: Arial, sans-serif; }
+        .vocab-content { flex: 1; }
+        .vocab-pinyin { font-size: 20px; color: #c62828; margin-bottom: 6px; font-weight: 500; }
+        .vocab-meaning { font-size: 20px; color: #2e7d32; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
+        .vocab-example { font-size: 16px; color: #888; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; }
+        .vocab-pos { display: inline-block; background: #fce4ec; color: #e65100; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; font-family: Arial, sans-serif; margin-top: 4px; border: 1px solid #f8bbd0; }
+        .vocab-animation { min-width: 140px; min-height: 100px; background: transparent; border: none; border-radius: 8px; display: flex; flex-direction: row; align-items: center; justify-content: center; padding: 10px; gap: 12px; }
+        .writer-container { width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; }
+        .animation-controls { display: flex; gap: 8px; align-items: center; }
+        .anim-btn { width: 28px; height: 28px; border: none; background: #fce4ec; color: #c62828; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s; }
+        .anim-btn:hover { background: #c62828; color: white; transform: scale(1.05); }
+        .audio-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #fce4ec; color: #c62828; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .audio-btn:hover { background: #c62828; color: white; transform: scale(1.05); }
+
+        .text-container { background: white; border-radius: 8px; padding: 30px; line-height: 1.8; }
+        .text-title { font-size: 22px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; padding-bottom: 15px; border-bottom: 2px solid #c62828; font-family: Arial, sans-serif; }
+        .text-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .text-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif; }
+        .text-tab.active { background: #fce4ec; border-color: #c62828; color: #c62828; }
+        .text-content { display: none; }
+        .text-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .dialogue-container { margin-bottom: 30px; }
+        .dialogue-header { background: #ed7d31; color: white; padding: 10px 15px; border-radius: 8px 8px 0 0; font-weight: bold; display: flex; align-items: center; justify-content: space-between; font-family: Arial, sans-serif; }
+        .dialogue-header-left { display: flex; align-items: center; gap: 10px; }
+        .dialogue-audio-all { background: #fff; color: #ed7d31; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: all 0.2s; }
+        .dialogue-audio-all:hover { background: #f5f5f5; transform: scale(1.05); }
+        .dialogue-content { background: #fafafa; padding: 20px; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px; }
+        .dialogue-line { margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s; position: relative; }
+        .dialogue-line:hover { background: #fce4ec; border-color: #c62828; transform: translateX(5px); }
+        .dialogue-speaker { font-weight: bold; color: #c62828; margin-bottom: 8px; font-size: 14px; font-family: Arial, sans-serif; }
+        .dialogue-chinese { font-size: 20px; color: #000 !important; margin-bottom: 6px; line-height: 1.6; text-align: justify; }
+        .dialogue-pinyin { font-size: 18px; color: #c62828; margin-bottom: 6px; text-align: justify; }
+        .dialogue-vietnamese { font-size: 18px; color: #666; font-family: Arial, sans-serif; text-align: justify; }
+
+        .prose-box { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+        .prose-chinese { font-size: 20px; color: #000 !important; line-height: 1.8; margin-bottom: 15px; text-indent: 2em; }
+        .prose-pinyin { font-size: 18px; color: #c62828; line-height: 1.8; margin-bottom: 15px; text-indent: 1em; }
+        .prose-vietnamese { font-size: 16px; color: #666; font-family: Arial, sans-serif; line-height: 1.8; }
+
+        .grammar-container { background: white; border-radius: 8px; padding: 25px; }
+        .grammar-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .grammar-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif; display: flex; align-items: center; gap: 8px; }
+        .grammar-tab:hover { background: #fce4ec; border-color: #c62828; color: #c62828; }
+        .grammar-tab.active { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+        .grammar-panel { display: none; animation: fadeIn 0.35s ease; }
+        .grammar-panel.active { display: block; }
+        .grammar-item { margin-bottom: 30px; border-bottom: 1px solid #e0e0e0; padding-bottom: 25px; }
+        .grammar-item:last-child { border-bottom: none; margin-bottom: 0; }
+        .grammar-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .grammar-number { width: 40px; height: 40px; background: #ed7d31; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; font-family: Arial, sans-serif; }
+        .grammar-title { font-size: 18px; font-weight: bold; color: #333; font-family: Arial, sans-serif; }
+        .grammar-structure { background: #fce4ec; padding: 15px; border-radius: 8px; font-size: 20px; color: #000; margin-bottom: 15px; border: 1px solid #ed7d31; }
+        .grammar-explanation { font-size: 16px; color: #666; line-height: 1.8; margin-bottom: 15px; font-family: Arial, sans-serif; }
+        .grammar-example { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e0e0e0; }
+        .example-chinese { font-size: 20px; color: #000 !important; margin-bottom: 6px; }
+        .example-pinyin { font-size: 18px; color: #c62828; margin-bottom: 6px; }
+        .example-vietnamese { font-size: 16px; color: #666; font-family: Arial, sans-serif; }
+        .grammar-practice { margin-top: 20px; padding: 20px; background: #fce4ec; border-radius: 8px; border: 1px solid #f8bbd0; }
+        .practice-title { font-size: 16px; font-weight: bold; color: #e65100; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif; }
+        .practice-question { margin-bottom: 20px; padding: 15px; background: white; border-radius: 5px; border: 1px solid #e0e0e0; }
+        .practice-sentence { font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; line-height: 1.8; margin-bottom: 15px; }
+        .practice-options { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 10px; }
+        .practice-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 18px; font-family: "Microsoft YaHei", "SimSun", serif; transition: all 0.2s; }
+        .practice-option:hover { color: #c62828; }
+        .practice-option input[type="radio"] { width: 18px; height: 18px; cursor: pointer; accent-color: #c62828; }
+
+        .exercise-container { background: white; border-radius: 8px; padding: 25px; }
+        .exercise-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; flex-wrap: wrap; }
+        .exercise-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif; display: flex; align-items: center; gap: 8px; }
+        .exercise-tab.active { background: #fce4ec; border-color: #c62828; color: #c62828; }
+        .exercise-content { display: none; }
+        .exercise-content.active { display: block; animation: fadeIn 0.3s ease; }
+        .section-header-exercise { background-color: #c62828; color: white; padding: 15px 20px; margin: 0 0 20px 0; border-radius: 5px; font-weight: bold; font-size: 22px; font-family: Arial, sans-serif; }
+        .part-header { background-color: #ed7d31; color: white; padding: 10px 15px; margin: 20px 0 15px 0; border-radius: 3px; font-weight: bold; font-family: Arial, sans-serif; }
+        .question-container { background-color: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
+        .question-text { margin-bottom: 15px; font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; line-height: 1.6; }
+        .radio-group { display: flex; flex-direction: row; gap: 15px 25px; margin-top: 10px; flex-wrap: wrap; }
+        .radio-item { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 18px; font-family: "Microsoft YaHei", "SimSun", serif; transition: all 0.2s; }
+        .radio-item:hover { color: #c62828; }
+        .radio-item input[type="radio"] { width: 18px; height: 18px; cursor: pointer; accent-color: #c62828; }
+        .fill-sentence { margin-bottom: 15px; line-height: 2; font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; }
+        .passage-box { background-color: #fce4ec; border: 1px solid #f8bbd0; padding: 20px; margin-bottom: 20px; border-radius: 5px; line-height: 1.8; }
+        .writing-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+        .arrange-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e0e0e0; }
+        .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; padding: 15px; background: #f0f0f0; border-radius: 6px; border: 1px solid #ddd; }
+        .word-source { padding: 8px 16px; background: #e8e8e8; border: 1px solid #ccc; border-radius: 4px; font-family: "Microsoft YaHei", "SimSun", serif; font-size: 18px; cursor: grab; transition: all 0.2s; user-select: none; color: #666; }
+        .word-source:hover:not(.used) { background: #d0d0d0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .word-source.used { opacity: 0.4; cursor: not-allowed; pointer-events: none; background: #e0e0e0; border-color: #bbb; }
+        .drop-zone { display: flex; flex-wrap: wrap; gap: 10px; min-height: 60px; padding: 15px; background: white; border-radius: 6px; border: 2px dashed #ccc; margin-bottom: 20px; align-items: center; transition: all 0.2s; }
+        .drop-zone.drag-over { background: #fce4ec; border-color: #c62828; }
+        .word-drop { padding: 8px 16px; background: white; border: 1px solid #999; border-radius: 4px; font-family: "Microsoft YaHei", "SimSun", serif; font-size: 18px; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s; }
+        .word-drop:hover { background: #fce4ec; border-color: #c62828; }
+        .word-drop.dragging { opacity: 0.5; }
+        .result-area { padding: 15px; background: white; border-radius: 6px; border: 1px solid #ddd; font-family: "Microsoft YaHei", "SimSun", serif; font-size: 20px; color: #333; min-height: 50px; line-height: 1.6; }
+        .result-area.empty { color: #999; font-style: italic; }
+        .char-writing-box { text-align: left; padding: 20px; background: #f8f9fa; border-radius: 8px; margin: 15px 0; }
+        .char-input { width: 60px; height: 40px; font-size: 20px; text-align: center; border: 2px solid #c62828; border-radius: 4px; font-family: "Microsoft YaHei", "SimSun", serif; margin: 10px 0; display: inline-block; vertical-align: middle; }
+        .char-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(198,40,40,0.2); }
+        .check-btn { background: #4caf50; color: white; border: none; padding: 10px 25px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 15px; display: inline-flex; align-items: center; gap: 8px; font-family: Arial, sans-serif; transition: all 0.2s; }
+        .check-btn:hover { background: #388e3c; transform: translateY(-1px); }
+        .result-message { margin-top: 15px; padding: 12px; border-radius: 6px; font-weight: 500; display: none; font-family: Arial, sans-serif; font-size: 14px; }
+        .result-message.show { display: block; }
+        .result-message.correct { background: #c8e6c9; color: #2e7d32; border: 1px solid #4caf50; }
+        .result-message.incorrect { background: #ffcdd2; color: #c62828; border: 1px solid #ef9a9a; }
+        .stroke-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .stroke-inline { display: flex; gap: 5px; }
+        .stroke-inline > div { border: 1px solid #e0e0e0; border-radius: 4px; background: #fafafa; }
+        .replay-btn { width: 32px; height: 32px; border: 1px solid #c62828; background: #fce4ec; color: #c62828; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .replay-btn:hover { background: #c62828; color: white; transform: scale(1.05); }
+        .compare-box { background: #fce4ec; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #ef9a9a; }
+        .compare-title { font-weight: bold; color: #b71c1c; margin-bottom: 10px; font-family: Arial, sans-serif; }
+        .char-sentence { font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; margin-bottom: 10px; line-height: 1.6; }
+        .char-pinyin-inline { color: #c62828; font-weight: bold; }
+        .char-label { font-family: Arial, sans-serif; font-size: 16px; margin-bottom: 8px; color: #333; }
+        .vocab-box { background-color: #fce4ec; padding: 15px; margin-bottom: 20px; border-radius: 5px; display: flex; flex-wrap: wrap; gap: 20px; }
+        .vocab-item { display: inline-flex; align-items: center; gap: 8px; font-size: 18px; font-family: "Microsoft YaHei", "SimSun", serif; }
+
+        #note-editor-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; animation: fadeIn 0.3s ease; }
+        #note-editor-container { background: white; width: 85%; height: 85%; margin: 5% auto; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; }
+        #note-editor-header { background: #c62828; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #b71c1c; }
+        #note-editor-header h3 { font-family: Arial, sans-serif; font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px; }
+        #note-editor-toolbar { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .editor-tool-btn { padding: 6px 12px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; transition: all 0.2s; }
+        .editor-tool-btn:hover { background: #fce4ec; border-color: #c62828; }
+        #rich-editor { flex: 1; padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; font-family: Arial, sans-serif; background: #fff; }
+        #rich-editor:focus { outline: none; }
+        #note-editor-footer { background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; }
+        .editor-btn { padding: 8px 20px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; font-weight: 600; transition: all 0.2s; }
+        .editor-btn-close { background: #f5f5f5; border: 1px solid #ddd; color: #666; }
+        .editor-btn-close:hover { background: #e0e0e0; }
+        .editor-btn-save { background: #c62828; border: 1px solid #c62828; color: white; }
+        .editor-btn-save:hover { background: #b71c1c; }
+
+        .warmup-box { background: #fff3e0; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .warmup-title { font-weight: bold; color: #e65100; margin-bottom: 10px; font-family: Arial, sans-serif; }
+        .warmup-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0; }
+        .warmup-img-item { text-align: center; padding: 10px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; }
+        .warmup-img-label { font-weight: bold; color: #c62828; margin-bottom: 5px; font-size: 18px; }
+        .warmup-match { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0; }
+        .warmup-match-item { padding: 10px; background: white; border-radius: 6px; border: 1px solid #e0e0e0; font-size: 18px; font-family: "Microsoft YaHei", "SimSun", serif; }
+
+        @media (max-width: 1024px) {
+            .sidebar-left { width: 60px; }
+            .sidebar-left .tools-section { display: none; }
+            .nav-item span { display: none; }
+            .nav-item { justify-content: center; padding: 15px 10px; }
+            .vocab-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; padding-top: 70px; }
+            .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; display: flex; overflow-x: auto; flex-direction: row; }
+            .nav-section { display: flex; border-bottom: none; flex: 1; }
+            .nav-item { white-space: nowrap; }
+            .tools-section { display: none; }
+            .radio-group { flex-direction: column; gap: 12px; }
+            .practice-options { flex-direction: column; gap: 12px; }
+            #note-editor-container { width: 95%; height: auto; margin: 2.5% auto; }
+            .word-bank, .drop-zone { gap: 8px; }
+            .warmup-images { grid-template-columns: repeat(2, 1fr); }
+            .warmup-match { grid-template-columns: 1fr; }
+        }
+        body.hide-examples .vocab-example { display: none !important; }
+    </style>
+<base target="_blank">
+</head>
+<body class="hide-examples">
+
+<div class="header">
+    <div class="logo">
+        <div class="logo-img">
+            <img id="logo-image" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+        </div>
+        <div class="logo-text">
+            <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+            <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+        </div>
+    </div>
+    <div class="lesson-title" style="flex: 1; text-align: center; font-size: 18px; font-weight: 600; color: white; font-family: Arial, sans-serif; padding: 0 20px;">
+        Bài 9: 阳光总在风雨后 Sau cơn mưa trờ lại sáng - HSK4
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 13px; font-family: Arial, sans-serif;">Tốc độ:</span>
+        <select id="audio-speed" onchange="setAudioSpeed(this.value)" style="padding: 5px 10px; border-radius: 4px; border: none; font-size: 13px; font-family: Arial, sans-serif; cursor: pointer; background: white; color: #c62828; font-weight: 600; outline: none;">
+            <option value="0.5">0.5x</option>
+            <option value="0.7">0.7x</option>
+            <option value="0.8" selected>0.8x</option>
+            <option value="1.0">1.0x</option>
+            <option value="1.2">1.2x</option>
+            <option value="1.5">1.5x</option>
+        </select>
+    </div>
+    <button onclick="goToHome()" title="Trang chủ" style="display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-family: Arial, sans-serif; cursor: pointer; transition: background 0.2s, border-color 0.2s; margin-left: 10px;" onmouseover="this.style.background='rgba(255,255,255,0.18)'; this.style.borderColor='rgba(255,255,255,0.85)';" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(255,255,255,0.5)';">
+        <i class="bi bi-house-door"></i><span>Trang chủ</span>
+    </button>
+</div>
+
+<div class="main-container">
+    <div class="sidebar-left">
+        <div class="nav-section">
+            <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung bài học</span></div>
+            <div class="nav-item active" onclick="showSection('objectives', this)">
+                <i class="bi bi-bullseye"></i><span>Mục tiêu</span>
+            </div>
+            <div class="nav-item" onclick="showSection('vocabulary', this)">
+                <i class="bi bi-alphabet"></i><span>Từ vựng</span>
+            </div>
+            <div class="nav-item" onclick="showSection('text', this)">
+                <i class="bi bi-book"></i><span>Bài khóa</span>
+            </div>
+            <div class="nav-item" onclick="showSection('grammar', this)">
+                <i class="bi bi-diagram-3"></i><span>Ngữ pháp</span>
+            </div>
+            <div class="nav-item" onclick="showSection('exercises', this)">
+                <i class="bi bi-pencil-square"></i><span>Bài tập</span>
+            </div>
+            <div class="nav-item" onclick="showSection('activity', this)">
+                <i class="bi bi-people"></i><span>Vận dụng</span>
+            </div>
+        </div>
+
+        <div class="tools-section">
+            <div class="tool-card">
+                <div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+                <button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+                    <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+                </button>
+                <button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+                    <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+                </button>
+                <button class="tool-btn active-toggle" id="btn-examples" onclick="toggleExamples(this)">
+                    <i class="bi bi-eye"></i><span>Ẩn/Hiện Ví dụ</span>
+                </button>
+                <button class="tool-btn primary" onclick="openNoteEditor()">
+                    <i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div class="content-header">
+            <div class="section-title">
+                <span id="current-icon"><i class="bi bi-bullseye"></i></span>
+                <span id="section-title-text">Mục tiêu bài học</span>
+                <span class="section-badge" id="section-badge">Phần 1/6</span>
+            </div>
+        </div>
+
+        <div class="content-body">
+
+            <!-- MỤC TIÊU -->
+            <div id="objectives" class="section-content active">
+                <div class="objectives-grid">
+                    <div class="objective-card">
+                        <i class="bi bi-sun"></i>
+                        <h3>Từ vựng chủ đề thành công, kiên trì & lý tưởng</h3>
+                        <p>Nắm vững 31 từ vựng: 饼干, 难道, 得, 坚持, 放弃, 主意, 网球, 国际, 轻松, 赢, 随便, 汗, 通过, 篇, 作家, 当时, 可是, 正确, 理想, 勇敢, 结果, 失败, 过程, 至少, 总结, 取, 经历, 许多, 区别, 暂时, 面对...</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-question-circle"></i>
+                        <h3>Phó từ 难道</h3>
+                        <p>Nắm vững "难道" — phó từ nhấn mạnh ngữ khí câu hỏi tu từ. Khi dùng trong câu hỏi tu từ khẳng định, cả câu mang nghĩa phủ định và ngược lại.</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-arrow-right-circle"></i>
+                        <h3>Giới từ/Động từ 通过</h3>
+                        <p>Nắm vững "通过": (1) giới từ biểu đạt đạt được mục đích nhờ ngườ nào đó hay phương tiện/cách thức nào đó; (2) động từ chỉ việc đi qua nơi nào đó; (3) đạt yêu cầu/tiêu chuẩn.</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-shuffle"></i>
+                        <h3>Liên từ 可是</h3>
+                        <p>Nắm vững "可是" — liên từ dùng ở vế sau của câu phức để chỉ sự chuyển ý. "虽然" thường được dùng ở vế câu trước để kết hợp với 可是.</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-arrow-left-right"></i>
+                        <h3>Phân biệt 通过 — 经过</h3>
+                        <p>Phân biệt 通过 và 经过: cả hai đều có thể diễn tả ý đạt được mục đích nhờ ngườ nào đó hay bằng phương tiện/cách thức nào đó. Điểm khác: 通过 là giới từ nhấn mạnh cách thức/phương tiện; 经过 là động từ nhấn mạnh quá trình diễn ra sự việc. 经过 còn có thể làm danh từ.</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-lightbulb"></i>
+                        <h3>Danh từ/liên từ 结果 & Động từ 上</h3>
+                        <p>Nắm vững 结果 làm danh từ chỉ trạng thái cuối cùng trong diễn biến của sự việc, và làm liên từ chỉ quan hệ nhân quả. Nắm vững 上 làm động từ diễn tả ý đạt đến hoặc đủ (số lượng hay mức độ nhất định).</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-heart"></i>
+                        <h3>Chủ đề bài học</h3>
+                        <p>Chủ đề: "阳光总在风雨后" — thành công đến từ sự kiên trì, nỗ lực và không ngừng cố gắng. Học cách đối mặt với khó khăn, thất bại và luôn giữ vững lý tưởng.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:30px;">
+                    <div class="section-header-exercise"><i class="bi bi-fire"></i> 热身 - Phần khởi động</div>
+
+                    <div class="warmup-box">
+                        <div class="warmup-title"><i class="bi bi-image"></i> 1. 给下面的词语选择对应的图片 - Chọn hình tương ứng với từ ngữ bên dưới</div>
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:15px 0;">
+                            <div style="text-align:center;padding:15px;background:white;border-radius:8px;border:1px solid #e0e0e0;">
+                                <div style="font-size:32px;margin-bottom:8px;">🍪</div>
+                                <div class="chinese-text" style="font-size:18px;font-weight:bold;">饼干 (A)</div>
+                                <div style="color:#666;font-size:14px;">bǐnggān - bánh quy</div>
+                            </div>
+                            <div style="text-align:center;padding:15px;background:white;border-radius:8px;border:1px solid #e0e0e0;">
+                                <div style="font-size:32px;margin-bottom:8px;">🎾</div>
+                                <div class="chinese-text" style="font-size:18px;font-weight:bold;">网球 (B)</div>
+                                <div style="color:#666;font-size:14px;">wǎngqiú - quần vợt</div>
+                            </div>
+                            <div style="text-align:center;padding:15px;background:white;border-radius:8px;border:1px solid #e0e0e0;">
+                                <div style="font-size:32px;margin-bottom:8px;">✍️</div>
+                                <div class="chinese-text" style="font-size:18px;font-weight:bold;">作家 (C)</div>
+                                <div style="color:#666;font-size:14px;">zuòjiā - nhà văn</div>
+                            </div>
+                            <div style="text-align:center;padding:15px;background:white;border-radius:8px;border:1px solid #e0e0e0;">
+                                <div style="font-size:32px;margin-bottom:8px;">🦸</div>
+                                <div class="chinese-text" style="font-size:18px;font-weight:bold;">勇敢 (D)</div>
+                                <div style="color:#666;font-size:14px;">yǒnggǎn - dũng cảm</div>
+                            </div>
+                            <div style="text-align:center;padding:15px;background:white;border-radius:8px;border:1px solid #e0e0e0;">
+                                <div style="font-size:32px;margin-bottom:8px;">😌</div>
+                                <div class="chinese-text" style="font-size:18px;font-weight:bold;">轻松 (E)</div>
+                                <div style="color:#666;font-size:14px;">qīngsōng - nhẹ nhàng</div>
+                            </div>
+                            <div style="text-align:center;padding:15px;background:white;border-radius:8px;border:1px solid #e0e0e0;">
+                                <div style="font-size:32px;margin-bottom:8px;">💡</div>
+                                <div class="chinese-text" style="font-size:18px;font-weight:bold;">爱迪生 (F)</div>
+                                <div style="color:#666;font-size:14px;">Àidíshēng - Edison</div>
+                            </div>
+                        </div>
+                        <div style="background:white;padding:15px;border-radius:6px;border:1px solid #e0e0e0;margin-top:10px;">
+                            <div style="font-weight:bold;color:#333;margin-bottom:10px;">Đáp án:</div>
+                            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:16px;">
+                                <div>① 轻松 → <strong>E</strong></div>
+                                <div>② 网球 → <strong>B</strong></div>
+                                <div>③ 作家 → <strong>C</strong></div>
+                                <div>④ 勇敢 → <strong>D</strong></div>
+                                <div>⑤ 饼干 → <strong>A</strong></div>
+                                <div>⑥ 爱迪生 → <strong>F</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="warmup-box">
+                        <div class="warmup-title"><i class="bi bi-chat-dots"></i> 2. 什么是成功? - Cho biết suy nghĩ của bạn về thành công</div>
+                        <div style="background:white;padding:15px;border-radius:6px;border:1px solid #e0e0e0;margin-top:10px;">
+                            <p style="margin-bottom:10px;color:#666;">Trong mắt bạn, thành công là gì? Hãy chia sẻ suy nghĩ của bạn.</p>
+                            <div class="chinese-text" style="font-size:18px;line-height:1.8;margin-bottom:10px;">
+                                你眼中成功的人: 商业名人 / 历史名人 / 明星 / 身边的人<br>
+                                年龄: 20岁以下 / 21-30岁 / 31-40岁 / 40岁以上<br>
+                                你认为他/她成功的原因: 做自己喜欢的事情 / 特别努力 / 运气好 / 其他<br>
+                                你认为成功是什么样的: 工作好 / 家庭幸福 / 有进步 / 其他
+                            </div>
+                            <textarea rows="4" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết suy nghĩ của bạn về thành công..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TỪ VỰNG -->
+            <div id="vocabulary" class="section-content">
+                <div class="vocab-container">
+                    <div class="vocab-tabs">
+                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (31)</button>
+                        <button class="vocab-tab" onclick="filterVocab('group1', this)">Nhóm 1: 课文1 (1-6)</button>
+                        <button class="vocab-tab" onclick="filterVocab('group2', this)">Nhóm 2: 课文2 (7-13)</button>
+                        <button class="vocab-tab" onclick="filterVocab('group3', this)">Nhóm 3: 课文3 (14-19)</button>
+                        <button class="vocab-tab" onclick="filterVocab('group4', this)">Nhóm 4: 课文4 (20-25)</button>
+                        <button class="vocab-tab" onclick="filterVocab('group5', this)">Nhóm 5: 课文5 (26-31)</button>
+                    </div>
+                    <div class="vocab-grid" id="vocab-grid"></div>
+                </div>
+            </div>
+
+            <!-- BÀI KHÓA -->
+            <div id="text" class="section-content">
+                <div class="text-container">
+                    <div class="text-tabs">
+                        <button class="text-tab active" onclick="showText('text1', this)"><i class="bi bi-chat-dots"></i> 课文1 - 王静和孙月聊减肥</button>
+                        <button class="text-tab" onclick="showText('text2', this)"><i class="bi bi-trophy"></i> 课文2 - 李进和张远聊成功经历</button>
+                        <button class="text-tab" onclick="showText('text3', this)"><i class="bi bi-book"></i> 课文3 - 小林和小李谈王红</button>
+                        <button class="text-tab" onclick="showText('text4', this)"><i class="bi bi-file-text"></i> 课文4 - 过程与结果</button>
+                        <button class="text-tab" onclick="showText('text5', this)"><i class="bi bi-lightbulb"></i> 课文5 - 阳光总在风雨后</button>
+                    </div>
+
+                    <!-- BÀI KHÓA 1: 王静和孙月 -->
+                    <div id="text1" class="text-content active">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-chat-dots"></i> 课文1 - 王静和孙月聊孙月减肥的事情 (09-1)</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-line" onclick="speak('王静：怎么又买了这么多饼干和巧克力？难道你不减肥了？')">
+                                    <div class="dialogue-speaker">王静 (Wáng Jìng)</div>
+                                    <div class="dialogue-chinese chinese-text">怎么又买了这么多饼干和巧克力？难道你不减肥了？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zěnme yòu mǎile zhème duō bǐnggān hé qiǎokèlì? Nándào nǐ bù jiǎn féi le?</div>
+                                    <div class="dialogue-vietnamese">Sao lại mua nhiều bánh quy và sôcôla thế? Chẳng lẽ bạn không giảm cân nữa à?</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('孙月：减了一个月都没瘦下来，我实在没有信心了。')">
+                                    <div class="dialogue-speaker">孙月 (Sūn Yuè)</div>
+                                    <div class="dialogue-chinese chinese-text">减了一个月都没瘦下来，我实在没有信心了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Jiǎn le yī gè yuè dōu méi shòu xialai, wǒ shízài méiyǒu xìnxīn le.</div>
+                                    <div class="dialogue-vietnamese">Giảm cân cả tháng rồi mà chẳng súng đi được chút nào, tôi thực sự không còn tin tưởng nữa.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('王静：如果你想减肥，就得少吃东西，而且要多运动。')">
+                                    <div class="dialogue-speaker">王静 (Wáng Jìng)</div>
+                                    <div class="dialogue-chinese chinese-text">如果你想减肥，就得少吃东西，而且要多运动。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Rúguǒ nǐ xiǎng jiǎn féi, jiù děi shǎo chī dōngxi, érqiě yào duō yùndòng.</div>
+                                    <div class="dialogue-vietnamese">Nếu bạn muốn giảm cân thì phải ăn ít lại, hơn nữa còn phải tập thể dục nhiều hơn.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('孙月：我就是这么做的，但这一个月下来，我只轻了一公斤。')">
+                                    <div class="dialogue-speaker">孙月 (Sūn Yuè)</div>
+                                    <div class="dialogue-chinese chinese-text">我就是这么做的，但这一个月下来，我只轻了一公斤。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Wǒ jiùshì zhème zuò de, dàn zhè yī gè yuè xialai, wǒ zhǐ qīng le yī gōngjīn.</div>
+                                    <div class="dialogue-vietnamese">Tôi cũng làm vậy mà, nhưng cả tháng nay chỉ giảm có một ký.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('王静：一个月太短了。要想减肥成功，只能坚持，才会慢慢有效果。')">
+                                    <div class="dialogue-speaker">王静 (Wáng Jìng)</div>
+                                    <div class="dialogue-chinese chinese-text">一个月太短了。要想减肥成功，只能坚持，才会慢慢有效果。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Yī gè yuè tài duǎn le. Yào xiǎng jiǎn féi chénggōng, zhǐ néng jiānchí, cái huì mànmàn yǒu xiàoguǒ.</div>
+                                    <div class="dialogue-vietnamese">Một tháng ngắn quá. Muốn giảm cân thành công thì chỉ có kiên trì, mới dần dần có hiệu quả.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('孙月：我本来已经打算放弃了，但是你刚才的话让我改变了主意。这些饼干和巧克力送给你了。')">
+                                    <div class="dialogue-speaker">孙月 (Sūn Yuè)</div>
+                                    <div class="dialogue-chinese chinese-text">我本来已经打算放弃了，但是你刚才的话让我改变了主意。这些饼干和巧克力送给你了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Wǒ běnlái yǐjīng dǎsuàn fàngqì le, dànshì nǐ gāngcái de huà ràng wǒ gǎibiànle zhǔyi. Zhèxiē bǐnggān hé qiǎokèlì sònggěi nǐ le.</div>
+                                    <div class="dialogue-vietnamese">Tôi vốn đã định từ bỏ rồi, nhưng lờ nói lúc nãy của bạn đã khiến tôi thay đổi ý định. Mấy cái bánh quy và sôcôla này tặng bạn nhé.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BÀI KHÓA 2: 李进和张远 -->
+                    <div id="text2" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-trophy"></i> 课文2 - 李进和张远聊张远的成功经历 (09-2)</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-line" onclick="speak('李进：你网球打得真好，还得过那么多国际大奖！每次看你比赛，感觉你轻轻松松就赢了。')">
+                                    <div class="dialogue-speaker">李进 (Lǐ Jìn)</div>
+                                    <div class="dialogue-chinese chinese-text">你网球打得真好，还得过那么多国际大奖！每次看你比赛，感觉你轻轻松松就赢了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nǐ wǎngqiú dǎ de zhēn hǎo, hái déguo nàme duō guójì dà jiǎng! Měi cì kàn nǐ bǐsài, gǎnjué nǐ qīngqīngsōngsōng jiù yíng le.</div>
+                                    <div class="dialogue-vietnamese">Bạn đánh quần vợt giỏi thật, còn đạt được nhiều giải thưởng quốc tế nữa! Mỗi lần xem bạn thi đấu, cảm giác bạn cứ nhẹ nhàng là thắng.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('张远：哪里啊！那是你没看到我辛苦练习的一面，没有人随随便便就能成功的。')">
+                                    <div class="dialogue-speaker">张远 (Zhāng Yuǎn)</div>
+                                    <div class="dialogue-chinese chinese-text">哪里啊！那是你没看到我辛苦练习的一面，没有人随随便便就能成功的。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nǎlǐ a! Nà shì nǐ méi kàndào wǒ xīnkǔ liànxí de yī miàn, méiyǒu rén suísuíbiànbiàn jiù néng chénggōng de.</div>
+                                    <div class="dialogue-vietnamese">Đâu có! Đó là vì bạn chưa thấy mặt tôi khổ luyện thôi, không ai có thể tùy tiện mà thành công được.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('李进：我从小也对网球感兴趣，但是到现在还是打得不怎么样。')">
+                                    <div class="dialogue-speaker">李进 (Lǐ Jìn)</div>
+                                    <div class="dialogue-chinese chinese-text">我从小也对网球感兴趣，但是到现在还是打得不怎么样。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Wǒ cóngxiǎo yě duì wǎngqiú gǎn xìngqù, dànshì dào xiànzài háishi dǎ de bù zěnmeyàng.</div>
+                                    <div class="dialogue-vietnamese">Tôi từ nhỏ cũng thích quần vợt, nhưng đến giờ vẫn đánh chẳng ra làm sao.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('张远：你知道吗？不管春夏秋冬，我练球从来没有休息过一天。')">
+                                    <div class="dialogue-speaker">张远 (Zhāng Yuǎn)</div>
+                                    <div class="dialogue-chinese chinese-text">你知道吗？不管春夏秋冬，我练球从来没有休息过一天。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nǐ zhīdào ma? Bùguǎn chūn xià qiū dōng, wǒ liàn qiú cónglái méiyǒu xiūxi guo yī tiān.</div>
+                                    <div class="dialogue-vietnamese">Bạn có biết không? Bất kể xuân hạ thu đông, tôi luyện tập chưa bao giờ nghỉ một ngày.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('李进：真是不容易啊！看来我只看到了你成功时获得的鲜花，却没注意到你成功前流下的汗水。')">
+                                    <div class="dialogue-speaker">李进 (Lǐ Jìn)</div>
+                                    <div class="dialogue-chinese chinese-text">真是不容易啊！看来我只看到了你成功时获得的鲜花，却没注意到你成功前流下的汗水。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhēn shi bù róngyì a! Kànlái wǒ zhǐ kàndàole nǐ chénggōng shí huòdé de xiānhuā, què méi zhùyì dào nǐ chénggōng qián liúxià de hànshuǐ.</div>
+                                    <div class="dialogue-vietnamese">Thật không dễ dàng gì! Xem ra tôi chỉ thấy bóng hoa khi bạn thành công, mà không để ý đến mồ hôi bạn đổ trước khi thành công.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('张远：任何成功都要通过努力才能得到。只要你坚持练习，我相信你也会越打越好的。')">
+                                    <div class="dialogue-speaker">张远 (Zhāng Yuǎn)</div>
+                                    <div class="dialogue-chinese chinese-text">任何成功都要通过努力才能得到。只要你坚持练习，我相信你也会越打越好的。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Rènhé chénggōng dōu yào tōngguò nǔlì cái néng dédào. Zhǐyào nǐ jiānchí liànxí, wǒ xiāngxìn nǐ yě huì yuè dǎ yuè hǎo de.</div>
+                                    <div class="dialogue-vietnamese">Bất kỳ thành công nào cũng phải thông qua nỗ lực mới đạt được. Chỉ cần bạn kiên trì luyện tập, tôi tin bạn cũng sẽ càng đánh càng giỏi.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BÀI KHÓA 3: 小林和小李谈王红 -->
+                    <div id="text3" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-book"></i> 课文3 - 小林和小李谈王红的成功经历 (09-3)</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-line" onclick="speak('小林：你还记得王红吗？我在报纸上看到一篇关于她的新闻，她现在已经是一个有名的作家了。')">
+                                    <div class="dialogue-speaker">小林 (Xiǎo Lín)</div>
+                                    <div class="dialogue-chinese chinese-text">你还记得王红吗？我在报纸上看到一篇关于她的新闻，她现在已经是一个有名的作家了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nǐ hái jìde Wáng Hóng ma? Wǒ zài bàozhǐ shang kàndào yī piān guānyú tā de xīnwén, tā xiànzài yǐjīng shì yī gè yǒumíng de zuòjiā le.</div>
+                                    <div class="dialogue-vietnamese">Bạn còn nhớ Vương Hồng không? Tôi thấy trên báo có một bài viết về cô ấy, giờ cô ấy đã là một nhà văn có tiếng rồi.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('小李：听说她毕业后放弃了律师的工作，开始专门写小说，没想到她竟然成功了。')">
+                                    <div class="dialogue-speaker">小李 (Xiǎo Lǐ)</div>
+                                    <div class="dialogue-chinese chinese-text">听说她毕业后放弃了律师的工作，开始专门写小说，没想到她竟然成功了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Tīngshuō tā bì yè hòu fàngqìle lǜshī de gōngzuò, kāishǐ zhuānmén xiě xiǎoshuō, méi xiǎngdào tā jìngrán chénggōng le.</div>
+                                    <div class="dialogue-vietnamese">Nghe nói sau khi tốt nghiệp cô ấy đã từ bỏ công việc luật sư, bắt đầu chuyên tâm viết tiểu thuyết, không ngờ cô ấy lại thành công.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('小林：当时她的父母和亲戚都不支持她，可是她坚持自己的选择，现在终于向所有人证明了她的选择是正确的。')">
+                                    <div class="dialogue-speaker">小林 (Xiǎo Lín)</div>
+                                    <div class="dialogue-chinese chinese-text">当时她的父母和亲戚都不支持她，可是她坚持自己的选择，现在终于向所有人证明了她的选择是正确的。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Dāngshí tā de fùmǔ hé qīnqi dōu bù zhīchí tā, kěshì tā jiānchí zìjǐ de xuǎnzé, xiànzài zhōngyú xiàng suǒyǒu rén zhèngmíngle tā de xuǎnzé shì zhèngquè de.</div>
+                                    <div class="dialogue-vietnamese">Lúc đó bố mẹ và họ hàng của cô ấy đều không ủng hộ, nhưng cô ấy kiên trì lựa chọn của mình, giờ cuối cùng đã chứng minh với mọi ngườ rằng lựa chọn của cô ấy là đúng đắn.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('小李：看来为了自己的理想，放弃一些东西也是值得的。')">
+                                    <div class="dialogue-speaker">小李 (Xiǎo Lǐ)</div>
+                                    <div class="dialogue-chinese chinese-text">看来为了自己的理想，放弃一些东西也是值得的。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Kànlái wèile zìjǐ de lǐxiǎng, fàngqì yīxiē dōngxi yě shì zhíde de.</div>
+                                    <div class="dialogue-vietnamese">Xem ra vì lý tưởng của bản thân, từ bỏ một số thứ cũng là đáng giá.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('小林：一个人只有两只手，不可能得到所有想要的东西，所以有时候放弃是一种聪明的选择。')">
+                                    <div class="dialogue-speaker">小林 (Xiǎo Lín)</div>
+                                    <div class="dialogue-chinese chinese-text">一个人只有两只手，不可能得到所有想要的东西，所以有时候放弃是一种聪明的选择。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Yī gè rén zhǐyǒu liǎng zhī shǒu, bù kěnéng dédào suǒyǒu xiǎng yào de dōngxi, suǒyǐ yǒu shíhou fàngqì shì yī zhǒng cōngming de xuǎnzé.</div>
+                                    <div class="dialogue-vietnamese">Một ngườ chỉ có hai bàn tay, không thể có được tất cả những gì muốn, nên đôi khi từ bỏ là một lựa chọn thông minh.</div>
+                                </div>
+                                <div class="dialogue-line" onclick="speak('小李：是啊，只有学会放弃，才能把自己的能力用到最该做的事情上，最后获得成功。')">
+                                    <div class="dialogue-speaker">小李 (Xiǎo Lǐ)</div>
+                                    <div class="dialogue-chinese chinese-text">是啊，只有学会放弃，才能把自己的能力用到最该做的事情上，最后获得成功。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Shì a, zhǐyǒu xuéhuì fàngqì, cái néng bǎ zìjǐ de nénglì yòngdào zuì gāi zuò de shìqing shang, zuìhòu huòdé chénggōng.</div>
+                                    <div class="dialogue-vietnamese">Đúng vậy, chỉ khi học được cách từ bỏ, mới có thể dùng năng lực của mình vào việc nên làm nhất, cuối cùng đạt được thành công.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BÀI KHÓA 4: Văn xuôi - 过程与结果 -->
+                    <div id="text4" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-file-text"></i> 课文4 - 过程与结果 (09-4)</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text4')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="prose-box" onclick="speak('如果你想做什么事情，那就勇敢地去做，不要担心结果，不要考虑会不会失败。要是太看重结果，失败就会给人们带来很多烦恼。我们应该把注意力放在做事情的过程上，这样你会在做的过程中发现解决问题的快乐，这是其他任何东西都给不了的。即使最后失败了也没有关系，因为至少你已经努力过，而且我们还可以从失败中总结出有用的经验，有了这些积累，成功自然离我们越来越近。')">
+                                    <div class="prose-chinese chinese-text">如果你想做什么事情，那就勇敢地去做，不要担心结果，不要考虑会不会失败。要是太看重结果，失败就会给人们带来很多烦恼。我们应该把注意力放在做事情的过程上，这样你会在做的过程中发现解决问题的快乐，这是其他任何东西都给不了的。即使最后失败了也没有关系，因为至少你已经努力过，而且我们还可以从失败中总结出有用的经验，有了这些积累，成功自然离我们越来越近。</div>
+                                    <div class="prose-pinyin pinyin-text">Rúguǒ nǐ xiǎng zuò shénme shìqing, nà jiù yǒnggǎn de qù zuò, búyào dānxīn jiéguǒ, búyào kǎolǜ huì bu huì shībài. Yàoshi tài kànzhòng jiéguǒ, shībài jiù huì gěi rénmen dàilái hěn duō fánnǎo. Wǒmen yīnggāi bǎ zhùyìlì fàngzài zuò shìqing de guòchéng shang, zhèyàng nǐ huì zài zuò de guòchéng zhōng fāxiàn jiějué wèntí de kuàilè, zhè shì qítā rènhé dōngxi dōu gěi bu liǎo de. Jíshǐ zuìhòu shībài le yě méiyǒu guānxi, yīnwèi zhìshǎo nǐ yǐjīng nǔlì guo, érqiě wǒmen hái kěyǐ cóng shībài zhōng zǒngjié chū yǒuyòng de jīngyàn, yǒule zhèxiē jīlěi, chénggōng zìrán lí wǒmen yuè lái yuè jìn.</div>
+                                    <div class="prose-vietnamese">Nếu bạn muốn làm gì, thì hãy dũng cảm làm đi, đừng lo lắng về kết quả, đừng nghĩ đến thất bại. Nếu quá coi trọng kết quả, thất bại sẽ mang lại nhiều phiền muộn. Chúng ta nên tập trung vào quá trình làm việc, như vậy bạn sẽ khám phá ra niềm vui giải quyết vấn đề trong quá trình làm, điều mà không thứ gì khác có thể mang lại. Dù cuối cùng thất bại cũng không sao, vì ít nhất bạn đã nỗ lực, và chúng ta còn có thể tổng kết kinh nghiệm hữu ích từ thất bại, có được những tích lũy này, thành công tự nhiên ngày càng đến gần.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BÀI KHÓA 5: Văn xuôi - 阳光总在风雨后 -->
+                    <div id="text5" class="text-content">
+                        <div class="dialogue-container">
+                            <div class="dialogue-header">
+                                <div class="dialogue-header-left"><i class="bi bi-lightbulb"></i> 课文5 - 阳光总在风雨后 (09-5)</div>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text5')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                            </div>
+                            <div class="dialogue-content">
+                                <div class="prose-box" onclick="speak('每一个人都希望成功，可是很多时候，在成功之前会遇到很多困难。有些人遇到困难就放弃，而有些人遇到困难却想办法解决它。对困难的态度不同，结果也是不一样的。爱迪生就是在找了上千种材料后才找到了能点亮电灯的材料。取得成功的人往往都经历过许多失败，他们和普通人的区别就是他们都坚持了下来。所以就算只有百分之一的希望，我们也要做出百分之百的努力。困难只是暂时的，阳光总在风雨后，只有我们勇敢地面对困难，才能有希望取得成功。')">
+                                    <div class="prose-chinese chinese-text">每一个人都希望成功，可是很多时候，在成功之前会遇到很多困难。有些人遇到困难就放弃，而有些人遇到困难却想办法解决它。对困难的态度不同，结果也是不一样的。爱迪生就是在找了上千种材料后才找到了能点亮电灯的材料。取得成功的人往往都经历过许多失败，他们和普通人的区别就是他们都坚持了下来。所以就算只有百分之一的希望，我们也要做出百分之百的努力。困难只是暂时的，"阳光总在风雨后"，只有我们勇敢地面对困难，才能有希望取得成功。</div>
+                                    <div class="prose-pinyin pinyin-text">Měi yī gè rén dōu xīwàng chénggōng, kěshì hěn duō shíhou, zài chénggōng zhīqián huì yùdào hěn duō kùnnan. Yǒuxiē rén yùdào kùnnan jiù fàngqì, ér yǒuxiē rén yùdào kùnnan què xiǎng bànfǎ jiějué tā. Duì kùnnan de tàidu bù tóng, jiéguǒ yě shì bù yīyàng de. Àidíshēng jiùshì zài zhǎole shàng qiān zhǒng cáiliào hòu cái zhǎodàole néng diǎn liàng diàndēng de cáiliào. Qǔdé chénggōng de rén wǎngwǎng dōu jīnglìguo xǔduō shībài, tāmen hé pǔtōng rén de qūbié jiùshì tāmen dōu jiānchí le xialai. Suǒyǐ jiùsuàn zhǐyǒu bǎi fēn zhī yī de xīwàng, wǒmen yě yào zuòchū bǎi fēn zhī bǎi de nǔlì. Kùnnan zhǐ shì zànshí de, "Yángguāng zǒng zài fēngyǔ hòu", zhǐyǒu wǒmen yǒnggǎn de miànduì kùnnan, cái néng yǒu xīwàng qǔdé chénggōng.</div>
+                                    <div class="prose-vietnamese">Mỗi ngườ đều mong muốn thành công, nhưng rất nhiều lúc, trước khi thành công sẽ gặp nhiều khó khăn. Có ngườ gặp khó khăn là từ bỏ, nhưng cũng có ngườ gặp khó khăn lại tìm cách giải quyết. Thái độ đối với khó khăn khác nhau, kết quả cũng khác nhau. Edison đã tìm hàng ngàn loại vật liệu mới tìm được thứ có thể thắp sáng bóng đèn. Ngườ đạt được thành công thường đã trải qua nhiều thất bại, điểm khác biệt của họ với ngườ thường là họ đều kiên trì. Vì vậy dù chỉ có một phần trăm hy vọng, chúng ta cũng phải nỗ lực một trăm phần trăm. Khó khăn chỉ là tạm thờ, "Sau cơn mưa trờ lại sáng", chỉ khi chúng ta dũng cảm đối mặt với khó khăn, mới có hy vọng đạt được thành công.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CÂU HỎI THEO NỘI DUNG BÀI HỌC -->
+                    <div class="part-header" style="margin-top:24px;"><i class="bi bi-question-circle"></i> 根据课文内容回答问题 - Trả lởi câu hỏi theo nội dung bài học</div>
+
+                    <div class="part-header">课文1 (Bài khóa 1)</div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>1.</strong> 孙月买了些什么？她为什么不想减肥了？</div>
+                        <textarea id="answer1" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer1','饼干','ans-result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result1"></div>
+                    </div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>2.</strong> 怎样减肥才能有效果？</div>
+                        <textarea id="answer2" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer2','坚持','ans-result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result2"></div>
+                    </div>
+
+                    <div class="part-header">课文2 (Bài khóa 2)</div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>3.</strong> 张远的网球为什么打得那么好？</div>
+                        <textarea id="answer3" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer3','练习','ans-result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result3"></div>
+                    </div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>4.</strong> 为什么说没有人能随随便便成功？</div>
+                        <textarea id="answer4" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer4','努力','ans-result4')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result4"></div>
+                    </div>
+
+                    <div class="part-header">课文3 (Bài khóa 3)</div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>5.</strong> 王红是干什么的？她是怎样获得成功的？</div>
+                        <textarea id="answer5" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer5','作家','ans-result5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result5"></div>
+                    </div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>6.</strong> 为什么说有时候放弃是一种聪明的选择？</div>
+                        <textarea id="answer6" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer6','能力','ans-result6')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result6"></div>
+                    </div>
+
+                    <div class="part-header">课文4-5 (Bài khóa 4-5)</div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>7.</strong> 过程和结果，哪个更重要？要是太看重结果会怎么样？</div>
+                        <textarea id="answer7" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer7','过程','ans-result7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result7"></div>
+                    </div>
+                    <div class="question-container">
+                        <div class="question-text"><strong>8.</strong> 爱迪生是怎样成功发明电灯的？"阳光总在风雨后"是什么意思？</div>
+                        <textarea id="answer8" rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                        <button class="check-btn" onclick="checkFreeAnswer('answer8','坚持','ans-result8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                        <div class="result-message" id="ans-result8"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- NGỮ PHÁP -->
+            <div id="grammar" class="section-content">
+                <div class="grammar-container">
+                    <div class="grammar-tabs">
+                        <button class="grammar-tab active" onclick="showGrammar(0, this)"><i class="bi bi-question-circle"></i> 难道</button>
+                        <button class="grammar-tab" onclick="showGrammar(1, this)"><i class="bi bi-arrow-right-circle"></i> 通过</button>
+                        <button class="grammar-tab" onclick="showGrammar(2, this)"><i class="bi bi-shuffle"></i> 可是</button>
+                        <button class="grammar-tab" onclick="showGrammar(3, this)"><i class="bi bi-lightbulb"></i> 结果</button>
+                        <button class="grammar-tab" onclick="showGrammar(4, this)"><i class="bi bi-graph-up"></i> 上</button>
+                        <button class="grammar-tab" onclick="showGrammar(5, this)"><i class="bi bi-arrow-left-right"></i> 通过 vs 经过</button>
+                    </div>
+
+                    <!-- NGỮ PHÁP 1: 难道 -->
+                    <div class="grammar-panel active" id="grammar-panel-0">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">1</div>
+                                <div class="grammar-title">难道 — Phó từ</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">难道 + 句子（nhấn mạnh ngữ khí câu hỏi tu từ）</div>
+                            <div class="grammar-explanation">
+                                <strong>Giải thích:</strong> "难道" là <em>phó từ</em>, nhấn mạnh ngữ khí của câu hỏi tu từ. Khi 难道 được dùng trong câu hỏi tu từ <em>khẳng định</em>, cả câu mang <em>nghĩa phủ định</em> và ngược lại, chẳng hạn câu 难道汉语真的这么难吗? có hàm ý ngườ nói nhấn mạnh tiếng Trung Quốc <em>không khó</em>.
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（1）怎么又买了这么多饼干和巧克力？难道你不减肥了？</div>
+                                <div class="example-pinyin pinyin-text">（1）Zěnme yòu mǎile zhème duō bǐnggān hé qiǎokèlì? Nándào nǐ bù jiǎn féi le?</div>
+                                <div class="example-vietnamese">Sao lại mua nhiều bánh quy và sôcôla thế? Chẳng lẽ bạn không giảm cân nữa à?</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（2）A: 喂，都十点了，你怎么还不来？<br>B: 难道你没看短信？我今天有事去不了了。</div>
+                                <div class="example-pinyin pinyin-text">（2）A: Wèi, dōu shí diǎn le, nǐ zěnme hái bù lái?<br>B: Nándào nǐ méi kàn duǎnxìn? Wǒ jīntiān yǒu shì qù bu liǎo le.</div>
+                                <div class="example-vietnamese">A: Ê, đã mườ giờ rồi, sao bạn còn chưa đến?<br>B: Chẳng lẽ bạn không xem tin nhắn à? Hôm nay tôi có việc không đi được rồi.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（3）A: 你不是两点就出发了吗？难道路上花了两个多小时？<br>B: 我那辆车出了点儿问题，刚才把车送去修了。</div>
+                                <div class="example-pinyin pinyin-text">（3）A: Nǐ bùshì liǎng diǎn jiù chūfā le ma? Nándào lùshang huāle liǎng gè duō xiǎoshí?<br>B: Wǒ nà liàng chē chūle diǎnr wèntí, gāngcái bǎ chē sòng qù xiū le.</div>
+                                <div class="example-vietnamese">A: Bạn không phải hai giờ đã xuất phát rồi sao? Chẳng lẽ trên đường mất hơn hai tiếng?<br>B: Xe tôi có chút trục trặc, vừa rồi đem xe đi sửa rồi.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> 练一练 — Hoàn thành câu/đoạn đối thoại dùng 难道:</div>
+                                <div class="practice-question"><div class="practice-sentence">（1）你别再喝这么多酒了！<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>？（难道）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">难道你不知道喝酒对身体不好吗</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（2）A: 你又咳嗽了？<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>？（难道）<br>B: 感冒早好了，我咳嗽是因为空气太干。</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">难道你还没好吗 / 难道你的感冒还没好</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（3）A: 喂，都十点了，你怎么还不来教室？<br>B: <span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>？（难道）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">难道你不知道今天放假吗 / 难道你没收到通知吗</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NGỮ PHÁP 2: 通过 -->
+                    <div class="grammar-panel" id="grammar-panel-1">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">2</div>
+                                <div class="grammar-title">通过 — Giới từ / Động từ</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">通过 + ngườ/phương tiện → đạt mục đích; 通过 + địa điểm → đi qua; 通过 + yêu cầu → đạt tiêu chuẩn</div>
+                            <div class="grammar-explanation">
+                                <strong>Giải thích:</strong> "通过" có thể được dùng làm <em>giới từ</em> để diễn tả ý đạt được mục đích nhất định nhờ ngườ nào đó hay bằng phương tiện/cách thức nào đó. "通过" cũng có thể làm <em>động từ</em> để chỉ việc đi qua nơi nào đó từ đầu này/phía này đến đầu kia/phía kia, hoặc mang nghĩa đạt yêu cầu/tiêu chuẩn.
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（1）任何成功都要通过努力才能得到。</div>
+                                <div class="example-pinyin pinyin-text">（1）Rènhé chénggōng dōu yào tōngguò nǔlì cái néng dédào.</div>
+                                <div class="example-vietnamese">Bất kỳ thành công nào cũng phải thông qua nỗ lực mới đạt được.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（2）这个节目我一直在看，它介绍了很多生活中的小知识。很多以前我没有注意到的问题，现在通过它了解了不少。</div>
+                                <div class="example-pinyin pinyin-text">（2）Zhège jiémù wǒ yīzhí zài kàn, tā jièshào le hěn duō shēnghuó zhōng de xiǎo zhīshi. Hěn duō yǐqián wǒ méiyǒu zhùyì dào de wèntí, xiànzài tōngguò tā liǎojiě le bùshǎo.</div>
+                                <div class="example-vietnamese">Tôi vẫn xem chương trình này, nó giới thiệu nhiều kiến thức nhỏ trong cuộc sống. Nhiều vấn đề trước đây tôi không để ý, giờ nhờ nó mà hiểu biết được nhiều.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（3）这条街只能步行通过。</div>
+                                <div class="example-pinyin pinyin-text">（3）Zhè tiáo jiē zhǐ néng bùxíng tōngguò.</div>
+                                <div class="example-vietnamese">Con phố này chỉ có thể đi bộ qua.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（4）我通过那家公司的面试了。经理对我印象不错，他要我明天就正式去上班。</div>
+                                <div class="example-pinyin pinyin-text">（4）Wǒ tōngguò nà jiā gōngsī de miànshì le. Jīnglǐ duì wǐ yìnxiàng bùcuò, tā yào wǒ míngtiān jiù zhèngshì qù shàngbān.</div>
+                                <div class="example-vietnamese">Tôi đã qua vòng phỏng vấn của công ty đó. Giám đốc ấn tượng tốt với tôi, ông ấy bảo tôi ngày mai đi làm chính thức.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> 练一练 — Hoàn thành câu/đoạn đối thoại dùng 通过:</div>
+                                <div class="practice-question"><div class="practice-sentence">（1）《人与自然》这个节目一直很受欢迎，<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（通过）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">通过这个节目，我们了解了很多自然知识</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（2）A: 这次HSK考试你考得怎么样？<br>B: <span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（通过）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">我通过考试了 / 我已经通过了</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（3）A: 您为什么会写这本书呢？<br>B: <span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（通过）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">我想通过这本书分享我的经验</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NGỮ PHÁP 3: 可是 -->
+                    <div class="grammar-panel" id="grammar-panel-2">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">3</div>
+                                <div class="grammar-title">可是 — Liên từ</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">虽然……，可是……（chỉ sự chuyển ý trong câu phức）</div>
+                            <div class="grammar-explanation">
+                                <strong>Giải thích:</strong> "可是" là <em>liên từ</em>, được dùng ở vế sau của câu phức để chỉ sự <em>chuyển ý</em>. "虽然" thường được dùng ở vế câu trước để kết hợp với 可是.
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（1）A: 你怎么又想换工作了，这儿的收入不是挺高的吗？<br>B: 虽然收入高，可是经常要加班，很少有时间和家人在一起。</div>
+                                <div class="example-pinyin pinyin-text">（1）A: Nǐ zěnme yòu xiǎng huàn gōngzuò le, zhèr de shōurù bùshì tǐng gāo de ma?<br>B: Suīrán shōurù gāo, kěshì jīngcháng yào jiābān, hěn shǎo yǒu shíjiān hé jiārén zài yīqǐ.</div>
+                                <div class="example-vietnamese">A: Sao bạn lại muốn đổi việc, thu nhập ở đây không phải khá cao sao?<br>B: Tuy thu nhập cao, nhưng thường phải tăng ca, hiếm khi có thờ gian ở bên gia đình.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（2）小时候，大家都说我像我妈，尤其是性格。可是长大后，他们说我更像爸爸。</div>
+                                <div class="example-pinyin pinyin-text">（2）Xiǎo shíhou, dàjiā dōu shuō wǒ xiàng wǒ mā, yóuqí shì xìnggé. Kěshì zhǎng dà hòu, tāmen shuō wǒ gèng xiàng bàba.</div>
+                                <div class="example-vietnamese">Hồi nhỏ, mọi ngườ đều nói tôi giống mẹ, đặc biệt là tính cách. Nhưng lớn lên rồi, họ nói tôi giống bố hơn.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（3）当时她的父母和亲戚都不支持她，可是她坚持自己的选择，现在终于向所有人证明了她的选择是正确的。</div>
+                                <div class="example-pinyin pinyin-text">（3）Dāngshí tā de fùmǔ hé qīnqi dōu bù zhīchí tā, kěshì tā jiānchí zìjǐ de xuǎnzé, xiànzài zhōngyú xiàng suǒyǒu rén zhèngmíngle tā de xuǎnzé shì zhèngquè de.</div>
+                                <div class="example-vietnamese">Lúc đó bố mẹ và họ hàng cô ấy đều không ủng hộ, nhưng cô ấy kiên trì lựa chọn của mình, giờ cuối cùng đã chứng minh với mọi ngườ rằng lựa chọn của cô ấy là đúng đắn.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> 练一练 — Hoàn thành câu/đoạn đối thoại dùng 可是:</div>
+                                <div class="practice-question"><div class="practice-sentence">（1）他虽然写得比较慢，<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（可是）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">可是写得非常认真 / 可是每个字都很漂亮</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（2）A: 你为什么不喜欢小王？他不是挺诚实的吗？<br>B: <span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（可是）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">他虽然诚实，可是太懒了 / 他虽然诚实，可是脾气不好</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（3）A: 我约了几个同学星期六上午去打网球，你也去吧。<br>B: <span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（可是）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">我很想去，可是星期六上午我得上班 / 我也想打网球，可是我没有球拍</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NGỮ PHÁP 4: 结果 -->
+                    <div class="grammar-panel" id="grammar-panel-3">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">4</div>
+                                <div class="grammar-title">结果 — Danh từ / Liên từ</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">结果 + là danh từ chỉ trạng thái cuối cùng; 结果 + là liên từ chỉ quan hệ nhân quả</div>
+                            <div class="grammar-explanation">
+                                <strong>Giải thích:</strong> "结果" có thể được dùng làm <em>danh từ</em> để chỉ trạng thái cuối cùng trong diễn biến của sự việc. "结果" cũng có thể được sử dụng làm <em>liên từ</em> chỉ quan hệ nhân quả, ngườ ta dùng 结果 ở vế câu sau để diễn tả kết quả của tình huống được đề cập ở vế câu trước.
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（1）小张，你这份计划书写得不错，就按照这个计划去做市场调查吧。下个月把调查结果交上来。</div>
+                                <div class="example-pinyin pinyin-text">（1）Xiǎo Zhāng, nǐ zhè fèn jìhuàshū xiě de búcuò, jiù ànzhào zhège jìhuà qù zuò shìchǎng diàochá ba. Xià gè yuè bǎ diàochá jiéguǒ jiāo shànglai.</div>
+                                <div class="example-vietnamese">Tiểu Trương, bản kế hoạch này của cậu viết không tệ, cứ theo kế hoạch này đi khảo sát thị trường nhé. Tháng sau nộp kết quả khảo sát lên.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（2）如果你想做什么事情，那就勇敢地去做，不要担心结果，不要考虑会不会失败。</div>
+                                <div class="example-pinyin pinyin-text">（2）Rúguǒ nǐ xiǎng zuò shénme shìqing, nà jiù yǒnggǎn de qù zuò, búyào dānxīn jiéguǒ, búyào kǎolǜ huì bu huì shībài.</div>
+                                <div class="example-vietnamese">Nếu bạn muốn làm gì, thì hãy dũng cảm làm đi, đừng lo lắng về kết quả, đừng nghĩ đến thất bại.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（3）我妻子想减肥，所以她每天早上都去骑马。结果马竟然在一个月之内瘦了二十斤。</div>
+                                <div class="example-pinyin pinyin-text">（3）Wǒ qīzi xiǎng jiǎn féi, suǒyǐ tā měitiān zǎoshang dōu qù qí mǎ. Jiéguǒ mǎ jìngrán zài yī gè yuè zhī nèi shòu le èrshí jīn.</div>
+                                <div class="example-vietnamese">Vợ tôi muốn giảm cân, nên cô ấy mỗi sáng đều đi cưỡi ngựa. Kết quả là con ngựa lại giảm được hai mươi cân trong vòng một tháng.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（4）有些人爱说"差不多"。例如，每天的工作都是完成得差不多，结果，积累下来，就变成差很多了。</div>
+                                <div class="example-pinyin pinyin-text">（4）Yǒuxiē rén ài shuō "chàbuduō". Lìrú, měitiān de gōngzuò dōu shì wánchéng de chàbuduō, jiéguǒ, jīlěi xialai, jiù biàn chéng chà hěn duō le.</div>
+                                <div class="example-vietnamese">Có ngườ thích nói "khoảng chừng". Ví dụ, mỗi ngày công việc đều hoàn thành khoảng chừng, kết quả, tích lũy lại thì thành kém rất nhiều.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> 练一练 — Hoàn thành câu dùng 结果:</div>
+                                <div class="practice-question"><div class="practice-sentence">（1）没有人能随随便便成功，成功都是<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（结果）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">努力的结果 / 坚持的结果</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（2）昨天晚上我一直工作到很晚才睡，<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（结果）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">结果今天起晚了 / 结果今天没精神</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（3）A: 昨天的面试<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>？（结果）<br>B: 明天或者后天吧，他们会打电话通知。</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">结果什么时候出来 / 结果出来了吗</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NGỮ PHÁP 5: 上 -->
+                    <div class="grammar-panel" id="grammar-panel-4">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">5</div>
+                                <div class="grammar-title">上 — Động từ (đạt đến/đủ số lượng)</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">上 + số lượng（đạt đến, đủ một số lượng hay mức độ nhất định）</div>
+                            <div class="grammar-explanation">
+                                <strong>Giải thích:</strong> "上" làm <em>động từ</em>, diễn tả ý đạt đến hoặc đủ (số lượng hay mức độ nhất định), theo sau nó thường là tân ngữ chỉ số lượng.
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（1）这个城市的地铁已经有上百年的历史了。</div>
+                                <div class="example-pinyin pinyin-text">（1）Zhège chéngshì de dìtiě yǐjīng yǒu shàng bǎi nián de lìshǐ le.</div>
+                                <div class="example-vietnamese">Tàu điện ngầm của thành phố này đã có lịch sử trăm năm rồi.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（2）每年有成千上万的高中毕业生参加艺术考试。</div>
+                                <div class="example-pinyin pinyin-text">（2）Měi nián yǒu chéng qiān shàng wàn de gāozhōng bìyè shēng cānjiā yìshù kǎoshì.</div>
+                                <div class="example-vietnamese">Mỗi năm có hàng ngàn học sinh tốt nghiệp trung học tham gia kỳ thi nghệ thuật.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">（3）爱迪生就是在找了上千种材料后才找到了能点亮电灯的材料。</div>
+                                <div class="example-pinyin pinyin-text">（3）Àidíshēng jiùshì zài zhǎole shàng qiān zhǒng cáiliào hòu cái zhǎodàole néng diǎn liàng diàndēng de cáiliào.</div>
+                                <div class="example-vietnamese">Edison đã tìm hàng ngàn loại vật liệu mới tìm được thứ có thể thắp sáng bóng đèn.</div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> 练一练 — Hoàn thành câu dùng 上:</div>
+                                <div class="practice-question"><div class="practice-sentence">（1）这件事发生在1914年，<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（上）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">已经有一百多年的历史了</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（2）这家书店虽然不大，但是书架上<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（上）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">摆了上千本书</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（3）这个电影很有名，<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:200px;">&nbsp;</span>。（上）</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">上亿人都看过了</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NGỮ PHÁP 6: 通过 vs 经过 -->
+                    <div class="grammar-panel" id="grammar-panel-5">
+                        <div class="grammar-item">
+                            <div class="grammar-header">
+                                <div class="grammar-number">6</div>
+                                <div class="grammar-title">通过 — 经过（Phân biệt từ）</div>
+                            </div>
+                            <div class="grammar-structure chinese-text">通过 / 经过（đều có thể diễn tả ý đạt được mục đích nhờ ngườ/phương tiện nào đó）</div>
+                            <div class="grammar-explanation">
+                                <strong>Giải thích:</strong> 通过 và 经过 đều có thể được dùng để diễn tả ý đạt được mục đích nhất định nhờ ngườ nào đó hay bằng phương tiện/cách thức nào đó. Ví dụ điểm giống: 通过/经过大家的努力，公司的生意越做越大。
+                            </div>
+                            <div class="compare-box">
+                                <div class="compare-title"><i class="bi bi-arrow-left-right"></i> 比一比 So sánh 通过 — 经过</div>
+                                <div style="overflow-x:auto;">
+                                <table style="width:100%;border-collapse:collapse;font-size:15px;">
+                                    <thead><tr style="background:#c62828;color:white;">
+                                        <th style="padding:10px;border:1px solid #ddd;text-align:left;">Điểm</th>
+                                        <th style="padding:10px;border:1px solid #ddd;">通过 tōngguò</th>
+                                        <th style="padding:10px;border:1px solid #ddd;">经过 jīngguò</th>
+                                    </tr></thead>
+                                    <tbody>
+                                        <tr><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Từ loại chính</td><td style="padding:10px;border:1px solid #ddd;">Giới từ (nhấn mạnh cách thức/phương tiện)</td><td style="padding:10px;border:1px solid #ddd;">Động từ (nhấn mạnh quá trình diễn ra)</td></tr>
+                                        <tr style="background:#f9f9f9;"><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">★ Cùng diễn tả đạt mục đích</td><td style="padding:10px;border:1px solid #ddd;" class="chinese-text">通过大家的努力，公司的生意越做越大。</td><td style="padding:10px;border:1px solid #ddd;" class="chinese-text">经过大家的努力，公司的生意越做越大。</td></tr>
+                                        <tr><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Đi qua nơi nào đó</td><td style="padding:10px;border:1px solid #ddd;" class="chinese-text">Đi từ đầu này/phía này đến đầu kia/phía kia<br>这条街只能步行通过。</td><td style="padding:10px;border:1px solid #ddd;" class="chinese-text">Đi ngang qua nơi nào đó nhưng không mang nghĩa đi từ đầu này đến đầu kia<br>我正好经过这儿，顺便过来看看你。</td></tr>
+                                        <tr style="background:#f9f9f9;"><td style="padding:10px;border:1px solid #ddd;font-weight:bold;">Danh từ</td><td style="padding:10px;border:1px solid #ddd;">❌ Không thể làm danh từ.</td><td style="padding:10px;border:1px solid #ddd;">✅ Có thể làm danh từ chỉ diễn biến của sự việc.<br><span class="chinese-text">小王把事情的经过告诉我了。</span></td></tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <div class="grammar-practice">
+                                <div class="practice-title"><i class="bi bi-pencil-square"></i> 做一做 — Chọn từ điền vào chỗ trống (通过 / 经过):</div>
+                                <div class="practice-question"><div class="practice-sentence">（1）<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:120px;">&nbsp;</span>调查我们发现，客人住宾馆最关心的是干净不干净。</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">通过 / 经过 đều được</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（2）这是保修卡，遇到什么问题，您可以<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:120px;">&nbsp;</span>上面的电话联系我们。</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">通过 (nhờ vào phương tiện)</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（3）我不了解这件事情的<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:120px;">&nbsp;</span>，你问问其他人吧。</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">经过 (làm danh từ chỉ diễn biến)</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（4）<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:120px;">&nbsp;</span>这段时间的学习，他的汉语水平提高了不少。</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">经过 (nhấn mạnh quá trình)</div></div>
+                                <div class="practice-question"><div class="practice-sentence">（5）有些人<span style="border-bottom:2px solid #bbb;display:inline-block;min-width:120px;">&nbsp;</span>节食的方法来减肥，虽然有效，但是时间长了对身体没有好处。</div><button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="margin-top:6px;padding:4px 8px;font-size:16px;background:transparent;border:none;cursor:pointer;color:#666;"><i class="bi bi-eye"></i></button><div style="display:none;margin-top:6px;font-size:20px;color:#c62828;font-family:'Microsoft YaHei','SimSun',serif;">通过 (nhấn mạnh cách thức/phương tiện)</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- BÀI TẬP -->
+            <div id="exercises" class="section-content">
+                <div class="exercise-container">
+                    <div class="exercise-tabs">
+                        <button class="exercise-tab active" onclick="showExercise('fill-ex', this)"><i class="bi bi-pencil-square"></i> Điền từ</button>
+                        <button class="exercise-tab" onclick="showExercise('retell-ex', this)"><i class="bi bi-chat-quote"></i> Thuật lại</button>
+                        <button class="exercise-tab" onclick="showExercise('dialogue-ex', this)"><i class="bi bi-chat-dots"></i> Đối thoại</button>
+                        <button class="exercise-tab" onclick="showExercise('comprehensive-ex', this)"><i class="bi bi-clipboard-check"></i> Tổng hợp</button>
+                    </div>
+
+                    <!-- ĐIỀN TỪ -->
+                    <div id="fill-ex" class="exercise-content active">
+                        <div class="section-header-exercise">练习 2 - 选择合适的词语填空 - Chọn từ thích hợp điền vào chỗ trống</div>
+
+                        <div class="part-header">第一组 - Nhóm 1: 过程 至少 区别 正确 暂时</div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>1.</strong> 我住的地方离地铁站有点儿远，走路_______要三十分钟。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill1" value="A"> A 过程</label>
+                                <label class="radio-item"><input type="radio" name="fill1" value="B"> B 至少</label>
+                                <label class="radio-item"><input type="radio" name="fill1" value="C"> C 区别</label>
+                                <label class="radio-item"><input type="radio" name="fill1" value="D"> D 正确</label>
+                                <label class="radio-item"><input type="radio" name="fill1" value="E"> E 暂时</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill1','B','fill-result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result1"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>2.</strong> 所有的困难都是_______的，要有信心，我相信你一定会成功。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill2" value="A"> A 过程</label>
+                                <label class="radio-item"><input type="radio" name="fill2" value="B"> B 至少</label>
+                                <label class="radio-item"><input type="radio" name="fill2" value="C"> C 区别</label>
+                                <label class="radio-item"><input type="radio" name="fill2" value="D"> D 正确</label>
+                                <label class="radio-item"><input type="radio" name="fill2" value="E"> E 暂时</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill2','E','fill-result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result2"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>3.</strong> "爱"和"喜欢"有什么_______？我认为"爱"比"喜欢"的感情更深。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill3" value="A"> A 过程</label>
+                                <label class="radio-item"><input type="radio" name="fill3" value="B"> B 至少</label>
+                                <label class="radio-item"><input type="radio" name="fill3" value="C"> C 区别</label>
+                                <label class="radio-item"><input type="radio" name="fill3" value="D"> D 正确</label>
+                                <label class="radio-item"><input type="radio" name="fill3" value="E"> E 暂时</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill3','C','fill-result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result3"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>4.</strong> 其实，只要我们真正努力过了，就不需要太关心结果。因为不管最后是成功还是失败，在努力的_______中，我们已经学到了很多东西。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill4" value="A"> A 过程</label>
+                                <label class="radio-item"><input type="radio" name="fill4" value="B"> B 至少</label>
+                                <label class="radio-item"><input type="radio" name="fill4" value="C"> C 区别</label>
+                                <label class="radio-item"><input type="radio" name="fill4" value="D"> D 正确</label>
+                                <label class="radio-item"><input type="radio" name="fill4" value="E"> E 暂时</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill4','A','fill-result4')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result4"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>5.</strong> 减肥不只是为了瘦，更是为了健康。_______的减肥方法是按时吃饭，多吃水果，多运动，而不是饿肚子。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill5" value="A"> A 过程</label>
+                                <label class="radio-item"><input type="radio" name="fill5" value="B"> B 至少</label>
+                                <label class="radio-item"><input type="radio" name="fill5" value="C"> C 区别</label>
+                                <label class="radio-item"><input type="radio" name="fill5" value="D"> D 正确</label>
+                                <label class="radio-item"><input type="radio" name="fill5" value="E"> E 暂时</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill5','D','fill-result5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result5"></div>
+                        </div>
+
+                        <div class="part-header">第二组 - Nhóm 2: 汗 得(děi) 取 理想 放弃</div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>6.</strong> A: 师傅，麻烦您快点儿行吗？我_______在九点之前到大使馆。<br>B: 不用担心，保证按时把您送到。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill6" value="A"> A 汗</label>
+                                <label class="radio-item"><input type="radio" name="fill6" value="B"> B 得</label>
+                                <label class="radio-item"><input type="radio" name="fill6" value="C"> C 取</label>
+                                <label class="radio-item"><input type="radio" name="fill6" value="D"> D 理想</label>
+                                <label class="radio-item"><input type="radio" name="fill6" value="E"> E 放弃</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill6','B','fill-result6')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result6"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>7.</strong> A: 你哥不是说三点到吗？都过去半个小时了，怎么还没出来？<br>B: 他还得去_______行李箱，您别担心，我打个电话问问。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill7" value="A"> A 汗</label>
+                                <label class="radio-item"><input type="radio" name="fill7" value="B"> B 得</label>
+                                <label class="radio-item"><input type="radio" name="fill7" value="C"> C 取</label>
+                                <label class="radio-item"><input type="radio" name="fill7" value="D"> D 理想</label>
+                                <label class="radio-item"><input type="radio" name="fill7" value="E"> E 放弃</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill7','C','fill-result7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result7"></div>
+                        </div>
+
+                        <div class="question-container">
+                            <div class="fill-sentence"><strong>8.</strong> A: 外面热吗？你怎么满头大_______？<br>B: 电梯坏了，我爬楼梯上来的。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="fill8" value="A"> A 汗</label>
+                                <label class="radio-item"><input type="radio" name="fill8" value="B"> B 得</label>
+                                <label class="radio-item"><input type="radio" name="fill8" value="C"> C 取</label>
+                                <label class="radio-item"><input type="radio" name="fill8" value="D"> D 理想</label>
+                                <label class="radio-item"><input type="radio" name="fill8" value="E"> E 放弃</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('fill8','A','fill-result8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="fill-result8"></div>
+                        </div>
+                    </div>
+
+                    <!-- THUẬT LẠI -->
+                    <div id="retell-ex" class="exercise-content">
+                        <div class="section-header-exercise">练习 1 - 复述 - Thuật lại nội dung bài học</div>
+                        <div class="part-header">课文1 - 孙月的语气</div>
+                        <div class="passage-box"><strong>重点词语:</strong> <span class="chinese-text">饼干、巧克力、减肥、信心、坚持</span></div>
+                        <div class="question-container">
+                            <div class="question-text">请以孙月的语气复述课文1的内容。</div>
+                            <textarea id="retell1" rows="5" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết lại nội dung theo giọng văn của Tôn Nguyệt..."></textarea>
+                            <button class="check-btn" onclick="checkFreeAnswer('retell1','坚持','retell-result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="retell-result1"></div>
+                        </div>
+
+                        <div class="part-header">课文2 - 李进的语气</div>
+                        <div class="passage-box"><strong>重点词语:</strong> <span class="chinese-text">网球、国际、赢、轻松、随便、汗、通过</span></div>
+                        <div class="question-container">
+                            <div class="question-text">请以李进的语气复述课文2的内容。</div>
+                            <textarea id="retell2" rows="5" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết lại nội dung theo giọng văn của Lý Tiến..."></textarea>
+                            <button class="check-btn" onclick="checkFreeAnswer('retell2','汗','retell-result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="retell-result2"></div>
+                        </div>
+
+                        <div class="part-header">课文3 - 王红的语气</div>
+                        <div class="passage-box"><strong>重点词语:</strong> <span class="chinese-text">放弃、主意、作家、坚持、理想</span></div>
+                        <div class="question-container">
+                            <div class="question-text">请以王红的语气复述课文3的内容。</div>
+                            <textarea id="retell3" rows="5" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết lại nội dung theo giọng văn của Vương Hồng..."></textarea>
+                            <button class="check-btn" onclick="checkFreeAnswer('retell3','理想','retell-result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="retell-result3"></div>
+                        </div>
+                    </div>
+
+                    <!-- ĐỐI THOẠI -->
+                    <div id="dialogue-ex" class="exercise-content">
+                        <div class="section-header-exercise">练习 3 - 完成对话 - Hoàn thành đối thoại</div>
+                        <div class="part-header">用"难道"完成句子</div>
+                        <div class="question-container">
+                            <div class="fill-sentence">1. A: 你怎么又迟到了？<br>B: _______（难道）</div>
+                            <textarea id="dialogue1" rows="2" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                            <button class="check-btn" onclick="checkFreeAnswer('dialogue1','难道','dialogue-result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="dialogue-result1"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="fill-sentence">2. A: 这个项目已经完成了。<br>B: _______（难道/通过）</div>
+                            <textarea id="dialogue2" rows="2" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                            <button class="check-btn" onclick="checkFreeAnswer('dialogue2','通过','dialogue-result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="dialogue-result2"></div>
+                        </div>
+
+                        <div class="part-header">用"可是"完成句子</div>
+                        <div class="question-container">
+                            <div class="fill-sentence">3. A: 你想去看电影吗？<br>B: _______（可是）</div>
+                            <textarea id="dialogue3" rows="2" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ..."></textarea>
+                            <button class="check-btn" onclick="checkFreeAnswer('dialogue3','可是','dialogue-result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="dialogue-result3"></div>
+                        </div>
+                    </div>
+
+                    <!-- TỔNG HỢP -->
+                    <div id="comprehensive-ex" class="exercise-content">
+                        <div class="section-header-exercise">练习 4 - Tổng hợp</div>
+                        <div class="part-header">选词填空 - Chọn từ thích hợp (通过/经过)</div>
+                        <div class="question-container">
+                            <div class="fill-sentence">1. _______这次活动，我认识了很多新朋友。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="comp1" value="A"> A 通过</label>
+                                <label class="radio-item"><input type="radio" name="comp1" value="B"> B 经过</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('comp1','A','comp-result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="comp-result1"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="fill-sentence">2. 请你把事情的_______告诉我。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="comp2" value="A"> A 通过</label>
+                                <label class="radio-item"><input type="radio" name="comp2" value="B"> B 经过</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('comp2','B','comp-result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="comp-result2"></div>
+                        </div>
+                        <div class="question-container">
+                            <div class="fill-sentence">3. _______大家的努力，我们终于找到了解决问题的方法。</div>
+                            <div class="radio-group">
+                                <label class="radio-item"><input type="radio" name="comp3" value="A"> A 通过</label>
+                                <label class="radio-item"><input type="radio" name="comp3" value="B"> B 经过</label>
+                            </div>
+                            <button class="check-btn" onclick="checkAnswer('comp3','B','comp-result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <div class="result-message" id="comp-result3"></div>
+                        </div>
+
+                        <div class="part-header">自由写作 - Viết tự do</div>
+                        <div class="question-container">
+                            <div class="question-text"><strong>题目:</strong> 请以"阳光总在风雨后"为题写一段话。尽量用上本课所学的生词，字数不少于80字。</div>
+                            <div style="margin-bottom:15px;padding:15px;background:#fce4ec;border-radius:8px;border:1px solid #f8bbd0;">
+                                <strong>Gợi ý từ vựng:</strong> <span class="chinese-text">困难、放弃、坚持、勇敢、面对、结果、过程、失败、成功、经验、理想</span>
+                            </div>
+                            <textarea id="comp-write" rows="8" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="请以&#10;阳光总在风雨后&#10;为题写一段话（不少于80字）..."></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- VẬN DỤNG -->
+            <div id="activity" class="section-content">
+                <div class="section-header-exercise">运用 - Phần vận dụng (Hoạt động thực tế)</div>
+
+                <div class="part-header"><i class="bi bi-chat-dots"></i> 话题讨论 - Thảo luận chủ đề: 你眼中的成功是什么样的？</div>
+                <div style="margin-bottom:20px;padding:15px;background:#e3f2fd;border-radius:8px;border:1px solid #90caf9;">
+                    <strong>Hướng dẫn:</strong> 根据课文内容和自己的看法，回答下面的问题，并和同学交流。<br>
+                    <em>Dựa vào nội dung bài khóa và quan điểm của mình, trả lởi các câu hỏi dưới đây và trao đổi với bạn học.</em>
+                </div>
+                <div class="question-container">
+                    <div class="question-text"><strong>1.</strong> 你认为什么是成功？请举例说明。</div>
+                    <textarea rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ của bạn..."></textarea>
+                </div>
+                <div class="question-container">
+                    <div class="question-text"><strong>2.</strong> 你遇到过什么困难？你是怎样面对的？</div>
+                    <textarea rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ của bạn..."></textarea>
+                </div>
+                <div class="question-container">
+                    <div class="question-text"><strong>3.</strong> 你觉得过程和结果哪个更重要？为什么？</div>
+                    <textarea rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ của bạn..."></textarea>
+                </div>
+                <div class="question-container">
+                    <div class="question-text"><strong>4.</strong> 如果你有一个理想，但是身边的人都不支持，你会怎么办？</div>
+                    <textarea rows="3" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lờ của bạn..."></textarea>
+                </div>
+
+                <div class="part-header"><i class="bi bi-pencil-fill"></i> 命题写作 - Viết theo đề bài</div>
+                <div style="margin-bottom:20px;padding:15px;background:#fce4ec;border-radius:8px;border:1px solid #f8bbd0;">
+                    <strong>题目:</strong> 请以"阳光总在风雨后"为题写一段话。尽量用上本课所学的生词，字数不少于100字。<br>
+                    <em>Đề bài: Hãy viết một đoạn văn với chủ đề "Sau cơn mưa trờ lại sáng". Cố gắng dùng các từ mới đã học trong bài, không dưới 100 chữ.</em>
+                </div>
+                <div class="question-container">
+                    <div class="question-text"><strong>Gợi ý cấu trúc:</strong></div>
+                    <div style="background:#f8f9fa;padding:15px;border-radius:8px;margin-bottom:15px;font-size:15px;line-height:1.8;">
+                        • 开头: 说说你对"阳光总在风雨后"这句话的理解<br>
+                        • 中间: 举一个你或者你认识的人的例子，说明成功需要坚持和努力<br>
+                        • 结尾: 总结你的看法
+                    </div>
+                    <textarea id="activity-write" rows="10" style="width:100%;padding:10px;border:2px solid #c62828;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="请以&#10;阳光总在风雨后&#10;为题写一段话（不少于100字）..."></textarea>
+                </div>
+
+                <div class="part-header"><i class="bi bi-megaphone"></i> 口语练习 - Luyện nói</div>
+                <div class="question-container">
+                    <div class="question-text"><strong>练习:</strong> 请用"难道""通过""可是""结果"各造一个句子，并读给同学听。</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px;">
+                        <div>
+                            <div class="char-label">1. 难道:</div>
+                            <textarea rows="2" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:16px;" placeholder="造句..."></textarea>
+                        </div>
+                        <div>
+                            <div class="char-label">2. 通过:</div>
+                            <textarea rows="2" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:16px;" placeholder="造句..."></textarea>
+                        </div>
+                        <div>
+                            <div class="char-label">3. 可是:</div>
+                            <textarea rows="2" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:16px;" placeholder="造句..."></textarea>
+                        </div>
+                        <div>
+                            <div class="char-label">4. 结果:</div>
+                            <textarea rows="2" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:16px;" placeholder="造句..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+
+// ===== VOCABULARY DATA =====
+const vocabData = [
+    { id:1, chinese:'饼干', pinyin:'bǐnggān', meaning:'bánh quy', pos:'dt.', example:'怎么又买了这么多饼干和巧克力？', examplePinyin:'Zěnme yòu mǎile zhème duō bǐnggān hé qiǎokèlì?', exampleVietnamese:'Sao lại mua nhiều bánh quy và sôcôla thế?', category:'text1,n,group1' },
+    { id:2, chinese:'难道', pinyin:'nándào', meaning:'được dùng trong câu hỏi tu từ để nhấn mạnh', pos:'phó.', example:'难道你不减肥了？', examplePinyin:'Nándào nǐ bù jiǎn féi le?', exampleVietnamese:'Chẳng lẽ bạn không giảm cân nữa à?', category:'text1,adv,group1' },
+    { id:3, chinese:'得', pinyin:'děi', meaning:'phải', pos:'dtnn.', example:'如果你想减肥，就得少吃东西。', examplePinyin:'Rúguǒ nǐ xiǎng jiǎn féi, jiù děi shǎo chī dōngxi.', exampleVietnamese:'Nếu bạn muốn giảm cân thì phải ăn ít lại.', category:'text1,modal,group1' },
+    { id:4, chinese:'坚持', pinyin:'jiānchí', meaning:'kiên trì, khăng khăng giữ', pos:'đgt.', example:'要想减肥成功，只能坚持。', examplePinyin:'Yào xiǎng jiǎn féi chénggōng, zhǐ néng jiānchí.', exampleVietnamese:'Muốn giảm cân thành công thì chỉ có kiên trì.', category:'text1,v,group1' },
+    { id:5, chinese:'放弃', pinyin:'fàngqì', meaning:'từ bỏ, bỏ', pos:'đgt.', example:'我本来已经打算放弃了。', examplePinyin:'Wǒ běnlái yǐjīng dǎsuàn fàngqì le.', exampleVietnamese:'Tôi vốn đã định từ bỏ rồi.', category:'text1,v,group1' },
+    { id:6, chinese:'主意', pinyin:'zhǔyi', meaning:'ý định, ý kiến', pos:'dt.', example:'你刚才的话让我改变了主意。', examplePinyin:'Nǐ gāngcái de huà ràng wǒ gǎibiànle zhǔyi.', exampleVietnamese:'Lờ nói lúc nãy của bạn đã khiến tôi thay đổi ý định.', category:'text1,n,group1' },
+    { id:7, chinese:'网球', pinyin:'wǎngqiú', meaning:'quần vợt', pos:'dt.', example:'你网球打得真好！', examplePinyin:'Nǐ wǎngqiú dǎ de zhēn hǎo!', exampleVietnamese:'Bạn đánh quần vợt giỏi thật!', category:'text2,n,group2' },
+    { id:8, chinese:'国际', pinyin:'guójì', meaning:'quốc tế', pos:'dt.', example:'还得过那么多国际大奖！', examplePinyin:'Hái déguo nàme duō guójì dà jiǎng!', exampleVietnamese:'Còn đạt được nhiều giải thưởng quốc tế nữa!', category:'text2,n,group2' },
+    { id:9, chinese:'轻松', pinyin:'qīngsōng', meaning:'nhẹ nhàng, dễ dàng', pos:'tt.', example:'感觉你轻轻松松就赢了。', examplePinyin:'Gǎnjué nǐ qīngqīngsōngsōng jiù yíng le.', exampleVietnamese:'Cảm giác bạn cứ nhẹ nhàng là thắng.', category:'text2,adj,group2' },
+    { id:10, chinese:'赢', pinyin:'yíng', meaning:'thắng', pos:'đgt.', example:'感觉你轻轻松松就赢了。', examplePinyin:'Gǎnjué nǐ qīngqīngsōngsōng jiù yíng le.', exampleVietnamese:'Cảm giác bạn cứ nhẹ nhàng là thắng.', category:'text2,v,group2' },
+    { id:11, chinese:'随便', pinyin:'suíbiàn', meaning:'tình cờ, tùy tiện', pos:'tt.', example:'没有人随随便便就能成功的。', examplePinyin:'Méiyǒu rén suísuíbiànbiàn jiù néng chénggōng de.', exampleVietnamese:'Không ai có thể tùy tiện mà thành công được.', category:'text2,adj,group2' },
+    { id:12, chinese:'汗', pinyin:'hàn', meaning:'mồ hôi', pos:'dt.', example:'却没注意到你成功前流下的汗水。', examplePinyin:'Què méi zhùyì dào nǐ chénggōng qián liúxià de hànshuǐ.', exampleVietnamese:'Mà không để ý đến mồ hôi bạn đổ trước khi thành công.', category:'text2,n,group2' },
+    { id:13, chinese:'通过', pinyin:'tōngguò', meaning:'giới. qua, nhờ vào', pos:'giới.', example:'任何成功都要通过努力才能得到。', examplePinyin:'Rènhé chénggōng dōu yào tōngguò nǔlì cái néng dédào.', exampleVietnamese:'Bất kỳ thành công nào cũng phải thông qua nỗ lực mới đạt được.', category:'text2,prep,group2' },
+    { id:14, chinese:'篇', pinyin:'piān', meaning:'lượng từ (bài văn, giấy...)', pos:'lượng.', example:'我在报纸上看到一篇关于她的新闻。', examplePinyin:'Wǒ zài bàozhǐ shang kàndào yī piān guānyú tā de xīnwén.', exampleVietnamese:'Tôi thấy trên báo có một bài viết về cô ấy.', category:'text3,m,group3' },
+    { id:15, chinese:'作家', pinyin:'zuòjiā', meaning:'nhà văn', pos:'dt.', example:'她现在已经是一个有名的作家了。', examplePinyin:'Tā xiànzài yǐjīng shì yī gè yǒumíng de zuòjiā le.', exampleVietnamese:'Giờ cô ấy đã là một nhà văn có tiếng rồi.', category:'text3,n,group3' },
+    { id:16, chinese:'当时', pinyin:'dāngshí', meaning:'lúc đó', pos:'dt.', example:'当时她的父母和亲戚都不支持她。', examplePinyin:'Dāngshí tā de fùmǔ hé qīnqi dōu bù zhīchí tā.', exampleVietnamese:'Lúc đó bố mẹ và họ hàng của cô ấy đều không ủng hộ.', category:'text3,n,group3' },
+    { id:17, chinese:'可是', pinyin:'kěshì', meaning:'nhưng', pos:'liên.', example:'可是她坚持自己的选择。', examplePinyin:'Kěshì tā jiānchí zìjǐ de xuǎnzé.', exampleVietnamese:'Nhưng cô ấy kiên trì lựa chọn của mình.', category:'text3,conj,group3' },
+    { id:18, chinese:'正确', pinyin:'zhèngquè', meaning:'đúng, chính xác', pos:'tt.', example:'向所有人证明了她的选择是正确的。', examplePinyin:'Xiàng suǒyǒu rén zhèngmíngle tā de xuǎnzé shì zhèngquè de.', exampleVietnamese:'Chứng minh với mọi ngườ rằng lựa chọn của cô ấy là đúng đắn.', category:'text3,adj,group3' },
+    { id:19, chinese:'理想', pinyin:'lǐxiǎng', meaning:'lý tưởng', pos:'dt.', example:'看来为了自己的理想，放弃一些东西也是值得的。', examplePinyin:'Kànlái wèile zìjǐ de lǐxiǎng, fàngqì yīxiē dōngxi yě shì zhíde de.', exampleVietnamese:'Xem ra vì lý tưởng của bản thân, từ bỏ một số thứ cũng đáng giá.', category:'text3,n,group3' },
+    { id:20, chinese:'勇敢', pinyin:'yǒnggǎn', meaning:'dũng cảm, gan dạ', pos:'tt.', example:'如果你想做什么事情，那就勇敢地去做。', examplePinyin:'Rúguǒ nǐ xiǎng zuò shénme shìqing, nà jiù yǒnggǎn de qù zuò.', exampleVietnamese:'Nếu bạn muốn làm gì, thì hãy dũng cảm làm đi.', category:'text4,adj,group4' },
+    { id:21, chinese:'结果', pinyin:'jiéguǒ', meaning:'kết quả', pos:'dt.', example:'不要考虑会不会失败。/ 结果马竟然瘦了二十斤。', examplePinyin:'Búyào kǎolǜ huì bu huì shībài. / Jiéguǒ mǎ jìngrán shòu le èrshí jīn.', exampleVietnamese:'Đừng nghĩ đến thất bại. / Kết quả là con ngựa lại giảm được 20 cân.', category:'text4,n,conj,group4' },
+    { id:22, chinese:'失败', pinyin:'shībài', meaning:'thất bại', pos:'đgt.', example:'不要考虑会不会失败。', examplePinyin:'Búyào kǎolǜ huì bu huì shībài.', exampleVietnamese:'Đừng nghĩ đến thất bại.', category:'text4,v,n,group4' },
+    { id:23, chinese:'过程', pinyin:'guòchéng', meaning:'quá trình', pos:'dt.', example:'我们应该把注意力放在做事情的过程上。', examplePinyin:'Wǒmen yīnggāi bǎ zhùyìlì fàngzài zuò shìqing de guòchéng shang.', exampleVietnamese:'Chúng ta nên tập trung vào quá trình làm việc.', category:'text4,n,group4' },
+    { id:24, chinese:'至少', pinyin:'zhìshǎo', meaning:'ít nhất', pos:'phó.', example:'因为至少你已经努力过。', examplePinyin:'Yīnwèi zhìshǎo nǐ yǐjīng nǔlì guo.', exampleVietnamese:'Vì ít nhất bạn đã nỗ lực.', category:'text4,adv,group4' },
+    { id:25, chinese:'总结', pinyin:'zǒngjié', meaning:'tổng kết', pos:'đgt.', example:'我们还可以从失败中总结出有用的经验。', examplePinyin:'Wǒmen hái kěyǐ cóng shībài zhōng zǒngjié chū yǒuyòng de jīngyàn.', exampleVietnamese:'Chúng ta còn có thể tổng kết kinh nghiệm hữu ích từ thất bại.', category:'text4,v,group4' },
+    { id:26, chinese:'取', pinyin:'qǔ', meaning:'đạt được', pos:'đgt.', example:'只有学会放弃，才能把自己的能力用到最该做的事情上，最后获得成功。', examplePinyin:'Zhǐyǒu xuéhuì fàngqì, cái néng bǎ zìjǐ de nénglì yòngdào zuì gāi zuò de shìqing shang, zuìhòu huòdé chénggōng.', exampleVietnamese:'Chỉ khi học được cách từ bỏ, mới có thể dùng năng lực vào việc nên làm nhất, cuối cùng đạt được thành công.', category:'text5,v,group5' },
+    { id:27, chinese:'经历', pinyin:'jīnglì', meaning:'trải qua', pos:'đgt.', example:'取得成功的人往往都经历过许多失败。', examplePinyin:'Qǔdé chénggōng de rén wǎngwǎng dōu jīnglìguo xǔduō shībài.', exampleVietnamese:'Ngườ đạt được thành công thường đã trải qua nhiều thất bại.', category:'text5,v,group5' },
+    { id:28, chinese:'许多', pinyin:'xǔduō', meaning:'rất nhiều', pos:'số.', example:'取得成功的人往往都经历过许多失败。', examplePinyin:'Qǔdé chénggōng de rén wǎngwǎng dōu jīnglìguo xǔduō shībài.', exampleVietnamese:'Ngườ đạt được thành công thường đã trải qua nhiều thất bại.', category:'text5,num,group5' },
+    { id:29, chinese:'区别', pinyin:'qūbié', meaning:'sự khác biệt', pos:'dt.', example:'他们和普通人的区别就是他们都坚持了下来。', examplePinyin:'Tāmen hé pǔtōng rén de qūbié jiùshì tāmen dōu jiānchí le xialai.', exampleVietnamese:'Điểm khác biệt của họ với ngườ thường là họ đều kiên trì.', category:'text5,n,group5' },
+    { id:30, chinese:'暂时', pinyin:'zànshí', meaning:'tạm thờ, nhất thờ', pos:'dt.', example:'困难只是暂时的。', examplePinyin:'Kùnnan zhǐ shì zànshí de.', exampleVietnamese:'Khó khăn chỉ là tạm thờ.', category:'text5,n,group5' },
+    { id:31, chinese:'面对', pinyin:'miànduì', meaning:'đương đầu, đối mặt', pos:'đgt.', example:'只有我们勇敢地面对困难，才能有希望取得成功。', examplePinyin:'Zhǐyǒu wǒmen yǒnggǎn de miànduì kùnnan, cái néng yǒu xīwàng qǔdé chénggōng.', exampleVietnamese:'Chỉ khi chúng ta dũng cảm đối mặt với khó khăn, mới có hy vọng đạt được thành công.', category:'text5,v,group5' },
+];
+
+// ===== SECTION MANAGEMENT =====
+const SECTION_TITLES = {
+    objectives: { text: 'Mục tiêu bài học', icon: '<i class="bi bi-bullseye"></i>', badge: 'Phần 1/6' },
+    vocabulary: { text: 'Từ vựng bài học', icon: '<i class="bi bi-alphabet"></i>', badge: '31 từ' },
+    text: { text: 'Bài khóa', icon: '<i class="bi bi-book"></i>', badge: '5 bài' },
+    grammar: { text: 'Ngữ pháp', icon: '<i class="bi bi-diagram-3"></i>', badge: '6 điểm' },
+    exercises: { text: 'Bài tập', icon: '<i class="bi bi-pencil-square"></i>', badge: '4 phần' },
+    activity: { text: 'Phần vận dụng', icon: '<i class="bi bi-people"></i>', badge: 'Hoạt động' }
+};
+function showSection(sectionId, navItem) {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+    document.querySelectorAll('.section-content').forEach(s => s && s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n && n.classList.remove('active'));
+    target.classList.add('active');
+    if (navItem) navItem.classList.add('active');
+    const t = SECTION_TITLES[sectionId];
+    const titleText = document.getElementById('section-title-text');
+    const currentIcon = document.getElementById('current-icon');
+    const sectionBadge = document.getElementById('section-badge');
+    if (t && titleText && currentIcon && sectionBadge) {
+        titleText.textContent = t.text;
+        currentIcon.innerHTML = t.icon;
+        sectionBadge.textContent = t.badge;
+    }
+    if (sectionId === 'vocabulary') renderVocab('all');
+    if (sectionId === 'writing-ex' || sectionId === 'exercises') initHanziForWriting();
+}
+
+// ===== VOCABULARY RENDERING =====
+const WRITER_VOCAB_CONFIG = { width: 90, height: 90, padding: 5, showOutline: true, strokeAnimationSpeed: 1, strokeColor: '#333', radicalColor: '#333', highlightColor: '#c62828' };
+const GROUP_FILTERS = ['group1', 'group2', 'group3', 'group4', 'group5'];
+const POS_FILTERS = ['n', 'v', 'adj', 'adv', 'pron', 'prep', 'conj', 'multi'];
+function renderVocab(filter) {
+    const grid = document.getElementById('vocab-grid');
+    if (!grid) return;
+    let data = vocabData;
+    if (filter !== 'all') {
+        if (GROUP_FILTERS.includes(filter)) {
+            data = vocabData.filter(v => v.category.includes(filter));
+        } else if (POS_FILTERS.includes(filter)) {
+            data = filter === 'multi' ? vocabData.filter(v => v.pos.includes('/')) : vocabData.filter(v => v.category.split(',').includes(filter));
+        } else {
+            data = vocabData.filter(v => v.category.includes(filter));
+        }
+    }
+    grid.innerHTML = data.map(word => {
+        const chars = word.chinese.split('');
+        const writersHtml = chars.map((c, i) => '<div class="writer-container" id="writer-vocab-' + word.id + '-' + i + '" style="border:1px solid #ddd;border-radius:6px;background:white;"></div>').join('');
+        return '<div class="vocab-card"><div class="vocab-info"><div class="vocab-number">' + word.id + '</div><div class="vocab-content"><div class="vocab-chinese chinese-text">' + word.chinese + '</div><div class="vocab-pinyin pinyin-text">' + word.pinyin + '</div><div class="vocab-meaning">' + word.meaning + '</div><span class="vocab-pos">' + word.pos + '</span><div class="vocab-example"><span class="chinese-text">' + word.example + '</span><br><span class="pinyin-text">' + word.examplePinyin + '</span><br><span style="color: #666; font-style: italic;">' + word.exampleVietnamese + '</span></div></div><button class="audio-btn" onclick="speak(\'' + word.chinese + '\')" title="Phát âm"><i class="bi bi-volume-up"></i></button></div><div class="vocab-animation"><div style="display: grid; grid-template-columns: repeat(2, 90px); gap: 8px; justify-items: center;">' + writersHtml + '</div><div class="animation-controls"><button class="anim-btn" onclick="replayVocabWriter(' + word.id + ', \'' + word.chinese + '\')" title="Viết lại"><i class="bi bi-arrow-repeat"></i></button></div></div></div>';
+    }).join('');
+    requestAnimationFrame(() => {
+        if (typeof HanziWriter === 'undefined') return;
+        data.forEach(word => {
+            word.chinese.split('').forEach((char, i) => {
+                const container = document.getElementById('writer-vocab-' + word.id + '-' + i);
+                if (container) {
+                    try {
+                        HanziWriter.create(container, char, WRITER_VOCAB_CONFIG).loopCharacterAnimation();
+                    } catch (e) { container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:14px;color:#ccc;">N/A</div>'; }
+                }
+            });
+        });
+    });
+}
+
+function filterVocab(category, btn) {
+    if (!btn) return;
+    document.querySelectorAll('.vocab-tab').forEach(t => t && t.classList.remove('active'));
+    btn.classList.add('active');
+    renderVocab(category);
+}
+
+const REPLAY_CONFIG = { width: 60, height: 60, padding: 2, showOutline: true, strokeAnimationSpeed: 1, strokeColor: '#333', radicalColor: '#333', highlightColor: '#c62828' };
+function replayVocabWriter(id, chinese) {
+    if (typeof HanziWriter === 'undefined' || !chinese) return;
+    const chars = chinese.split('');
+    chars.forEach((char, i) => {
+        const container = document.getElementById('writer-vocab-' + id + '-' + i);
+        if (container) {
+            container.innerHTML = '';
+            try {
+                HanziWriter.create(container, char, REPLAY_CONFIG).loopCharacterAnimation();
+            } catch (e) {}
+        }
+    });
+}
+
+// ===== TEXT/LESSON TABS =====
+function showText(textId, btn) {
+    const el = document.getElementById(textId);
+    if (!el) return;
+    document.querySelectorAll('.text-content').forEach(t => t && t.classList.remove('active'));
+    document.querySelectorAll('.text-tab').forEach(t => t && t.classList.remove('active'));
+    el.classList.add('active');
+    if (btn) btn.classList.add('active');
+}
+
+// ===== GRAMMAR TABS =====
+function showGrammar(index, btn) {
+    const panel = document.getElementById('grammar-panel-' + index);
+    if (!panel) return;
+    document.querySelectorAll('.grammar-panel').forEach(p => p && p.classList.remove('active'));
+    document.querySelectorAll('.grammar-tab').forEach(t => t && t.classList.remove('active'));
+    panel.classList.add('active');
+    if (btn) btn.classList.add('active');
+}
+
+// ===== EXERCISE TABS =====
+function showExercise(exId, btn) {
+    const el = document.getElementById(exId);
+    if (!el) return;
+    document.querySelectorAll('.exercise-content').forEach(e => e && e.classList.remove('active'));
+    document.querySelectorAll('.exercise-tab').forEach(t => t && t.classList.remove('active'));
+    el.classList.add('active');
+    if (btn) btn.classList.add('active');
+    if (exId === 'writing-ex' || exId === 'exercises') initHanziForWriting();
+    if (exId === 'grammar-ex') initArrangers();
+}
+
+// ===== TTS =====
+let audioSpeed = 0.8;
+function setAudioSpeed(speed) { audioSpeed = parseFloat(speed); }
+function goToHome() { var path = window.location.pathname; var dir = path.substring(0, path.lastIndexOf('/')); window.location.href = dir + '/BHHSK4.html'; }
+
+function speak(text) {
+    if (!text || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'zh-CN'; utter.rate = audioSpeed || 0.8; utter.pitch = 1;
+    window.speechSynthesis.speak(utter);
+}
+
+function speakAllText(textId) {
+    const container = document.getElementById(textId);
+    if (!container || !('speechSynthesis' in window)) return;
+    const lines = container.querySelectorAll('.dialogue-chinese, .prose-chinese');
+    if (!lines.length) return;
+    let index = 0;
+    function speakNext() {
+        if (index >= lines.length) return;
+        const text = lines[index]?.textContent?.trim();
+        if (!text) { index++; speakNext(); return; }
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'zh-CN'; utter.rate = audioSpeed || 0.8; utter.pitch = 1;
+        utter.onend = () => { index++; speakNext(); };
+        window.speechSynthesis.speak(utter);
+    }
+    window.speechSynthesis.cancel();
+    speakNext();
+}
+
+// ===== TOGGLE PINYIN/VIETNAMESE/EXAMPLES =====
+let pinyinHidden = false;
+function togglePinyin(btn) {
+    if (!btn) return;
+    pinyinHidden = !pinyinHidden;
+    document.body?.classList.toggle('hide-pinyin', pinyinHidden);
+    btn.classList.toggle('active-toggle', pinyinHidden);
+    const icon = btn.querySelector('i');
+    if (icon) icon.className = pinyinHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+
+let vietnameseHidden = false;
+function toggleVietnamese(btn) {
+    if (!btn) return;
+    vietnameseHidden = !vietnameseHidden;
+    document.body?.classList.toggle('hide-vietnamese', vietnameseHidden);
+    btn.classList.toggle('active-toggle', vietnameseHidden);
+    const icon = btn.querySelector('i');
+    if (icon) icon.className = vietnameseHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+
+let examplesHidden = true;
+function toggleExamples(btn) {
+    if (!btn) return;
+    examplesHidden = !examplesHidden;
+    document.body?.classList.toggle('hide-examples', examplesHidden);
+    btn.classList.toggle('active-toggle', examplesHidden);
+    const icon = btn.querySelector('i');
+    if (icon) icon.className = examplesHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+
+// ===== ANSWER CHECKING =====
+function checkAnswer(name, correctValue, resultId) {
+    if (!name || !resultId) return;
+    const radios = document.getElementsByName(name);
+    if (!radios?.length) return;
+    let selected = null;
+    for (let r of radios) { if (r?.checked) { selected = r.value; break; } }
+    const el = document.getElementById(resultId);
+    if (!el) return;
+    if (selected === correctValue) {
+        el.textContent = 'Chính xác! Xin chúc mừng!';
+        el.className = 'result-message show correct';
+    } else {
+        el.textContent = 'Chưa chính xác. Hãy thử lại nhé!';
+        el.className = 'result-message show incorrect';
+    }
+}
+
+function checkCharInput(inputId, correctAnswer, resultId) {
+    if (!inputId || !resultId) return;
+    const input = document.getElementById(inputId);
+    const el = document.getElementById(resultId);
+    if (!input || !el) return;
+    const val = input.value?.trim();
+    if (!val) { el.textContent = 'Vui lòng nhập câu trả lờ.'; el.className = 'result-message show incorrect'; return; }
+    if (val === correctAnswer) {
+        el.textContent = 'Chính xác! Rất tốt!';
+        el.className = 'result-message show correct';
+    } else {
+        el.textContent = 'Chưa chính xác. Đáp án đúng là: ' + correctAnswer;
+        el.className = 'result-message show incorrect';
+    }
+}
+
+function checkFreeAnswer(inputId, keyword, resultId) {
+    if (!inputId || !resultId) return;
+    const input = document.getElementById(inputId);
+    const el = document.getElementById(resultId);
+    if (!input || !el) return;
+    const val = input.value?.trim();
+    if (!val) { el.textContent = 'Vui lòng nhập câu trả lờ.'; el.className = 'result-message show incorrect'; return; }
+    if (keyword && val.includes(keyword)) {
+        el.textContent = 'Câu trả lờ hợp lý! (Đáp án tham khảo đã được chấp nhận)';
+        el.className = 'result-message show correct';
+    } else {
+        el.textContent = 'Câu trả lờ của bạn đã được ghi nhận. Hãy tham khảo đáp án trong sách giáo khoa để đối chiếu.';
+        el.className = 'result-message show';
+        el.style.cssText = 'display:block;background:#fce4ec;color:#b71c1c;border:1px solid #ef9a9a;';
+    }
+}
+
+// ===== HANZI WRITER =====
+const WRITER_CONFIG = { width: 100, height: 100, padding: 5, showOutline: true, strokeAnimationSpeed: 1, strokeColor: '#333', radicalColor: '#333' };
+const WRITERS_DATA = [
+    ['writer1-1','坚'],['writer1-2','持'],
+    ['writer2-1','通'],['writer2-2','过'],
+    ['writer3-1','理'],['writer3-2','想'],
+    ['writer4-1','结'],['writer4-2','果'],
+    ['writer5-1','勇'],['writer5-2','敢'],
+    ['writer6-1','难'],['writer6-2','道'],
+    ['writer7-1','放'],['writer7-2','弃'],
+    ['writer8-1','网'],['writer8-2','球'],
+    ['writer9-1','饼'],['writer9-2','干'],
+    ['writer10-1','爱'],['writer10-2','迪']
+];
+function initHanziForWriting() {
+    if (typeof HanziWriter === 'undefined') return;
+    requestAnimationFrame(() => {
+        WRITERS_DATA.forEach(([id, char]) => {
+            const el = document.getElementById(id);
+            if (el && !el.dataset.initialized) {
+                try {
+                    HanziWriter.create(el, char, WRITER_CONFIG).loopCharacterAnimation();
+                    el.dataset.initialized = 'true';
+                } catch (e) { el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:24px;color:#ccc;">N/A</div>'; }
+            }
+        });
+    });
+}
+
+// ===== NOTE EDITOR =====
+function openNoteEditor() {
+    const overlay = document.getElementById('note-editor-overlay');
+    const editor = document.getElementById('rich-editor');
+    if (overlay && editor) {
+        editor.innerHTML = localStorage.getItem('hsk4_bai09_notes') || '';
+        overlay.style.display = 'block';
+    }
+}
+
+function closeNoteEditor() {
+    const overlay = document.getElementById('note-editor-overlay');
+    if (overlay) overlay.style.display = 'none';
+}
+
+function closeNoteEditorOnBg(event) {
+    if (event.target === document.getElementById('note-editor-overlay')) closeNoteEditor();
+}
+
+function execCmd(command, value) {
+    const editor = document.getElementById('rich-editor');
+    if (!editor) return;
+    document.execCommand(command, false, value);
+    editor.focus();
+}
+
+function saveNotes() {
+    const editor = document.getElementById('rich-editor');
+    if (editor) {
+        localStorage.setItem('hsk4_bai09_notes', editor.innerHTML);
+        const status = document.getElementById('save-status');
+        if (status) { status.textContent = 'Đã lưu thành công!'; setTimeout(() => status.textContent = 'Tự động lưu khi bạn gõ', 2000); }
+    }
+}
+
+// ===== RESET & EXPORT =====
+function resetExercises() {
+    if (!confirm('Bạn có chắc muốn làm lại tất cả bài tập không?')) return;
+    try {
+        document.querySelectorAll('input[type="radio"]').forEach(r => { if (r) r.checked = false; });
+        document.querySelectorAll('input[type="text"]').forEach(i => { if (i) i.value = ''; });
+        document.querySelectorAll('textarea').forEach(t => { if (t) t.value = ''; });
+        Object.values(arrangers || {}).forEach(a => { if (a?.reset) a.reset(); });
+        document.querySelectorAll('.result-message').forEach(r => { if (r) { r.className = 'result-message'; r.textContent = ''; r.style.cssText = ''; } });
+        localStorage.removeItem('hsk4_bai09_notes');
+        shuffleAllExercises();
+        alert('Đã xóa tất cả bài tập!');
+    } catch (e) { console.error('Reset error:', e); }
+}
+
+function exportHTML() {
+    const content = document.documentElement.outerHTML;
+    const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'BHHSK4-09-Bai9.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// ===== XÁO TRỘN (cố định theo seed -> ổn định qua mỗi lần mở/in) =====
+function _hashStr(s) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+}
+function _mulberry32(a) {
+    return function () {
+        a |= 0; a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+function _seededShuffle(arr, seed) {
+    const rnd = _mulberry32(seed >>> 0);
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rnd() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+function shuffleAllExercises() {
+    const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    document.querySelectorAll('button').forEach(btn => {
+        const oc = btn.getAttribute('onclick');
+        if (!oc) return;
+        const m = oc.match(/checkAnswer\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/);
+        if (!m) return;
+        const name = m[1], oldCorrect = m[2], resultId = m[3];
+        const inputs = Array.from(document.querySelectorAll('input[type="radio"][name="' + name + ']"'));
+        if (inputs.length < 2) return;
+        const labels = inputs.map(inp => inp.closest('label'));
+        if (labels.some(l => !l)) return;
+        const items = labels.map((lab, i) => ({
+            content: lab.textContent.trim().replace(/^[A-Z]\s*/, ''),
+            correct: inputs[i].value === oldCorrect
+        }));
+        const correctIdx = items.findIndex(it => it.correct);
+        if (correctIdx === -1) return;
+        const correctContent = items[correctIdx].content;
+        const contents = _seededShuffle(items.map(it => it.content), _hashStr(name));
+        labels.forEach((lab, i) => {
+            const inp = inputs[i];
+            inp.value = LETTERS[i];
+            inp.checked = false;
+            Array.from(lab.childNodes).forEach(n => { if (n !== inp) lab.removeChild(n); });
+            lab.appendChild(document.createTextNode(' ' + LETTERS[i] + ' ' + contents[i]));
+        });
+        const newCorrect = LETTERS[contents.indexOf(correctContent)];
+        btn.setAttribute('onclick', "checkAnswer('" + name + "', '" + newCorrect + "', '" + resultId + "')");
+    });
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeNoteEditor();
+});
+
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        renderVocab('all');
+        shuffleAllExercises();
+    } catch (e) { console.error('Init error:', e); }
+});
+</script>
+
+
+<!-- ===== NOTE EDITOR OVERLAY ===== -->
+<div id="note-editor-overlay" onclick="closeNoteEditorOnBg(event)">
+    <div id="note-editor-container">
+        <div id="note-editor-header">
+            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú</h3>
+            <button onclick="closeNoteEditor()" style="background:transparent; border:none; color:white; font-size:20px; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div id="note-editor-toolbar">
+            <button class="editor-tool-btn" onclick="execCmd('bold')"><i class="bi bi-type-bold"></i> Đậm</button>
+            <button class="editor-tool-btn" onclick="execCmd('italic')"><i class="bi bi-type-italic"></i> Nghiêng</button>
+            <button class="editor-tool-btn" onclick="execCmd('underline')"><i class="bi bi-type-underline"></i> Gạch chân</button>
+            <button class="editor-tool-btn" onclick="execCmd('foreColor', '#c62828')"><i class="bi bi-palette"></i> Đỏ</button>
+            <button class="editor-tool-btn" onclick="execCmd('foreColor', '#2e7d32')"><i class="bi bi-palette"></i> Xanh</button>
+            <button class="editor-tool-btn" onclick="execCmd('insertUnorderedList')"><i class="bi bi-list-ul"></i> Danh sách</button>
+            <button class="editor-tool-btn" onclick="execCmd('removeFormat')"><i class="bi bi-eraser"></i> Xóa định dạng</button>
+        </div>
+        <div id="rich-editor" contenteditable="true" spellcheck="false"><p><b>Bảng ghi chú - Bài 9: 阳光总在风雨后</b></p><p><br></p><p><i>Ghi chép những điểm quan trọng ở đây...</i></p></div>
+        <div id="note-editor-footer">
+            <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()"><i class="bi bi-x-circle"></i> Đóng</button>
+            <div id="save-status" style="font-size: 13px; color: #666; font-style: italic;">Tự động lưu khi bạn gõ</div>
+            <button class="editor-btn editor-btn-save" onclick="saveNotes()"><i class="bi bi-check-circle"></i> Lưu & Đóng</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
