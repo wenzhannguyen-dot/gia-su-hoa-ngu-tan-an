@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bài 26: Thuế Gtgt</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.2/dist/hanzi-writer.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#c62828;--primary-dark:#9f1f1f;--accent:#ed7d31;--green:#2e7d32;--green-light:#e8f5e9;--bg:#f5f5f5;--border:#d9d9d9;--muted:#666}
+html{scroll-behavior:smooth}
+body{font-family:Arial,"Helvetica Neue",sans-serif;background:var(--bg);color:#333;min-height:100vh}
+button{font-family:inherit}
+.header{position:fixed;inset:0 0 auto 0;height:70px;background:var(--primary);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;z-index:1000;box-shadow:0 3px 10px rgba(0,0,0,.16)}
+.logo{display:flex;align-items:center;gap:13px}
+.logo-mark{width:50px;height:50px;border-radius:9px;background:#fff;color:var(--primary);display:grid;place-items:center;font-size:27px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo-text h1{font-size:17px;margin-bottom:3px}
+.logo-text p{font-size:12px;opacity:.92}
+.main-container{display:flex;gap:15px;min-height:100vh;padding:90px 15px 15px}
+.sidebar-left{width:230px;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;flex-shrink:0;position:sticky;top:90px;height:calc(100vh - 105px);display:flex;flex-direction:column;overflow-y:auto}
+.nav-title{padding:15px;background:#f8f9fa;border-bottom:2px solid var(--primary);font-size:14px;font-weight:700;display:flex;gap:8px;align-items:center}
+.nav-item{padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;color:#666;font-size:13px;border-bottom:1px solid #f0f0f0;transition:.15s}
+.nav-item i{width:19px;text-align:center;font-size:16px}
+.nav-item:hover{background:#fce4ec;color:var(--primary)}
+.nav-item.active{background:var(--green-light);color:var(--green);font-weight:700;border-left:4px solid var(--green);padding-left:10px}
+.tools-section{padding:13px;background:#fafafa;margin-top:auto;border-top:1px solid #e0e0e0}
+.tool-card{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:11px;margin-bottom:9px}
+.tool-title{font-size:13px;font-weight:700;margin-bottom:9px;display:flex;gap:6px;align-items:center}
+.tool-btn{width:100%;border:1px solid #ddd;background:#f8f9fa;color:#555;padding:8px;border-radius:5px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px}
+.tool-btn:last-child{margin-bottom:0}
+.tool-btn:hover{background:#fce4ec;border-color:var(--primary);color:var(--primary)}
+.tool-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.tool-btn.success{background:#4caf50;border-color:#4caf50;color:#fff;font-weight:700}
+.tool-btn.active-toggle{background:#fce4ec;border-color:var(--primary);color:var(--primary);font-weight:700}
+.content-area{flex:1;min-width:0;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.content-header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#f8f9fa,#fce4ec);padding:20px;border-bottom:2px solid var(--primary)}
+.section-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700}
+.section-badge{margin-left:auto;background:var(--primary);color:#fff;padding:5px 12px;border-radius:20px;font-size:12px}
+.content-body{padding:25px;background:#fafafa;min-height:calc(100vh - 150px)}
+.section-content{display:none;animation:fadeIn .3s ease}
+.section-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.objectives-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:20px}
+.objective-card{background:linear-gradient(to right,#fce4ec,#f8f9fa);border-radius:9px;padding:20px;border:1px solid #f3d6da}
+.objective-card i{font-size:25px;color:var(--primary);display:block;margin-bottom:10px}
+.objective-card h3{font-size:16px;margin-bottom:8px}
+.objective-card p{font-size:14px;line-height:1.65;color:#666}
+.panel{background:#fff;border:1px solid #e0e0e0;border-radius:9px;padding:22px;margin-bottom:18px}
+.panel-title{font-size:18px;font-weight:700;color:#333;margin-bottom:15px;display:flex;align-items:center;gap:9px;padding-bottom:10px;border-bottom:2px solid var(--primary)}
+.clean-list{padding-left:22px;line-height:1.9;font-size:16px}
+.vocab-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:20px;padding:8px 13px;background:#fff;min-width:260px}
+.search-box input{border:0;outline:0;width:100%;font-size:14px}
+.vocab-count{font-size:13px;color:#666}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:18px}
+.vocab-card{background:#f8f9fa;border:2px dashed var(--primary);border-radius:12px;padding:17px;display:flex;align-items:center;gap:15px;min-height:138px;transition:.2s}
+.vocab-card:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(198,40,40,.12);border-style:solid}
+.vocab-number{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:#4caf50;color:#fff;font-weight:700;flex-shrink:0}
+.vocab-main{flex:1;min-width:0}
+.vocab-chinese{font-family:"DFKai-SB","KaiTi","楷体","Microsoft YaHei",serif;font-size:30px;color:#000;margin-bottom:4px;cursor:pointer}
+.vocab-pinyin{font-size:19px;color:var(--primary);margin-bottom:5px}
+.vocab-meaning{font-size:18px;color:var(--green);font-weight:700;line-height:1.4}
+.vocab-actions{display:flex;flex-direction:column;gap:7px}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:#fce4ec;color:var(--primary);cursor:pointer;display:grid;place-items:center}
+.icon-btn:hover{background:var(--primary);color:#fff}
+.writer-wrap{display:none;flex-wrap:wrap;gap:6px;margin-top:11px;padding-top:10px;border-top:1px dashed #ddd}
+.writer-wrap.open{display:flex}
+.writer-box{width:64px;height:64px;background:#fff;border:1px solid #ddd;border-radius:5px}
+.language-list{display:grid;gap:13px}
+.language-card{background:#fff;border:1px solid #e0e0e0;border-radius:9px;padding:16px;display:flex;gap:15px;align-items:flex-start;cursor:pointer;transition:.15s}
+.language-card:hover{background:#fce4ec;border-color:var(--primary);transform:translateX(3px)}
+.number-badge{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+.language-body{flex:1;min-width:0}
+.chinese-text{font-family:"Microsoft YaHei","SimHei",serif;font-size:21px;color:#000;line-height:1.55;margin-bottom:5px}
+.pinyin-text{font-size:18px;color:var(--primary);line-height:1.55;margin-bottom:5px}
+.vietnamese-text{font-size:17px;color:#666;line-height:1.55}
+.round-audio{width:36px;height:36px;border:0;border-radius:50%;background:#fce4ec;color:var(--primary);cursor:pointer;flex-shrink:0}
+.round-audio:hover{background:var(--primary);color:#fff}
+.dialogue-header{background:var(--accent);color:#fff;padding:11px 14px;border-radius:8px 8px 0 0;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dialogue-header button{border:0;background:#fff;color:var(--accent);padding:6px 11px;border-radius:15px;font-weight:700;cursor:pointer}
+.dialogue-content{background:#fff;border:1px solid #e0e0e0;border-top:0;border-radius:0 0 8px 8px;padding:18px}
+.dialogue-line{padding:15px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;margin-bottom:13px;cursor:pointer;transition:.15s}
+.dialogue-line:last-child{margin-bottom:0}
+.dialogue-line:hover{background:#fce4ec;border-color:var(--primary);transform:translateX(4px)}
+.dialogue-speaker{color:var(--primary);font-weight:700;margin-bottom:7px}
+.info-line,.step-line{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;margin-bottom:10px;font-size:16px;line-height:1.65}
+.info-dot,.step-icon{width:28px;height:28px;border-radius:50%;background:var(--green-light);color:var(--green);display:grid;place-items:center;flex-shrink:0}
+.situation-label{background:#fff3e0;border-left:4px solid var(--accent);padding:13px 15px;margin-bottom:12px;border-radius:5px;font-size:16px;line-height:1.65;font-weight:600}
+body.hide-pinyin .pinyin-text,body.hide-pinyin .vocab-pinyin,body.hide-pinyin .dialogue-pinyin{display:none!important}
+body.hide-vietnamese .vietnamese-text,body.hide-vietnamese .vocab-meaning,body.hide-vietnamese .dialogue-vietnamese{display:none!important}
+#note-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:5000;padding:4vh 7vw}
+.note-box{height:92vh;background:#fff;border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+.note-head{background:var(--primary);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.note-toolbar{padding:9px 14px;background:#f8f9fa;border-bottom:1px solid #ddd;display:flex;gap:7px;flex-wrap:wrap}
+.note-toolbar button{padding:6px 10px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer}
+#note-editor{flex:1;padding:20px;overflow:auto;outline:0;line-height:1.7}
+.note-foot{padding:11px 16px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
+.note-save{background:var(--primary);color:#fff;border:0;padding:8px 17px;border-radius:5px;cursor:pointer}
+.empty-state{padding:30px;text-align:center;color:#777}
+@media(max-width:900px){.main-container{padding:78px 8px 8px}.sidebar-left{position:fixed;left:-260px;top:70px;height:calc(100vh - 70px);z-index:1500;border-radius:0;transition:.2s}.sidebar-left.open{left:0}.content-body{padding:15px}.vocab-grid{grid-template-columns:1fr}.vocab-card{min-width:0}}
+@media(max-width:540px){.logo-text h1{font-size:13px}.logo-text p{display:none}.vocab-card{display:block}.vocab-number{margin-bottom:10px}.vocab-actions{position:absolute;right:14px;top:14px}.content-header{padding:14px}.section-title{font-size:16px}.section-badge{font-size:10px}}
+@media print{.header,.sidebar-left,.content-header,.round-audio,.vocab-actions{display:none!important}.main-container{padding:0}.content-area{border:0;box-shadow:none}.content-body{padding:0;background:#fff}.section-content{display:block!important;page-break-before:always}.section-content:first-child{page-break-before:auto}.vocab-card,.language-card,.dialogue-line,.panel{break-inside:avoid}}
+
+/* ===== GIỮ NGUYÊN GIAO DIỆN HSK ===== */
+.header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #c62828; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+.logo-img img { width: 100%; height: 100%; object-fit: contain; }
+.logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+.logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+.main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+.sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
+.nav-section { border-bottom: 1px solid #e0e0e0; }
+.nav-title { padding: 15px; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #c62828; font-family: Arial, sans-serif; }
+.nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666; font-size: 13px; transition: background 0.1s ease, color 0.1s ease; font-family: Arial, sans-serif; border: 0; }
+.nav-item:hover { background: #fce4ec; color: #c62828; }
+.nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; border-left: 0; padding-left: 15px; }
+.nav-item i { font-size: 16px; width: 20px; text-align: center; }
+.tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+.tool-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.tool-card:last-child { margin-bottom: 0; }
+.tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; }
+.tool-btn { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; cursor: pointer; font-size: 12px; color: #666; margin-bottom: 6px; display: flex; align-items: center; justify-content: flex-start; gap: 8px; transition: all 0.1s; font-family: Arial, sans-serif; }
+.tool-btn:hover { background: #fce4ec; border-color: #c62828; color: #c62828; }
+.tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+.tool-btn.primary:hover { background: #d35400; }
+.tool-btn.active-toggle { background: #fce4ec; border-color: #c62828; color: #c62828; font-weight: 600; }
+.content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #fce4ec); padding: 20px; border-bottom: 2px solid #c62828; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+.section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+.section-badge { background: #c62828; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; margin-left: 0; }
+.content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+body.hide-examples .vocab-example { display: none !important; }
+@media (max-width: 1024px) {
+    .sidebar-left { width: 60px; }
+    .sidebar-left .tools-section { display: none; }
+    .nav-item span, .nav-title span { display: none; }
+    .nav-item { justify-content: center; padding: 15px 10px; }
+    .nav-item.active { padding-left: 10px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar-left { position: sticky !important; left: auto !important; top: 90px !important; height: fit-content !important; max-height: calc(100vh - 105px) !important; border-radius: 8px !important; }
+}
+@media (max-width: 768px) {
+    .main-container { flex-direction: column; padding: 70px 8px 8px; }
+    .sidebar-left { width: 100%; position: relative !important; left: auto !important; top: 0 !important; height: auto !important; max-height: none; display: flex; overflow-x: auto; flex-direction: row; border-radius: 8px; }
+    .nav-section { display: flex; border-bottom: none; flex: 1; }
+    .nav-title { display: none; }
+    .nav-item { white-space: nowrap; }
+    .nav-item span { display: inline; }
+    .tools-section { display: none; }
+}
+@media print {
+    .header, .sidebar-left, .content-header, .round-audio, .vocab-actions { display: none !important; }
+    .main-container { padding: 0; }
+    .content-area { border: 0; box-shadow: none; }
+    .content-body { padding: 0; background: #fff; }
+    .section-content { display: block !important; page-break-before: always; }
+    .section-content:first-child { page-break-before: auto; }
+    .vocab-card, .language-card, .dialogue-line, .panel { break-inside: avoid; }
+}
+
+
+.home-link{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.65);padding:9px 14px;border-radius:7px;text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap;transition:.15s}
+.home-link:hover{background:#fff;color:#c62828}
+@media(max-width:620px){.home-link span{display:none}.home-link{padding:9px 11px}.logo-text h1{font-size:12px}}
+
+/* Bổ sung hiển thị nội dung Word, không thay đổi khung giao diện HSK */
+.dialogue-task{display:flex;align-items:flex-start;gap:10px;background:#fff8e1;border:1px solid #f0cf86;border-left:4px solid var(--accent);border-radius:8px;padding:12px 14px;margin-bottom:12px;line-height:1.6;font-size:15px}
+.dialogue-task i{color:var(--accent);font-size:18px;margin-top:2px}
+.table-scroll{overflow-x:auto;margin:14px 0;border:1px solid #ddd;border-radius:8px;background:#fff}
+.doc-table{width:100%;border-collapse:collapse;min-width:560px;font-size:14px;line-height:1.5}
+.doc-table th,.doc-table td{border:1px solid #ddd;padding:10px 12px;text-align:left;vertical-align:top}
+.doc-table th{background:#f4f4f4;font-weight:700;color:#222}
+.document-sheet{background:#fff;border:1px solid #d8d8d8;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:14px 0;font-family:"Microsoft YaHei",Arial,sans-serif;line-height:1.75;white-space:normal}
+.document-sheet>div:empty{min-height:10px}
+.table-list-item{list-style:none;margin-left:-22px}
+@media(max-width:620px){.doc-table{min-width:500px}.dialogue-header{align-items:flex-start;flex-direction:column}.dialogue-header button{align-self:flex-end}}
+</style>
+<base target="_blank"/>
+</head>
+<body class="hide-examples">
+<div class="header">
+<div class="logo">
+<div class="logo-img">
+<img alt="Logo" id="logo-image" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png"/>
+</div>
+<div class="logo-text">
+<h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+<p>Địa chỉ: 9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
+</div>
+</div>
+<a class="home-link" href="TRANG_CHU_GIAO_TRINH_KE_TOAN.html" target="_self" title="Về trang chủ"><i class="bi bi-house-door-fill"></i><span>Trang chủ</span></a></div>
+<div class="main-container">
+<aside class="sidebar-left" id="sidebar">
+<div class="nav-section">
+<div class="nav-title"><i class="bi bi-list-ul"></i><span>NỘI DUNG BÀI HỌC</span></div>
+<div class="nav-item active" onclick="showSection('objectives', this)">
+<i class="bi bi-bullseye"></i><span>Mục tiêu bài học</span>
+</div>
+<div class="nav-item" onclick="showSection('vocabulary', this)">
+<i class="bi bi-alphabet"></i><span>Từ vựng</span>
+</div>
+<div class="nav-item" onclick="showSection('sentences', this)">
+<i class="bi bi-chat-square-text"></i><span>Mẫu câu trọng tâm</span>
+</div>
+<div class="nav-item" onclick="showSection('dialogue', this)">
+<i class="bi bi-book"></i><span>Hội thoại tình huống</span>
+</div>
+<div class="nav-item" onclick="showSection('process', this)">
+<i class="bi bi-diagram-3"></i><span>Quy trình nghiệp vụ</span>
+</div>
+<div class="nav-item" onclick="showSection('documents', this)">
+<i class="bi bi-file-earmark-text"></i><span>Đọc biểu mẫu và chứng từ</span>
+</div>
+<div class="nav-item" onclick="showSection('situation', this)">
+<i class="bi bi-people"></i><span>Tình huống giao tiếp và xử lý</span>
+</div>
+</div>
+<div class="tools-section">
+<div class="tool-card">
+<div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+<button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+<i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+</button>
+<button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+<i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+</button>
+<button class="tool-btn active-toggle" id="btn-examples" onclick="toggleExamples(this)">
+<i class="bi bi-eye"></i><span>Ẩn/Hiện Ví dụ</span>
+</button>
+<button class="tool-btn primary" onclick="openNoteEditor()">
+<i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="content-area">
+<div class="content-header"><div class="section-title"><span id="current-icon"><i class="bi bi-bullseye"></i></span><span id="section-title-text">Mục tiêu bài học</span><span class="section-badge" id="section-badge">Phần 1/7</span></div></div>
+<div class="content-body">
+<section class="section-content active" id="objectives"><div class="objectives-grid"><div class="objective-card"><i class="bi bi-translate"></i><h3>Mục tiêu tiếng Trung</h3><p>Sử dụng đúng từ vựng và mẫu câu về thuế GTGT; nghe – nói được một tình huống công việc cơ bản.</p></div><div class="objective-card"><i class="bi bi-briefcase"></i><h3>Mục tiêu nghiệp vụ</h3><p>Nhận biết chứng từ và trình tự nghiệp vụ liên quan đến thuế gtgt.</p></div><div class="objective-card"><i class="bi bi-check2-circle"></i><h3>Đầu ra bài học</h3><p>Đọc số liệu và giải thích cách tính thuế GTGT cơ bản.</p></div></div><div class="panel"><div class="panel-title"><i class="bi bi-check-circle"></i>1. Mục tiêu ngôn ngữ và nghiệp vụ</div><ul class="clean-list"><li>Hiểu cơ chế thuế GTGT tại Trung Quốc (一般纳税人 và 小规模纳税人).</li><li>Tính thuế GTGT phải nộp.</li><li>Phân biệt thuế đầu ra, thuế đầu vào, khấu trừ.</li></ul></div></section>
+<section class="section-content" id="vocabulary">
+<div class="panel"><div class="panel-title"><i class="bi bi-card-list"></i>2. Từ vựng</div>
+<div class="vocab-toolbar"><div class="search-box"><i class="bi bi-search"></i><input id="vocab-search" oninput="renderVocab(this.value)" placeholder="Tìm tiếng Trung, Pinyin hoặc nghĩa..."/></div><div class="vocab-count" id="vocab-count"></div></div>
+<div class="vocab-grid" id="vocab-grid"></div>
+</div>
+</section>
+<section class="section-content" id="sentences"><div class="panel"><div class="panel-title"><i class="bi bi-chat-square-text"></i>3. Mẫu câu trọng tâm</div><div class="language-list"><div class="language-card" onclick='speak("我们是增值税一般纳税人。")'><div class="number-badge">1</div><div class="language-body"><div class="chinese-text">我们是增值税一般纳税人。</div><div class="pinyin-text">Wǒmen shì zēngzhíshuì yìbān nàshuìrén.</div><div class="vietnamese-text">Chúng tôi là người nộp thuế giá trị gia tăng theo phương pháp thông thường.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("我们是增值税一般纳税人。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("销项税额减去进项税额就是应纳税额。")'><div class="number-badge">2</div><div class="language-body"><div class="chinese-text">销项税额减去进项税额就是应纳税额。</div><div class="pinyin-text">Xiāoxiàng shuì'é jiǎn qù jìnxiàng shuì'é jiùshì yìngnà shuì'é.</div><div class="vietnamese-text">Thuế giá trị gia tăng phải nộp bằng thuế đầu ra trừ thuế đầu vào.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("销项税额减去进项税额就是应纳税额。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("进项发票要及时认证。")'><div class="number-badge">3</div><div class="language-body"><div class="chinese-text">进项发票要及时认证。</div><div class="pinyin-text">Jìnxiàng fāpiào yào jíshí rènzhèng.</div><div class="vietnamese-text">Hóa đơn đầu vào phải được xác nhận kịp thời.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("进项发票要及时认证。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("这个月留抵税额有两万。")'><div class="number-badge">4</div><div class="language-body"><div class="chinese-text">这个月留抵税额有两万。</div><div class="pinyin-text">Zhège yuè liúdǐ shuì'é yǒu liǎng wàn.</div><div class="vietnamese-text">Tháng này còn hai mươi nghìn thuế đầu vào được chuyển sang kỳ sau để khấu trừ.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("这个月留抵税额有两万。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("用于员工福利的进项不能抵扣。")'><div class="number-badge">5</div><div class="language-body"><div class="chinese-text">用于员工福利的进项不能抵扣。</div><div class="pinyin-text">Yòng yú yuángōng fúlì de jìnxiàng bùnéng dǐkòu.</div><div class="vietnamese-text">Thuế đầu vào dùng cho phúc lợi nhân viên không được khấu trừ.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("用于员工福利的进项不能抵扣。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("要转出进项税额。")'><div class="number-badge">6</div><div class="language-body"><div class="chinese-text">要转出进项税额。</div><div class="pinyin-text">Yào zhuǎnchū jìnxiàng shuì'é.</div><div class="vietnamese-text">Phải điều chỉnh giảm thuế đầu vào được khấu trừ.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("要转出进项税额。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("小规模纳税人按3%征收。")'><div class="number-badge">7</div><div class="language-body"><div class="chinese-text">小规模纳税人按3%征收。</div><div class="pinyin-text">Xiǎoguīmó nàshuìrén àn 3% zhēngshōu.</div><div class="vietnamese-text">Người nộp thuế quy mô nhỏ nộp theo tỷ lệ 3%.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("小规模纳税人按3%征收。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("出口货物适用零税率。")'><div class="number-badge">8</div><div class="language-body"><div class="chinese-text">出口货物适用零税率。</div><div class="pinyin-text">Chūkǒu huòwù shìyòng líng shuìlǜ.</div><div class="vietnamese-text">Hàng xuất khẩu áp dụng thuế suất 0%.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("出口货物适用零税率。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("农产品按9%计算进项。")'><div class="number-badge">9</div><div class="language-body"><div class="chinese-text">农产品按9%计算进项。</div><div class="pinyin-text">Nóngchǎnpǐn àn 9% jìsuàn jìnxiàng.</div><div class="vietnamese-text">Thuế đầu vào đối với nông sản được tính theo tỷ lệ 9%.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("农产品按9%计算进项。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("简易计税不能抵扣进项。")'><div class="number-badge">10</div><div class="language-body"><div class="chinese-text">简易计税不能抵扣进项。</div><div class="pinyin-text">Jiǎnyì jìshuì bùnéng dǐkòu jìnxiàng.</div><div class="vietnamese-text">Phương pháp tính thuế đơn giản không được khấu trừ thuế đầu vào.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("简易计税不能抵扣进项。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("申报表15号前要提交。")'><div class="number-badge">11</div><div class="language-body"><div class="chinese-text">申报表15号前要提交。</div><div class="pinyin-text">Shēnbào biǎo shíwǔ hào qián yào tíjiāo.</div><div class="vietnamese-text">Tờ khai phải được nộp trước ngày 15.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("申报表15号前要提交。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("完税凭证打印两份。")'><div class="number-badge">12</div><div class="language-body"><div class="chinese-text">完税凭证打印两份。</div><div class="pinyin-text">Wánshuì píngzhèng dǎyìn liǎng fèn.</div><div class="vietnamese-text">In chứng từ nộp thuế thành hai bản.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("完税凭证打印两份。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("金税盘要每月清卡。")'><div class="number-badge">13</div><div class="language-body"><div class="chinese-text">金税盘要每月清卡。</div><div class="pinyin-text">Jīnshuì pán yào měi yuè qīngkǎ.</div><div class="vietnamese-text">Thiết bị kiểm soát thuế phải được xóa thẻ hằng tháng.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("金税盘要每月清卡。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("勾选平台进不去，系统维护了。")'><div class="number-badge">14</div><div class="language-body"><div class="chinese-text">勾选平台进不去，系统维护了。</div><div class="pinyin-text">Gōuxuǎn píngtái jìn bù qù, xìtǒng wéihù le.</div><div class="vietnamese-text">Không truy cập được nền tảng chọn hóa đơn vì hệ thống đang bảo trì.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("勾选平台进不去，系统维护了。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("减免税额要备案。")'><div class="number-badge">15</div><div class="language-body"><div class="chinese-text">减免税额要备案。</div><div class="pinyin-text">Jiǎnmiǎn shuì'é yào bèi'àn.</div><div class="vietnamese-text">Khoản thuế được miễn giảm phải đăng ký hồ sơ.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("减免税额要备案。")'><i class="bi bi-volume-up-fill"></i></button></div></div></div></section>
+<section class="section-content" id="dialogue"><div class="dialogue-task"><i class="bi bi-bullseye"></i><span>Nhiệm vụ giao tiếp: Đọc số liệu và giải thích cách tính thuế GTGT cơ bản.</span></div><div class="dialogue-header"><span><i class="bi bi-people-fill"></i> A: 税务会计 (Kế toán thuế) – B: 财务经理 (Giám đốc tài vụ)</span><button onclick="speakDialogue()"><i class="bi bi-play-fill"></i> Nghe hội thoại</button></div><div class="dialogue-content"><div class="dialogue-line" onclick='speak("经理，7月份的增值税算出来了。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">经理，7月份的增值税算出来了。</div><div class="dialogue-pinyin pinyin-text">Jīnglǐ, qī yuèfèn de zēngzhíshuì suàn chūlai le.</div><div class="dialogue-vietnamese vietnamese-text">Giám đốc, thuế giá trị gia tăng tháng 7 đã tính xong.</div></div><div class="dialogue-line" onclick='speak("多少？")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">多少？</div><div class="dialogue-pinyin pinyin-text">Duōshao?</div><div class="dialogue-vietnamese vietnamese-text">Bao nhiêu?</div></div><div class="dialogue-line" onclick='speak("销项税额十五万，进项税额十万，其中有两千的进项用于员工福利，要转出。所以应纳税额是五万两千。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">销项税额十五万，进项税额十万，其中有两千的进项用于员工福利，要转出。所以应纳税额是五万两千。</div><div class="dialogue-pinyin pinyin-text">Xiāoxiàng shuì'é shíwǔ wàn, jìnxiàng shuì'é shí wàn, qízhōng yǒu liǎng qiān de jìnxiàng yòng yú yuángōng fúlì, yào zhuǎnchū. Suǒyǐ yìngnà shuì'é shì wǔ wàn liǎng qiān.</div><div class="dialogue-vietnamese vietnamese-text">Thuế đầu ra là một trăm năm mươi nghìn, thuế đầu vào một trăm nghìn; trong đó có hai nghìn thuế đầu vào dùng cho phúc lợi nhân viên phải điều chỉnh giảm. Vì vậy thuế phải nộp là năm mươi hai nghìn.</div></div><div class="dialogue-line" onclick='speak("留抵还有吗？")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">留抵还有吗？</div><div class="dialogue-pinyin pinyin-text">Liúdǐ háiyǒu ma?</div><div class="dialogue-vietnamese vietnamese-text">Còn số thuế được chuyển sang kỳ sau để khấu trừ không?</div></div><div class="dialogue-line" onclick='speak("上个月留抵三万，这个月先用留抵抵减，实际要交两万两千。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">上个月留抵三万，这个月先用留抵抵减，实际要交两万两千。</div><div class="dialogue-pinyin pinyin-text">Shàng ge yuè liúdǐ sān wàn, zhège yuè xiān yòng liúdǐ dǐjiǎn, shíjì yào jiāo liǎng wàn liǎng qiān.</div><div class="dialogue-vietnamese vietnamese-text">Tháng trước còn ba mươi nghìn thuế được khấu trừ chuyển kỳ. Tháng này dùng số đó bù trừ trước, nên thực tế phải nộp hai mươi hai nghìn.</div></div><div class="dialogue-line" onclick='speak("好的。申报表做好后给我审核。")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">好的。申报表做好后给我审核。</div><div class="dialogue-pinyin pinyin-text">Hǎo de. Shēnbào biǎo zuò hǎo hòu gěi wǒ shěnhé.</div><div class="dialogue-vietnamese vietnamese-text">Được. Làm xong tờ khai thì đưa tôi kiểm tra.</div></div><div class="dialogue-line" onclick='speak("还有，我们有个客户是小规模纳税人，给我们开的是3%的普通发票，不能抵扣。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">还有，我们有个客户是小规模纳税人，给我们开的是3%的普通发票，不能抵扣。</div><div class="dialogue-pinyin pinyin-text">Háiyǒu, wǒmen yǒu ge kèhù shì xiǎoguīmó nàshuìrén, gěi wǒmen kāi de shì 3% de pǔtōng fāpiào, bùnéng dǐkòu.</div><div class="dialogue-vietnamese vietnamese-text">Ngoài ra, chúng ta có một khách hàng là người nộp thuế quy mô nhỏ; họ xuất hóa đơn phổ thông thuế suất 3% nên không được khấu trừ.</div></div><div class="dialogue-line" onclick='speak("那以后尽量让他们代开专票，或者我们接受价格让步。")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">那以后尽量让他们代开专票，或者我们接受价格让步。</div><div class="dialogue-pinyin pinyin-text">Nà yǐhòu jǐnliàng ràng tāmen dàikāi zhuānpài, huòzhě wǒmen jiēshòu jiàgé ràngbù.</div><div class="dialogue-vietnamese vietnamese-text">Vậy sau này cố gắng yêu cầu họ xin xuất hóa đơn chuyên dụng, hoặc chúng ta yêu cầu giảm giá.</div></div></div></section>
+<section class="section-content" id="process"><div class="panel"><div class="panel-title"><i class="bi bi-diagram-3"></i>5. Quy trình nghiệp vụ</div><div class="info-line"><span class="info-dot"><i class="bi bi-arrow-right"></i></span><div>Khi trình bày, sử dụng các từ nối: 首先 shǒuxiān trước tiên; 然后 ránhòu sau đó; 接下来 jiēxiàlái tiếp theo; 最后 zuìhòu cuối cùng.</div></div><div class="info-line"><span class="info-dot"><i class="bi bi-arrow-right"></i></span><div>Quy trình kê khai thuế GTGT hàng tháng (TQ):</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>1. Ngày 1-15: Tổng hợp hóa đơn đầu ra (đã xuất trong tháng).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>2. Tổng hợp hóa đơn đầu vào (đã nhận và chứng nhận trong tháng).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>3. Tính toán: Thuế đầu ra - Thuế đầu vào được khấu trừ + Thuế đầu vào phải chuyển ra - Thuế được khấu trừ chuyển kỳ trước = Thuế phải nộp.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>4. Lập "增值税纳税申报表" (Tờ khai thuế GTGT).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>5. Đăng nhập hệ thống kê khai thuế điện tử của cục thuế.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>6. Nhập số liệu, kiểm tra tự động.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>7. Nộp tờ khai.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>8. Nếu có thuế phải nộp: Thanh toán qua ngân hàng hoặc nộp trực tiếp.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>9. Lấy "完税凭证" (chứng từ nộp thuế).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>10. In tờ khai và chứng từ nộp thuế, lưu hồ sơ.</div></div></div></section>
+<section class="section-content" id="documents"><div class="panel"><div class="panel-title"><i class="bi bi-file-earmark-text"></i>6. Đọc biểu mẫu và chứng từ</div><div class="info-line"><span class="info-dot"><i class="bi bi-file-earmark-text"></i></span><div>Đọc theo thứ tự: tên chứng từ → đơn vị lập → ngày tháng → đối tượng → số tiền/số lượng → chữ ký và phê duyệt.</div></div><div class="document-sheet"><div>增值税纳税申报表（简表）(Tờ khai thuế GTGT - đơn giản):</div><div>增值税纳税申报表（一般纳税人适用）</div><div>申报所属期：2026年6月</div><div>项目 栏次 一般项目</div><div>本月数 本年累计</div><div>一、按适用税率计税销售额 1 1,000,000 6,000,000</div><div>销项税额 11 130,000 780,000</div><div>二、进项税额 12 100,000 600,000</div><div>进项税额转出 13 2,000 10,000</div><div>三、应抵扣税额合计 17 100,000 600,000</div><div>实际抵扣税额 18 100,000 600,000</div><div>四、应纳税额 19 32,000 190,000</div><div>期末留抵税额 20 0 5,000</div><div>税款缴纳：</div><div>本期已缴税额 27 30,000 180,000</div><div>本期应补（退）税额 34 2,000 10,000</div></div></div></section>
+<section class="section-content" id="situation"><div class="panel"><div class="panel-title"><i class="bi bi-lightbulb"></i>7. Tình huống giao tiếp và xử lý</div><div class="situation-label">Yêu cầu: xác định vấn đề, chọn mẫu câu phù hợp, trình bày cách xử lý và xác nhận kết quả.</div><div class="situation-label">Tình huống: Kê khai thuế tháng 6 xong, phát hiện quên không chứng nhận một hóa đơn đầu vào 10,000 tệ (thuế 1,300 tệ). Tờ khai đã nộp, thuế đã nộp.</div><div class="situation-label">Xử lý:</div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>1. Hóa đơn vẫn có thể chứng nhận trong tháng 7 (nếu chưa quá 360 ngày).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>2. Chứng nhận hóa đơn trong tháng 7.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>3. Khi kê khai tháng 7: Thuế đầu vào tháng 7 sẽ tăng thêm 1,300, làm giảm thuế phải nộp tháng 7 đi 1,300 (hoặc tăng thuế được khấu trừ chuyển kỳ).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>4. Không cần sửa tờ khai tháng 6 nếu không bị phạt (vì không khai sai, chỉ là chưa chứng nhận).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>5. Nếu cần sửa tờ khai: Nộp "更正申报" (tờ khai điều chỉnh) cho tháng 6, xin hoàn thuế 1,300 hoặc chuyển sang tháng 7.</div></div></div></section>
+</div>
+</main>
+</div>
+<div id="note-overlay" onclick="closeNotesOnBg(event)"><div class="note-box">
+<div class="note-head"><strong><i class="bi bi-journal-text"></i> Bảng ghi chú – Bài 26</strong><button onclick="closeNotes()" style="border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer">×</button></div>
+<div class="note-toolbar"><button onclick="cmd('bold')"><b>B</b></button><button onclick="cmd('italic')"><i>I</i></button><button onclick="cmd('underline')"><u>U</u></button><button onclick="cmd('insertUnorderedList')"><i class="bi bi-list-ul"></i></button><button onclick="cmd('insertOrderedList')"><i class="bi bi-list-ol"></i></button></div>
+<div contenteditable="true" id="note-editor"></div>
+<div class="note-foot"><span id="save-status">Tự động lưu khi bạn gõ</span><button class="note-save" onclick="saveNotes();closeNotes()">Lưu ghi chú</button></div>
+</div></div>
+<script>
+const VOCAB=[{"num":"1","zh":"增值税","py":"zēngzhíshuì","vi":"Thuế giá trị gia tăng (GTGT)"},{"num":"2","zh":"一般纳税人","py":"yìbān nàshuìrén","vi":"Người nộp thuế khấu trừ thường"},{"num":"3","zh":"小规模纳税人","py":"xiǎoguīmó nàshuìrén","vi":"Người nộp thuế quy mô nhỏ"},{"num":"4","zh":"销项税额","py":"xiāoxiàng shuì'é","vi":"Thuế đầu ra"},{"num":"5","zh":"进项税额","py":"jìnxiàng shuì'é","vi":"Thuế đầu vào"},{"num":"6","zh":"应纳税额","py":"yìngnà shuì'é","vi":"Thuế phải nộp"},{"num":"7","zh":"留抵税额","py":"liúdǐ shuì'é","vi":"Thuế được khấu trừ chuyển kỳ sau"},{"num":"8","zh":"转出","py":"zhuǎnchū","vi":"Chuyển ra"},{"num":"9","zh":"进项税额转出","py":"jìnxiàng shuì'é zhuǎnchū","vi":"Thuế đầu vào không được khấu trừ"},{"num":"10","zh":"减免","py":"jiǎnmiǎn","vi":"Giảm / Miễn"},{"num":"11","zh":"即征即退","py":"jí zhēng jí tuì","vi":"Thu ngay hoàn ngay"},{"num":"12","zh":"先征后退","py":"xiān zhēng hòu tuì","vi":"Thu trước hoàn sau"},{"num":"13","zh":"出口退稅","py":"chūkǒu tuìshuì","vi":"Hoàn thuế xuất khẩu"},{"num":"14","zh":"零税率","py":"líng shuìlǜ","vi":"Thuế suất 0%"},{"num":"15","zh":"免税","py":"miǎnshuì","vi":"Miễn thuế"},{"num":"16","zh":"简易计税","py":"jiǎnyì jìshuì","vi":"Tính thuế đơn giản"},{"num":"17","zh":"征收率","py":"zhēngshōulǜ","vi":"Tỷ lệ thu (với quy mô nhỏ)"},{"num":"18","zh":"税率","py":"shuìlǜ","vi":"Thuế suất"},{"num":"19","zh":"13%","py":"shísān bǎifēnzhī","vi":"13%"},{"num":"20","zh":"9%","py":"jiǔ bǎifēnzhī","vi":"9%"},{"num":"21","zh":"6%","py":"liù bǎifēnzhī","vi":"6%"},{"num":"22","zh":"3%","py":"sān bǎifēnzhī","vi":"3%"},{"num":"23","zh":"发票","py":"fāpiào","vi":"Hóa đơn"},{"num":"24","zh":"专用发票","py":"zhuānyòng fāpiào","vi":"Hóa đơn đặc biệt"},{"num":"25","zh":"普通发票","py":"pǔtōng fāpiào","vi":"Hóa đơn thường"},{"num":"26","zh":"认证","py":"rènzhèng","vi":"Xác nhận hóa đơn"},{"num":"27","zh":"勾选","py":"gōuxuǎn","vi":"Chọn (trong hệ thống)"},{"num":"28","zh":"申报","py":"shēnbào","vi":"Kê khai"},{"num":"29","zh":"缴纳","py":"jiǎonà","vi":"Nộp"},{"num":"30","zh":"完税凭证","py":"wánshuì píngzhèng","vi":"Chứng từ nộp thuế"},{"num":"31","zh":"税务","py":"shuìwù","vi":"Thuế vụ"},{"num":"32","zh":"金税盘","py":"jīnshuì pán","vi":"Thiết bị khống chế thuế (hệ thống TQ)"},{"num":"33","zh":"税控盘","py":"shuìkòng pán","vi":"Thiết bị khống chế thuế"},{"num":"34","zh":"申报表","py":"shēnbào biǎo","vi":"Tờ khai"}];
+const DIALOGUE=[{"speaker":"A","zh":"经理，7月份的增值税算出来了。","py":"Jīnglǐ, qī yuèfèn de zēngzhíshuì suàn chūlai le.","vi":"Giám đốc, thuế giá trị gia tăng tháng 7 đã tính xong."},{"speaker":"B","zh":"多少？","py":"Duōshao?","vi":"Bao nhiêu?"},{"speaker":"A","zh":"销项税额十五万，进项税额十万，其中有两千的进项用于员工福利，要转出。所以应纳税额是五万两千。","py":"Xiāoxiàng shuì'é shíwǔ wàn, jìnxiàng shuì'é shí wàn, qízhōng yǒu liǎng qiān de jìnxiàng yòng yú yuángōng fúlì, yào zhuǎnchū. Suǒyǐ yìngnà shuì'é shì wǔ wàn liǎng qiān.","vi":"Thuế đầu ra là một trăm năm mươi nghìn, thuế đầu vào một trăm nghìn; trong đó có hai nghìn thuế đầu vào dùng cho phúc lợi nhân viên phải điều chỉnh giảm. Vì vậy thuế phải nộp là năm mươi hai nghìn."},{"speaker":"B","zh":"留抵还有吗？","py":"Liúdǐ háiyǒu ma?","vi":"Còn số thuế được chuyển sang kỳ sau để khấu trừ không?"},{"speaker":"A","zh":"上个月留抵三万，这个月先用留抵抵减，实际要交两万两千。","py":"Shàng ge yuè liúdǐ sān wàn, zhège yuè xiān yòng liúdǐ dǐjiǎn, shíjì yào jiāo liǎng wàn liǎng qiān.","vi":"Tháng trước còn ba mươi nghìn thuế được khấu trừ chuyển kỳ. Tháng này dùng số đó bù trừ trước, nên thực tế phải nộp hai mươi hai nghìn."},{"speaker":"B","zh":"好的。申报表做好后给我审核。","py":"Hǎo de. Shēnbào biǎo zuò hǎo hòu gěi wǒ shěnhé.","vi":"Được. Làm xong tờ khai thì đưa tôi kiểm tra."},{"speaker":"A","zh":"还有，我们有个客户是小规模纳税人，给我们开的是3%的普通发票，不能抵扣。","py":"Háiyǒu, wǒmen yǒu ge kèhù shì xiǎoguīmó nàshuìrén, gěi wǒmen kāi de shì 3% de pǔtōng fāpiào, bùnéng dǐkòu.","vi":"Ngoài ra, chúng ta có một khách hàng là người nộp thuế quy mô nhỏ; họ xuất hóa đơn phổ thông thuế suất 3% nên không được khấu trừ."},{"speaker":"B","zh":"那以后尽量让他们代开专票，或者我们接受价格让步。","py":"Nà yǐhòu jǐnliàng ràng tāmen dàikāi zhuānpài, huòzhě wǒmen jiēshòu jiàgé ràngbù.","vi":"Vậy sau này cố gắng yêu cầu họ xin xuất hóa đơn chuyên dụng, hoặc chúng ta yêu cầu giảm giá."}];
+let audioSpeed=.8;
+const SECTION_TITLES = {
+    objectives: { text: 'Mục tiêu bài học', icon: '<i class="bi bi-bullseye"></i>', badge: 'Phần 1/7' },
+    vocabulary: { text: 'Từ vựng bài học', icon: '<i class="bi bi-alphabet"></i>', badge: '34 từ' },
+    sentences: { text: 'Mẫu câu trọng tâm', icon: '<i class="bi bi-chat-square-text"></i>', badge: '15 câu' },
+    dialogue: { text: 'Hội thoại tình huống', icon: '<i class="bi bi-book"></i>', badge: '8 lượt' },
+    process: { text: 'Quy trình nghiệp vụ', icon: '<i class="bi bi-diagram-3"></i>', badge: 'Phần 5/7' },
+    documents: { text: 'Đọc biểu mẫu và chứng từ', icon: '<i class="bi bi-file-earmark-text"></i>', badge: 'Phần 6/7' },
+    situation: { text: 'Tình huống giao tiếp và xử lý', icon: '<i class="bi bi-people"></i>', badge: 'Phần 7/7' }
+};
+function showSection(sectionId, navItem) {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+    document.querySelectorAll('.section-content').forEach(s => s && s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n && n.classList.remove('active'));
+    target.classList.add('active');
+    if (navItem) navItem.classList.add('active');
+    const t = SECTION_TITLES[sectionId];
+    const titleText = document.getElementById('section-title-text');
+    const currentIcon = document.getElementById('current-icon');
+    const sectionBadge = document.getElementById('section-badge');
+    if (t && titleText && currentIcon && sectionBadge) {
+        titleText.textContent = t.text;
+        currentIcon.innerHTML = t.icon;
+        sectionBadge.textContent = t.badge;
+    }
+    if (sectionId === 'vocabulary') renderVocab('');
+}
+function speak(text){if(!text||!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';u.rate=audioSpeed;u.pitch=1;speechSynthesis.speak(u)}
+function speakDialogue(){let i=0;speechSynthesis.cancel();function next(){if(i>=DIALOGUE.length)return;const u=new SpeechSynthesisUtterance(DIALOGUE[i++].zh);u.lang='zh-CN';u.rate=audioSpeed;u.onend=next;speechSynthesis.speak(u)}next()}
+let pinyinHidden=false,vietnameseHidden=false;
+function togglePinyin(btn){pinyinHidden=!pinyinHidden;document.body.classList.toggle('hide-pinyin',pinyinHidden);btn.classList.toggle('active-toggle',pinyinHidden);btn.querySelector('i').className=pinyinHidden?'bi bi-eye':'bi bi-eye-slash'}
+function toggleVietnamese(btn){vietnameseHidden=!vietnameseHidden;document.body.classList.toggle('hide-vietnamese',vietnameseHidden);btn.classList.toggle('active-toggle',vietnameseHidden);btn.querySelector('i').className=vietnameseHidden?'bi bi-eye':'bi bi-eye-slash'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderVocab(q=''){q=q.trim().toLowerCase();const items=VOCAB.filter(v=>!q||[v.zh,v.py,v.vi].some(x=>x.toLowerCase().includes(q)));document.getElementById('vocab-count').textContent=items.length+' / '+VOCAB.length+' từ';const grid=document.getElementById('vocab-grid');grid.innerHTML=items.map(v=>`<article class="vocab-card"><div class="vocab-number">${esc(v.num)}</div><div class="vocab-main"><div class="vocab-chinese" onclick="speak('${v.zh.replace(/'/g,"\'")}')">${esc(v.zh)}</div><div class="vocab-pinyin pinyin-text">${esc(v.py)}</div><div class="vocab-meaning vietnamese-text">${esc(v.vi)}</div><div class="writer-wrap" id="writer-${v.num}"></div></div><div class="vocab-actions"><button class="icon-btn" title="Phát âm" onclick="speak('${v.zh.replace(/'/g,"\'")}')"><i class="bi bi-volume-up-fill"></i></button><button class="icon-btn" title="Xem thứ tự nét" onclick="toggleWriter('${v.num}','${v.zh.replace(/'/g,"\'")}')"><i class="bi bi-pencil-square"></i></button></div></article>`).join('');if(!items.length)grid.innerHTML='<div class="empty-state">Không tìm thấy từ phù hợp.</div>'}
+const writers={};
+function toggleWriter(id,text){const wrap=document.getElementById('writer-'+id);if(!wrap)return;wrap.classList.toggle('open');if(!wrap.classList.contains('open')||writers[id])return;if(typeof HanziWriter==='undefined'){wrap.textContent='Không tải được thư viện viết chữ.';return};writers[id]=[];[...text].filter(ch=>/[㐀-鿿]/.test(ch)).forEach((ch,i)=>{const box=document.createElement('div');box.className='writer-box';box.id=`writer-${id}-${i}`;wrap.appendChild(box);try{const w=HanziWriter.create(box.id,ch,{width:62,height:62,padding:4,showOutline:true,strokeAnimationSpeed:1,delayBetweenStrokes:120,strokeColor:'#333',radicalColor:'#c62828'});writers[id].push(w);w.loopCharacterAnimation()}catch(e){box.textContent=ch}})}
+const NOTE_KEY='kt_bai26_notes';
+function openNotes(){document.getElementById('note-editor').innerHTML=localStorage.getItem(NOTE_KEY)||'';document.getElementById('note-overlay').style.display='block'}
+function closeNotes(){document.getElementById('note-overlay').style.display='none'}
+function closeNotesOnBg(e){if(e.target.id==='note-overlay')closeNotes()}
+function cmd(c){document.execCommand(c,false,null);document.getElementById('note-editor').focus()}
+function saveNotes(){localStorage.setItem(NOTE_KEY,document.getElementById('note-editor').innerHTML);document.getElementById('save-status').textContent='Đã lưu thành công!';setTimeout(()=>document.getElementById('save-status').textContent='Tự động lưu khi bạn gõ',1600)}
+document.getElementById('note-editor').addEventListener('input',()=>localStorage.setItem(NOTE_KEY,document.getElementById('note-editor').innerHTML));
+
+let examplesHidden = true;
+function toggleExamples(btn) {
+    examplesHidden = !examplesHidden;
+    document.body.classList.toggle('hide-examples', examplesHidden);
+    if (btn) {
+        btn.classList.toggle('active-toggle', examplesHidden);
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = examplesHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+    }
+}
+function openNoteEditor() { openNotes(); }
+
+renderVocab();
+</script>
+</body>
+</html>

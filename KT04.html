@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bài 04: Giao Tiếp Hằng Ngày Trong Công Ty</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.2/dist/hanzi-writer.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#c62828;--primary-dark:#9f1f1f;--accent:#ed7d31;--green:#2e7d32;--green-light:#e8f5e9;--bg:#f5f5f5;--border:#d9d9d9;--muted:#666}
+html{scroll-behavior:smooth}
+body{font-family:Arial,"Helvetica Neue",sans-serif;background:var(--bg);color:#333;min-height:100vh}
+button{font-family:inherit}
+.header{position:fixed;inset:0 0 auto 0;height:70px;background:var(--primary);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;z-index:1000;box-shadow:0 3px 10px rgba(0,0,0,.16)}
+.logo{display:flex;align-items:center;gap:13px}
+.logo-mark{width:50px;height:50px;border-radius:9px;background:#fff;color:var(--primary);display:grid;place-items:center;font-size:27px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo-text h1{font-size:17px;margin-bottom:3px}
+.logo-text p{font-size:12px;opacity:.92}
+.main-container{display:flex;gap:15px;min-height:100vh;padding:90px 15px 15px}
+.sidebar-left{width:230px;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;flex-shrink:0;position:sticky;top:90px;height:calc(100vh - 105px);display:flex;flex-direction:column;overflow-y:auto}
+.nav-title{padding:15px;background:#f8f9fa;border-bottom:2px solid var(--primary);font-size:14px;font-weight:700;display:flex;gap:8px;align-items:center}
+.nav-item{padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;color:#666;font-size:13px;border-bottom:1px solid #f0f0f0;transition:.15s}
+.nav-item i{width:19px;text-align:center;font-size:16px}
+.nav-item:hover{background:#fce4ec;color:var(--primary)}
+.nav-item.active{background:var(--green-light);color:var(--green);font-weight:700;border-left:4px solid var(--green);padding-left:10px}
+.tools-section{padding:13px;background:#fafafa;margin-top:auto;border-top:1px solid #e0e0e0}
+.tool-card{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:11px;margin-bottom:9px}
+.tool-title{font-size:13px;font-weight:700;margin-bottom:9px;display:flex;gap:6px;align-items:center}
+.tool-btn{width:100%;border:1px solid #ddd;background:#f8f9fa;color:#555;padding:8px;border-radius:5px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px}
+.tool-btn:last-child{margin-bottom:0}
+.tool-btn:hover{background:#fce4ec;border-color:var(--primary);color:var(--primary)}
+.tool-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.tool-btn.success{background:#4caf50;border-color:#4caf50;color:#fff;font-weight:700}
+.tool-btn.active-toggle{background:#fce4ec;border-color:var(--primary);color:var(--primary);font-weight:700}
+.content-area{flex:1;min-width:0;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.content-header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#f8f9fa,#fce4ec);padding:20px;border-bottom:2px solid var(--primary)}
+.section-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700}
+.section-badge{margin-left:auto;background:var(--primary);color:#fff;padding:5px 12px;border-radius:20px;font-size:12px}
+.content-body{padding:25px;background:#fafafa;min-height:calc(100vh - 150px)}
+.section-content{display:none;animation:fadeIn .3s ease}
+.section-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.objectives-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:20px}
+.objective-card{background:linear-gradient(to right,#fce4ec,#f8f9fa);border-radius:9px;padding:20px;border:1px solid #f3d6da}
+.objective-card i{font-size:25px;color:var(--primary);display:block;margin-bottom:10px}
+.objective-card h3{font-size:16px;margin-bottom:8px}
+.objective-card p{font-size:14px;line-height:1.65;color:#666}
+.panel{background:#fff;border:1px solid #e0e0e0;border-radius:9px;padding:22px;margin-bottom:18px}
+.panel-title{font-size:18px;font-weight:700;color:#333;margin-bottom:15px;display:flex;align-items:center;gap:9px;padding-bottom:10px;border-bottom:2px solid var(--primary)}
+.clean-list{padding-left:22px;line-height:1.9;font-size:16px}
+.vocab-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:20px;padding:8px 13px;background:#fff;min-width:260px}
+.search-box input{border:0;outline:0;width:100%;font-size:14px}
+.vocab-count{font-size:13px;color:#666}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:18px}
+.vocab-card{background:#f8f9fa;border:2px dashed var(--primary);border-radius:12px;padding:17px;display:flex;align-items:center;gap:15px;min-height:138px;transition:.2s}
+.vocab-card:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(198,40,40,.12);border-style:solid}
+.vocab-number{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:#4caf50;color:#fff;font-weight:700;flex-shrink:0}
+.vocab-main{flex:1;min-width:0}
+.vocab-chinese{font-family:"DFKai-SB","KaiTi","楷体","Microsoft YaHei",serif;font-size:30px;color:#000;margin-bottom:4px;cursor:pointer}
+.vocab-pinyin{font-size:19px;color:var(--primary);margin-bottom:5px}
+.vocab-meaning{font-size:18px;color:var(--green);font-weight:700;line-height:1.4}
+.vocab-actions{display:flex;flex-direction:column;gap:7px}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:#fce4ec;color:var(--primary);cursor:pointer;display:grid;place-items:center}
+.icon-btn:hover{background:var(--primary);color:#fff}
+.writer-wrap{display:none;flex-wrap:wrap;gap:6px;margin-top:11px;padding-top:10px;border-top:1px dashed #ddd}
+.writer-wrap.open{display:flex}
+.writer-box{width:64px;height:64px;background:#fff;border:1px solid #ddd;border-radius:5px}
+.language-list{display:grid;gap:13px}
+.language-card{background:#fff;border:1px solid #e0e0e0;border-radius:9px;padding:16px;display:flex;gap:15px;align-items:flex-start;cursor:pointer;transition:.15s}
+.language-card:hover{background:#fce4ec;border-color:var(--primary);transform:translateX(3px)}
+.number-badge{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+.language-body{flex:1;min-width:0}
+.chinese-text{font-family:"Microsoft YaHei","SimHei",serif;font-size:21px;color:#000;line-height:1.55;margin-bottom:5px}
+.pinyin-text{font-size:18px;color:var(--primary);line-height:1.55;margin-bottom:5px}
+.vietnamese-text{font-size:17px;color:#666;line-height:1.55}
+.round-audio{width:36px;height:36px;border:0;border-radius:50%;background:#fce4ec;color:var(--primary);cursor:pointer;flex-shrink:0}
+.round-audio:hover{background:var(--primary);color:#fff}
+.dialogue-header{background:var(--accent);color:#fff;padding:11px 14px;border-radius:8px 8px 0 0;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dialogue-header button{border:0;background:#fff;color:var(--accent);padding:6px 11px;border-radius:15px;font-weight:700;cursor:pointer}
+.dialogue-content{background:#fff;border:1px solid #e0e0e0;border-top:0;border-radius:0 0 8px 8px;padding:18px}
+.dialogue-line{padding:15px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;margin-bottom:13px;cursor:pointer;transition:.15s}
+.dialogue-line:last-child{margin-bottom:0}
+.dialogue-line:hover{background:#fce4ec;border-color:var(--primary);transform:translateX(4px)}
+.dialogue-speaker{color:var(--primary);font-weight:700;margin-bottom:7px}
+.info-line,.step-line{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;margin-bottom:10px;font-size:16px;line-height:1.65}
+.info-dot,.step-icon{width:28px;height:28px;border-radius:50%;background:var(--green-light);color:var(--green);display:grid;place-items:center;flex-shrink:0}
+.situation-label{background:#fff3e0;border-left:4px solid var(--accent);padding:13px 15px;margin-bottom:12px;border-radius:5px;font-size:16px;line-height:1.65;font-weight:600}
+body.hide-pinyin .pinyin-text,body.hide-pinyin .vocab-pinyin,body.hide-pinyin .dialogue-pinyin{display:none!important}
+body.hide-vietnamese .vietnamese-text,body.hide-vietnamese .vocab-meaning,body.hide-vietnamese .dialogue-vietnamese{display:none!important}
+#note-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:5000;padding:4vh 7vw}
+.note-box{height:92vh;background:#fff;border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+.note-head{background:var(--primary);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.note-toolbar{padding:9px 14px;background:#f8f9fa;border-bottom:1px solid #ddd;display:flex;gap:7px;flex-wrap:wrap}
+.note-toolbar button{padding:6px 10px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer}
+#note-editor{flex:1;padding:20px;overflow:auto;outline:0;line-height:1.7}
+.note-foot{padding:11px 16px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
+.note-save{background:var(--primary);color:#fff;border:0;padding:8px 17px;border-radius:5px;cursor:pointer}
+.empty-state{padding:30px;text-align:center;color:#777}
+@media(max-width:900px){.main-container{padding:78px 8px 8px}.sidebar-left{position:fixed;left:-260px;top:70px;height:calc(100vh - 70px);z-index:1500;border-radius:0;transition:.2s}.sidebar-left.open{left:0}.content-body{padding:15px}.vocab-grid{grid-template-columns:1fr}.vocab-card{min-width:0}}
+@media(max-width:540px){.logo-text h1{font-size:13px}.logo-text p{display:none}.vocab-card{display:block}.vocab-number{margin-bottom:10px}.vocab-actions{position:absolute;right:14px;top:14px}.content-header{padding:14px}.section-title{font-size:16px}.section-badge{font-size:10px}}
+@media print{.header,.sidebar-left,.content-header,.round-audio,.vocab-actions{display:none!important}.main-container{padding:0}.content-area{border:0;box-shadow:none}.content-body{padding:0;background:#fff}.section-content{display:block!important;page-break-before:always}.section-content:first-child{page-break-before:auto}.vocab-card,.language-card,.dialogue-line,.panel{break-inside:avoid}}
+
+/* ===== GIỮ NGUYÊN GIAO DIỆN HSK ===== */
+.header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #c62828; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+.logo-img img { width: 100%; height: 100%; object-fit: contain; }
+.logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+.logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+.main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+.sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
+.nav-section { border-bottom: 1px solid #e0e0e0; }
+.nav-title { padding: 15px; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #c62828; font-family: Arial, sans-serif; }
+.nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666; font-size: 13px; transition: background 0.1s ease, color 0.1s ease; font-family: Arial, sans-serif; border: 0; }
+.nav-item:hover { background: #fce4ec; color: #c62828; }
+.nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; border-left: 0; padding-left: 15px; }
+.nav-item i { font-size: 16px; width: 20px; text-align: center; }
+.tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+.tool-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.tool-card:last-child { margin-bottom: 0; }
+.tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; }
+.tool-btn { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; cursor: pointer; font-size: 12px; color: #666; margin-bottom: 6px; display: flex; align-items: center; justify-content: flex-start; gap: 8px; transition: all 0.1s; font-family: Arial, sans-serif; }
+.tool-btn:hover { background: #fce4ec; border-color: #c62828; color: #c62828; }
+.tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+.tool-btn.primary:hover { background: #d35400; }
+.tool-btn.active-toggle { background: #fce4ec; border-color: #c62828; color: #c62828; font-weight: 600; }
+.content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #fce4ec); padding: 20px; border-bottom: 2px solid #c62828; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+.section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+.section-badge { background: #c62828; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; margin-left: 0; }
+.content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+body.hide-examples .vocab-example { display: none !important; }
+@media (max-width: 1024px) {
+    .sidebar-left { width: 60px; }
+    .sidebar-left .tools-section { display: none; }
+    .nav-item span, .nav-title span { display: none; }
+    .nav-item { justify-content: center; padding: 15px 10px; }
+    .nav-item.active { padding-left: 10px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar-left { position: sticky !important; left: auto !important; top: 90px !important; height: fit-content !important; max-height: calc(100vh - 105px) !important; border-radius: 8px !important; }
+}
+@media (max-width: 768px) {
+    .main-container { flex-direction: column; padding: 70px 8px 8px; }
+    .sidebar-left { width: 100%; position: relative !important; left: auto !important; top: 0 !important; height: auto !important; max-height: none; display: flex; overflow-x: auto; flex-direction: row; border-radius: 8px; }
+    .nav-section { display: flex; border-bottom: none; flex: 1; }
+    .nav-title { display: none; }
+    .nav-item { white-space: nowrap; }
+    .nav-item span { display: inline; }
+    .tools-section { display: none; }
+}
+@media print {
+    .header, .sidebar-left, .content-header, .round-audio, .vocab-actions { display: none !important; }
+    .main-container { padding: 0; }
+    .content-area { border: 0; box-shadow: none; }
+    .content-body { padding: 0; background: #fff; }
+    .section-content { display: block !important; page-break-before: always; }
+    .section-content:first-child { page-break-before: auto; }
+    .vocab-card, .language-card, .dialogue-line, .panel { break-inside: avoid; }
+}
+
+
+.home-link{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.65);padding:9px 14px;border-radius:7px;text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap;transition:.15s}
+.home-link:hover{background:#fff;color:#c62828}
+@media(max-width:620px){.home-link span{display:none}.home-link{padding:9px 11px}.logo-text h1{font-size:12px}}
+
+/* Bổ sung hiển thị nội dung Word, không thay đổi khung giao diện HSK */
+.dialogue-task{display:flex;align-items:flex-start;gap:10px;background:#fff8e1;border:1px solid #f0cf86;border-left:4px solid var(--accent);border-radius:8px;padding:12px 14px;margin-bottom:12px;line-height:1.6;font-size:15px}
+.dialogue-task i{color:var(--accent);font-size:18px;margin-top:2px}
+.table-scroll{overflow-x:auto;margin:14px 0;border:1px solid #ddd;border-radius:8px;background:#fff}
+.doc-table{width:100%;border-collapse:collapse;min-width:560px;font-size:14px;line-height:1.5}
+.doc-table th,.doc-table td{border:1px solid #ddd;padding:10px 12px;text-align:left;vertical-align:top}
+.doc-table th{background:#f4f4f4;font-weight:700;color:#222}
+.document-sheet{background:#fff;border:1px solid #d8d8d8;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:14px 0;font-family:"Microsoft YaHei",Arial,sans-serif;line-height:1.75;white-space:normal}
+.document-sheet>div:empty{min-height:10px}
+.table-list-item{list-style:none;margin-left:-22px}
+@media(max-width:620px){.doc-table{min-width:500px}.dialogue-header{align-items:flex-start;flex-direction:column}.dialogue-header button{align-self:flex-end}}
+</style>
+<base target="_blank"/>
+</head>
+<body class="hide-examples">
+<div class="header">
+<div class="logo">
+<div class="logo-img">
+<img alt="Logo" id="logo-image" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png"/>
+</div>
+<div class="logo-text">
+<h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+<p>Địa chỉ: 9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
+</div>
+</div>
+<a class="home-link" href="TRANG_CHU_GIAO_TRINH_KE_TOAN.html" target="_self" title="Về trang chủ"><i class="bi bi-house-door-fill"></i><span>Trang chủ</span></a></div>
+<div class="main-container">
+<aside class="sidebar-left" id="sidebar">
+<div class="nav-section">
+<div class="nav-title"><i class="bi bi-list-ul"></i><span>NỘI DUNG BÀI HỌC</span></div>
+<div class="nav-item active" onclick="showSection('objectives', this)">
+<i class="bi bi-bullseye"></i><span>Mục tiêu bài học</span>
+</div>
+<div class="nav-item" onclick="showSection('vocabulary', this)">
+<i class="bi bi-alphabet"></i><span>Từ vựng</span>
+</div>
+<div class="nav-item" onclick="showSection('sentences', this)">
+<i class="bi bi-chat-square-text"></i><span>Mẫu câu trọng tâm</span>
+</div>
+<div class="nav-item" onclick="showSection('dialogue', this)">
+<i class="bi bi-book"></i><span>Hội thoại tình huống</span>
+</div>
+<div class="nav-item" onclick="showSection('process', this)">
+<i class="bi bi-diagram-3"></i><span>Quy trình nghiệp vụ</span>
+</div>
+<div class="nav-item" onclick="showSection('documents', this)">
+<i class="bi bi-file-earmark-text"></i><span>Đọc biểu mẫu và chứng từ</span>
+</div>
+<div class="nav-item" onclick="showSection('situation', this)">
+<i class="bi bi-people"></i><span>Tình huống giao tiếp và xử lý</span>
+</div>
+</div>
+<div class="tools-section">
+<div class="tool-card">
+<div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+<button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+<i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+</button>
+<button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+<i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+</button>
+<button class="tool-btn active-toggle" id="btn-examples" onclick="toggleExamples(this)">
+<i class="bi bi-eye"></i><span>Ẩn/Hiện Ví dụ</span>
+</button>
+<button class="tool-btn primary" onclick="openNoteEditor()">
+<i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="content-area">
+<div class="content-header"><div class="section-title"><span id="current-icon"><i class="bi bi-bullseye"></i></span><span id="section-title-text">Mục tiêu bài học</span><span class="section-badge" id="section-badge">Phần 1/7</span></div></div>
+<div class="content-body">
+<section class="section-content active" id="objectives"><div class="objectives-grid"><div class="objective-card"><i class="bi bi-translate"></i><h3>Mục tiêu tiếng Trung</h3><p>Sử dụng đúng từ vựng và mẫu câu về giao tiếp hằng ngày trong công ty; nghe – nói được một tình huống công việc cơ bản.</p></div><div class="objective-card"><i class="bi bi-briefcase"></i><h3>Mục tiêu nghiệp vụ</h3><p>Nhận biết chứng từ và trình tự nghiệp vụ liên quan đến giao tiếp hằng ngày trong công ty.</p></div><div class="objective-card"><i class="bi bi-check2-circle"></i><h3>Đầu ra bài học</h3><p>Chào hỏi, nhờ hỗ trợ, xin phép và báo cáo tiến độ công việc.</p></div></div><div class="panel"><div class="panel-title"><i class="bi bi-check-circle"></i>1. Mục tiêu ngôn ngữ và nghiệp vụ</div><ul class="clean-list"><li>Giao tiếp cơ bản trong môi trường công sở.</li><li>Biết cách hỏi thông tin, nhờ vả, báo cáo.</li><li>Sử dụng lễ phép trong công ty.</li></ul></div></section>
+<section class="section-content" id="vocabulary">
+<div class="panel"><div class="panel-title"><i class="bi bi-card-list"></i>2. Từ vựng</div>
+<div class="vocab-toolbar"><div class="search-box"><i class="bi bi-search"></i><input id="vocab-search" oninput="renderVocab(this.value)" placeholder="Tìm tiếng Trung, Pinyin hoặc nghĩa..."/></div><div class="vocab-count" id="vocab-count"></div></div>
+<div class="vocab-grid" id="vocab-grid"></div>
+</div>
+</section>
+<section class="section-content" id="sentences"><div class="panel"><div class="panel-title"><i class="bi bi-chat-square-text"></i>3. Mẫu câu trọng tâm</div><div class="language-list"><div class="language-card" onclick='speak("早上好！今天工作忙吗？")'><div class="number-badge">1</div><div class="language-body"><div class="chinese-text">早上好！今天工作忙吗？</div><div class="pinyin-text">Zǎoshang hǎo! Jīntiān gōngzuò máng ma?</div><div class="vietnamese-text">Chào buổi sáng! Hôm nay công việc có bận không?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("早上好！今天工作忙吗？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("可以麻烦你帮我一下吗？")'><div class="number-badge">2</div><div class="language-body"><div class="chinese-text">可以麻烦你帮我一下吗？</div><div class="pinyin-text">Kěyǐ máfan nǐ bāng wǒ yíxià ma?</div><div class="vietnamese-text">Có thể phiền bạn giúp tôi một chút được không?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("可以麻烦你帮我一下吗？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("这个文件请复印两份。")'><div class="number-badge">3</div><div class="language-body"><div class="chinese-text">这个文件请复印两份。</div><div class="pinyin-text">Zhège wénjiàn qǐng fùyìn liǎng fèn.</div><div class="vietnamese-text">Vui lòng photocopy tài liệu này thành hai bản.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("这个文件请复印两份。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("经理叫你去开会。")'><div class="number-badge">4</div><div class="language-body"><div class="chinese-text">经理叫你去开会。</div><div class="pinyin-text">Jīnglǐ jiào nǐ qù kāihuì.</div><div class="vietnamese-text">Giám đốc gọi bạn đi họp.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("经理叫你去开会。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("会议几点开始？")'><div class="number-badge">5</div><div class="language-body"><div class="chinese-text">会议几点开始？</div><div class="pinyin-text">Huìyì jǐ diǎn kāishǐ?</div><div class="vietnamese-text">Cuộc họp bắt đầu lúc mấy giờ?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("会议几点开始？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("报告已经完成了。")'><div class="number-badge">6</div><div class="language-body"><div class="chinese-text">报告已经完成了。</div><div class="pinyin-text">Bàogào yǐjīng wánchéng le.</div><div class="vietnamese-text">Báo cáo đã hoàn thành rồi.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("报告已经完成了。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("还没做完，要再等一下。")'><div class="number-badge">7</div><div class="language-body"><div class="chinese-text">还没做完，要再等一下。</div><div class="pinyin-text">Hái méi zuò wán, yào zài děng yíxià.</div><div class="vietnamese-text">Vẫn chưa làm xong, cần đợi thêm một chút.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("还没做完，要再等一下。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("请在这里签字。")'><div class="number-badge">8</div><div class="language-body"><div class="chinese-text">请在这里签字。</div><div class="pinyin-text">Qǐng zài zhèlǐ qiānzì.</div><div class="vietnamese-text">Vui lòng ký tên ở đây.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("请在这里签字。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("收到，我马上处理。")'><div class="number-badge">9</div><div class="language-body"><div class="chinese-text">收到，我马上处理。</div><div class="pinyin-text">Shōudào, wǒ mǎshàng chǔlǐ.</div><div class="vietnamese-text">Đã nhận, tôi sẽ xử lý ngay.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("收到，我马上处理。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("今天需要加班吗？")'><div class="number-badge">10</div><div class="language-body"><div class="chinese-text">今天需要加班吗？</div><div class="pinyin-text">Jīntiān xūyào jiābān ma?</div><div class="vietnamese-text">Hôm nay có cần tăng ca không?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("今天需要加班吗？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("我想请明天一天假。")'><div class="number-badge">11</div><div class="language-body"><div class="chinese-text">我想请明天一天假。</div><div class="pinyin-text">Wǒ xiǎng qǐng míngtiān yì tiān jià.</div><div class="vietnamese-text">Tôi muốn xin nghỉ cả ngày mai.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("我想请明天一天假。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("对不起，我迟到了。")'><div class="number-badge">12</div><div class="language-body"><div class="chinese-text">对不起，我迟到了。</div><div class="pinyin-text">Duìbùqǐ, wǒ chídào le.</div><div class="vietnamese-text">Xin lỗi, tôi đến muộn.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("对不起，我迟到了。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("大家辛苦了，早点回去吧。")'><div class="number-badge">13</div><div class="language-body"><div class="chinese-text">大家辛苦了，早点回去吧。</div><div class="pinyin-text">Dàjiā xīnkǔ le, zǎo diǎn huíqù ba.</div><div class="vietnamese-text">Mọi người đã vất vả rồi, về sớm nghỉ ngơi nhé.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("大家辛苦了，早点回去吧。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("请把原件给我看看。")'><div class="number-badge">14</div><div class="language-body"><div class="chinese-text">请把原件给我看看。</div><div class="pinyin-text">Qǐng bǎ yuánjiàn gěi wǒ kànkan.</div><div class="vietnamese-text">Vui lòng cho tôi xem bản gốc.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("请把原件给我看看。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("这个通知转发给所有人。")'><div class="number-badge">15</div><div class="language-body"><div class="chinese-text">这个通知转发给所有人。</div><div class="pinyin-text">Zhège tōngzhī zhuǎnfā gěi suǒyǒu rén.</div><div class="vietnamese-text">Hãy chuyển tiếp thông báo này cho tất cả mọi người.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("这个通知转发给所有人。")'><i class="bi bi-volume-up-fill"></i></button></div></div></div></section>
+<section class="section-content" id="dialogue"><div class="dialogue-task"><i class="bi bi-bullseye"></i><span>Nhiệm vụ giao tiếp: Chào hỏi, nhờ hỗ trợ, xin phép và báo cáo tiến độ công việc.</span></div><div class="dialogue-header"><span><i class="bi bi-people-fill"></i> A: 销售部 (Phòng bán hàng) – B: 财务部 (Phòng tài vụ)</span><button onclick="speakDialogue()"><i class="bi bi-play-fill"></i> Nghe hội thoại</button></div><div class="dialogue-content"><div class="dialogue-line" onclick='speak("小王，客户要开发票，需要财务先确认一下金额。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">小王，客户要开发票，需要财务先确认一下金额。</div><div class="dialogue-pinyin pinyin-text">Xiǎo Wáng, kèhù yào kāi fāpiào, xūyào cáiwù xiān quèrèn yíxià jīn'é.</div><div class="dialogue-vietnamese vietnamese-text">Tiểu Vương, khách hàng cần xuất hóa đơn; phòng tài vụ phải xác nhận số tiền trước.</div></div><div class="dialogue-line" onclick='speak("好的，你把合同和出货单给我，我核对一下。")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">好的，你把合同和出货单给我，我核对一下。</div><div class="dialogue-pinyin pinyin-text">Hǎo de, nǐ bǎ hétóng hé chūhuòdān gěi wǒ, wǒ héduì yíxià.</div><div class="dialogue-vietnamese vietnamese-text">Được, bạn đưa hợp đồng và phiếu xuất hàng cho tôi, tôi sẽ đối chiếu.</div></div><div class="dialogue-line" onclick='speak("在这里。金额是三万六，含税。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">在这里。金额是三万六，含税。</div><div class="dialogue-pinyin pinyin-text">Zài zhèlǐ. Jīn'é shì sān wàn liù, hánshuì.</div><div class="dialogue-vietnamese vietnamese-text">Ở đây. Số tiền là ba mươi sáu nghìn, đã bao gồm thuế.</div></div><div class="dialogue-line" onclick='speak("没问题，金额是对的。我通知税务会计开具发票。")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">没问题，金额是对的。我通知税务会计开具发票。</div><div class="dialogue-pinyin pinyin-text">Méi wèntí, jīn'é shì duì de. Wǒ tōngzhī shuìwù kuàijì kāijù fāpiào.</div><div class="dialogue-vietnamese vietnamese-text">Không có vấn đề, số tiền chính xác. Tôi sẽ thông báo kế toán thuế xuất hóa đơn.</div></div><div class="dialogue-line" onclick='speak("谢谢，麻烦你了！客户很急。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">谢谢，麻烦你了！客户很急。</div><div class="dialogue-pinyin pinyin-text">Xièxie, máfan nǐ le! Kèhù hěn jí.</div><div class="dialogue-vietnamese vietnamese-text">Cảm ơn, làm phiền bạn rồi! Khách hàng đang rất gấp.</div></div><div class="dialogue-line" onclick='speak("不客气，马上就好。")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">不客气，马上就好。</div><div class="dialogue-pinyin pinyin-text">Bú kèqi, mǎshàng jiù hǎo.</div><div class="dialogue-vietnamese vietnamese-text">Không có gì, sắp xong rồi.</div></div></div></section>
+<section class="section-content" id="process"><div class="panel"><div class="panel-title"><i class="bi bi-diagram-3"></i>5. Quy trình nghiệp vụ</div><div class="info-line"><span class="info-dot"><i class="bi bi-arrow-right"></i></span><div>Khi trình bày, sử dụng các từ nối: 首先 shǒuxiān trước tiên; 然后 ránhòu sau đó; 接下来 jiēxiàlái tiếp theo; 最后 zuìhòu cuối cùng.</div></div><div class="info-line"><span class="info-dot"><i class="bi bi-arrow-right"></i></span><div>Quy trình giao tiếp xin chỉ đạo:</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>1. Chuẩn bị tài liệu / câu hỏi rõ ràng.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>2. Gõ cửa / nhắn tin: "经理，您现在方便吗？有个问题想请教。"</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>3. Trình bày vấn đề ngắn gọn (30 giây).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>4. Ghi chú lại chỉ đạo.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>5. Xác nhận lại: "好的，我马上去做。做好后向您汇报。"</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>6. Sau khi xong: "经理，您交代的事已经做完了，请过目。"</div></div></div></section>
+<section class="section-content" id="documents"><div class="panel"><div class="panel-title"><i class="bi bi-file-earmark-text"></i>6. Đọc biểu mẫu và chứng từ</div><div class="info-line"><span class="info-dot"><i class="bi bi-file-earmark-text"></i></span><div>Đọc theo thứ tự: tên chứng từ → đơn vị lập → ngày tháng → đối tượng → số tiền/số lượng → chữ ký và phê duyệt.</div></div><div class="document-sheet"><div>请假单 (Đơn xin nghỉ phép):</div><div>请假单</div><div>申请人：王芳 部门：财务部</div><div>请假类型：□事假 □病假 □年假</div><div>请假时间：2026年07月10日 上午</div><div>请假事由：去医院看病</div><div>部门经理意见：同意</div><div>财务经理意见：同意</div></div></div></section>
+<section class="section-content" id="situation"><div class="panel"><div class="panel-title"><i class="bi bi-lightbulb"></i>7. Tình huống giao tiếp và xử lý</div><div class="situation-label">Yêu cầu: xác định vấn đề, chọn mẫu câu phù hợp, trình bày cách xử lý và xác nhận kết quả.</div><div class="situation-label">Tình huống: Bạn cần nhờ đồng nghiệp phòng bán hàng gửi gấp bản sao hợp đồng nhưng họ đang bận.</div><div class="situation-label">Xử lý:</div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>"小李，打扰一下。财务部急着要这份合同复印件，能麻烦你现在发给我吗？"</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>Nếu họ bận: "没关系，您什么时候方便发给我都行，但最好今天下班前，可以吗？"</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>Sau khi nhận: "收到了，谢谢！辛苦你了。"</div></div></div></section>
+</div>
+</main>
+</div>
+<div id="note-overlay" onclick="closeNotesOnBg(event)"><div class="note-box">
+<div class="note-head"><strong><i class="bi bi-journal-text"></i> Bảng ghi chú – Bài 04</strong><button onclick="closeNotes()" style="border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer">×</button></div>
+<div class="note-toolbar"><button onclick="cmd('bold')"><b>B</b></button><button onclick="cmd('italic')"><i>I</i></button><button onclick="cmd('underline')"><u>U</u></button><button onclick="cmd('insertUnorderedList')"><i class="bi bi-list-ul"></i></button><button onclick="cmd('insertOrderedList')"><i class="bi bi-list-ol"></i></button></div>
+<div contenteditable="true" id="note-editor"></div>
+<div class="note-foot"><span id="save-status">Tự động lưu khi bạn gõ</span><button class="note-save" onclick="saveNotes();closeNotes()">Lưu ghi chú</button></div>
+</div></div>
+<script>
+const VOCAB=[{"num":"1","zh":"早上好","py":"zǎoshang hǎo","vi":"Chào buổi sáng"},{"num":"2","zh":"下午好","py":"xiàwǔ hǎo","vi":"Chào buổi chiều"},{"num":"3","zh":"再见","py":"zàijiàn","vi":"Tạm biệt"},{"num":"4","zh":"谢谢","py":"xièxie","vi":"Cảm ơn"},{"num":"5","zh":"不客气","py":"bú kèqi","vi":"Không có gì"},{"num":"6","zh":"对不起","py":"duìbùqǐ","vi":"Xin lỗi"},{"num":"7","zh":"没关系","py":"méi guānxi","vi":"Không sao"},{"num":"8","zh":"请","py":"qǐng","vi":"Xin mời / Làm ơn"},{"num":"9","zh":"帮忙","py":"bāngmáng","vi":"Giúp đỡ"},{"num":"10","zh":"等一下","py":"děng yíxià","vi":"Đợi một chút"},{"num":"11","zh":"马上","py":"mǎshàng","vi":"Ngay lập tức"},{"num":"12","zh":"完成了","py":"wánchéng le","vi":"Đã hoàn thành"},{"num":"13","zh":"还没","py":"hái méi","vi":"Chưa"},{"num":"14","zh":"可以","py":"kěyǐ","vi":"Có thể"},{"num":"15","zh":"不行","py":"bù xíng","vi":"Không được"},{"num":"16","zh":"没问题","py":"méi wèntí","vi":"Không có vấn đề"},{"num":"17","zh":"麻烦","py":"máfan","vi":"Phiền phức / Làm phiền"},{"num":"18","zh":"辛苦","py":"xīnkǔ","vi":"Vất vả / Cảm ơn đã vất vả"},{"num":"19","zh":"加班","py":"jiābān","vi":"Làm thêm giờ"},{"num":"20","zh":"请假","py":"qǐngjià","vi":"Xin nghỉ phép"},{"num":"21","zh":"迟到","py":"chídào","vi":"Đi muộn"},{"num":"22","zh":"早退","py":"zǎotuì","vi":"Về sớm"},{"num":"23","zh":"开会","py":"kāihuì","vi":"Họp"},{"num":"24","zh":"签字","py":"qiānzì","vi":"Ký tên"},{"num":"25","zh":"确认","py":"quèrèn","vi":"Xác nhận"},{"num":"26","zh":"通知","py":"tōngzhī","vi":"Thông báo"},{"num":"27","zh":"收到","py":"shōudào","vi":"Đã nhận được"},{"num":"28","zh":"转发","py":"zhuǎnfā","vi":"Chuyển tiếp"},{"num":"29","zh":"复印","py":"fùyìn","vi":"Photocopy"},{"num":"30","zh":"原件","py":"yuánjiàn","vi":"Bản chính"}];
+const DIALOGUE=[{"speaker":"A","zh":"小王，客户要开发票，需要财务先确认一下金额。","py":"Xiǎo Wáng, kèhù yào kāi fāpiào, xūyào cáiwù xiān quèrèn yíxià jīn'é.","vi":"Tiểu Vương, khách hàng cần xuất hóa đơn; phòng tài vụ phải xác nhận số tiền trước."},{"speaker":"B","zh":"好的，你把合同和出货单给我，我核对一下。","py":"Hǎo de, nǐ bǎ hétóng hé chūhuòdān gěi wǒ, wǒ héduì yíxià.","vi":"Được, bạn đưa hợp đồng và phiếu xuất hàng cho tôi, tôi sẽ đối chiếu."},{"speaker":"A","zh":"在这里。金额是三万六，含税。","py":"Zài zhèlǐ. Jīn'é shì sān wàn liù, hánshuì.","vi":"Ở đây. Số tiền là ba mươi sáu nghìn, đã bao gồm thuế."},{"speaker":"B","zh":"没问题，金额是对的。我通知税务会计开具发票。","py":"Méi wèntí, jīn'é shì duì de. Wǒ tōngzhī shuìwù kuàijì kāijù fāpiào.","vi":"Không có vấn đề, số tiền chính xác. Tôi sẽ thông báo kế toán thuế xuất hóa đơn."},{"speaker":"A","zh":"谢谢，麻烦你了！客户很急。","py":"Xièxie, máfan nǐ le! Kèhù hěn jí.","vi":"Cảm ơn, làm phiền bạn rồi! Khách hàng đang rất gấp."},{"speaker":"B","zh":"不客气，马上就好。","py":"Bú kèqi, mǎshàng jiù hǎo.","vi":"Không có gì, sắp xong rồi."}];
+let audioSpeed=.8;
+const SECTION_TITLES = {
+    objectives: { text: 'Mục tiêu bài học', icon: '<i class="bi bi-bullseye"></i>', badge: 'Phần 1/7' },
+    vocabulary: { text: 'Từ vựng bài học', icon: '<i class="bi bi-alphabet"></i>', badge: '30 từ' },
+    sentences: { text: 'Mẫu câu trọng tâm', icon: '<i class="bi bi-chat-square-text"></i>', badge: '15 câu' },
+    dialogue: { text: 'Hội thoại tình huống', icon: '<i class="bi bi-book"></i>', badge: '6 lượt' },
+    process: { text: 'Quy trình nghiệp vụ', icon: '<i class="bi bi-diagram-3"></i>', badge: 'Phần 5/7' },
+    documents: { text: 'Đọc biểu mẫu và chứng từ', icon: '<i class="bi bi-file-earmark-text"></i>', badge: 'Phần 6/7' },
+    situation: { text: 'Tình huống giao tiếp và xử lý', icon: '<i class="bi bi-people"></i>', badge: 'Phần 7/7' }
+};
+function showSection(sectionId, navItem) {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+    document.querySelectorAll('.section-content').forEach(s => s && s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n && n.classList.remove('active'));
+    target.classList.add('active');
+    if (navItem) navItem.classList.add('active');
+    const t = SECTION_TITLES[sectionId];
+    const titleText = document.getElementById('section-title-text');
+    const currentIcon = document.getElementById('current-icon');
+    const sectionBadge = document.getElementById('section-badge');
+    if (t && titleText && currentIcon && sectionBadge) {
+        titleText.textContent = t.text;
+        currentIcon.innerHTML = t.icon;
+        sectionBadge.textContent = t.badge;
+    }
+    if (sectionId === 'vocabulary') renderVocab('');
+}
+function speak(text){if(!text||!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';u.rate=audioSpeed;u.pitch=1;speechSynthesis.speak(u)}
+function speakDialogue(){let i=0;speechSynthesis.cancel();function next(){if(i>=DIALOGUE.length)return;const u=new SpeechSynthesisUtterance(DIALOGUE[i++].zh);u.lang='zh-CN';u.rate=audioSpeed;u.onend=next;speechSynthesis.speak(u)}next()}
+let pinyinHidden=false,vietnameseHidden=false;
+function togglePinyin(btn){pinyinHidden=!pinyinHidden;document.body.classList.toggle('hide-pinyin',pinyinHidden);btn.classList.toggle('active-toggle',pinyinHidden);btn.querySelector('i').className=pinyinHidden?'bi bi-eye':'bi bi-eye-slash'}
+function toggleVietnamese(btn){vietnameseHidden=!vietnameseHidden;document.body.classList.toggle('hide-vietnamese',vietnameseHidden);btn.classList.toggle('active-toggle',vietnameseHidden);btn.querySelector('i').className=vietnameseHidden?'bi bi-eye':'bi bi-eye-slash'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderVocab(q=''){q=q.trim().toLowerCase();const items=VOCAB.filter(v=>!q||[v.zh,v.py,v.vi].some(x=>x.toLowerCase().includes(q)));document.getElementById('vocab-count').textContent=items.length+' / '+VOCAB.length+' từ';const grid=document.getElementById('vocab-grid');grid.innerHTML=items.map(v=>`<article class="vocab-card"><div class="vocab-number">${esc(v.num)}</div><div class="vocab-main"><div class="vocab-chinese" onclick="speak('${v.zh.replace(/'/g,"\'")}')">${esc(v.zh)}</div><div class="vocab-pinyin pinyin-text">${esc(v.py)}</div><div class="vocab-meaning vietnamese-text">${esc(v.vi)}</div><div class="writer-wrap" id="writer-${v.num}"></div></div><div class="vocab-actions"><button class="icon-btn" title="Phát âm" onclick="speak('${v.zh.replace(/'/g,"\'")}')"><i class="bi bi-volume-up-fill"></i></button><button class="icon-btn" title="Xem thứ tự nét" onclick="toggleWriter('${v.num}','${v.zh.replace(/'/g,"\'")}')"><i class="bi bi-pencil-square"></i></button></div></article>`).join('');if(!items.length)grid.innerHTML='<div class="empty-state">Không tìm thấy từ phù hợp.</div>'}
+const writers={};
+function toggleWriter(id,text){const wrap=document.getElementById('writer-'+id);if(!wrap)return;wrap.classList.toggle('open');if(!wrap.classList.contains('open')||writers[id])return;if(typeof HanziWriter==='undefined'){wrap.textContent='Không tải được thư viện viết chữ.';return};writers[id]=[];[...text].filter(ch=>/[㐀-鿿]/.test(ch)).forEach((ch,i)=>{const box=document.createElement('div');box.className='writer-box';box.id=`writer-${id}-${i}`;wrap.appendChild(box);try{const w=HanziWriter.create(box.id,ch,{width:62,height:62,padding:4,showOutline:true,strokeAnimationSpeed:1,delayBetweenStrokes:120,strokeColor:'#333',radicalColor:'#c62828'});writers[id].push(w);w.loopCharacterAnimation()}catch(e){box.textContent=ch}})}
+const NOTE_KEY='kt_bai04_notes';
+function openNotes(){document.getElementById('note-editor').innerHTML=localStorage.getItem(NOTE_KEY)||'';document.getElementById('note-overlay').style.display='block'}
+function closeNotes(){document.getElementById('note-overlay').style.display='none'}
+function closeNotesOnBg(e){if(e.target.id==='note-overlay')closeNotes()}
+function cmd(c){document.execCommand(c,false,null);document.getElementById('note-editor').focus()}
+function saveNotes(){localStorage.setItem(NOTE_KEY,document.getElementById('note-editor').innerHTML);document.getElementById('save-status').textContent='Đã lưu thành công!';setTimeout(()=>document.getElementById('save-status').textContent='Tự động lưu khi bạn gõ',1600)}
+document.getElementById('note-editor').addEventListener('input',()=>localStorage.setItem(NOTE_KEY,document.getElementById('note-editor').innerHTML));
+
+let examplesHidden = true;
+function toggleExamples(btn) {
+    examplesHidden = !examplesHidden;
+    document.body.classList.toggle('hide-examples', examplesHidden);
+    if (btn) {
+        btn.classList.toggle('active-toggle', examplesHidden);
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = examplesHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+    }
+}
+function openNoteEditor() { openNotes(); }
+
+renderVocab();
+</script>
+</body>
+</html>

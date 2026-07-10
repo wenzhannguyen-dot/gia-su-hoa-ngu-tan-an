@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bài 09: Hàng Hóa Và Kho</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.2/dist/hanzi-writer.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#c62828;--primary-dark:#9f1f1f;--accent:#ed7d31;--green:#2e7d32;--green-light:#e8f5e9;--bg:#f5f5f5;--border:#d9d9d9;--muted:#666}
+html{scroll-behavior:smooth}
+body{font-family:Arial,"Helvetica Neue",sans-serif;background:var(--bg);color:#333;min-height:100vh}
+button{font-family:inherit}
+.header{position:fixed;inset:0 0 auto 0;height:70px;background:var(--primary);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;z-index:1000;box-shadow:0 3px 10px rgba(0,0,0,.16)}
+.logo{display:flex;align-items:center;gap:13px}
+.logo-mark{width:50px;height:50px;border-radius:9px;background:#fff;color:var(--primary);display:grid;place-items:center;font-size:27px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo-text h1{font-size:17px;margin-bottom:3px}
+.logo-text p{font-size:12px;opacity:.92}
+.main-container{display:flex;gap:15px;min-height:100vh;padding:90px 15px 15px}
+.sidebar-left{width:230px;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;flex-shrink:0;position:sticky;top:90px;height:calc(100vh - 105px);display:flex;flex-direction:column;overflow-y:auto}
+.nav-title{padding:15px;background:#f8f9fa;border-bottom:2px solid var(--primary);font-size:14px;font-weight:700;display:flex;gap:8px;align-items:center}
+.nav-item{padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;color:#666;font-size:13px;border-bottom:1px solid #f0f0f0;transition:.15s}
+.nav-item i{width:19px;text-align:center;font-size:16px}
+.nav-item:hover{background:#fce4ec;color:var(--primary)}
+.nav-item.active{background:var(--green-light);color:var(--green);font-weight:700;border-left:4px solid var(--green);padding-left:10px}
+.tools-section{padding:13px;background:#fafafa;margin-top:auto;border-top:1px solid #e0e0e0}
+.tool-card{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:11px;margin-bottom:9px}
+.tool-title{font-size:13px;font-weight:700;margin-bottom:9px;display:flex;gap:6px;align-items:center}
+.tool-btn{width:100%;border:1px solid #ddd;background:#f8f9fa;color:#555;padding:8px;border-radius:5px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px}
+.tool-btn:last-child{margin-bottom:0}
+.tool-btn:hover{background:#fce4ec;border-color:var(--primary);color:var(--primary)}
+.tool-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.tool-btn.success{background:#4caf50;border-color:#4caf50;color:#fff;font-weight:700}
+.tool-btn.active-toggle{background:#fce4ec;border-color:var(--primary);color:var(--primary);font-weight:700}
+.content-area{flex:1;min-width:0;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.content-header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#f8f9fa,#fce4ec);padding:20px;border-bottom:2px solid var(--primary)}
+.section-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700}
+.section-badge{margin-left:auto;background:var(--primary);color:#fff;padding:5px 12px;border-radius:20px;font-size:12px}
+.content-body{padding:25px;background:#fafafa;min-height:calc(100vh - 150px)}
+.section-content{display:none;animation:fadeIn .3s ease}
+.section-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.objectives-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-bottom:20px}
+.objective-card{background:linear-gradient(to right,#fce4ec,#f8f9fa);border-radius:9px;padding:20px;border:1px solid #f3d6da}
+.objective-card i{font-size:25px;color:var(--primary);display:block;margin-bottom:10px}
+.objective-card h3{font-size:16px;margin-bottom:8px}
+.objective-card p{font-size:14px;line-height:1.65;color:#666}
+.panel{background:#fff;border:1px solid #e0e0e0;border-radius:9px;padding:22px;margin-bottom:18px}
+.panel-title{font-size:18px;font-weight:700;color:#333;margin-bottom:15px;display:flex;align-items:center;gap:9px;padding-bottom:10px;border-bottom:2px solid var(--primary)}
+.clean-list{padding-left:22px;line-height:1.9;font-size:16px}
+.vocab-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;border:1px solid #ddd;border-radius:20px;padding:8px 13px;background:#fff;min-width:260px}
+.search-box input{border:0;outline:0;width:100%;font-size:14px}
+.vocab-count{font-size:13px;color:#666}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:18px}
+.vocab-card{background:#f8f9fa;border:2px dashed var(--primary);border-radius:12px;padding:17px;display:flex;align-items:center;gap:15px;min-height:138px;transition:.2s}
+.vocab-card:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(198,40,40,.12);border-style:solid}
+.vocab-number{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:#4caf50;color:#fff;font-weight:700;flex-shrink:0}
+.vocab-main{flex:1;min-width:0}
+.vocab-chinese{font-family:"DFKai-SB","KaiTi","楷体","Microsoft YaHei",serif;font-size:30px;color:#000;margin-bottom:4px;cursor:pointer}
+.vocab-pinyin{font-size:19px;color:var(--primary);margin-bottom:5px}
+.vocab-meaning{font-size:18px;color:var(--green);font-weight:700;line-height:1.4}
+.vocab-actions{display:flex;flex-direction:column;gap:7px}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:0;background:#fce4ec;color:var(--primary);cursor:pointer;display:grid;place-items:center}
+.icon-btn:hover{background:var(--primary);color:#fff}
+.writer-wrap{display:none;flex-wrap:wrap;gap:6px;margin-top:11px;padding-top:10px;border-top:1px dashed #ddd}
+.writer-wrap.open{display:flex}
+.writer-box{width:64px;height:64px;background:#fff;border:1px solid #ddd;border-radius:5px}
+.language-list{display:grid;gap:13px}
+.language-card{background:#fff;border:1px solid #e0e0e0;border-radius:9px;padding:16px;display:flex;gap:15px;align-items:flex-start;cursor:pointer;transition:.15s}
+.language-card:hover{background:#fce4ec;border-color:var(--primary);transform:translateX(3px)}
+.number-badge{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+.language-body{flex:1;min-width:0}
+.chinese-text{font-family:"Microsoft YaHei","SimHei",serif;font-size:21px;color:#000;line-height:1.55;margin-bottom:5px}
+.pinyin-text{font-size:18px;color:var(--primary);line-height:1.55;margin-bottom:5px}
+.vietnamese-text{font-size:17px;color:#666;line-height:1.55}
+.round-audio{width:36px;height:36px;border:0;border-radius:50%;background:#fce4ec;color:var(--primary);cursor:pointer;flex-shrink:0}
+.round-audio:hover{background:var(--primary);color:#fff}
+.dialogue-header{background:var(--accent);color:#fff;padding:11px 14px;border-radius:8px 8px 0 0;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dialogue-header button{border:0;background:#fff;color:var(--accent);padding:6px 11px;border-radius:15px;font-weight:700;cursor:pointer}
+.dialogue-content{background:#fff;border:1px solid #e0e0e0;border-top:0;border-radius:0 0 8px 8px;padding:18px}
+.dialogue-line{padding:15px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;margin-bottom:13px;cursor:pointer;transition:.15s}
+.dialogue-line:last-child{margin-bottom:0}
+.dialogue-line:hover{background:#fce4ec;border-color:var(--primary);transform:translateX(4px)}
+.dialogue-speaker{color:var(--primary);font-weight:700;margin-bottom:7px}
+.info-line,.step-line{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;background:#fff;border:1px solid #e0e0e0;border-radius:8px;margin-bottom:10px;font-size:16px;line-height:1.65}
+.info-dot,.step-icon{width:28px;height:28px;border-radius:50%;background:var(--green-light);color:var(--green);display:grid;place-items:center;flex-shrink:0}
+.situation-label{background:#fff3e0;border-left:4px solid var(--accent);padding:13px 15px;margin-bottom:12px;border-radius:5px;font-size:16px;line-height:1.65;font-weight:600}
+body.hide-pinyin .pinyin-text,body.hide-pinyin .vocab-pinyin,body.hide-pinyin .dialogue-pinyin{display:none!important}
+body.hide-vietnamese .vietnamese-text,body.hide-vietnamese .vocab-meaning,body.hide-vietnamese .dialogue-vietnamese{display:none!important}
+#note-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:5000;padding:4vh 7vw}
+.note-box{height:92vh;background:#fff;border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+.note-head{background:var(--primary);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.note-toolbar{padding:9px 14px;background:#f8f9fa;border-bottom:1px solid #ddd;display:flex;gap:7px;flex-wrap:wrap}
+.note-toolbar button{padding:6px 10px;border:1px solid #ddd;background:#fff;border-radius:4px;cursor:pointer}
+#note-editor{flex:1;padding:20px;overflow:auto;outline:0;line-height:1.7}
+.note-foot{padding:11px 16px;background:#f8f9fa;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center}
+.note-save{background:var(--primary);color:#fff;border:0;padding:8px 17px;border-radius:5px;cursor:pointer}
+.empty-state{padding:30px;text-align:center;color:#777}
+@media(max-width:900px){.main-container{padding:78px 8px 8px}.sidebar-left{position:fixed;left:-260px;top:70px;height:calc(100vh - 70px);z-index:1500;border-radius:0;transition:.2s}.sidebar-left.open{left:0}.content-body{padding:15px}.vocab-grid{grid-template-columns:1fr}.vocab-card{min-width:0}}
+@media(max-width:540px){.logo-text h1{font-size:13px}.logo-text p{display:none}.vocab-card{display:block}.vocab-number{margin-bottom:10px}.vocab-actions{position:absolute;right:14px;top:14px}.content-header{padding:14px}.section-title{font-size:16px}.section-badge{font-size:10px}}
+@media print{.header,.sidebar-left,.content-header,.round-audio,.vocab-actions{display:none!important}.main-container{padding:0}.content-area{border:0;box-shadow:none}.content-body{padding:0;background:#fff}.section-content{display:block!important;page-break-before:always}.section-content:first-child{page-break-before:auto}.vocab-card,.language-card,.dialogue-line,.panel{break-inside:avoid}}
+
+/* ===== GIỮ NGUYÊN GIAO DIỆN HSK ===== */
+.header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #c62828; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+.logo-img img { width: 100%; height: 100%; object-fit: contain; }
+.logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+.logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+.main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+.sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
+.nav-section { border-bottom: 1px solid #e0e0e0; }
+.nav-title { padding: 15px; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #c62828; font-family: Arial, sans-serif; }
+.nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666; font-size: 13px; transition: background 0.1s ease, color 0.1s ease; font-family: Arial, sans-serif; border: 0; }
+.nav-item:hover { background: #fce4ec; color: #c62828; }
+.nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; border-left: 0; padding-left: 15px; }
+.nav-item i { font-size: 16px; width: 20px; text-align: center; }
+.tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+.tool-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.tool-card:last-child { margin-bottom: 0; }
+.tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; }
+.tool-btn { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; cursor: pointer; font-size: 12px; color: #666; margin-bottom: 6px; display: flex; align-items: center; justify-content: flex-start; gap: 8px; transition: all 0.1s; font-family: Arial, sans-serif; }
+.tool-btn:hover { background: #fce4ec; border-color: #c62828; color: #c62828; }
+.tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+.tool-btn.primary:hover { background: #d35400; }
+.tool-btn.active-toggle { background: #fce4ec; border-color: #c62828; color: #c62828; font-weight: 600; }
+.content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #fce4ec); padding: 20px; border-bottom: 2px solid #c62828; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+.section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+.section-badge { background: #c62828; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; margin-left: 0; }
+.content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+body.hide-examples .vocab-example { display: none !important; }
+@media (max-width: 1024px) {
+    .sidebar-left { width: 60px; }
+    .sidebar-left .tools-section { display: none; }
+    .nav-item span, .nav-title span { display: none; }
+    .nav-item { justify-content: center; padding: 15px 10px; }
+    .nav-item.active { padding-left: 10px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sidebar-left { position: sticky !important; left: auto !important; top: 90px !important; height: fit-content !important; max-height: calc(100vh - 105px) !important; border-radius: 8px !important; }
+}
+@media (max-width: 768px) {
+    .main-container { flex-direction: column; padding: 70px 8px 8px; }
+    .sidebar-left { width: 100%; position: relative !important; left: auto !important; top: 0 !important; height: auto !important; max-height: none; display: flex; overflow-x: auto; flex-direction: row; border-radius: 8px; }
+    .nav-section { display: flex; border-bottom: none; flex: 1; }
+    .nav-title { display: none; }
+    .nav-item { white-space: nowrap; }
+    .nav-item span { display: inline; }
+    .tools-section { display: none; }
+}
+@media print {
+    .header, .sidebar-left, .content-header, .round-audio, .vocab-actions { display: none !important; }
+    .main-container { padding: 0; }
+    .content-area { border: 0; box-shadow: none; }
+    .content-body { padding: 0; background: #fff; }
+    .section-content { display: block !important; page-break-before: always; }
+    .section-content:first-child { page-break-before: auto; }
+    .vocab-card, .language-card, .dialogue-line, .panel { break-inside: avoid; }
+}
+
+
+.home-link{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.65);padding:9px 14px;border-radius:7px;text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap;transition:.15s}
+.home-link:hover{background:#fff;color:#c62828}
+@media(max-width:620px){.home-link span{display:none}.home-link{padding:9px 11px}.logo-text h1{font-size:12px}}
+
+/* Bổ sung hiển thị nội dung Word, không thay đổi khung giao diện HSK */
+.dialogue-task{display:flex;align-items:flex-start;gap:10px;background:#fff8e1;border:1px solid #f0cf86;border-left:4px solid var(--accent);border-radius:8px;padding:12px 14px;margin-bottom:12px;line-height:1.6;font-size:15px}
+.dialogue-task i{color:var(--accent);font-size:18px;margin-top:2px}
+.table-scroll{overflow-x:auto;margin:14px 0;border:1px solid #ddd;border-radius:8px;background:#fff}
+.doc-table{width:100%;border-collapse:collapse;min-width:560px;font-size:14px;line-height:1.5}
+.doc-table th,.doc-table td{border:1px solid #ddd;padding:10px 12px;text-align:left;vertical-align:top}
+.doc-table th{background:#f4f4f4;font-weight:700;color:#222}
+.document-sheet{background:#fff;border:1px solid #d8d8d8;border-left:4px solid var(--primary);border-radius:8px;padding:18px 20px;margin:14px 0;font-family:"Microsoft YaHei",Arial,sans-serif;line-height:1.75;white-space:normal}
+.document-sheet>div:empty{min-height:10px}
+.table-list-item{list-style:none;margin-left:-22px}
+@media(max-width:620px){.doc-table{min-width:500px}.dialogue-header{align-items:flex-start;flex-direction:column}.dialogue-header button{align-self:flex-end}}
+</style>
+<base target="_blank"/>
+</head>
+<body class="hide-examples">
+<div class="header">
+<div class="logo">
+<div class="logo-img">
+<img alt="Logo" id="logo-image" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png"/>
+</div>
+<div class="logo-text">
+<h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+<p>Địa chỉ: 9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839 889 772</p>
+</div>
+</div>
+<a class="home-link" href="TRANG_CHU_GIAO_TRINH_KE_TOAN.html" target="_self" title="Về trang chủ"><i class="bi bi-house-door-fill"></i><span>Trang chủ</span></a></div>
+<div class="main-container">
+<aside class="sidebar-left" id="sidebar">
+<div class="nav-section">
+<div class="nav-title"><i class="bi bi-list-ul"></i><span>NỘI DUNG BÀI HỌC</span></div>
+<div class="nav-item active" onclick="showSection('objectives', this)">
+<i class="bi bi-bullseye"></i><span>Mục tiêu bài học</span>
+</div>
+<div class="nav-item" onclick="showSection('vocabulary', this)">
+<i class="bi bi-alphabet"></i><span>Từ vựng</span>
+</div>
+<div class="nav-item" onclick="showSection('sentences', this)">
+<i class="bi bi-chat-square-text"></i><span>Mẫu câu trọng tâm</span>
+</div>
+<div class="nav-item" onclick="showSection('dialogue', this)">
+<i class="bi bi-book"></i><span>Hội thoại tình huống</span>
+</div>
+<div class="nav-item" onclick="showSection('process', this)">
+<i class="bi bi-diagram-3"></i><span>Quy trình nghiệp vụ</span>
+</div>
+<div class="nav-item" onclick="showSection('documents', this)">
+<i class="bi bi-file-earmark-text"></i><span>Đọc biểu mẫu và chứng từ</span>
+</div>
+<div class="nav-item" onclick="showSection('situation', this)">
+<i class="bi bi-people"></i><span>Tình huống giao tiếp và xử lý</span>
+</div>
+</div>
+<div class="tools-section">
+<div class="tool-card">
+<div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+<button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+<i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+</button>
+<button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+<i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+</button>
+<button class="tool-btn active-toggle" id="btn-examples" onclick="toggleExamples(this)">
+<i class="bi bi-eye"></i><span>Ẩn/Hiện Ví dụ</span>
+</button>
+<button class="tool-btn primary" onclick="openNoteEditor()">
+<i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+</button>
+</div>
+</div>
+</aside>
+<main class="content-area">
+<div class="content-header"><div class="section-title"><span id="current-icon"><i class="bi bi-bullseye"></i></span><span id="section-title-text">Mục tiêu bài học</span><span class="section-badge" id="section-badge">Phần 1/7</span></div></div>
+<div class="content-body">
+<section class="section-content active" id="objectives"><div class="objectives-grid"><div class="objective-card"><i class="bi bi-translate"></i><h3>Mục tiêu tiếng Trung</h3><p>Sử dụng đúng từ vựng và mẫu câu về hàng hóa và kho; nghe – nói được một tình huống công việc cơ bản.</p></div><div class="objective-card"><i class="bi bi-briefcase"></i><h3>Mục tiêu nghiệp vụ</h3><p>Nhận biết chứng từ và trình tự nghiệp vụ liên quan đến hàng hóa và kho.</p></div><div class="objective-card"><i class="bi bi-check2-circle"></i><h3>Đầu ra bài học</h3><p>Mô tả tình trạng nhập, xuất, tồn và kiểm soát hàng trong kho.</p></div></div><div class="panel"><div class="panel-title"><i class="bi bi-check-circle"></i>1. Mục tiêu ngôn ngữ và nghiệp vụ</div><ul class="clean-list"><li>Biết thuật ngữ về hàng hóa, nguyên liệu, kho bãi.</li><li>Phân biệt nhập kho, xuất kho, tồn kho.</li><li>Tính giá tồn kho cơ bản.</li></ul></div></section>
+<section class="section-content" id="vocabulary">
+<div class="panel"><div class="panel-title"><i class="bi bi-card-list"></i>2. Từ vựng</div>
+<div class="vocab-toolbar"><div class="search-box"><i class="bi bi-search"></i><input id="vocab-search" oninput="renderVocab(this.value)" placeholder="Tìm tiếng Trung, Pinyin hoặc nghĩa..."/></div><div class="vocab-count" id="vocab-count"></div></div>
+<div class="vocab-grid" id="vocab-grid"></div>
+</div>
+</section>
+<section class="section-content" id="sentences"><div class="panel"><div class="panel-title"><i class="bi bi-chat-square-text"></i>3. Mẫu câu trọng tâm</div><div class="language-list"><div class="language-card" onclick='speak("这批货什么时候入库？")'><div class="number-badge">1</div><div class="language-body"><div class="chinese-text">这批货什么时候入库？</div><div class="pinyin-text">Zhè pī huò shénme shíhòu rùkù?</div><div class="vietnamese-text">Lô hàng này khi nào nhập kho?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("这批货什么时候入库？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("库存数量不够了，要补货。")'><div class="number-badge">2</div><div class="language-body"><div class="chinese-text">库存数量不够了，要补货。</div><div class="pinyin-text">Kùcún shùliàng bù gòu le, yào bǔhuò.</div><div class="vietnamese-text">Số lượng tồn kho không đủ, cần bổ sung hàng.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("库存数量不够了，要补货。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("请按先进先出的原则发货。")'><div class="number-badge">3</div><div class="language-body"><div class="chinese-text">请按先进先出的原则发货。</div><div class="pinyin-text">Qǐng àn xiānjìn xiānchū de yuánzé fāhuò.</div><div class="vietnamese-text">Vui lòng xuất hàng theo nguyên tắc nhập trước xuất trước.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("请按先进先出的原则发货。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("这批原材料的保质期到什么时候？")'><div class="number-badge">4</div><div class="language-body"><div class="chinese-text">这批原材料的保质期到什么时候？</div><div class="pinyin-text">Zhè pī yuáncáiliào de bǎozhìqī dào shénme shíhòu?</div><div class="vietnamese-text">Hạn sử dụng của lô nguyên liệu này đến khi nào?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("这批原材料的保质期到什么时候？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("盘点发现少了五件。")'><div class="number-badge">5</div><div class="language-body"><div class="chinese-text">盘点发现少了五件。</div><div class="pinyin-text">Pándiǎn fāxiàn shǎo le wǔ jiàn.</div><div class="vietnamese-text">Kiểm kê phát hiện thiếu năm sản phẩm.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("盘点发现少了五件。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("呆滞料怎么处理？")'><div class="number-badge">6</div><div class="language-body"><div class="chinese-text">呆滞料怎么处理？</div><div class="pinyin-text">Dāizhìliào zěnme chǔlǐ?</div><div class="vietnamese-text">Nguyên liệu tồn đọng xử lý thế nào?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("呆滞料怎么处理？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("损耗率不能超过1%。")'><div class="number-badge">7</div><div class="language-body"><div class="chinese-text">损耗率不能超过1%。</div><div class="pinyin-text">Sǔnhàolǜ bùnéng chāoguò 1%.</div><div class="vietnamese-text">Tỷ lệ hao hụt không được vượt quá 1%.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("损耗率不能超过1%。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("这批货不合格，要退货。")'><div class="number-badge">8</div><div class="language-body"><div class="chinese-text">这批货不合格，要退货。</div><div class="pinyin-text">Zhè pī huò bù hégé, yào tuìhuò.</div><div class="vietnamese-text">Lô hàng này không đạt chất lượng, cần trả lại.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("这批货不合格，要退货。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("请开一张领料单。")'><div class="number-badge">9</div><div class="language-body"><div class="chinese-text">请开一张领料单。</div><div class="pinyin-text">Qǐng kāi yì zhāng lǐngliàodān.</div><div class="vietnamese-text">Vui lòng lập một phiếu lĩnh nguyên liệu.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("请开一张领料单。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("从A仓库调拨到B仓库。")'><div class="number-badge">10</div><div class="language-body"><div class="chinese-text">从A仓库调拨到B仓库。</div><div class="pinyin-text">Cóng A cāngkù diàobō dào B cāngkù.</div><div class="vietnamese-text">Điều chuyển từ kho A sang kho B.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("从A仓库调拨到B仓库。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("入库单和发票数量要对上。")'><div class="number-badge">11</div><div class="language-body"><div class="chinese-text">入库单和发票数量要对上。</div><div class="pinyin-text">Rùkùdān hé fāpiào shùliàng yào duì shàng.</div><div class="vietnamese-text">Số lượng trên phiếu nhập kho và hóa đơn phải khớp nhau.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("入库单和发票数量要对上。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("库存金额是单价乘以数量。")'><div class="number-badge">12</div><div class="language-body"><div class="chinese-text">库存金额是单价乘以数量。</div><div class="pinyin-text">Kùcún jīn'é shì dānjià chéngyǐ shùliàng.</div><div class="vietnamese-text">Giá trị tồn kho bằng đơn giá nhân với số lượng.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("库存金额是单价乘以数量。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("这批产品报废了。")'><div class="number-badge">13</div><div class="language-body"><div class="chinese-text">这批产品报废了。</div><div class="pinyin-text">Zhè pī chǎnpǐn bàofèi le.</div><div class="vietnamese-text">Lô sản phẩm này đã bị loại bỏ.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("这批产品报废了。")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("送货单在哪里？")'><div class="number-badge">14</div><div class="language-body"><div class="chinese-text">送货单在哪里？</div><div class="pinyin-text">Sònghuòdān zài nǎlǐ?</div><div class="vietnamese-text">Phiếu giao hàng ở đâu?</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("送货单在哪里？")'><i class="bi bi-volume-up-fill"></i></button></div><div class="language-card" onclick='speak("验货后再签字。")'><div class="number-badge">15</div><div class="language-body"><div class="chinese-text">验货后再签字。</div><div class="pinyin-text">Yànhuò hòu zài qiānzì.</div><div class="vietnamese-text">Sau khi kiểm hàng mới ký tên.</div></div><button aria-label="Phát âm" class="round-audio" onclick='event.stopPropagation();speak("验货后再签字。")'><i class="bi bi-volume-up-fill"></i></button></div></div></div></section>
+<section class="section-content" id="dialogue"><div class="dialogue-task"><i class="bi bi-bullseye"></i><span>Nhiệm vụ giao tiếp: Mô tả tình trạng nhập, xuất, tồn và kiểm soát hàng trong kho.</span></div><div class="dialogue-header"><span><i class="bi bi-people-fill"></i> A: 会计 (Kế toán) – B: 仓管员 (Thủ kho)</span><button onclick="speakDialogue()"><i class="bi bi-play-fill"></i> Nghe hội thoại</button></div><div class="dialogue-content"><div class="dialogue-line" onclick='speak("小李，昨天那批货入库了吗？")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">小李，昨天那批货入库了吗？</div><div class="dialogue-pinyin pinyin-text">Xiǎo Lǐ, zuótiān nà pī huò rùkù le ma?</div><div class="dialogue-vietnamese vietnamese-text">Tiểu Lý, lô hàng hôm qua đã nhập kho chưa?</div></div><div class="dialogue-line" onclick='speak("入了，这是入库单。一共两百件，单价五十，金额一万。")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">入了，这是入库单。一共两百件，单价五十，金额一万。</div><div class="dialogue-pinyin pinyin-text">Rù le, zhè shì rùkùdān. Yígòng liǎng bǎi jiàn, dānjià wǔshí, jīn'é yì wàn.</div><div class="dialogue-vietnamese vietnamese-text">Đã nhập. Đây là phiếu nhập kho. Tổng cộng hai trăm sản phẩm, đơn giá năm mươi, thành tiền mười nghìn.</div></div><div class="dialogue-line" onclick='speak("我核对一下发票……数量对，金额也对。发票和入库单我都收下了。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">我核对一下发票……数量对，金额也对。发票和入库单我都收下了。</div><div class="dialogue-pinyin pinyin-text">Wǒ héduì yíxià fāpiào…… Shùliàng duì, jīn'é yě duì. Fāpiào hé rùkùdān wǒ dōu shōuxià le.</div><div class="dialogue-vietnamese vietnamese-text">Tôi đối chiếu hóa đơn một chút… Số lượng đúng, số tiền cũng đúng. Tôi nhận cả hóa đơn và phiếu nhập kho.</div></div><div class="dialogue-line" onclick='speak("对了，有一批货快到期了，要不要先出库？")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">对了，有一批货快到期了，要不要先出库？</div><div class="dialogue-pinyin pinyin-text">Duìle, yǒu yì pī huò kuài dàoqī le, yào bùyào xiān chūkù?</div><div class="dialogue-vietnamese vietnamese-text">À, có một lô hàng sắp hết hạn, có cần xuất lô đó trước không?</div></div><div class="dialogue-line" onclick='speak("哪一批？我看看保质期。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">哪一批？我看看保质期。</div><div class="dialogue-pinyin pinyin-text">Nǎ yì pī? Wǒ kànkan bǎozhìqī.</div><div class="dialogue-vietnamese vietnamese-text">Lô nào? Để tôi xem hạn sử dụng.</div></div><div class="dialogue-line" onclick='speak("批次20260301，保质期到7月15日。")'><div class="dialogue-speaker">B</div><div class="dialogue-chinese chinese-text">批次20260301，保质期到7月15日。</div><div class="dialogue-pinyin pinyin-text">Pīcì èr líng èr liù líng sān líng yāo, bǎozhìqī dào qī yuè shíwǔ rì.</div><div class="dialogue-vietnamese vietnamese-text">Lô số 20260301, hạn sử dụng đến ngày 15 tháng 7.</div></div><div class="dialogue-line" onclick='speak("先出这一批，按先进先出。你做个标记，通知生产部优先领料。")'><div class="dialogue-speaker">A</div><div class="dialogue-chinese chinese-text">先出这一批，按先进先出。你做个标记，通知生产部优先领料。</div><div class="dialogue-pinyin pinyin-text">Xiān chū zhè yì pī, àn xiānjìn xiānchū. Nǐ zuò ge biāojì, tōngzhī shēngchǎnbù yōuxiān lǐngliào.</div><div class="dialogue-vietnamese vietnamese-text">Xuất lô này trước theo nguyên tắc nhập trước xuất trước. Bạn đánh dấu và thông báo cho phòng sản xuất ưu tiên lĩnh lô này.</div></div></div></section>
+<section class="section-content" id="process"><div class="panel"><div class="panel-title"><i class="bi bi-diagram-3"></i>5. Quy trình nghiệp vụ</div><div class="info-line"><span class="info-dot"><i class="bi bi-arrow-right"></i></span><div>Khi trình bày, sử dụng các từ nối: 首先 shǒuxiān trước tiên; 然后 ránhòu sau đó; 接下来 jiēxiàlái tiếp theo; 最后 zuìhòu cuối cùng.</div></div><div class="info-line"><span class="info-dot"><i class="bi bi-arrow-right"></i></span><div>Quy trình nhập kho nguyên liệu:</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>1. Hàng đến → Thủ kho kiểm tra số lượng, chất lượng (验货).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>2. Nếu đạt → Lập phiếu nhập kho (入库单), ghi rõ: tên hàng, quy cách, số lượng, đơn giá, thành tiền, lô hàng, ngày nhập.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>3. Thủ kho và người giao hàng ký nhận.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>4. Chuyển phiếu nhập kho + hóa đơn cho kế toán.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>5. Kế toán kiểm tra 3 chứng từ khớp nhau (hợp đồng - hóa đơn - phiếu nhập).</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>6. Ghi sổ: Nợ TK Nguyên liệu / Có TK Phải trả (hoặc Tiền gửi).</div></div></div></section>
+<section class="section-content" id="documents"><div class="panel"><div class="panel-title"><i class="bi bi-file-earmark-text"></i>6. Đọc biểu mẫu và chứng từ</div><div class="info-line"><span class="info-dot"><i class="bi bi-file-earmark-text"></i></span><div>Đọc theo thứ tự: tên chứng từ → đơn vị lập → ngày tháng → đối tượng → số tiền/số lượng → chữ ký và phê duyệt.</div></div><div class="document-sheet"><div>入库单 (Phiếu nhập kho):</div><div>入库单</div><div>日期：2026年07月09日 编号：RK20260709001</div><div>供应商：上海宏达公司</div><div>仓库：原材料仓</div><div>序号  物料名称 规格 单位  数量  单价(元)  金额(元)  批次 备注</div><div>1 不锈钢板 304 张 100 50.00 5,000 20260301</div><div>2 螺丝钉 M6 盒 200 25.00 5,000 20260515</div><div>合计金额：¥10,000.00（壹万元整）</div><div>仓管员：_____ 送货人：_____ 会计：_____</div></div></div></section>
+<section class="section-content" id="situation"><div class="panel"><div class="panel-title"><i class="bi bi-lightbulb"></i>7. Tình huống giao tiếp và xử lý</div><div class="situation-label">Yêu cầu: xác định vấn đề, chọn mẫu câu phù hợp, trình bày cách xử lý và xác nhận kết quả.</div><div class="situation-label">Tình huống: Nhận được một lô hàng 500 hộp linh kiện điện tử. Phiếu nhập kho ghi 500 hộp, nhưng thủ kho đếm thực tế chỉ có 498 hộp.</div><div class="situation-label">Xử lý:</div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>1. Không ký nhận 500 hộp ngay. Chụp ảnh, lập biên bản: "收货差异报告".</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>2. Thông báo nhà cung cấp: "贵司送来的货，发票数量500，实际清点498，差2盒。请确认。"</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>3. Nếu nhà cung cấp thừa nhận: Lập phiếu nhập 498, chờ bù 2 hộp hoặc giảm tiền.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>4. Nếu nhà cung cấp không đồng ý: Kiểm tra lại cân nặng, đóng gói, xem có bị rách không. Nếu vận chuyển lỗi → yêu cầu công ty vận chuyển giải quyết.</div></div><div class="step-line"><span class="step-icon"><i class="bi bi-check2"></i></span><div>5. Kế toán chỉ ghi sổ theo số lượng thực nhận.</div></div></div></section>
+</div>
+</main>
+</div>
+<div id="note-overlay" onclick="closeNotesOnBg(event)"><div class="note-box">
+<div class="note-head"><strong><i class="bi bi-journal-text"></i> Bảng ghi chú – Bài 09</strong><button onclick="closeNotes()" style="border:0;background:transparent;color:#fff;font-size:22px;cursor:pointer">×</button></div>
+<div class="note-toolbar"><button onclick="cmd('bold')"><b>B</b></button><button onclick="cmd('italic')"><i>I</i></button><button onclick="cmd('underline')"><u>U</u></button><button onclick="cmd('insertUnorderedList')"><i class="bi bi-list-ul"></i></button><button onclick="cmd('insertOrderedList')"><i class="bi bi-list-ol"></i></button></div>
+<div contenteditable="true" id="note-editor"></div>
+<div class="note-foot"><span id="save-status">Tự động lưu khi bạn gõ</span><button class="note-save" onclick="saveNotes();closeNotes()">Lưu ghi chú</button></div>
+</div></div>
+<script>
+const VOCAB=[{"num":"1","zh":"原材料","py":"yuáncáiliào","vi":"Nguyên liệu"},{"num":"2","zh":"库存商品","py":"kùcún shāngpǐn","vi":"Thành phẩm / Hàng tồn kho"},{"num":"3","zh":"在产品","py":"zàichǎnpǐn","vi":"Bán thành phẩm"},{"num":"4","zh":"半成品","py":"bànchéngpǐn","vi":"Bán thành phẩm"},{"num":"5","zh":"物料","py":"wùliào","vi":"Vật liệu / Nguyên vật liệu"},{"num":"6","zh":"存货","py":"cúnhuò","vi":"Hàng tồn kho"},{"num":"7","zh":"仓库","py":"cāngkù","vi":"Kho hàng"},{"num":"8","zh":"仓管员","py":"cāngguǎnyuán","vi":"Thủ kho"},{"num":"9","zh":"入库","py":"rùkù","vi":"Nhập kho"},{"num":"10","zh":"出库","py":"chūkù","vi":"Xuất kho"},{"num":"11","zh":"盘点","py":"pándiǎn","vi":"Kiểm kê"},{"num":"12","zh":"库存数量","py":"kùcún shùliàng","vi":"Số lượng tồn kho"},{"num":"13","zh":"库存金额","py":"kùcún jīn'é","vi":"Giá trị tồn kho"},{"num":"14","zh":"先进先出","py":"xiānjìn xiānchū","vi":"Nhập trước – xuất trước (FIFO)"},{"num":"15","zh":"加权平均","py":"jiāquán píngjūn","vi":"Bình quân gia quyền"},{"num":"16","zh":"单价","py":"dānjià","vi":"Đơn giá"},{"num":"17","zh":"数量","py":"shùliàng","vi":"Số lượng"},{"num":"18","zh":"金额","py":"jīn'é","vi":"Số tiền / Thành tiền"},{"num":"19","zh":"规格","py":"guīgé","vi":"Quy cách"},{"num":"20","zh":"型号","py":"xínghào","vi":"Mã hiệu / Model"},{"num":"21","zh":"批次","py":"pīcì","vi":"Lô hàng"},{"num":"22","zh":"保质期","py":"bǎozhìqī","vi":"Hạn sử dụng"},{"num":"23","zh":"呆滞料","py":"dāizhìliào","vi":"Nguyên liệu tồn đọng"},{"num":"24","zh":"损耗","py":"sǔnhào","vi":"Hao hụt"},{"num":"25","zh":"报废","py":"bàofèi","vi":"Loại bỏ / Thanh lý"},{"num":"26","zh":"调拨","py":"diàobō","vi":"Điều chuyển"},{"num":"27","zh":"领料","py":"lǐngliào","vi":"Lĩnh nguyên liệu"},{"num":"28","zh":"退料","py":"tuìliào","vi":"Trả lại nguyên liệu"},{"num":"29","zh":"送货","py":"sònghuò","vi":"Giao hàng"},{"num":"30","zh":"收货","py":"shōuhuò","vi":"Nhận hàng"},{"num":"31","zh":"验货","py":"yànhuò","vi":"Kiểm tra hàng"},{"num":"32","zh":"合格","py":"hégé","vi":"Đạt yêu cầu"},{"num":"33","zh":"不合格","py":"bù hégé","vi":"Không đạt"}];
+const DIALOGUE=[{"speaker":"A","zh":"小李，昨天那批货入库了吗？","py":"Xiǎo Lǐ, zuótiān nà pī huò rùkù le ma?","vi":"Tiểu Lý, lô hàng hôm qua đã nhập kho chưa?"},{"speaker":"B","zh":"入了，这是入库单。一共两百件，单价五十，金额一万。","py":"Rù le, zhè shì rùkùdān. Yígòng liǎng bǎi jiàn, dānjià wǔshí, jīn'é yì wàn.","vi":"Đã nhập. Đây là phiếu nhập kho. Tổng cộng hai trăm sản phẩm, đơn giá năm mươi, thành tiền mười nghìn."},{"speaker":"A","zh":"我核对一下发票……数量对，金额也对。发票和入库单我都收下了。","py":"Wǒ héduì yíxià fāpiào…… Shùliàng duì, jīn'é yě duì. Fāpiào hé rùkùdān wǒ dōu shōuxià le.","vi":"Tôi đối chiếu hóa đơn một chút… Số lượng đúng, số tiền cũng đúng. Tôi nhận cả hóa đơn và phiếu nhập kho."},{"speaker":"B","zh":"对了，有一批货快到期了，要不要先出库？","py":"Duìle, yǒu yì pī huò kuài dàoqī le, yào bùyào xiān chūkù?","vi":"À, có một lô hàng sắp hết hạn, có cần xuất lô đó trước không?"},{"speaker":"A","zh":"哪一批？我看看保质期。","py":"Nǎ yì pī? Wǒ kànkan bǎozhìqī.","vi":"Lô nào? Để tôi xem hạn sử dụng."},{"speaker":"B","zh":"批次20260301，保质期到7月15日。","py":"Pīcì èr líng èr liù líng sān líng yāo, bǎozhìqī dào qī yuè shíwǔ rì.","vi":"Lô số 20260301, hạn sử dụng đến ngày 15 tháng 7."},{"speaker":"A","zh":"先出这一批，按先进先出。你做个标记，通知生产部优先领料。","py":"Xiān chū zhè yì pī, àn xiānjìn xiānchū. Nǐ zuò ge biāojì, tōngzhī shēngchǎnbù yōuxiān lǐngliào.","vi":"Xuất lô này trước theo nguyên tắc nhập trước xuất trước. Bạn đánh dấu và thông báo cho phòng sản xuất ưu tiên lĩnh lô này."}];
+let audioSpeed=.8;
+const SECTION_TITLES = {
+    objectives: { text: 'Mục tiêu bài học', icon: '<i class="bi bi-bullseye"></i>', badge: 'Phần 1/7' },
+    vocabulary: { text: 'Từ vựng bài học', icon: '<i class="bi bi-alphabet"></i>', badge: '33 từ' },
+    sentences: { text: 'Mẫu câu trọng tâm', icon: '<i class="bi bi-chat-square-text"></i>', badge: '15 câu' },
+    dialogue: { text: 'Hội thoại tình huống', icon: '<i class="bi bi-book"></i>', badge: '7 lượt' },
+    process: { text: 'Quy trình nghiệp vụ', icon: '<i class="bi bi-diagram-3"></i>', badge: 'Phần 5/7' },
+    documents: { text: 'Đọc biểu mẫu và chứng từ', icon: '<i class="bi bi-file-earmark-text"></i>', badge: 'Phần 6/7' },
+    situation: { text: 'Tình huống giao tiếp và xử lý', icon: '<i class="bi bi-people"></i>', badge: 'Phần 7/7' }
+};
+function showSection(sectionId, navItem) {
+    const target = document.getElementById(sectionId);
+    if (!target) return;
+    document.querySelectorAll('.section-content').forEach(s => s && s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n && n.classList.remove('active'));
+    target.classList.add('active');
+    if (navItem) navItem.classList.add('active');
+    const t = SECTION_TITLES[sectionId];
+    const titleText = document.getElementById('section-title-text');
+    const currentIcon = document.getElementById('current-icon');
+    const sectionBadge = document.getElementById('section-badge');
+    if (t && titleText && currentIcon && sectionBadge) {
+        titleText.textContent = t.text;
+        currentIcon.innerHTML = t.icon;
+        sectionBadge.textContent = t.badge;
+    }
+    if (sectionId === 'vocabulary') renderVocab('');
+}
+function speak(text){if(!text||!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';u.rate=audioSpeed;u.pitch=1;speechSynthesis.speak(u)}
+function speakDialogue(){let i=0;speechSynthesis.cancel();function next(){if(i>=DIALOGUE.length)return;const u=new SpeechSynthesisUtterance(DIALOGUE[i++].zh);u.lang='zh-CN';u.rate=audioSpeed;u.onend=next;speechSynthesis.speak(u)}next()}
+let pinyinHidden=false,vietnameseHidden=false;
+function togglePinyin(btn){pinyinHidden=!pinyinHidden;document.body.classList.toggle('hide-pinyin',pinyinHidden);btn.classList.toggle('active-toggle',pinyinHidden);btn.querySelector('i').className=pinyinHidden?'bi bi-eye':'bi bi-eye-slash'}
+function toggleVietnamese(btn){vietnameseHidden=!vietnameseHidden;document.body.classList.toggle('hide-vietnamese',vietnameseHidden);btn.classList.toggle('active-toggle',vietnameseHidden);btn.querySelector('i').className=vietnameseHidden?'bi bi-eye':'bi bi-eye-slash'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderVocab(q=''){q=q.trim().toLowerCase();const items=VOCAB.filter(v=>!q||[v.zh,v.py,v.vi].some(x=>x.toLowerCase().includes(q)));document.getElementById('vocab-count').textContent=items.length+' / '+VOCAB.length+' từ';const grid=document.getElementById('vocab-grid');grid.innerHTML=items.map(v=>`<article class="vocab-card"><div class="vocab-number">${esc(v.num)}</div><div class="vocab-main"><div class="vocab-chinese" onclick="speak('${v.zh.replace(/'/g,"\'")}')">${esc(v.zh)}</div><div class="vocab-pinyin pinyin-text">${esc(v.py)}</div><div class="vocab-meaning vietnamese-text">${esc(v.vi)}</div><div class="writer-wrap" id="writer-${v.num}"></div></div><div class="vocab-actions"><button class="icon-btn" title="Phát âm" onclick="speak('${v.zh.replace(/'/g,"\'")}')"><i class="bi bi-volume-up-fill"></i></button><button class="icon-btn" title="Xem thứ tự nét" onclick="toggleWriter('${v.num}','${v.zh.replace(/'/g,"\'")}')"><i class="bi bi-pencil-square"></i></button></div></article>`).join('');if(!items.length)grid.innerHTML='<div class="empty-state">Không tìm thấy từ phù hợp.</div>'}
+const writers={};
+function toggleWriter(id,text){const wrap=document.getElementById('writer-'+id);if(!wrap)return;wrap.classList.toggle('open');if(!wrap.classList.contains('open')||writers[id])return;if(typeof HanziWriter==='undefined'){wrap.textContent='Không tải được thư viện viết chữ.';return};writers[id]=[];[...text].filter(ch=>/[㐀-鿿]/.test(ch)).forEach((ch,i)=>{const box=document.createElement('div');box.className='writer-box';box.id=`writer-${id}-${i}`;wrap.appendChild(box);try{const w=HanziWriter.create(box.id,ch,{width:62,height:62,padding:4,showOutline:true,strokeAnimationSpeed:1,delayBetweenStrokes:120,strokeColor:'#333',radicalColor:'#c62828'});writers[id].push(w);w.loopCharacterAnimation()}catch(e){box.textContent=ch}})}
+const NOTE_KEY='kt_bai09_notes';
+function openNotes(){document.getElementById('note-editor').innerHTML=localStorage.getItem(NOTE_KEY)||'';document.getElementById('note-overlay').style.display='block'}
+function closeNotes(){document.getElementById('note-overlay').style.display='none'}
+function closeNotesOnBg(e){if(e.target.id==='note-overlay')closeNotes()}
+function cmd(c){document.execCommand(c,false,null);document.getElementById('note-editor').focus()}
+function saveNotes(){localStorage.setItem(NOTE_KEY,document.getElementById('note-editor').innerHTML);document.getElementById('save-status').textContent='Đã lưu thành công!';setTimeout(()=>document.getElementById('save-status').textContent='Tự động lưu khi bạn gõ',1600)}
+document.getElementById('note-editor').addEventListener('input',()=>localStorage.setItem(NOTE_KEY,document.getElementById('note-editor').innerHTML));
+
+let examplesHidden = true;
+function toggleExamples(btn) {
+    examplesHidden = !examplesHidden;
+    document.body.classList.toggle('hide-examples', examplesHidden);
+    if (btn) {
+        btn.classList.toggle('active-toggle', examplesHidden);
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = examplesHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+    }
+}
+function openNoteEditor() { openNotes(); }
+
+renderVocab();
+</script>
+</body>
+</html>
