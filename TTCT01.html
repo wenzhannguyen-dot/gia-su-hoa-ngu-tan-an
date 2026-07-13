@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1: Chào hỏi, Cảm ơn, Xin lỗi - 汉语速成</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, "Helvetica Neue", sans-serif; background: #f5f5f5; min-height: 100vh; color: #333333; }
+        .chinese-text { color: #000000 !important; font-family: "SimSun", "STSong", "Songti", serif; font-size: 20px; }
+        .pinyin-text { font-family: Arial, sans-serif; font-style: normal; font-size: 18px; color: #4472c4; }
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #4472c4; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+        .logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+        .main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+        .sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
+        .nav-section { border-bottom: 1px solid #e0e0e0; }
+        .nav-title { padding: 15px; color: #333333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #4472c4; font-family: Arial, sans-serif; }
+        .nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666666; font-size: 13px; transition: background 0.1s ease, color 0.1s ease; font-family: Arial, sans-serif; }
+        .nav-item:hover { background: #e3f2fd; color: #4472c4; }
+        .nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; }
+        .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+        .content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #e3f2fd); padding: 20px; border-bottom: 2px solid #4472c4; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .section-title { font-size: 20px; color: #333333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+        .section-badge { background: #4472c4; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
+        .content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+        .section-content { display: none; animation: fadeIn 0.4s ease; }
+        .section-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .part-box { background: white; border-radius: 8px; padding: 25px; margin-bottom: 20px; border: 1px solid #e0e0e0; }
+        .part-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #4472c4; font-family: Arial, sans-serif; }
+        .part-subtitle { font-size: 16px; font-weight: bold; color: #ed7d31; margin: 20px 0 12px 0; font-family: Arial, sans-serif; }
+        .part-desc { font-size: 15px; color: #555; margin-bottom: 15px; line-height: 1.6; font-family: Arial, sans-serif; }
+        .formula-box { background: #fff3e0; border: 1px solid #ffe082; border-radius: 8px; padding: 12px 18px; margin-bottom: 15px; font-size: 16px; color: #333; font-family: Arial, sans-serif; }
+
+        .phrase-line { display: flex; align-items: flex-start; gap: 15px; padding: 12px 15px; margin-bottom: 10px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; transition: all 0.2s; cursor: pointer; }
+        .phrase-line:hover { background: #e3f2fd; border-color: #4472c4; transform: translateX(3px); }
+        .phrase-bullet { color: #4472c4; font-size: 20px; line-height: 1; margin-top: 2px; }
+        .phrase-content { flex: 1; }
+        .phrase-chinese { font-size: 20px; font-weight: bold; color: #000; font-family: "SimSun", "STSong", serif; margin-bottom: 4px; }
+        .phrase-pinyin { font-size: 16px; color: #4472c4; margin-bottom: 4px; }
+        .phrase-vietnamese { font-size: 15px; color: #555; font-family: Arial, sans-serif; }
+
+        .vocab-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .vocab-table th { background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; padding: 14px; text-align: left; font-weight: 600; font-size: 14px; }
+        .vocab-table td { padding: 12px 14px; border-bottom: 1px solid #e9ecef; font-size: 15px; }
+        .vocab-table tr:last-child td { border-bottom: none; }
+        .vocab-table tr:hover td { background: #f8f9ff; }
+        .vocab-hanzi { font-size: 22px; font-weight: bold; font-family: "SimSun", "STSong", serif; }
+        .vocab-pinyin-td { color: #4472c4; font-style: italic; }
+
+        .grammar-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .grammar-table th { background: linear-gradient(135deg, #6c757d, #495057); color: white; padding: 14px; text-align: left; font-weight: 600; font-size: 14px; }
+        .grammar-table td { padding: 14px; border-bottom: 1px solid #e9ecef; vertical-align: top; font-size: 15px; }
+        .grammar-table tr:hover td { background: #f8f9ff; }
+        .grammar-word { font-size: 20px; font-weight: bold; color: #4472c4; font-family: "SimSun", "STSong", serif; }
+        .grammar-pinyin { color: #666; font-style: italic; }
+
+        .dialogue-container { background: white; border-radius: 8px; padding: 25px; border: 1px solid #e0e0e0; }
+        .dialogue-line { display: flex; gap: 15px; margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
+        .dialogue-line:hover { background: #e3f2fd; border-color: #4472c4; transform: translateX(5px); }
+        .dialogue-speaker { font-weight: bold; color: #e65100; min-width: 30px; font-size: 15px; font-family: Arial, sans-serif; }
+        .dialogue-content { flex: 1; }
+        .dialogue-chinese { font-size: 20px; font-weight: bold; color: #000; margin-bottom: 4px; font-family: "SimSun", "STSong", serif; }
+        .dialogue-pinyin { font-size: 16px; color: #4472c4; margin-bottom: 4px; }
+        .dialogue-vietnamese { font-size: 15px; color: #555; font-family: Arial, sans-serif; }
+
+        .note-box { background: #fff3e0; border: 1px solid #ffe082; border-radius: 8px; padding: 15px; margin: 20px 0; }
+        .note-title { font-size: 15px; font-weight: bold; color: #e65100; margin-bottom: 8px; font-family: Arial, sans-serif; }
+        .note-text { font-size: 14px; color: #555; line-height: 1.8; font-family: Arial, sans-serif; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; } .main-container { flex-direction: column; padding-top: 70px; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <div class="logo-img">
+            <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+        </div>
+        <div class="logo-text">
+            <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+            <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+        </div>
+    </div>
+    <div style="flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: white; font-family: Arial, sans-serif;">
+        汉语速成 — Bài 1: Chào hỏi, Cảm ơn, Xin lỗi
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="sidebar-left">
+        <div class="nav-section">
+            <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung</span></div>
+            <a href="TIENG TRUNG CAP TOC.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self">
+                <i class="bi bi-house-door"></i><span>Về trang chủ</span>
+            </a>
+            <div class="nav-item active" onclick="showSection('chao-hoi', this)"><i class="bi bi-hand-thumbs-up"></i><span>I. Chào hỏi</span></div>
+            <div class="nav-item" onclick="showSection('hoi-tham', this)"><i class="bi bi-heart-pulse"></i><span>II. Hỏi thăm SK</span></div>
+            <div class="nav-item" onclick="showSection('thuong-dung', this)"><i class="bi bi-chat-quote"></i><span>III. Câu thường dùng</span></div>
+            <div class="nav-item" onclick="showSection('cam-on', this)"><i class="bi bi-emoji-smile"></i><span>Cảm ơn & XL</span></div>
+            <div class="nav-item" onclick="showSection('tu-vung', this)"><i class="bi bi-journal-bookmark"></i><span>IV. Từ vựng</span></div>
+            <div class="nav-item" onclick="showSection('giai-thich', this)"><i class="bi bi-lightbulb"></i><span>V. Giải thích từ</span></div>
+            <div class="nav-item" onclick="showSection('hoi-thoai', this)"><i class="bi bi-people-fill"></i><span>VI. Hội thoại</span></div>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div class="content-header">
+            <div class="section-title">
+                <span id="current-icon"><i class="bi bi-hand-thumbs-up"></i></span>
+                <span id="section-title-text">I. CHÀO HỎI</span>
+                <span class="section-badge" id="section-badge">Phần 1/7</span>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <!-- I. CHÀO HỎI -->
+            <div id="chao-hoi" class="section-content active">
+                <div class="part-box">
+                    <div class="part-title">I. CHÀO HỎI</div>
+
+                    <div class="part-subtitle">1. Cách chào hỏi thông thường</div>
+                    <div class="part-desc">Khi gặp nhau lần đầu có thể chào một cách đơn giản và thông dụng.</div>
+                    <div class="formula-box">A + 好 (A là đại từ, danh từ chỉ người)</div>
+                    <div class="phrase-line" onclick="speak('你好！')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">你好!</div>
+                            <div class="phrase-pinyin">Nǐ hǎo.</div>
+                            <div class="phrase-vietnamese">Chào anh(chị, bạn).</div>
+                        </div>
+                    </div>
+
+                    <div class="part-subtitle">2. Cách chào hỏi theo buổi</div>
+                    <div class="phrase-line" onclick="speak('先生，早安！')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">先生, 早安!</div>
+                            <div class="phrase-pinyin">Xiānsheng, zǎo ān!</div>
+                            <div class="phrase-vietnamese">Chào ngài, buổi sáng vui vẻ!</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('小姐，中午好！')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">小姐, 中午好!</div>
+                            <div class="phrase-pinyin">Xiǎojiě, zhōngwǔ hǎo.</div>
+                            <div class="phrase-vietnamese">Chào cô, chúc cô buổi trưa vui vẻ!</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('老板，晚安！')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">老板, 晚安!</div>
+                            <div class="phrase-pinyin">Lǎobǎn, wǎn ān!</div>
+                            <div class="phrase-vietnamese">Chào ông, chúc ngủ ngon!</div>
+                        </div>
+                    </div>
+
+                    <div class="part-subtitle">3. Cách chào hỏi khi mới gặp lần đầu</div>
+                    <div class="phrase-line" onclick="speak('认识你，我很高兴。')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">认识 你, 我很高兴。</div>
+                            <div class="phrase-pinyin">Rènshi nǐ, wǒ hěn gāoxìng.</div>
+                            <div class="phrase-vietnamese">Tôi rất vui mừng khi quen biết anh(chị).</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('认识你，我也很高兴。')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">认识你, 我也很高兴。</div>
+                            <div class="phrase-pinyin">Rènshi nǐ, wǒ yě hěn gāoxìng.</div>
+                            <div class="phrase-vietnamese">Quen biết anh, tôi cũng rất vui.</div>
+                        </div>
+                    </div>
+
+                    <div class="part-subtitle">4. Một vài cách chào hỏi thường dùng khác</div>
+                    <div class="phrase-line" onclick="speak('你吃了吗？')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">你吃了吗?</div>
+                            <div class="phrase-pinyin">Nǐ chī le ma?</div>
+                            <div class="phrase-vietnamese">Anh ăn cơm chưa?</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('我吃了，你呢？')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">我吃了, 你呢?</div>
+                            <div class="phrase-pinyin">Wǒ chī le, nǐ ne?</div>
+                            <div class="phrase-vietnamese">Tôi ăn rồi, anh đã ăn chưa?</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('你去哪儿？')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">你去哪儿?</div>
+                            <div class="phrase-pinyin">Nǐ qù nǎr?</div>
+                            <div class="phrase-vietnamese">Anh đi đâu đấy?</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('我出去。')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">我出去。</div>
+                            <div class="phrase-pinyin">Wǒ chūqù.</div>
+                            <div class="phrase-vietnamese">Tôi đi ra ngoài.</div>
+                        </div>
+                    </div>
+
+                    <div class="part-subtitle">5. Chào tạm biệt</div>
+                    <div class="phrase-line" onclick="speak('再见。')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">再见。</div>
+                            <div class="phrase-pinyin">Zàijiàn.</div>
+                            <div class="phrase-vietnamese">Tạm biệt.</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('明天见。')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">明天见。</div>
+                            <div class="phrase-pinyin">Míngtiān jiàn.</div>
+                            <div class="phrase-vietnamese">Ngày mai gặp nhé.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- II. HỎI THĂM SỨC KHỎE -->
+            <div id="hoi-tham" class="section-content">
+                <div class="part-box">
+                    <div class="part-title">II. CÁCH HỎI THĂM SỨC KHỎE</div>
+                    <div class="formula-box">A + 好吗? &nbsp;&nbsp;→&nbsp;&nbsp; A + có khỏe không?</div>
+
+                    <div class="phrase-line" onclick="speak('你好吗？')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">你好吗?</div>
+                            <div class="phrase-pinyin">Nǐ hǎo ma?</div>
+                            <div class="phrase-vietnamese">Anh khỏe không?</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('我好！')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">我好!</div>
+                            <div class="phrase-pinyin">Wǒ hǎo!</div>
+                            <div class="phrase-vietnamese">Tôi khỏe!</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('你身体好吗？')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">你身体好吗?</div>
+                            <div class="phrase-pinyin">Nǐ shēntǐ hǎoma?</div>
+                            <div class="phrase-vietnamese">Anh khỏe không?</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('我很好，谢谢。你呢？')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">我很好, 谢谢。你呢?</div>
+                            <div class="phrase-pinyin">Wǒ hěn hǎo, xièxie. Nǐ ne?</div>
+                            <div class="phrase-vietnamese">Tôi rất khỏe, cám ơn anh. Còn anh?</div>
+                        </div>
+                    </div>
+                    <div class="phrase-line" onclick="speak('我也很好，谢谢你。')">
+                        <div class="phrase-bullet">•</div>
+                        <div class="phrase-content">
+                            <div class="phrase-chinese">我也很好, 谢谢你。</div>
+                            <div class="phrase-pinyin">Wǒ yě hěn hǎo, xièxie nǐ.</div>
+                            <div class="phrase-vietnamese">Tôi cũng rất khỏe, cám ơn anh.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- III. NHỮNG CÂU NÓI THƯỜNG DÙNG -->
+            <div id="thuong-dung" class="section-content">
+                <div class="part-box">
+                    <div class="part-title">III. NHỮNG CÂU NÓI THƯỜNG DÙNG</div>
+                    <div class="two-col">
+                        <div class="phrase-line" onclick="speak('你好！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">你好!</div>
+                                <div class="phrase-pinyin">Nǐ hǎo!</div>
+                                <div class="phrase-vietnamese">Chào anh!</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('早安！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">早安!</div>
+                                <div class="phrase-pinyin">Zǎo ān!</div>
+                                <div class="phrase-vietnamese">Chào buổi sáng!</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('午安！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">午安!</div>
+                                <div class="phrase-pinyin">Wǔ ān!</div>
+                                <div class="phrase-vietnamese">Chào buổi trưa.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('晚安！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">晚安!</div>
+                                <div class="phrase-pinyin">Wǎn ān!</div>
+                                <div class="phrase-vietnamese">Chào buổi tối, chúc ngủ ngon!</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请进！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请进!</div>
+                                <div class="phrase-pinyin">Qǐng jìn!</div>
+                                <div class="phrase-vietnamese">Mời vào!</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请跟我走！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请跟我走!</div>
+                                <div class="phrase-pinyin">Qǐng gēn wǒ zǒu!</div>
+                                <div class="phrase-vietnamese">Hãy đi theo tôi!</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请坐！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请坐!</div>
+                                <div class="phrase-pinyin">Qǐng zuò!</div>
+                                <div class="phrase-vietnamese">Mời ngồi!</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请吃饭！')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请吃饭!</div>
+                                <div class="phrase-pinyin">Qǐng chī fàn!</div>
+                                <div class="phrase-vietnamese">Mời ăn cơm!</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请喝茶。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请喝茶。</div>
+                                <div class="phrase-pinyin">Qǐng hē chá.</div>
+                                <div class="phrase-vietnamese">Mời uống trà.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('别客气。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">别客气。</div>
+                                <div class="phrase-pinyin">Bié kèqi.</div>
+                                <div class="phrase-vietnamese">Đừng khách khí.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请上车。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请上车。</div>
+                                <div class="phrase-pinyin">Qǐng shàng chē.</div>
+                                <div class="phrase-vietnamese">Mời lên xe.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请下车。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请下车。</div>
+                                <div class="phrase-pinyin">Qǐng xià chē.</div>
+                                <div class="phrase-vietnamese">Mời xuống xe.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请说慢一点。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请说慢一点。</div>
+                                <div class="phrase-pinyin">Qǐng shuō màn yì diǎn.</div>
+                                <div class="phrase-vietnamese">Xin nói chậm một chút.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请再说一边。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请再说一边。</div>
+                                <div class="phrase-pinyin">Qǐng zài shuō yí biàn.</div>
+                                <div class="phrase-vietnamese">Xin nhắc lại lần nữa.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请大声一点。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请大声一点。</div>
+                                <div class="phrase-pinyin">Qǐng dà shēng yì diǎn.</div>
+                                <div class="phrase-vietnamese">Xin nói to một chút.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请帮我一下。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请帮我一下。</div>
+                                <div class="phrase-pinyin">Qǐng bāng wǒ yí xià.</div>
+                                <div class="phrase-vietnamese">Hãy giúp tôi.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请等一会。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请等一会。</div>
+                                <div class="phrase-pinyin">Qǐng děng yí huì.</div>
+                                <div class="phrase-vietnamese">Xin đợi một chút.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CẢM ƠN & XIN LỖI -->
+            <div id="cam-on" class="section-content">
+                <div class="part-box">
+                    <div class="part-title">CẢM ƠN &amp; XIN LỖI</div>
+                    <div class="two-col">
+                        <div class="phrase-line" onclick="speak('感谢。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">感谢。</div>
+                                <div class="phrase-pinyin">Gǎn xiè.</div>
+                                <div class="phrase-vietnamese">Cám ơn.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('不用谢。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">不用谢。</div>
+                                <div class="phrase-pinyin">Bú yòng xiè.</div>
+                                <div class="phrase-vietnamese">Không cần cám ơn.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('没什么。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">没什么。</div>
+                                <div class="phrase-pinyin">Méi shén me.</div>
+                                <div class="phrase-vietnamese">Không có gì.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('对不起。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">对不起。</div>
+                                <div class="phrase-pinyin">Duì bù qǐ.</div>
+                                <div class="phrase-vietnamese">Xin lỗi.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请原谅。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请原谅。</div>
+                                <div class="phrase-pinyin">Qǐng yuán liàng.</div>
+                                <div class="phrase-vietnamese">Xin thứ lỗi.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('麻烦你了。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">麻烦你了。</div>
+                                <div class="phrase-pinyin">Má fan nǐ le.</div>
+                                <div class="phrase-vietnamese">Làm phiền anh.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('劳驾。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">劳驾。</div>
+                                <div class="phrase-pinyin">Láo jià.</div>
+                                <div class="phrase-vietnamese">Cảm phiền.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('我很抱歉。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">我很抱歉。</div>
+                                <div class="phrase-pinyin">Wǒ hěn bào qiàn.</div>
+                                <div class="phrase-vietnamese">Thành thật xin lỗi.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('太可惜。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">太可惜。</div>
+                                <div class="phrase-pinyin">Tài kě xī.</div>
+                                <div class="phrase-vietnamese">Thật đáng tiếc.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('客气一点。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">客气一点。</div>
+                                <div class="phrase-pinyin">Kè qì yì diǎn.</div>
+                                <div class="phrase-vietnamese">Khách khí một chút.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('我走啊。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">我走啊。</div>
+                                <div class="phrase-pinyin">Wǒ zǒu a.</div>
+                                <div class="phrase-vietnamese">Tôi đi đây.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('慢走。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">慢走。</div>
+                                <div class="phrase-pinyin">Màn zǒu.</div>
+                                <div class="phrase-vietnamese">Về nhé.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('再见。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">再见。</div>
+                                <div class="phrase-pinyin">Zàijiàn.</div>
+                                <div class="phrase-vietnamese">Tạm biệt.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请客气。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请客气。</div>
+                                <div class="phrase-pinyin">Qǐng kè qì.</div>
+                                <div class="phrase-vietnamese">Xin khách khí.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('别客气。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">别客气。</div>
+                                <div class="phrase-pinyin">Bié kè qì.</div>
+                                <div class="phrase-vietnamese">Xin đừng khách khí.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('好久不见。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">好久不见。</div>
+                                <div class="phrase-pinyin">Hǎo jiǔ bú jiàn.</div>
+                                <div class="phrase-vietnamese">Lâu rồi không gặp.</div>
+                            </div>
+                        </div>
+                        <div class="phrase-line" onclick="speak('请等一下，请等一等。')">
+                            <div class="phrase-bullet">•</div>
+                            <div class="phrase-content">
+                                <div class="phrase-chinese">请等一下; 请等一等。</div>
+                                <div class="phrase-pinyin">Qǐng děng yí xià; qǐng děng yì děng.</div>
+                                <div class="phrase-vietnamese">Đợi chút.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IV. TỪ VỰNG -->
+            <div id="tu-vung" class="section-content">
+                <div class="part-box">
+                    <div class="part-title">IV. TỪ VỰNG</div>
+                    <table class="vocab-table">
+                        <thead>
+                            <tr><th style="width:60px">STT</th><th style="width:100px">Hán tự</th><th style="width:120px">Phiên âm</th><th>Nghĩa tiếng Việt</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td class="vocab-hanzi">我</td><td class="vocab-pinyin-td">wǒ</td><td>tôi, tao, ta</td></tr>
+                            <tr><td>2</td><td class="vocab-hanzi">你</td><td class="vocab-pinyin-td">nǐ</td><td>anh, chị, mày</td></tr>
+                            <tr><td>3</td><td class="vocab-hanzi">他/她</td><td class="vocab-pinyin-td">tā</td><td>anh ta, nó, cô ấy</td></tr>
+                            <tr><td>4</td><td class="vocab-hanzi">先生</td><td class="vocab-pinyin-td">xiān sheng</td><td>ngài, ông</td></tr>
+                            <tr><td>5</td><td class="vocab-hanzi">认识</td><td class="vocab-pinyin-td">rèn shi</td><td>quen biết</td></tr>
+                            <tr><td>6</td><td class="vocab-hanzi">很</td><td class="vocab-pinyin-td">hěn</td><td>rất</td></tr>
+                            <tr><td>7</td><td class="vocab-hanzi">好</td><td class="vocab-pinyin-td">hǎo</td><td>tốt, khỏe</td></tr>
+                            <tr><td>8</td><td class="vocab-hanzi">经理</td><td class="vocab-pinyin-td">jīng lǐ</td><td>giám đốc</td></tr>
+                            <tr><td>9</td><td class="vocab-hanzi">高兴</td><td class="vocab-pinyin-td">gāo xìng</td><td>vui mừng</td></tr>
+                            <tr><td>10</td><td class="vocab-hanzi">也</td><td class="vocab-pinyin-td">yě</td><td>cũng</td></tr>
+                            <tr><td>11</td><td class="vocab-hanzi">身体</td><td class="vocab-pinyin-td">shēn tǐ</td><td>thân thể</td></tr>
+                            <tr><td>12</td><td class="vocab-hanzi">吃</td><td class="vocab-pinyin-td">chī</td><td>ăn</td></tr>
+                            <tr><td>13</td><td class="vocab-hanzi">饱</td><td class="vocab-pinyin-td">bǎo</td><td>no</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- V. GIẢI THÍCH TỪ -->
+            <div id="giai-thich" class="section-content">
+                <div class="part-box">
+                    <div class="part-title">V. GIẢI THÍCH TỪ</div>
+                    <table class="grammar-table">
+                        <thead>
+                            <tr><th style="width:80px">Từ</th><th>Giải thích</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="grammar-word">吗</span><br><span class="grammar-pinyin">ma</span></td>
+                                <td>Ngữ khí từ đặt ở cuối câu trần thuật để câu thành câu hỏi có nghĩa là "Có phải không?".</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">呢</span><br><span class="grammar-pinyin">ne</span></td>
+                                <td>Là từ đặt ở cuối câu dùng làm câu hỏi rút gọn (khi không muốn nhắc lại câu hỏi).</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">你</span><br><span class="grammar-pinyin">nǐ</span></td>
+                                <td>Anh, em, mày, ông, bà... dùng để chỉ người nói chuyện với mình (trang hồ thường).</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">您</span><br><span class="grammar-pinyin">nín</span></td>
+                                <td>Ngài, ông, bà. Dùng để nói chuyện với bậc trên, tỏ lòng kính trọng, xã giao (trang hồ tôn kính).</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">好</span><br><span class="grammar-pinyin">hǎo</span></td>
+                                <td>Tốt, hay, giỏi, khỏe, được...</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">我</span><br><span class="grammar-pinyin">wǒ</span></td>
+                                <td>Tôi, tao, tớ, con, cháu... Dùng để xưng khi nói chuyện với người khác.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">他</span><br><span class="grammar-pinyin">tā</span></td>
+                                <td>Anh ấy, chị ấy, bà ấy, nó... Dùng để chỉ người thứ ba.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">我们</span><br><span class="grammar-pinyin">wǒmen</span></td>
+                                <td>Chúng tôi, chúng ta, chúng em... Dùng để xưng hô đông người gồm cả mình trong đó.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">咱们</span><br><span class="grammar-pinyin">zánmen</span></td>
+                                <td>Chúng tôi, chúng ta... Dùng để xưng hô phía mình và phía đối phương.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">你们</span><br><span class="grammar-pinyin">nǐmen</span></td>
+                                <td>Các anh, các chị, các bạn... Dùng để xưng hô đối tượng từ người thứ hai trở lên.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grammar-word">他们</span><br><span class="grammar-pinyin">tāmen</span></td>
+                                <td>Các cô, các bạn ấy... Dùng để xưng hô đối tượng ngoài mình và đối tượng nói chuyện.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VI. HỘI THOẠI TỔNG HỢP -->
+            <div id="hoi-thoai" class="section-content">
+                <div class="part-box">
+                    <div class="part-title">VI. HỘI THOẠI TỔNG HỢP</div>
+
+                    <div class="note-box">
+                        <div class="note-title"><i class="bi bi-info-circle"></i> Ghi nhớ</div>
+                        <div class="note-text">Người Trung Quốc hay người Đài Loan đều gọi nhau bằng họ + đại từ (anh, chị, ông, bà...) hoặc gọi họ + chức vụ (danh từ).<br>Ví dụ: <strong>李经理</strong> → Giám đốc Lý.</div>
+                    </div>
+
+                    <div class="dialogue-container">
+                        <div class="dialogue-line" onclick="speak('你好。你好吗？')">
+                            <div class="dialogue-speaker">A</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">你好。你好吗?</div>
+                                <div class="dialogue-pinyin">Nǐ hǎo. Nǐ hǎo ma?</div>
+                                <div class="dialogue-vietnamese">Chào chị, chị khỏe không?</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('你好，我很好。你呢？')">
+                            <div class="dialogue-speaker">B</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">你好, 我很好。你呢?</div>
+                                <div class="dialogue-pinyin">Nǐ hǎo, wǒ hěn hǎo. Nǐ ne?</div>
+                                <div class="dialogue-vietnamese">Chào em, chị khỏe. Còn em?</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('我也很好。')">
+                            <div class="dialogue-speaker">A</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">我也很好。</div>
+                                <div class="dialogue-pinyin">Wǒ yě hěn hǎo.</div>
+                                <div class="dialogue-vietnamese">Em cũng vậy.</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('请坐。')">
+                            <div class="dialogue-speaker">B</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">请坐。</div>
+                                <div class="dialogue-pinyin">Qǐng zuò.</div>
+                                <div class="dialogue-vietnamese">Chị ngồi đi.</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('谢谢。')">
+                            <div class="dialogue-speaker">A</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">谢谢。</div>
+                                <div class="dialogue-pinyin">Xièxie.</div>
+                                <div class="dialogue-vietnamese">Cám ơn em.</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('别客气。')">
+                            <div class="dialogue-speaker">B</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">别客气。</div>
+                                <div class="dialogue-pinyin">Bié kèqi.</div>
+                                <div class="dialogue-vietnamese">Xin đừng khách khí.</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('李经理，中午好！')">
+                            <div class="dialogue-speaker">A</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">李经理, 中午好!</div>
+                                <div class="dialogue-pinyin">Lǐ jīnglǐ, zhōngwǔ hǎo!</div>
+                                <div class="dialogue-vietnamese">Giám đốc Lý, buổi trưa vui vẻ!</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('你好，请喝茶。')">
+                            <div class="dialogue-speaker">B</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">你好, 请喝茶。</div>
+                                <div class="dialogue-pinyin">Nǐ hǎo, qǐng hē chá.</div>
+                                <div class="dialogue-vietnamese">Chào anh, mời anh uống trà.</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('谢谢你。')">
+                            <div class="dialogue-speaker">A</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">谢谢你。</div>
+                                <div class="dialogue-pinyin">Xièxie nǐ.</div>
+                                <div class="dialogue-vietnamese">Cám ơn anh.</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('你吃饭了吗？')">
+                            <div class="dialogue-speaker">B</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">你吃饭了吗?</div>
+                                <div class="dialogue-pinyin">Nǐ chī fàn le ma?</div>
+                                <div class="dialogue-vietnamese">Anh ăn cơm chưa?</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('我吃了。')">
+                            <div class="dialogue-speaker">A</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">我吃了。</div>
+                                <div class="dialogue-pinyin">Wǒ chī le.</div>
+                                <div class="dialogue-vietnamese">Tôi ăn rồi.</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('你呢？')">
+                            <div class="dialogue-speaker">B</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">你呢?</div>
+                                <div class="dialogue-pinyin">Nǐ ne?</div>
+                                <div class="dialogue-vietnamese">Còn anh?</div>
+                            </div>
+                        </div>
+                        <div class="dialogue-line" onclick="speak('我吃饱了。')">
+                            <div class="dialogue-speaker">A</div>
+                            <div class="dialogue-content">
+                                <div class="dialogue-chinese">我吃饱了。</div>
+                                <div class="dialogue-pinyin">Wǒ chī bǎo le.</div>
+                                <div class="dialogue-vietnamese">Tôi ăn no rồi.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'zh-CN';
+            utter.rate = 1.0;
+            utter.pitch = 1;
+            window.speechSynthesis.speak(utter);
+        }
+    }
+
+    const sections = ['chao-hoi', 'hoi-tham', 'thuong-dung', 'cam-on', 'tu-vung', 'giai-thich', 'hoi-thoai'];
+    const sectionTitles = ['I. CHÀO HỎI', 'II. CÁCH HỎI THĂM SỨC KHỎE', 'III. NHỮNG CÂU NÓI THƯỜNG DÙNG', 'CẢM ƠN & XIN LỖI', 'IV. TỪ VỰNG', 'V. GIẢI THÍCH TỪ', 'VI. HỘI THOẠI TỔNG HỢP'];
+    const sectionIcons = ['bi-hand-thumbs-up', 'bi-heart-pulse', 'bi-chat-quote', 'bi-emoji-smile', 'bi-journal-bookmark', 'bi-lightbulb', 'bi-people-fill'];
+
+    function showSection(sectionId, navItem) {
+        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        if (navItem) navItem.classList.add('active');
+        const idx = sections.indexOf(sectionId);
+        document.getElementById('section-title-text').textContent = sectionTitles[idx];
+        document.getElementById('current-icon').innerHTML = '<i class="bi ' + sectionIcons[idx] + '"></i>';
+        document.getElementById('section-badge').textContent = 'Phần ' + (idx + 1) + '/7';
+    }
+</script>
+</body>
+</html>

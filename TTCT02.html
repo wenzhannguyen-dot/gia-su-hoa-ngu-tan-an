@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2: Số đếm, Số thứ tự, Hỏi tuổi - 汉语速成</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, "Helvetica Neue", sans-serif; background: #f5f5f5; min-height: 100vh; color: #333; }
+        .chinese-text { color: #000 !important; font-family: "SimSun", "STSong", serif; font-size: 20px; }
+        .pinyin-text { font-family: Arial, sans-serif; font-size: 18px; color: #4472c4; }
+        body.hide-pinyin .phrase-pinyin, body.hide-pinyin .dialogue-pinyin, body.hide-pinyin .vocab-pinyin { display: none !important; }
+        body.hide-vietnamese .phrase-vietnamese, body.hide-vietnamese .dialogue-vietnamese { display: none !important; }
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #4472c4; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; display: flex; align-items: center; justify-content: center; }
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+        .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+        .logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+        .main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+        .sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
+        .nav-section { border-bottom: 1px solid #e0e0e0; }
+        .nav-title { padding: 15px; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #4472c4; font-family: Arial, sans-serif; }
+        .nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666; font-size: 13px; transition: background 0.1s, color 0.1s; font-family: Arial, sans-serif; text-decoration: none; }
+        .nav-item:hover { background: #e3f2fd; color: #4472c4; }
+        .nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; }
+        .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+        .tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+        .tool-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .tool-card:last-child { margin-bottom: 0; }
+        .tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; }
+        .tool-btn { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; cursor: pointer; font-size: 12px; color: #666; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; transition: all 0.2s; font-family: Arial, sans-serif; }
+        .tool-btn:hover { background: #e3f2fd; border-color: #4472c4; color: #4472c4; }
+        .tool-btn.active-toggle { background: #e3f2fd; border-color: #4472c4; color: #4472c4; font-weight: 600; }
+        .tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+        .tool-btn.primary:hover { background: #d35400; }
+        .content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #e3f2fd); padding: 20px; border-bottom: 2px solid #4472c4; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+        .section-badge { background: #4472c4; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
+        .content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+        .section-content { display: none; animation: fadeIn 0.4s ease; }
+        .section-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .part-box { background: white; border-radius: 8px; padding: 25px; margin-bottom: 20px; border: 1px solid #e0e0e0; }
+        .part-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #4472c4; font-family: Arial, sans-serif; }
+        .part-subtitle { font-size: 16px; font-weight: bold; color: #ed7d31; margin: 20px 0 12px 0; font-family: Arial, sans-serif; }
+        .part-desc { font-size: 15px; color: #555; margin-bottom: 15px; line-height: 1.6; font-family: Arial, sans-serif; }
+        .formula-box { background: #fff3e0; border: 1px solid #ffe082; border-radius: 8px; padding: 12px 18px; margin-bottom: 15px; font-size: 16px; color: #333; font-family: Arial, sans-serif; }
+        .phrase-line { display: flex; align-items: flex-start; gap: 15px; padding: 12px 15px; margin-bottom: 10px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; transition: all 0.2s; cursor: pointer; }
+        .phrase-line:hover { background: #e3f2fd; border-color: #4472c4; transform: translateX(3px); }
+        .phrase-bullet { color: #4472c4; font-size: 20px; line-height: 1; margin-top: 2px; }
+        .phrase-content { flex: 1; }
+        .phrase-chinese { font-size: 20px; font-weight: bold; color: #000; font-family: "SimSun", "STSong", serif; margin-bottom: 4px; }
+        .phrase-pinyin { font-size: 16px; color: #4472c4; margin-bottom: 4px; }
+        .phrase-vietnamese { font-size: 15px; color: #555; font-family: Arial, sans-serif; }
+        .vocab-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .vocab-table th { background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; padding: 14px; text-align: left; font-weight: 600; font-size: 14px; }
+        .vocab-table td { padding: 12px 14px; border-bottom: 1px solid #e9ecef; font-size: 15px; }
+        .vocab-table tr:last-child td { border-bottom: none; }
+        .vocab-table tr:hover td { background: #f8f9ff; }
+        .vocab-hanzi { font-size: 22px; font-weight: bold; font-family: "SimSun", "STSong", serif; }
+        .vocab-pinyin-td { color: #4472c4; font-style: italic; }
+        .grammar-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .grammar-table th { background: linear-gradient(135deg, #6c757d, #495057); color: white; padding: 14px; text-align: left; font-weight: 600; font-size: 14px; }
+        .grammar-table td { padding: 14px; border-bottom: 1px solid #e9ecef; vertical-align: top; font-size: 15px; }
+        .grammar-table tr:hover td { background: #f8f9ff; }
+        .grammar-word { font-size: 20px; font-weight: bold; color: #4472c4; font-family: "SimSun", "STSong", serif; }
+        .grammar-pinyin { color: #666; font-style: italic; }
+        .dialogue-container { background: white; border-radius: 8px; padding: 25px; border: 1px solid #e0e0e0; }
+        .dialogue-line { display: flex; gap: 15px; margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
+        .dialogue-line:hover { background: #e3f2fd; border-color: #4472c4; transform: translateX(5px); }
+        .dialogue-speaker { font-weight: bold; color: #e65100; min-width: 30px; font-size: 15px; font-family: Arial, sans-serif; }
+        .dialogue-content { flex: 1; }
+        .dialogue-chinese { font-size: 20px; font-weight: bold; color: #000; margin-bottom: 4px; font-family: "SimSun", "STSong", serif; }
+        .dialogue-pinyin { font-size: 16px; color: #4472c4; margin-bottom: 4px; }
+        .dialogue-vietnamese { font-size: 15px; color: #555; font-family: Arial, sans-serif; }
+        .note-box { background: #fff3e0; border: 1px solid #ffe082; border-radius: 8px; padding: 15px; margin: 20px 0; }
+        .note-title { font-size: 15px; font-weight: bold; color: #e65100; margin-bottom: 8px; font-family: Arial, sans-serif; }
+        .note-text { font-size: 14px; color: #555; line-height: 1.8; font-family: Arial, sans-serif; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        #note-editor-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; }
+        #note-editor-container { background: white; width: 85%; height: 85%; margin: 5% auto; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; }
+        #note-editor-header { background: #4472c4; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3467a8; }
+        #note-editor-header h3 { font-family: Arial, sans-serif; font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px; }
+        #note-editor-toolbar { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .editor-tool-btn { padding: 6px 12px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; transition: all 0.2s; }
+        .editor-tool-btn:hover { background: #e3f2fd; border-color: #4472c4; }
+        #rich-editor { flex: 1; padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; font-family: Arial, sans-serif; background: #fff; }
+        #rich-editor:focus { outline: none; }
+        #note-editor-footer { background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; }
+        .editor-btn { padding: 8px 20px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; font-weight: 600; transition: all 0.2s; }
+        .editor-btn-close { background: #f5f5f5; border: 1px solid #ddd; color: #666; }
+        .editor-btn-close:hover { background: #e0e0e0; }
+        .editor-btn-save { background: #4472c4; border: 1px solid #4472c4; color: white; }
+        .editor-btn-save:hover { background: #3467a8; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 20px; }
+        .vocab-card { background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #4472c4; display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+        .vocab-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(68,114,196,0.15); border-color: #4472c4; border-style: solid; }
+        .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .vocab-number { width: 45px; height: 45px; background: #4472c4; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(68,114,196,0.3); font-family: Arial, sans-serif; }
+        .vocab-content { flex: 1; }
+        .vocab-chinese { font-size: 32px; font-weight: bold; color: #000 !important; margin-bottom: 6px; letter-spacing: 2px; font-family: "SimSun", "STSong", serif; }
+        .vocab-pinyin { font-size: 20px; color: #4472c4; margin-bottom: 6px; font-weight: 500; }
+        .vocab-meaning { font-size: 20px; color: #333; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
+        .vocab-example { font-size: 16px; color: #888; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; }
+        .vocab-animation { width: 140px; height: 140px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .stroke-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .stroke-inline { display: flex; gap: 5px; }
+        .stroke-inline > div { border: 1px solid #e0e0e0; border-radius: 4px; background: #fafafa; }
+        .replay-btn { width: 32px; height: 32px; border: 1px solid #4472c4; background: #e3f2fd; color: #4472c4; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .replay-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
+        .audio-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #e3f2fd; color: #4472c4; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .audio-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
+        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; } .main-container { flex-direction: column; padding-top: 70px; } .vocab-grid { grid-template-columns: 1fr; } .vocab-card { flex-direction: column; align-items: flex-start; gap: 12px; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <div class="logo-img">
+            <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+        </div>
+        <div class="logo-text">
+            <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+            <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+        </div>
+    </div>
+    <div style="flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: white; font-family: Arial, sans-serif;">
+        汉语速成 — Bài 2: Số đếm, Số thứ tự, Hỏi tuổi
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="sidebar-left">
+        <div class="nav-section">
+            <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung</span></div>
+            <a href="TIENG TRUNG CAP TOC.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self">
+                <i class="bi bi-house-door"></i><span>Về trang chủ</span>
+            </a>
+            <div class="nav-item active" onclick="showSection('so-dem', this)"><i class="bi bi-123"></i><span>I. Số đếm</span></div>
+            <div class="nav-item" onclick="showSection('so-thu-tu', this)"><i class="bi bi-sort-numeric-down"></i><span>II. Số thứ tự</span></div>
+            <div class="nav-item" onclick="showSection('phan-so', this)"><i class="bi bi-percent"></i><span>III. Phân số</span></div>
+            <div class="nav-item" onclick="showSection('hoi-tuoi', this)"><i class="bi bi-person-badge"></i><span>IV. Cách hỏi tuổi</span></div>
+            <div class="nav-item" onclick="showSection('gia-dinh', this)"><i class="bi bi-diagram-3"></i><span>V. Quan hệ gia đình</span></div>
+            <div class="nav-item" onclick="showSection('cau-hoi', this)"><i class="bi bi-question-circle"></i><span>VI. Câu thường dùng</span></div>
+            <div class="nav-item" onclick="showSection('tu-vung', this)"><i class="bi bi-journal-bookmark"></i><span>VII. Từ vựng</span></div>
+            <div class="nav-item" onclick="showSection('giai-thich', this)"><i class="bi bi-lightbulb"></i><span>VIII. Giải thích từ</span></div>
+            <div class="nav-item" onclick="showSection('hoi-thoai', this)"><i class="bi bi-people-fill"></i><span>IX. Hội thoại</span></div>
+        </div>
+        <div class="tools-section">
+            <div class="tool-card">
+                <div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+                <button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)"><i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span></button>
+                <button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)"><i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span></button>
+                <button class="tool-btn primary" onclick="openNoteEditor()"><i class="bi bi-journal-text"></i><span>Bảng ghi chú</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="content-area">
+        <div class="content-header">
+            <div class="section-title">
+                <span id="current-icon"><i class="bi bi-123"></i></span>
+                <span id="section-title-text">I. SỐ ĐẾM</span>
+                <span class="section-badge" id="section-badge">Phần 1/9</span>
+            </div>
+        </div>
+        <div class="content-body"><div id="so-dem" class="section-content active">
+    <div class="part-box">
+        <div class="part-title">I. SỐ ĐẾM</div>
+        <div class="part-subtitle">1. Cách đếm từ 1 đến 20</div>
+        <table class="vocab-table"><thead><tr><th style="width:32%">Chữ Hán</th><th style="width:38%">Pinyin</th><th style="width:30%">Số</th></tr></thead><tbody><tr onclick="speak(&quot;一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一</td><td class="vocab-pinyin vocab-pinyin-td">yī</td><td class="phrase-vietnamese">1</td></tr><tr onclick="speak(&quot;二&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">二</td><td class="vocab-pinyin vocab-pinyin-td">èr</td><td class="phrase-vietnamese">2</td></tr><tr onclick="speak(&quot;三&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">三</td><td class="vocab-pinyin vocab-pinyin-td">sān</td><td class="phrase-vietnamese">3</td></tr><tr onclick="speak(&quot;四&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">四</td><td class="vocab-pinyin vocab-pinyin-td">sì</td><td class="phrase-vietnamese">4</td></tr><tr onclick="speak(&quot;五&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">五</td><td class="vocab-pinyin vocab-pinyin-td">wǔ</td><td class="phrase-vietnamese">5</td></tr><tr onclick="speak(&quot;六&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">六</td><td class="vocab-pinyin vocab-pinyin-td">liù</td><td class="phrase-vietnamese">6</td></tr><tr onclick="speak(&quot;七&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">七</td><td class="vocab-pinyin vocab-pinyin-td">qī</td><td class="phrase-vietnamese">7</td></tr><tr onclick="speak(&quot;八&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">八</td><td class="vocab-pinyin vocab-pinyin-td">bā</td><td class="phrase-vietnamese">8</td></tr><tr onclick="speak(&quot;九&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">九</td><td class="vocab-pinyin vocab-pinyin-td">jiǔ</td><td class="phrase-vietnamese">9</td></tr><tr onclick="speak(&quot;十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十</td><td class="vocab-pinyin vocab-pinyin-td">shí</td><td class="phrase-vietnamese">10</td></tr><tr onclick="speak(&quot;十一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十一</td><td class="vocab-pinyin vocab-pinyin-td">shíyī</td><td class="phrase-vietnamese">11</td></tr><tr onclick="speak(&quot;十二&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十二</td><td class="vocab-pinyin vocab-pinyin-td">shí’èr</td><td class="phrase-vietnamese">12</td></tr><tr onclick="speak(&quot;十三&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十三</td><td class="vocab-pinyin vocab-pinyin-td">shísān</td><td class="phrase-vietnamese">13</td></tr><tr onclick="speak(&quot;十四&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十四</td><td class="vocab-pinyin vocab-pinyin-td">shísì</td><td class="phrase-vietnamese">14</td></tr><tr onclick="speak(&quot;十五&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十五</td><td class="vocab-pinyin vocab-pinyin-td">shíwǔ</td><td class="phrase-vietnamese">15</td></tr><tr onclick="speak(&quot;十六&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十六</td><td class="vocab-pinyin vocab-pinyin-td">shíliù</td><td class="phrase-vietnamese">16</td></tr><tr onclick="speak(&quot;十七&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十七</td><td class="vocab-pinyin vocab-pinyin-td">shíqī</td><td class="phrase-vietnamese">17</td></tr><tr onclick="speak(&quot;十八&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十八</td><td class="vocab-pinyin vocab-pinyin-td">shíbā</td><td class="phrase-vietnamese">18</td></tr><tr onclick="speak(&quot;十九&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十九</td><td class="vocab-pinyin vocab-pinyin-td">shíjiǔ</td><td class="phrase-vietnamese">19</td></tr><tr onclick="speak(&quot;二十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">二十</td><td class="vocab-pinyin vocab-pinyin-td">èrshí</td><td class="phrase-vietnamese">20</td></tr></tbody></table>
+        <div class="part-subtitle">2. Cách đếm số hàng chục</div>
+        <div class="formula-box">Số hàng chục: số đếm + 十. Ví dụ: 三十 (30), 九十 (90).</div>
+        <table class="vocab-table"><thead><tr><th style="width:32%">Chữ Hán</th><th style="width:38%">Pinyin</th><th style="width:30%">Số</th></tr></thead><tbody><tr onclick="speak(&quot;十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十</td><td class="vocab-pinyin vocab-pinyin-td">shí</td><td class="phrase-vietnamese">10</td></tr><tr onclick="speak(&quot;二十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">二十</td><td class="vocab-pinyin vocab-pinyin-td">èrshí</td><td class="phrase-vietnamese">20</td></tr><tr onclick="speak(&quot;三十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">三十</td><td class="vocab-pinyin vocab-pinyin-td">sānshí</td><td class="phrase-vietnamese">30</td></tr><tr onclick="speak(&quot;四十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">四十</td><td class="vocab-pinyin vocab-pinyin-td">sìshí</td><td class="phrase-vietnamese">40</td></tr><tr onclick="speak(&quot;五十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">五十</td><td class="vocab-pinyin vocab-pinyin-td">wǔshí</td><td class="phrase-vietnamese">50</td></tr><tr onclick="speak(&quot;六十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">六十</td><td class="vocab-pinyin vocab-pinyin-td">liùshí</td><td class="phrase-vietnamese">60</td></tr><tr onclick="speak(&quot;七十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">七十</td><td class="vocab-pinyin vocab-pinyin-td">qīshí</td><td class="phrase-vietnamese">70</td></tr><tr onclick="speak(&quot;八十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">八十</td><td class="vocab-pinyin vocab-pinyin-td">bāshí</td><td class="phrase-vietnamese">80</td></tr><tr onclick="speak(&quot;九十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">九十</td><td class="vocab-pinyin vocab-pinyin-td">jiǔshí</td><td class="phrase-vietnamese">90</td></tr><tr onclick="speak(&quot;一百&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi</td><td class="phrase-vietnamese">100</td></tr></tbody></table>
+        <div class="part-subtitle">3. Cách đếm từ 100 đến 200</div>
+        <table class="vocab-table"><thead><tr><th style="width:32%">Chữ Hán</th><th style="width:38%">Pinyin</th><th style="width:30%">Số</th></tr></thead><tbody><tr onclick="speak(&quot;一百&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi</td><td class="phrase-vietnamese">100</td></tr><tr onclick="speak(&quot;一百零一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百零一</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi líng yī</td><td class="phrase-vietnamese">101</td></tr><tr onclick="speak(&quot;一百零二&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百零二</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi líng èr</td><td class="phrase-vietnamese">102</td></tr><tr onclick="speak(&quot;一百一十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百一十</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi yīshí</td><td class="phrase-vietnamese">110</td></tr><tr onclick="speak(&quot;一百一十一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百一十一</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi yīshíyī</td><td class="phrase-vietnamese">111</td></tr><tr onclick="speak(&quot;一百二十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百二十</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi èrshí</td><td class="phrase-vietnamese">120</td></tr><tr onclick="speak(&quot;一百二十一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百二十一</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi èrshíyī</td><td class="phrase-vietnamese">121</td></tr><tr onclick="speak(&quot;一百九十九&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一百九十九</td><td class="vocab-pinyin vocab-pinyin-td">yìbǎi jiǔshíjiǔ</td><td class="phrase-vietnamese">199</td></tr><tr onclick="speak(&quot;两百&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">两百</td><td class="vocab-pinyin vocab-pinyin-td">liǎngbǎi</td><td class="phrase-vietnamese">200</td></tr></tbody></table>
+        <div class="part-subtitle">4. Cách đếm hàng trăm trở lên</div>
+        <table class="vocab-table"><thead><tr><th style="width:32%">Chữ Hán</th><th style="width:38%">Pinyin</th><th style="width:30%">Số</th></tr></thead><tbody><tr onclick="speak(&quot;两百&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">两百</td><td class="vocab-pinyin vocab-pinyin-td">liǎngbǎi</td><td class="phrase-vietnamese">200</td></tr><tr onclick="speak(&quot;三百&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">三百</td><td class="vocab-pinyin vocab-pinyin-td">sānbǎi</td><td class="phrase-vietnamese">300</td></tr><tr onclick="speak(&quot;一千&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一千</td><td class="vocab-pinyin vocab-pinyin-td">yìqiān</td><td class="phrase-vietnamese">1.000</td></tr><tr onclick="speak(&quot;一千一百&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一千一百</td><td class="vocab-pinyin vocab-pinyin-td">yìqiān yìbǎi</td><td class="phrase-vietnamese">1.100</td></tr><tr onclick="speak(&quot;两千&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">两千</td><td class="vocab-pinyin vocab-pinyin-td">liǎngqiān</td><td class="phrase-vietnamese">2.000</td></tr><tr onclick="speak(&quot;一万&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一万</td><td class="vocab-pinyin vocab-pinyin-td">yíwàn</td><td class="phrase-vietnamese">10.000</td></tr><tr onclick="speak(&quot;一万一千&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一万一千</td><td class="vocab-pinyin vocab-pinyin-td">yíwàn yìqiān</td><td class="phrase-vietnamese">11.000</td></tr><tr onclick="speak(&quot;两万&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">两万</td><td class="vocab-pinyin vocab-pinyin-td">liǎngwàn</td><td class="phrase-vietnamese">20.000</td></tr><tr onclick="speak(&quot;九万&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">九万</td><td class="vocab-pinyin vocab-pinyin-td">jiǔwàn</td><td class="phrase-vietnamese">90.000</td></tr><tr onclick="speak(&quot;十万&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">十万</td><td class="vocab-pinyin vocab-pinyin-td">shíwàn</td><td class="phrase-vietnamese">100.000</td></tr></tbody></table>
+    </div>
+</div>
+<div id="so-thu-tu" class="section-content">
+    <div class="part-box">
+        <div class="part-title">II. SỐ THỨ TỰ</div>
+        <div class="formula-box">第 + số đếm → số thứ tự</div>
+        <table class="vocab-table"><thead><tr><th style="width:32%">Chữ Hán</th><th style="width:38%">Pinyin</th><th style="width:30%">Nghĩa</th></tr></thead><tbody><tr onclick="speak(&quot;第一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">第一</td><td class="vocab-pinyin vocab-pinyin-td">dì yī</td><td class="phrase-vietnamese">thứ nhất</td></tr><tr onclick="speak(&quot;第二&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">第二</td><td class="vocab-pinyin vocab-pinyin-td">dì èr</td><td class="phrase-vietnamese">thứ hai</td></tr><tr onclick="speak(&quot;……&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">……</td><td class="vocab-pinyin vocab-pinyin-td">……</td><td class="phrase-vietnamese">……</td></tr><tr onclick="speak(&quot;第十&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">第十</td><td class="vocab-pinyin vocab-pinyin-td">dì shí</td><td class="phrase-vietnamese">thứ mười</td></tr></tbody></table>
+    </div>
+</div>
+<div id="phan-so" class="section-content">
+    <div class="part-box">
+        <div class="part-title">III. PHÂN SỐ, SỐ THẬP PHÂN</div>
+        <div class="part-desc">Khác với cách đọc phân số của người Việt, người Trung Quốc đọc mẫu số trước, rồi đến <strong>分之</strong> (fēnzhī), tiếp đó mới đến tử số.</div>
+        <div class="formula-box">Mẫu số + 分之 + tử số</div>
+        <table class="vocab-table"><thead><tr><th style="width:38%">Chữ Hán</th><th style="width:38%">Pinyin</th><th style="width:24%">Giá trị</th></tr></thead><tbody><tr onclick="speak(&quot;百分之一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">百分之一</td><td class="vocab-pinyin vocab-pinyin-td">bǎifēnzhī yī</td><td class="phrase-vietnamese">1%</td></tr><tr onclick="speak(&quot;百分之二十五&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">百分之二十五</td><td class="vocab-pinyin vocab-pinyin-td">bǎifēnzhī èrshíwǔ</td><td class="phrase-vietnamese">25%</td></tr><tr onclick="speak(&quot;三分之一&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">三分之一</td><td class="vocab-pinyin vocab-pinyin-td">sānfēnzhī yī</td><td class="phrase-vietnamese">1/3</td></tr><tr onclick="speak(&quot;四点四&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">四点四</td><td class="vocab-pinyin vocab-pinyin-td">sì diǎn sì</td><td class="phrase-vietnamese">4,4</td></tr><tr onclick="speak(&quot;一半&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">一半</td><td class="vocab-pinyin vocab-pinyin-td">yíbàn</td><td class="phrase-vietnamese">một nửa</td></tr></tbody></table>
+    </div>
+</div>
+<div id="hoi-tuoi" class="section-content">
+    <div class="part-box">
+        <div class="part-title">IV. CÁCH HỎI TUỔI</div>
+        <div class="part-desc">Đối với người Trung Quốc có các cách hỏi thăm tuổi tác khác nhau, tùy thuộc vào độ tuổi của người được hỏi để lựa chọn cách nói lễ phép, tôn kính.</div>
+        <div class="part-subtitle">1. Cách hỏi tuổi trẻ em</div><div class="phrase-line" onclick="speak(&quot;你几岁了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你几岁了？</div>
+            <div class="phrase-pinyin">Nǐ jǐ suì le?</div>
+            <div class="phrase-vietnamese">Cháu mấy tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;我五岁了。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">我五岁了。</div>
+            <div class="phrase-pinyin">Wǒ wǔ suì le.</div>
+            <div class="phrase-vietnamese">Cháu 5 tuổi rồi.</div>
+        </div>
+    </div>
+        <div class="part-subtitle">2. Cách hỏi tuổi thanh thiếu niên</div><div class="phrase-line" onclick="speak(&quot;你多大了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你多大了？</div>
+            <div class="phrase-pinyin">Nǐ duōdà le?</div>
+            <div class="phrase-vietnamese">Em bao tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;我十五岁了。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">我十五岁了。</div>
+            <div class="phrase-pinyin">Wǒ shíwǔ suì le.</div>
+            <div class="phrase-vietnamese">Em 15 tuổi.</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;你二十几岁了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你二十几岁了？</div>
+            <div class="phrase-pinyin">Nǐ èrshí jǐ suì le?</div>
+            <div class="phrase-vietnamese">Anh năm nay hai mươi mấy tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;我二十五岁了。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">我二十五岁了。</div>
+            <div class="phrase-pinyin">Wǒ èrshíwǔ suì le.</div>
+            <div class="phrase-vietnamese">Tôi 25 tuổi rồi.</div>
+        </div>
+    </div>
+        <div class="part-subtitle">3. Cách hỏi đối với người đứng tuổi</div><div class="phrase-line" onclick="speak(&quot;你多大年纪了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你多大年纪了？</div>
+            <div class="phrase-pinyin">Nǐ duōdà niánjì le?</div>
+            <div class="phrase-vietnamese">Cô bao tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;我五十五岁了。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">我五十五岁了。</div>
+            <div class="phrase-pinyin">Wǒ wǔshíwǔ suì le.</div>
+            <div class="phrase-vietnamese">Tôi 55 tuổi rồi.</div>
+        </div>
+    </div>
+        <div class="part-subtitle">4. Cách hỏi tuổi đối với người già</div><div class="phrase-line" onclick="speak(&quot;您多大岁数了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">您多大岁数了？</div>
+            <div class="phrase-pinyin">Nín duōdà suìshu le?</div>
+            <div class="phrase-vietnamese">Cụ năm nay bao tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;您高寿了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">您高寿了？</div>
+            <div class="phrase-pinyin">Nín gāoshòu le?</div>
+            <div class="phrase-vietnamese">Cụ năm nay bao tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;我八十岁了。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">我八十岁了。</div>
+            <div class="phrase-pinyin">Wǒ bāshí suì le.</div>
+            <div class="phrase-vietnamese">Tôi 80 tuổi rồi.</div>
+        </div>
+    </div>
+    </div>
+</div>
+<div id="gia-dinh" class="section-content">
+    <div class="part-box">
+        <div class="part-title">V. MỘT SỐ TỪ CHỈ MỐI QUAN HỆ TRONG GIA ĐÌNH</div>
+        <table class="vocab-table"><thead><tr><th style="width:34%">Chữ Hán</th><th style="width:36%">Pinyin</th><th style="width:30%">Nghĩa</th></tr></thead><tbody><tr onclick="speak(&quot;爷爷&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">爷爷</td><td class="vocab-pinyin vocab-pinyin-td">yéye</td><td class="phrase-vietnamese">ông nội</td></tr><tr onclick="speak(&quot;奶奶&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">奶奶</td><td class="vocab-pinyin vocab-pinyin-td">nǎinai</td><td class="phrase-vietnamese">bà nội</td></tr><tr onclick="speak(&quot;外婆、外祖母&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">外婆、外祖母</td><td class="vocab-pinyin vocab-pinyin-td">wàipó, wàizǔmǔ</td><td class="phrase-vietnamese">bà ngoại</td></tr><tr onclick="speak(&quot;叔叔&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">叔叔</td><td class="vocab-pinyin vocab-pinyin-td">shūshu</td><td class="phrase-vietnamese">chú ruột</td></tr><tr onclick="speak(&quot;叔公&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">叔公</td><td class="vocab-pinyin vocab-pinyin-td">shūgōng</td><td class="phrase-vietnamese">chú của chồng / ông chú</td></tr><tr onclick="speak(&quot;叔母&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">叔母</td><td class="vocab-pinyin vocab-pinyin-td">shūmǔ</td><td class="phrase-vietnamese">thím</td></tr><tr onclick="speak(&quot;舅舅&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">舅舅</td><td class="vocab-pinyin vocab-pinyin-td">jiùjiu</td><td class="phrase-vietnamese">cậu</td></tr><tr onclick="speak(&quot;舅母&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">舅母</td><td class="vocab-pinyin vocab-pinyin-td">jiùmǔ</td><td class="phrase-vietnamese">mợ</td></tr><tr onclick="speak(&quot;父母&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">父母</td><td class="vocab-pinyin vocab-pinyin-td">fùmǔ</td><td class="phrase-vietnamese">bố mẹ</td></tr><tr onclick="speak(&quot;爸爸、父亲&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">爸爸、父亲</td><td class="vocab-pinyin vocab-pinyin-td">bàba, fùqin</td><td class="phrase-vietnamese">bố</td></tr><tr onclick="speak(&quot;妈妈、母亲&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">妈妈、母亲</td><td class="vocab-pinyin vocab-pinyin-td">māma, mǔqin</td><td class="phrase-vietnamese">mẹ</td></tr><tr onclick="speak(&quot;哥哥&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">哥哥</td><td class="vocab-pinyin vocab-pinyin-td">gēge</td><td class="phrase-vietnamese">anh trai</td></tr><tr onclick="speak(&quot;弟弟&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">弟弟</td><td class="vocab-pinyin vocab-pinyin-td">dìdi</td><td class="phrase-vietnamese">em trai</td></tr><tr onclick="speak(&quot;姐姐&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">姐姐</td><td class="vocab-pinyin vocab-pinyin-td">jiějie</td><td class="phrase-vietnamese">chị gái</td></tr><tr onclick="speak(&quot;妹妹&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">妹妹</td><td class="vocab-pinyin vocab-pinyin-td">mèimei</td><td class="phrase-vietnamese">em gái</td></tr><tr onclick="speak(&quot;男孩&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">男孩</td><td class="vocab-pinyin vocab-pinyin-td">nánhái</td><td class="phrase-vietnamese">con trai / bé trai</td></tr><tr onclick="speak(&quot;女孩&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">女孩</td><td class="vocab-pinyin vocab-pinyin-td">nǚhái</td><td class="phrase-vietnamese">con gái / bé gái</td></tr><tr onclick="speak(&quot;孩子&quot;)" style="cursor:pointer;"><td class="vocab-hanzi">孩子</td><td class="vocab-pinyin vocab-pinyin-td">háizi</td><td class="phrase-vietnamese">con cái / trẻ em</td></tr></tbody></table>
+    </div>
+</div>
+<div id="cau-hoi" class="section-content">
+    <div class="part-box">
+        <div class="part-title">VI. NHỮNG CÂU HỎI THƯỜNG DÙNG</div>
+        <div class="phrase-line" onclick="speak(&quot;你几岁了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你几岁了？</div>
+            <div class="phrase-pinyin">Nǐ jǐ suì le?</div>
+            <div class="phrase-vietnamese">Cháu mấy tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;你多大了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你多大了？</div>
+            <div class="phrase-pinyin">Nǐ duōdà le?</div>
+            <div class="phrase-vietnamese">Em bao tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;你十几岁了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你十几岁了？</div>
+            <div class="phrase-pinyin">Nǐ shí jǐ suì le?</div>
+            <div class="phrase-vietnamese">Em mười mấy tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;你二十几岁了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你二十几岁了？</div>
+            <div class="phrase-pinyin">Nǐ èrshí jǐ suì le?</div>
+            <div class="phrase-vietnamese">Anh hai mươi mấy tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;你多大年纪了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你多大年纪了？</div>
+            <div class="phrase-pinyin">Nǐ duōdà niánjì le?</div>
+            <div class="phrase-vietnamese">Cô ấy bao tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;你多大岁数了？&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">你多大岁数了？</div>
+            <div class="phrase-pinyin">Nǐ duōdà suìshu le?</div>
+            <div class="phrase-vietnamese">Cụ bao tuổi rồi?</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;祝你健康长寿。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">祝你健康长寿。</div>
+            <div class="phrase-pinyin">Zhù nǐ jiànkāng chángshòu.</div>
+            <div class="phrase-vietnamese">Chúc ông mạnh khỏe, sống lâu.</div>
+        </div>
+    </div>
+    </div>
+</div>
+<div id="tu-vung" class="section-content">
+    <div class="part-box">
+        <div class="part-title">VII. TỪ VỰNG</div>
+        <div class="vocab-grid" id="vocab-grid"></div>
+    </div>
+</div>
+<div id="giai-thich" class="section-content">
+    <div class="part-box">
+        <div class="part-title">VIII. GIẢI THÍCH TỪ</div>
+        <table class="grammar-table">
+            <thead><tr><th style="width:120px">Từ</th><th>Giải thích</th></tr></thead>
+            <tbody>
+                <tr><td><span class="grammar-word">多大</span><br><span class="grammar-pinyin">duōdà</span></td><td>Dùng khi hỏi tuổi; trong mẫu câu của bài này không dùng <strong>多少</strong> (duōshao) đứng một mình để thay thế.</td></tr>
+                <tr><td><span class="grammar-word">上</span><br><span class="grammar-pinyin">shàng</span></td><td>Nghĩa gốc là “trên, bên trên”. Khi chỉ thời gian, <strong>上</strong> biểu thị thời gian trước hoặc quá khứ. Ngoài ra, <strong>上</strong> còn có thể dùng như một động từ.</td></tr>
+                <tr><td><span class="grammar-word">下</span><br><span class="grammar-pinyin">xià</span></td><td>Nghĩa gốc là “dưới, bên dưới”. Khi chỉ thời gian, <strong>下</strong> biểu thị thời gian sau hoặc tương lai. Ngoài ra, <strong>下</strong> còn có thể dùng như một động từ.</td></tr>
+            </tbody>
+        </table>
+        <div class="part-subtitle">Ví dụ</div>
+        <div class="phrase-line" onclick="speak(&quot;桌子上。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">桌子上。</div>
+            <div class="phrase-pinyin">Zhuōzi shàng.</div>
+            <div class="phrase-vietnamese">Trên bàn.</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;桌子下。&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">桌子下。</div>
+            <div class="phrase-pinyin">Zhuōzi xià.</div>
+            <div class="phrase-vietnamese">Dưới bàn.</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;上个月&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">上个月</div>
+            <div class="phrase-pinyin">shàng ge yuè</div>
+            <div class="phrase-vietnamese">tháng trước</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;下个月&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">下个月</div>
+            <div class="phrase-pinyin">xià ge yuè</div>
+            <div class="phrase-vietnamese">tháng sau</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;上班&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">上班</div>
+            <div class="phrase-pinyin">shàngbān</div>
+            <div class="phrase-vietnamese">đi làm</div>
+        </div>
+    </div><div class="phrase-line" onclick="speak(&quot;下班&quot;)">
+        <div class="phrase-bullet">•</div>
+        <div class="phrase-content">
+            <div class="phrase-chinese">下班</div>
+            <div class="phrase-pinyin">xiàbān</div>
+            <div class="phrase-vietnamese">tan sở</div>
+        </div>
+    </div>
+    </div>
+</div>
+<div id="hoi-thoai" class="section-content">
+    <div class="part-box">
+        <div class="part-title">IX. HỘI THOẠI TỔNG HỢP</div>
+        <div class="dialogue-container"><div class="dialogue-line" onclick="speak(&quot;你好，好久不见。&quot;)">
+        <div class="dialogue-speaker">A</div>
+        <div class="dialogue-content">
+            <div class="dialogue-chinese">你好，好久不见。</div>
+            <div class="dialogue-pinyin">Nǐ hǎo, hǎojiǔ bú jiàn.</div>
+            <div class="dialogue-vietnamese">Chào anh, lâu rồi không gặp anh.</div>
+        </div>
+    </div><div class="dialogue-line" onclick="speak(&quot;你好，你好吗？&quot;)">
+        <div class="dialogue-speaker">B</div>
+        <div class="dialogue-content">
+            <div class="dialogue-chinese">你好，你好吗？</div>
+            <div class="dialogue-pinyin">Nǐ hǎo, nǐ hǎo ma?</div>
+            <div class="dialogue-vietnamese">Chào chị, chị khỏe không?</div>
+        </div>
+    </div><div class="dialogue-line" onclick="speak(&quot;我爷爷明天举行祝寿会，请你来参加。&quot;)">
+        <div class="dialogue-speaker">A</div>
+        <div class="dialogue-content">
+            <div class="dialogue-chinese">我爷爷明天举行祝寿会，请你来参加。</div>
+            <div class="dialogue-pinyin">Wǒ yéye míngtiān jǔxíng zhùshòu huì, qǐng nǐ lái cānjiā.</div>
+            <div class="dialogue-vietnamese">Ngày mai mừng thọ ông tôi, mời chị đến tham gia.</div>
+        </div>
+    </div><div class="dialogue-line" onclick="speak(&quot;谢谢你，我很好。你爷爷多大岁数了？&quot;)">
+        <div class="dialogue-speaker">B</div>
+        <div class="dialogue-content">
+            <div class="dialogue-chinese">谢谢你，我很好。你爷爷多大岁数了？</div>
+            <div class="dialogue-pinyin">Xièxie nǐ, wǒ hěn hǎo. Nǐ yéye duōdà suìshu le?</div>
+            <div class="dialogue-vietnamese">Cảm ơn, tôi khỏe. Ông anh năm nay bao tuổi rồi?</div>
+        </div>
+    </div><div class="dialogue-line" onclick="speak(&quot;我爷爷九十岁了。&quot;)">
+        <div class="dialogue-speaker">A</div>
+        <div class="dialogue-content">
+            <div class="dialogue-chinese">我爷爷九十岁了。</div>
+            <div class="dialogue-pinyin">Wǒ yéye jiǔshí suì le.</div>
+            <div class="dialogue-vietnamese">Ông tôi năm nay 90 tuổi rồi.</div>
+        </div>
+    </div><div class="dialogue-line" onclick="speak(&quot;祝你爷爷健康长寿。我明天一定来参加。&quot;)">
+        <div class="dialogue-speaker">B</div>
+        <div class="dialogue-content">
+            <div class="dialogue-chinese">祝你爷爷健康长寿。我明天一定来参加。</div>
+            <div class="dialogue-pinyin">Zhù nǐ yéye jiànkāng chángshòu. Wǒ míngtiān yídìng lái cānjiā.</div>
+            <div class="dialogue-vietnamese">Chúc ông mạnh khỏe, sống lâu. Ngày mai tôi sẽ đến.</div>
+        </div>
+    </div><div class="dialogue-line" onclick="speak(&quot;谢谢你，你父母多大年纪了？&quot;)">
+        <div class="dialogue-speaker">A</div>
+        <div class="dialogue-content">
+            <div class="dialogue-chinese">谢谢你，你父母多大年纪了？</div>
+            <div class="dialogue-pinyin">Xièxie nǐ, nǐ fùmǔ duōdà niánjì le?</div>
+            <div class="dialogue-vietnamese">Cảm ơn chị, bố mẹ chị năm nay bao nhiêu tuổi rồi?</div>
+        </div>
+    </div></div>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
+<div id="note-editor-overlay">
+    <div id="note-editor-container">
+        <div id="note-editor-header">
+            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>
+            <button class="editor-tool-btn" onclick="closeNoteEditor()" style="border:none; background:rgba(255,255,255,0.2); color:white;"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div id="note-editor-toolbar">
+            <button class="editor-tool-btn" onclick="formatDoc('bold')"><i class="bi bi-type-bold"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('italic')"><i class="bi bi-type-italic"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('underline')"><i class="bi bi-type-underline"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('insertUnorderedList')"><i class="bi bi-list-ul"></i></button>
+            <button class="editor-tool-btn" onclick="clearEditor()" style="color:#4472c4;"><i class="bi bi-trash"></i></button>
+        </div>
+        <div id="rich-editor" contenteditable="true" spellcheck="false"></div>
+        <div id="note-editor-footer">
+            <span style="font-size:12px; color:#666; font-family:Arial;">Hỗ trợ paste trực tiếp từ Word</span>
+            <div>
+                <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()">Đóng</button>
+                <button class="editor-btn editor-btn-save" onclick="saveNoteEditor()"><i class="bi bi-check-lg"></i> Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const sections = ['so-dem','so-thu-tu','phan-so','hoi-tuoi','gia-dinh','cau-hoi','tu-vung','giai-thich','hoi-thoai'];
+    const sectionTitles = ['I. SỐ ĐẾM','II. SỐ THỨ TỰ','III. PHÂN SỐ, SỐ THẬP PHÂN','IV. CÁCH HỎI TUỔI','V. QUAN HỆ GIA ĐÌNH','VI. NHỮNG CÂU HỎI THƯỜNG DÙNG','VII. TỪ VỰNG','VIII. GIẢI THÍCH TỪ','IX. HỘI THOẠI TỔNG HỢP'];
+    const sectionIcons = ['bi-123','bi-sort-numeric-down','bi-percent','bi-person-badge','bi-diagram-3','bi-question-circle','bi-journal-bookmark','bi-lightbulb','bi-people-fill'];
+    const toggleStates = { pinyin: false, vietnamese: false };
+    const vocabulary = [
+        {
+                "id": 1,
+                "chinese": "岁",
+                "pinyin": "suì",
+                "meaning": "tuổi",
+                "example": "我十五岁了。"
+        },
+        {
+                "id": 2,
+                "chinese": "是",
+                "pinyin": "shì",
+                "meaning": "là",
+                "example": ""
+        },
+        {
+                "id": 3,
+                "chinese": "不",
+                "pinyin": "bù",
+                "meaning": "không",
+                "example": ""
+        },
+        {
+                "id": 4,
+                "chinese": "有",
+                "pinyin": "yǒu",
+                "meaning": "có",
+                "example": ""
+        },
+        {
+                "id": 5,
+                "chinese": "没",
+                "pinyin": "méi",
+                "meaning": "chưa; không có",
+                "example": ""
+        },
+        {
+                "id": 6,
+                "chinese": "祝",
+                "pinyin": "zhù",
+                "meaning": "chúc",
+                "example": "祝你健康长寿。"
+        },
+        {
+                "id": 7,
+                "chinese": "健康",
+                "pinyin": "jiànkāng",
+                "meaning": "khỏe mạnh",
+                "example": "祝你健康长寿。"
+        },
+        {
+                "id": 8,
+                "chinese": "年纪",
+                "pinyin": "niánjì",
+                "meaning": "tuổi",
+                "example": "你多大年纪了？"
+        },
+        {
+                "id": 9,
+                "chinese": "岁数",
+                "pinyin": "suìshu",
+                "meaning": "số tuổi",
+                "example": "你多大岁数了？"
+        },
+        {
+                "id": 10,
+                "chinese": "多少",
+                "pinyin": "duōshao",
+                "meaning": "bao nhiêu",
+                "example": ""
+        },
+        {
+                "id": 11,
+                "chinese": "多大",
+                "pinyin": "duōdà",
+                "meaning": "bao nhiêu tuổi; lớn bao nhiêu",
+                "example": "你多大了？"
+        },
+        {
+                "id": 12,
+                "chinese": "举行",
+                "pinyin": "jǔxíng",
+                "meaning": "tổ chức, cử hành",
+                "example": "明天举行祝寿会。"
+        },
+        {
+                "id": 13,
+                "chinese": "参加",
+                "pinyin": "cānjiā",
+                "meaning": "tham gia",
+                "example": "请你来参加。"
+        },
+        {
+                "id": 14,
+                "chinese": "来",
+                "pinyin": "lái",
+                "meaning": "đến",
+                "example": "我明天一定来。"
+        }
+];
+    const writers = {};
+    let strokesInitialized = false;
+
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            var utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'zh-CN'; utter.rate = 1.0; utter.pitch = 1;
+            window.speechSynthesis.speak(utter);
+        }
+    }
+
+    function showSection(sectionId, navItem) {
+        document.querySelectorAll('.section-content').forEach(function(s) { s.classList.remove('active'); });
+        document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(function(i) { i.classList.remove('active'); });
+        if (navItem) navItem.classList.add('active');
+        var idx = sections.indexOf(sectionId);
+        document.getElementById('section-title-text').textContent = sectionTitles[idx];
+        document.getElementById('current-icon').innerHTML = '<i class="bi ' + sectionIcons[idx] + '"></i>';
+        document.getElementById('section-badge').textContent = 'Phần ' + (idx + 1) + '/9';
+        if (sectionId === 'tu-vung') { strokesInitialized = false; renderVocabulary(); }
+    }
+
+    function toggleFeature(feature, btn, className, iconShow, iconHide) {
+        toggleStates[feature] = !toggleStates[feature];
+        document.body.classList.toggle(className, toggleStates[feature]);
+        btn.classList.toggle('active-toggle', toggleStates[feature]);
+        btn.querySelector('i').className = toggleStates[feature] ? iconShow : iconHide;
+    }
+    function togglePinyin(btn) { toggleFeature('pinyin', btn, 'hide-pinyin', 'bi bi-eye', 'bi bi-eye-slash'); }
+    function toggleVietnamese(btn) { toggleFeature('vietnamese', btn, 'hide-vietnamese', 'bi bi-eye', 'bi bi-eye-slash'); }
+
+    function openNoteEditor() {
+        document.getElementById('note-editor-overlay').style.display = 'block';
+        document.getElementById('rich-editor').focus();
+    }
+    function closeNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'none'; }
+    function saveNoteEditor() {
+        localStorage.setItem('hanyu_sucheng_bai2_notes', document.getElementById('rich-editor').innerHTML);
+        alert('Đã lưu ghi chú!'); closeNoteEditor();
+    }
+    function loadNoteEditor() {
+        var c = localStorage.getItem('hanyu_sucheng_bai2_notes');
+        if (c) document.getElementById('rich-editor').innerHTML = c;
+    }
+    function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
+    function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
+
+    function renderVocabulary() {
+        var grid = document.getElementById('vocab-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        vocabulary.forEach(function(item) {
+            var card = document.createElement('div');
+            card.className = 'vocab-card';
+            card.dataset.char = item.chinese;
+            var html = '<div class="vocab-info"><div class="vocab-number">' + item.id + '</div>';
+            html += '<div class="vocab-content"><div class="vocab-chinese">' + item.chinese + '</div>';
+            html += '<div class="vocab-pinyin">' + item.pinyin + '</div>';
+            html += '<div class="vocab-meaning">' + item.meaning + '</div>';
+            if (item.example) html += '<div class="vocab-example">“' + item.example + '”</div>';
+            html += "</div><button class='audio-btn' onclick='speak(\"" + item.chinese + "\");event.stopPropagation();'>";
+            html += '<i class="bi bi-volume-up"></i></button></div>';
+            html += '<div class="stroke-wrapper"><div class="stroke-inline" id="stroke-' + item.chinese + '"></div>';
+            html += "<button class='replay-btn' onclick='event.stopPropagation(); replayStroke(\"" + item.chinese + "\")'>↺</button></div>";
+            card.innerHTML = html;
+            grid.appendChild(card);
+        });
+        setTimeout(initVocabStrokes, 100);
+    }
+
+    function replayStroke(char) {
+        if (writers[char] && Array.isArray(writers[char])) {
+            writers[char].forEach(function(writer) { writer.animateCharacter(); });
+        }
+    }
+
+    function initVocabStrokes() {
+        if (strokesInitialized || !window.HanziWriter) return;
+        document.querySelectorAll('.vocab-card[data-char]').forEach(function(card) {
+            var char = card.dataset.char;
+            var container = card.querySelector('.stroke-inline');
+            if (!container) return;
+            container.innerHTML = '';
+            var chars = char.split('');
+            writers[char] = [];
+            chars.forEach(function(c, index) {
+                var div = document.createElement('div');
+                div.id = 'stroke-' + char + '-' + index;
+                div.style.display = 'inline-block';
+                container.appendChild(div);
+                var writer = HanziWriter.create(div.id, c, {
+                    width: 60, height: 60, padding: 3,
+                    strokeColor: '#4472c4', radicalColor: '#4472c4',
+                    delayBetweenStrokes: 300, strokeAnimationSpeed: 1.5, showCharacter: false
+                });
+                writers[char].push(writer);
+                writer.animateCharacter();
+            });
+        });
+        strokesInitialized = true;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadNoteEditor();
+        var overlay = document.getElementById('note-editor-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', function(e) {
+                if (e.target.id === 'note-editor-overlay') closeNoteEditor();
+            });
+        }
+        if (document.getElementById('tu-vung').classList.contains('active')) {
+            renderVocabulary();
+        }
+    });
+</script>
+
+</body>
+</html>
