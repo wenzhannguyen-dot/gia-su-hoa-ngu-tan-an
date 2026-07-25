@@ -664,31 +664,50 @@ function renderSidebar(){
     const a2=vocabData.filter(item=>item.level==='A2').length;
     let html=`<button type="button" class="category-item active flex justify-between items-center" data-nav-key="all" data-main="all" data-sub="all" data-level="all">
         <span>📋 Tất cả</span><span class="nav-count">${total}</span>
-    </button>
-    <button type="button" class="subcategory-item nav-level-item flex justify-between items-center" data-nav-key="level-A1" data-main="all" data-sub="all" data-level="A1">
-        <span>TOCFL A1</span><span class="nav-count">${a1}</span>
-    </button>
-    <button type="button" class="subcategory-item nav-level-item flex justify-between items-center" data-nav-key="level-A2" data-main="all" data-sub="all" data-level="A2">
-        <span>TOCFL A2</span><span class="nav-count">${a2}</span>
     </button>`;
 
-    mainOrder.forEach(mainCode=>{
+    // Các cấp độ và nhóm từ loại được xếp theo số lượng từ ít đến nhiều.
+    [
+        {code:'A1',count:a1},
+        {code:'A2',count:a2}
+    ].sort((a,b)=>a.count-b.count || a.code.localeCompare(b.code)).forEach(level=>{
+        html+=`<button type="button" class="subcategory-item nav-level-item flex justify-between items-center" data-nav-key="level-${level.code}" data-main="all" data-sub="all" data-level="${level.code}">
+            <span>TOCFL ${level.code}</span><span class="nav-count">${level.count}</span>
+        </button>`;
+    });
+
+    const sortedMainCodes=mainOrder
+        .map((mainCode,index)=>({
+            mainCode,
+            index,
+            count:vocabData.filter(item=>item.mainCode===mainCode).length
+        }))
+        .filter(entry=>entry.count>0)
+        .sort((a,b)=>a.count-b.count || a.index-b.index);
+
+    sortedMainCodes.forEach(({mainCode,count:mainCount})=>{
         const main=mainTypeMeta[mainCode];
         const mainItems=vocabData.filter(item=>item.mainCode===mainCode);
-        if(!mainItems.length) return;
         html+=`<button type="button" class="category-item flex justify-between items-center" data-nav-key="main-${mainCode}" data-main="${mainCode}" data-sub="all" data-level="all">
             <span class="nav-bilingual-label"><span class="nav-zh">${esc(main.zh)}</span><span class="nav-vi">${esc(main.vi)}</span></span>
-            <span class="nav-count">${mainItems.length}</span>
+            <span class="nav-count">${mainCount}</span>
         </button>`;
-        (subtypeOrder[mainCode]||[]).forEach(subCode=>{
-            const count=mainItems.filter(item=>item.subCode===subCode).length;
-            if(!count) return;
-            const sub=subtypeMeta[subCode];
-            html+=`<button type="button" class="subcategory-item flex justify-between items-center" data-nav-key="sub-${subCode}" data-main="${mainCode}" data-sub="${subCode}" data-level="all">
-                <span class="nav-bilingual-label"><span class="nav-zh">${esc(sub.zh)}</span><span class="nav-vi">${esc(sub.vi)}</span></span>
-                <span class="nav-count">${count}</span>
-            </button>`;
-        });
+
+        (subtypeOrder[mainCode]||[])
+            .map((subCode,index)=>({
+                subCode,
+                index,
+                count:mainItems.filter(item=>item.subCode===subCode).length
+            }))
+            .filter(entry=>entry.count>0)
+            .sort((a,b)=>a.count-b.count || a.index-b.index)
+            .forEach(({subCode,count})=>{
+                const sub=subtypeMeta[subCode];
+                html+=`<button type="button" class="subcategory-item flex justify-between items-center" data-nav-key="sub-${subCode}" data-main="${mainCode}" data-sub="${subCode}" data-level="all">
+                    <span class="nav-bilingual-label"><span class="nav-zh">${esc(sub.zh)}</span><span class="nav-vi">${esc(sub.vi)}</span></span>
+                    <span class="nav-count">${count}</span>
+                </button>`;
+            });
     });
     sidebar.innerHTML=html;
 }
@@ -721,11 +740,11 @@ function closeSidebar(){
 function renderTable(){
     const data=getFilteredData();
     const tbody=document.getElementById('vocabTableBody');
-    tbody.innerHTML=data.map(item=>{
+    tbody.innerHTML=data.map((item,index)=>{
         const main=mainTypeMeta[item.mainCode];
         const sub=subtypeMeta[item.subCode];
         return `<tr class="transition-colors">
-            <td class="px-3 py-3 text-center text-gray-600">${item.stt}</td>
+            <td class="px-3 py-3 text-center text-gray-600">${index+1}</td>
             <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn audio-btn" data-action="speak" data-stt="${item.stt}" title="Phát âm ${esc(item.hanzi)}">🔊</button></td>
             <td class="px-4 py-3 text-center"><span class="hanzi-font text-xl text-gray-900">${esc(item.hanzi)}</span></td>
             <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn stroke-btn" data-action="stroke" data-stt="${item.stt}" title="Xem nét viết">✏</button></td>
