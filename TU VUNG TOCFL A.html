@@ -113,9 +113,6 @@
             transform:scale(1.07);
             filter:brightness(.96);
         }
-        .audio-btn { background:#3b82f6; }
-        .stroke-btn { background:#10b981; }
-        .detail-btn { background:#f97316; }
         .type-cell {
             display:flex;
             align-items:center;
@@ -403,10 +400,91 @@
             .table-shell { max-height:none; }
         }
 
+        /* ICON NÉT ĐƠN GIẢN, KHÔNG DÙNG EMOJI */
+        .line-icon {
+            width:18px;
+            height:18px;
+            display:inline-block;
+            flex:0 0 auto;
+            stroke:currentColor;
+            fill:none;
+            stroke-width:1.8;
+            stroke-linecap:round;
+            stroke-linejoin:round;
+            vertical-align:middle;
+        }
+        .line-icon-sm { width:16px; height:16px; }
+        .line-icon-lg { width:20px; height:20px; }
+        .icon-label {
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:7px;
+        }
+        .icon-btn {
+            border:1px solid currentColor;
+            border-radius:5px;
+            background:#fff;
+            box-shadow:none;
+        }
+        .icon-btn:hover,
+        .icon-btn:focus-visible {
+            transform:none;
+            background:#f9fafb;
+            outline:2px solid rgba(124,58,237,.18);
+            outline-offset:2px;
+        }
+        .audio-btn { color:#2563eb; background:#eff6ff; }
+        .stroke-btn { color:#047857; background:#ecfdf5; }
+        .detail-btn { color:#c2410c; background:#fff7ed; }
+        .table-icon-head { display:inline-flex; align-items:center; justify-content:center; }
+
+        /* ACCORDION: chỉ hiện mục con khi bấm vào từ loại chính */
+        .main-nav-item {
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        .main-nav-item .nav-bilingual-label { margin-right:0; }
+        .nav-chevron {
+            width:16px;
+            height:16px;
+            flex:0 0 16px;
+            transition:transform .18s ease;
+            color:#6b7280;
+        }
+        .main-nav-item[aria-expanded="true"] .nav-chevron { transform:rotate(90deg); }
+        .category-item.active .nav-chevron { color:currentColor; }
+        .nav-children {
+            display:none;
+            border-bottom:1px solid #f3f4f6;
+            background:#fafafa;
+        }
+        .nav-children.open { display:block; }
+        .subcategory-item {
+            position:relative;
+            padding-left:46px;
+            background:#fafafa;
+        }
+        .subcategory-item::before {
+            content:"";
+            position:absolute;
+            left:28px;
+            top:50%;
+            width:7px;
+            height:1px;
+            background:#9ca3af;
+        }
+        .category-item:focus-visible,
+        .subcategory-item:focus-visible {
+            outline:2px solid rgba(124,58,237,.35);
+            outline-offset:-2px;
+        }
+
     </style>
 </head>
 <body>
-<!-- L99 QA: 883 mục từ; A1=495; A2=388; đã phân tích lại từ loại chính và phân loại nhỏ theo hướng giảng dạy Hoa ngữ Đài Loan; giữ mã từ loại gốc trong dữ liệu; menu trái chia theo từ loại và tiểu loại; không sắp xếp theo chữ cái; logo dùng URL trực tiếp. -->
+<!-- L99 QA: 883 mục từ; A1=495; A2=388; menu chỉ giữ Tất cả + từ loại; bỏ điều hướng A1/A2; các nhóm nhỏ mặc định thu gọn và chỉ mở khi bấm từ loại chính; thứ tự menu từ ít đến nhiều; STT tự đánh lại sau lọc; icon SVG nét đơn; logo dùng URL trực tiếp; không có nút lưu trang web. -->
 <header class="site-header">
     <div class="max-w-[1600px] mx-auto px-3 md:px-5 py-2 flex items-center gap-3">
         <a class="logo-box" href="https://giasuhoangu.com" target="_blank" rel="noopener" aria-label="Gia Sư Hoa Ngữ Tân An">
@@ -423,7 +501,7 @@
 <aside class="sidebar-container" id="sidebar" aria-label="Điều hướng từ loại">
     <div class="sidebar-title">
         <h2 class="font-bold text-purple-900 flex items-center gap-2">
-            <span>📚</span>
+            <svg class="line-icon line-icon-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5z"></path><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5A2.5 2.5 0 0 1 20 21.5z"></path></svg>
             <span>TỪ LOẠI VÀ PHÂN LOẠI NHỎ</span>
         </h2>
     </div>
@@ -433,7 +511,7 @@
 <main class="main-content">
     <div class="content-toolbar">
         <div class="flex items-center gap-2 min-w-0">
-            <button id="mobileSidebarButton" type="button" class="mobile-sidebar-button" aria-label="Mở danh mục từ loại">☰</button>
+            <button id="mobileSidebarButton" type="button" class="mobile-sidebar-button" aria-label="Mở danh mục từ loại"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
             <span class="text-sm text-gray-500">Lọc:</span>
             <span id="currentFilter" class="font-semibold text-purple-700 bg-purple-100 px-3 py-1 rounded-full text-sm truncate">Tất cả (883 mục từ)</span>
         </div>
@@ -448,15 +526,15 @@
             <thead class="sticky-head">
                 <tr class="table-header text-sm">
                     <th class="px-3 py-3 text-center w-14">STT</th>
-                    <th class="px-2 py-3 text-center w-12 icon-col">🔊</th>
+                    <th class="px-2 py-3 text-center w-12 icon-col"><span class="table-icon-head" title="Phát âm" aria-label="Phát âm"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19z"></path><path d="M15 9.5a4 4 0 0 1 0 5"></path><path d="M17.5 7a7.5 7.5 0 0 1 0 10"></path></svg></span></th>
                     <th class="px-4 py-3 text-center w-36">Chữ phồn thể</th>
-                    <th class="px-2 py-3 text-center w-12 icon-col">✏</th>
+                    <th class="px-2 py-3 text-center w-12 icon-col"><span class="table-icon-head" title="Thứ tự nét" aria-label="Thứ tự nét"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10z"></path><path d="m14.5 7.5 3 3"></path></svg></span></th>
                     <th class="px-4 py-3 text-left w-40">Pinyin</th>
                     <th class="px-4 py-3 text-left w-40">Từ loại chính</th>
                     <th class="px-4 py-3 text-left w-72">Phân loại nhỏ</th>
                     <th class="px-4 py-3 text-center w-20">Cấp độ</th>
                     <th class="px-4 py-3 text-left">Nghĩa tiếng Việt</th>
-                    <th class="px-2 py-3 text-center w-12 icon-col">👁</th>
+                    <th class="px-2 py-3 text-center w-12 icon-col"><span class="table-icon-head" title="Ví dụ" aria-label="Ví dụ"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></span></th>
                 </tr>
             </thead>
             <tbody id="vocabTableBody" class="text-sm divide-y divide-gray-200"></tbody>
@@ -468,15 +546,15 @@
 <div id="strokeModal" class="modal-backdrop hidden">
     <div class="modal-card">
         <div class="bg-purple-600 text-white px-5 py-4 flex items-center justify-between">
-            <h2 class="text-lg font-bold">✏ Thứ tự nét: <span id="strokeModalTitle" class="hanzi-font text-2xl"></span></h2>
-            <button type="button" class="close-stroke text-white text-2xl leading-none" aria-label="Đóng">×</button>
+            <h2 class="text-lg font-bold icon-label"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10z"></path><path d="m14.5 7.5 3 3"></path></svg><span>Thứ tự nét: <span id="strokeModalTitle" class="hanzi-font text-2xl"></span></span></h2>
+            <button type="button" class="close-stroke text-white p-1 rounded" aria-label="Đóng"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
         </div>
         <div class="flex-1 overflow-y-auto bg-gray-50 p-4">
             <div id="strokeContainer" class="stroke-container"></div>
             <div id="strokeMessage" class="hidden text-center text-gray-600 py-8"></div>
         </div>
         <div class="bg-gray-100 px-5 py-4 flex justify-center gap-3">
-            <button type="button" id="animateAllButton" class="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold">▶ Viết lại</button>
+            <button type="button" id="animateAllButton" class="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold"><span class="icon-label"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7z"></path></svg><span>Viết lại</span></span></button>
             <button type="button" class="close-stroke bg-gray-500 text-white px-5 py-2 rounded-lg font-semibold">Đóng</button>
         </div>
     </div>
@@ -485,8 +563,8 @@
 <div id="detailModal" class="modal-backdrop hidden">
     <div class="modal-card">
         <div class="bg-orange-500 text-white px-5 py-4 flex items-center justify-between">
-            <h2 class="text-lg font-bold">👁 Ví dụ</h2>
-            <button type="button" class="close-detail text-white text-2xl leading-none" aria-label="Đóng">×</button>
+            <h2 class="text-lg font-bold icon-label"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span>Ví dụ</span></h2>
+            <button type="button" class="close-detail text-white p-1 rounded" aria-label="Đóng"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
         </div>
         <div id="detailContent" class="flex-1 overflow-y-auto p-5"></div>
         <div class="bg-gray-100 px-5 py-4 flex justify-center">
@@ -507,7 +585,7 @@ const mainTypeMeta={
     PREP:{zh:'介詞',vi:'Giới từ',className:'type-prep'},
     CONJ:{zh:'連接詞',vi:'Liên từ',className:'type-conj'},
     P:{zh:'助詞',vi:'Trợ từ',className:'type-p'},
-    EXPR:{zh:'慣用語',vi:'Cụm giao tiếp / cách nói cố định',className:'type-expr'}
+    EXPR:{zh:'常用語',vi:'Cụm diễn đạt thông dụng',className:'type-expr'}
 };
 const subtypeMeta={
     N_PRONOUN:{zh:'代名詞',vi:'Đại từ'},
@@ -532,7 +610,7 @@ const subtypeMeta={
     V_REL:{zh:'判斷關係動詞',vi:'Động từ phán đoán / quan hệ'},
     V_CHANGE:{zh:'變化結果動詞',vi:'Động từ biến đổi / kết quả'},
     V_PHYSIO:{zh:'生理活動動詞',vi:'Động từ hoạt động sinh lý'},
-    V_STATE:{zh:'狀態性質動詞',vi:'Động từ trạng thái / tính chất'},
+    V_STATE:{zh:'狀態／性質動詞',vi:'Động từ trạng thái / tính chất'},
 
     ADV_NEG:{zh:'否定副詞',vi:'Phó từ phủ định'},
     ADV_DEGREE:{zh:'程度副詞',vi:'Phó từ mức độ'},
@@ -595,7 +673,7 @@ const subtypeMeta={
     EXPR_PROBLEM:{zh:'問題處理語',vi:'Cách nói xử lý tình huống'},
     EXPR_CONGRATS:{zh:'祝賀語',vi:'Câu chúc mừng'},
     EXPR_CALL:{zh:'招呼語',vi:'Tiếng gọi / bắt chuyện'},
-    EXPR_OTHER:{zh:'其他慣用語',vi:'Cách nói cố định khác'}
+    EXPR_OTHER:{zh:'其他常用語',vi:'Cụm diễn đạt thông dụng khác'}
 };
 const sourceTypeMeta={
     N:'名詞',VA:'動作動詞',VS:'狀態動詞',Adv:'副詞',Det:'定詞',M:'量詞',Prep:'介詞',Conj:'連接詞',P:'助詞',Expr:'常用語'
@@ -612,7 +690,7 @@ const subtypeOrder={
     P:['P_STRUCT','P_ASPECT','P_MODAL','P_OTHER'],
     EXPR:['EXPR_GREETING','EXPR_FAREWELL','EXPR_THANKS','EXPR_APOLOGY','EXPR_RESPONSE','EXPR_INQUIRY','EXPR_PROBLEM','EXPR_CONGRATS','EXPR_CALL','EXPR_OTHER']
 };
-const state={level:'all',main:'all',sub:'all',query:'',navKey:'all'};
+const state={level:'all',main:'all',sub:'all',query:'',navKey:'all',expandedMain:null};
 let currentWriters=[];
 
 function esc(value){
@@ -660,21 +738,12 @@ function filterLabel(data){
 function renderSidebar(){
     const sidebar=document.getElementById('sidebarMenu');
     const total=vocabData.length;
-    const a1=vocabData.filter(item=>item.level==='A1').length;
-    const a2=vocabData.filter(item=>item.level==='A2').length;
-    let html=`<button type="button" class="category-item active flex justify-between items-center" data-nav-key="all" data-main="all" data-sub="all" data-level="all">
-        <span>📋 Tất cả</span><span class="nav-count">${total}</span>
-    </button>`;
+    const listIcon=`<svg class="line-icon line-icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"></path><path d="M4 6h.01M4 12h.01M4 18h.01"></path></svg>`;
+    const chevron=`<svg class="nav-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
 
-    // Các cấp độ và nhóm từ loại được xếp theo số lượng từ ít đến nhiều.
-    [
-        {code:'A1',count:a1},
-        {code:'A2',count:a2}
-    ].sort((a,b)=>a.count-b.count || a.code.localeCompare(b.code)).forEach(level=>{
-        html+=`<button type="button" class="subcategory-item nav-level-item flex justify-between items-center" data-nav-key="level-${level.code}" data-main="all" data-sub="all" data-level="${level.code}">
-            <span>TOCFL ${level.code}</span><span class="nav-count">${level.count}</span>
-        </button>`;
-    });
+    let html=`<button type="button" class="category-item flex justify-between items-center ${state.navKey==='all'?'active':''}" data-nav-role="all" data-nav-key="all" data-main="all" data-sub="all" aria-current="${state.navKey==='all'?'true':'false'}">
+        <span class="icon-label">${listIcon}<span>Tất cả</span></span><span class="nav-count">${total}</span>
+    </button>`;
 
     const sortedMainCodes=mainOrder
         .map((mainCode,index)=>({
@@ -688,11 +757,17 @@ function renderSidebar(){
     sortedMainCodes.forEach(({mainCode,count:mainCount})=>{
         const main=mainTypeMeta[mainCode];
         const mainItems=vocabData.filter(item=>item.mainCode===mainCode);
-        html+=`<button type="button" class="category-item flex justify-between items-center" data-nav-key="main-${mainCode}" data-main="${mainCode}" data-sub="all" data-level="all">
+        const isExpanded=state.expandedMain===mainCode;
+        const isMainActive=state.main===mainCode && state.sub==='all';
+        const childId=`nav-children-${mainCode}`;
+
+        html+=`<button type="button" class="category-item main-nav-item ${isMainActive?'active':''}" data-nav-role="main" data-nav-key="main-${mainCode}" data-main="${mainCode}" data-sub="all" aria-expanded="${isExpanded}" aria-controls="${childId}" aria-current="${isMainActive?'true':'false'}">
+            ${chevron}
             <span class="nav-bilingual-label"><span class="nav-zh">${esc(main.zh)}</span><span class="nav-vi">${esc(main.vi)}</span></span>
             <span class="nav-count">${mainCount}</span>
         </button>`;
 
+        html+=`<div id="${childId}" class="nav-children ${isExpanded?'open':''}" role="group" aria-label="Phân loại nhỏ của ${esc(main.vi)}">`;
         (subtypeOrder[mainCode]||[])
             .map((subCode,index)=>({
                 subCode,
@@ -703,28 +778,55 @@ function renderSidebar(){
             .sort((a,b)=>a.count-b.count || a.index-b.index)
             .forEach(({subCode,count})=>{
                 const sub=subtypeMeta[subCode];
-                html+=`<button type="button" class="subcategory-item flex justify-between items-center" data-nav-key="sub-${subCode}" data-main="${mainCode}" data-sub="${subCode}" data-level="all">
+                const isSubActive=state.sub===subCode;
+                html+=`<button type="button" class="subcategory-item flex justify-between items-center ${isSubActive?'active':''}" data-nav-role="sub" data-nav-key="sub-${subCode}" data-main="${mainCode}" data-sub="${subCode}" aria-current="${isSubActive?'true':'false'}">
                     <span class="nav-bilingual-label"><span class="nav-zh">${esc(sub.zh)}</span><span class="nav-vi">${esc(sub.vi)}</span></span>
                     <span class="nav-count">${count}</span>
                 </button>`;
             });
+        html+='</div>';
     });
     sidebar.innerHTML=html;
 }
-function updateSidebarActive(){
-    document.querySelectorAll('#sidebarMenu [data-nav-key]').forEach(item=>{
-        item.classList.toggle('active',item.dataset.navKey===state.navKey);
-    });
-}
-function applySidebarFilter(button){
-    state.main=button.dataset.main||'all';
-    state.sub=button.dataset.sub||'all';
-    state.level=button.dataset.level||'all';
-    state.navKey=button.dataset.navKey||'all';
+function clearSearch(){
     state.query='';
     const search=document.getElementById('searchInput');
     if(search) search.value='';
-    updateSidebarActive();
+}
+function selectAllNavigation(){
+    state.level='all';
+    state.main='all';
+    state.sub='all';
+    state.navKey='all';
+    state.expandedMain=null;
+    clearSearch();
+    renderSidebar();
+    renderTable();
+    document.getElementById('tableShell').scrollTop=0;
+    closeSidebar();
+}
+function toggleMainNavigation(button){
+    const mainCode=button.dataset.main;
+    const shouldOpen=state.expandedMain!==mainCode;
+    state.expandedMain=shouldOpen?mainCode:null;
+    state.level='all';
+    state.main=mainCode;
+    state.sub='all';
+    state.navKey=`main-${mainCode}`;
+    clearSearch();
+    renderSidebar();
+    renderTable();
+    document.getElementById('tableShell').scrollTop=0;
+    // Không đóng menu trên di động: người học cần thấy và chọn mục con vừa mở.
+}
+function selectSubNavigation(button){
+    state.level='all';
+    state.main=button.dataset.main;
+    state.sub=button.dataset.sub;
+    state.navKey=button.dataset.navKey;
+    state.expandedMain=state.main;
+    clearSearch();
+    renderSidebar();
     renderTable();
     document.getElementById('tableShell').scrollTop=0;
     closeSidebar();
@@ -740,14 +842,17 @@ function closeSidebar(){
 function renderTable(){
     const data=getFilteredData();
     const tbody=document.getElementById('vocabTableBody');
+    const speakerIcon=`<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19z"></path><path d="M15 9.5a4 4 0 0 1 0 5"></path><path d="M17.5 7a7.5 7.5 0 0 1 0 10"></path></svg>`;
+    const pencilIcon=`<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10z"></path><path d="m14.5 7.5 3 3"></path></svg>`;
+    const eyeIcon=`<svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>`;
     tbody.innerHTML=data.map((item,index)=>{
         const main=mainTypeMeta[item.mainCode];
         const sub=subtypeMeta[item.subCode];
         return `<tr class="transition-colors">
             <td class="px-3 py-3 text-center text-gray-600">${index+1}</td>
-            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn audio-btn" data-action="speak" data-stt="${item.stt}" title="Phát âm ${esc(item.hanzi)}">🔊</button></td>
+            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn audio-btn" data-action="speak" data-stt="${item.stt}" title="Phát âm ${esc(item.hanzi)}" aria-label="Phát âm ${esc(item.hanzi)}">${speakerIcon}</button></td>
             <td class="px-4 py-3 text-center"><span class="hanzi-font text-xl text-gray-900">${esc(item.hanzi)}</span></td>
-            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn stroke-btn" data-action="stroke" data-stt="${item.stt}" title="Xem nét viết">✏</button></td>
+            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn stroke-btn" data-action="stroke" data-stt="${item.stt}" title="Xem thứ tự nét của ${esc(item.hanzi)}" aria-label="Xem thứ tự nét của ${esc(item.hanzi)}">${pencilIcon}</button></td>
             <td class="px-4 py-3 text-left text-gray-700">${esc(item.pinyin)}</td>
             <td class="px-4 py-3 text-left">
                 <span class="type-badge ${main.className}">${esc(main.zh)}</span>
@@ -759,23 +864,14 @@ function renderTable(){
             </td>
             <td class="px-4 py-3 text-center"><span class="level-badge">${esc(item.level)}</span></td>
             <td class="px-4 py-3 text-left text-gray-900">${esc(item.meaning)}</td>
-            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn detail-btn" data-action="detail" data-stt="${item.stt}" title="Xem ví dụ">👁</button></td>
+            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn detail-btn" data-action="detail" data-stt="${item.stt}" title="Xem ví dụ của ${esc(item.hanzi)}" aria-label="Xem ví dụ của ${esc(item.hanzi)}">${eyeIcon}</button></td>
         </tr>`;
     }).join('');
     document.getElementById('emptyState').classList.toggle('hidden',data.length!==0);
     document.getElementById('currentFilter').textContent=filterLabel(data);
 }
 function resetFilters(){
-    state.level='all';
-    state.main='all';
-    state.sub='all';
-    state.query='';
-    state.navKey='all';
-    document.getElementById('searchInput').value='';
-    updateSidebarActive();
-    renderTable();
-    document.getElementById('tableShell').scrollTop=0;
-    closeSidebar();
+    selectAllNavigation();
 }
 function findItem(stt){
     return vocabData.find(item=>item.stt===Number(stt));
@@ -929,6 +1025,205 @@ const exampleOverrides={
     '生活':{sentence:'我在臺灣生活。',pinyin:'Wǒ zài Táiwān shēnghuó.',meaning:'Tôi sinh sống ở Đài Loan.'}
 };
 
+const qaExampleOverrides={
+    "才":{sentence:"他九點才到。",pinyin:"Tā jiǔ diǎn cái dào.",meaning:"Mãi chín giờ anh ấy mới đến."},
+    "就":{sentence:"他八點就到了。",pinyin:"Tā bā diǎn jiù dào le.",meaning:"Mới tám giờ anh ấy đã đến rồi."},
+    "快|ADV_TIME":{sentence:"他快到了。",pinyin:"Tā kuài dào le.",meaning:"Anh ấy sắp đến rồi."},
+    "先":{sentence:"你先坐，我馬上來。",pinyin:"Nǐ xiān zuò, wǒ mǎshàng lái.",meaning:"Bạn ngồi trước đi, tôi đến ngay."},
+    "已經":{sentence:"他已經到了。",pinyin:"Tā yǐjīng dào le.",meaning:"Anh ấy đã đến rồi."},
+    "一直":{sentence:"他一直在等你。",pinyin:"Tā yìzhí zài děng nǐ.",meaning:"Anh ấy vẫn luôn đợi bạn."},
+    "再":{sentence:"請再說一次。",pinyin:"Qǐng zài shuō yí cì.",meaning:"Vui lòng nói lại một lần nữa."},
+    "在|ADV_TIME":{sentence:"他在看書。",pinyin:"Tā zài kàn shū.",meaning:"Anh ấy đang đọc sách."},
+    "剛剛":{sentence:"他剛剛到。",pinyin:"Tā gānggāng dào.",meaning:"Anh ấy vừa mới đến."},
+    "還|ADV_TIME":{sentence:"他還在工作。",pinyin:"Tā hái zài gōngzuò.",meaning:"Anh ấy vẫn còn đang làm việc."},
+    "就要":{sentence:"火車就要開了。",pinyin:"Huǒchē jiùyào kāi le.",meaning:"Tàu sắp chạy rồi."},
+    "馬上":{sentence:"我馬上回來。",pinyin:"Wǒ mǎshàng huílái.",meaning:"Tôi sẽ quay lại ngay."},
+    "然後":{sentence:"我們先吃飯，然後去看電影。",pinyin:"Wǒmen xiān chīfàn, ránhòu qù kàn diànyǐng.",meaning:"Chúng ta ăn cơm trước, sau đó đi xem phim."},
+    "原來":{sentence:"原來你也住在這裡。",pinyin:"Yuánlái nǐ yě zhù zài zhèlǐ.",meaning:"Hóa ra bạn cũng sống ở đây."},
+    "正在":{sentence:"他正在上課。",pinyin:"Tā zhèngzài shàngkè.",meaning:"Anh ấy đang học."},
+    "比較":{sentence:"今天比較冷。",pinyin:"Jīntiān bǐjiào lěng.",meaning:"Hôm nay khá lạnh."},
+    "更":{sentence:"今天比昨天更冷。",pinyin:"Jīntiān bǐ zuótiān gèng lěng.",meaning:"Hôm nay lạnh hơn hôm qua."},
+    "有點(兒)":{sentence:"我今天有點兒累。",pinyin:"Wǒ jīntiān yǒudiǎnr lèi.",meaning:"Hôm nay tôi hơi mệt."},
+    "越來越":{sentence:"天氣越來越熱。",pinyin:"Tiānqì yuèláiyuè rè.",meaning:"Thời tiết ngày càng nóng."},
+    "有時候":{sentence:"我有時候坐公車上班。",pinyin:"Wǒ yǒushíhou zuò gōngchē shàngbān.",meaning:"Đôi khi tôi đi làm bằng xe buýt."},
+    "總是":{sentence:"他總是很早到。",pinyin:"Tā zǒngshì hěn zǎo dào.",meaning:"Anh ấy luôn đến rất sớm."},
+    "可能":{sentence:"他可能會來。",pinyin:"Tā kěnéng huì lái.",meaning:"Có lẽ anh ấy sẽ đến."},
+    "#165":{sentence:"我會說中文。",pinyin:"Wǒ huì shuō Zhōngwén.",meaning:"Tôi biết nói tiếng Trung."},
+    "#209":{sentence:"你可以進來。",pinyin:"Nǐ kěyǐ jìnlái.",meaning:"Bạn có thể vào."},
+    "#267":{sentence:"我今天不能去。",pinyin:"Wǒ jīntiān bù néng qù.",meaning:"Hôm nay tôi không thể đi."},
+    "#424":{sentence:"我要買一本書。",pinyin:"Wǒ yào mǎi yì běn shū.",meaning:"Tôi muốn mua một quyển sách."},
+    "#505":{sentence:"上課時必須關手機。",pinyin:"Shàngkè shí bìxū guān shǒujī.",meaning:"Khi học phải tắt điện thoại."},
+    "#612":{sentence:"他明天會來。",pinyin:"Tā míngtiān huì lái.",meaning:"Ngày mai anh ấy sẽ đến."},
+    "#836":{sentence:"你應該多休息。",pinyin:"Nǐ yīnggāi duō xiūxi.",meaning:"Bạn nên nghỉ ngơi nhiều hơn."},
+    "#845":{sentence:"我願意幫你。",pinyin:"Wǒ yuànyì bāng nǐ.",meaning:"Tôi sẵn lòng giúp bạn."},
+    "班|N_ORG":{sentence:"我們班有二十個學生。",pinyin:"Wǒmen bān yǒu èrshí ge xuéshēng.",meaning:"Lớp chúng tôi có hai mươi học sinh."},
+    "大學|N_ORG":{sentence:"這所大學很有名。",pinyin:"Zhè suǒ dàxué hěn yǒumíng.",meaning:"Trường đại học này rất nổi tiếng."},
+    "公司|N_ORG":{sentence:"這家公司在臺北。",pinyin:"Zhè jiā gōngsī zài Táiběi.",meaning:"Công ty này ở Đài Bắc."},
+    "國家|N_ORG":{sentence:"越南是一個很美的國家。",pinyin:"Yuènán shì yí ge hěn měi de guójiā.",meaning:"Việt Nam là một đất nước rất đẹp."},
+    "學校|N_ORG":{sentence:"我的學校在市中心。",pinyin:"Wǒ de xuéxiào zài shì zhōngxīn.",meaning:"Trường của tôi ở trung tâm thành phố."},
+    "家庭|N_ORG":{sentence:"他有一個幸福的家庭。",pinyin:"Tā yǒu yí ge xìngfú de jiātíng.",meaning:"Anh ấy có một gia đình hạnh phúc."},
+    "比賽|N_EVENT":{sentence:"明天有一場比賽。",pinyin:"Míngtiān yǒu yì chǎng bǐsài.",meaning:"Ngày mai có một trận đấu."},
+    "功課":{sentence:"我做完功課了。",pinyin:"Wǒ zuòwán gōngkè le.",meaning:"Tôi làm xong bài tập rồi."},
+    "工作|N_EVENT":{sentence:"我喜歡現在的工作。",pinyin:"Wǒ xǐhuan xiànzài de gōngzuò.",meaning:"Tôi thích công việc hiện tại."},
+    "活動|N_EVENT":{sentence:"學校今天有活動。",pinyin:"Xuéxiào jīntiān yǒu huódòng.",meaning:"Hôm nay trường có hoạt động."},
+    "考試|N_EVENT":{sentence:"明天有考試。",pinyin:"Míngtiān yǒu kǎoshì.",meaning:"Ngày mai có kỳ thi."},
+    "課|N_EVENT":{sentence:"這堂課很有意思。",pinyin:"Zhè táng kè hěn yǒuyìsi.",meaning:"Buổi học này rất thú vị."},
+    "問題|N_EVENT":{sentence:"我有一個問題。",pinyin:"Wǒ yǒu yí ge wèntí.",meaning:"Tôi có một câu hỏi."},
+    "運動|N_EVENT":{sentence:"運動對身體很好。",pinyin:"Yùndòng duì shēntǐ hěn hǎo.",meaning:"Vận động rất tốt cho sức khỏe."},
+    "辦法":{sentence:"我想到一個辦法。",pinyin:"Wǒ xiǎngdào yí ge bànfǎ.",meaning:"Tôi nghĩ ra một cách."},
+    "病|N_EVENT":{sentence:"他的病好多了。",pinyin:"Tā de bìng hǎo duō le.",meaning:"Bệnh của anh ấy đã đỡ nhiều rồi."},
+    "故事":{sentence:"這個故事很有意思。",pinyin:"Zhège gùshì hěn yǒuyìsi.",meaning:"Câu chuyện này rất thú vị."},
+    "計畫|N_EVENT":{sentence:"這個計畫很好。",pinyin:"Zhège jìhuà hěn hǎo.",meaning:"Kế hoạch này rất tốt."},
+    "節目":{sentence:"這個節目很好看。",pinyin:"Zhège jiémù hěn hǎokàn.",meaning:"Chương trình này rất hay."},
+    "事":{sentence:"我有一件事要告訴你。",pinyin:"Wǒ yǒu yí jiàn shì yào gàosù nǐ.",meaning:"Tôi có một việc muốn nói với bạn."},
+    "事情":{sentence:"這件事情很重要。",pinyin:"Zhè jiàn shìqíng hěn zhòngyào.",meaning:"Việc này rất quan trọng."},
+    "通知|N_EVENT":{sentence:"我收到學校的通知。",pinyin:"Wǒ shōudào xuéxiào de tōngzhī.",meaning:"Tôi nhận được thông báo của trường."},
+    "作業":{sentence:"我寫完作業了。",pinyin:"Wǒ xiěwán zuòyè le.",meaning:"Tôi làm xong bài tập rồi."},
+    "春天":{sentence:"春天的天氣很舒服。",pinyin:"Chūntiān de tiānqì hěn shūfu.",meaning:"Thời tiết mùa xuân rất dễ chịu."},
+    "冬天":{sentence:"臺北的冬天常常下雨。",pinyin:"Táiběi de dōngtiān chángcháng xiàyǔ.",meaning:"Mùa đông ở Đài Bắc thường có mưa."},
+    "寒假":{sentence:"寒假我要回家。",pinyin:"Hánjià wǒ yào huíjiā.",meaning:"Kỳ nghỉ đông tôi sẽ về nhà."},
+    "今年":{sentence:"我今年二十五歲。",pinyin:"Wǒ jīnnián èrshíwǔ suì.",meaning:"Năm nay tôi hai mươi lăm tuổi."},
+    "今天":{sentence:"今天天氣很好。",pinyin:"Jīntiān tiānqì hěn hǎo.",meaning:"Hôm nay thời tiết rất đẹp."},
+    "明年":{sentence:"我明年要去臺灣。",pinyin:"Wǒ míngnián yào qù Táiwān.",meaning:"Năm sau tôi sẽ đi Đài Loan."},
+    "明天":{sentence:"我們明天見。",pinyin:"Wǒmen míngtiān jiàn.",meaning:"Ngày mai chúng ta gặp nhau."},
+    "年":{sentence:"我在臺灣住了三年。",pinyin:"Wǒ zài Táiwān zhù le sān nián.",meaning:"Tôi đã sống ở Đài Loan ba năm."},
+    "秋天":{sentence:"秋天的天氣很涼快。",pinyin:"Qiūtiān de tiānqì hěn liángkuai.",meaning:"Thời tiết mùa thu rất mát."},
+    "去年":{sentence:"我去年來過臺灣。",pinyin:"Wǒ qùnián láiguo Táiwān.",meaning:"Năm ngoái tôi từng đến Đài Loan."},
+    "上午":{sentence:"我上午有課。",pinyin:"Wǒ shàngwǔ yǒu kè.",meaning:"Buổi sáng tôi có lớp."},
+    "生日":{sentence:"今天是我的生日。",pinyin:"Jīntiān shì wǒ de shēngrì.",meaning:"Hôm nay là sinh nhật của tôi."},
+    "時候":{sentence:"小時候，我住在鄉下。",pinyin:"Xiǎoshíhou, wǒ zhù zài xiāngxià.",meaning:"Khi còn nhỏ, tôi sống ở quê."},
+    "時間":{sentence:"我今天沒有時間。",pinyin:"Wǒ jīntiān méiyǒu shíjiān.",meaning:"Hôm nay tôi không có thời gian."},
+    "暑假":{sentence:"暑假我們去旅行。",pinyin:"Shǔjià wǒmen qù lǚxíng.",meaning:"Kỳ nghỉ hè chúng tôi đi du lịch."},
+    "天|N_TIME":{sentence:"我在這裡住了三天。",pinyin:"Wǒ zài zhèlǐ zhù le sān tiān.",meaning:"Tôi đã ở đây ba ngày."},
+    "晚上":{sentence:"我晚上在家看書。",pinyin:"Wǒ wǎnshàng zài jiā kàn shū.",meaning:"Buổi tối tôi đọc sách ở nhà."},
+    "夏天":{sentence:"臺灣的夏天很熱。",pinyin:"Táiwān de xiàtiān hěn rè.",meaning:"Mùa hè ở Đài Loan rất nóng."},
+    "下午":{sentence:"我下午去銀行。",pinyin:"Wǒ xiàwǔ qù yínháng.",meaning:"Buổi chiều tôi đi ngân hàng."},
+    "現在":{sentence:"我現在很忙。",pinyin:"Wǒ xiànzài hěn máng.",meaning:"Bây giờ tôi rất bận."},
+    "小時":{sentence:"我每天學兩個小時。",pinyin:"Wǒ měitiān xué liǎng ge xiǎoshí.",meaning:"Mỗi ngày tôi học hai giờ."},
+    "新年":{sentence:"祝你新年快樂！",pinyin:"Zhù nǐ xīnnián kuàilè!",meaning:"Chúc bạn năm mới vui vẻ!"},
+    "星期":{sentence:"一個星期有七天。",pinyin:"Yí ge xīngqí yǒu qī tiān.",meaning:"Một tuần có bảy ngày."},
+    "星期天/星期日":{sentence:"星期天我不上班。",pinyin:"Xīngqítiān wǒ bú shàngbān.",meaning:"Chủ nhật tôi không đi làm."},
+    "以後":{sentence:"下課以後，我去圖書館。",pinyin:"Xiàkè yǐhòu, wǒ qù túshūguǎn.",meaning:"Sau giờ học, tôi đi thư viện."},
+    "以前":{sentence:"我以前住在臺南。",pinyin:"Wǒ yǐqián zhù zài Táinán.",meaning:"Trước đây tôi sống ở Đài Nam."},
+    "月":{sentence:"一年有十二個月。",pinyin:"Yì nián yǒu shí’èr ge yuè.",meaning:"Một năm có mười hai tháng."},
+    "雨天":{sentence:"雨天出門要帶傘。",pinyin:"Yǔtiān chūmén yào dài sǎn.",meaning:"Ngày mưa ra ngoài phải mang ô."},
+    "早上":{sentence:"我每天早上六點起床。",pinyin:"Wǒ měitiān zǎoshàng liù diǎn qǐchuáng.",meaning:"Mỗi sáng tôi thức dậy lúc sáu giờ."},
+    "中午":{sentence:"我們中午一起吃飯。",pinyin:"Wǒmen zhōngwǔ yìqǐ chīfàn.",meaning:"Buổi trưa chúng ta cùng ăn cơm."},
+    "從前":{sentence:"從前這裡沒有高樓。",pinyin:"Cóngqián zhèlǐ méiyǒu gāolóu.",meaning:"Trước đây nơi này không có nhà cao tầng."},
+    "過去|N_TIME":{sentence:"過去的事情不要再想了。",pinyin:"Guòqù de shìqíng búyào zài xiǎng le.",meaning:"Đừng nghĩ lại chuyện đã qua nữa."},
+    "後來":{sentence:"後來他搬到臺北。",pinyin:"Hòulái tā bān dào Táiběi.",meaning:"Sau đó anh ấy chuyển đến Đài Bắc."},
+    "前天":{sentence:"我前天去看醫生。",pinyin:"Wǒ qiántiān qù kàn yīshēng.",meaning:"Hôm kia tôi đi khám bác sĩ."},
+    "日":{sentence:"今天是五月一日。",pinyin:"Jīntiān shì wǔ yuè yí rì.",meaning:"Hôm nay là ngày một tháng năm."},
+    "日子":{sentence:"今天是個好日子。",pinyin:"Jīntiān shì ge hǎo rìzi.",meaning:"Hôm nay là một ngày đẹp."},
+    "一會兒":{sentence:"請等我一會兒。",pinyin:"Qǐng děng wǒ yíhuìr.",meaning:"Vui lòng đợi tôi một lát."},
+    "鐘頭":{sentence:"我等了兩個鐘頭。",pinyin:"Wǒ děng le liǎng ge zhōngtóu.",meaning:"Tôi đã đợi hai tiếng đồng hồ."},
+    "北邊":{sentence:"學校在城市的北邊。",pinyin:"Xuéxiào zài chéngshì de běibiān.",meaning:"Trường học ở phía bắc thành phố."},
+    "地上":{sentence:"書在地上。",pinyin:"Shū zài dìshàng.",meaning:"Sách ở trên mặt đất."},
+    "東邊":{sentence:"公園在城市的東邊。",pinyin:"Gōngyuán zài chéngshì de dōngbiān.",meaning:"Công viên ở phía đông thành phố."},
+    "對面":{sentence:"銀行在郵局對面。",pinyin:"Yínháng zài yóujú duìmiàn.",meaning:"Ngân hàng ở đối diện bưu điện."},
+    "附近":{sentence:"這附近有一家商店。",pinyin:"Zhè fùjìn yǒu yì jiā shāngdiàn.",meaning:"Gần đây có một cửa hàng."},
+    "海邊":{sentence:"我們住在海邊。",pinyin:"Wǒmen zhù zài hǎibiān.",meaning:"Chúng tôi sống gần biển."},
+    "後面":{sentence:"洗手間在教室後面。",pinyin:"Xǐshǒujiān zài jiàoshì hòumiàn.",meaning:"Nhà vệ sinh ở phía sau lớp học."},
+    "裡面":{sentence:"房間裡面有一張桌子。",pinyin:"Fángjiān lǐmiàn yǒu yì zhāng zhuōzi.",meaning:"Bên trong phòng có một cái bàn."},
+    "南(邊)":{sentence:"車站在城市的南邊。",pinyin:"Chēzhàn zài chéngshì de nánbiān.",meaning:"Bến xe ở phía nam thành phố."},
+    "前面":{sentence:"老師站在教室前面。",pinyin:"Lǎoshī zhàn zài jiàoshì qiánmiàn.",meaning:"Giáo viên đứng phía trước lớp học."},
+    "上面":{sentence:"桌子上面有一本書。",pinyin:"Zhuōzi shàngmiàn yǒu yì běn shū.",meaning:"Trên bàn có một quyển sách."},
+    "外面":{sentence:"外面正在下雨。",pinyin:"Wàimiàn zhèngzài xiàyǔ.",meaning:"Bên ngoài đang mưa."},
+    "西邊":{sentence:"市場在城市的西邊。",pinyin:"Shìchǎng zài chéngshì de xībiān.",meaning:"Chợ ở phía tây thành phố."},
+    "下面":{sentence:"椅子在桌子下面。",pinyin:"Yǐzi zài zhuōzi xiàmiàn.",meaning:"Ghế ở dưới bàn."},
+    "右邊":{sentence:"銀行在郵局右邊。",pinyin:"Yínháng zài yóujú yòubiān.",meaning:"Ngân hàng ở bên phải bưu điện."},
+    "邊(兒)":{sentence:"他坐在我旁邊。",pinyin:"Tā zuò zài wǒ pángbiān.",meaning:"Anh ấy ngồi bên cạnh tôi."},
+    "裡":{sentence:"書在包裡。",pinyin:"Shū zài bāo lǐ.",meaning:"Sách ở trong cặp."},
+    "裡邊":{sentence:"屋子裡邊很安靜。",pinyin:"Wūzi lǐbian hěn ānjìng.",meaning:"Bên trong căn nhà rất yên tĩnh."},
+    "那邊":{sentence:"洗手間在那邊。",pinyin:"Xǐshǒujiān zài nàbiān.",meaning:"Nhà vệ sinh ở phía bên kia."},
+    "旁邊":{sentence:"我坐在老師旁邊。",pinyin:"Wǒ zuò zài lǎoshī pángbiān.",meaning:"Tôi ngồi bên cạnh giáo viên."},
+    "這邊":{sentence:"請到這邊來。",pinyin:"Qǐng dào zhèbiān lái.",meaning:"Vui lòng đến phía bên này."},
+    "中間":{sentence:"他坐在我和小王中間。",pinyin:"Tā zuò zài wǒ hé Xiǎo Wáng zhōngjiān.",meaning:"Anh ấy ngồi giữa tôi và Tiểu Vương."},
+    "成績":{sentence:"他的成績很好。",pinyin:"Tā de chéngjī hěn hǎo.",meaning:"Thành tích của anh ấy rất tốt."},
+    "風景":{sentence:"這裡的風景很美。",pinyin:"Zhèlǐ de fēngjǐng hěn měi.",meaning:"Phong cảnh ở đây rất đẹp."},
+    "號碼":{sentence:"請寫下你的電話號碼。",pinyin:"Qǐng xiěxià nǐ de diànhuà hàomǎ.",meaning:"Vui lòng ghi số điện thoại của bạn."},
+    "名字":{sentence:"你的名字是什麼？",pinyin:"Nǐ de míngzi shì shénme?",meaning:"Tên của bạn là gì?"},
+    "身體":{sentence:"我的身體很健康。",pinyin:"Wǒ de shēntǐ hěn jiànkāng.",meaning:"Cơ thể tôi rất khỏe mạnh."},
+    "天氣":{sentence:"今天天氣很好。",pinyin:"Jīntiān tiānqì hěn hǎo.",meaning:"Hôm nay thời tiết rất đẹp."},
+    "意思":{sentence:"我不懂這個意思。",pinyin:"Wǒ bù dǒng zhège yìsi.",meaning:"Tôi không hiểu ý này."},
+    "方法":{sentence:"這個方法很好。",pinyin:"Zhège fāngfǎ hěn hǎo.",meaning:"Phương pháp này rất tốt."},
+    "機會":{sentence:"這是一個好機會。",pinyin:"Zhè shì yí ge hǎo jīhuì.",meaning:"Đây là một cơ hội tốt."},
+    "科學":{sentence:"他對科學很有興趣。",pinyin:"Tā duì kēxué hěn yǒu xìngqù.",meaning:"Anh ấy rất hứng thú với khoa học."},
+    "空氣":{sentence:"這裡的空氣很新鮮。",pinyin:"Zhèlǐ de kōngqì hěn xīnxiān.",meaning:"Không khí ở đây rất trong lành."},
+    "麻煩|N_ABSTRACT":{sentence:"這件事很麻煩。",pinyin:"Zhè jiàn shì hěn máfan.",meaning:"Việc này rất phiền phức."},
+    "年紀":{sentence:"他的年紀比我大。",pinyin:"Tā de niánjì bǐ wǒ dà.",meaning:"Anh ấy lớn tuổi hơn tôi."},
+    "生活|N_ABSTRACT":{sentence:"我的生活很忙。",pinyin:"Wǒ de shēnghuó hěn máng.",meaning:"Cuộc sống của tôi rất bận rộn."},
+    "聲音":{sentence:"她的聲音很好聽。",pinyin:"Tā de shēngyīn hěn hǎotīng.",meaning:"Giọng của cô ấy rất dễ nghe."},
+    "世界":{sentence:"世界很大。",pinyin:"Shìjiè hěn dà.",meaning:"Thế giới rất rộng lớn."},
+    "味道":{sentence:"這道菜的味道很好。",pinyin:"Zhè dào cài de wèidào hěn hǎo.",meaning:"Món này có vị rất ngon."},
+    "習慣":{sentence:"早睡是一個好習慣。",pinyin:"Zǎo shuì shì yí ge hǎo xíguàn.",meaning:"Ngủ sớm là một thói quen tốt."},
+    "消息":{sentence:"我收到一個好消息。",pinyin:"Wǒ shōudào yí ge hǎo xiāoxi.",meaning:"Tôi nhận được một tin vui."},
+    "新聞":{sentence:"我每天看新聞。",pinyin:"Wǒ měitiān kàn xīnwén.",meaning:"Tôi xem tin tức mỗi ngày."},
+    "興趣":{sentence:"我的興趣是游泳。",pinyin:"Wǒ de xìngqù shì yóuyǒng.",meaning:"Sở thích của tôi là bơi lội."},
+    "顏色":{sentence:"你喜歡什麼顏色？",pinyin:"Nǐ xǐhuan shénme yánsè?",meaning:"Bạn thích màu gì?"},
+    "樣子":{sentence:"這個杯子的樣子很特別。",pinyin:"Zhège bēizi de yàngzi hěn tèbié.",meaning:"Kiểu dáng của cái ly này rất đặc biệt."},
+    "語法":{sentence:"這個語法不難。",pinyin:"Zhège yǔfǎ bù nán.",meaning:"Ngữ pháp này không khó."},
+    "語言":{sentence:"中文是一種語言。",pinyin:"Zhōngwén shì yì zhǒng yǔyán.",meaning:"Tiếng Trung là một ngôn ngữ."},
+    "打電話":{sentence:"我晚上給媽媽打電話。",pinyin:"Wǒ wǎnshàng gěi māma dǎ diànhuà.",meaning:"Buổi tối tôi gọi điện cho mẹ."},
+    "告訴":{sentence:"請告訴我你的名字。",pinyin:"Qǐng gàosù wǒ nǐ de míngzi.",meaning:"Vui lòng cho tôi biết tên của bạn."},
+    "介紹":{sentence:"我來介紹我的朋友。",pinyin:"Wǒ lái jièshào wǒ de péngyǒu.",meaning:"Để tôi giới thiệu bạn của tôi."},
+    "請|V_SPEECH":{sentence:"請坐。",pinyin:"Qǐng zuò.",meaning:"Mời ngồi."},
+    "說":{sentence:"他會說中文。",pinyin:"Tā huì shuō Zhōngwén.",meaning:"Anh ấy biết nói tiếng Trung."},
+    "說話":{sentence:"請不要說話。",pinyin:"Qǐng búyào shuōhuà.",meaning:"Vui lòng đừng nói chuyện."},
+    "問":{sentence:"我想問一個問題。",pinyin:"Wǒ xiǎng wèn yí ge wèntí.",meaning:"Tôi muốn hỏi một câu."},
+    "回答":{sentence:"請回答這個問題。",pinyin:"Qǐng huídá zhège wèntí.",meaning:"Vui lòng trả lời câu hỏi này."},
+    "講話":{sentence:"他正在跟老師講話。",pinyin:"Tā zhèngzài gēn lǎoshī jiǎnghuà.",meaning:"Anh ấy đang nói chuyện với giáo viên."},
+    "教":{sentence:"老師教我們中文。",pinyin:"Lǎoshī jiāo wǒmen Zhōngwén.",meaning:"Giáo viên dạy chúng tôi tiếng Trung."},
+    "聊天":{sentence:"我喜歡跟朋友聊天。",pinyin:"Wǒ xǐhuan gēn péngyǒu liáotiān.",meaning:"Tôi thích trò chuyện với bạn bè."},
+    "談":{sentence:"我們正在談工作。",pinyin:"Wǒmen zhèngzài tán gōngzuò.",meaning:"Chúng tôi đang bàn về công việc."},
+    "聽說":{sentence:"我聽說他要結婚了。",pinyin:"Wǒ tīngshuō tā yào jiéhūn le.",meaning:"Tôi nghe nói anh ấy sắp kết hôn."},
+    "通知|V_SPEECH":{sentence:"學校通知我們明天放假。",pinyin:"Xuéxiào tōngzhī wǒmen míngtiān fàngjià.",meaning:"Trường thông báo ngày mai được nghỉ."},
+    "祝":{sentence:"祝你生日快樂！",pinyin:"Zhù nǐ shēngrì kuàilè!",meaning:"Chúc bạn sinh nhật vui vẻ!"},
+    "懂":{sentence:"我懂你的意思。",pinyin:"Wǒ dǒng nǐ de yìsi.",meaning:"Tôi hiểu ý của bạn."},
+    "記得":{sentence:"我記得他的名字。",pinyin:"Wǒ jìde tā de míngzi.",meaning:"Tôi nhớ tên của anh ấy."},
+    "覺得":{sentence:"我覺得這本書很好看。",pinyin:"Wǒ juéde zhè běn shū hěn hǎokàn.",meaning:"Tôi thấy quyển sách này rất hay."},
+    "看":{sentence:"我在看書。",pinyin:"Wǒ zài kàn shū.",meaning:"Tôi đang đọc sách."},
+    "認識":{sentence:"我認識那位老師。",pinyin:"Wǒ rènshi nà wèi lǎoshī.",meaning:"Tôi quen giáo viên đó."},
+    "聽":{sentence:"我喜歡聽音樂。",pinyin:"Wǒ xǐhuan tīng yīnyuè.",meaning:"Tôi thích nghe nhạc."},
+    "忘":{sentence:"我忘了帶鑰匙。",pinyin:"Wǒ wàng le dài yàoshi.",meaning:"Tôi quên mang chìa khóa."},
+    "知道":{sentence:"我知道答案。",pinyin:"Wǒ zhīdào dá’àn.",meaning:"Tôi biết đáp án."},
+    "猜":{sentence:"你猜他幾歲？",pinyin:"Nǐ cāi tā jǐ suì?",meaning:"Bạn đoán xem anh ấy bao nhiêu tuổi?"},
+    "發現":{sentence:"我發現門沒關。",pinyin:"Wǒ fāxiàn mén méi guān.",meaning:"Tôi phát hiện cửa chưa đóng."},
+    "記|V_PERCEPT":{sentence:"請記下這個號碼。",pinyin:"Qǐng jìxià zhège hàomǎ.",meaning:"Vui lòng ghi nhớ số này."},
+    "看到":{sentence:"我看到他了。",pinyin:"Wǒ kàndào tā le.",meaning:"Tôi nhìn thấy anh ấy rồi."},
+    "看見":{sentence:"我看見一隻貓。",pinyin:"Wǒ kànjiàn yì zhī māo.",meaning:"Tôi nhìn thấy một con mèo."},
+    "聽見":{sentence:"我聽見有人叫我。",pinyin:"Wǒ tīngjiàn yǒurén jiào wǒ.",meaning:"Tôi nghe thấy có người gọi mình."},
+    "注意":{sentence:"請注意安全。",pinyin:"Qǐng zhùyì ānquán.",meaning:"Vui lòng chú ý an toàn."},
+    "愛":{sentence:"我愛我的家人。",pinyin:"Wǒ ài wǒ de jiārén.",meaning:"Tôi yêu gia đình của mình."},
+    "高興":{sentence:"見到你很高興。",pinyin:"Jiàndào nǐ hěn gāoxìng.",meaning:"Rất vui được gặp bạn."},
+    "想":{sentence:"我想去臺灣。",pinyin:"Wǒ xiǎng qù Táiwān.",meaning:"Tôi muốn đi Đài Loan."},
+    "喜歡":{sentence:"我喜歡學中文。",pinyin:"Wǒ xǐhuan xué Zhōngwén.",meaning:"Tôi thích học tiếng Trung."},
+    "打算":{sentence:"我打算明天去。",pinyin:"Wǒ dǎsuàn míngtiān qù.",meaning:"Tôi dự định đi vào ngày mai."},
+    "害怕":{sentence:"我害怕一個人走夜路。",pinyin:"Wǒ hàipà yí ge rén zǒu yèlù.",meaning:"Tôi sợ đi đường ban đêm một mình."},
+    "計畫|V_PSYCH":{sentence:"我計畫明年去旅行。",pinyin:"Wǒ jìhuà míngnián qù lǚxíng.",meaning:"Tôi dự định năm sau đi du lịch."},
+    "緊張":{sentence:"考試以前我很緊張。",pinyin:"Kǎoshì yǐqián wǒ hěn jǐnzhāng.",meaning:"Trước kỳ thi tôi rất căng thẳng."},
+    "決定":{sentence:"我決定學中文。",pinyin:"Wǒ juédìng xué Zhōngwén.",meaning:"Tôi quyết định học tiếng Trung."},
+    "開心":{sentence:"今天我很開心。",pinyin:"Jīntiān wǒ hěn kāixīn.",meaning:"Hôm nay tôi rất vui."},
+    "難過":{sentence:"聽到這個消息，我很難過。",pinyin:"Tīngdào zhège xiāoxi, wǒ hěn nánguò.",meaning:"Nghe tin này, tôi rất buồn."},
+    "怕":{sentence:"我怕狗。",pinyin:"Wǒ pà gǒu.",meaning:"Tôi sợ chó."},
+    "認為":{sentence:"我認為這個方法很好。",pinyin:"Wǒ rènwéi zhège fāngfǎ hěn hǎo.",meaning:"Tôi cho rằng phương pháp này rất tốt."},
+    "生氣":{sentence:"他為這件事生氣。",pinyin:"Tā wèi zhè jiàn shì shēngqì.",meaning:"Anh ấy tức giận vì chuyện này."},
+    "討厭":{sentence:"我討厭下雨天。",pinyin:"Wǒ tǎoyàn xiàyǔtiān.",meaning:"Tôi ghét ngày mưa."},
+    "希望":{sentence:"我希望你能來。",pinyin:"Wǒ xīwàng nǐ néng lái.",meaning:"Tôi hy vọng bạn có thể đến."},
+    "需要":{sentence:"我需要你的幫助。",pinyin:"Wǒ xūyào nǐ de bāngzhù.",meaning:"Tôi cần sự giúp đỡ của bạn."},
+    "相信":{sentence:"我相信你。",pinyin:"Wǒ xiāngxìn nǐ.",meaning:"Tôi tin bạn."},
+    "著急":{sentence:"別著急，慢慢來。",pinyin:"Bié zháojí, mànmàn lái.",meaning:"Đừng sốt ruột, cứ từ từ."},
+    "地方":{sentence:"這是一個很安靜的地方。",pinyin:"Zhè shì yí ge hěn ānjìng de dìfāng.",meaning:"Đây là một nơi rất yên tĩnh."},
+    "百貨公司":{sentence:"我去百貨公司買衣服。",pinyin:"Wǒ qù bǎihuògōngsī mǎi yīfu.",meaning:"Tôi đến trung tâm thương mại mua quần áo."},
+    "筆":{sentence:"我用這枝筆寫字。",pinyin:"Wǒ yòng zhè zhī bǐ xiězì.",meaning:"Tôi dùng cây bút này để viết."},
+    "兒子":{sentence:"我兒子今年十歲。",pinyin:"Wǒ érzi jīnnián shí suì.",meaning:"Con trai tôi năm nay mười tuổi."},
+    "女兒":{sentence:"我女兒正在上學。",pinyin:"Wǒ nǚ’ér zhèngzài shàngxué.",meaning:"Con gái tôi đang đi học."},
+    "先生":{sentence:"那位先生是醫生。",pinyin:"Nà wèi xiānsheng shì yīshēng.",meaning:"Vị đó là bác sĩ."},
+    "太太":{sentence:"王太太在銀行工作。",pinyin:"Wáng tàitai zài yínháng gōngzuò.",meaning:"Bà Vương làm việc ở ngân hàng."},
+    "小姐":{sentence:"那位小姐是服務生。",pinyin:"Nà wèi xiǎojiě shì fúwùshēng.",meaning:"Cô ấy là nhân viên phục vụ."},
+    "起來|V_DIR":{sentence:"請站起來。",pinyin:"Qǐng zhàn qǐlái.",meaning:"Vui lòng đứng dậy."},
+};
+
 const classifierExamples={
     '班':['今天有三班公車。','Jīntiān yǒu sān bān gōngchē.','Hôm nay có ba chuyến xe buýt.'],
     '本':['我買了兩本書。','Wǒ mǎi le liǎng běn shū.','Tôi đã mua hai quyển sách.'],
@@ -960,10 +1255,17 @@ function capPinyin(text){
     return String(text||'').replace(/^([a-z])/u,char=>char.toUpperCase());
 }
 function makeExample(sentence,pinyin,meaning){return {sentence,pinyin,meaning};}
+function primaryMeaning(value){
+    return String(value||'')
+        .split(/[，,;；/（(]/u)[0]
+        .replace(/…+/g,'')
+        .replace(/\s+/g,' ')
+        .trim();
+}
 function buildExample(item){
-    const keyed=exampleOverrides[`${item.hanzi}|${item.subCode}`]||exampleOverrides[item.hanzi];
+    const keyed=qaExampleOverrides[`#${item.stt}`]||qaExampleOverrides[`${item.hanzi}|${item.subCode}`]||qaExampleOverrides[item.hanzi]||exampleOverrides[`${item.hanzi}|${item.subCode}`]||exampleOverrides[item.hanzi];
     if(keyed) return keyed;
-    const w=item.hanzi,p=item.pinyin,m=item.meaning,cp=capPinyin(p);
+    const w=item.hanzi,p=item.pinyin,m=primaryMeaning(item.meaning),cp=capPinyin(p);
 
     if(item.subCode==='M_CLASSIFIER' && classifierExamples[w]) return makeExample(...classifierExamples[w]);
     if(item.subCode==='M_BORROW' && borrowedMeasureExamples[w]) return makeExample(...borrowedMeasureExamples[w]);
@@ -987,18 +1289,18 @@ function buildExample(item){
     switch(item.subCode){
         case 'N_PRONOUN': return makeExample(`${w}也要去。`,`${cp} yě yào qù.`,`${m} cũng muốn đi.`);
         case 'N_PERSON': return makeExample(`他是我的${w}。`,`Tā shì wǒ de ${p}.`,`Anh ấy là ${m} của tôi.`);
-        case 'N_PLACE': return makeExample(`我今天去${w}。`,`Wǒ jīntiān qù ${p}.`,`Hôm nay tôi đi đến ${m}.`);
+        case 'N_PLACE': return makeExample(`我現在在${w}。`,`Wǒ xiànzài zài ${p}.`,`Bây giờ tôi đang ở ${m}.`);
         case 'N_TIME': return makeExample(`我們${w}見。`,`Wǒmen ${p} jiàn.`,`Chúng ta gặp nhau vào ${m}.`);
         case 'N_POSITION': return makeExample(`${w}有一家商店。`,`${cp} yǒu yì jiā shāngdiàn.`,`Ở ${m} có một cửa hàng.`);
         case 'N_PROPER': return makeExample(`我想去${w}。`,`Wǒ xiǎng qù ${p}.`,`Tôi muốn đến ${m}.`);
-        case 'N_ORG': return makeExample(`他在${w}工作。`,`Tā zài ${p} gōngzuò.`,`Anh ấy làm việc tại ${m}.`);
-        case 'N_EVENT': return makeExample(`我正在準備${w}。`,`Wǒ zhèngzài zhǔnbèi ${p}.`,`Tôi đang chuẩn bị ${m}.`);
+        case 'N_ORG': return makeExample(`這個${w}很大。`,`Zhège ${p} hěn dà.`,`${m} này rất lớn.`);
+        case 'N_EVENT': return makeExample(`這個${w}很重要。`,`Zhège ${p} hěn zhòngyào.`,`${m} này rất quan trọng.`);
         case 'N_ABSTRACT': return makeExample(`這個${w}很重要。`,`Zhège ${p} hěn zhòngyào.`,`${m} này rất quan trọng.`);
         case 'N_OBJECT': return makeExample(`這是${w}。`,`Zhè shì ${p}.`,`Đây là ${m}.`);
 
         case 'V_ACTION': return makeExample(`他正在${w}。`,`Tā zhèngzài ${p}.`,`Anh ấy đang ${m}.`);
         case 'V_MOVE': return makeExample(`我們一起${w}吧。`,`Wǒmen yìqǐ ${p} ba.`,`Chúng ta cùng ${m} nhé.`);
-        case 'V_DIR': return makeExample(`請${w}。`,`Qǐng ${p}.`,`Mời ${m}.`);
+        case 'V_DIR': return makeExample(`請${w}。`,`Qǐng ${p}.`,`Hãy ${m}.`);
         case 'V_SPEECH': return makeExample(`請你${w}。`,`Qǐng nǐ ${p}.`,`Mời bạn ${m}.`);
         case 'V_PERCEPT': return makeExample(`我已經${w}了。`,`Wǒ yǐjīng ${p} le.`,`Tôi đã ${m} rồi.`);
         case 'V_MODAL': return makeExample(`我${w}去。`,`Wǒ ${p} qù.`,`Tôi ${m} đi.`);
@@ -1066,8 +1368,8 @@ function showDetail(item){
             <div class="text-base text-gray-700">${esc(example.meaning)}</div>
         </div>
         <div class="flex flex-wrap justify-center gap-3">
-            <button type="button" id="detailSpeakWord" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold">🔊 Phát âm từ</button>
-            <button type="button" id="detailSpeakExample" class="bg-orange-500 text-white px-5 py-2 rounded-lg font-semibold">🔊 Nghe ví dụ</button>
+            <button type="button" id="detailSpeakWord" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold"><span class="icon-label"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19z"></path><path d="M15 9.5a4 4 0 0 1 0 5"></path><path d="M17.5 7a7.5 7.5 0 0 1 0 10"></path></svg><span>Phát âm từ</span></span></button>
+            <button type="button" id="detailSpeakExample" class="bg-orange-500 text-white px-5 py-2 rounded-lg font-semibold"><span class="icon-label"><svg class="line-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19z"></path><path d="M15 9.5a4 4 0 0 1 0 5"></path><path d="M17.5 7a7.5 7.5 0 0 1 0 10"></path></svg><span>Nghe ví dụ</span></span></button>
         </div>`;
     document.getElementById('detailSpeakWord').onclick=()=>speakText(item.hanzi);
     document.getElementById('detailSpeakExample').onclick=()=>speakText(example.sentence);
@@ -1082,8 +1384,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     renderTable();
 
     document.getElementById('sidebarMenu').addEventListener('click',event=>{
-        const button=event.target.closest('[data-nav-key]');
-        if(button) applySidebarFilter(button);
+        const button=event.target.closest('[data-nav-role]');
+        if(!button) return;
+        const role=button.dataset.navRole;
+        if(role==='all') selectAllNavigation();
+        if(role==='main') toggleMainNavigation(button);
+        if(role==='sub') selectSubNavigation(button);
     });
     document.getElementById('mobileSidebarButton').addEventListener('click',openSidebar);
     document.getElementById('sidebarOverlay').addEventListener('click',closeSidebar);
