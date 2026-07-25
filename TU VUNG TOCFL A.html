@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hệ thống 883 mục từ vựng TOCFL A1-A2, chữ phồn thể, pinyin, từ loại theo chuẩn giảng dạy Hoa ngữ Đài Loan và nghĩa tiếng Việt.">
+    <title>883 Mục Từ Vựng TOCFL A1-A2 - Phân Loại Từ Loại L99</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap');
+        :root {
+            --purple:#7c3aed;
+            --purple-dark:#6d28d9;
+            --header-h:86px;
+        }
+        * { box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body {
+            margin:0;
+            background:#f5f5f5;
+            color:#1f2937;
+            font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+        }
+        button,input,select { font:inherit; }
+        .hanzi-font {
+            font-family:'Noto Serif TC','Microsoft JhengHei','PMingLiU',serif;
+            font-weight:600;
+        }
+        .site-header {
+            position:sticky;
+            top:0;
+            z-index:1000;
+            min-height:var(--header-h);
+            background:var(--purple);
+            border-bottom:2px solid var(--purple-dark);
+            box-shadow:0 2px 8px rgba(0,0,0,.15);
+        }
+        .logo-box {
+            width:66px;
+            height:66px;
+            flex:0 0 66px;
+            padding:3px;
+            overflow:hidden;
+            border-radius:12px;
+            background:#fff;
+            box-shadow:0 2px 8px rgba(0,0,0,.16);
+        }
+        .logo-box img {
+            width:100%;
+            height:100%;
+            display:block;
+            object-fit:contain;
+        }
+        .filter-panel {
+            position:sticky;
+            top:var(--header-h);
+            z-index:800;
+            border:1px solid #e5e7eb;
+            background:rgba(255,255,255,.97);
+            backdrop-filter:blur(10px);
+            box-shadow:0 3px 12px rgba(0,0,0,.08);
+        }
+        .level-btn {
+            border:1px solid #d1d5db;
+            background:#fff;
+            color:#4b5563;
+            border-radius:9px;
+            padding:7px 13px;
+            font-size:13px;
+            font-weight:700;
+            transition:.18s;
+        }
+        .level-btn:hover {
+            border-color:#8b5cf6;
+            color:#6d28d9;
+        }
+        .level-btn.active {
+            border-color:var(--purple);
+            background:var(--purple);
+            color:#fff;
+        }
+        .table-shell {
+            max-height:calc(100vh - 190px);
+            overflow:auto;
+            background:#fff;
+            border-radius:12px;
+            box-shadow:0 5px 18px rgba(0,0,0,.09);
+        }
+        .sticky-head {
+            position:sticky;
+            top:0;
+            z-index:20;
+        }
+        .table-header {
+            background:var(--purple);
+            color:#fff;
+        }
+        tbody tr:hover { background:#faf7ff; }
+        .icon-btn {
+            width:32px;
+            height:32px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            border:0;
+            border-radius:8px;
+            cursor:pointer;
+            transition:.18s;
+            color:#fff;
+        }
+        .icon-btn:hover {
+            transform:scale(1.07);
+            filter:brightness(.96);
+        }
+        .audio-btn { background:#3b82f6; }
+        .stroke-btn { background:#10b981; }
+        .detail-btn { background:#f97316; }
+        .type-cell {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            min-width:174px;
+        }
+        .type-badge {
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-width:45px;
+            padding:4px 8px;
+            border-radius:999px;
+            font-size:12px;
+            font-weight:800;
+            white-space:nowrap;
+        }
+        .type-n { background:#dbeafe; color:#1e40af; }
+        .type-va { background:#dcfce7; color:#166534; }
+        .type-vs { background:#fef3c7; color:#92400e; }
+        .type-adv { background:#ffedd5; color:#c2410c; }
+        .type-det { background:#fce7f3; color:#9d174d; }
+        .type-m { background:#f3e8ff; color:#7c3aed; }
+        .type-prep { background:#e0e7ff; color:#4338ca; }
+        .type-conj { background:#fae8ff; color:#86198f; }
+        .type-p { background:#f1f5f9; color:#475569; }
+        .type-expr { background:#cffafe; color:#155e75; }
+        .level-badge {
+            display:inline-block;
+            min-width:40px;
+            padding:4px 8px;
+            border-radius:999px;
+            background:#ede9fe;
+            color:#6d28d9;
+            font-size:12px;
+            font-weight:800;
+            text-align:center;
+        }
+        .modal-backdrop {
+            position:fixed;
+            inset:0;
+            z-index:2000;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:16px;
+            background:rgba(0,0,0,.54);
+            backdrop-filter:blur(4px);
+        }
+        .modal-card {
+            width:min(860px,100%);
+            max-height:92vh;
+            display:flex;
+            flex-direction:column;
+            overflow:hidden;
+            border-radius:15px;
+            background:#fff;
+            box-shadow:0 28px 75px rgba(0,0,0,.30);
+        }
+        .hidden { display:none !important; }
+        .stroke-container {
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:center;
+            gap:20px;
+            padding:20px;
+        }
+        .char-box { text-align:center; }
+        .info-card {
+            border:1px solid #e5e7eb;
+            border-radius:10px;
+            background:#f9fafb;
+            padding:12px;
+        }
+        details summary { cursor:pointer; user-select:none; }
+        @media (max-width:768px) {
+            :root { --header-h:104px; }
+            .site-header .address-line { display:none; }
+            .site-header h1 { font-size:16px; }
+            .logo-box { width:58px; height:58px; flex-basis:58px; }
+            .filter-panel { position:static; }
+            .table-shell { max-height:none; border-radius:8px; }
+            .desktop-only { display:none; }
+        }
+        @media print {
+            .filter-panel,.icon-col,.modal-backdrop { display:none !important; }
+            .site-header { position:static; box-shadow:none; }
+            .table-shell { max-height:none; overflow:visible; box-shadow:none; }
+            body { background:#fff; }
+        }
+
+        /* ĐIỀU HƯỚNG TỪ LOẠI THEO FILE MẪU HSK */
+        .sidebar-container {
+            width:280px;
+            background:#fff;
+            border-right:1px solid #e5e7eb;
+            position:fixed;
+            left:0;
+            top:var(--header-h);
+            bottom:0;
+            overflow-y:auto;
+            z-index:700;
+        }
+        .sidebar-title {
+            position:sticky;
+            top:0;
+            z-index:5;
+            padding:14px 16px;
+            border-bottom:1px solid #e5e7eb;
+            background:#f5f3ff;
+        }
+        .category-item,
+        .subcategory-item {
+            width:100%;
+            border:0;
+            text-align:left;
+            cursor:pointer;
+            transition:all .18s;
+        }
+        .category-item {
+            padding:10px 16px;
+            background:#fff;
+            color:#374151;
+            font-size:13px;
+            font-weight:700;
+        }
+        .category-item:hover { background:#f3f4f6; }
+        .category-item.active {
+            background:var(--purple);
+            color:#fff;
+        }
+        .subcategory-item {
+            padding:7px 16px 7px 32px;
+            background:#fff;
+            color:#6b7280;
+            font-size:12px;
+            font-weight:600;
+        }
+        .subcategory-item:hover { background:#f9fafb; }
+        .subcategory-item.active {
+            background:#ede9fe;
+            color:var(--purple);
+            border-right:3px solid var(--purple);
+        }
+        .nav-count {
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-width:28px;
+            padding:2px 7px;
+            border-radius:999px;
+            background:#e5e7eb;
+            color:#4b5563;
+            font-size:11px;
+            font-weight:800;
+        }
+        .category-item.active .nav-count {
+            background:rgba(255,255,255,.22);
+            color:#fff;
+        }
+        .nav-bilingual-label {
+            display:grid;
+            grid-template-columns:82px minmax(0,1fr);
+            align-items:center;
+            gap:8px;
+            flex:1 1 auto;
+            min-width:0;
+            margin-right:8px;
+            text-align:left;
+            line-height:1.25;
+        }
+        .nav-zh {
+            font-family:'Noto Serif TC','Microsoft JhengHei','PMingLiU',serif;
+            font-size:15px;
+            font-weight:700;
+            white-space:nowrap;
+        }
+        .nav-vi {
+            min-width:0;
+            font-size:12px;
+            font-weight:600;
+        }
+
+        .subcategory-item .nav-bilingual-label {
+            grid-template-columns:118px minmax(0,1fr);
+            gap:7px;
+        }
+        .subcategory-item .nav-zh { font-size:13px; }
+        .subcategory-item .nav-vi { font-size:11px; font-weight:600; }
+        .nav-level-item {
+            padding-left:32px;
+            background:#fafafa;
+        }
+        .subtype-main {
+            font-family:'Noto Serif TC','Microsoft JhengHei','PMingLiU',serif;
+            font-weight:700;
+            color:#374151;
+        }
+        .subtype-vi { font-size:12px; color:#6b7280; margin-top:2px; }
+        .source-code { font-size:10px; color:#9ca3af; margin-top:3px; }
+        .main-content {
+            margin-left:280px;
+            padding:14px 20px 20px;
+        }
+        .content-toolbar {
+            position:sticky;
+            top:var(--header-h);
+            z-index:800;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            margin-bottom:12px;
+            padding:12px 14px;
+            border:1px solid #e5e7eb;
+            border-radius:10px;
+            background:rgba(255,255,255,.97);
+            backdrop-filter:blur(10px);
+            box-shadow:0 3px 12px rgba(0,0,0,.08);
+        }
+        .toolbar-search {
+            width:min(330px,42vw);
+            border:1px solid #d1d5db;
+            border-radius:8px;
+            padding:8px 11px;
+            font-size:13px;
+            background:#fff;
+        }
+        .toolbar-search:focus {
+            outline:none;
+            border-color:#8b5cf6;
+            box-shadow:0 0 0 3px rgba(139,92,246,.16);
+        }
+        .show-all-btn {
+            border:0;
+            background:transparent;
+            color:#6b7280;
+            font-size:13px;
+            font-weight:700;
+            text-decoration:underline;
+            cursor:pointer;
+            white-space:nowrap;
+        }
+        .show-all-btn:hover { color:var(--purple); }
+        .mobile-sidebar-button {
+            display:none;
+            width:38px;
+            height:36px;
+            align-items:center;
+            justify-content:center;
+            border:1px solid #d1d5db;
+            border-radius:8px;
+            background:#fff;
+            color:#6d28d9;
+            font-size:20px;
+            cursor:pointer;
+        }
+        .sidebar-overlay {
+            display:none;
+            position:fixed;
+            inset:var(--header-h) 0 0 0;
+            z-index:650;
+            background:rgba(0,0,0,.35);
+        }
+        .table-shell {
+            max-height:calc(100vh - var(--header-h) - 92px);
+        }
+        @media (max-width:1024px) {
+            .sidebar-container { width:240px; }
+            .main-content { margin-left:240px; padding-left:14px; padding-right:14px; }
+        }
+        @media (max-width:768px) {
+            .sidebar-container {
+                width:280px;
+                transform:translateX(-100%);
+                transition:transform .25s ease;
+                box-shadow:8px 0 24px rgba(0,0,0,.18);
+            }
+            .sidebar-container.open { transform:translateX(0); }
+            .sidebar-overlay.open { display:block; }
+            .main-content { margin-left:0; padding:10px; }
+            .content-toolbar { top:var(--header-h); flex-wrap:wrap; }
+            .mobile-sidebar-button { display:inline-flex; }
+            .toolbar-search { width:100%; flex:1 1 210px; }
+            .table-shell { max-height:none; }
+        }
+
+    </style>
+</head>
+<body>
+<!-- L99 QA: 883 mục từ; A1=495; A2=388; đã phân tích lại từ loại chính và phân loại nhỏ theo hướng giảng dạy Hoa ngữ Đài Loan; giữ mã từ loại gốc trong dữ liệu; menu trái chia theo từ loại và tiểu loại; không sắp xếp theo chữ cái; logo dùng URL trực tiếp. -->
+<header class="site-header">
+    <div class="max-w-[1600px] mx-auto px-3 md:px-5 py-2 flex items-center gap-3">
+        <a class="logo-box" href="https://giasuhoangu.com" target="_blank" rel="noopener" aria-label="Gia Sư Hoa Ngữ Tân An">
+            <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Logo Gia Sư Hoa Ngữ Tân An">
+        </a>
+        <div class="min-w-0 text-white">
+            <h1 class="text-xl font-bold leading-tight">HỆ THỐNG 883 MỤC TỪ VỰNG TOCFL A1-A2 · PHÂN LOẠI TỪ LOẠI</h1>
+            <p class="text-sm font-semibold">GIA SƯ HOA NGỮ TÂN AN · 正體中文</p>
+            <p class="address-line text-xs text-white/95">9/1 BẠCH VĂN TƯ, TÂN AN, LONG AN · ZALO: 0839 889 772</p>
+        </div>
+    </div>
+</header>
+
+<aside class="sidebar-container" id="sidebar" aria-label="Điều hướng từ loại">
+    <div class="sidebar-title">
+        <h2 class="font-bold text-purple-900 flex items-center gap-2">
+            <span>📚</span>
+            <span>TỪ LOẠI VÀ PHÂN LOẠI NHỎ</span>
+        </h2>
+    </div>
+    <div id="sidebarMenu" class="py-2"></div>
+</aside>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<main class="main-content">
+    <div class="content-toolbar">
+        <div class="flex items-center gap-2 min-w-0">
+            <button id="mobileSidebarButton" type="button" class="mobile-sidebar-button" aria-label="Mở danh mục từ loại">☰</button>
+            <span class="text-sm text-gray-500">Lọc:</span>
+            <span id="currentFilter" class="font-semibold text-purple-700 bg-purple-100 px-3 py-1 rounded-full text-sm truncate">Tất cả (883 mục từ)</span>
+        </div>
+        <div class="flex items-center gap-2 flex-1 justify-end">
+            <label class="sr-only" for="searchInput">Tìm từ vựng</label>
+            <input id="searchInput" class="toolbar-search" type="search" autocomplete="off" placeholder="Tìm chữ Hoa, pinyin, nghĩa hoặc loại từ...">
+            <button id="resetButton" type="button" class="show-all-btn">Xem tất cả</button>
+        </div>
+    </div>
+    <div class="table-shell" id="tableShell">
+        <table class="w-full border-collapse min-w-[1210px]">
+            <thead class="sticky-head">
+                <tr class="table-header text-sm">
+                    <th class="px-3 py-3 text-center w-14">STT</th>
+                    <th class="px-2 py-3 text-center w-12 icon-col">🔊</th>
+                    <th class="px-4 py-3 text-center w-36">Chữ phồn thể</th>
+                    <th class="px-2 py-3 text-center w-12 icon-col">✏</th>
+                    <th class="px-4 py-3 text-left w-40">Pinyin</th>
+                    <th class="px-4 py-3 text-left w-40">Từ loại chính</th>
+                    <th class="px-4 py-3 text-left w-72">Phân loại nhỏ</th>
+                    <th class="px-4 py-3 text-center w-20">Cấp độ</th>
+                    <th class="px-4 py-3 text-left">Nghĩa tiếng Việt</th>
+                    <th class="px-2 py-3 text-center w-12 icon-col">👁</th>
+                </tr>
+            </thead>
+            <tbody id="vocabTableBody" class="text-sm divide-y divide-gray-200"></tbody>
+        </table>
+        <div id="emptyState" class="hidden p-10 text-center text-gray-500">Không tìm thấy mục từ phù hợp.</div>
+    </div>
+</main>
+
+<div id="strokeModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+        <div class="bg-purple-600 text-white px-5 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-bold">✏ Thứ tự nét: <span id="strokeModalTitle" class="hanzi-font text-2xl"></span></h2>
+            <button type="button" class="close-stroke text-white text-2xl leading-none" aria-label="Đóng">×</button>
+        </div>
+        <div class="flex-1 overflow-y-auto bg-gray-50 p-4">
+            <div id="strokeContainer" class="stroke-container"></div>
+            <div id="strokeMessage" class="hidden text-center text-gray-600 py-8"></div>
+        </div>
+        <div class="bg-gray-100 px-5 py-4 flex justify-center gap-3">
+            <button type="button" id="animateAllButton" class="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold">▶ Viết lại</button>
+            <button type="button" class="close-stroke bg-gray-500 text-white px-5 py-2 rounded-lg font-semibold">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<div id="detailModal" class="modal-backdrop hidden">
+    <div class="modal-card">
+        <div class="bg-orange-500 text-white px-5 py-4 flex items-center justify-between">
+            <h2 class="text-lg font-bold">👁 Chi tiết mục từ</h2>
+            <button type="button" class="close-detail text-white text-2xl leading-none" aria-label="Đóng">×</button>
+        </div>
+        <div id="detailContent" class="flex-1 overflow-y-auto p-5"></div>
+        <div class="bg-gray-100 px-5 py-4 flex justify-center">
+            <button type="button" class="close-detail bg-gray-500 text-white px-5 py-2 rounded-lg font-semibold">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const vocabData=[{"stt":1,"hanzi":"啊","pinyin":"ā","typeCode":"P","meaning":"a, à, á","level":"A1","page":1,"mainCode":"P","subCode":"P_MODAL"},{"stt":2,"hanzi":"愛","pinyin":"ài","typeCode":"VS","meaning":"yêu, thích","level":"A1","page":1,"mainCode":"V","subCode":"V_PSYCH"},{"stt":3,"hanzi":"安靜","pinyin":"ānjìng","typeCode":"VS","meaning":"yên tĩnh","level":"A1","page":1,"mainCode":"V","subCode":"V_STATE"},{"stt":4,"hanzi":"吧","pinyin":"ba","typeCode":"P","meaning":"nhé, hả?","level":"A1","page":1,"mainCode":"P","subCode":"P_MODAL"},{"stt":5,"hanzi":"八","pinyin":"bā","typeCode":"Det","meaning":"tám","level":"A1","page":1,"mainCode":"DET","subCode":"DET_CARD"},{"stt":6,"hanzi":"把","pinyin":"bǎ","typeCode":"Prep","meaning":"trợ từ xử lý, cái (dao, dù…)","level":"A1","page":1,"mainCode":"PREP","subCode":"PREP_DISPOSAL"},{"stt":7,"hanzi":"爸爸","pinyin":"bàba","typeCode":"N","meaning":"cha","level":"A1","page":1,"mainCode":"N","subCode":"N_PERSON"},{"stt":8,"hanzi":"百","pinyin":"bǎi","typeCode":"Det","meaning":"trăm","level":"A1","page":1,"mainCode":"DET","subCode":"DET_CARD"},{"stt":9,"hanzi":"百貨公司","pinyin":"bǎihuògōngsī","typeCode":"N","meaning":"Công ty bách hóa, TTTM","level":"A1","page":1,"mainCode":"N","subCode":"N_PLACE"},{"stt":10,"hanzi":"白色","pinyin":"báisè","typeCode":"N","meaning":"màu trắng","level":"A1","page":1,"mainCode":"N","subCode":"N_OBJECT"},{"stt":11,"hanzi":"班","pinyin":"bān","typeCode":"M","meaning":"Chuyến (xe, máy bay)","level":"A1","page":1,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":12,"hanzi":"班","pinyin":"bān","typeCode":"N","meaning":"lớp","level":"A1","page":1,"mainCode":"N","subCode":"N_ORG"},{"stt":13,"hanzi":"搬","pinyin":"bān","typeCode":"VA","meaning":"dời","level":"A1","page":1,"mainCode":"V","subCode":"V_MOVE"},{"stt":14,"hanzi":"半","pinyin":"bàn","typeCode":"Det","meaning":"nửa, rưỡi","level":"A1","page":1,"mainCode":"DET","subCode":"DET_QUANT"},{"stt":15,"hanzi":"幫","pinyin":"bāng","typeCode":"VA","meaning":"giúp","level":"A1","page":1,"mainCode":"V","subCode":"V_ACTION"},{"stt":16,"hanzi":"辦公室","pinyin":"bàngōngshì","typeCode":"N","meaning":"văn phòng","level":"A1","page":1,"mainCode":"N","subCode":"N_PLACE"},{"stt":17,"hanzi":"棒球","pinyin":"bàngqiú","typeCode":"N","meaning":"bóng chày","level":"A1","page":1,"mainCode":"N","subCode":"N_OBJECT"},{"stt":18,"hanzi":"包子","pinyin":"bāozi","typeCode":"N","meaning":"bánh bao","level":"A1","page":1,"mainCode":"N","subCode":"N_OBJECT"},{"stt":19,"hanzi":"報紙","pinyin":"bàozhǐ","typeCode":"N","meaning":"báo","level":"A1","page":1,"mainCode":"N","subCode":"N_OBJECT"},{"stt":20,"hanzi":"杯","pinyin":"bēi","typeCode":"M","meaning":"ly","level":"A1","page":1,"mainCode":"M","subCode":"M_BORROW"},{"stt":21,"hanzi":"被","pinyin":"bèi","typeCode":"Prep","meaning":"bị, được","level":"A1","page":1,"mainCode":"PREP","subCode":"PREP_PASSIVE"},{"stt":22,"hanzi":"北邊","pinyin":"běi biān","typeCode":"N","meaning":"hướng Bắc","level":"A1","page":1,"mainCode":"N","subCode":"N_POSITION"},{"stt":23,"hanzi":"杯子","pinyin":"bēizi","typeCode":"N","meaning":"cái ly","level":"A1","page":1,"mainCode":"N","subCode":"N_OBJECT"},{"stt":24,"hanzi":"本","pinyin":"běn","typeCode":"M","meaning":"cuốn","level":"A1","page":1,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":25,"hanzi":"本子","pinyin":"běnzi","typeCode":"N","meaning":"tập","level":"A1","page":1,"mainCode":"N","subCode":"N_OBJECT"},{"stt":26,"hanzi":"比","pinyin":"bǐ","typeCode":"Prep","meaning":"so sánh","level":"A1","page":2,"mainCode":"PREP","subCode":"PREP_COMPARE"},{"stt":27,"hanzi":"筆","pinyin":"bǐ","typeCode":"N","meaning":"bút, viết","level":"A1","page":2,"mainCode":"N","subCode":"N_OBJECT"},{"stt":28,"hanzi":"別的","pinyin":"biéde","typeCode":"Det","meaning":"cái khác","level":"A1","page":2,"mainCode":"DET","subCode":"DET_INDEF"},{"stt":29,"hanzi":"比較","pinyin":"bǐjiào","typeCode":"Adv","meaning":"khá là, …hơn","level":"A1","page":2,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":30,"hanzi":"比賽","pinyin":"bǐsài","typeCode":"N","meaning":"trận đấu","level":"A1","page":2,"mainCode":"N","subCode":"N_EVENT"},{"stt":31,"hanzi":"比賽","pinyin":"bǐsài","typeCode":"VA","meaning":"thi đấu","level":"A1","page":2,"mainCode":"V","subCode":"V_ACTION"},{"stt":32,"hanzi":"不客氣","pinyin":"búkèqì","typeCode":"Expr","meaning":"đừng khách sáo","level":"A1","page":2,"mainCode":"EXPR","subCode":"EXPR_RESPONSE"},{"stt":33,"hanzi":"不","pinyin":"bù","typeCode":"Adv","meaning":"không","level":"A1","page":2,"mainCode":"ADV","subCode":"ADV_NEG"},{"stt":34,"hanzi":"不好意思","pinyin":"bùhǎoyìsi","typeCode":"Expr","meaning":"ngại","level":"A1","page":2,"mainCode":"EXPR","subCode":"EXPR_APOLOGY"},{"stt":35,"hanzi":"才","pinyin":"cái","typeCode":"Adv","meaning":"mới (sớm)","level":"A1","page":2,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":36,"hanzi":"菜","pinyin":"cài","typeCode":"N","meaning":"món ăn, rau","level":"A1","page":2,"mainCode":"N","subCode":"N_OBJECT"},{"stt":37,"hanzi":"參加","pinyin":"cānjiā","typeCode":"VA","meaning":"tham gia","level":"A1","page":2,"mainCode":"V","subCode":"V_ACTION"},{"stt":38,"hanzi":"餐廳","pinyin":"cāntīng","typeCode":"N","meaning":"nhà hàng","level":"A1","page":2,"mainCode":"N","subCode":"N_PLACE"},{"stt":39,"hanzi":"飯館","pinyin":"fànguǎn","typeCode":"N","meaning":"quán cơm","level":"A1","page":2,"mainCode":"N","subCode":"N_PLACE"},{"stt":40,"hanzi":"茶","pinyin":"chá","typeCode":"N","meaning":"trà","level":"A1","page":2,"mainCode":"N","subCode":"N_OBJECT"},{"stt":41,"hanzi":"長","pinyin":"cháng","typeCode":"VS","meaning":"dài","level":"A1","page":2,"mainCode":"V","subCode":"V_STATE"},{"stt":42,"hanzi":"常常","pinyin":"chángcháng","typeCode":"Adv","meaning":"thường","level":"A1","page":2,"mainCode":"ADV","subCode":"ADV_FREQ"},{"stt":43,"hanzi":"唱歌","pinyin":"chànggē","typeCode":"VA","meaning":"ca hát","level":"A1","page":2,"mainCode":"V","subCode":"V_ACTION"},{"stt":44,"hanzi":"吵","pinyin":"chǎo","typeCode":"VS","meaning":"ồn, làm ồn","level":"A1","page":2,"mainCode":"V","subCode":"V_STATE"},{"stt":45,"hanzi":"車(子)","pinyin":"chē(zi)","typeCode":"N","meaning":"xe","level":"A1","page":2,"mainCode":"N","subCode":"N_OBJECT"},{"stt":46,"hanzi":"車站","pinyin":"chēzhàn","typeCode":"N","meaning":"trạm xe","level":"A1","page":2,"mainCode":"N","subCode":"N_PLACE"},{"stt":47,"hanzi":"成績","pinyin":"chéngjī","typeCode":"N","meaning":"thành tích","level":"A1","page":2,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":48,"hanzi":"吃","pinyin":"chī","typeCode":"VA","meaning":"ăn","level":"A1","page":2,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":49,"hanzi":"吃飽","pinyin":"chībǎo","typeCode":"VS","meaning":"ăn no","level":"A1","page":2,"mainCode":"V","subCode":"V_CHANGE"},{"stt":50,"hanzi":"吃飯","pinyin":"chīfàn","typeCode":"VA","meaning":"ăn cơm","level":"A1","page":2,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":51,"hanzi":"穿","pinyin":"chuān","typeCode":"VA","meaning":"mặc","level":"A1","page":2,"mainCode":"V","subCode":"V_ACTION"},{"stt":52,"hanzi":"船","pinyin":"chuán","typeCode":"N","meaning":"thuyền","level":"A1","page":2,"mainCode":"N","subCode":"N_OBJECT"},{"stt":53,"hanzi":"窗","pinyin":"chuāng","typeCode":"N","meaning":"cửa sổ","level":"A1","page":2,"mainCode":"N","subCode":"N_OBJECT"},{"stt":54,"hanzi":"床","pinyin":"chuáng","typeCode":"N","meaning":"giường","level":"A1","page":3,"mainCode":"N","subCode":"N_OBJECT"},{"stt":55,"hanzi":"廚房","pinyin":"chúfáng","typeCode":"N","meaning":"nhà bếp","level":"A1","page":3,"mainCode":"N","subCode":"N_PLACE"},{"stt":56,"hanzi":"出國","pinyin":"chūguó","typeCode":"VA","meaning":"đi nước ngoài","level":"A1","page":3,"mainCode":"V","subCode":"V_MOVE"},{"stt":57,"hanzi":"出來","pinyin":"chūlái","typeCode":"VA","meaning":"ra","level":"A1","page":3,"mainCode":"V","subCode":"V_DIR"},{"stt":58,"hanzi":"出去","pinyin":"chūqù","typeCode":"VA","meaning":"đi ra","level":"A1","page":3,"mainCode":"V","subCode":"V_DIR"},{"stt":59,"hanzi":"春天","pinyin":"chūntiān","typeCode":"N","meaning":"mùa xuân","level":"A1","page":3,"mainCode":"N","subCode":"N_TIME"},{"stt":60,"hanzi":"次","pinyin":"cì","typeCode":"M","meaning":"lần","level":"A1","page":3,"mainCode":"M","subCode":"M_EVENT"},{"stt":61,"hanzi":"從","pinyin":"cóng","typeCode":"Prep","meaning":"từ","level":"A1","page":3,"mainCode":"PREP","subCode":"PREP_SOURCE"},{"stt":62,"hanzi":"錯","pinyin":"cuò","typeCode":"VS","meaning":"sai, nhầm","level":"A1","page":3,"mainCode":"V","subCode":"V_STATE"},{"stt":63,"hanzi":"打","pinyin":"dǎ","typeCode":"VA","meaning":"đánh","level":"A1","page":3,"mainCode":"V","subCode":"V_ACTION"},{"stt":64,"hanzi":"打電話","pinyin":"dǎdiànhuà","typeCode":"VA","meaning":"gọi điện thoại","level":"A1","page":3,"mainCode":"V","subCode":"V_SPEECH"},{"stt":65,"hanzi":"打開","pinyin":"dǎkāi","typeCode":"VA","meaning":"mở ra","level":"A1","page":3,"mainCode":"V","subCode":"V_ACTION"},{"stt":66,"hanzi":"大","pinyin":"dà","typeCode":"VS","meaning":"lớn","level":"A1","page":3,"mainCode":"V","subCode":"V_STATE"},{"stt":67,"hanzi":"大家","pinyin":"dàjiā","typeCode":"N","meaning":"mọi người","level":"A1","page":3,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":68,"hanzi":"大樓","pinyin":"dàlóu","typeCode":"N","meaning":"nhà lầu","level":"A1","page":3,"mainCode":"N","subCode":"N_PLACE"},{"stt":69,"hanzi":"蛋糕","pinyin":"dàngāo","typeCode":"N","meaning":"bánh kem","level":"A1","page":3,"mainCode":"N","subCode":"N_OBJECT"},{"stt":70,"hanzi":"當然","pinyin":"dāngrán","typeCode":"Adv","meaning":"đương nhiên","level":"A1","page":3,"mainCode":"ADV","subCode":"ADV_MODAL"},{"stt":71,"hanzi":"到","pinyin":"dào","typeCode":"VA","meaning":"đến, tới","level":"A1","page":3,"mainCode":"V","subCode":"V_MOVE"},{"stt":72,"hanzi":"大學","pinyin":"dàxué","typeCode":"N","meaning":"đại học","level":"A1","page":3,"mainCode":"N","subCode":"N_ORG"},{"stt":73,"hanzi":"的","pinyin":"de","typeCode":"P","meaning":"trợ từ sở hữu, nhấn mạnh","level":"A1","page":3,"mainCode":"P","subCode":"P_STRUCT"},{"stt":74,"hanzi":"得","pinyin":"de","typeCode":"P","meaning":"trợ từ bổ ngữ trình độ","level":"A1","page":3,"mainCode":"P","subCode":"P_STRUCT"},{"stt":75,"hanzi":"等","pinyin":"děng","typeCode":"VA","meaning":"chờ, đợi","level":"A1","page":3,"mainCode":"V","subCode":"V_ACTION"},{"stt":76,"hanzi":"第","pinyin":"dì","typeCode":"Det","meaning":"thứ tự","level":"A1","page":3,"mainCode":"DET","subCode":"DET_ORD"},{"stt":77,"hanzi":"點(鐘)","pinyin":"diǎn(zhōng)","typeCode":"M","meaning":"giờ","level":"A1","page":3,"mainCode":"M","subCode":"M_TIME"},{"stt":78,"hanzi":"電話","pinyin":"diànhuà","typeCode":"N","meaning":"điện thoại","level":"A1","page":3,"mainCode":"N","subCode":"N_OBJECT"},{"stt":79,"hanzi":"電腦","pinyin":"diànnǎo","typeCode":"N","meaning":"máy vi tính","level":"A1","page":3,"mainCode":"N","subCode":"N_OBJECT"},{"stt":80,"hanzi":"電視(機)","pinyin":"diànshì(jī)","typeCode":"N","meaning":"tivi","level":"A1","page":3,"mainCode":"N","subCode":"N_OBJECT"},{"stt":81,"hanzi":"電影","pinyin":"diànyǐng","typeCode":"N","meaning":"phim","level":"A1","page":3,"mainCode":"N","subCode":"N_OBJECT"},{"stt":82,"hanzi":"電影院","pinyin":"diànyǐngyuàn","typeCode":"N","meaning":"rạp chiếu phim","level":"A1","page":4,"mainCode":"N","subCode":"N_PLACE"},{"stt":83,"hanzi":"弟弟","pinyin":"dìdi","typeCode":"N","meaning":"em trai","level":"A1","page":4,"mainCode":"N","subCode":"N_PERSON"},{"stt":84,"hanzi":"地方","pinyin":"dìfāng","typeCode":"N","meaning":"nơi","level":"A1","page":4,"mainCode":"N","subCode":"N_PLACE"},{"stt":85,"hanzi":"地上","pinyin":"dìshàng","typeCode":"N","meaning":"dưới đất, trên mặt đất","level":"A1","page":4,"mainCode":"N","subCode":"N_POSITION"},{"stt":86,"hanzi":"地圖","pinyin":"dìtú","typeCode":"N","meaning":"bản đồ","level":"A1","page":4,"mainCode":"N","subCode":"N_OBJECT"},{"stt":87,"hanzi":"東邊","pinyin":"dōngbiān","typeCode":"N","meaning":"hướng Đông","level":"A1","page":4,"mainCode":"N","subCode":"N_POSITION"},{"stt":88,"hanzi":"冬天","pinyin":"dōngtiān","typeCode":"N","meaning":"mùa đông","level":"A1","page":4,"mainCode":"N","subCode":"N_TIME"},{"stt":89,"hanzi":"東西","pinyin":"dōngxi","typeCode":"N","meaning":"đồ","level":"A1","page":4,"mainCode":"N","subCode":"N_OBJECT"},{"stt":90,"hanzi":"懂","pinyin":"dǒng","typeCode":"VS","meaning":"hiểu","level":"A1","page":4,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":91,"hanzi":"都","pinyin":"dōu","typeCode":"Adv","meaning":"đều","level":"A1","page":4,"mainCode":"ADV","subCode":"ADV_SCOPE"},{"stt":92,"hanzi":"對","pinyin":"duì","typeCode":"VS","meaning":"đúng, đối với","level":"A1","page":4,"mainCode":"V","subCode":"V_REL"},{"stt":93,"hanzi":"對不起","pinyin":"duìbùqǐ","typeCode":"Expr","meaning":"xin lỗi","level":"A1","page":4,"mainCode":"EXPR","subCode":"EXPR_APOLOGY"},{"stt":94,"hanzi":"對面","pinyin":"duìmiàn","typeCode":"N","meaning":"đối diện","level":"A1","page":4,"mainCode":"N","subCode":"N_POSITION"},{"stt":95,"hanzi":"多","pinyin":"duō","typeCode":"Adv","meaning":"nhiều lên","level":"A1","page":4,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":96,"hanzi":"多","pinyin":"duō","typeCode":"VS","meaning":"nhiều","level":"A1","page":4,"mainCode":"V","subCode":"V_STATE"},{"stt":97,"hanzi":"多少","pinyin":"duōshǎo","typeCode":"Adv","meaning":"bao nhiêu","level":"A1","page":4,"mainCode":"ADV","subCode":"ADV_INTERROG"},{"stt":98,"hanzi":"肚子","pinyin":"dùzi","typeCode":"N","meaning":"bụng","level":"A1","page":4,"mainCode":"N","subCode":"N_OBJECT"},{"stt":99,"hanzi":"餓","pinyin":"è","typeCode":"VS","meaning":"đói","level":"A1","page":4,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":100,"hanzi":"二","pinyin":"èr","typeCode":"Det","meaning":"hai","level":"A1","page":4,"mainCode":"DET","subCode":"DET_CARD"},{"stt":101,"hanzi":"兒子","pinyin":"érzi","typeCode":"N","meaning":"con trai (của ai)","level":"A1","page":4,"mainCode":"N","subCode":"N_PERSON"},{"stt":102,"hanzi":"飯","pinyin":"fàn","typeCode":"N","meaning":"cơm, bữa ăn","level":"A1","page":4,"mainCode":"N","subCode":"N_OBJECT"},{"stt":103,"hanzi":"放","pinyin":"fàng","typeCode":"VA","meaning":"để, đặt","level":"A1","page":4,"mainCode":"V","subCode":"V_ACTION"},{"stt":104,"hanzi":"方便","pinyin":"fāngbiàn","typeCode":"VS","meaning":"tiện lợi","level":"A1","page":4,"mainCode":"V","subCode":"V_STATE"},{"stt":105,"hanzi":"房間","pinyin":"fángjiān","typeCode":"N","meaning":"phòng","level":"A1","page":4,"mainCode":"N","subCode":"N_PLACE"},{"stt":106,"hanzi":"房子","pinyin":"fángzi","typeCode":"N","meaning":"nhà","level":"A1","page":4,"mainCode":"N","subCode":"N_PLACE"},{"stt":107,"hanzi":"非常","pinyin":"fēicháng","typeCode":"Adv","meaning":"vô cùng","level":"A1","page":4,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":108,"hanzi":"飛機","pinyin":"fēijī","typeCode":"N","meaning":"máy bay","level":"A1","page":4,"mainCode":"N","subCode":"N_OBJECT"},{"stt":109,"hanzi":"機場","pinyin":"jīchǎng","typeCode":"N","meaning":"sân bay","level":"A1","page":5,"mainCode":"N","subCode":"N_PLACE"},{"stt":110,"hanzi":"分鐘","pinyin":"fēnzhōng","typeCode":"M","meaning":"phút","level":"A1","page":5,"mainCode":"M","subCode":"M_TIME"},{"stt":111,"hanzi":"封","pinyin":"fēng","typeCode":"M","meaning":"bức (thư)","level":"A1","page":5,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":112,"hanzi":"風","pinyin":"fēng","typeCode":"N","meaning":"gió","level":"A1","page":5,"mainCode":"N","subCode":"N_OBJECT"},{"stt":113,"hanzi":"風景","pinyin":"fēngjǐng","typeCode":"N","meaning":"phong cảnh","level":"A1","page":5,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":114,"hanzi":"附近","pinyin":"fùjìn","typeCode":"N","meaning":"gần đây, ở gần","level":"A1","page":5,"mainCode":"N","subCode":"N_POSITION"},{"stt":115,"hanzi":"乾淨","pinyin":"gānjìng","typeCode":"VS","meaning":"sạch sẽ","level":"A1","page":5,"mainCode":"V","subCode":"V_STATE"},{"stt":116,"hanzi":"感冒","pinyin":"gǎnmào","typeCode":"VS","meaning":"cảm","level":"A1","page":5,"mainCode":"V","subCode":"V_CHANGE"},{"stt":117,"hanzi":"高","pinyin":"gāo","typeCode":"VS","meaning":"cao","level":"A1","page":5,"mainCode":"V","subCode":"V_STATE"},{"stt":118,"hanzi":"高興","pinyin":"gāoxìng","typeCode":"VS","meaning":"vui","level":"A1","page":5,"mainCode":"V","subCode":"V_PSYCH"},{"stt":119,"hanzi":"告訴","pinyin":"gàosù","typeCode":"VA","meaning":"nói cho biết","level":"A1","page":5,"mainCode":"V","subCode":"V_SPEECH"},{"stt":120,"hanzi":"個","pinyin":"gè","typeCode":"M","meaning":"lượng từ: cái, người…","level":"A1","page":5,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":121,"hanzi":"哥哥","pinyin":"gēge","typeCode":"N","meaning":"anh trai","level":"A1","page":5,"mainCode":"N","subCode":"N_PERSON"},{"stt":122,"hanzi":"給","pinyin":"gěi","typeCode":"VA","meaning":"cho","level":"A1","page":5,"mainCode":"V","subCode":"V_ACTION"},{"stt":123,"hanzi":"跟","pinyin":"gēn","typeCode":"Conj","meaning":"cùng, và","level":"A1","page":5,"mainCode":"CONJ","subCode":"CONJ_COORD"},{"stt":124,"hanzi":"更","pinyin":"gèng","typeCode":"Adv","meaning":"càng, còn…hơn nữa","level":"A1","page":5,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":125,"hanzi":"公共汽車","pinyin":"gōnggòng qìchē","typeCode":"N","meaning":"xe buýt","level":"A1","page":5,"mainCode":"N","subCode":"N_OBJECT"},{"stt":126,"hanzi":"公車","pinyin":"gōngchē","typeCode":"N","meaning":"xe buýt","level":"A1","page":5,"mainCode":"N","subCode":"N_OBJECT"},{"stt":127,"hanzi":"功課","pinyin":"gōngkè","typeCode":"N","meaning":"bài tập về nhà, học hành","level":"A1","page":5,"mainCode":"N","subCode":"N_EVENT"},{"stt":128,"hanzi":"公司","pinyin":"gōngsī","typeCode":"N","meaning":"công ty","level":"A1","page":5,"mainCode":"N","subCode":"N_ORG"},{"stt":129,"hanzi":"公寓","pinyin":"gōngyù","typeCode":"N","meaning":"chung cư","level":"A1","page":5,"mainCode":"N","subCode":"N_PLACE"},{"stt":130,"hanzi":"公園","pinyin":"gōngyuán","typeCode":"N","meaning":"công viên","level":"A1","page":5,"mainCode":"N","subCode":"N_PLACE"},{"stt":131,"hanzi":"工作","pinyin":"gōngzuò","typeCode":"N","meaning":"công việc","level":"A1","page":5,"mainCode":"N","subCode":"N_EVENT"},{"stt":132,"hanzi":"狗","pinyin":"gǒu","typeCode":"N","meaning":"chó","level":"A1","page":5,"mainCode":"N","subCode":"N_OBJECT"},{"stt":133,"hanzi":"關","pinyin":"guān","typeCode":"VA","meaning":"đóng","level":"A1","page":5,"mainCode":"V","subCode":"V_ACTION"},{"stt":134,"hanzi":"貴","pinyin":"guì","typeCode":"VS","meaning":"mắc tiền","level":"A1","page":5,"mainCode":"V","subCode":"V_STATE"},{"stt":135,"hanzi":"過","pinyin":"guò","typeCode":"P","meaning":"…qua","level":"A1","page":5,"mainCode":"P","subCode":"P_ASPECT"},{"stt":136,"hanzi":"過","pinyin":"guò","typeCode":"VA","meaning":"đi qua","level":"A1","page":5,"mainCode":"V","subCode":"V_MOVE"},{"stt":137,"hanzi":"國家","pinyin":"guójiā","typeCode":"N","meaning":"nước, đất nước","level":"A1","page":6,"mainCode":"N","subCode":"N_ORG"},{"stt":138,"hanzi":"孩子","pinyin":"háizi","typeCode":"N","meaning":"con, trẻ","level":"A1","page":6,"mainCode":"N","subCode":"N_PERSON"},{"stt":139,"hanzi":"海邊","pinyin":"hǎibiān","typeCode":"N","meaning":"bãi biển","level":"A1","page":6,"mainCode":"N","subCode":"N_POSITION"},{"stt":140,"hanzi":"還是","pinyin":"háishì","typeCode":"Conj","meaning":"hay là","level":"A1","page":6,"mainCode":"CONJ","subCode":"CONJ_CHOICE"},{"stt":141,"hanzi":"寒假","pinyin":"hánjià","typeCode":"N","meaning":"nghỉ đông","level":"A1","page":6,"mainCode":"N","subCode":"N_TIME"},{"stt":142,"hanzi":"好","pinyin":"hǎo","typeCode":"Adv","meaning":"rất","level":"A1","page":6,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":143,"hanzi":"好","pinyin":"hǎo","typeCode":"VS","meaning":"tốt","level":"A1","page":6,"mainCode":"V","subCode":"V_STATE"},{"stt":144,"hanzi":"好吃","pinyin":"hǎochī","typeCode":"VS","meaning":"ăn ngon","level":"A1","page":6,"mainCode":"V","subCode":"V_STATE"},{"stt":145,"hanzi":"好像","pinyin":"hǎoxiàng","typeCode":"Adv","meaning":"hình như","level":"A1","page":6,"mainCode":"ADV","subCode":"ADV_MODAL"},{"stt":146,"hanzi":"好玩","pinyin":"hǎowán","typeCode":"VS","meaning":"chơi vui","level":"A1","page":6,"mainCode":"V","subCode":"V_STATE"},{"stt":147,"hanzi":"號","pinyin":"hào","typeCode":"M","meaning":"số, ngày","level":"A1","page":6,"mainCode":"M","subCode":"M_TIME"},{"stt":148,"hanzi":"號碼","pinyin":"hàomǎ","typeCode":"N","meaning":"số","level":"A1","page":6,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":149,"hanzi":"喝","pinyin":"hē","typeCode":"VA","meaning":"uống","level":"A1","page":6,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":150,"hanzi":"和","pinyin":"hé","typeCode":"Conj","meaning":"và","level":"A1","page":6,"mainCode":"CONJ","subCode":"CONJ_COORD"},{"stt":151,"hanzi":"很","pinyin":"hěn","typeCode":"Adv","meaning":"rất","level":"A1","page":6,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":152,"hanzi":"紅色","pinyin":"hóngsè","typeCode":"N","meaning":"màu đỏ","level":"A1","page":6,"mainCode":"N","subCode":"N_OBJECT"},{"stt":153,"hanzi":"後面","pinyin":"hòumiàn","typeCode":"N","meaning":"phía sau","level":"A1","page":6,"mainCode":"N","subCode":"N_POSITION"},{"stt":154,"hanzi":"花(兒)","pinyin":"huā(er)","typeCode":"N","meaning":"bông hoa","level":"A1","page":6,"mainCode":"N","subCode":"N_OBJECT"},{"stt":155,"hanzi":"畫","pinyin":"huà","typeCode":"N","meaning":"tranh","level":"A1","page":6,"mainCode":"N","subCode":"N_OBJECT"},{"stt":156,"hanzi":"畫畫","pinyin":"huàhuà","typeCode":"VA","meaning":"vẽ tranh","level":"A1","page":6,"mainCode":"V","subCode":"V_ACTION"},{"stt":157,"hanzi":"壞","pinyin":"huài","typeCode":"VS","meaning":"xấu, hư","level":"A1","page":6,"mainCode":"V","subCode":"V_STATE"},{"stt":158,"hanzi":"換","pinyin":"huàn","typeCode":"VA","meaning":"đổi","level":"A1","page":6,"mainCode":"V","subCode":"V_ACTION"},{"stt":159,"hanzi":"黃色","pinyin":"huángsè","typeCode":"N","meaning":"màu vàng","level":"A1","page":6,"mainCode":"N","subCode":"N_OBJECT"},{"stt":160,"hanzi":"歡迎","pinyin":"huānyíng","typeCode":"VS","meaning":"hoan nghênh","level":"A1","page":6,"mainCode":"EXPR","subCode":"EXPR_GREETING"},{"stt":161,"hanzi":"華語/華文","pinyin":"huáyǔ / huáwén","typeCode":"N","meaning":"tiếng Hoa","level":"A1","page":6,"mainCode":"N","subCode":"N_PROPER"},{"stt":162,"hanzi":"回家","pinyin":"huíjiā","typeCode":"VA","meaning":"về nhà","level":"A1","page":6,"mainCode":"V","subCode":"V_MOVE"},{"stt":163,"hanzi":"回來","pinyin":"huílái","typeCode":"VA","meaning":"quay lại","level":"A1","page":6,"mainCode":"V","subCode":"V_DIR"},{"stt":164,"hanzi":"回去","pinyin":"huíqù","typeCode":"VA","meaning":"đi về","level":"A1","page":6,"mainCode":"V","subCode":"V_DIR"},{"stt":165,"hanzi":"會","pinyin":"huì","typeCode":"VS","meaning":"biết, sẽ","level":"A1","page":7,"mainCode":"V","subCode":"V_MODAL"},{"stt":166,"hanzi":"活動","pinyin":"huódòng","typeCode":"N","meaning":"hoạt động, chương trình","level":"A1","page":7,"mainCode":"N","subCode":"N_EVENT"},{"stt":167,"hanzi":"火車","pinyin":"huǒchē","typeCode":"N","meaning":"xe lửa","level":"A1","page":7,"mainCode":"N","subCode":"N_OBJECT"},{"stt":168,"hanzi":"幾","pinyin":"jǐ","typeCode":"Det","meaning":"mấy, vài","level":"A1","page":7,"mainCode":"DET","subCode":"DET_INTERROG"},{"stt":169,"hanzi":"寄","pinyin":"jì","typeCode":"VA","meaning":"gửi","level":"A1","page":7,"mainCode":"V","subCode":"V_ACTION"},{"stt":170,"hanzi":"加","pinyin":"jiā","typeCode":"VA","meaning":"thêm, cộng","level":"A1","page":7,"mainCode":"V","subCode":"V_ACTION"},{"stt":171,"hanzi":"家","pinyin":"jiā","typeCode":"N","meaning":"nhà, gia đình","level":"A1","page":7,"mainCode":"N","subCode":"N_PLACE"},{"stt":172,"hanzi":"家人","pinyin":"jiārén","typeCode":"N","meaning":"người nhà","level":"A1","page":7,"mainCode":"N","subCode":"N_PERSON"},{"stt":173,"hanzi":"間","pinyin":"jiān","typeCode":"M","meaning":"căn (phòng)","level":"A1","page":7,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":174,"hanzi":"件","pinyin":"jiàn","typeCode":"M","meaning":"chiếc (áo)","level":"A1","page":7,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":175,"hanzi":"健康","pinyin":"jiànkāng","typeCode":"VS","meaning":"khỏe mạnh","level":"A1","page":7,"mainCode":"V","subCode":"V_STATE"},{"stt":176,"hanzi":"見面","pinyin":"jiànmiàn","typeCode":"VA","meaning":"gặp mặt","level":"A1","page":7,"mainCode":"V","subCode":"V_ACTION"},{"stt":177,"hanzi":"腳","pinyin":"jiǎo","typeCode":"N","meaning":"chân","level":"A1","page":7,"mainCode":"N","subCode":"N_OBJECT"},{"stt":178,"hanzi":"腳踏車","pinyin":"jiǎotàchē","typeCode":"N","meaning":"xe đạp","level":"A1","page":7,"mainCode":"N","subCode":"N_OBJECT"},{"stt":179,"hanzi":"自行車","pinyin":"zìxíngchē","typeCode":"N","meaning":"xe đạp","level":"A1","page":7,"mainCode":"N","subCode":"N_OBJECT"},{"stt":180,"hanzi":"叫","pinyin":"jiào","typeCode":"VA","meaning":"tên là, được gọi là","level":"A1","page":7,"mainCode":"V","subCode":"V_REL"},{"stt":181,"hanzi":"教室","pinyin":"jiàoshì","typeCode":"N","meaning":"phòng học","level":"A1","page":7,"mainCode":"N","subCode":"N_PLACE"},{"stt":182,"hanzi":"記得","pinyin":"jìdé","typeCode":"VS","meaning":"nhớ","level":"A1","page":7,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":183,"hanzi":"接","pinyin":"jiē","typeCode":"VA","meaning":"Đón, tiếp","level":"A1","page":7,"mainCode":"V","subCode":"V_ACTION"},{"stt":184,"hanzi":"結束","pinyin":"jiéshù","typeCode":"VS","meaning":"kết thúc","level":"A1","page":7,"mainCode":"V","subCode":"V_CHANGE"},{"stt":185,"hanzi":"介紹","pinyin":"jièshào","typeCode":"VA","meaning":"giới thiệu","level":"A1","page":7,"mainCode":"V","subCode":"V_SPEECH"},{"stt":186,"hanzi":"今年","pinyin":"jīnnián","typeCode":"N","meaning":"năm nay","level":"A1","page":7,"mainCode":"N","subCode":"N_TIME"},{"stt":187,"hanzi":"今天","pinyin":"jīntiān","typeCode":"N","meaning":"hôm nay","level":"A1","page":7,"mainCode":"N","subCode":"N_TIME"},{"stt":188,"hanzi":"近","pinyin":"jìn","typeCode":"VS","meaning":"gần","level":"A1","page":7,"mainCode":"V","subCode":"V_STATE"},{"stt":189,"hanzi":"進步","pinyin":"jìnbù","typeCode":"VS","meaning":"tiến bộ","level":"A1","page":7,"mainCode":"V","subCode":"V_CHANGE"},{"stt":190,"hanzi":"進來","pinyin":"jìnlái","typeCode":"VA","meaning":"đi vào","level":"A1","page":7,"mainCode":"V","subCode":"V_DIR"},{"stt":191,"hanzi":"進去","pinyin":"jìnqù","typeCode":"VA","meaning":"đi vô","level":"A1","page":7,"mainCode":"V","subCode":"V_DIR"},{"stt":192,"hanzi":"九","pinyin":"jiǔ","typeCode":"Det","meaning":"chín","level":"A1","page":7,"mainCode":"DET","subCode":"DET_CARD"},{"stt":193,"hanzi":"久","pinyin":"jiǔ","typeCode":"VS","meaning":"lâu","level":"A1","page":8,"mainCode":"V","subCode":"V_STATE"},{"stt":194,"hanzi":"酒","pinyin":"jiǔ","typeCode":"N","meaning":"rượu","level":"A1","page":8,"mainCode":"N","subCode":"N_OBJECT"},{"stt":195,"hanzi":"就","pinyin":"jiù","typeCode":"Adv","meaning":"thì","level":"A1","page":8,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":196,"hanzi":"舊","pinyin":"jiù","typeCode":"VS","meaning":"cũ","level":"A1","page":8,"mainCode":"V","subCode":"V_STATE"},{"stt":197,"hanzi":"覺得","pinyin":"juédé","typeCode":"VS","meaning":"cảm thấy","level":"A1","page":8,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":198,"hanzi":"咖啡","pinyin":"kāfēi","typeCode":"N","meaning":"cà phê","level":"A1","page":8,"mainCode":"N","subCode":"N_OBJECT"},{"stt":199,"hanzi":"開","pinyin":"kāi","typeCode":"VA","meaning":"lái, mở","level":"A1","page":8,"mainCode":"V","subCode":"V_ACTION"},{"stt":200,"hanzi":"開車","pinyin":"kāichē","typeCode":"VA","meaning":"lái xe","level":"A1","page":8,"mainCode":"V","subCode":"V_ACTION"},{"stt":201,"hanzi":"開始","pinyin":"kāishǐ","typeCode":"VS","meaning":"bắt đầu","level":"A1","page":8,"mainCode":"V","subCode":"V_CHANGE"},{"stt":202,"hanzi":"看","pinyin":"kàn","typeCode":"VA","meaning":"xem","level":"A1","page":8,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":203,"hanzi":"考試","pinyin":"kǎoshì","typeCode":"N","meaning":"kì thi","level":"A1","page":8,"mainCode":"N","subCode":"N_EVENT"},{"stt":204,"hanzi":"考試","pinyin":"kǎoshì","typeCode":"VA","meaning":"thi","level":"A1","page":8,"mainCode":"V","subCode":"V_ACTION"},{"stt":205,"hanzi":"卡片","pinyin":"kǎpiàn","typeCode":"N","meaning":"thiệp","level":"A1","page":8,"mainCode":"N","subCode":"N_OBJECT"},{"stt":206,"hanzi":"可樂","pinyin":"kělè","typeCode":"N","meaning":"coca","level":"A1","page":8,"mainCode":"N","subCode":"N_OBJECT"},{"stt":207,"hanzi":"可能","pinyin":"kěnéng","typeCode":"Adv","meaning":"có thể, có lẽ","level":"A1","page":8,"mainCode":"ADV","subCode":"ADV_MODAL"},{"stt":208,"hanzi":"可是","pinyin":"kěshì","typeCode":"Conj","meaning":"nhưng","level":"A1","page":8,"mainCode":"CONJ","subCode":"CONJ_ADVERS"},{"stt":209,"hanzi":"可以","pinyin":"kěyǐ","typeCode":"Adv","meaning":"có thể, được","level":"A1","page":8,"mainCode":"V","subCode":"V_MODAL"},{"stt":210,"hanzi":"課","pinyin":"kè","typeCode":"N","meaning":"bài, khóa học","level":"A1","page":8,"mainCode":"N","subCode":"N_EVENT"},{"stt":211,"hanzi":"客廳","pinyin":"kètīng","typeCode":"N","meaning":"phòng khách","level":"A1","page":8,"mainCode":"N","subCode":"N_PLACE"},{"stt":212,"hanzi":"褲子","pinyin":"kùzi","typeCode":"N","meaning":"quần","level":"A1","page":8,"mainCode":"N","subCode":"N_OBJECT"},{"stt":213,"hanzi":"快","pinyin":"kuài","typeCode":"Adv","meaning":"mau","level":"A1","page":8,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":214,"hanzi":"快","pinyin":"kuài","typeCode":"VS","meaning":"nhanh","level":"A1","page":8,"mainCode":"V","subCode":"V_STATE"},{"stt":215,"hanzi":"塊","pinyin":"kuài","typeCode":"M","meaning":"đồng, cục, viên, miếng","level":"A1","page":8,"mainCode":"M","subCode":"M_BORROW"},{"stt":216,"hanzi":"快樂","pinyin":"kuàilè","typeCode":"VS","meaning":"vui vẻ","level":"A1","page":8,"mainCode":"V","subCode":"V_STATE"},{"stt":217,"hanzi":"來","pinyin":"lái","typeCode":"VA","meaning":"đến","level":"A1","page":8,"mainCode":"V","subCode":"V_MOVE"},{"stt":218,"hanzi":"籃球","pinyin":"lánqiú","typeCode":"N","meaning":"bóng rổ","level":"A1","page":8,"mainCode":"N","subCode":"N_OBJECT"},{"stt":219,"hanzi":"老師","pinyin":"lǎoshī","typeCode":"N","meaning":"giáo viên","level":"A1","page":8,"mainCode":"N","subCode":"N_PERSON"},{"stt":220,"hanzi":"了","pinyin":"le","typeCode":"P","meaning":"…rồi","level":"A1","page":9,"mainCode":"P","subCode":"P_ASPECT"},{"stt":221,"hanzi":"了","pinyin":"le","typeCode":"P","meaning":"đã…","level":"A1","page":9,"mainCode":"P","subCode":"P_ASPECT"},{"stt":222,"hanzi":"累","pinyin":"lèi","typeCode":"VS","meaning":"mệt","level":"A1","page":9,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":223,"hanzi":"冷","pinyin":"lěng","typeCode":"VS","meaning":"lạnh","level":"A1","page":9,"mainCode":"V","subCode":"V_STATE"},{"stt":224,"hanzi":"冷氣(機)","pinyin":"lěngqì(jī)","typeCode":"N","meaning":"máy lạnh","level":"A1","page":9,"mainCode":"N","subCode":"N_OBJECT"},{"stt":225,"hanzi":"離","pinyin":"lí","typeCode":"VA","meaning":"cách","level":"A1","page":9,"mainCode":"V","subCode":"V_REL"},{"stt":226,"hanzi":"離開","pinyin":"líkāi","typeCode":"VA","meaning":"rời xa","level":"A1","page":9,"mainCode":"V","subCode":"V_MOVE"},{"stt":227,"hanzi":"裡面","pinyin":"lǐmiàn","typeCode":"N","meaning":"bên trong","level":"A1","page":9,"mainCode":"N","subCode":"N_POSITION"},{"stt":228,"hanzi":"兩","pinyin":"liǎng","typeCode":"Det","meaning":"hai","level":"A1","page":9,"mainCode":"DET","subCode":"DET_CARD"},{"stt":229,"hanzi":"六","pinyin":"liù","typeCode":"Det","meaning":"sáu","level":"A1","page":9,"mainCode":"DET","subCode":"DET_CARD"},{"stt":230,"hanzi":"樓","pinyin":"lóu","typeCode":"M","meaning":"lầu","level":"A1","page":9,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":231,"hanzi":"樓上","pinyin":"lóushàng","typeCode":"N","meaning":"trên lầu","level":"A1","page":9,"mainCode":"N","subCode":"N_PLACE"},{"stt":232,"hanzi":"樓下","pinyin":"lóuxià","typeCode":"N","meaning":"dưới lầu","level":"A1","page":9,"mainCode":"N","subCode":"N_PLACE"},{"stt":233,"hanzi":"路","pinyin":"lù","typeCode":"N","meaning":"đường, lộ","level":"A1","page":9,"mainCode":"N","subCode":"N_PLACE"},{"stt":234,"hanzi":"路口","pinyin":"lùkǒu","typeCode":"N","meaning":"giao lộ","level":"A1","page":9,"mainCode":"N","subCode":"N_PLACE"},{"stt":235,"hanzi":"旅行","pinyin":"lǚxíng","typeCode":"VA","meaning":"du lịch","level":"A1","page":9,"mainCode":"V","subCode":"V_MOVE"},{"stt":236,"hanzi":"綠色","pinyin":"lǜsè","typeCode":"N","meaning":"màu xanh lá","level":"A1","page":9,"mainCode":"N","subCode":"N_OBJECT"},{"stt":237,"hanzi":"嗎","pinyin":"ma","typeCode":"P","meaning":"trợ từ nghi vấn","level":"A1","page":9,"mainCode":"P","subCode":"P_MODAL"},{"stt":238,"hanzi":"媽媽","pinyin":"māma","typeCode":"N","meaning":"mẹ","level":"A1","page":9,"mainCode":"N","subCode":"N_PERSON"},{"stt":239,"hanzi":"買","pinyin":"mǎi","typeCode":"VA","meaning":"mua","level":"A1","page":9,"mainCode":"V","subCode":"V_ACTION"},{"stt":240,"hanzi":"賣","pinyin":"mài","typeCode":"VA","meaning":"bán","level":"A1","page":9,"mainCode":"V","subCode":"V_ACTION"},{"stt":241,"hanzi":"忙","pinyin":"máng","typeCode":"VS","meaning":"bận","level":"A1","page":9,"mainCode":"V","subCode":"V_STATE"},{"stt":242,"hanzi":"貓","pinyin":"māo","typeCode":"N","meaning":"mèo","level":"A1","page":9,"mainCode":"N","subCode":"N_OBJECT"},{"stt":243,"hanzi":"毛","pinyin":"máo","typeCode":"M","meaning":"lông","level":"A1","page":9,"mainCode":"M","subCode":"M_CURRENCY"},{"stt":244,"hanzi":"每","pinyin":"měi","typeCode":"Det","meaning":"mỗi","level":"A1","page":9,"mainCode":"DET","subCode":"DET_TOTAL"},{"stt":245,"hanzi":"美國","pinyin":"měiguó","typeCode":"N","meaning":"nước Mỹ","level":"A1","page":9,"mainCode":"N","subCode":"N_PROPER"},{"stt":246,"hanzi":"沒","pinyin":"méi","typeCode":"Adv","meaning":"đã không, không có","level":"A1","page":9,"mainCode":"ADV","subCode":"ADV_NEG"},{"stt":247,"hanzi":"沒(有)","pinyin":"méi(yǒu)","typeCode":"P","meaning":"không, không có","level":"A1","page":9,"mainCode":"ADV","subCode":"ADV_NEG"},{"stt":248,"hanzi":"沒關係","pinyin":"méiguānxì","typeCode":"VS","meaning":"không sao","level":"A1","page":10,"mainCode":"EXPR","subCode":"EXPR_RESPONSE"},{"stt":249,"hanzi":"沒問題","pinyin":"méiwèntí","typeCode":"VS","meaning":"không vấn đề","level":"A1","page":10,"mainCode":"EXPR","subCode":"EXPR_RESPONSE"},{"stt":250,"hanzi":"妹妹","pinyin":"mèimei","typeCode":"N","meaning":"em gái","level":"A1","page":10,"mainCode":"N","subCode":"N_PERSON"},{"stt":251,"hanzi":"門","pinyin":"mén","typeCode":"N","meaning":"cửa","level":"A1","page":10,"mainCode":"N","subCode":"N_OBJECT"},{"stt":252,"hanzi":"門口","pinyin":"ménkǒu","typeCode":"N","meaning":"ngoài cửa","level":"A1","page":10,"mainCode":"N","subCode":"N_PLACE"},{"stt":253,"hanzi":"麵","pinyin":"miàn","typeCode":"N","meaning":"mì","level":"A1","page":10,"mainCode":"N","subCode":"N_OBJECT"},{"stt":254,"hanzi":"麵包","pinyin":"miànbāo","typeCode":"N","meaning":"bánh mì","level":"A1","page":10,"mainCode":"N","subCode":"N_OBJECT"},{"stt":255,"hanzi":"明年","pinyin":"míngnián","typeCode":"N","meaning":"năm tới","level":"A1","page":10,"mainCode":"N","subCode":"N_TIME"},{"stt":256,"hanzi":"明天","pinyin":"míngtiān","typeCode":"N","meaning":"ngày mai","level":"A1","page":10,"mainCode":"N","subCode":"N_TIME"},{"stt":257,"hanzi":"名字","pinyin":"míngzì","typeCode":"N","meaning":"tên","level":"A1","page":10,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":258,"hanzi":"拿","pinyin":"ná","typeCode":"VA","meaning":"lấy","level":"A1","page":10,"mainCode":"V","subCode":"V_ACTION"},{"stt":259,"hanzi":"哪裡/兒","pinyin":"nǎlǐ/er","typeCode":"N","meaning":"đâu","level":"A1","page":10,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":260,"hanzi":"那裡/兒","pinyin":"nàlǐ/er","typeCode":"N","meaning":"chỗ đó","level":"A1","page":10,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":261,"hanzi":"那些","pinyin":"nàxiē","typeCode":"Det","meaning":"những thứ đó","level":"A1","page":10,"mainCode":"DET","subCode":"DET_DEM"},{"stt":262,"hanzi":"難","pinyin":"nán","typeCode":"VS","meaning":"khó","level":"A1","page":10,"mainCode":"V","subCode":"V_STATE"},{"stt":263,"hanzi":"南(邊)","pinyin":"nán(biān)","typeCode":"N","meaning":"phía nam","level":"A1","page":10,"mainCode":"N","subCode":"N_POSITION"},{"stt":264,"hanzi":"男孩","pinyin":"nánhái","typeCode":"N","meaning":"con trai, cậu bé","level":"A1","page":10,"mainCode":"N","subCode":"N_PERSON"},{"stt":265,"hanzi":"男生","pinyin":"nánshēng","typeCode":"N","meaning":"con trai","level":"A1","page":10,"mainCode":"N","subCode":"N_PERSON"},{"stt":266,"hanzi":"呢","pinyin":"ne","typeCode":"P","meaning":"trợ từ ngữ khí: thì sao? Nè?","level":"A1","page":10,"mainCode":"P","subCode":"P_MODAL"},{"stt":267,"hanzi":"能","pinyin":"néng","typeCode":"Adv","meaning":"có thể","level":"A1","page":10,"mainCode":"V","subCode":"V_MODAL"},{"stt":268,"hanzi":"你","pinyin":"nǐ","typeCode":"N","meaning":"bạn","level":"A1","page":10,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":269,"hanzi":"你們","pinyin":"nǐmen","typeCode":"N","meaning":"các bạn","level":"A1","page":10,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":270,"hanzi":"年","pinyin":"nián","typeCode":"N","meaning":"năm","level":"A1","page":10,"mainCode":"N","subCode":"N_TIME"},{"stt":271,"hanzi":"您","pinyin":"nín","typeCode":"N","meaning":"ngài, ông, bà, anh, chị","level":"A1","page":10,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":272,"hanzi":"牛奶","pinyin":"niúnǎi","typeCode":"N","meaning":"sữa bò","level":"A1","page":10,"mainCode":"N","subCode":"N_OBJECT"},{"stt":273,"hanzi":"女兒","pinyin":"nǚér","typeCode":"N","meaning":"con gái (của ai)","level":"A1","page":10,"mainCode":"N","subCode":"N_PERSON"},{"stt":274,"hanzi":"女孩","pinyin":"nǚhái","typeCode":"N","meaning":"con gái, cô bé","level":"A1","page":10,"mainCode":"N","subCode":"N_PERSON"},{"stt":275,"hanzi":"女生","pinyin":"nǚshēng","typeCode":"N","meaning":"con gái","level":"A1","page":10,"mainCode":"N","subCode":"N_PERSON"},{"stt":276,"hanzi":"跑步","pinyin":"pǎobù","typeCode":"VA","meaning":"chạy bộ","level":"A1","page":11,"mainCode":"V","subCode":"V_MOVE"},{"stt":277,"hanzi":"朋友","pinyin":"péngyou","typeCode":"N","meaning":"bạn bè","level":"A1","page":11,"mainCode":"N","subCode":"N_PERSON"},{"stt":278,"hanzi":"便宜","pinyin":"piányi","typeCode":"VS","meaning":"rẻ tiền","level":"A1","page":11,"mainCode":"V","subCode":"V_STATE"},{"stt":279,"hanzi":"票","pinyin":"piào","typeCode":"N","meaning":"vé","level":"A1","page":11,"mainCode":"N","subCode":"N_OBJECT"},{"stt":280,"hanzi":"漂亮","pinyin":"piāoliàng","typeCode":"VS","meaning":"xinh đẹp","level":"A1","page":11,"mainCode":"V","subCode":"V_STATE"},{"stt":281,"hanzi":"皮包","pinyin":"píbāo","typeCode":"N","meaning":"túi xách","level":"A1","page":11,"mainCode":"N","subCode":"N_OBJECT"},{"stt":282,"hanzi":"瓶","pinyin":"píng","typeCode":"M","meaning":"chai","level":"A1","page":11,"mainCode":"M","subCode":"M_BORROW"},{"stt":283,"hanzi":"七","pinyin":"qī","typeCode":"Det","meaning":"7","level":"A1","page":11,"mainCode":"DET","subCode":"DET_CARD"},{"stt":284,"hanzi":"騎","pinyin":"qí","typeCode":"VA","meaning":"chạy xe 2 bánh","level":"A1","page":11,"mainCode":"V","subCode":"V_MOVE"},{"stt":285,"hanzi":"千","pinyin":"qiān","typeCode":"Det","meaning":"ngàn","level":"A1","page":11,"mainCode":"DET","subCode":"DET_CARD"},{"stt":286,"hanzi":"錢","pinyin":"qián","typeCode":"N","meaning":"tiền","level":"A1","page":11,"mainCode":"N","subCode":"N_OBJECT"},{"stt":287,"hanzi":"前面","pinyin":"qiánmiàn","typeCode":"N","meaning":"phía trước","level":"A1","page":11,"mainCode":"N","subCode":"N_POSITION"},{"stt":288,"hanzi":"錢包","pinyin":"qiánbāo","typeCode":"N","meaning":"ví tiền","level":"A1","page":11,"mainCode":"N","subCode":"N_OBJECT"},{"stt":289,"hanzi":"起床","pinyin":"qǐchuáng","typeCode":"VA","meaning":"thức dậy","level":"A1","page":11,"mainCode":"V","subCode":"V_CHANGE"},{"stt":290,"hanzi":"請","pinyin":"qǐng","typeCode":"VA","meaning":"mời, xin","level":"A1","page":11,"mainCode":"V","subCode":"V_SPEECH"},{"stt":291,"hanzi":"請問","pinyin":"qǐngwèn","typeCode":"Expr","meaning":"xin hỏi","level":"A1","page":11,"mainCode":"EXPR","subCode":"EXPR_INQUIRY"},{"stt":292,"hanzi":"球","pinyin":"qiú","typeCode":"N","meaning":"bóng, banh","level":"A1","page":11,"mainCode":"N","subCode":"N_OBJECT"},{"stt":293,"hanzi":"秋天","pinyin":"qiūtiān","typeCode":"N","meaning":"mùa thu","level":"A1","page":11,"mainCode":"N","subCode":"N_TIME"},{"stt":294,"hanzi":"去","pinyin":"qù","typeCode":"VA","meaning":"đi","level":"A1","page":11,"mainCode":"V","subCode":"V_MOVE"},{"stt":295,"hanzi":"去年","pinyin":"qùnián","typeCode":"N","meaning":"năm ngoái","level":"A1","page":11,"mainCode":"N","subCode":"N_TIME"},{"stt":296,"hanzi":"熱","pinyin":"rè","typeCode":"VS","meaning":"nóng","level":"A1","page":11,"mainCode":"V","subCode":"V_STATE"},{"stt":297,"hanzi":"熱狗","pinyin":"règǒu","typeCode":"N","meaning":"hotdog","level":"A1","page":11,"mainCode":"N","subCode":"N_OBJECT"},{"stt":298,"hanzi":"熱鬧","pinyin":"rènào","typeCode":"VS","meaning":"náo nhiệt","level":"A1","page":11,"mainCode":"V","subCode":"V_STATE"},{"stt":299,"hanzi":"人","pinyin":"rén","typeCode":"N","meaning":"người","level":"A1","page":11,"mainCode":"N","subCode":"N_PERSON"},{"stt":300,"hanzi":"認識","pinyin":"rènshi","typeCode":"VS","meaning":"quen biết, nhận ra","level":"A1","page":11,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":301,"hanzi":"日本","pinyin":"rìběn","typeCode":"N","meaning":"Nhật bản","level":"A1","page":11,"mainCode":"N","subCode":"N_PROPER"},{"stt":302,"hanzi":"容易","pinyin":"róngyì","typeCode":"VS","meaning":"dễ","level":"A1","page":12,"mainCode":"V","subCode":"V_STATE"},{"stt":303,"hanzi":"肉","pinyin":"ròu","typeCode":"N","meaning":"thịt","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":304,"hanzi":"三","pinyin":"sān","typeCode":"Det","meaning":"3","level":"A1","page":12,"mainCode":"DET","subCode":"DET_CARD"},{"stt":305,"hanzi":"傘","pinyin":"sǎn","typeCode":"N","meaning":"dù","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":306,"hanzi":"山","pinyin":"shān","typeCode":"N","meaning":"núi","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":307,"hanzi":"上","pinyin":"shàng","typeCode":"VA","meaning":"lên, trên","level":"A1","page":12,"mainCode":"V","subCode":"V_MOVE"},{"stt":308,"hanzi":"上面","pinyin":"shàng miàn","typeCode":"N","meaning":"phía trên","level":"A1","page":12,"mainCode":"N","subCode":"N_POSITION"},{"stt":309,"hanzi":"上班","pinyin":"shàngbān","typeCode":"VA","meaning":"vào làm, đi làm","level":"A1","page":12,"mainCode":"V","subCode":"V_ACTION"},{"stt":310,"hanzi":"商店","pinyin":"shāngdiàn","typeCode":"N","meaning":"cửa hàng","level":"A1","page":12,"mainCode":"N","subCode":"N_PLACE"},{"stt":311,"hanzi":"上課","pinyin":"shàngkè","typeCode":"VA","meaning":"lên lớp","level":"A1","page":12,"mainCode":"V","subCode":"V_ACTION"},{"stt":312,"hanzi":"上網","pinyin":"shàngwǎng","typeCode":"VA","meaning":"lên mạng","level":"A1","page":12,"mainCode":"V","subCode":"V_ACTION"},{"stt":313,"hanzi":"上午","pinyin":"shàngwǔ","typeCode":"N","meaning":"buổi sáng","level":"A1","page":12,"mainCode":"N","subCode":"N_TIME"},{"stt":314,"hanzi":"少","pinyin":"shǎo","typeCode":"VS","meaning":"ít","level":"A1","page":12,"mainCode":"V","subCode":"V_STATE"},{"stt":315,"hanzi":"誰","pinyin":"shéi","typeCode":"N","meaning":"ai","level":"A1","page":12,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":316,"hanzi":"生病","pinyin":"shēngbìng","typeCode":"VS","meaning":"bị bệnh","level":"A1","page":12,"mainCode":"V","subCode":"V_CHANGE"},{"stt":317,"hanzi":"生日","pinyin":"shēngrì","typeCode":"N","meaning":"sinh nhật","level":"A1","page":12,"mainCode":"N","subCode":"N_TIME"},{"stt":318,"hanzi":"身體","pinyin":"shēntǐ","typeCode":"N","meaning":"cơ thể, sức khỏe","level":"A1","page":12,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":319,"hanzi":"什麼","pinyin":"shénme","typeCode":"Det","meaning":"gì, cái gì","level":"A1","page":12,"mainCode":"DET","subCode":"DET_INTERROG"},{"stt":320,"hanzi":"十","pinyin":"shí","typeCode":"Det","meaning":"10","level":"A1","page":12,"mainCode":"DET","subCode":"DET_CARD"},{"stt":321,"hanzi":"時候","pinyin":"shíhòu","typeCode":"N","meaning":"lúc, khi","level":"A1","page":12,"mainCode":"N","subCode":"N_TIME"},{"stt":322,"hanzi":"時間","pinyin":"shíjiān","typeCode":"N","meaning":"thời gian","level":"A1","page":12,"mainCode":"N","subCode":"N_TIME"},{"stt":323,"hanzi":"時鐘","pinyin":"shízhōng","typeCode":"N","meaning":"đồng hồ","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":324,"hanzi":"是","pinyin":"shì","typeCode":"VA","meaning":"là, phải","level":"A1","page":12,"mainCode":"V","subCode":"V_REL"},{"stt":325,"hanzi":"收到","pinyin":"shōudào","typeCode":"VA","meaning":"nhận được","level":"A1","page":12,"mainCode":"V","subCode":"V_CHANGE"},{"stt":326,"hanzi":"手","pinyin":"shǒu","typeCode":"N","meaning":"tay","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":327,"hanzi":"手機","pinyin":"shǒujī","typeCode":"N","meaning":"điện thoại di động","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":328,"hanzi":"書","pinyin":"shū","typeCode":"N","meaning":"sách","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":329,"hanzi":"書包","pinyin":"shūbāo","typeCode":"N","meaning":"cặp đựng sách","level":"A1","page":12,"mainCode":"N","subCode":"N_OBJECT"},{"stt":330,"hanzi":"舒服","pinyin":"shūfú","typeCode":"VS","meaning":"dễ chịu","level":"A1","page":13,"mainCode":"V","subCode":"V_STATE"},{"stt":331,"hanzi":"暑假","pinyin":"shǔjià","typeCode":"N","meaning":"nghỉ hè","level":"A1","page":13,"mainCode":"N","subCode":"N_TIME"},{"stt":332,"hanzi":"樹","pinyin":"shù","typeCode":"N","meaning":"cây","level":"A1","page":13,"mainCode":"N","subCode":"N_OBJECT"},{"stt":333,"hanzi":"雙","pinyin":"shuāng","typeCode":"M","meaning":"đôi(giày, tay)","level":"A1","page":13,"mainCode":"M","subCode":"M_COLLECTION"},{"stt":334,"hanzi":"水","pinyin":"shuǐ","typeCode":"N","meaning":"nước","level":"A1","page":13,"mainCode":"N","subCode":"N_OBJECT"},{"stt":335,"hanzi":"水果","pinyin":"shuǐguǒ","typeCode":"N","meaning":"trái cây","level":"A1","page":13,"mainCode":"N","subCode":"N_OBJECT"},{"stt":336,"hanzi":"睡覺","pinyin":"shuìjiào","typeCode":"VA","meaning":"ngủ","level":"A1","page":13,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":337,"hanzi":"說","pinyin":"shuō","typeCode":"VA","meaning":"nói","level":"A1","page":13,"mainCode":"V","subCode":"V_SPEECH"},{"stt":338,"hanzi":"說話","pinyin":"shuōhuà","typeCode":"VA","meaning":"nói chuyện","level":"A1","page":13,"mainCode":"V","subCode":"V_SPEECH"},{"stt":339,"hanzi":"四","pinyin":"sì","typeCode":"Det","meaning":"4","level":"A1","page":13,"mainCode":"DET","subCode":"DET_CARD"},{"stt":340,"hanzi":"宿舍","pinyin":"sùshè","typeCode":"N","meaning":"ký túc xá","level":"A1","page":13,"mainCode":"N","subCode":"N_PLACE"},{"stt":341,"hanzi":"歲","pinyin":"suì","typeCode":"M","meaning":"tuổi","level":"A1","page":13,"mainCode":"M","subCode":"M_TIME"},{"stt":342,"hanzi":"算","pinyin":"suàn","typeCode":"VA","meaning":"tính","level":"A1","page":13,"mainCode":"V","subCode":"V_ACTION"},{"stt":343,"hanzi":"送","pinyin":"sòng","typeCode":"VA","meaning":"tặng, đưa tiễn","level":"A1","page":13,"mainCode":"V","subCode":"V_ACTION"},{"stt":344,"hanzi":"所以","pinyin":"suǒyǐ","typeCode":"Conj","meaning":"cho nên","level":"A1","page":13,"mainCode":"CONJ","subCode":"CONJ_RESULT"},{"stt":345,"hanzi":"他/她","pinyin":"tā/tā","typeCode":"N","meaning":"anh ấy, cô ấy","level":"A1","page":13,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":346,"hanzi":"他們/她們","pinyin":"tāmen/tāmen","typeCode":"N","meaning":"bọn họ","level":"A1","page":13,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":347,"hanzi":"太","pinyin":"tài","typeCode":"Adv","meaning":"quá","level":"A1","page":13,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":348,"hanzi":"太太","pinyin":"tàitài","typeCode":"N","meaning":"bà, vợ","level":"A1","page":13,"mainCode":"N","subCode":"N_PERSON"},{"stt":349,"hanzi":"糖","pinyin":"táng","typeCode":"N","meaning":"kẹo, đường","level":"A1","page":13,"mainCode":"N","subCode":"N_OBJECT"},{"stt":350,"hanzi":"特別","pinyin":"tèbié","typeCode":"VS","meaning":"đặc biệt","level":"A1","page":13,"mainCode":"V","subCode":"V_STATE"},{"stt":351,"hanzi":"踢","pinyin":"tī","typeCode":"VA","meaning":"đá","level":"A1","page":13,"mainCode":"V","subCode":"V_ACTION"},{"stt":352,"hanzi":"天","pinyin":"tiān","typeCode":"M","meaning":"ngày","level":"A1","page":13,"mainCode":"M","subCode":"M_TIME"},{"stt":353,"hanzi":"天","pinyin":"tiān","typeCode":"N","meaning":"ngày, trời","level":"A1","page":13,"mainCode":"N","subCode":"N_TIME"},{"stt":354,"hanzi":"天氣","pinyin":"tiānqì","typeCode":"N","meaning":"thời tiết","level":"A1","page":13,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":355,"hanzi":"跳舞","pinyin":"tiàowǔ","typeCode":"VA","meaning":"nhảy múa","level":"A1","page":13,"mainCode":"V","subCode":"V_ACTION"},{"stt":356,"hanzi":"聽","pinyin":"tīng","typeCode":"VA","meaning":"nghe","level":"A1","page":13,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":357,"hanzi":"痛","pinyin":"tòng","typeCode":"VS","meaning":"đau","level":"A1","page":13,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":358,"hanzi":"同學","pinyin":"tóngxué","typeCode":"N","meaning":"bạn học","level":"A1","page":14,"mainCode":"N","subCode":"N_PERSON"},{"stt":359,"hanzi":"頭","pinyin":"tóu","typeCode":"N","meaning":"đầu","level":"A1","page":14,"mainCode":"N","subCode":"N_OBJECT"},{"stt":360,"hanzi":"圖片","pinyin":"túpiàn","typeCode":"N","meaning":"hình","level":"A1","page":14,"mainCode":"N","subCode":"N_OBJECT"},{"stt":361,"hanzi":"圖書館","pinyin":"túshūguǎn","typeCode":"N","meaning":"thư viện","level":"A1","page":14,"mainCode":"N","subCode":"N_PLACE"},{"stt":362,"hanzi":"外面","pinyin":"wàimiàn","typeCode":"N","meaning":"bên ngoài","level":"A1","page":14,"mainCode":"N","subCode":"N_POSITION"},{"stt":363,"hanzi":"完","pinyin":"wán","typeCode":"VS","meaning":"hết, xong","level":"A1","page":14,"mainCode":"V","subCode":"V_CHANGE"},{"stt":364,"hanzi":"玩(兒)","pinyin":"wán(er)","typeCode":"VA","meaning":"chơi","level":"A1","page":14,"mainCode":"V","subCode":"V_ACTION"},{"stt":365,"hanzi":"碗","pinyin":"wǎn","typeCode":"N","meaning":"cái chén, cái tô","level":"A1","page":14,"mainCode":"N","subCode":"N_OBJECT"},{"stt":366,"hanzi":"碗","pinyin":"wǎn","typeCode":"M","meaning":"chén, tô","level":"A1","page":14,"mainCode":"M","subCode":"M_BORROW"},{"stt":367,"hanzi":"晚安","pinyin":"wǎnān","typeCode":"VS","meaning":"ngủ ngon","level":"A1","page":14,"mainCode":"EXPR","subCode":"EXPR_GREETING"},{"stt":368,"hanzi":"晚餐/晚飯","pinyin":"wǎncān/wǎnfàn","typeCode":"N","meaning":"cơm tối","level":"A1","page":14,"mainCode":"N","subCode":"N_OBJECT"},{"stt":369,"hanzi":"晚上","pinyin":"wǎnshàng","typeCode":"N","meaning":"buổi tối","level":"A1","page":14,"mainCode":"N","subCode":"N_TIME"},{"stt":370,"hanzi":"往","pinyin":"wǎng","typeCode":"Prep","meaning":"về phía, hướng về","level":"A1","page":14,"mainCode":"PREP","subCode":"PREP_DIRECTION"},{"stt":371,"hanzi":"網球","pinyin":"wǎngqiú","typeCode":"N","meaning":"tennis","level":"A1","page":14,"mainCode":"N","subCode":"N_OBJECT"},{"stt":372,"hanzi":"網站","pinyin":"wǎngzhàn","typeCode":"N","meaning":"website, trang web","level":"A1","page":14,"mainCode":"N","subCode":"N_OBJECT"},{"stt":373,"hanzi":"忘","pinyin":"wàng","typeCode":"VS","meaning":"quên","level":"A1","page":14,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":374,"hanzi":"喂","pinyin":"wéi","typeCode":"VS","meaning":"alo","level":"A1","page":14,"mainCode":"EXPR","subCode":"EXPR_CALL"},{"stt":375,"hanzi":"位","pinyin":"wèi","typeCode":"M","meaning":"Vị (anh, chị, ông, bà)","level":"A1","page":14,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":376,"hanzi":"為什麼","pinyin":"wèishénme","typeCode":"Adv","meaning":"tại sao","level":"A1","page":14,"mainCode":"ADV","subCode":"ADV_INTERROG"},{"stt":377,"hanzi":"問","pinyin":"wèn","typeCode":"VA","meaning":"hỏi","level":"A1","page":14,"mainCode":"V","subCode":"V_SPEECH"},{"stt":378,"hanzi":"問題","pinyin":"wèntí","typeCode":"N","meaning":"vấn đề, câu hỏi","level":"A1","page":14,"mainCode":"N","subCode":"N_EVENT"},{"stt":379,"hanzi":"我","pinyin":"wǒ","typeCode":"N","meaning":"tôi","level":"A1","page":14,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":380,"hanzi":"我們","pinyin":"wǒmen","typeCode":"N","meaning":"chúng ta, chúng tôi","level":"A1","page":14,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":381,"hanzi":"五","pinyin":"wǔ","typeCode":"Det","meaning":"5","level":"A1","page":14,"mainCode":"DET","subCode":"DET_CARD"},{"stt":382,"hanzi":"午餐/午飯","pinyin":"wǔcān/wǔfàn","typeCode":"N","meaning":"cơm trưa","level":"A1","page":14,"mainCode":"N","subCode":"N_OBJECT"},{"stt":383,"hanzi":"洗","pinyin":"xǐ","typeCode":"VA","meaning":"rửa, tắm","level":"A1","page":14,"mainCode":"V","subCode":"V_ACTION"},{"stt":384,"hanzi":"下","pinyin":"xià","typeCode":"VA","meaning":"xuống, dưới","level":"A1","page":14,"mainCode":"V","subCode":"V_MOVE"},{"stt":385,"hanzi":"西邊","pinyin":"xībiān","typeCode":"N","meaning":"phía tây","level":"A1","page":15,"mainCode":"N","subCode":"N_POSITION"},{"stt":386,"hanzi":"下面","pinyin":"xiàmiàn","typeCode":"N","meaning":"phía dưới","level":"A1","page":15,"mainCode":"N","subCode":"N_POSITION"},{"stt":387,"hanzi":"下班","pinyin":"xiàbān","typeCode":"VA","meaning":"tan ca","level":"A1","page":15,"mainCode":"V","subCode":"V_ACTION"},{"stt":388,"hanzi":"下課","pinyin":"xiàkè","typeCode":"VS","meaning":"tan học","level":"A1","page":15,"mainCode":"V","subCode":"V_CHANGE"},{"stt":389,"hanzi":"夏天","pinyin":"xiàtiān","typeCode":"N","meaning":"mùa hè","level":"A1","page":15,"mainCode":"N","subCode":"N_TIME"},{"stt":390,"hanzi":"下午","pinyin":"xiàwǔ","typeCode":"N","meaning":"buổi chiều","level":"A1","page":15,"mainCode":"N","subCode":"N_TIME"},{"stt":391,"hanzi":"下雨","pinyin":"xiàyǔ","typeCode":"VA","meaning":"trời mưa","level":"A1","page":15,"mainCode":"V","subCode":"V_CHANGE"},{"stt":392,"hanzi":"先","pinyin":"xiān","typeCode":"Adv","meaning":"trước","level":"A1","page":15,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":393,"hanzi":"先生","pinyin":"xiānshēng","typeCode":"N","meaning":"ông, anh, mr","level":"A1","page":15,"mainCode":"N","subCode":"N_PERSON"},{"stt":394,"hanzi":"現在","pinyin":"xiànzài","typeCode":"N","meaning":"bây giờ","level":"A1","page":15,"mainCode":"N","subCode":"N_TIME"},{"stt":395,"hanzi":"想","pinyin":"xiǎng","typeCode":"VA","meaning":"nghĩ, nhớ","level":"A1","page":15,"mainCode":"V","subCode":"V_PSYCH"},{"stt":396,"hanzi":"像","pinyin":"xiàng","typeCode":"VA","meaning":"giống","level":"A1","page":15,"mainCode":"V","subCode":"V_REL"},{"stt":397,"hanzi":"小","pinyin":"xiǎo","typeCode":"VS","meaning":"nhỏ","level":"A1","page":15,"mainCode":"V","subCode":"V_STATE"},{"stt":398,"hanzi":"小孩","pinyin":"xiǎohái","typeCode":"N","meaning":"con, con nít","level":"A1","page":15,"mainCode":"N","subCode":"N_PERSON"},{"stt":399,"hanzi":"小姐","pinyin":"xiǎojiě","typeCode":"N","meaning":"cô, miss","level":"A1","page":15,"mainCode":"N","subCode":"N_PERSON"},{"stt":400,"hanzi":"小時","pinyin":"xiǎoshí","typeCode":"N","meaning":"giờ, tiếng đồng hồ","level":"A1","page":15,"mainCode":"N","subCode":"N_TIME"},{"stt":401,"hanzi":"小心","pinyin":"xiǎoxīn","typeCode":"VS","meaning":"cẩn thận","level":"A1","page":15,"mainCode":"V","subCode":"V_STATE"},{"stt":402,"hanzi":"鞋子","pinyin":"xiézi","typeCode":"N","meaning":"giày","level":"A1","page":15,"mainCode":"N","subCode":"N_OBJECT"},{"stt":403,"hanzi":"寫","pinyin":"xiě","typeCode":"VA","meaning":"viết","level":"A1","page":15,"mainCode":"V","subCode":"V_ACTION"},{"stt":404,"hanzi":"寫字","pinyin":"xiězì","typeCode":"VA","meaning":"viết chữ","level":"A1","page":15,"mainCode":"V","subCode":"V_ACTION"},{"stt":405,"hanzi":"謝謝","pinyin":"xièxie","typeCode":"VS","meaning":"cảm ơn","level":"A1","page":15,"mainCode":"EXPR","subCode":"EXPR_THANKS"},{"stt":406,"hanzi":"喜歡","pinyin":"xǐhuān","typeCode":"VS","meaning":"thích","level":"A1","page":15,"mainCode":"V","subCode":"V_PSYCH"},{"stt":407,"hanzi":"洗手間","pinyin":"xǐshǒujiān","typeCode":"N","meaning":"nhà vệ sinh","level":"A1","page":15,"mainCode":"N","subCode":"N_PLACE"},{"stt":408,"hanzi":"廁所","pinyin":"cèsuǒ","typeCode":"N","meaning":"nhà vệ sinh","level":"A1","page":15,"mainCode":"N","subCode":"N_PLACE"},{"stt":409,"hanzi":"洗衣機","pinyin":"xǐyījī","typeCode":"N","meaning":"máy giặt","level":"A1","page":15,"mainCode":"N","subCode":"N_OBJECT"},{"stt":410,"hanzi":"洗澡","pinyin":"xǐzǎo","typeCode":"VA","meaning":"tắm","level":"A1","page":15,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":411,"hanzi":"新","pinyin":"xīn","typeCode":"VS","meaning":"mới","level":"A1","page":15,"mainCode":"V","subCode":"V_STATE"},{"stt":412,"hanzi":"新年","pinyin":"xīnnián","typeCode":"N","meaning":"năm mới","level":"A1","page":15,"mainCode":"N","subCode":"N_TIME"},{"stt":413,"hanzi":"信","pinyin":"xìn","typeCode":"N","meaning":"thư","level":"A1","page":15,"mainCode":"N","subCode":"N_OBJECT"},{"stt":414,"hanzi":"信封","pinyin":"xìnfēng","typeCode":"N","meaning":"bức thư","level":"A1","page":16,"mainCode":"N","subCode":"N_OBJECT"},{"stt":415,"hanzi":"星期","pinyin":"xīngqí","typeCode":"N","meaning":"tuần, thứ","level":"A1","page":16,"mainCode":"N","subCode":"N_TIME"},{"stt":416,"hanzi":"星期天/星期日","pinyin":"xīngqítiān xīngqírì","typeCode":"N","meaning":"chủ nhật","level":"A1","page":16,"mainCode":"N","subCode":"N_TIME"},{"stt":417,"hanzi":"行","pinyin":"xíng","typeCode":"VS","meaning":"ok, được","level":"A1","page":16,"mainCode":"EXPR","subCode":"EXPR_RESPONSE"},{"stt":418,"hanzi":"姓","pinyin":"xìng","typeCode":"VA","meaning":"họ","level":"A1","page":16,"mainCode":"V","subCode":"V_REL"},{"stt":419,"hanzi":"休息","pinyin":"xiūxí","typeCode":"VA","meaning":"nghỉ ngơi","level":"A1","page":16,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":420,"hanzi":"學","pinyin":"xué","typeCode":"VA","meaning":"học","level":"A1","page":16,"mainCode":"V","subCode":"V_ACTION"},{"stt":421,"hanzi":"學生","pinyin":"xuéshēng","typeCode":"N","meaning":"học sinh","level":"A1","page":16,"mainCode":"N","subCode":"N_PERSON"},{"stt":422,"hanzi":"學校","pinyin":"xuéxiào","typeCode":"N","meaning":"trường học","level":"A1","page":16,"mainCode":"N","subCode":"N_ORG"},{"stt":423,"hanzi":"眼睛","pinyin":"yǎnjīng","typeCode":"N","meaning":"mắt","level":"A1","page":16,"mainCode":"N","subCode":"N_OBJECT"},{"stt":424,"hanzi":"要","pinyin":"yào","typeCode":"VA","meaning":"muốn, cần, phải, sẽ","level":"A1","page":16,"mainCode":"V","subCode":"V_MODAL"},{"stt":425,"hanzi":"藥","pinyin":"yào","typeCode":"N","meaning":"thuốc","level":"A1","page":16,"mainCode":"N","subCode":"N_OBJECT"},{"stt":426,"hanzi":"也","pinyin":"yě","typeCode":"Adv","meaning":"cũng","level":"A1","page":16,"mainCode":"ADV","subCode":"ADV_SCOPE"},{"stt":427,"hanzi":"一","pinyin":"yī","typeCode":"Det","meaning":"1","level":"A1","page":16,"mainCode":"DET","subCode":"DET_CARD"},{"stt":428,"hanzi":"醫生","pinyin":"yīshēng","typeCode":"N","meaning":"bác sỹ","level":"A1","page":16,"mainCode":"N","subCode":"N_PERSON"},{"stt":429,"hanzi":"一點兒","pinyin":"yìdiǎnr","typeCode":"Det","meaning":"một ít","level":"A1","page":16,"mainCode":"DET","subCode":"DET_INDEF"},{"stt":430,"hanzi":"一定","pinyin":"yídìng","typeCode":"Adv","meaning":"nhất định","level":"A1","page":16,"mainCode":"ADV","subCode":"ADV_MODAL"},{"stt":431,"hanzi":"衣服","pinyin":"yīfú","typeCode":"N","meaning":"quần áo","level":"A1","page":16,"mainCode":"N","subCode":"N_OBJECT"},{"stt":432,"hanzi":"醫院","pinyin":"yīyuàn","typeCode":"N","meaning":"bệnh viện","level":"A1","page":16,"mainCode":"N","subCode":"N_PLACE"},{"stt":433,"hanzi":"一共","pinyin":"yígòng","typeCode":"Adv","meaning":"tổng cộng","level":"A1","page":16,"mainCode":"ADV","subCode":"ADV_SCOPE"},{"stt":434,"hanzi":"以後","pinyin":"yǐhòu","typeCode":"N","meaning":"sau này, sau khi","level":"A1","page":16,"mainCode":"N","subCode":"N_TIME"},{"stt":435,"hanzi":"已經","pinyin":"yǐjīng","typeCode":"Adv","meaning":"đã","level":"A1","page":16,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":436,"hanzi":"以前","pinyin":"yǐqián","typeCode":"N","meaning":"trước đây, trước khi","level":"A1","page":16,"mainCode":"N","subCode":"N_TIME"},{"stt":437,"hanzi":"椅子","pinyin":"yǐzi","typeCode":"N","meaning":"ghế","level":"A1","page":16,"mainCode":"N","subCode":"N_OBJECT"},{"stt":438,"hanzi":"一起","pinyin":"yìqǐ","typeCode":"Adv","meaning":"cùng nhau","level":"A1","page":16,"mainCode":"ADV","subCode":"ADV_SCOPE"},{"stt":439,"hanzi":"一些","pinyin":"yìxiē","typeCode":"Det","meaning":"một vài","level":"A1","page":16,"mainCode":"DET","subCode":"DET_INDEF"},{"stt":440,"hanzi":"一樣","pinyin":"yíyàng","typeCode":"VS","meaning":"giống nhau","level":"A1","page":16,"mainCode":"V","subCode":"V_REL"},{"stt":441,"hanzi":"一直","pinyin":"yìzhí","typeCode":"Adv","meaning":"cứ, hoài, mãi","level":"A1","page":16,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":442,"hanzi":"意思","pinyin":"yìsi","typeCode":"N","meaning":"ý nghĩa","level":"A1","page":17,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":443,"hanzi":"銀行","pinyin":"yínháng","typeCode":"N","meaning":"ngân hàng","level":"A1","page":17,"mainCode":"N","subCode":"N_PLACE"},{"stt":444,"hanzi":"因為","pinyin":"yīnwèi","typeCode":"Conj","meaning":"bởi vì","level":"A1","page":17,"mainCode":"CONJ","subCode":"CONJ_CAUSE"},{"stt":445,"hanzi":"音樂","pinyin":"yīnyuè","typeCode":"N","meaning":"âm nhạc","level":"A1","page":17,"mainCode":"N","subCode":"N_OBJECT"},{"stt":446,"hanzi":"英國","pinyin":"yīngguó","typeCode":"N","meaning":"Anh Quốc","level":"A1","page":17,"mainCode":"N","subCode":"N_PROPER"},{"stt":447,"hanzi":"英文","pinyin":"yīngwén","typeCode":"N","meaning":"tiếng Anh","level":"A1","page":17,"mainCode":"N","subCode":"N_PROPER"},{"stt":448,"hanzi":"郵局","pinyin":"yóujú","typeCode":"N","meaning":"bưu điện","level":"A1","page":17,"mainCode":"N","subCode":"N_PLACE"},{"stt":449,"hanzi":"郵票","pinyin":"yóupiào","typeCode":"N","meaning":"tem thư","level":"A1","page":17,"mainCode":"N","subCode":"N_OBJECT"},{"stt":450,"hanzi":"游泳","pinyin":"yóuyǒng","typeCode":"VA","meaning":"bơi","level":"A1","page":17,"mainCode":"V","subCode":"V_MOVE"},{"stt":451,"hanzi":"游泳池","pinyin":"yóuyǒngchí","typeCode":"N","meaning":"hồ bơi","level":"A1","page":17,"mainCode":"N","subCode":"N_PLACE"},{"stt":452,"hanzi":"有","pinyin":"yǒu","typeCode":"VA","meaning":"có","level":"A1","page":17,"mainCode":"V","subCode":"V_EXIST"},{"stt":453,"hanzi":"有點(兒)","pinyin":"yǒudiǎn(er)","typeCode":"Adv","meaning":"hơi hơi","level":"A1","page":17,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":454,"hanzi":"有空","pinyin":"yǒukòng","typeCode":"VS","meaning":"rảnh","level":"A1","page":17,"mainCode":"V","subCode":"V_STATE"},{"stt":455,"hanzi":"有時候","pinyin":"yǒushíhòu","typeCode":"Adv","meaning":"có khi, có lúc","level":"A1","page":17,"mainCode":"ADV","subCode":"ADV_FREQ"},{"stt":456,"hanzi":"有意思","pinyin":"yǒuyìsi","typeCode":"VS","meaning":"thú vị","level":"A1","page":17,"mainCode":"V","subCode":"V_STATE"},{"stt":457,"hanzi":"又","pinyin":"yòu","typeCode":"Adv","meaning":"lại, nữa","level":"A1","page":17,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":458,"hanzi":"右邊","pinyin":"yòubiān","typeCode":"N","meaning":"bên phải","level":"A1","page":17,"mainCode":"N","subCode":"N_POSITION"},{"stt":459,"hanzi":"用","pinyin":"yòng","typeCode":"VA","meaning":"dùng, xài","level":"A1","page":17,"mainCode":"V","subCode":"V_ACTION"},{"stt":460,"hanzi":"魚","pinyin":"yú","typeCode":"N","meaning":"cá","level":"A1","page":17,"mainCode":"N","subCode":"N_OBJECT"},{"stt":461,"hanzi":"元","pinyin":"yuán","typeCode":"M","meaning":"đồng (đơn vị tiền TQ)","level":"A1","page":17,"mainCode":"M","subCode":"M_CURRENCY"},{"stt":462,"hanzi":"遠","pinyin":"yuǎn","typeCode":"VS","meaning":"xa","level":"A1","page":17,"mainCode":"V","subCode":"V_STATE"},{"stt":463,"hanzi":"月","pinyin":"yuè","typeCode":"N","meaning":"tháng","level":"A1","page":17,"mainCode":"N","subCode":"N_TIME"},{"stt":464,"hanzi":"運動","pinyin":"yùndòng","typeCode":"N","meaning":"vận động, thể thao","level":"A1","page":17,"mainCode":"N","subCode":"N_EVENT"},{"stt":465,"hanzi":"運動","pinyin":"yùndòng","typeCode":"VA","meaning":"vận động, tập thể dục","level":"A1","page":17,"mainCode":"V","subCode":"V_ACTION"},{"stt":466,"hanzi":"雨天","pinyin":"yǔtiān","typeCode":"N","meaning":"ngày mưa","level":"A1","page":17,"mainCode":"N","subCode":"N_TIME"},{"stt":467,"hanzi":"再","pinyin":"zài","typeCode":"Adv","meaning":"thêm, tiếp","level":"A1","page":17,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":468,"hanzi":"在","pinyin":"zài","typeCode":"Adv","meaning":"đang","level":"A1","page":17,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":469,"hanzi":"在","pinyin":"zài","typeCode":"Prep","meaning":"ở, lúc","level":"A1","page":17,"mainCode":"PREP","subCode":"PREP_LOC_TIME"},{"stt":470,"hanzi":"再見","pinyin":"zàijiàn","typeCode":"VA","meaning":"tạm biệt","level":"A1","page":18,"mainCode":"EXPR","subCode":"EXPR_FAREWELL"},{"stt":471,"hanzi":"早","pinyin":"zǎo","typeCode":"VS","meaning":"sớm","level":"A1","page":18,"mainCode":"V","subCode":"V_STATE"},{"stt":472,"hanzi":"早餐","pinyin":"zǎocān","typeCode":"N","meaning":"cơm sáng","level":"A1","page":18,"mainCode":"N","subCode":"N_OBJECT"},{"stt":473,"hanzi":"早飯","pinyin":"zǎofàn","typeCode":"N","meaning":"cơm sáng","level":"A1","page":18,"mainCode":"N","subCode":"N_OBJECT"},{"stt":474,"hanzi":"早上","pinyin":"zǎoshàng","typeCode":"N","meaning":"buổi sáng","level":"A1","page":18,"mainCode":"N","subCode":"N_TIME"},{"stt":475,"hanzi":"怎麼","pinyin":"zěnme","typeCode":"Adv","meaning":"sao?","level":"A1","page":18,"mainCode":"ADV","subCode":"ADV_INTERROG"},{"stt":476,"hanzi":"怎麼辦","pinyin":"zěnme bàn","typeCode":"Expr","meaning":"làm sao? Tính sao?","level":"A1","page":18,"mainCode":"EXPR","subCode":"EXPR_PROBLEM"},{"stt":477,"hanzi":"怎麼了","pinyin":"zěnme le","typeCode":"Expr","meaning":"bị sao rồi?","level":"A1","page":18,"mainCode":"EXPR","subCode":"EXPR_INQUIRY"},{"stt":478,"hanzi":"怎麼樣","pinyin":"zěnmeyàng","typeCode":"Expr","meaning":"như thế nào?","level":"A1","page":18,"mainCode":"EXPR","subCode":"EXPR_INQUIRY"},{"stt":479,"hanzi":"站","pinyin":"zhàn","typeCode":"N","meaning":"trạm, bến","level":"A1","page":18,"mainCode":"N","subCode":"N_PLACE"},{"stt":480,"hanzi":"站","pinyin":"zhàn","typeCode":"VA","meaning":"đứng","level":"A1","page":18,"mainCode":"V","subCode":"V_MOVE"},{"stt":481,"hanzi":"張","pinyin":"zhāng","typeCode":"M","meaning":"tờ, tấm","level":"A1","page":18,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":482,"hanzi":"找","pinyin":"zhǎo","typeCode":"VA","meaning":"tìm","level":"A1","page":18,"mainCode":"V","subCode":"V_ACTION"},{"stt":483,"hanzi":"找到","pinyin":"zhǎodào","typeCode":"VA","meaning":"tìm được","level":"A1","page":18,"mainCode":"V","subCode":"V_CHANGE"},{"stt":484,"hanzi":"照片","pinyin":"zhàopiàn","typeCode":"N","meaning":"hình chụp","level":"A1","page":18,"mainCode":"N","subCode":"N_OBJECT"},{"stt":485,"hanzi":"照相","pinyin":"zhàoxiàng","typeCode":"VA","meaning":"chụp hình","level":"A1","page":18,"mainCode":"V","subCode":"V_ACTION"},{"stt":486,"hanzi":"照相機","pinyin":"zhàoxiàngjī","typeCode":"N","meaning":"máy ảnh","level":"A1","page":18,"mainCode":"N","subCode":"N_OBJECT"},{"stt":487,"hanzi":"這裡/兒","pinyin":"zhèlǐ/er","typeCode":"N","meaning":"chỗ này","level":"A1","page":18,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":488,"hanzi":"這些","pinyin":"zhèxiē","typeCode":"Det","meaning":"những thứ này","level":"A1","page":18,"mainCode":"DET","subCode":"DET_DEM"},{"stt":489,"hanzi":"紙","pinyin":"zhǐ","typeCode":"N","meaning":"giấy","level":"A1","page":18,"mainCode":"N","subCode":"N_OBJECT"},{"stt":490,"hanzi":"枝","pinyin":"zhī","typeCode":"M","meaning":"cây (viết)","level":"A1","page":18,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":491,"hanzi":"只","pinyin":"zhī","typeCode":"M","meaning":"con (chó, mèo)","level":"A1","page":18,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":492,"hanzi":"知道","pinyin":"zhīdào","typeCode":"VS","meaning":"biết","level":"A1","page":18,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":493,"hanzi":"中國","pinyin":"zhōngguó","typeCode":"N","meaning":"Trung Quốc","level":"A1","page":18,"mainCode":"N","subCode":"N_PROPER"},{"stt":494,"hanzi":"中文","pinyin":"zhōngwén","typeCode":"N","meaning":"tiếng Trung","level":"A1","page":18,"mainCode":"N","subCode":"N_PROPER"},{"stt":495,"hanzi":"中午","pinyin":"zhōngwǔ","typeCode":"N","meaning":"buổi trưa","level":"A1","page":18,"mainCode":"N","subCode":"N_TIME"},{"stt":496,"hanzi":"阿姨","pinyin":"āyí","typeCode":"N","meaning":"dì","level":"A2","page":18,"mainCode":"N","subCode":"N_PERSON"},{"stt":497,"hanzi":"矮","pinyin":"ǎi","typeCode":"VS","meaning":"thấp","level":"A2","page":19,"mainCode":"V","subCode":"V_STATE"},{"stt":498,"hanzi":"安全","pinyin":"ānquán","typeCode":"VS","meaning":"an toàn","level":"A2","page":19,"mainCode":"V","subCode":"V_STATE"},{"stt":499,"hanzi":"白","pinyin":"bái","typeCode":"VS","meaning":"trắng","level":"A2","page":19,"mainCode":"V","subCode":"V_STATE"},{"stt":500,"hanzi":"辦法","pinyin":"bànfǎ","typeCode":"N","meaning":"biện pháp, cách","level":"A2","page":19,"mainCode":"N","subCode":"N_EVENT"},{"stt":501,"hanzi":"棒","pinyin":"bàng","typeCode":"VS","meaning":"giỏi, tuyệt","level":"A2","page":19,"mainCode":"V","subCode":"V_STATE"},{"stt":502,"hanzi":"幫忙","pinyin":"bāngmáng","typeCode":"VA","meaning":"giúp đỡ","level":"A2","page":19,"mainCode":"V","subCode":"V_ACTION"},{"stt":503,"hanzi":"包","pinyin":"bāo","typeCode":"M","meaning":"gói, bao","level":"A2","page":19,"mainCode":"M","subCode":"M_BORROW"},{"stt":504,"hanzi":"抱","pinyin":"bào","typeCode":"VA","meaning":"ôm, bồng","level":"A2","page":19,"mainCode":"V","subCode":"V_ACTION"},{"stt":505,"hanzi":"必須","pinyin":"bìxū","typeCode":"Adv","meaning":"cần phải","level":"A2","page":19,"mainCode":"V","subCode":"V_MODAL"},{"stt":506,"hanzi":"邊(兒)","pinyin":"biān(er)","typeCode":"N","meaning":"bên, cạnh","level":"A2","page":19,"mainCode":"N","subCode":"N_POSITION"},{"stt":507,"hanzi":"遍","pinyin":"biàn","typeCode":"M","meaning":"lần, bận","level":"A2","page":19,"mainCode":"M","subCode":"M_EVENT"},{"stt":508,"hanzi":"表","pinyin":"biǎo","typeCode":"N","meaning":"đồng hồ","level":"A2","page":19,"mainCode":"N","subCode":"N_OBJECT"},{"stt":509,"hanzi":"別","pinyin":"bié","typeCode":"Adv","meaning":"đừng","level":"A2","page":19,"mainCode":"ADV","subCode":"ADV_NEG"},{"stt":510,"hanzi":"別人","pinyin":"biérén","typeCode":"N","meaning":"người khác","level":"A2","page":19,"mainCode":"N","subCode":"N_PRONOUN"},{"stt":511,"hanzi":"餅乾","pinyin":"bǐnggān","typeCode":"N","meaning":"bánh quy","level":"A2","page":19,"mainCode":"N","subCode":"N_OBJECT"},{"stt":512,"hanzi":"冰箱","pinyin":"bīngxiāng","typeCode":"N","meaning":"tủ lạnh","level":"A2","page":19,"mainCode":"N","subCode":"N_OBJECT"},{"stt":513,"hanzi":"病","pinyin":"bìng","typeCode":"N","meaning":"bệnh","level":"A2","page":19,"mainCode":"N","subCode":"N_EVENT"},{"stt":514,"hanzi":"病人","pinyin":"bìngrén","typeCode":"N","meaning":"người bệnh","level":"A2","page":19,"mainCode":"N","subCode":"N_PERSON"},{"stt":515,"hanzi":"不錯","pinyin":"búcuò","typeCode":"VS","meaning":"khá, không tệ","level":"A2","page":19,"mainCode":"V","subCode":"V_STATE"},{"stt":516,"hanzi":"不但","pinyin":"búdàn","typeCode":"Conj","meaning":"không những","level":"A2","page":19,"mainCode":"CONJ","subCode":"CONJ_PROGRESS"},{"stt":517,"hanzi":"不一定","pinyin":"bùyídìng","typeCode":"Adv","meaning":"không nhất định","level":"A2","page":19,"mainCode":"ADV","subCode":"ADV_NEG"},{"stt":518,"hanzi":"不用","pinyin":"búyòng","typeCode":"Adv","meaning":"không cần","level":"A2","page":19,"mainCode":"ADV","subCode":"ADV_NEG"},{"stt":519,"hanzi":"擦","pinyin":"cā","typeCode":"VA","meaning":"lau, chùi","level":"A2","page":19,"mainCode":"V","subCode":"V_ACTION"},{"stt":520,"hanzi":"猜","pinyin":"cāi","typeCode":"VA","meaning":"đoán","level":"A2","page":19,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":521,"hanzi":"才","pinyin":"cái","typeCode":"Adv","meaning":"mới, vừa mới","level":"A2","page":19,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":522,"hanzi":"菜單","pinyin":"càidān","typeCode":"N","meaning":"menu, thực đơn","level":"A2","page":19,"mainCode":"N","subCode":"N_OBJECT"},{"stt":523,"hanzi":"餐桌","pinyin":"cānzhuō","typeCode":"N","meaning":"bàn ăn","level":"A2","page":19,"mainCode":"N","subCode":"N_OBJECT"},{"stt":524,"hanzi":"草","pinyin":"cǎo","typeCode":"N","meaning":"cỏ","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":525,"hanzi":"草地","pinyin":"cǎodì","typeCode":"N","meaning":"bãi cỏ","level":"A2","page":20,"mainCode":"N","subCode":"N_PLACE"},{"stt":526,"hanzi":"叉(子)","pinyin":"chā(zi)","typeCode":"N","meaning":"cái nĩa","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":527,"hanzi":"超級市場","pinyin":"chāojí shìchǎng","typeCode":"N","meaning":"siêu thị","level":"A2","page":20,"mainCode":"N","subCode":"N_PLACE"},{"stt":528,"hanzi":"超市","pinyin":"chāoshì","typeCode":"N","meaning":"siêu thị","level":"A2","page":20,"mainCode":"N","subCode":"N_PLACE"},{"stt":529,"hanzi":"城市","pinyin":"chéngshì","typeCode":"N","meaning":"thành phố","level":"A2","page":20,"mainCode":"N","subCode":"N_PLACE"},{"stt":530,"hanzi":"襯衫","pinyin":"chènshān","typeCode":"N","meaning":"áo sơ mi","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":531,"hanzi":"遲到","pinyin":"chídào","typeCode":"VS","meaning":"đến muộn","level":"A2","page":20,"mainCode":"V","subCode":"V_CHANGE"},{"stt":532,"hanzi":"窗戶","pinyin":"chuānghù","typeCode":"N","meaning":"cửa sổ","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":533,"hanzi":"吹","pinyin":"chuī","typeCode":"VA","meaning":"thổi","level":"A2","page":20,"mainCode":"V","subCode":"V_ACTION"},{"stt":534,"hanzi":"聰明","pinyin":"cōngmíng","typeCode":"VS","meaning":"thông minh","level":"A2","page":20,"mainCode":"V","subCode":"V_STATE"},{"stt":535,"hanzi":"從前","pinyin":"cóngqián","typeCode":"N","meaning":"hồi trước","level":"A2","page":20,"mainCode":"N","subCode":"N_TIME"},{"stt":536,"hanzi":"帶","pinyin":"dài","typeCode":"VA","meaning":"mang, dắt","level":"A2","page":20,"mainCode":"V","subCode":"V_ACTION"},{"stt":537,"hanzi":"戴","pinyin":"dài","typeCode":"VA","meaning":"đeo, đội","level":"A2","page":20,"mainCode":"V","subCode":"V_ACTION"},{"stt":538,"hanzi":"袋子","pinyin":"dàizi","typeCode":"N","meaning":"túi, bọc","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":539,"hanzi":"蛋","pinyin":"dàn","typeCode":"N","meaning":"trứng","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":540,"hanzi":"但是","pinyin":"dànshì","typeCode":"Conj","meaning":"nhưng mà","level":"A2","page":20,"mainCode":"CONJ","subCode":"CONJ_ADVERS"},{"stt":541,"hanzi":"刀(子)","pinyin":"dāo(zi)","typeCode":"N","meaning":"con dao","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":542,"hanzi":"倒","pinyin":"dào","typeCode":"VA","meaning":"rót, đổ","level":"A2","page":20,"mainCode":"V","subCode":"V_ACTION"},{"stt":543,"hanzi":"打掃","pinyin":"dǎsǎo","typeCode":"VA","meaning":"quét","level":"A2","page":20,"mainCode":"V","subCode":"V_ACTION"},{"stt":544,"hanzi":"打算","pinyin":"dǎsuàn","typeCode":"VA","meaning":"dự tính, định","level":"A2","page":20,"mainCode":"V","subCode":"V_PSYCH"},{"stt":545,"hanzi":"大聲","pinyin":"dàshēng","typeCode":"VS","meaning":"lớn tiếng","level":"A2","page":20,"mainCode":"V","subCode":"V_STATE"},{"stt":546,"hanzi":"大衣","pinyin":"dàyī","typeCode":"N","meaning":"áo choàng","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":547,"hanzi":"德國","pinyin":"déguó","typeCode":"N","meaning":"nước Đức","level":"A2","page":20,"mainCode":"N","subCode":"N_PROPER"},{"stt":548,"hanzi":"低","pinyin":"dī","typeCode":"VS","meaning":"thấp","level":"A2","page":20,"mainCode":"V","subCode":"V_STATE"},{"stt":549,"hanzi":"店","pinyin":"diàn","typeCode":"N","meaning":"tiệm, quán","level":"A2","page":20,"mainCode":"N","subCode":"N_PLACE"},{"stt":550,"hanzi":"電燈","pinyin":"diàndēng","typeCode":"N","meaning":"đèn điện","level":"A2","page":20,"mainCode":"N","subCode":"N_OBJECT"},{"stt":551,"hanzi":"點(兒)","pinyin":"diǎn (er)","typeCode":"M","meaning":"ít, tý","level":"A2","page":20,"mainCode":"M","subCode":"M_INDEF"},{"stt":552,"hanzi":"點(兒)","pinyin":"diǎn (er)","typeCode":"N","meaning":"chấm","level":"A2","page":21,"mainCode":"N","subCode":"N_OBJECT"},{"stt":553,"hanzi":"點菜","pinyin":"diǎncài","typeCode":"VA","meaning":"chọn món","level":"A2","page":21,"mainCode":"V","subCode":"V_ACTION"},{"stt":554,"hanzi":"點心","pinyin":"diǎnxīn","typeCode":"N","meaning":"điểm tâm","level":"A2","page":21,"mainCode":"N","subCode":"N_OBJECT"},{"stt":555,"hanzi":"掉","pinyin":"diào","typeCode":"VS","meaning":"rớt","level":"A2","page":21,"mainCode":"V","subCode":"V_CHANGE"},{"stt":556,"hanzi":"動","pinyin":"dòng","typeCode":"VA","meaning":"động","level":"A2","page":21,"mainCode":"V","subCode":"V_ACTION"},{"stt":557,"hanzi":"動物","pinyin":"dòngwù","typeCode":"N","meaning":"động vật","level":"A2","page":21,"mainCode":"N","subCode":"N_OBJECT"},{"stt":558,"hanzi":"動物園","pinyin":"dòngwùyuán","typeCode":"N","meaning":"sở thú","level":"A2","page":21,"mainCode":"N","subCode":"N_PLACE"},{"stt":559,"hanzi":"讀","pinyin":"dú","typeCode":"VA","meaning":"đọc, học ở trường","level":"A2","page":21,"mainCode":"V","subCode":"V_ACTION"},{"stt":560,"hanzi":"讀書","pinyin":"dúshū","typeCode":"VA","meaning":"học, đọc sách","level":"A2","page":21,"mainCode":"V","subCode":"V_ACTION"},{"stt":561,"hanzi":"短","pinyin":"duǎn","typeCode":"VS","meaning":"ngắn","level":"A2","page":21,"mainCode":"V","subCode":"V_STATE"},{"stt":562,"hanzi":"朵","pinyin":"duǒ","typeCode":"M","meaning":"đóa (hoa, mây)","level":"A2","page":21,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":563,"hanzi":"耳朵","pinyin":"ěrduō","typeCode":"N","meaning":"lỗ tai","level":"A2","page":21,"mainCode":"N","subCode":"N_OBJECT"},{"stt":564,"hanzi":"法國","pinyin":"fǎguó","typeCode":"N","meaning":"nước Pháp","level":"A2","page":21,"mainCode":"N","subCode":"N_PROPER"},{"stt":565,"hanzi":"飯店","pinyin":"fàndiàn","typeCode":"N","meaning":"khách sạn, nhà hàng","level":"A2","page":21,"mainCode":"N","subCode":"N_PLACE"},{"stt":566,"hanzi":"方法","pinyin":"fāngfǎ","typeCode":"N","meaning":"phương pháp","level":"A2","page":21,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":567,"hanzi":"放假","pinyin":"fàngjià","typeCode":"VS","meaning":"được nghỉ","level":"A2","page":21,"mainCode":"V","subCode":"V_CHANGE"},{"stt":568,"hanzi":"放下","pinyin":"fàngxià","typeCode":"VA","meaning":"bỏ xuống","level":"A2","page":21,"mainCode":"V","subCode":"V_CHANGE"},{"stt":569,"hanzi":"發生","pinyin":"fāshēng","typeCode":"VS","meaning":"xảy ra, phát sinh","level":"A2","page":21,"mainCode":"V","subCode":"V_CHANGE"},{"stt":570,"hanzi":"發現","pinyin":"fāxiàn","typeCode":"VA","meaning":"phát hiện","level":"A2","page":21,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":571,"hanzi":"飛","pinyin":"fēi","typeCode":"VA","meaning":"bay","level":"A2","page":21,"mainCode":"V","subCode":"V_MOVE"},{"stt":572,"hanzi":"父親","pinyin":"fùqīn","typeCode":"N","meaning":"cha","level":"A2","page":21,"mainCode":"N","subCode":"N_PERSON"},{"stt":573,"hanzi":"服務生","pinyin":"fúwùshēng","typeCode":"N","meaning":"phục vụ viên","level":"A2","page":21,"mainCode":"N","subCode":"N_PERSON"},{"stt":574,"hanzi":"幹","pinyin":"gān","typeCode":"VS","meaning":"khô","level":"A2","page":21,"mainCode":"V","subCode":"V_STATE"},{"stt":575,"hanzi":"剛剛","pinyin":"gānggāng","typeCode":"Adv","meaning":"mới vừa","level":"A2","page":21,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":576,"hanzi":"給","pinyin":"gěi","typeCode":"Prep","meaning":"cho","level":"A2","page":21,"mainCode":"PREP","subCode":"PREP_TARGET"},{"stt":577,"hanzi":"跟","pinyin":"gēn","typeCode":"Prep","meaning":"cùng với","level":"A2","page":21,"mainCode":"PREP","subCode":"PREP_ACCOMP"},{"stt":578,"hanzi":"恭喜","pinyin":"gōngxǐ","typeCode":"VS","meaning":"chúc mừng","level":"A2","page":22,"mainCode":"EXPR","subCode":"EXPR_CONGRATS"},{"stt":579,"hanzi":"工作","pinyin":"gōngzuò","typeCode":"VA","meaning":"làm việc","level":"A2","page":22,"mainCode":"V","subCode":"V_ACTION"},{"stt":580,"hanzi":"夠","pinyin":"gòu","typeCode":"VS","meaning":"đủ","level":"A2","page":22,"mainCode":"V","subCode":"V_STATE"},{"stt":581,"hanzi":"掛","pinyin":"guà","typeCode":"VA","meaning":"treo","level":"A2","page":22,"mainCode":"V","subCode":"V_ACTION"},{"stt":582,"hanzi":"乖","pinyin":"guāi","typeCode":"VS","meaning":"ngoan","level":"A2","page":22,"mainCode":"V","subCode":"V_STATE"},{"stt":583,"hanzi":"關上","pinyin":"guānshàng","typeCode":"VA","meaning":"đóng lại","level":"A2","page":22,"mainCode":"V","subCode":"V_CHANGE"},{"stt":584,"hanzi":"果汁","pinyin":"guǒzhī","typeCode":"N","meaning":"nước trái cây","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":585,"hanzi":"過來","pinyin":"guòlái","typeCode":"VA","meaning":"qua đây","level":"A2","page":22,"mainCode":"V","subCode":"V_DIR"},{"stt":586,"hanzi":"過年","pinyin":"guònián","typeCode":"VA","meaning":"ăn tết","level":"A2","page":22,"mainCode":"V","subCode":"V_ACTION"},{"stt":587,"hanzi":"過去","pinyin":"guòqù","typeCode":"N","meaning":"quá khứ","level":"A2","page":22,"mainCode":"N","subCode":"N_TIME"},{"stt":588,"hanzi":"過去","pinyin":"guòqù","typeCode":"VA","meaning":"đi qua (bên kia)","level":"A2","page":22,"mainCode":"V","subCode":"V_DIR"},{"stt":589,"hanzi":"故事","pinyin":"gùshì","typeCode":"N","meaning":"câu chuyện","level":"A2","page":22,"mainCode":"N","subCode":"N_EVENT"},{"stt":590,"hanzi":"還","pinyin":"hái","typeCode":"Adv","meaning":"vẫn, còn","level":"A2","page":22,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":591,"hanzi":"海","pinyin":"hǎi","typeCode":"N","meaning":"biển","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":592,"hanzi":"害怕","pinyin":"hàipà","typeCode":"VS","meaning":"e sợ","level":"A2","page":22,"mainCode":"V","subCode":"V_PSYCH"},{"stt":593,"hanzi":"漢堡","pinyin":"hànbǎo","typeCode":"N","meaning":"hamburger","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":594,"hanzi":"韓國","pinyin":"hánguó","typeCode":"N","meaning":"Hàn Quốc","level":"A2","page":22,"mainCode":"N","subCode":"N_PROPER"},{"stt":595,"hanzi":"漢語","pinyin":"hànyǔ","typeCode":"N","meaning":"tiếng Hán","level":"A2","page":22,"mainCode":"N","subCode":"N_PROPER"},{"stt":596,"hanzi":"漢字","pinyin":"hànzì","typeCode":"N","meaning":"chữ Hán","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":597,"hanzi":"好看","pinyin":"hǎokàn","typeCode":"VS","meaning":"xinh đẹp","level":"A2","page":22,"mainCode":"V","subCode":"V_STATE"},{"stt":598,"hanzi":"河","pinyin":"hé","typeCode":"N","meaning":"sông","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":599,"hanzi":"盒子","pinyin":"hézi","typeCode":"N","meaning":"cái hộp","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":600,"hanzi":"黑","pinyin":"hēi","typeCode":"VS","meaning":"đen","level":"A2","page":22,"mainCode":"V","subCode":"V_STATE"},{"stt":601,"hanzi":"黑色","pinyin":"hēisè","typeCode":"N","meaning":"màu đen","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":602,"hanzi":"紅","pinyin":"hóng","typeCode":"VS","meaning":"đỏ","level":"A2","page":22,"mainCode":"V","subCode":"V_STATE"},{"stt":603,"hanzi":"紅包","pinyin":"hóngbāo","typeCode":"N","meaning":"bao lì xì","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":604,"hanzi":"紅茶","pinyin":"hóngchá","typeCode":"N","meaning":"hồng trà","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":605,"hanzi":"紅綠燈","pinyin":"hónglǜdēng","typeCode":"N","meaning":"đèn xanh đỏ","level":"A2","page":22,"mainCode":"N","subCode":"N_OBJECT"},{"stt":606,"hanzi":"後來","pinyin":"hòulái","typeCode":"N","meaning":"về sau","level":"A2","page":23,"mainCode":"N","subCode":"N_TIME"},{"stt":607,"hanzi":"護士","pinyin":"hùshì","typeCode":"N","meaning":"y tá","level":"A2","page":23,"mainCode":"N","subCode":"N_PERSON"},{"stt":608,"hanzi":"畫家","pinyin":"huàjiā","typeCode":"N","meaning":"họa sỹ","level":"A2","page":23,"mainCode":"N","subCode":"N_PERSON"},{"stt":609,"hanzi":"黃","pinyin":"huáng","typeCode":"VS","meaning":"vàng","level":"A2","page":23,"mainCode":"V","subCode":"V_STATE"},{"stt":610,"hanzi":"花園","pinyin":"huāyuán","typeCode":"N","meaning":"vườn hoa","level":"A2","page":23,"mainCode":"N","subCode":"N_PLACE"},{"stt":611,"hanzi":"滑雪","pinyin":"huáxuě","typeCode":"VA","meaning":"trượt tuyết","level":"A2","page":23,"mainCode":"V","subCode":"V_MOVE"},{"stt":612,"hanzi":"會","pinyin":"huì","typeCode":"Adv","meaning":"sẽ","level":"A2","page":23,"mainCode":"V","subCode":"V_MODAL"},{"stt":613,"hanzi":"回答","pinyin":"huídá","typeCode":"VA","meaning":"trả lời","level":"A2","page":23,"mainCode":"V","subCode":"V_SPEECH"},{"stt":614,"hanzi":"活","pinyin":"huó","typeCode":"VS","meaning":"sống","level":"A2","page":23,"mainCode":"V","subCode":"V_EXIST"},{"stt":615,"hanzi":"或","pinyin":"huò","typeCode":"Conj","meaning":"hoặc","level":"A2","page":23,"mainCode":"CONJ","subCode":"CONJ_CHOICE"},{"stt":616,"hanzi":"或是","pinyin":"huòshì","typeCode":"Conj","meaning":"hoặc là","level":"A2","page":23,"mainCode":"CONJ","subCode":"CONJ_CHOICE"},{"stt":617,"hanzi":"機會","pinyin":"jīhuì","typeCode":"N","meaning":"cơ hội","level":"A2","page":23,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":618,"hanzi":"記","pinyin":"jì","typeCode":"VA","meaning":"ghi chép, nhớ","level":"A2","page":23,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":619,"hanzi":"計程車","pinyin":"jìchéngchē","typeCode":"N","meaning":"taxi","level":"A2","page":23,"mainCode":"N","subCode":"N_OBJECT"},{"stt":620,"hanzi":"計畫","pinyin":"jìhuà","typeCode":"N","meaning":"kế hoạch","level":"A2","page":23,"mainCode":"N","subCode":"N_EVENT"},{"stt":621,"hanzi":"計畫","pinyin":"jìhuà","typeCode":"VA","meaning":"dự định, lặp kế hoạch","level":"A2","page":23,"mainCode":"V","subCode":"V_PSYCH"},{"stt":622,"hanzi":"家庭","pinyin":"jiātíng","typeCode":"N","meaning":"gia đình","level":"A2","page":23,"mainCode":"N","subCode":"N_ORG"},{"stt":623,"hanzi":"簡單","pinyin":"jiǎndān","typeCode":"VS","meaning":"đơn giản","level":"A2","page":23,"mainCode":"V","subCode":"V_STATE"},{"stt":624,"hanzi":"件","pinyin":"jiàn","typeCode":"M","meaning":"cái (áo, quần, việc, quà)","level":"A2","page":23,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":625,"hanzi":"講話","pinyin":"jiǎnghuà","typeCode":"VA","meaning":"nói chuyện","level":"A2","page":23,"mainCode":"V","subCode":"V_SPEECH"},{"stt":626,"hanzi":"教","pinyin":"jiāo","typeCode":"VA","meaning":"dạy","level":"A2","page":23,"mainCode":"V","subCode":"V_SPEECH"},{"stt":627,"hanzi":"交","pinyin":"jiāo","typeCode":"VA","meaning":"giao, nộp","level":"A2","page":23,"mainCode":"V","subCode":"V_ACTION"},{"stt":628,"hanzi":"餃子","pinyin":"jiǎozi","typeCode":"N","meaning":"há cảo","level":"A2","page":23,"mainCode":"N","subCode":"N_OBJECT"},{"stt":629,"hanzi":"結婚","pinyin":"jiéhūn","typeCode":"VA","meaning":"kết hôn","level":"A2","page":23,"mainCode":"V","subCode":"V_ACTION"},{"stt":630,"hanzi":"節目","pinyin":"jiémù","typeCode":"N","meaning":"tiết mục","level":"A2","page":23,"mainCode":"N","subCode":"N_EVENT"},{"stt":631,"hanzi":"解決","pinyin":"jiějué","typeCode":"VA","meaning":"giải quyết","level":"A2","page":23,"mainCode":"V","subCode":"V_ACTION"},{"stt":632,"hanzi":"借","pinyin":"jiè","typeCode":"VA","meaning":"mượn, cho mượn","level":"A2","page":23,"mainCode":"V","subCode":"V_ACTION"},{"stt":633,"hanzi":"斤","pinyin":"jīn","typeCode":"M","meaning":"cân (500gr)","level":"A2","page":23,"mainCode":"M","subCode":"M_MEASURE"},{"stt":634,"hanzi":"經過","pinyin":"jīngguò","typeCode":"VA","meaning":"trãi qua","level":"A2","page":24,"mainCode":"V","subCode":"V_ACTION"},{"stt":635,"hanzi":"員警","pinyin":"jǐngchá","typeCode":"N","meaning":"cảnh sát","level":"A2","page":24,"mainCode":"N","subCode":"N_PERSON"},{"stt":636,"hanzi":"緊張","pinyin":"jǐnzhāng","typeCode":"VS","meaning":"căng thẳng","level":"A2","page":24,"mainCode":"V","subCode":"V_PSYCH"},{"stt":637,"hanzi":"就要","pinyin":"jiùyào","typeCode":"Adv","meaning":"sắp sửa","level":"A2","page":24,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":638,"hanzi":"決定","pinyin":"juédìng","typeCode":"VA","meaning":"quyết định","level":"A2","page":24,"mainCode":"V","subCode":"V_PSYCH"},{"stt":639,"hanzi":"句子","pinyin":"jùzi","typeCode":"N","meaning":"câu","level":"A2","page":24,"mainCode":"N","subCode":"N_OBJECT"},{"stt":640,"hanzi":"開始","pinyin":"kāishǐ","typeCode":"VA","meaning":"bắt đầu","level":"A2","page":24,"mainCode":"V","subCode":"V_CHANGE"},{"stt":641,"hanzi":"開水","pinyin":"kāishuǐ","typeCode":"N","meaning":"nước chín","level":"A2","page":24,"mainCode":"N","subCode":"N_OBJECT"},{"stt":642,"hanzi":"開心","pinyin":"kāixīn","typeCode":"VS","meaning":"vui vẻ","level":"A2","page":24,"mainCode":"V","subCode":"V_PSYCH"},{"stt":643,"hanzi":"開學","pinyin":"kāixué","typeCode":"VS","meaning":"vào học","level":"A2","page":24,"mainCode":"V","subCode":"V_CHANGE"},{"stt":644,"hanzi":"看到","pinyin":"kàndào","typeCode":"VA","meaning":"nhìn được","level":"A2","page":24,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":645,"hanzi":"看見","pinyin":"kànjiàn","typeCode":"VA","meaning":"nhìn thấy","level":"A2","page":24,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":646,"hanzi":"烤","pinyin":"kǎo","typeCode":"VA","meaning":"nướng, quay","level":"A2","page":24,"mainCode":"V","subCode":"V_ACTION"},{"stt":647,"hanzi":"棵","pinyin":"kē","typeCode":"M","meaning":"cây (thông, táo, lê)","level":"A2","page":24,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":648,"hanzi":"科學","pinyin":"kēxué","typeCode":"N","meaning":"khoa học","level":"A2","page":24,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":649,"hanzi":"渴","pinyin":"kě","typeCode":"VS","meaning":"khát","level":"A2","page":24,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":650,"hanzi":"可愛","pinyin":"kěài","typeCode":"VS","meaning":"dễ thương","level":"A2","page":24,"mainCode":"V","subCode":"V_STATE"},{"stt":651,"hanzi":"課本","pinyin":"kèběn","typeCode":"N","meaning":"sách giáo khoa","level":"A2","page":24,"mainCode":"N","subCode":"N_OBJECT"},{"stt":652,"hanzi":"客氣","pinyin":"kèqì","typeCode":"VS","meaning":"khách sáo","level":"A2","page":24,"mainCode":"V","subCode":"V_STATE"},{"stt":653,"hanzi":"客人","pinyin":"kèrén","typeCode":"N","meaning":"khách","level":"A2","page":24,"mainCode":"N","subCode":"N_PERSON"},{"stt":654,"hanzi":"課文","pinyin":"kèwén","typeCode":"N","meaning":"bài học","level":"A2","page":24,"mainCode":"N","subCode":"N_OBJECT"},{"stt":655,"hanzi":"空氣","pinyin":"kōngqì","typeCode":"N","meaning":"không khí","level":"A2","page":24,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":656,"hanzi":"口","pinyin":"kǒu","typeCode":"M","meaning":"miệng, ngụm","level":"A2","page":24,"mainCode":"M","subCode":"M_BORROW"},{"stt":657,"hanzi":"哭","pinyin":"kū","typeCode":"VA","meaning":"khóc","level":"A2","page":24,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":658,"hanzi":"苦","pinyin":"kǔ","typeCode":"VS","meaning":"khổ","level":"A2","page":24,"mainCode":"V","subCode":"V_STATE"},{"stt":659,"hanzi":"塊","pinyin":"kuài","typeCode":"M","meaning":"đồng, miếng, cục","level":"A2","page":24,"mainCode":"M","subCode":"M_BORROW"},{"stt":660,"hanzi":"筷子","pinyin":"kuàizi","typeCode":"N","meaning":"đũa","level":"A2","page":24,"mainCode":"N","subCode":"N_OBJECT"},{"stt":661,"hanzi":"拉","pinyin":"lā","typeCode":"VA","meaning":"kéo","level":"A2","page":25,"mainCode":"V","subCode":"V_ACTION"},{"stt":662,"hanzi":"藍","pinyin":"lán","typeCode":"VS","meaning":"xanh lam","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":663,"hanzi":"藍色","pinyin":"lánsè","typeCode":"N","meaning":"màu xanh lam","level":"A2","page":25,"mainCode":"N","subCode":"N_OBJECT"},{"stt":664,"hanzi":"老","pinyin":"lǎo","typeCode":"VS","meaning":"già, cũ","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":665,"hanzi":"老人","pinyin":"lǎorén","typeCode":"N","meaning":"người già","level":"A2","page":25,"mainCode":"N","subCode":"N_PERSON"},{"stt":666,"hanzi":"裡","pinyin":"lǐ","typeCode":"N","meaning":"trong, bên trong","level":"A2","page":25,"mainCode":"N","subCode":"N_POSITION"},{"stt":667,"hanzi":"裡邊","pinyin":"lǐbiān","typeCode":"N","meaning":"bên trong","level":"A2","page":25,"mainCode":"N","subCode":"N_POSITION"},{"stt":668,"hanzi":"禮物","pinyin":"lǐwù","typeCode":"N","meaning":"quà","level":"A2","page":25,"mainCode":"N","subCode":"N_OBJECT"},{"stt":669,"hanzi":"臉","pinyin":"liǎn","typeCode":"N","meaning":"mặt","level":"A2","page":25,"mainCode":"N","subCode":"N_OBJECT"},{"stt":670,"hanzi":"練習","pinyin":"liànxí","typeCode":"VA","meaning":"luyện tập","level":"A2","page":25,"mainCode":"V","subCode":"V_ACTION"},{"stt":671,"hanzi":"涼","pinyin":"liáng","typeCode":"VS","meaning":"lạnh, nguội","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":672,"hanzi":"涼快","pinyin":"liángkuài","typeCode":"VS","meaning":"mát mẻ","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":673,"hanzi":"亮","pinyin":"liàng","typeCode":"VS","meaning":"sáng","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":674,"hanzi":"輛","pinyin":"liàng","typeCode":"M","meaning":"chiếc (xe)","level":"A2","page":25,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":675,"hanzi":"聊天","pinyin":"liáotiān","typeCode":"VA","meaning":"trò chuyện","level":"A2","page":25,"mainCode":"V","subCode":"V_SPEECH"},{"stt":676,"hanzi":"零","pinyin":"líng","typeCode":"Det","meaning":"0, lẻ","level":"A2","page":25,"mainCode":"DET","subCode":"DET_CARD"},{"stt":677,"hanzi":"留","pinyin":"liú","typeCode":"VA","meaning":"lưu, để lại, ở lại","level":"A2","page":25,"mainCode":"V","subCode":"V_ACTION"},{"stt":678,"hanzi":"樓","pinyin":"lóu","typeCode":"N","meaning":"lầu, tầng lầu","level":"A2","page":25,"mainCode":"N","subCode":"N_PLACE"},{"stt":679,"hanzi":"旅遊","pinyin":"lǚyóu","typeCode":"VA","meaning":"du lịch","level":"A2","page":25,"mainCode":"V","subCode":"V_MOVE"},{"stt":680,"hanzi":"綠","pinyin":"lǜ","typeCode":"VS","meaning":"xanh lục","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":681,"hanzi":"亂","pinyin":"luàn","typeCode":"VS","meaning":"loạn, bậy","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":682,"hanzi":"路上","pinyin":"lùshàng","typeCode":"N","meaning":"trên đường","level":"A2","page":25,"mainCode":"N","subCode":"N_PLACE"},{"stt":683,"hanzi":"麻煩","pinyin":"máfán","typeCode":"N","meaning":"phiền phức","level":"A2","page":25,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":684,"hanzi":"麻煩","pinyin":"máfán","typeCode":"VS","meaning":"làm phiền","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":685,"hanzi":"馬","pinyin":"mǎ","typeCode":"N","meaning":"ngựa","level":"A2","page":25,"mainCode":"N","subCode":"N_OBJECT"},{"stt":686,"hanzi":"馬上","pinyin":"mǎshàng","typeCode":"Adv","meaning":"lập tức","level":"A2","page":25,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":687,"hanzi":"慢","pinyin":"màn","typeCode":"VS","meaning":"chậm","level":"A2","page":25,"mainCode":"V","subCode":"V_STATE"},{"stt":688,"hanzi":"毛衣","pinyin":"máoyī","typeCode":"N","meaning":"áo len","level":"A2","page":25,"mainCode":"N","subCode":"N_OBJECT"},{"stt":689,"hanzi":"帽子","pinyin":"màozi","typeCode":"N","meaning":"nón","level":"A2","page":26,"mainCode":"N","subCode":"N_OBJECT"},{"stt":690,"hanzi":"美","pinyin":"měi","typeCode":"VS","meaning":"đẹp","level":"A2","page":26,"mainCode":"V","subCode":"V_STATE"},{"stt":691,"hanzi":"美麗","pinyin":"měilì","typeCode":"VS","meaning":"xinh đẹp","level":"A2","page":26,"mainCode":"V","subCode":"V_STATE"},{"stt":692,"hanzi":"摩托車","pinyin":"mótuōchē","typeCode":"N","meaning":"xe máy","level":"A2","page":26,"mainCode":"N","subCode":"N_OBJECT"},{"stt":693,"hanzi":"機車","pinyin":"jīchē","typeCode":"N","meaning":"xe máy","level":"A2","page":26,"mainCode":"N","subCode":"N_OBJECT"},{"stt":694,"hanzi":"木頭","pinyin":"mùtóu","typeCode":"N","meaning":"gỗ","level":"A2","page":26,"mainCode":"N","subCode":"N_OBJECT"},{"stt":695,"hanzi":"哪","pinyin":"nǎ","typeCode":"Det","meaning":"nào","level":"A2","page":26,"mainCode":"DET","subCode":"DET_INTERROG"},{"stt":696,"hanzi":"那邊","pinyin":"nàbiān","typeCode":"N","meaning":"bên đó","level":"A2","page":26,"mainCode":"N","subCode":"N_POSITION"},{"stt":697,"hanzi":"那麼","pinyin":"nàme","typeCode":"Adv","meaning":"vậy, như vậy","level":"A2","page":26,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":698,"hanzi":"那樣","pinyin":"nà yàng","typeCode":"Adv","meaning":"vậy, như vậy","level":"A2","page":26,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":699,"hanzi":"奶奶","pinyin":"nǎinai","typeCode":"N","meaning":"bà nội","level":"A2","page":26,"mainCode":"N","subCode":"N_PERSON"},{"stt":700,"hanzi":"難過","pinyin":"nánguò","typeCode":"VA","meaning":"buồn","level":"A2","page":26,"mainCode":"V","subCode":"V_PSYCH"},{"stt":701,"hanzi":"年紀","pinyin":"niánjì","typeCode":"N","meaning":"tuổi tác","level":"A2","page":26,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":702,"hanzi":"年輕","pinyin":"niánqīng","typeCode":"VS","meaning":"trẻ tuổi","level":"A2","page":26,"mainCode":"V","subCode":"V_STATE"},{"stt":703,"hanzi":"念","pinyin":"niàn","typeCode":"VA","meaning":"đọc, học","level":"A2","page":26,"mainCode":"V","subCode":"V_ACTION"},{"stt":704,"hanzi":"小鳥","pinyin":"xiǎo niǎo","typeCode":"N","meaning":"chim con","level":"A2","page":26,"mainCode":"N","subCode":"N_OBJECT"},{"stt":705,"hanzi":"努力","pinyin":"nǔlì","typeCode":"VS","meaning":"nỗ lực, cố gắng","level":"A2","page":26,"mainCode":"V","subCode":"V_STATE"},{"stt":706,"hanzi":"暖和","pinyin":"nuǎnhuo","typeCode":"VS","meaning":"ấm áp","level":"A2","page":26,"mainCode":"V","subCode":"V_STATE"},{"stt":707,"hanzi":"爬","pinyin":"pá","typeCode":"VA","meaning":"leo, trèo","level":"A2","page":26,"mainCode":"V","subCode":"V_MOVE"},{"stt":708,"hanzi":"爬山","pinyin":"páshān","typeCode":"VA","meaning":"leo núi","level":"A2","page":26,"mainCode":"V","subCode":"V_MOVE"},{"stt":709,"hanzi":"怕","pinyin":"pà","typeCode":"VS","meaning":"sợ","level":"A2","page":26,"mainCode":"V","subCode":"V_PSYCH"},{"stt":710,"hanzi":"拍","pinyin":"pāi","typeCode":"VA","meaning":"chụp hình, vỗ","level":"A2","page":26,"mainCode":"V","subCode":"V_ACTION"},{"stt":711,"hanzi":"盤","pinyin":"pán","typeCode":"M","meaning":"dĩa, đĩa, mâm","level":"A2","page":26,"mainCode":"M","subCode":"M_BORROW"},{"stt":712,"hanzi":"盤子","pinyin":"pánzi","typeCode":"N","meaning":"cái dĩa","level":"A2","page":26,"mainCode":"N","subCode":"N_OBJECT"},{"stt":713,"hanzi":"旁邊","pinyin":"pángbiān","typeCode":"N","meaning":"bên cạnh","level":"A2","page":26,"mainCode":"N","subCode":"N_POSITION"},{"stt":714,"hanzi":"胖","pinyin":"pàng","typeCode":"VS","meaning":"mập","level":"A2","page":26,"mainCode":"V","subCode":"V_STATE"},{"stt":715,"hanzi":"跑","pinyin":"pǎo","typeCode":"VA","meaning":"chạy","level":"A2","page":26,"mainCode":"V","subCode":"V_MOVE"},{"stt":716,"hanzi":"片","pinyin":"piàn","typeCode":"M","meaning":"miếng, lát, mảnh","level":"A2","page":27,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":717,"hanzi":"蘋果","pinyin":"píngguǒ","typeCode":"N","meaning":"táo","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":718,"hanzi":"瓶子","pinyin":"píngzi","typeCode":"N","meaning":"cái chai, cái bình","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":719,"hanzi":"破","pinyin":"pò","typeCode":"VS","meaning":"bể, vỡ","level":"A2","page":27,"mainCode":"V","subCode":"V_CHANGE"},{"stt":720,"hanzi":"奇怪","pinyin":"qíguài","typeCode":"VS","meaning":"kì cục","level":"A2","page":27,"mainCode":"V","subCode":"V_STATE"},{"stt":721,"hanzi":"汽水","pinyin":"qìshuǐ","typeCode":"N","meaning":"nước có ga","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":722,"hanzi":"起","pinyin":"qǐ","typeCode":"VA","meaning":"dậy, lên","level":"A2","page":27,"mainCode":"V","subCode":"V_ACTION"},{"stt":723,"hanzi":"起來","pinyin":"qǐlái","typeCode":"VA","meaning":"dậy, mọc","level":"A2","page":27,"mainCode":"V","subCode":"V_DIR"},{"stt":724,"hanzi":"汽車","pinyin":"qìchē","typeCode":"N","meaning":"xe hơi","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":725,"hanzi":"鉛筆","pinyin":"qiānbǐ","typeCode":"N","meaning":"bút chì, viết chì","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":726,"hanzi":"前天","pinyin":"qiántiān","typeCode":"N","meaning":"hôm kia","level":"A2","page":27,"mainCode":"N","subCode":"N_TIME"},{"stt":727,"hanzi":"牆","pinyin":"qiáng","typeCode":"N","meaning":"tường","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":728,"hanzi":"橋","pinyin":"qiáo","typeCode":"N","meaning":"cầu","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":729,"hanzi":"巧克力","pinyin":"qiǎokèlì","typeCode":"N","meaning":"sô cô la","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":730,"hanzi":"親","pinyin":"qīn","typeCode":"VA","meaning":"thân, ruột thịt","level":"A2","page":27,"mainCode":"V","subCode":"V_STATE"},{"stt":731,"hanzi":"輕","pinyin":"qīng","typeCode":"VS","meaning":"nhẹ","level":"A2","page":27,"mainCode":"V","subCode":"V_STATE"},{"stt":732,"hanzi":"清楚","pinyin":"qīngchǔ","typeCode":"VS","meaning":"rõ ràng","level":"A2","page":27,"mainCode":"V","subCode":"V_STATE"},{"stt":733,"hanzi":"晴天","pinyin":"qíngtiān","typeCode":"N","meaning":"trời nắng","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":734,"hanzi":"請客","pinyin":"qǐngkè","typeCode":"VA","meaning":"mời khách, khao, bao","level":"A2","page":27,"mainCode":"V","subCode":"V_ACTION"},{"stt":735,"hanzi":"慶祝","pinyin":"qìngzhù","typeCode":"VA","meaning":"chúc mừng, ăn mừng","level":"A2","page":27,"mainCode":"V","subCode":"V_ACTION"},{"stt":736,"hanzi":"全部","pinyin":"quánbù","typeCode":"Det","meaning":"toàn bộ","level":"A2","page":27,"mainCode":"DET","subCode":"DET_TOTAL"},{"stt":737,"hanzi":"裙子","pinyin":"qúnzi","typeCode":"N","meaning":"cái váy, đầm","level":"A2","page":27,"mainCode":"N","subCode":"N_OBJECT"},{"stt":738,"hanzi":"然後","pinyin":"ránhòu","typeCode":"Adv","meaning":"sau đó","level":"A2","page":27,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":739,"hanzi":"讓","pinyin":"ràng","typeCode":"Prep","meaning":"để, nhường, kêu, bảo","level":"A2","page":27,"mainCode":"PREP","subCode":"PREP_CAUSATIVE"},{"stt":740,"hanzi":"認為","pinyin":"rènwéi","typeCode":"VA","meaning":"cho rằng","level":"A2","page":27,"mainCode":"V","subCode":"V_PSYCH"},{"stt":741,"hanzi":"認真","pinyin":"rènzhēn","typeCode":"VS","meaning":"nghiêm túc","level":"A2","page":27,"mainCode":"V","subCode":"V_STATE"},{"stt":742,"hanzi":"日","pinyin":"rì","typeCode":"N","meaning":"ngày","level":"A2","page":27,"mainCode":"N","subCode":"N_TIME"},{"stt":743,"hanzi":"日子","pinyin":"rìzi","typeCode":"N","meaning":"ngày (lễ)","level":"A2","page":28,"mainCode":"N","subCode":"N_TIME"},{"stt":744,"hanzi":"如果","pinyin":"rúguǒ","typeCode":"Conj","meaning":"nếu","level":"A2","page":28,"mainCode":"CONJ","subCode":"CONJ_CONDITION"},{"stt":745,"hanzi":"森林","pinyin":"sēnlín","typeCode":"N","meaning":"rừng rậm","level":"A2","page":28,"mainCode":"N","subCode":"N_OBJECT"},{"stt":746,"hanzi":"沙發","pinyin":"shāfā","typeCode":"N","meaning":"ghế salon","level":"A2","page":28,"mainCode":"N","subCode":"N_OBJECT"},{"stt":747,"hanzi":"上來","pinyin":"shànglái","typeCode":"VA","meaning":"lên đây","level":"A2","page":28,"mainCode":"V","subCode":"V_DIR"},{"stt":748,"hanzi":"上去","pinyin":"shàngqù","typeCode":"VA","meaning":"đi lên đó","level":"A2","page":28,"mainCode":"V","subCode":"V_DIR"},{"stt":749,"hanzi":"上學","pinyin":"shàngxué","typeCode":"VA","meaning":"đi học ở trường","level":"A2","page":28,"mainCode":"V","subCode":"V_ACTION"},{"stt":750,"hanzi":"生活","pinyin":"shēnghuó","typeCode":"N","meaning":"cuộc sống","level":"A2","page":28,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":751,"hanzi":"生活","pinyin":"shēnghuó","typeCode":"VA","meaning":"sinh sống","level":"A2","page":28,"mainCode":"V","subCode":"V_EXIST"},{"stt":752,"hanzi":"生氣","pinyin":"shēngqì","typeCode":"VS","meaning":"giận","level":"A2","page":28,"mainCode":"V","subCode":"V_PSYCH"},{"stt":753,"hanzi":"聲音","pinyin":"shēngyīn","typeCode":"N","meaning":"âm thanh","level":"A2","page":28,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":754,"hanzi":"事","pinyin":"shì","typeCode":"N","meaning":"việc","level":"A2","page":28,"mainCode":"N","subCode":"N_EVENT"},{"stt":755,"hanzi":"試","pinyin":"shì","typeCode":"VA","meaning":"thử","level":"A2","page":28,"mainCode":"V","subCode":"V_ACTION"},{"stt":756,"hanzi":"市場","pinyin":"shìchǎng","typeCode":"N","meaning":"chợ","level":"A2","page":28,"mainCode":"N","subCode":"N_PLACE"},{"stt":757,"hanzi":"世界","pinyin":"shìjiè","typeCode":"N","meaning":"thế giới","level":"A2","page":28,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":758,"hanzi":"事情","pinyin":"shìqíng","typeCode":"N","meaning":"sự việc","level":"A2","page":28,"mainCode":"N","subCode":"N_EVENT"},{"stt":759,"hanzi":"石頭","pinyin":"shítóu","typeCode":"N","meaning":"đá","level":"A2","page":28,"mainCode":"N","subCode":"N_OBJECT"},{"stt":760,"hanzi":"食物","pinyin":"shíwù","typeCode":"N","meaning":"thức ăn","level":"A2","page":28,"mainCode":"N","subCode":"N_OBJECT"},{"stt":761,"hanzi":"手套","pinyin":"shǒutào","typeCode":"N","meaning":"găng tay","level":"A2","page":28,"mainCode":"N","subCode":"N_OBJECT"},{"stt":762,"hanzi":"瘦","pinyin":"shòu","typeCode":"VS","meaning":"ốm","level":"A2","page":28,"mainCode":"V","subCode":"V_STATE"},{"stt":763,"hanzi":"書桌","pinyin":"shūzhuō","typeCode":"N","meaning":"bàn đọc sách","level":"A2","page":28,"mainCode":"N","subCode":"N_OBJECT"},{"stt":764,"hanzi":"數","pinyin":"shǔ","typeCode":"VA","meaning":"đếm","level":"A2","page":28,"mainCode":"V","subCode":"V_ACTION"},{"stt":765,"hanzi":"刷牙","pinyin":"shuāyá","typeCode":"VA","meaning":"đánh răng","level":"A2","page":28,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":766,"hanzi":"睡","pinyin":"shuì","typeCode":"VA","meaning":"ngủ","level":"A2","page":28,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":767,"hanzi":"酸","pinyin":"suān","typeCode":"VS","meaning":"chua","level":"A2","page":28,"mainCode":"V","subCode":"V_STATE"},{"stt":768,"hanzi":"雖然","pinyin":"suīrán","typeCode":"Conj","meaning":"tuy","level":"A2","page":28,"mainCode":"CONJ","subCode":"CONJ_CONCESS"},{"stt":769,"hanzi":"隨便","pinyin":"suíbiàn","typeCode":"VS","meaning":"tùy, tùy tiện","level":"A2","page":28,"mainCode":"V","subCode":"V_STATE"},{"stt":770,"hanzi":"所有","pinyin":"suǒyǒu","typeCode":"Det","meaning":"tất cả","level":"A2","page":28,"mainCode":"DET","subCode":"DET_TOTAL"},{"stt":771,"hanzi":"談","pinyin":"tán","typeCode":"VA","meaning":"trò chuyện","level":"A2","page":29,"mainCode":"V","subCode":"V_SPEECH"},{"stt":772,"hanzi":"湯","pinyin":"tāng","typeCode":"N","meaning":"canh","level":"A2","page":29,"mainCode":"N","subCode":"N_OBJECT"},{"stt":773,"hanzi":"湯匙","pinyin":"tāngchí","typeCode":"N","meaning":"muỗng canh","level":"A2","page":29,"mainCode":"N","subCode":"N_OBJECT"},{"stt":774,"hanzi":"討厭","pinyin":"tǎoyàn","typeCode":"VS","meaning":"ghét, thấy ghét","level":"A2","page":29,"mainCode":"V","subCode":"V_PSYCH"},{"stt":775,"hanzi":"套","pinyin":"tào","typeCode":"M","meaning":"bộ (tem, quần áo)","level":"A2","page":29,"mainCode":"M","subCode":"M_COLLECTION"},{"stt":776,"hanzi":"疼","pinyin":"téng","typeCode":"VS","meaning":"đau, nhức","level":"A2","page":29,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":777,"hanzi":"天天","pinyin":"tiāntiān","typeCode":"Adv","meaning":"ngày ngày","level":"A2","page":29,"mainCode":"ADV","subCode":"ADV_FREQ"},{"stt":778,"hanzi":"甜","pinyin":"tián","typeCode":"VS","meaning":"ngọt","level":"A2","page":29,"mainCode":"V","subCode":"V_STATE"},{"stt":779,"hanzi":"條","pinyin":"tiáo","typeCode":"M","meaning":"con (cá, rắn), cái (quần, váy)","level":"A2","page":29,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":780,"hanzi":"跳","pinyin":"tiào","typeCode":"VA","meaning":"nhảy","level":"A2","page":29,"mainCode":"V","subCode":"V_ACTION"},{"stt":781,"hanzi":"聽見","pinyin":"tīngjiàn","typeCode":"VA","meaning":"nghe thấy","level":"A2","page":29,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":782,"hanzi":"聽說","pinyin":"tīngshuō","typeCode":"VA","meaning":"nghe nói","level":"A2","page":29,"mainCode":"V","subCode":"V_SPEECH"},{"stt":783,"hanzi":"停","pinyin":"tíng","typeCode":"VS","meaning":"dừng","level":"A2","page":29,"mainCode":"V","subCode":"V_CHANGE"},{"stt":784,"hanzi":"停車","pinyin":"tíngchē","typeCode":"VA","meaning":"dừng xe","level":"A2","page":29,"mainCode":"V","subCode":"V_ACTION"},{"stt":785,"hanzi":"通知","pinyin":"tōngzhī","typeCode":"N","meaning":"thông báo","level":"A2","page":29,"mainCode":"N","subCode":"N_EVENT"},{"stt":786,"hanzi":"通知","pinyin":"tōngzhī","typeCode":"VA","meaning":"thông báo","level":"A2","page":29,"mainCode":"V","subCode":"V_SPEECH"},{"stt":787,"hanzi":"偷","pinyin":"tōu","typeCode":"VA","meaning":"trộm","level":"A2","page":29,"mainCode":"V","subCode":"V_ACTION"},{"stt":788,"hanzi":"頭髮","pinyin":"tóufǎ","typeCode":"N","meaning":"tóc","level":"A2","page":29,"mainCode":"N","subCode":"N_OBJECT"},{"stt":789,"hanzi":"推","pinyin":"tuī","typeCode":"VA","meaning":"đẩy","level":"A2","page":29,"mainCode":"V","subCode":"V_ACTION"},{"stt":790,"hanzi":"腿","pinyin":"tuǐ","typeCode":"N","meaning":"chân, đùi","level":"A2","page":29,"mainCode":"N","subCode":"N_OBJECT"},{"stt":791,"hanzi":"外套","pinyin":"wàitào","typeCode":"N","meaning":"áo khoác","level":"A2","page":29,"mainCode":"N","subCode":"N_OBJECT"},{"stt":792,"hanzi":"危險","pinyin":"wéixiǎn","typeCode":"VS","meaning":"nguy hiểm","level":"A2","page":29,"mainCode":"V","subCode":"V_STATE"},{"stt":793,"hanzi":"味道","pinyin":"wèidào","typeCode":"N","meaning":"mùi vị","level":"A2","page":29,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":794,"hanzi":"無聊","pinyin":"wúliáo","typeCode":"VS","meaning":"chán, buồn chán","level":"A2","page":29,"mainCode":"V","subCode":"V_STATE"},{"stt":795,"hanzi":"西瓜","pinyin":"xīguā","typeCode":"N","meaning":"dưa hấu","level":"A2","page":29,"mainCode":"N","subCode":"N_OBJECT"},{"stt":796,"hanzi":"希望","pinyin":"xīwàng","typeCode":"VS","meaning":"hi vọng","level":"A2","page":29,"mainCode":"V","subCode":"V_PSYCH"},{"stt":797,"hanzi":"習慣","pinyin":"xíguàn","typeCode":"N","meaning":"thói quen, quen","level":"A2","page":30,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":798,"hanzi":"需要","pinyin":"xūyào","typeCode":"VS","meaning":"cần thiết","level":"A2","page":30,"mainCode":"V","subCode":"V_PSYCH"},{"stt":799,"hanzi":"許多","pinyin":"xǔduō","typeCode":"Det","meaning":"rất nhiều","level":"A2","page":30,"mainCode":"DET","subCode":"DET_INDEF"},{"stt":800,"hanzi":"下來","pinyin":"xiàlái","typeCode":"VA","meaning":"xuống đây","level":"A2","page":30,"mainCode":"V","subCode":"V_DIR"},{"stt":801,"hanzi":"下去","pinyin":"xiàqù","typeCode":"VA","meaning":"đi xuống","level":"A2","page":30,"mainCode":"V","subCode":"V_DIR"},{"stt":802,"hanzi":"下雪","pinyin":"xiàxuě","typeCode":"VA","meaning":"trời tuyết","level":"A2","page":30,"mainCode":"V","subCode":"V_CHANGE"},{"stt":803,"hanzi":"香","pinyin":"xiāng","typeCode":"VS","meaning":"thơm","level":"A2","page":30,"mainCode":"V","subCode":"V_STATE"},{"stt":804,"hanzi":"鄉下","pinyin":"xiāngxià","typeCode":"N","meaning":"dưới quê","level":"A2","page":30,"mainCode":"N","subCode":"N_PLACE"},{"stt":805,"hanzi":"相信","pinyin":"xiāngxìn","typeCode":"VS","meaning":"tin tưởng","level":"A2","page":30,"mainCode":"V","subCode":"V_PSYCH"},{"stt":806,"hanzi":"箱子","pinyin":"xiāngzi","typeCode":"N","meaning":"vali","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":807,"hanzi":"向","pinyin":"xiàng","typeCode":"Prep","meaning":"hướng về","level":"A2","page":30,"mainCode":"PREP","subCode":"PREP_DIRECTION"},{"stt":808,"hanzi":"消息","pinyin":"xiāoxí","typeCode":"N","meaning":"tin tức","level":"A2","page":30,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":809,"hanzi":"小說","pinyin":"xiǎoshuō","typeCode":"N","meaning":"tiểu thuyết","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":810,"hanzi":"小偷","pinyin":"xiǎotōu","typeCode":"N","meaning":"kẻ trộm","level":"A2","page":30,"mainCode":"N","subCode":"N_PERSON"},{"stt":811,"hanzi":"小學","pinyin":"xiǎoxué","typeCode":"N","meaning":"tiểu học","level":"A2","page":30,"mainCode":"N","subCode":"N_PLACE"},{"stt":812,"hanzi":"笑","pinyin":"xiào","typeCode":"VA","meaning":"cười","level":"A2","page":30,"mainCode":"V","subCode":"V_PHYSIO"},{"stt":813,"hanzi":"笑話","pinyin":"xiàohuà","typeCode":"N","meaning":"chuyện cười","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":814,"hanzi":"校長","pinyin":"xiàozhǎng","typeCode":"N","meaning":"hiệu trưởng","level":"A2","page":30,"mainCode":"N","subCode":"N_PERSON"},{"stt":815,"hanzi":"心","pinyin":"xīn","typeCode":"N","meaning":"tim","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":816,"hanzi":"辛苦","pinyin":"xīnkǔ","typeCode":"VS","meaning":"cực khổ","level":"A2","page":30,"mainCode":"V","subCode":"V_STATE"},{"stt":817,"hanzi":"新聞","pinyin":"xīnwén","typeCode":"N","meaning":"tin tức, thời sự","level":"A2","page":30,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":818,"hanzi":"星星","pinyin":"xīngxīng","typeCode":"N","meaning":"ngôi sao","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":819,"hanzi":"興趣","pinyin":"xìngqù","typeCode":"N","meaning":"sở thích, hứng thú","level":"A2","page":30,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":820,"hanzi":"學習","pinyin":"xuéxí","typeCode":"VA","meaning":"học tập","level":"A2","page":30,"mainCode":"V","subCode":"V_ACTION"},{"stt":821,"hanzi":"雪","pinyin":"xuě","typeCode":"N","meaning":"tuyết","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":822,"hanzi":"牙刷","pinyin":"yáshuā","typeCode":"N","meaning":"bàn chải đánh răng","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":823,"hanzi":"顏色","pinyin":"yánsè","typeCode":"N","meaning":"màu sắc","level":"A2","page":30,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":824,"hanzi":"眼鏡","pinyin":"yǎnjìng","typeCode":"N","meaning":"mắt kính","level":"A2","page":30,"mainCode":"N","subCode":"N_OBJECT"},{"stt":825,"hanzi":"鑰匙","pinyin":"yàoshí","typeCode":"N","meaning":"chìa khóa","level":"A2","page":31,"mainCode":"N","subCode":"N_OBJECT"},{"stt":826,"hanzi":"要是","pinyin":"yàoshì","typeCode":"Conj","meaning":"nếu như","level":"A2","page":31,"mainCode":"CONJ","subCode":"CONJ_CONDITION"},{"stt":827,"hanzi":"羊","pinyin":"yáng","typeCode":"N","meaning":"con dê","level":"A2","page":31,"mainCode":"N","subCode":"N_OBJECT"},{"stt":828,"hanzi":"樣子","pinyin":"yàngzi","typeCode":"N","meaning":"kiểu dáng, dáng vẻ","level":"A2","page":31,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":829,"hanzi":"也許","pinyin":"yěxǔ","typeCode":"Adv","meaning":"có lẽ","level":"A2","page":31,"mainCode":"ADV","subCode":"ADV_MODAL"},{"stt":830,"hanzi":"爺爺","pinyin":"yéye","typeCode":"N","meaning":"ông nội","level":"A2","page":31,"mainCode":"N","subCode":"N_PERSON"},{"stt":831,"hanzi":"一半","pinyin":"yíbàn","typeCode":"Det","meaning":"một nửa","level":"A2","page":31,"mainCode":"DET","subCode":"DET_QUANT"},{"stt":832,"hanzi":"一邊","pinyin":"yìbiān","typeCode":"Adv","meaning":"vừa…vừa…","level":"A2","page":31,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":833,"hanzi":"一會兒","pinyin":"yíhuìér","typeCode":"N","meaning":"một hồi, tý nữa","level":"A2","page":31,"mainCode":"N","subCode":"N_TIME"},{"stt":834,"hanzi":"飲料","pinyin":"yǐnliào","typeCode":"N","meaning":"thức uống","level":"A2","page":31,"mainCode":"N","subCode":"N_OBJECT"},{"stt":835,"hanzi":"陰天","pinyin":"yīntiān","typeCode":"N","meaning":"trời âm u","level":"A2","page":31,"mainCode":"N","subCode":"N_OBJECT"},{"stt":836,"hanzi":"應該","pinyin":"yīnggāi","typeCode":"Adv","meaning":"nên","level":"A2","page":31,"mainCode":"V","subCode":"V_MODAL"},{"stt":837,"hanzi":"永遠","pinyin":"yǒngyuǎn","typeCode":"Adv","meaning":"mãi mãi","level":"A2","page":31,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":838,"hanzi":"有趣","pinyin":"yǒuqù","typeCode":"VS","meaning":"thú vị","level":"A2","page":31,"mainCode":"V","subCode":"V_STATE"},{"stt":839,"hanzi":"有用","pinyin":"yǒuyòng","typeCode":"VS","meaning":"hữu dụng","level":"A2","page":31,"mainCode":"V","subCode":"V_STATE"},{"stt":840,"hanzi":"又","pinyin":"yòu","typeCode":"Conj","meaning":"vừa…vừa…","level":"A2","page":31,"mainCode":"CONJ","subCode":"CONJ_COORD"},{"stt":841,"hanzi":"雨","pinyin":"yǔ","typeCode":"N","meaning":"mưa","level":"A2","page":31,"mainCode":"N","subCode":"N_OBJECT"},{"stt":842,"hanzi":"圓","pinyin":"yuán","typeCode":"VS","meaning":"tròn","level":"A2","page":31,"mainCode":"V","subCode":"V_STATE"},{"stt":843,"hanzi":"原來","pinyin":"yuánlái","typeCode":"Adv","meaning":"hóa ra, thì ra","level":"A2","page":31,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":844,"hanzi":"院子","pinyin":"yuànzi","typeCode":"N","meaning":"sân","level":"A2","page":31,"mainCode":"N","subCode":"N_PLACE"},{"stt":845,"hanzi":"願意","pinyin":"yuànyì","typeCode":"VS","meaning":"chịu","level":"A2","page":31,"mainCode":"V","subCode":"V_MODAL"},{"stt":846,"hanzi":"約","pinyin":"yuē","typeCode":"VA","meaning":"hẹn","level":"A2","page":31,"mainCode":"V","subCode":"V_ACTION"},{"stt":847,"hanzi":"越來越","pinyin":"yuèláiyuè","typeCode":"Adv","meaning":"ngày càng","level":"A2","page":31,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":848,"hanzi":"月亮","pinyin":"yuèliàng","typeCode":"N","meaning":"mặt trăng","level":"A2","page":31,"mainCode":"N","subCode":"N_OBJECT"},{"stt":849,"hanzi":"語法","pinyin":"yǔfǎ","typeCode":"N","meaning":"ngữ pháp","level":"A2","page":31,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":850,"hanzi":"語言","pinyin":"yǔyán","typeCode":"N","meaning":"ngôn ngữ","level":"A2","page":31,"mainCode":"N","subCode":"N_ABSTRACT"},{"stt":851,"hanzi":"雲","pinyin":"yún","typeCode":"N","meaning":"mây","level":"A2","page":31,"mainCode":"N","subCode":"N_OBJECT"},{"stt":852,"hanzi":"髒","pinyin":"zāng","typeCode":"VS","meaning":"dơ, bẩn","level":"A2","page":31,"mainCode":"V","subCode":"V_STATE"},{"stt":853,"hanzi":"炸雞","pinyin":"zhájī","typeCode":"N","meaning":"gà rán","level":"A2","page":32,"mainCode":"N","subCode":"N_OBJECT"},{"stt":854,"hanzi":"張","pinyin":"zhāng","typeCode":"M","meaning":"tấm, tờ, miếng","level":"A2","page":32,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":855,"hanzi":"著急","pinyin":"zhāojí","typeCode":"VS","meaning":"sốt ruột","level":"A2","page":32,"mainCode":"V","subCode":"V_PSYCH"},{"stt":856,"hanzi":"著","pinyin":"zhe","typeCode":"P","meaning":"vẫn đang, có","level":"A2","page":32,"mainCode":"P","subCode":"P_ASPECT"},{"stt":857,"hanzi":"這邊","pinyin":"zhèbiān","typeCode":"N","meaning":"bên này","level":"A2","page":32,"mainCode":"N","subCode":"N_POSITION"},{"stt":858,"hanzi":"這麼","pinyin":"zhème","typeCode":"Adv","meaning":"như vậy","level":"A2","page":32,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":859,"hanzi":"這樣","pinyin":"zhèyàng","typeCode":"Adv","meaning":"như vậy","level":"A2","page":32,"mainCode":"ADV","subCode":"ADV_MANNER"},{"stt":860,"hanzi":"真","pinyin":"zhēn","typeCode":"Adv","meaning":"thật là","level":"A2","page":32,"mainCode":"ADV","subCode":"ADV_DEGREE"},{"stt":861,"hanzi":"真","pinyin":"zhēn","typeCode":"VS","meaning":"thật","level":"A2","page":32,"mainCode":"V","subCode":"V_REL"},{"stt":862,"hanzi":"正在","pinyin":"zhèngzài","typeCode":"Adv","meaning":"đang","level":"A2","page":32,"mainCode":"ADV","subCode":"ADV_TIME"},{"stt":863,"hanzi":"枝","pinyin":"zhī","typeCode":"M","meaning":"cây (bút)","level":"A2","page":32,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":864,"hanzi":"只","pinyin":"zhī","typeCode":"M","meaning":"con (chó, mèo)","level":"A2","page":32,"mainCode":"M","subCode":"M_CLASSIFIER"},{"stt":865,"hanzi":"只","pinyin":"zhǐ","typeCode":"Adv","meaning":"chỉ","level":"A2","page":32,"mainCode":"ADV","subCode":"ADV_SCOPE"},{"stt":866,"hanzi":"只好","pinyin":"zhǐhǎo","typeCode":"Adv","meaning":"chỉ đành, đành phải","level":"A2","page":32,"mainCode":"ADV","subCode":"ADV_MODAL"},{"stt":867,"hanzi":"中間","pinyin":"zhōngjiān","typeCode":"N","meaning":"ở giữa","level":"A2","page":32,"mainCode":"N","subCode":"N_POSITION"},{"stt":868,"hanzi":"鐘頭","pinyin":"zhōngtóu","typeCode":"N","meaning":"tiếng đồng hồ","level":"A2","page":32,"mainCode":"N","subCode":"N_TIME"},{"stt":869,"hanzi":"中心","pinyin":"zhōngxīn","typeCode":"N","meaning":"trung tâm","level":"A2","page":32,"mainCode":"N","subCode":"N_PLACE"},{"stt":870,"hanzi":"種","pinyin":"zhǒng","typeCode":"M","meaning":"loại","level":"A2","page":32,"mainCode":"M","subCode":"M_COLLECTION"},{"stt":871,"hanzi":"種","pinyin":"zhòng","typeCode":"VA","meaning":"trồng","level":"A2","page":32,"mainCode":"V","subCode":"V_ACTION"},{"stt":872,"hanzi":"豬","pinyin":"zhū","typeCode":"N","meaning":"heo","level":"A2","page":32,"mainCode":"N","subCode":"N_OBJECT"},{"stt":873,"hanzi":"煮","pinyin":"zhǔ","typeCode":"VA","meaning":"nấu","level":"A2","page":32,"mainCode":"V","subCode":"V_ACTION"},{"stt":874,"hanzi":"祝","pinyin":"zhù","typeCode":"VA","meaning":"chúc","level":"A2","page":32,"mainCode":"V","subCode":"V_SPEECH"},{"stt":875,"hanzi":"裝","pinyin":"zhuāng","typeCode":"VA","meaning":"đựng, lắp (máy)","level":"A2","page":32,"mainCode":"V","subCode":"V_ACTION"},{"stt":876,"hanzi":"準備","pinyin":"zhǔnbèi","typeCode":"VA","meaning":"chuẩn bị","level":"A2","page":32,"mainCode":"V","subCode":"V_ACTION"},{"stt":877,"hanzi":"注意","pinyin":"zhùyì","typeCode":"VS","meaning":"chú ý","level":"A2","page":32,"mainCode":"V","subCode":"V_PERCEPT"},{"stt":878,"hanzi":"字","pinyin":"zì","typeCode":"N","meaning":"chữ","level":"A2","page":32,"mainCode":"N","subCode":"N_OBJECT"},{"stt":879,"hanzi":"總是","pinyin":"zǒngshì","typeCode":"Adv","meaning":"luôn, cứ luôn","level":"A2","page":32,"mainCode":"ADV","subCode":"ADV_FREQ"},{"stt":880,"hanzi":"租","pinyin":"zū","typeCode":"VA","meaning":"thuê","level":"A2","page":32,"mainCode":"V","subCode":"V_ACTION"},{"stt":881,"hanzi":"嘴巴","pinyin":"zuǐbā","typeCode":"N","meaning":"cái miệng","level":"A2","page":32,"mainCode":"N","subCode":"N_OBJECT"},{"stt":882,"hanzi":"做菜","pinyin":"zuòcài","typeCode":"VA","meaning":"làm đồ ăn","level":"A2","page":33,"mainCode":"V","subCode":"V_ACTION"},{"stt":883,"hanzi":"作業","pinyin":"zuòyè","typeCode":"N","meaning":"bài tập về nhà","level":"A2","page":33,"mainCode":"N","subCode":"N_EVENT"}];
+
+const mainTypeMeta={
+    N:{zh:'名詞',vi:'Danh từ',className:'type-n'},
+    V:{zh:'動詞',vi:'Động từ',className:'type-va'},
+    ADV:{zh:'副詞',vi:'Phó từ',className:'type-adv'},
+    DET:{zh:'定詞／數詞',vi:'Từ hạn định / số từ',className:'type-det'},
+    M:{zh:'量詞',vi:'Lượng từ',className:'type-m'},
+    PREP:{zh:'介詞',vi:'Giới từ',className:'type-prep'},
+    CONJ:{zh:'連接詞',vi:'Liên từ',className:'type-conj'},
+    P:{zh:'助詞',vi:'Trợ từ',className:'type-p'},
+    EXPR:{zh:'慣用語',vi:'Cụm giao tiếp / cách nói cố định',className:'type-expr'}
+};
+const subtypeMeta={
+    N_PRONOUN:{zh:'代名詞',vi:'Đại từ'},
+    N_PERSON:{zh:'人物名詞',vi:'Danh từ chỉ người'},
+    N_PLACE:{zh:'處所名詞',vi:'Danh từ chỉ nơi chốn'},
+    N_TIME:{zh:'時間名詞',vi:'Danh từ chỉ thời gian'},
+    N_POSITION:{zh:'方位名詞',vi:'Danh từ phương vị'},
+    N_PROPER:{zh:'專有名詞',vi:'Danh từ riêng'},
+    N_ORG:{zh:'組織集體名詞',vi:'Danh từ tổ chức / tập thể'},
+    N_EVENT:{zh:'事件活動名詞',vi:'Danh từ sự việc / hoạt động'},
+    N_ABSTRACT:{zh:'抽象名詞',vi:'Danh từ trừu tượng'},
+    N_OBJECT:{zh:'事物名詞',vi:'Danh từ chỉ sự vật'},
+
+    V_ACTION:{zh:'動作動詞',vi:'Động từ hành động'},
+    V_MOVE:{zh:'移動動詞',vi:'Động từ di chuyển'},
+    V_DIR:{zh:'趨向動詞',vi:'Động từ xu hướng'},
+    V_SPEECH:{zh:'言語動詞',vi:'Động từ ngôn ngữ'},
+    V_PERCEPT:{zh:'感知認知動詞',vi:'Động từ tri giác / nhận thức'},
+    V_PSYCH:{zh:'心理動詞',vi:'Động từ tâm lý'},
+    V_MODAL:{zh:'能願動詞',vi:'Động từ năng nguyện'},
+    V_EXIST:{zh:'存在領有動詞',vi:'Động từ tồn tại / sở hữu'},
+    V_REL:{zh:'判斷關係動詞',vi:'Động từ phán đoán / quan hệ'},
+    V_CHANGE:{zh:'變化結果動詞',vi:'Động từ biến đổi / kết quả'},
+    V_PHYSIO:{zh:'生理活動動詞',vi:'Động từ hoạt động sinh lý'},
+    V_STATE:{zh:'狀態性質動詞',vi:'Động từ trạng thái / tính chất'},
+
+    ADV_NEG:{zh:'否定副詞',vi:'Phó từ phủ định'},
+    ADV_DEGREE:{zh:'程度副詞',vi:'Phó từ mức độ'},
+    ADV_TIME:{zh:'時間副詞',vi:'Phó từ thời gian'},
+    ADV_FREQ:{zh:'頻率副詞',vi:'Phó từ tần suất'},
+    ADV_SCOPE:{zh:'範圍副詞',vi:'Phó từ phạm vi'},
+    ADV_MODAL:{zh:'語氣情態副詞',vi:'Phó từ ngữ khí / tình thái'},
+    ADV_INTERROG:{zh:'疑問副詞',vi:'Phó từ nghi vấn'},
+    ADV_MANNER:{zh:'方式關聯副詞',vi:'Phó từ cách thức / liên kết'},
+
+    DET_CARD:{zh:'基數詞',vi:'Số từ cơ bản'},
+    DET_ORD:{zh:'序數標記',vi:'Dấu hiệu số thứ tự'},
+    DET_DEM:{zh:'指示定詞',vi:'Từ hạn định chỉ thị'},
+    DET_INTERROG:{zh:'疑問定詞',vi:'Từ hạn định nghi vấn'},
+    DET_INDEF:{zh:'不定定詞',vi:'Từ hạn định không xác định'},
+    DET_TOTAL:{zh:'總括定詞',vi:'Từ hạn định tổng quát'},
+    DET_QUANT:{zh:'數量定詞',vi:'Từ hạn định số lượng'},
+
+    M_CLASSIFIER:{zh:'個體量詞',vi:'Lượng từ cá thể'},
+    M_COLLECTION:{zh:'集合類別量詞',vi:'Lượng từ tập hợp / chủng loại'},
+    M_MEASURE:{zh:'度量衡量詞',vi:'Lượng từ đo lường'},
+    M_TIME:{zh:'時間年齡量詞',vi:'Lượng từ thời gian / tuổi'},
+    M_EVENT:{zh:'動量詞',vi:'Lượng từ chỉ lần của động tác'},
+    M_CURRENCY:{zh:'貨幣量詞',vi:'Lượng từ tiền tệ'},
+    M_BORROW:{zh:'借用量詞',vi:'Lượng từ vay mượn'},
+    M_INDEF:{zh:'不定量詞',vi:'Lượng từ không xác định'},
+
+    PREP_DISPOSAL:{zh:'處置介詞',vi:'Giới từ xử trí'},
+    PREP_PASSIVE:{zh:'被動介詞',vi:'Giới từ bị động'},
+    PREP_COMPARE:{zh:'比較介詞',vi:'Giới từ so sánh'},
+    PREP_SOURCE:{zh:'起點來源介詞',vi:'Giới từ điểm xuất phát / nguồn'},
+    PREP_DIRECTION:{zh:'方向介詞',vi:'Giới từ phương hướng'},
+    PREP_LOC_TIME:{zh:'處所時間介詞',vi:'Giới từ nơi chốn / thời gian'},
+    PREP_TARGET:{zh:'對象介詞',vi:'Giới từ chỉ đối tượng'},
+    PREP_ACCOMP:{zh:'伴隨介詞',vi:'Giới từ cùng đi / đi kèm'},
+    PREP_CAUSATIVE:{zh:'使役介詞',vi:'Giới từ sai khiến'},
+    PREP_OTHER:{zh:'其他介詞',vi:'Giới từ khác'},
+
+    CONJ_COORD:{zh:'並列連詞',vi:'Liên từ đẳng lập'},
+    CONJ_CHOICE:{zh:'選擇連詞',vi:'Liên từ lựa chọn'},
+    CONJ_ADVERS:{zh:'轉折連詞',vi:'Liên từ chuyển ý'},
+    CONJ_CAUSE:{zh:'原因連詞',vi:'Liên từ chỉ nguyên nhân'},
+    CONJ_RESULT:{zh:'結果連詞',vi:'Liên từ chỉ kết quả'},
+    CONJ_CONDITION:{zh:'假設條件連詞',vi:'Liên từ giả thiết / điều kiện'},
+    CONJ_CONCESS:{zh:'讓步連詞',vi:'Liên từ nhượng bộ'},
+    CONJ_PROGRESS:{zh:'遞進連詞',vi:'Liên từ tăng tiến'},
+    CONJ_OTHER:{zh:'其他連詞',vi:'Liên từ khác'},
+
+    P_STRUCT:{zh:'結構助詞',vi:'Trợ từ kết cấu'},
+    P_ASPECT:{zh:'動態助詞',vi:'Trợ từ thể / trạng thái động tác'},
+    P_MODAL:{zh:'語氣助詞',vi:'Trợ từ ngữ khí'},
+    P_OTHER:{zh:'其他助詞',vi:'Trợ từ khác'},
+
+    EXPR_GREETING:{zh:'問候歡迎語',vi:'Câu chào hỏi / chào đón'},
+    EXPR_FAREWELL:{zh:'道別語',vi:'Câu tạm biệt'},
+    EXPR_THANKS:{zh:'感謝語',vi:'Câu cảm ơn'},
+    EXPR_APOLOGY:{zh:'道歉語',vi:'Câu xin lỗi'},
+    EXPR_RESPONSE:{zh:'回應語',vi:'Câu đáp lại'},
+    EXPR_INQUIRY:{zh:'詢問語',vi:'Câu hỏi / cách hỏi'},
+    EXPR_PROBLEM:{zh:'問題處理語',vi:'Cách nói xử lý tình huống'},
+    EXPR_CONGRATS:{zh:'祝賀語',vi:'Câu chúc mừng'},
+    EXPR_CALL:{zh:'招呼語',vi:'Tiếng gọi / bắt chuyện'},
+    EXPR_OTHER:{zh:'其他慣用語',vi:'Cách nói cố định khác'}
+};
+const sourceTypeMeta={
+    N:'名詞',VA:'動作動詞',VS:'狀態動詞',Adv:'副詞',Det:'定詞',M:'量詞',Prep:'介詞',Conj:'連接詞',P:'助詞',Expr:'常用語'
+};
+const mainOrder=['N','V','ADV','DET','M','PREP','CONJ','P','EXPR'];
+const subtypeOrder={
+    N:['N_PRONOUN','N_PERSON','N_PLACE','N_TIME','N_POSITION','N_PROPER','N_ORG','N_EVENT','N_ABSTRACT','N_OBJECT'],
+    V:['V_ACTION','V_MOVE','V_DIR','V_SPEECH','V_PERCEPT','V_PSYCH','V_MODAL','V_EXIST','V_REL','V_CHANGE','V_PHYSIO','V_STATE'],
+    ADV:['ADV_NEG','ADV_DEGREE','ADV_TIME','ADV_FREQ','ADV_SCOPE','ADV_MODAL','ADV_INTERROG','ADV_MANNER'],
+    DET:['DET_CARD','DET_ORD','DET_DEM','DET_INTERROG','DET_INDEF','DET_TOTAL','DET_QUANT'],
+    M:['M_CLASSIFIER','M_COLLECTION','M_MEASURE','M_TIME','M_EVENT','M_CURRENCY','M_BORROW','M_INDEF'],
+    PREP:['PREP_DISPOSAL','PREP_PASSIVE','PREP_COMPARE','PREP_SOURCE','PREP_DIRECTION','PREP_LOC_TIME','PREP_TARGET','PREP_ACCOMP','PREP_CAUSATIVE','PREP_OTHER'],
+    CONJ:['CONJ_COORD','CONJ_CHOICE','CONJ_ADVERS','CONJ_CAUSE','CONJ_RESULT','CONJ_CONDITION','CONJ_CONCESS','CONJ_PROGRESS','CONJ_OTHER'],
+    P:['P_STRUCT','P_ASPECT','P_MODAL','P_OTHER'],
+    EXPR:['EXPR_GREETING','EXPR_FAREWELL','EXPR_THANKS','EXPR_APOLOGY','EXPR_RESPONSE','EXPR_INQUIRY','EXPR_PROBLEM','EXPR_CONGRATS','EXPR_CALL','EXPR_OTHER']
+};
+const state={level:'all',main:'all',sub:'all',query:'',navKey:'all'};
+let currentWriters=[];
+
+function esc(value){
+    return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function normalizeSearch(value){
+    return String(value??'')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .replace(/đ/g,'d')
+        .replace(/ü/g,'u')
+        .replace(/\s+/g,' ')
+        .trim();
+}
+function getFilteredData(){
+    const q=normalizeSearch(state.query);
+    return vocabData.filter(item=>{
+        if(state.level!=='all' && item.level!==state.level) return false;
+        if(state.main!=='all' && item.mainCode!==state.main) return false;
+        if(state.sub!=='all' && item.subCode!==state.sub) return false;
+        if(!q) return true;
+        const main=mainTypeMeta[item.mainCode];
+        const sub=subtypeMeta[item.subCode];
+        return normalizeSearch([
+            item.hanzi,item.pinyin,item.meaning,item.level,item.typeCode,
+            sourceTypeMeta[item.typeCode],main?.zh,main?.vi,sub?.zh,sub?.vi
+        ].join(' ')).includes(q);
+    });
+}
+function filterLabel(data){
+    const parts=[];
+    if(state.level!=='all') parts.push('TOCFL '+state.level);
+    if(state.main!=='all'){
+        const main=mainTypeMeta[state.main];
+        parts.push(main.zh+' · '+main.vi);
+    }
+    if(state.sub!=='all'){
+        const sub=subtypeMeta[state.sub];
+        parts.push(sub.zh+' · '+sub.vi);
+    }
+    if(state.query) parts.push('tìm “'+state.query+'”');
+    return (parts.length?parts.join(' · '):'Tất cả')+' ('+data.length+' mục từ)';
+}
+function renderSidebar(){
+    const sidebar=document.getElementById('sidebarMenu');
+    const total=vocabData.length;
+    const a1=vocabData.filter(item=>item.level==='A1').length;
+    const a2=vocabData.filter(item=>item.level==='A2').length;
+    let html=`<button type="button" class="category-item active flex justify-between items-center" data-nav-key="all" data-main="all" data-sub="all" data-level="all">
+        <span>📋 Tất cả</span><span class="nav-count">${total}</span>
+    </button>
+    <button type="button" class="subcategory-item nav-level-item flex justify-between items-center" data-nav-key="level-A1" data-main="all" data-sub="all" data-level="A1">
+        <span>TOCFL A1</span><span class="nav-count">${a1}</span>
+    </button>
+    <button type="button" class="subcategory-item nav-level-item flex justify-between items-center" data-nav-key="level-A2" data-main="all" data-sub="all" data-level="A2">
+        <span>TOCFL A2</span><span class="nav-count">${a2}</span>
+    </button>`;
+
+    mainOrder.forEach(mainCode=>{
+        const main=mainTypeMeta[mainCode];
+        const mainItems=vocabData.filter(item=>item.mainCode===mainCode);
+        if(!mainItems.length) return;
+        html+=`<button type="button" class="category-item flex justify-between items-center" data-nav-key="main-${mainCode}" data-main="${mainCode}" data-sub="all" data-level="all">
+            <span class="nav-bilingual-label"><span class="nav-zh">${esc(main.zh)}</span><span class="nav-vi">${esc(main.vi)}</span></span>
+            <span class="nav-count">${mainItems.length}</span>
+        </button>`;
+        (subtypeOrder[mainCode]||[]).forEach(subCode=>{
+            const count=mainItems.filter(item=>item.subCode===subCode).length;
+            if(!count) return;
+            const sub=subtypeMeta[subCode];
+            html+=`<button type="button" class="subcategory-item flex justify-between items-center" data-nav-key="sub-${subCode}" data-main="${mainCode}" data-sub="${subCode}" data-level="all">
+                <span class="nav-bilingual-label"><span class="nav-zh">${esc(sub.zh)}</span><span class="nav-vi">${esc(sub.vi)}</span></span>
+                <span class="nav-count">${count}</span>
+            </button>`;
+        });
+    });
+    sidebar.innerHTML=html;
+}
+function updateSidebarActive(){
+    document.querySelectorAll('#sidebarMenu [data-nav-key]').forEach(item=>{
+        item.classList.toggle('active',item.dataset.navKey===state.navKey);
+    });
+}
+function applySidebarFilter(button){
+    state.main=button.dataset.main||'all';
+    state.sub=button.dataset.sub||'all';
+    state.level=button.dataset.level||'all';
+    state.navKey=button.dataset.navKey||'all';
+    state.query='';
+    const search=document.getElementById('searchInput');
+    if(search) search.value='';
+    updateSidebarActive();
+    renderTable();
+    document.getElementById('tableShell').scrollTop=0;
+    closeSidebar();
+}
+function openSidebar(){
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('open');
+}
+function closeSidebar(){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+}
+function renderTable(){
+    const data=getFilteredData();
+    const tbody=document.getElementById('vocabTableBody');
+    tbody.innerHTML=data.map(item=>{
+        const main=mainTypeMeta[item.mainCode];
+        const sub=subtypeMeta[item.subCode];
+        return `<tr class="transition-colors">
+            <td class="px-3 py-3 text-center text-gray-600">${item.stt}</td>
+            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn audio-btn" data-action="speak" data-stt="${item.stt}" title="Phát âm ${esc(item.hanzi)}">🔊</button></td>
+            <td class="px-4 py-3 text-center"><span class="hanzi-font text-xl text-gray-900">${esc(item.hanzi)}</span></td>
+            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn stroke-btn" data-action="stroke" data-stt="${item.stt}" title="Xem nét viết">✏</button></td>
+            <td class="px-4 py-3 text-left text-gray-700">${esc(item.pinyin)}</td>
+            <td class="px-4 py-3 text-left">
+                <span class="type-badge ${main.className}">${esc(main.zh)}</span>
+                <div class="text-xs text-gray-500 mt-1">${esc(main.vi)}</div>
+            </td>
+            <td class="px-4 py-3 text-left">
+                <div class="subtype-main">${esc(sub.zh)}</div>
+                <div class="subtype-vi">${esc(sub.vi)}</div>
+            </td>
+            <td class="px-4 py-3 text-center"><span class="level-badge">${esc(item.level)}</span></td>
+            <td class="px-4 py-3 text-left text-gray-900">${esc(item.meaning)}</td>
+            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn detail-btn" data-action="detail" data-stt="${item.stt}" title="Xem chi tiết">👁</button></td>
+        </tr>`;
+    }).join('');
+    document.getElementById('emptyState').classList.toggle('hidden',data.length!==0);
+    document.getElementById('currentFilter').textContent=filterLabel(data);
+}
+function resetFilters(){
+    state.level='all';
+    state.main='all';
+    state.sub='all';
+    state.query='';
+    state.navKey='all';
+    document.getElementById('searchInput').value='';
+    updateSidebarActive();
+    renderTable();
+    document.getElementById('tableShell').scrollTop=0;
+    closeSidebar();
+}
+function findItem(stt){
+    return vocabData.find(item=>item.stt===Number(stt));
+}
+function speakText(text){
+    if(!('speechSynthesis' in window)){
+        alert('Trình duyệt không hỗ trợ phát âm.');
+        return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance(text);
+    utterance.lang='zh-TW';
+    utterance.rate=.78;
+    const voices=window.speechSynthesis.getVoices();
+    const preferred=voices.find(v=>/zh-TW/i.test(v.lang))||voices.find(v=>/^zh/i.test(v.lang));
+    if(preferred) utterance.voice=preferred;
+    window.speechSynthesis.speak(utterance);
+}
+function showStrokeOrder(item){
+    const modal=document.getElementById('strokeModal');
+    const container=document.getElementById('strokeContainer');
+    const message=document.getElementById('strokeMessage');
+    document.getElementById('strokeModalTitle').textContent=item.hanzi;
+    container.innerHTML='';
+    message.classList.add('hidden');
+    currentWriters=[];
+    const chars=Array.from(item.hanzi).filter(ch=>/\p{Script=Han}/u.test(ch));
+    if(!chars.length || typeof HanziWriter==='undefined'){
+        message.textContent=typeof HanziWriter==='undefined'
+            ?'Không tải được thư viện nét viết. Hãy kiểm tra kết nối Internet.'
+            :'Mục từ này không có chữ Hán phù hợp để hiển thị nét viết.';
+        message.classList.remove('hidden');
+    }else{
+        chars.forEach((char,index)=>{
+            const box=document.createElement('div');
+            box.className='char-box';
+            const id='stroke-'+Date.now()+'-'+index;
+            box.id=id;
+            container.appendChild(box);
+            try{
+                const writer=HanziWriter.create(id,char,{
+                    width:120,
+                    height:120,
+                    padding:5,
+                    strokeColor:'#7c3aed',
+                    radicalColor:'#10b981',
+                    showOutline:true,
+                    showCharacter:false
+                });
+                currentWriters.push(writer);
+                writer.animateCharacter();
+            }catch(error){
+                box.innerHTML='<div class="w-[120px] h-[120px] flex items-center justify-center border rounded-lg hanzi-font text-5xl">'+esc(char)+'</div>';
+            }
+        });
+    }
+    modal.classList.remove('hidden');
+}
+function closeStrokeModal(){
+    document.getElementById('strokeModal').classList.add('hidden');
+    currentWriters=[];
+}
+function showDetail(item){
+    const main=mainTypeMeta[item.mainCode];
+    const sub=subtypeMeta[item.subCode];
+    document.getElementById('detailContent').innerHTML=`
+        <div class="text-center mb-6">
+            <div class="hanzi-font text-5xl text-gray-900 mb-2">${esc(item.hanzi)}</div>
+            <div class="text-xl text-purple-700 font-semibold">${esc(item.pinyin)}</div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+            <div class="info-card">
+                <div class="text-xs text-gray-500 mb-1">Từ loại chính</div>
+                <div><span class="type-badge ${main.className}">${esc(main.zh)}</span></div>
+                <div class="text-sm text-gray-600 mt-2">${esc(main.vi)}</div>
+            </div>
+            <div class="info-card">
+                <div class="text-xs text-gray-500 mb-1">Phân loại nhỏ</div>
+                <div class="font-bold hanzi-font text-lg">${esc(sub.zh)}</div>
+                <div class="text-sm text-gray-600">${esc(sub.vi)}</div>
+            </div>
+            <div class="info-card">
+                <div class="text-xs text-gray-500 mb-1">Cấp độ</div>
+                <div class="font-semibold">TOCFL ${esc(item.level)}</div>
+            </div>
+            <div class="info-card">
+                <div class="text-xs text-gray-500 mb-1">Mã từ loại trong PDF gốc</div>
+                <div class="font-semibold">${esc(item.typeCode)} · ${esc(sourceTypeMeta[item.typeCode]||'—')}</div>
+            </div>
+        </div>
+        <div class="info-card mb-4">
+            <div class="text-xs text-gray-500 mb-1">Nghĩa tiếng Việt</div>
+            <div class="text-lg font-semibold">${esc(item.meaning)}</div>
+        </div>
+        <div class="info-card mb-5">
+            <div class="text-xs text-gray-500 mb-1">Nguồn và nguyên tắc phân loại</div>
+            <div>Trang ${item.page} trong PDF “TỪ VỰNG TOCFL”. Mã từ loại gốc được giữ lại để đối chiếu; mục “phân loại nhỏ” được phân tích theo chức năng và nghĩa của từng từ trong cách dạy Hoa ngữ Đài Loan.</div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-3">
+            <button type="button" id="detailSpeak" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold">🔊 Phát âm</button>
+            <button type="button" id="detailStroke" class="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold">✏ Xem nét viết</button>
+        </div>`;
+    document.getElementById('detailSpeak').onclick=()=>speakText(item.hanzi);
+    document.getElementById('detailStroke').onclick=()=>{
+        closeDetailModal();
+        showStrokeOrder(item);
+    };
+    document.getElementById('detailModal').classList.remove('hidden');
+}
+function closeDetailModal(){
+    document.getElementById('detailModal').classList.add('hidden');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+    renderSidebar();
+    renderTable();
+
+    document.getElementById('sidebarMenu').addEventListener('click',event=>{
+        const button=event.target.closest('[data-nav-key]');
+        if(button) applySidebarFilter(button);
+    });
+    document.getElementById('mobileSidebarButton').addEventListener('click',openSidebar);
+    document.getElementById('sidebarOverlay').addEventListener('click',closeSidebar);
+    document.getElementById('searchInput').addEventListener('input',event=>{
+        state.query=event.target.value.trim();
+        renderTable();
+    });
+    document.getElementById('resetButton').addEventListener('click',resetFilters);
+    document.getElementById('vocabTableBody').addEventListener('click',event=>{
+        const button=event.target.closest('[data-action]');
+        if(!button) return;
+        const item=findItem(button.dataset.stt);
+        if(!item) return;
+        if(button.dataset.action==='speak') speakText(item.hanzi);
+        if(button.dataset.action==='stroke') showStrokeOrder(item);
+        if(button.dataset.action==='detail') showDetail(item);
+    });
+    document.getElementById('animateAllButton').addEventListener('click',()=>{
+        currentWriters.forEach(writer=>writer.animateCharacter());
+    });
+    document.querySelectorAll('.close-stroke').forEach(button=>button.addEventListener('click',closeStrokeModal));
+    document.querySelectorAll('.close-detail').forEach(button=>button.addEventListener('click',closeDetailModal));
+    document.getElementById('strokeModal').addEventListener('click',event=>{
+        if(event.target===event.currentTarget) closeStrokeModal();
+    });
+    document.getElementById('detailModal').addEventListener('click',event=>{
+        if(event.target===event.currentTarget) closeDetailModal();
+    });
+    document.addEventListener('keydown',event=>{
+        if(event.key==='Escape'){
+            closeStrokeModal();
+            closeDetailModal();
+        }
+    });
+});
+</script>
+</body>
+</html>
