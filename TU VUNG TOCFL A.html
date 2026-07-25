@@ -485,7 +485,7 @@
 <div id="detailModal" class="modal-backdrop hidden">
     <div class="modal-card">
         <div class="bg-orange-500 text-white px-5 py-4 flex items-center justify-between">
-            <h2 class="text-lg font-bold">👁 Chi tiết mục từ</h2>
+            <h2 class="text-lg font-bold">👁 Ví dụ</h2>
             <button type="button" class="close-detail text-white text-2xl leading-none" aria-label="Đóng">×</button>
         </div>
         <div id="detailContent" class="flex-1 overflow-y-auto p-5"></div>
@@ -759,7 +759,7 @@ function renderTable(){
             </td>
             <td class="px-4 py-3 text-center"><span class="level-badge">${esc(item.level)}</span></td>
             <td class="px-4 py-3 text-left text-gray-900">${esc(item.meaning)}</td>
-            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn detail-btn" data-action="detail" data-stt="${item.stt}" title="Xem chi tiết">👁</button></td>
+            <td class="px-2 py-3 text-center icon-col"><button type="button" class="icon-btn detail-btn" data-action="detail" data-stt="${item.stt}" title="Xem ví dụ">👁</button></td>
         </tr>`;
     }).join('');
     document.getElementById('emptyState').classList.toggle('hidden',data.length!==0);
@@ -838,51 +838,239 @@ function closeStrokeModal(){
     document.getElementById('strokeModal').classList.add('hidden');
     currentWriters=[];
 }
+const exampleOverrides={
+    '把':{sentence:'請把門關上。',pinyin:'Qǐng bǎ mén guān shàng.',meaning:'Vui lòng đóng cửa lại.'},
+    '被':{sentence:'杯子被打破了。',pinyin:'Bēizi bèi dǎpò le.',meaning:'Cái ly đã bị làm vỡ.'},
+    '比':{sentence:'他比我高。',pinyin:'Tā bǐ wǒ gāo.',meaning:'Anh ấy cao hơn tôi.'},
+    '從':{sentence:'我從家裡來。',pinyin:'Wǒ cóng jiālǐ lái.',meaning:'Tôi đến từ nhà.'},
+    '往':{sentence:'一直往前走。',pinyin:'Yìzhí wǎng qián zǒu.',meaning:'Cứ đi thẳng về phía trước.'},
+    '向':{sentence:'他向老師問問題。',pinyin:'Tā xiàng lǎoshī wèn wèntí.',meaning:'Anh ấy hỏi giáo viên một câu hỏi.'},
+    '在':{sentence:'我在教室上課。',pinyin:'Wǒ zài jiàoshì shàngkè.',meaning:'Tôi học trong lớp.'},
+    '給':{sentence:'我給你一本書。',pinyin:'Wǒ gěi nǐ yì běn shū.',meaning:'Tôi đưa bạn một quyển sách.'},
+    '跟':{sentence:'我跟朋友一起去。',pinyin:'Wǒ gēn péngyǒu yìqǐ qù.',meaning:'Tôi đi cùng bạn.'},
+    '讓':{sentence:'老師讓我們休息。',pinyin:'Lǎoshī ràng wǒmen xiūxi.',meaning:'Giáo viên cho chúng tôi nghỉ.'},
+
+    '啊':{sentence:'啊！你也來了。',pinyin:'A! Nǐ yě lái le.',meaning:'À! Bạn cũng đến rồi.'},
+    '吧':{sentence:'我們走吧！',pinyin:'Wǒmen zǒu ba!',meaning:'Chúng ta đi thôi!'},
+    '嗎':{sentence:'你是學生嗎？',pinyin:'Nǐ shì xuéshēng ma?',meaning:'Bạn là học sinh phải không?'},
+    '呢':{sentence:'我很好，你呢？',pinyin:'Wǒ hěn hǎo, nǐ ne?',meaning:'Tôi khỏe, còn bạn thì sao?'},
+    '的':{sentence:'這是我的書。',pinyin:'Zhè shì wǒ de shū.',meaning:'Đây là sách của tôi.'},
+    '得':{sentence:'他說得很好。',pinyin:'Tā shuō de hěn hǎo.',meaning:'Anh ấy nói rất hay.'},
+    '過':{sentence:'我去過臺灣。',pinyin:'Wǒ qùguo Táiwān.',meaning:'Tôi từng đến Đài Loan.'},
+    '了':{sentence:'我吃飯了。',pinyin:'Wǒ chīfàn le.',meaning:'Tôi ăn cơm rồi.'},
+    '著':{sentence:'門開著。',pinyin:'Mén kāizhe.',meaning:'Cửa đang mở.'},
+
+    '跟|CONJ_COORD':{sentence:'我跟他都是學生。',pinyin:'Wǒ gēn tā dōu shì xuéshēng.',meaning:'Tôi và anh ấy đều là học sinh.'},
+    '和':{sentence:'我和妹妹一起上學。',pinyin:'Wǒ hé mèimei yìqǐ shàngxué.',meaning:'Tôi và em gái cùng đi học.'},
+    '又|CONJ_COORD':{sentence:'他又聰明又認真。',pinyin:'Tā yòu cōngmíng yòu rènzhēn.',meaning:'Anh ấy vừa thông minh vừa chăm chỉ.'},
+    '還是':{sentence:'你喝茶還是咖啡？',pinyin:'Nǐ hē chá háishì kāfēi?',meaning:'Bạn uống trà hay cà phê?'},
+    '或':{sentence:'你可以坐公車或火車。',pinyin:'Nǐ kěyǐ zuò gōngchē huò huǒchē.',meaning:'Bạn có thể đi xe buýt hoặc tàu hỏa.'},
+    '或是':{sentence:'星期六或是星期天都可以。',pinyin:'Xīngqíliù huòshì xīngqítiān dōu kěyǐ.',meaning:'Thứ Bảy hoặc Chủ nhật đều được.'},
+    '可是':{sentence:'我想去，可是今天很忙。',pinyin:'Wǒ xiǎng qù, kěshì jīntiān hěn máng.',meaning:'Tôi muốn đi, nhưng hôm nay rất bận.'},
+    '但是':{sentence:'他很累，但是還在工作。',pinyin:'Tā hěn lèi, dànshì hái zài gōngzuò.',meaning:'Anh ấy rất mệt nhưng vẫn đang làm việc.'},
+    '因為':{sentence:'因為下雨，所以我沒去。',pinyin:'Yīnwèi xiàyǔ, suǒyǐ wǒ méi qù.',meaning:'Vì trời mưa nên tôi không đi.'},
+    '所以':{sentence:'今天很冷，所以我穿外套。',pinyin:'Jīntiān hěn lěng, suǒyǐ wǒ chuān wàitào.',meaning:'Hôm nay rất lạnh nên tôi mặc áo khoác.'},
+    '如果':{sentence:'如果有時間，我就去。',pinyin:'Rúguǒ yǒu shíjiān, wǒ jiù qù.',meaning:'Nếu có thời gian, tôi sẽ đi.'},
+    '要是':{sentence:'要是下雨，我們就不去。',pinyin:'Yàoshi xiàyǔ, wǒmen jiù bú qù.',meaning:'Nếu trời mưa, chúng ta sẽ không đi.'},
+    '雖然':{sentence:'雖然很累，他還是繼續工作。',pinyin:'Suīrán hěn lèi, tā háishì jìxù gōngzuò.',meaning:'Tuy rất mệt, anh ấy vẫn tiếp tục làm việc.'},
+    '不但':{sentence:'他不但會說中文，還會說英文。',pinyin:'Tā bùdàn huì shuō Zhōngwén, hái huì shuō Yīngwén.',meaning:'Anh ấy không những biết nói tiếng Trung mà còn biết nói tiếng Anh.'},
+
+    '第':{sentence:'這是我第一次來臺灣。',pinyin:'Zhè shì wǒ dì yī cì lái Táiwān.',meaning:'Đây là lần đầu tiên tôi đến Đài Loan.'},
+    '半':{sentence:'現在三點半。',pinyin:'Xiànzài sān diǎn bàn.',meaning:'Bây giờ là ba giờ rưỡi.'},
+    '一半':{sentence:'我吃了一半。',pinyin:'Wǒ chī le yíbàn.',meaning:'Tôi đã ăn một nửa.'},
+    '別的':{sentence:'我想看看別的衣服。',pinyin:'Wǒ xiǎng kànkan biéde yīfu.',meaning:'Tôi muốn xem quần áo khác.'},
+    '一點兒':{sentence:'請給我一點兒水。',pinyin:'Qǐng gěi wǒ yìdiǎnr shuǐ.',meaning:'Vui lòng cho tôi một ít nước.'},
+    '一些':{sentence:'我買了一些水果。',pinyin:'Wǒ mǎi le yìxiē shuǐguǒ.',meaning:'Tôi đã mua một ít trái cây.'},
+    '許多':{sentence:'這裡有許多人。',pinyin:'Zhèlǐ yǒu xǔduō rén.',meaning:'Ở đây có rất nhiều người.'},
+    '每':{sentence:'我每天學中文。',pinyin:'Wǒ měitiān xué Zhōngwén.',meaning:'Tôi học tiếng Trung mỗi ngày.'},
+    '全部':{sentence:'這些書我全部看完了。',pinyin:'Zhèxiē shū wǒ quánbù kànwán le.',meaning:'Tôi đã đọc xong toàn bộ số sách này.'},
+    '所有':{sentence:'所有學生都到了。',pinyin:'Suǒyǒu xuéshēng dōu dào le.',meaning:'Tất cả học sinh đều đã đến.'},
+    '那些':{sentence:'那些人是我的朋友。',pinyin:'Nàxiē rén shì wǒ de péngyǒu.',meaning:'Những người kia là bạn của tôi.'},
+    '這些':{sentence:'這些書很好看。',pinyin:'Zhèxiē shū hěn hǎokàn.',meaning:'Những quyển sách này rất hay.'},
+    '幾':{sentence:'你有幾本書？',pinyin:'Nǐ yǒu jǐ běn shū?',meaning:'Bạn có mấy quyển sách?'},
+    '什麼':{sentence:'你想吃什麼？',pinyin:'Nǐ xiǎng chī shénme?',meaning:'Bạn muốn ăn gì?'},
+    '哪':{sentence:'你喜歡哪本書？',pinyin:'Nǐ xǐhuan nǎ běn shū?',meaning:'Bạn thích quyển sách nào?'},
+
+    '不':{sentence:'我今天不去。',pinyin:'Wǒ jīntiān bú qù.',meaning:'Hôm nay tôi không đi.'},
+    '沒':{sentence:'我昨天沒上課。',pinyin:'Wǒ zuótiān méi shàngkè.',meaning:'Hôm qua tôi không đi học.'},
+    '沒(有)':{sentence:'我沒有時間。',pinyin:'Wǒ méiyǒu shíjiān.',meaning:'Tôi không có thời gian.'},
+    '別':{sentence:'別說話！',pinyin:'Bié shuōhuà!',meaning:'Đừng nói chuyện!'},
+    '不一定':{sentence:'他明天不一定來。',pinyin:'Tā míngtiān bù yídìng lái.',meaning:'Ngày mai anh ấy chưa chắc sẽ đến.'},
+    '不用':{sentence:'你不用等我。',pinyin:'Nǐ búyòng děng wǒ.',meaning:'Bạn không cần đợi tôi.'},
+    '都':{sentence:'我們都是學生。',pinyin:'Wǒmen dōu shì xuéshēng.',meaning:'Chúng tôi đều là học sinh.'},
+    '也':{sentence:'我也喜歡中文。',pinyin:'Wǒ yě xǐhuan Zhōngwén.',meaning:'Tôi cũng thích tiếng Trung.'},
+    '一共':{sentence:'這些東西一共多少錢？',pinyin:'Zhèxiē dōngxi yígòng duōshǎo qián?',meaning:'Tất cả những món này tổng cộng bao nhiêu tiền?'},
+    '一起':{sentence:'我們一起吃飯吧。',pinyin:'Wǒmen yìqǐ chīfàn ba.',meaning:'Chúng ta cùng ăn cơm nhé.'},
+    '只':{sentence:'我只有一本書。',pinyin:'Wǒ zhǐ yǒu yì běn shū.',meaning:'Tôi chỉ có một quyển sách.'},
+    '只好':{sentence:'下雨了，我只好回家。',pinyin:'Xiàyǔ le, wǒ zhǐhǎo huíjiā.',meaning:'Trời mưa nên tôi đành phải về nhà.'},
+    '多少':{sentence:'這個多少錢？',pinyin:'Zhège duōshǎo qián?',meaning:'Cái này bao nhiêu tiền?'},
+    '為什麼':{sentence:'你為什麼不去？',pinyin:'Nǐ wèishénme bú qù?',meaning:'Tại sao bạn không đi?'},
+    '怎麼':{sentence:'這個字怎麼念？',pinyin:'Zhège zì zěnme niàn?',meaning:'Chữ này đọc thế nào?'},
+    '多|ADV_MANNER':{sentence:'請多吃一點。',pinyin:'Qǐng duō chī yìdiǎn.',meaning:'Hãy ăn thêm một chút.'},
+    '又|ADV_MANNER':{sentence:'他今天又遲到了。',pinyin:'Tā jīntiān yòu chídào le.',meaning:'Hôm nay anh ấy lại đến trễ.'},
+    '那麼':{sentence:'今天沒有那麼冷。',pinyin:'Jīntiān méiyǒu nàme lěng.',meaning:'Hôm nay không lạnh đến thế.'},
+    '那樣':{sentence:'不要那樣說。',pinyin:'Búyào nàyàng shuō.',meaning:'Đừng nói như vậy.'},
+    '一邊':{sentence:'他一邊吃飯，一邊看電視。',pinyin:'Tā yìbiān chīfàn, yìbiān kàn diànshì.',meaning:'Anh ấy vừa ăn cơm vừa xem tivi.'},
+    '永遠':{sentence:'我永遠不會忘記你。',pinyin:'Wǒ yǒngyuǎn bú huì wàngjì nǐ.',meaning:'Tôi sẽ không bao giờ quên bạn.'},
+    '這麼':{sentence:'今天怎麼這麼熱？',pinyin:'Jīntiān zěnme zhème rè?',meaning:'Hôm nay sao nóng thế?'},
+    '這樣':{sentence:'你可以這樣做。',pinyin:'Nǐ kěyǐ zhèyàng zuò.',meaning:'Bạn có thể làm như thế này.'},
+
+    '對':{sentence:'你的答案是對的。',pinyin:'Nǐ de dá’àn shì duì de.',meaning:'Đáp án của bạn là đúng.'},
+    '叫':{sentence:'我叫王明。',pinyin:'Wǒ jiào Wáng Míng.',meaning:'Tôi tên là Vương Minh.'},
+    '離':{sentence:'我家離學校很近。',pinyin:'Wǒ jiā lí xuéxiào hěn jìn.',meaning:'Nhà tôi cách trường rất gần.'},
+    '是':{sentence:'我是越南人。',pinyin:'Wǒ shì Yuènán rén.',meaning:'Tôi là người Việt Nam.'},
+    '像':{sentence:'他長得像爸爸。',pinyin:'Tā zhǎngde xiàng bàba.',meaning:'Anh ấy trông giống bố.'},
+    '姓':{sentence:'我姓王。',pinyin:'Wǒ xìng Wáng.',meaning:'Tôi họ Vương.'},
+    '一樣':{sentence:'這兩件衣服一樣。',pinyin:'Zhè liǎng jiàn yīfu yíyàng.',meaning:'Hai bộ quần áo này giống nhau.'},
+    '真|V_REL':{sentence:'這件事是真的。',pinyin:'Zhè jiàn shì shì zhēn de.',meaning:'Chuyện này là thật.'},
+
+    '有':{sentence:'這裡有很多人。',pinyin:'Zhèlǐ yǒu hěnduō rén.',meaning:'Ở đây có rất nhiều người.'},
+    '活':{sentence:'他活得很健康。',pinyin:'Tā huó de hěn jiànkāng.',meaning:'Anh ấy sống rất khỏe mạnh.'},
+    '生活':{sentence:'我在臺灣生活。',pinyin:'Wǒ zài Táiwān shēnghuó.',meaning:'Tôi sinh sống ở Đài Loan.'}
+};
+
+const classifierExamples={
+    '班':['今天有三班公車。','Jīntiān yǒu sān bān gōngchē.','Hôm nay có ba chuyến xe buýt.'],
+    '本':['我買了兩本書。','Wǒ mǎi le liǎng běn shū.','Tôi đã mua hai quyển sách.'],
+    '封':['我收到一封信。','Wǒ shōudào yì fēng xìn.','Tôi nhận được một bức thư.'],
+    '個':['我買了三個蘋果。','Wǒ mǎi le sān ge píngguǒ.','Tôi đã mua ba quả táo.'],
+    '間':['這裡有兩間教室。','Zhèlǐ yǒu liǎng jiān jiàoshì.','Ở đây có hai phòng học.'],
+    '件':['我買了一件外套。','Wǒ mǎi le yí jiàn wàitào.','Tôi đã mua một chiếc áo khoác.'],
+    '樓':['我的辦公室在三樓。','Wǒ de bàngōngshì zài sān lóu.','Văn phòng của tôi ở tầng ba.'],
+    '位':['那位老師很好。','Nà wèi lǎoshī hěn hǎo.','Vị giáo viên kia rất tốt.'],
+    '張':['桌上有一張紙。','Zhuō shàng yǒu yì zhāng zhǐ.','Trên bàn có một tờ giấy.'],
+    '枝':['我有兩枝筆。','Wǒ yǒu liǎng zhī bǐ.','Tôi có hai cây bút.'],
+    '只':['我家有一隻貓。','Wǒ jiā yǒu yì zhī māo.','Nhà tôi có một con mèo.'],
+    '朵':['她買了三朵花。','Tā mǎi le sān duǒ huā.','Cô ấy đã mua ba bông hoa.'],
+    '棵':['院子裡有一棵樹。','Yuànzi lǐ yǒu yì kē shù.','Trong sân có một cái cây.'],
+    '輛':['門口有兩輛車。','Ménkǒu yǒu liǎng liàng chē.','Trước cửa có hai chiếc xe.'],
+    '片':['我吃了一片麵包。','Wǒ chī le yí piàn miànbāo.','Tôi đã ăn một lát bánh mì.'],
+    '條':['我買了一條褲子。','Wǒ mǎi le yì tiáo kùzi.','Tôi đã mua một chiếc quần.']
+};
+const borrowedMeasureExamples={
+    '杯':['我喝了一杯茶。','Wǒ hē le yì bēi chá.','Tôi đã uống một ly trà.'],
+    '塊':['我吃了一塊蛋糕。','Wǒ chī le yí kuài dàngāo.','Tôi đã ăn một miếng bánh kem.'],
+    '瓶':['我買了一瓶水。','Wǒ mǎi le yì píng shuǐ.','Tôi đã mua một chai nước.'],
+    '碗':['我吃了一碗飯。','Wǒ chī le yì wǎn fàn.','Tôi đã ăn một bát cơm.'],
+    '包':['我買了一包糖。','Wǒ mǎi le yì bāo táng.','Tôi đã mua một gói kẹo.'],
+    '口':['我吃了一口飯。','Wǒ chī le yì kǒu fàn.','Tôi đã ăn một miếng cơm.'],
+    '盤':['桌上有一盤菜。','Zhuō shàng yǒu yì pán cài.','Trên bàn có một đĩa thức ăn.']
+};
+function capPinyin(text){
+    return String(text||'').replace(/^([a-z])/u,char=>char.toUpperCase());
+}
+function makeExample(sentence,pinyin,meaning){return {sentence,pinyin,meaning};}
+function buildExample(item){
+    const keyed=exampleOverrides[`${item.hanzi}|${item.subCode}`]||exampleOverrides[item.hanzi];
+    if(keyed) return keyed;
+    const w=item.hanzi,p=item.pinyin,m=item.meaning,cp=capPinyin(p);
+
+    if(item.subCode==='M_CLASSIFIER' && classifierExamples[w]) return makeExample(...classifierExamples[w]);
+    if(item.subCode==='M_BORROW' && borrowedMeasureExamples[w]) return makeExample(...borrowedMeasureExamples[w]);
+    if(item.subCode==='M_COLLECTION'){
+        const map={雙:['我買了一雙鞋。','Wǒ mǎi le yì shuāng xié.','Tôi đã mua một đôi giày.'],套:['他穿了一套新衣服。','Tā chuān le yí tào xīn yīfu.','Anh ấy mặc một bộ quần áo mới.'],種:['這是一種好方法。','Zhè shì yì zhǒng hǎo fāngfǎ.','Đây là một phương pháp hay.']};
+        if(map[w]) return makeExample(...map[w]);
+    }
+    if(item.subCode==='M_MEASURE') return makeExample(`我買了三${w}蘋果。`,`Wǒ mǎi le sān ${p} píngguǒ.`,`Tôi đã mua ba ${m} táo.`);
+    if(item.subCode==='M_TIME'){
+        const map={'點(鐘)':['現在三點鐘。','Xiànzài sān diǎnzhōng.','Bây giờ là ba giờ.'],'分鐘':['請等十分鐘。','Qǐng děng shí fēnzhōng.','Vui lòng đợi mười phút.'],'號':['今天是五號。','Jīntiān shì wǔ hào.','Hôm nay là ngày mùng năm.'],'歲':['妹妹八歲。','Mèimei bā suì.','Em gái tám tuổi.'],'天':['我去了三天。','Wǒ qù le sān tiān.','Tôi đã đi ba ngày.']};
+        if(map[w]) return makeExample(...map[w]);
+    }
+    if(item.subCode==='M_EVENT') return w==='遍'
+        ?makeExample('這篇課文我讀了三遍。','Zhè piān kèwén wǒ dú le sān biàn.','Tôi đã đọc bài khóa này ba lượt.')
+        :makeExample('我去過臺灣兩次。','Wǒ qùguo Táiwān liǎng cì.','Tôi đã đến Đài Loan hai lần.');
+    if(item.subCode==='M_CURRENCY') return w==='毛'
+        ?makeExample('這枝筆五毛錢。','Zhè zhī bǐ wǔ máo qián.','Cây bút này giá năm hào.')
+        :makeExample('這本書一百元。','Zhè běn shū yìbǎi yuán.','Quyển sách này giá một trăm đồng.');
+    if(item.subCode==='M_INDEF') return makeExample('請給我一點兒水。','Qǐng gěi wǒ yìdiǎnr shuǐ.','Vui lòng cho tôi một ít nước.');
+
+    switch(item.subCode){
+        case 'N_PRONOUN': return makeExample(`${w}也要去。`,`${cp} yě yào qù.`,`${m} cũng muốn đi.`);
+        case 'N_PERSON': return makeExample(`他是我的${w}。`,`Tā shì wǒ de ${p}.`,`Anh ấy là ${m} của tôi.`);
+        case 'N_PLACE': return makeExample(`我今天去${w}。`,`Wǒ jīntiān qù ${p}.`,`Hôm nay tôi đi đến ${m}.`);
+        case 'N_TIME': return makeExample(`我們${w}見。`,`Wǒmen ${p} jiàn.`,`Chúng ta gặp nhau vào ${m}.`);
+        case 'N_POSITION': return makeExample(`${w}有一家商店。`,`${cp} yǒu yì jiā shāngdiàn.`,`Ở ${m} có một cửa hàng.`);
+        case 'N_PROPER': return makeExample(`我想去${w}。`,`Wǒ xiǎng qù ${p}.`,`Tôi muốn đến ${m}.`);
+        case 'N_ORG': return makeExample(`他在${w}工作。`,`Tā zài ${p} gōngzuò.`,`Anh ấy làm việc tại ${m}.`);
+        case 'N_EVENT': return makeExample(`我正在準備${w}。`,`Wǒ zhèngzài zhǔnbèi ${p}.`,`Tôi đang chuẩn bị ${m}.`);
+        case 'N_ABSTRACT': return makeExample(`這個${w}很重要。`,`Zhège ${p} hěn zhòngyào.`,`${m} này rất quan trọng.`);
+        case 'N_OBJECT': return makeExample(`這是${w}。`,`Zhè shì ${p}.`,`Đây là ${m}.`);
+
+        case 'V_ACTION': return makeExample(`他正在${w}。`,`Tā zhèngzài ${p}.`,`Anh ấy đang ${m}.`);
+        case 'V_MOVE': return makeExample(`我們一起${w}吧。`,`Wǒmen yìqǐ ${p} ba.`,`Chúng ta cùng ${m} nhé.`);
+        case 'V_DIR': return makeExample(`請${w}。`,`Qǐng ${p}.`,`Mời ${m}.`);
+        case 'V_SPEECH': return makeExample(`請你${w}。`,`Qǐng nǐ ${p}.`,`Mời bạn ${m}.`);
+        case 'V_PERCEPT': return makeExample(`我已經${w}了。`,`Wǒ yǐjīng ${p} le.`,`Tôi đã ${m} rồi.`);
+        case 'V_MODAL': return makeExample(`我${w}去。`,`Wǒ ${p} qù.`,`Tôi ${m} đi.`);
+        case 'V_PHYSIO': return makeExample(`我每天都${w}。`,`Wǒ měitiān dōu ${p}.`,`Mỗi ngày tôi đều ${m}.`);
+        case 'V_EXIST': return makeExample(`這裡${w}很多人。`,`Zhèlǐ ${p} hěnduō rén.`,`Ở đây ${m} rất nhiều người.`);
+        case 'V_CHANGE':{
+            if(['下雨','下雪'].includes(w)) return makeExample(`外面開始${w}了。`,`Wàimiàn kāishǐ ${p} le.`,`Bên ngoài bắt đầu ${m} rồi.`);
+            if(['感冒','生病','遲到','起床'].includes(w)) return makeExample(`他已經${w}了。`,`Tā yǐjīng ${p} le.`,`Anh ấy đã ${m} rồi.`);
+            if(['結束','開始','發生','開學','放假','停'].includes(w)) return makeExample(`活動已經${w}了。`,`Huódòng yǐjīng ${p} le.`,`Hoạt động đã ${m} rồi.`);
+            return makeExample(`我已經${w}了。`,`Wǒ yǐjīng ${p} le.`,`Tôi đã ${m} rồi.`);
+        }
+        case 'V_PSYCH':{
+            if(['打算','計畫','決定','希望','需要','想'].includes(w)) return makeExample(`我${w}明天去。`,`Wǒ ${p} míngtiān qù.`,`Tôi ${m} ngày mai đi.`);
+            if(['高興','害怕','緊張','開心','難過','生氣','著急'].includes(w)) return makeExample(`我現在很${w}。`,`Wǒ xiànzài hěn ${p}.`,`Bây giờ tôi rất ${m}.`);
+            return makeExample(`我${w}這件事。`,`Wǒ ${p} zhè jiàn shì.`,`Tôi ${m} việc này.`);
+        }
+        case 'V_STATE':{
+            if(['好吃','苦','酸','甜','香'].includes(w)) return makeExample(`這個東西很${w}。`,`Zhège dōngxi hěn ${p}.`,`Món này rất ${m}.`);
+            if(['小心','努力','認真','乖','聰明','年輕','胖','瘦','親','隨便','客氣'].includes(w)) return makeExample(`他很${w}。`,`Tā hěn ${p}.`,`Anh ấy rất ${m}.`);
+            return makeExample(`這裡很${w}。`,`Zhèlǐ hěn ${p}.`,`Ở đây rất ${m}.`);
+        }
+
+        case 'ADV_NEG': return makeExample(`我${w}去。`,`Wǒ ${p} qù.`,`Tôi ${m} đi.`);
+        case 'ADV_DEGREE': return makeExample(`今天${w}冷。`,`Jīntiān ${p} lěng.`,`Hôm nay ${m} lạnh.`);
+        case 'ADV_TIME': return makeExample(`他${w}來了。`,`Tā ${p} lái le.`,`Anh ấy ${m} đã đến.`);
+        case 'ADV_FREQ': return makeExample(`我${w}去那裡。`,`Wǒ ${p} qù nàlǐ.`,`Tôi ${m} đến đó.`);
+        case 'ADV_MODAL': return makeExample(`他${w}會來。`,`Tā ${p} huì lái.`,`Anh ấy ${m} sẽ đến.`);
+        case 'ADV_SCOPE': return makeExample(`我們${w}去。`,`Wǒmen ${p} qù.`,`Chúng tôi ${m} đi.`);
+        case 'ADV_INTERROG': return makeExample(`${w}不去？`,`${cp} bú qù?`,`${m} không đi?`);
+        case 'ADV_MANNER': return makeExample(`請${w}說。`,`Qǐng ${p} shuō.`,`Hãy nói ${m}.`);
+
+        case 'DET_CARD': return makeExample(`我有${w}本書。`,`Wǒ yǒu ${p} běn shū.`,`Tôi có ${m} quyển sách.`);
+        case 'DET_DEM': return makeExample(`${w}本書很好看。`,`${cp} běn shū hěn hǎokàn.`,`${m} quyển sách này rất hay.`);
+        case 'DET_INTERROG': return makeExample(`${w}本書是你的？`,`${cp} běn shū shì nǐ de?`,`${m} quyển sách là của bạn?`);
+        case 'DET_TOTAL': return makeExample(`${w}學生都到了。`,`${cp} xuéshēng dōu dào le.`,`${m} học sinh đều đã đến.`);
+        case 'DET_QUANT': return makeExample(`我吃了${w}個蛋糕。`,`Wǒ chī le ${p} ge dàngāo.`,`Tôi đã ăn ${m} cái bánh kem.`);
+        case 'DET_INDEF': return makeExample(`我想看${w}書。`,`Wǒ xiǎng kàn ${p} shū.`,`Tôi muốn xem ${m} sách.`);
+
+        case 'EXPR_GREETING':
+        case 'EXPR_FAREWELL':
+        case 'EXPR_THANKS':
+        case 'EXPR_APOLOGY':
+        case 'EXPR_RESPONSE':
+        case 'EXPR_INQUIRY':
+        case 'EXPR_PROBLEM':
+        case 'EXPR_CONGRATS':
+        case 'EXPR_CALL':
+        case 'EXPR_OTHER':
+            return makeExample(`${w}！`,`${cp}!`,`${m}!`);
+    }
+    return makeExample(`「${w}」是一個常用詞。`,`“${cp}” shì yí ge chángyòng cí.`,`“${w}” là một từ thường dùng, có nghĩa là “${m}”.`);
+}
 function showDetail(item){
-    const main=mainTypeMeta[item.mainCode];
-    const sub=subtypeMeta[item.subCode];
+    const example=buildExample(item);
     document.getElementById('detailContent').innerHTML=`
-        <div class="text-center mb-6">
+        <div class="text-center mb-5">
             <div class="hanzi-font text-5xl text-gray-900 mb-2">${esc(item.hanzi)}</div>
             <div class="text-xl text-purple-700 font-semibold">${esc(item.pinyin)}</div>
-        </div>
-        <div class="grid sm:grid-cols-2 gap-3 mb-4">
-            <div class="info-card">
-                <div class="text-xs text-gray-500 mb-1">Từ loại chính</div>
-                <div><span class="type-badge ${main.className}">${esc(main.zh)}</span></div>
-                <div class="text-sm text-gray-600 mt-2">${esc(main.vi)}</div>
-            </div>
-            <div class="info-card">
-                <div class="text-xs text-gray-500 mb-1">Phân loại nhỏ</div>
-                <div class="font-bold hanzi-font text-lg">${esc(sub.zh)}</div>
-                <div class="text-sm text-gray-600">${esc(sub.vi)}</div>
-            </div>
-            <div class="info-card">
-                <div class="text-xs text-gray-500 mb-1">Cấp độ</div>
-                <div class="font-semibold">TOCFL ${esc(item.level)}</div>
-            </div>
-            <div class="info-card">
-                <div class="text-xs text-gray-500 mb-1">Mã từ loại trong PDF gốc</div>
-                <div class="font-semibold">${esc(item.typeCode)} · ${esc(sourceTypeMeta[item.typeCode]||'—')}</div>
-            </div>
-        </div>
-        <div class="info-card mb-4">
-            <div class="text-xs text-gray-500 mb-1">Nghĩa tiếng Việt</div>
-            <div class="text-lg font-semibold">${esc(item.meaning)}</div>
+            <div class="text-gray-600 mt-2">${esc(item.meaning)}</div>
         </div>
         <div class="info-card mb-5">
-            <div class="text-xs text-gray-500 mb-1">Nguồn và nguyên tắc phân loại</div>
-            <div>Trang ${item.page} trong PDF “TỪ VỰNG TOCFL”. Mã từ loại gốc được giữ lại để đối chiếu; mục “phân loại nhỏ” được phân tích theo chức năng và nghĩa của từng từ trong cách dạy Hoa ngữ Đài Loan.</div>
+            <div class="text-xs font-bold tracking-wider text-orange-600 uppercase mb-3">Ví dụ sử dụng</div>
+            <div class="hanzi-font text-2xl leading-relaxed text-gray-900 mb-3">${esc(example.sentence)}</div>
+            <div class="text-lg text-purple-700 font-medium mb-3">${esc(example.pinyin)}</div>
+            <div class="text-base text-gray-700">${esc(example.meaning)}</div>
         </div>
         <div class="flex flex-wrap justify-center gap-3">
-            <button type="button" id="detailSpeak" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold">🔊 Phát âm</button>
-            <button type="button" id="detailStroke" class="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold">✏ Xem nét viết</button>
+            <button type="button" id="detailSpeakWord" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold">🔊 Phát âm từ</button>
+            <button type="button" id="detailSpeakExample" class="bg-orange-500 text-white px-5 py-2 rounded-lg font-semibold">🔊 Nghe ví dụ</button>
         </div>`;
-    document.getElementById('detailSpeak').onclick=()=>speakText(item.hanzi);
-    document.getElementById('detailStroke').onclick=()=>{
-        closeDetailModal();
-        showStrokeOrder(item);
-    };
+    document.getElementById('detailSpeakWord').onclick=()=>speakText(item.hanzi);
+    document.getElementById('detailSpeakExample').onclick=()=>speakText(example.sentence);
     document.getElementById('detailModal').classList.remove('hidden');
 }
 function closeDetailModal(){
