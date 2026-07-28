@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài 5: Đổi tiền - 汉语速成</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f5f5f5;color:#333}
+.header{position:fixed;top:0;left:0;right:0;height:70px;background:#4472c4;color:white;display:flex;align-items:center;gap:12px;padding:10px 20px;z-index:1000}
+.logo-text h1{font-size:16px}.logo-text p{font-size:12px;opacity:.9}.header-lesson-title{flex:1;text-align:center;font-weight:700}
+.nav-toggle-header{width:42px;height:40px;border:1px solid rgba(255,255,255,.8);border-radius:7px;background:rgba(255,255,255,.15);color:#fff;font-size:20px;cursor:pointer}
+.main-container{display:flex;gap:15px;padding:90px 15px 15px;min-height:100vh}
+.sidebar-left{width:230px;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 105px);overflow-y:auto}
+body.nav-hidden .sidebar-left{display:none}
+.nav-title{padding:15px;background:#f8f9fa;border-bottom:2px solid #4472c4;font-weight:700}
+.nav-item{display:flex;gap:10px;padding:12px 15px;color:#666;text-decoration:none;cursor:pointer}
+.nav-item:hover{background:#e3f2fd;color:#4472c4}.nav-item.active{background:#e8f5e9;color:#2e7d32;font-weight:700}
+.tools-section{padding:15px;background:#fafafa;border-top:1px solid #ddd}.tool-btn{width:100%;padding:8px;margin-bottom:6px;border:1px solid #ddd;border-radius:5px;background:#f8f9fa;cursor:pointer}
+.content-area{flex:1;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden}
+.content-header{padding:20px;background:linear-gradient(135deg,#f8f9fa,#e3f2fd);border-bottom:2px solid #4472c4;display:flex;justify-content:space-between}
+.section-title{font-size:20px;font-weight:700;display:flex;gap:10px}.section-badge{background:#4472c4;color:#fff;padding:5px 12px;border-radius:20px;font-size:12px}
+.content-body{padding:25px;background:#fafafa}.section-content{display:none}.section-content.active{display:block}
+.part-box{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:25px;margin-bottom:20px}
+.part-title{font-size:18px;font-weight:700;border-bottom:2px solid #4472c4;padding-bottom:10px;margin-bottom:15px}
+.phrase-line,.dialogue-line{display:flex;gap:15px;padding:14px 15px;margin-bottom:10px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer}
+.phrase-line:hover,.dialogue-line:hover{background:#e3f2fd;border-color:#4472c4}
+.phrase-bullet{color:#4472c4;font-size:20px}.phrase-chinese,.dialogue-chinese{font-family:"SimSun","STSong",serif;font-size:20px;font-weight:700;color:#000}
+.phrase-pinyin,.dialogue-pinyin{color:#4472c4;font-size:16px;margin:4px 0}.phrase-vietnamese,.dialogue-vietnamese{color:#555;font-size:15px}
+.dialogue-speaker{font-weight:700;color:#e65100;min-width:30px}
+.vocab-table{width:100%;border-collapse:collapse;background:#fff}.vocab-table th{background:#4472c4;color:#fff;padding:12px;text-align:left}
+.vocab-table td{padding:12px;border-bottom:1px solid #e9ecef}.vocab-hanzi{font-size:22px;font-weight:700;font-family:"SimSun","STSong",serif}.vocab-pinyin-td{color:#4472c4;font-style:italic}
+body.hide-pinyin .phrase-pinyin,body.hide-pinyin .dialogue-pinyin{display:none!important}
+body.hide-vietnamese .phrase-vietnamese,body.hide-vietnamese .dialogue-vietnamese{display:none!important}
+@media(max-width:768px){.main-container{flex-direction:column;padding-top:78px}.sidebar-left{width:100%;position:relative;top:0;max-height:none}.header-lesson-title{display:none}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo-text"><h1>汉语速成</h1><p>TỰ HỌC TIẾNG TRUNG CHO NGƯỜI MỚI BẮT ĐẦU</p></div>
+  <div class="header-lesson-title">BÀI 5: ĐỔI TIỀN</div>
+  <button id="nav-toggle-btn" class="nav-toggle-header" onclick="toggleNavigation()" title="Ẩn điều hướng" aria-label="Ẩn điều hướng"><i class="bi bi-layout-sidebar-inset-reverse"></i></button>
+</div>
+<div class="main-container">
+<aside class="sidebar-left">
+  <div class="nav-title"><i class="bi bi-list-ul"></i> Điều hướng bài học</div>
+  <a class="nav-item active" onclick="showSection(0)"><i class="bi bi-currency-exchange"></i> I. Mẫu câu</a>
+  <a class="nav-item" onclick="showSection(1)"><i class="bi bi-journal-bookmark"></i> II. Từ vựng</a>
+  <a class="nav-item" onclick="showSection(2)"><i class="bi bi-people-fill"></i> III. Hội thoại</a>
+  <div class="tools-section">
+    <button class="tool-btn" onclick="togglePinyin()"><i class="bi bi-eye-slash"></i> Ẩn/Hiện Pinyin</button>
+    <button class="tool-btn" onclick="toggleVietnamese()"><i class="bi bi-translate"></i> Ẩn/Hiện nghĩa Việt</button>
+  </div>
+</aside>
+<main class="content-area">
+  <div class="content-header">
+    <div class="section-title"><span id="current-icon"><i class="bi bi-currency-exchange"></i></span><span id="section-title-text">I. MẪU CÂU THÔNG DỤNG</span></div>
+    <div class="section-badge">Bài 05</div>
+  </div>
+  <div class="content-body">
+    <section class="section-content active" id="section-0">
+<div class="part-box">
+  <div class="part-title">I. MẪU CÂU THÔNG DỤNG</div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;小姐，你好！请问这里能不能换钱？&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">小姐，你好！请问这里能不能换钱？</div>
+        <div class="phrase-pinyin">Xiǎojiě, nǐ hǎo! Qǐngwèn zhèlǐ néng bu néng huàn qián?</div>
+        <div class="phrase-vietnamese">Chào cô, xin hỏi ở đây có thể đổi tiền không?</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;能，你带的是什么钱？&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">能，你带的是什么钱？</div>
+        <div class="phrase-pinyin">Néng, nǐ dài de shì shénme qián?</div>
+        <div class="phrase-vietnamese">Có ạ. Ông muốn đổi tiền gì?</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;我要换美元。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">我要换美元。</div>
+        <div class="phrase-pinyin">Wǒ yào huàn Měiyuán.</div>
+        <div class="phrase-vietnamese">Tôi muốn đổi tiền đô la Mỹ.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;你要换多少钱？&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你要换多少钱？</div>
+        <div class="phrase-pinyin">Nǐ yào huàn duōshao qián?</div>
+        <div class="phrase-vietnamese">Anh muốn đổi bao nhiêu tiền?</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;我换500块。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">我换500块。</div>
+        <div class="phrase-pinyin">Wǒ huàn wǔbǎi kuài.</div>
+        <div class="phrase-vietnamese">Tôi đổi 500 USD.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;一美元的外汇券价格呢？&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">一美元的外汇券价格呢？</div>
+        <div class="phrase-pinyin">Yì Měiyuán de wàihuìquàn jiàgé ne?</div>
+        <div class="phrase-vietnamese">Một USD có tỉ giá hối đoái bao nhiêu?</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;220块。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">220块。</div>
+        <div class="phrase-pinyin">Èrbǎi èrshí kuài.</div>
+        <div class="phrase-vietnamese">220 đồng.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;你还要换什么钱？&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你还要换什么钱？</div>
+        <div class="phrase-pinyin">Nǐ hái yào huàn shénme qián?</div>
+        <div class="phrase-vietnamese">Anh còn muốn đổi tiền gì nữa không?</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;我还要换台币。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">我还要换台币。</div>
+        <div class="phrase-pinyin">Wǒ hái yào huàn Táibì.</div>
+        <div class="phrase-vietnamese">Tôi còn muốn đổi thêm tiền Đài tệ.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;你要换多少？&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你要换多少？</div>
+        <div class="phrase-pinyin">Nǐ yào huàn duōshao?</div>
+        <div class="phrase-vietnamese">Anh muốn đổi bao nhiêu?</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;请问今日台币与越币兑换率是多少？&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">请问今日台币与越币兑换率是多少？</div>
+        <div class="phrase-pinyin">Qǐngwèn jīnrì Táibì yǔ Yuèbì duìhuànlǜ shì duōshao?</div>
+        <div class="phrase-vietnamese">Xin hỏi, hôm nay tỉ giá tiền Đài đổi sang tiền Việt là bao nhiêu?</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;今日兑换率是一比800。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">今日兑换率是一比800。</div>
+        <div class="phrase-pinyin">Jīnrì duìhuànlǜ shì yì bǐ bābǎi.</div>
+        <div class="phrase-vietnamese">Tỉ giá hôm nay là 1:800.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;我换300美元。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">我换300美元。</div>
+        <div class="phrase-pinyin">Wǒ huàn sānbǎi Měiyuán.</div>
+        <div class="phrase-vietnamese">Tôi đổi 300 USD.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;请等一下……你的钱，请数看看。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">请等一下……你的钱，请数看看。</div>
+        <div class="phrase-pinyin">Qǐng děng yíxià… nǐ de qián, qǐng shǔ kànkan.</div>
+        <div class="phrase-vietnamese">Xin ông chờ chút. Tiền của ông đây, ông đếm lại xem đủ chưa.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;好了，够了。谢谢你。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">好了，够了。谢谢你。</div>
+        <div class="phrase-pinyin">Hǎo le, gòu le. Xièxie nǐ.</div>
+        <div class="phrase-vietnamese">Được rồi, đủ rồi. Cảm ơn cô.</div>
+      </div>
+    </div>
+  
+    <div class="phrase-line" onclick="speakText(&#x27;没什么。&#x27;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">没什么。</div>
+        <div class="phrase-pinyin">Méi shénme.</div>
+        <div class="phrase-vietnamese">Không có gì.</div>
+      </div>
+    </div>
+</div>
+
+<div class="part-box">
+  <div class="part-title">Một số loại tiền tệ trên thế giới</div>
+  <table class="vocab-table">
+    <thead><tr><th>Chữ Hán</th><th>Pinyin</th><th>Nghĩa</th></tr></thead>
+    <tbody>
+      <tr><td></td><td class='vocab-hanzi'>美元</td><td class='vocab-pinyin-td'>Měiyuán</td><td>đô la Mỹ</td></tr>
+      <tr><td></td><td class='vocab-hanzi'>人民币</td><td class='vocab-pinyin-td'>Rénmínbì</td><td>nhân dân tệ</td></tr>
+      <tr><td></td><td class='vocab-hanzi'>越盾</td><td class='vocab-pinyin-td'>Yuèdùn</td><td>tiền Việt</td></tr>
+      <tr><td></td><td class='vocab-hanzi'>台币</td><td class='vocab-pinyin-td'>Táibì</td><td>tiền Đài</td></tr>
+      <tr><td></td><td class='vocab-hanzi'>港币</td><td class='vocab-pinyin-td'>Gǎngbì</td><td>đô la Hồng Kông</td></tr>
+      <tr><td></td><td class='vocab-hanzi'>日元</td><td class='vocab-pinyin-td'>Rìyuán</td><td>yên Nhật</td></tr>
+      <tr><td></td><td class='vocab-hanzi'>欧元</td><td class='vocab-pinyin-td'>Ōuyuán</td><td>đồng Euro</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+    <section class="section-content" id="section-1">
+<div class="part-box"><div class="part-title">II. TỪ VỰNG</div>
+<table class="vocab-table"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>1</td><td class='vocab-hanzi'>外汇券</td><td class='vocab-pinyin-td'>wàihuìquàn</td><td>hối đoái</td></tr><tr><td>2</td><td class='vocab-hanzi'>钱</td><td class='vocab-pinyin-td'>qián</td><td>tiền</td></tr><tr><td>3</td><td class='vocab-hanzi'>换</td><td class='vocab-pinyin-td'>huàn</td><td>đổi</td></tr><tr><td>4</td><td class='vocab-hanzi'>金店</td><td class='vocab-pinyin-td'>jīndiàn</td><td>cửa hàng vàng</td></tr><tr><td>5</td><td class='vocab-hanzi'>来</td><td class='vocab-pinyin-td'>lái</td><td>đến</td></tr><tr><td>6</td><td class='vocab-hanzi'>去</td><td class='vocab-pinyin-td'>qù</td><td>đi</td></tr><tr><td>7</td><td class='vocab-hanzi'>给</td><td class='vocab-pinyin-td'>gěi</td><td>đưa</td></tr><tr><td>8</td><td class='vocab-hanzi'>拿</td><td class='vocab-pinyin-td'>ná</td><td>cầm</td></tr><tr><td>9</td><td class='vocab-hanzi'>数</td><td class='vocab-pinyin-td'>shǔ</td><td>đếm</td></tr><tr><td>10</td><td class='vocab-hanzi'>找</td><td class='vocab-pinyin-td'>zhǎo</td><td>tìm</td></tr><tr><td>11</td><td class='vocab-hanzi'>银行</td><td class='vocab-pinyin-td'>yínháng</td><td>ngân hàng</td></tr>
+</tbody></table></div>
+</section>
+    <section class="section-content" id="section-2">
+<div class="part-box">
+  <div class="part-title">III. HỘI THOẠI TỔNG HỢP</div>
+  <div class="dialogue-container">
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;钱花光了，我没钱了，我要去换钱。&#x27;)">
+      <div class="dialogue-speaker">A</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">钱花光了，我没钱了，我要去换钱。</div>
+        <div class="dialogue-pinyin">Qián huā guāng le, wǒ méi qián le, wǒ yào qù huàn qián.</div>
+        <div class="dialogue-vietnamese">Tôi tiêu hết sạch tiền rồi, không còn tiền nữa, tôi phải đi đổi tiền thôi.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;饭店里可以换钱啊。&#x27;)">
+      <div class="dialogue-speaker">B</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">饭店里可以换钱啊。</div>
+        <div class="dialogue-pinyin">Fàndiàn lǐ kěyǐ huàn qián a.</div>
+        <div class="dialogue-vietnamese">Ở trong khách sạn họ có đổi tiền đấy.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;小姐，我要换钱。&#x27;)">
+      <div class="dialogue-speaker">A</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">小姐，我要换钱。</div>
+        <div class="dialogue-pinyin">Xiǎojiě, wǒ yào huàn qián.</div>
+        <div class="dialogue-vietnamese">Chào cô, tôi muốn đổi tiền.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;你带的什么钱？换多少钱？&#x27;)">
+      <div class="dialogue-speaker">B</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">你带的什么钱？换多少钱？</div>
+        <div class="dialogue-pinyin">Nǐ dài de shénme qián? Huàn duōshao qián?</div>
+        <div class="dialogue-vietnamese">Anh mang loại tiền gì và đổi bao tiền?</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;换1000美金。请问今日美金与越盾兑换率是多少？&#x27;)">
+      <div class="dialogue-speaker">A</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">换1000美金。请问今日美金与越盾兑换率是多少？</div>
+        <div class="dialogue-pinyin">Huàn yìqiān Měijīn. Qǐngwèn jīnrì Měijīn yǔ Yuèdùn duìhuànlǜ shì duōshao?</div>
+        <div class="dialogue-vietnamese">Đổi 1000 USD, xin hỏi hôm nay tỉ giá USD đổi sang tiền Việt là bao nhiêu?</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;2200……请你先填一张兑换单。&#x27;)">
+      <div class="dialogue-speaker">B</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">2200……请你先填一张兑换单。</div>
+        <div class="dialogue-pinyin">Èrqiān èrbǎi… qǐng nǐ xiān tián yì zhāng duìhuàndān.</div>
+        <div class="dialogue-vietnamese">2200 đồng… Xin anh điền vào phiếu đổi tiền.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;这样写，对了吗？&#x27;)">
+      <div class="dialogue-speaker">A</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">这样写，对了吗？</div>
+        <div class="dialogue-pinyin">Zhèyàng xiě, duì le ma?</div>
+        <div class="dialogue-vietnamese">Điền như thế này đúng chưa cô?</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;对了。&#x27;)">
+      <div class="dialogue-speaker">B</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">对了。</div>
+        <div class="dialogue-pinyin">Duì le.</div>
+        <div class="dialogue-vietnamese">Đúng rồi.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;先生，这张钱太旧了，麻烦你给我换其他张的。&#x27;)">
+      <div class="dialogue-speaker">B</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">先生，这张钱太旧了，麻烦你给我换其他张的。</div>
+        <div class="dialogue-pinyin">Xiānsheng, zhè zhāng qián tài jiù le, máfan nǐ gěi wǒ huàn qítā zhāng de.</div>
+        <div class="dialogue-vietnamese">Anh ơi, tờ tiền này cũ quá, phiền anh đổi lại cho em tờ khác.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;OK，没事。&#x27;)">
+      <div class="dialogue-speaker">A</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">OK，没事。</div>
+        <div class="dialogue-pinyin">OK, méi shì.</div>
+        <div class="dialogue-vietnamese">OK. Không sao.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;请你收钱。&#x27;)">
+      <div class="dialogue-speaker">B</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">请你收钱。</div>
+        <div class="dialogue-pinyin">Qǐng nǐ shōu qián.</div>
+        <div class="dialogue-vietnamese">Anh nhận tiền hộ em.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;够了，谢谢你。&#x27;)">
+      <div class="dialogue-speaker">A</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">够了，谢谢你。</div>
+        <div class="dialogue-pinyin">Gòu le, xièxie nǐ.</div>
+        <div class="dialogue-vietnamese">Đủ rồi em ạ, cảm ơn em.</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;你还要什么的？&#x27;)">
+      <div class="dialogue-speaker">B</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">你还要什么的？</div>
+        <div class="dialogue-pinyin">Nǐ hái yào shénme de?</div>
+        <div class="dialogue-vietnamese">Anh còn cần gì nữa không?</div>
+      </div>
+    </div>
+    
+    <div class="dialogue-line" onclick="speakText(&#x27;不用了，谢谢你。&#x27;)">
+      <div class="dialogue-speaker">A</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">不用了，谢谢你。</div>
+        <div class="dialogue-pinyin">Búyòng le, xièxie nǐ.</div>
+        <div class="dialogue-vietnamese">Không, cảm ơn em.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+  </div>
+</main>
+</div>
+<script>
+const titles=["I. MẪU CÂU THÔNG DỤNG","II. TỪ VỰNG","III. HỘI THOẠI TỔNG HỢP"];
+const icons=["bi-currency-exchange","bi-journal-bookmark","bi-people-fill"];
+function showSection(i){
+ document.querySelectorAll('.section-content').forEach((e,j)=>e.classList.toggle('active',i===j));
+ document.querySelectorAll('.nav-item').forEach((e,j)=>e.classList.toggle('active',i===j));
+ document.getElementById('section-title-text').textContent=titles[i];
+ document.getElementById('current-icon').innerHTML='<i class="bi '+icons[i]+'"></i>';
+}
+function togglePinyin(){document.body.classList.toggle('hide-pinyin')}
+function toggleVietnamese(){document.body.classList.toggle('hide-vietnamese')}
+function speakText(t){if(!('speechSynthesis' in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=.92;speechSynthesis.speak(u)}
+function toggleNavigation(){
+ document.body.classList.toggle('nav-hidden');
+ const hidden=document.body.classList.contains('nav-hidden');
+ const b=document.getElementById('nav-toggle-btn');
+ const label=hidden?'Hiện điều hướng':'Ẩn điều hướng';
+ b.title=label;b.setAttribute('aria-label',label);
+ b.innerHTML=hidden?'<i class="bi bi-layout-sidebar-inset"></i>':'<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+}
+</script>
+</body>
+</html>
