@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài 10: Đặt phòng - 汉语速成</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#333}
+.header{position:fixed;top:0;left:0;right:0;height:70px;background:#4472c4;color:white;display:flex;align-items:center;gap:12px;padding:10px 20px;z-index:1000}
+.logo-text h1{font-size:16px;letter-spacing:1px}
+.logo-text p{font-size:12px;opacity:.9}
+.header-lesson-title{flex:1;text-align:center;font-weight:700;font-size:18px}
+.nav-toggle-header{width:42px;height:40px;border:1px solid rgba(255,255,255,.8);border-radius:7px;background:rgba(255,255,255,.15);color:#fff;font-size:20px;cursor:pointer}
+.main-container{display:flex;gap:15px;padding:90px 15px 15px;min-height:100vh}
+.sidebar-left{width:230px;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 105px);overflow-y:auto}
+body.nav-hidden .sidebar-left{display:none}
+.nav-title{padding:15px;background:#f8f9fa;border-bottom:2px solid #4472c4;font-weight:700}
+.nav-item{display:flex;gap:10px;padding:12px 15px;color:#666;text-decoration:none;cursor:pointer;transition:.2s}
+.nav-item:hover{background:#e3f2fd;color:#4472c4}
+.nav-item.active{background:#e8f5e9;color:#2e7d32;font-weight:700}
+.tools-section{padding:15px;background:#fafafa;border-top:1px solid #ddd}
+.tool-btn{width:100%;padding:8px;margin-bottom:6px;border:1px solid #ddd;border-radius:5px;background:#f8f9fa;cursor:pointer}
+.content-area{flex:1;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden}
+.content-header{padding:20px;background:linear-gradient(135deg,#f8f9fa,#e3f2fd);border-bottom:2px solid #4472c4;display:flex;justify-content:space-between;align-items:center}
+.section-title{font-size:20px;font-weight:700;display:flex;gap:10px;align-items:center}
+.section-badge{background:#4472c4;color:#fff;padding:5px 12px;border-radius:20px;font-size:12px}
+.content-body{padding:25px;background:#fafafa}
+.section-content{display:none}
+.section-content.active{display:block}
+.part-box{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:25px;margin-bottom:20px}
+.part-title{font-size:18px;font-weight:700;border-bottom:2px solid #4472c4;padding-bottom:10px;margin-bottom:15px;color:#222}
+.sub-title{font-size:17px;font-weight:700;margin:24px 0 12px;color:#222}
+.phrase-line,.dialogue-line{display:flex;gap:15px;padding:14px 15px;margin-bottom:10px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;transition:.2s}
+.phrase-line:hover,.dialogue-line:hover{background:#e3f2fd;border-color:#4472c4}
+.phrase-bullet{color:#4472c4;font-size:20px;line-height:1.2}
+.phrase-content,.dialogue-content{flex:1}
+.phrase-chinese,.dialogue-chinese{font-family:'SimSun','STSong',serif;font-size:20px;font-weight:700;color:#000;line-height:1.4}
+.phrase-pinyin,.dialogue-pinyin{color:#4472c4;font-size:16px;margin:4px 0;line-height:1.5}
+.phrase-vietnamese,.dialogue-vietnamese{color:#555;font-size:15px;line-height:1.5}
+.dialogue-speaker{font-weight:700;color:#e65100;min-width:88px}
+.vocab-table{width:100%;border-collapse:collapse;background:#fff;margin-bottom:10px}
+.vocab-table th{background:#4472c4;color:#fff;padding:12px;text-align:left}
+.vocab-table td{padding:12px;border-bottom:1px solid #e9ecef;vertical-align:top}
+.vocab-hanzi{font-size:22px;font-weight:700;font-family:'SimSun','STSong',serif}
+.vocab-pinyin-td{color:#4472c4;font-style:italic}
+body.hide-pinyin .phrase-pinyin, body.hide-pinyin .dialogue-pinyin{display:none!important}
+body.hide-vietnamese .phrase-vietnamese, body.hide-vietnamese .dialogue-vietnamese{display:none!important}
+@media(max-width:768px){
+  .main-container{flex-direction:column;padding-top:78px}
+  .sidebar-left{width:100%;position:relative;top:0;max-height:none}
+  .header-lesson-title{display:none}
+  .content-header{padding:15px}
+  .content-body{padding:15px}
+  .part-box{padding:16px}
+  .phrase-chinese,.dialogue-chinese{font-size:18px}
+  .dialogue-speaker{min-width:68px}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo-text">
+    <h1>汉语速成</h1>
+    <p>TỰ HỌC TIẾNG TRUNG CHO NGƯỜI MỚI BẮT ĐẦU</p>
+  </div>
+  <div class="header-lesson-title">BÀI 10: ĐẶT PHÒNG</div>
+  <button id="nav-toggle-btn" class="nav-toggle-header" onclick="toggleNavigation()" title="Ẩn điều hướng" aria-label="Ẩn điều hướng">
+    <i class="bi bi-layout-sidebar-inset-reverse"></i>
+  </button>
+</div>
+
+<div class="main-container">
+  <aside class="sidebar-left">
+    <div class="nav-title"><i class="bi bi-list-ul"></i> Điều hướng bài học</div>
+    <a class="nav-item active" onclick="showSection(0)"><i class="bi bi-chat-square-text"></i> I. Mẫu câu</a>
+    <a class="nav-item" onclick="showSection(1)"><i class="bi bi-journal-bookmark"></i> II. Từ vựng</a>
+    <a class="nav-item" onclick="showSection(2)"><i class="bi bi-people-fill"></i> III. Hội thoại</a>
+    <div class="tools-section">
+      <button class="tool-btn" onclick="togglePinyin()"><i class="bi bi-eye-slash"></i> Ẩn/Hiện Pinyin</button>
+      <button class="tool-btn" onclick="toggleVietnamese()"><i class="bi bi-translate"></i> Ẩn/Hiện nghĩa Việt</button>
+    </div>
+  </aside>
+  <main class="content-area">
+    <div class="content-header">
+      <div class="section-title">
+        <span id="current-icon"><i class="bi bi-chat-square-text"></i></span>
+        <span id="section-title-text">I. MẪU CÂU THÔNG DỤNG</span>
+      </div>
+      <div class="section-badge">Bài 10</div>
+    </div>
+    <div class="content-body">
+      <section class="section-content active" id="section-0"><div class="part-box"><div class="part-title">I. MẪU CÂU THÔNG DỤNG</div>
+    <div class="phrase-line" onclick="speakText(&quot;喂，请问，是河内饭店的吗？&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">喂，请问，是河内饭店的吗？</div>
+        <div class="phrase-pinyin">Wèi, qǐngwèn, shì Hénèi fàndiàn de ma?</div>
+        <div class="phrase-vietnamese">A lô, làm ơn cho hỏi, đây có phải là khách sạn Hà Nội không?</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;你好，请问，你是哪位？我能帮你什么忙？&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你好，请问，你是哪位？我能帮你什么忙？</div>
+        <div class="phrase-pinyin">Nǐ hǎo, qǐng wèn, nǐ shì nǎ wèi? Wǒ néng bāng nǐ shénme máng?</div>
+        <div class="phrase-vietnamese">Xin chào, ông là ai? Tôi có thể giúp gì cho quý khách?</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;我是陈先生，我要订房。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">我是陈先生，我要订房。</div>
+        <div class="phrase-pinyin">Wǒ shì Chén xiānsheng, wǒ yào dìng fáng.</div>
+        <div class="phrase-vietnamese">Tôi họ Trần, tôi muốn đặt phòng.</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;你从哪里打过来？&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你从哪里打过来？</div>
+        <div class="phrase-pinyin">Nǐ cóng nǎli dǎ guò lái?</div>
+        <div class="phrase-vietnamese">Quý khách gọi từ đâu đến?</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;日本。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">日本。</div>
+        <div class="phrase-pinyin">Rìběn.</div>
+        <div class="phrase-vietnamese">Nhật Bản.</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;你要订几天？双房还是单房？哪种房子？&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你要订几天？双房还是单房？哪种房子？</div>
+        <div class="phrase-pinyin">Nǐ yào dìng jǐ tiān? Shuāngfáng háishi dānfáng? Nǎ zhǒng fángzi?</div>
+        <div class="phrase-vietnamese">Quý khách đặt mấy ngày? Quý khách cần phòng đôi hay phòng đơn? Quý khách muốn loại phòng nào?</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;5天，单房。我要普通房。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">5天，单房。我要普通房。</div>
+        <div class="phrase-pinyin">Wǔ tiān, dānfáng. Wǒ yào pǔtōng fáng.</div>
+        <div class="phrase-vietnamese">5 ngày, phòng đơn. Tôi chỉ cần phòng phổ thông.</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;你什么时候过来？&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你什么时候过来？</div>
+        <div class="phrase-pinyin">Nǐ shénme shíhòu guò lái?</div>
+        <div class="phrase-vietnamese">Bao giờ ông đến?</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;3月20日上午8点到3月25日下午2点。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">3月20日上午8点到3月25日下午2点。</div>
+        <div class="phrase-pinyin">Sān yuè èrshí rì shàngwǔ bā diǎn dào sān yuè èrshíwǔ rì xiàwǔ liǎng diǎn.</div>
+        <div class="phrase-vietnamese">Từ 8h sáng ngày 20/3 đến 2h chiều ngày 25/3.</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;你能传真给我你护照影本吗？&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">你能传真给我你护照影本吗？</div>
+        <div class="phrase-pinyin">Nǐ néng chuán gěi wǒ nǐ hùzhào yǐngběn ma?</div>
+        <div class="phrase-vietnamese">Quý khách có thể fax cho tôi bản hộ chiếu photo được không?</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;给我你饭店的传真号码。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">给我你饭店的传真号码。</div>
+        <div class="phrase-pinyin">Gěi wǒ nǐ fàndiàn de chuánzhēn hàomǎ.</div>
+        <div class="phrase-vietnamese">Cho tôi số fax của khách sạn.</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;04.3564 4143&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">04.3564 4143</div>
+        <div class="phrase-pinyin">Líng sì sān wǔ liù sì sì yāo sì sān.</div>
+        <div class="phrase-vietnamese">04.3564 4143</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;请等一下……你收到了吗？&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">请等一下……你收到了吗？</div>
+        <div class="phrase-pinyin">Qǐng děng yíxià... nǐ shōu dào le ma?</div>
+        <div class="phrase-vietnamese">Đợi chút... Cô nhận được chưa?</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;收到了。你的房间是A区304号。每天100美元。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">收到了。你的房间是A区304号。每天100美元。</div>
+        <div class="phrase-pinyin">Shōu dào le. Nǐ de fángjiān shì A qū sān líng sì hào. Měitiān yìbǎi Měiyuán.</div>
+        <div class="phrase-vietnamese">Tôi nhận được rồi. Ông ở phòng 304 khu A. Mỗi ngày 100 USD.</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;OK。谢谢你。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">OK。谢谢你。</div>
+        <div class="phrase-pinyin">OK. Xièxie nǐ.</div>
+        <div class="phrase-vietnamese">Được rồi, cám ơn cô.</div>
+      </div>
+    </div>
+    <div class="phrase-line" onclick="speakText(&quot;别客气。&quot;)">
+      <div class="phrase-bullet">•</div>
+      <div class="phrase-content">
+        <div class="phrase-chinese">别客气。</div>
+        <div class="phrase-pinyin">Bié kèqi.</div>
+        <div class="phrase-vietnamese">Không có gì ạ.</div>
+      </div>
+    </div></div></section>
+      <section class="section-content" id="section-1">
+<div class="part-box">
+  <div class="part-title">II. TỪ VỰNG</div>
+  <table class="vocab-table">
+    <thead>
+      <tr><th>STT</th><th>Chữ Hán</th><th>Pinyin</th><th>Nghĩa</th></tr>
+    </thead>
+    <tbody>
+<tr><td>1</td><td class='vocab-hanzi'>谁</td><td class='vocab-pinyin-td'>shuí</td><td>ai</td></tr><tr><td>2</td><td class='vocab-hanzi'>怎么</td><td class='vocab-pinyin-td'>zěnme</td><td>làm sao</td></tr><tr><td>3</td><td class='vocab-hanzi'>怎么样</td><td class='vocab-pinyin-td'>zěnmeyàng</td><td>như thế nào</td></tr><tr><td>4</td><td class='vocab-hanzi'>处理</td><td class='vocab-pinyin-td'>chǔlǐ</td><td>xử lí</td></tr><tr><td>5</td><td class='vocab-hanzi'>哪儿</td><td class='vocab-pinyin-td'>nǎr</td><td>ở đâu</td></tr><tr><td>6</td><td class='vocab-hanzi'>哪里</td><td class='vocab-pinyin-td'>nǎli</td><td>chỗ nào</td></tr><tr><td>7</td><td class='vocab-hanzi'>感冒</td><td class='vocab-pinyin-td'>gǎnmào</td><td>cảm mạo</td></tr><tr><td>8</td><td class='vocab-hanzi'>订</td><td class='vocab-pinyin-td'>dìng</td><td>đặt</td></tr><tr><td>9</td><td class='vocab-hanzi'>房间</td><td class='vocab-pinyin-td'>fángjiān</td><td>phòng</td></tr><tr><td>10</td><td class='vocab-hanzi'>宾馆</td><td class='vocab-pinyin-td'>bīnguǎn</td><td>nhà khách</td></tr><tr><td>11</td><td class='vocab-hanzi'>饭店</td><td class='vocab-pinyin-td'>fàndiàn</td><td>khách sạn</td></tr><tr><td>12</td><td class='vocab-hanzi'>楼</td><td class='vocab-pinyin-td'>lóu</td><td>lầu, tầng</td></tr><tr><td>13</td><td class='vocab-hanzi'>从…到</td><td class='vocab-pinyin-td'>cóng…dào…</td><td>từ... đến</td></tr><tr><td>14</td><td class='vocab-hanzi'>打</td><td class='vocab-pinyin-td'>dǎ</td><td>đánh, gọi, kêu...</td></tr><tr><td>15</td><td class='vocab-hanzi'>电话</td><td class='vocab-pinyin-td'>diànhuà</td><td>điện thoại</td></tr>
+    </tbody>
+  </table>
+  <div class="sub-title">* Tên một số quốc gia</div>
+  <table class="vocab-table">
+    <thead>
+      <tr><th>STT</th><th>Chữ Hán</th><th>Pinyin</th><th>Nghĩa</th></tr>
+    </thead>
+    <tbody>
+<tr><td>1</td><td class='vocab-hanzi'>越南</td><td class='vocab-pinyin-td'>Yuènán</td><td>Việt Nam</td></tr><tr><td>2</td><td class='vocab-hanzi'>中国</td><td class='vocab-pinyin-td'>Zhōngguó</td><td>Trung Quốc</td></tr><tr><td>3</td><td class='vocab-hanzi'>台湾</td><td class='vocab-pinyin-td'>Táiwān</td><td>Đài Loan</td></tr><tr><td>4</td><td class='vocab-hanzi'>日本</td><td class='vocab-pinyin-td'>Rìběn</td><td>Nhật Bản</td></tr><tr><td>5</td><td class='vocab-hanzi'>泰国</td><td class='vocab-pinyin-td'>Tàiguó</td><td>Thái Lan</td></tr><tr><td>6</td><td class='vocab-hanzi'>美国</td><td class='vocab-pinyin-td'>Měiguó</td><td>Mỹ</td></tr><tr><td>7</td><td class='vocab-hanzi'>德国</td><td class='vocab-pinyin-td'>Déguó</td><td>Đức</td></tr><tr><td>8</td><td class='vocab-hanzi'>法国</td><td class='vocab-pinyin-td'>Fǎguó</td><td>Pháp</td></tr><tr><td>9</td><td class='vocab-hanzi'>荷兰</td><td class='vocab-pinyin-td'>Hélán</td><td>Hà Lan</td></tr><tr><td>10</td><td class='vocab-hanzi'>韩国</td><td class='vocab-pinyin-td'>Hánguó</td><td>Hàn Quốc</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+      <section class="section-content" id="section-2"><div class="part-box"><div class="part-title">III. HỘI THOẠI TỔNG HỢP</div><div class="dialogue-container">
+    <div class="dialogue-line" onclick="speakText(&quot;小姐，请问是不是德政宾馆？&quot;)">
+      <div class="dialogue-speaker">Lễ tân</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">小姐，请问是不是德政宾馆？</div>
+        <div class="dialogue-pinyin">Xiǎojiě, qǐngwèn shì bú shì Dézhèng bīnguǎn?</div>
+        <div class="dialogue-vietnamese">Em ơi, đây có phải khách sạn Đức Chính không?</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;是啊。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">是啊。</div>
+        <div class="dialogue-pinyin">Shì a.</div>
+        <div class="dialogue-vietnamese">Đúng rồi ạ.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;我明天想订一间房。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">我明天想订一间房。</div>
+        <div class="dialogue-pinyin">Wǒ míngtiān xiǎng dìng yì jiān fáng.</div>
+        <div class="dialogue-vietnamese">Ngày mai tôi muốn đặt một phòng.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;请问你从哪儿打过来？你贵姓？你明天几点来？&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">请问你从哪儿打过来？你贵姓？你明天几点来？</div>
+        <div class="dialogue-pinyin">Qǐngwèn nǐ cóng nǎr dǎ guò lái? Nǐ guìxìng? Nǐ míngtiān jǐ diǎn lái?</div>
+        <div class="dialogue-vietnamese">Xin hỏi anh gọi từ đâu tới, anh tên gì? Mai mấy giờ anh đến?</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;我从越南打过来。我姓陈。明天早上7点左右。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">我从越南打过来。我姓陈。明天早上7点左右。</div>
+        <div class="dialogue-pinyin">Wǒ cóng Yuènán dǎ guò lái. Wǒ xìng Chén. Míngtiān zǎoshang qī diǎn zuǒyòu.</div>
+        <div class="dialogue-vietnamese">Tôi gọi từ Việt Nam sang, tôi họ Trần. Sáng mai khoảng 7h sáng tôi đến.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;你要双房还是单房？你要住什么房？&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">你要双房还是单房？你要住什么房？</div>
+        <div class="dialogue-pinyin">Nǐ yào shuāngfáng háishi dānfáng? Nǐ yào zhù shénme fáng?</div>
+        <div class="dialogue-vietnamese">Anh ở phòng đơn hay đôi? Ở loại phòng nào?</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;我要单房，普通的。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">我要单房，普通的。</div>
+        <div class="dialogue-pinyin">Wǒ yào dānfáng, pǔtōng de.</div>
+        <div class="dialogue-vietnamese">Tôi ở phòng đơn. Ở phòng loại bình thường.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;一天是180人民币。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">一天是180人民币。</div>
+        <div class="dialogue-pinyin">Yì tiān shì 180 Rénmínbì.</div>
+        <div class="dialogue-vietnamese">Vậy giá 180 tệ/ngày.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;好的。我住2天。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">好的。我住2天。</div>
+        <div class="dialogue-pinyin">Hǎo de. Wǒ zhù liǎng tiān.</div>
+        <div class="dialogue-vietnamese">Được. Tôi ở hai ngày.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;把你的姓名和联络电话给我。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">把你的姓名和联络电话给我。</div>
+        <div class="dialogue-pinyin">Bǎ nǐ de xìngmíng hé liánluò diànhuà gěi wǒ.</div>
+        <div class="dialogue-vietnamese">Cho tôi xin tên và số điện thoại liên lạc của anh.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;我是陈平明。我的中国手机：1326984510；越南手机：0084904003123。我本人现在在越南，明天早上我到中国。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">我是陈平明。我的中国手机：1326984510；越南手机：0084904003123。我本人现在在越南，明天早上我到中国。</div>
+        <div class="dialogue-pinyin">Wǒ shì Chén Píng Míng. Wǒ de Zhōngguó shǒujī: 1326984510; Yuènán shǒujī: 0084904003123. Wǒ běnrén xiànzài zài Yuènán, míngtiān zǎoshang wǒ dào Zhōngguó.</div>
+        <div class="dialogue-vietnamese">Tôi là Trần Bình Minh. Số điện thoại liên lạc của tôi bên Trung Quốc là: 1326984510, số điện thoại bên Việt Nam là: 0084.904003123. Tôi hiện đang ở Việt Nam, sáng mai tôi mới có mặt ở Trung Quốc.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;OK。我留给你一间房了，你住808号。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">OK。我留给你一间房了，你住808号。</div>
+        <div class="dialogue-pinyin">OK. Wǒ liú gěi nǐ yì jiān fáng le, nǐ zhù bā líng bā hào.</div>
+        <div class="dialogue-vietnamese">Vâng, tôi đã giữ một phòng cho anh, anh sẽ ở phòng 808.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;谢谢你，再见。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">谢谢你，再见。</div>
+        <div class="dialogue-pinyin">Xièxie nǐ, zàijiàn.</div>
+        <div class="dialogue-vietnamese">Cám ơn cô, tạm biệt.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;再见。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">再见。</div>
+        <div class="dialogue-pinyin">Zàijiàn.</div>
+        <div class="dialogue-vietnamese">Chào anh.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;（明天早上在中国德政宾馆……）&quot;)">
+      <div class="dialogue-speaker">Ghi chú</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">（明天早上在中国德政宾馆……）</div>
+        <div class="dialogue-pinyin">(Míngtiān zǎoshang zài Zhōngguó Dézhèng bīnguǎn...)</div>
+        <div class="dialogue-vietnamese">(Sáng ngày hôm sau tại khách sạn Đức Chính Trung Quốc)</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;小姐，我要收房昨天已订好了。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">小姐，我要收房昨天已订好了。</div>
+        <div class="dialogue-pinyin">Xiǎojiě, wǒ yào shōu fáng. Zuótiān yǐ dìng hǎo le.</div>
+        <div class="dialogue-vietnamese">Em ơi, anh muốn lấy phòng. Hôm qua anh đã đặt rồi.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;好，给我你的护照。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">好，给我你的护照。</div>
+        <div class="dialogue-pinyin">Hǎo, gěi wǒ nǐ de hùzhào.</div>
+        <div class="dialogue-vietnamese">Vâng, anh cho em mượn hộ chiếu.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;给你。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">给你。</div>
+        <div class="dialogue-pinyin">Gěi nǐ.</div>
+        <div class="dialogue-vietnamese">Đây em ơi.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;等我扫描你的护照和签证，麻烦你帮我在订房书填你的名字和签证号码。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">等我扫描你的护照和签证，麻烦你帮我在订房书填你的名字和签证号码。</div>
+        <div class="dialogue-pinyin">Děng wǒ sǎomiáo nǐ de hùzhào hé qiānzhèng, máfan nǐ bāng wǒ zài dìngfángshū tián nǐ de míngzi hé qiānzhèng hàomǎ.</div>
+        <div class="dialogue-vietnamese">Anh đợi em scan hộ chiếu, anh điền tên và số visa vào phiếu nhận phòng cho em.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;好的。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">好的。</div>
+        <div class="dialogue-pinyin">Hǎo de.</div>
+        <div class="dialogue-vietnamese">OK.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;订金是200人民币。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">订金是200人民币。</div>
+        <div class="dialogue-pinyin">Dìngjīn shì liǎngbǎi Rénmínbì.</div>
+        <div class="dialogue-vietnamese">Anh đặt cọc 200 tệ tiền phòng.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;给你钱。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">给你钱。</div>
+        <div class="dialogue-pinyin">Gěi nǐ qián.</div>
+        <div class="dialogue-vietnamese">Tiền đây em ơi.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;你房间的钥匙。&quot;)">
+      <div class="dialogue-speaker">Nhân viên</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">你房间的钥匙。</div>
+        <div class="dialogue-pinyin">Nǐ fángjiān de yàoshi.</div>
+        <div class="dialogue-vietnamese">Chìa khóa phòng của anh đây.</div>
+      </div>
+    </div>
+    <div class="dialogue-line" onclick="speakText(&quot;谢谢你。&quot;)">
+      <div class="dialogue-speaker">Khách</div>
+      <div class="dialogue-content">
+        <div class="dialogue-chinese">谢谢你。</div>
+        <div class="dialogue-pinyin">Xièxie nǐ.</div>
+        <div class="dialogue-vietnamese">Cám ơn em.</div>
+      </div>
+    </div></div></div></section>
+    </div>
+  </main>
+</div>
+
+<script>
+const titles = ['I. MẪU CÂU THÔNG DỤNG', 'II. TỪ VỰNG', 'III. HỘI THOẠI TỔNG HỢP'];
+const icons = ['bi-chat-square-text', 'bi-journal-bookmark', 'bi-people-fill'];
+
+function showSection(i){
+  document.querySelectorAll('.section-content').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.querySelectorAll('.nav-item').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.getElementById('section-title-text').textContent = titles[i];
+  document.getElementById('current-icon').innerHTML = '<i class="bi ' + icons[i] + '"></i>';
+}
+
+function togglePinyin(){
+  document.body.classList.toggle('hide-pinyin');
+}
+
+function toggleVietnamese(){
+  document.body.classList.toggle('hide-vietnamese');
+}
+
+function speakText(text){
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'zh-CN';
+  utter.rate = 0.92;
+  speechSynthesis.speak(utter);
+}
+
+function toggleNavigation(){
+  document.body.classList.toggle('nav-hidden');
+  const hidden = document.body.classList.contains('nav-hidden');
+  const btn = document.getElementById('nav-toggle-btn');
+  const label = hidden ? 'Hiện điều hướng' : 'Ẩn điều hướng';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
+  btn.innerHTML = hidden ? '<i class="bi bi-layout-sidebar-inset"></i>' : '<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+}
+</script>
+</body>
+</html>
