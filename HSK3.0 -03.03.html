@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -1740,13 +1740,212 @@ function speakAllText(textId) {
         }
     }
 
+
+    // ==================== TAB + EXERCISE HELPERS ====================
+    function setResultMessage(resultId, isCorrect, message) {
+        const result = document.getElementById(resultId);
+        if (!result) return;
+        result.textContent = message;
+        result.classList.remove('correct', 'incorrect');
+        result.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+    }
+
+    function filterVocab(filter, btn) {
+        document.querySelectorAll('.vocab-tab').forEach(tab => tab.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        renderVocabulary(filter);
+    }
+
+    function showText(textId, btn) {
+        document.querySelectorAll('.text-content').forEach(panel => panel.classList.remove('active'));
+        const target = document.getElementById(textId);
+        if (target) target.classList.add('active');
+        document.querySelectorAll('.text-tab').forEach(tab => tab.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+    }
+
+    function showExercise(exerciseId, btn) {
+        document.querySelectorAll('.exercise-content').forEach(panel => panel.classList.remove('active'));
+        const target = document.getElementById(exerciseId);
+        if (target) target.classList.add('active');
+        document.querySelectorAll('.exercise-tab').forEach(tab => tab.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+    }
+
+    function checkAnswer(groupName, expected, resultId) {
+        const selected = document.querySelector(`input[name="${groupName}"]:checked`);
+        if (!selected) {
+            setResultMessage(resultId, false, 'Vui lòng chọn một đáp án.');
+            return;
+        }
+        const accepted = Array.isArray(expected) ? expected.map(String) : [String(expected)];
+        const isCorrect = accepted.includes(String(selected.value));
+        setResultMessage(resultId, isCorrect, isCorrect ? 'Chính xác!' : 'Chưa chính xác, hãy thử lại.');
+    }
+
+    function replayAnimation(itemId) {
+        const instances = writers[itemId];
+        if (!instances || !instances.length) return;
+        try {
+            instances.forEach(writer => {
+                if (writer && typeof writer.cancelAnimation === 'function') writer.cancelAnimation();
+                if (writer && typeof writer.hideCharacter === 'function') writer.hideCharacter();
+            });
+        } catch (e) {}
+        animateSequence(instances, 0);
+    }
+
+    function normalizeArrangeText(value) {
+        return String(value || '')
+            .replace(/[\s，。！？；：、,.!?;:'"“”‘’（）()]/g, '')
+            .trim();
+    }
+
+    function updateArrangeDisplay(box) {
+        if (!box) return;
+        const words = [...box.querySelectorAll('.drop-zone .word-drop')]
+            .map(el => el.dataset.word || el.textContent.replace('×', '').trim());
+        const resultArea = box.querySelector('.result-area');
+        if (!resultArea) return;
+        if (words.length) {
+            resultArea.textContent = words.join(' ');
+            resultArea.classList.remove('empty');
+        } else {
+            resultArea.textContent = 'Kết quả sẽ hiển thị ở đây...';
+            resultArea.classList.add('empty');
+        }
+    }
+
+    function restoreSourceWord(box, token) {
+        if (!box || !token) return;
+        const source = box.querySelector(`.word-source[data-token="${token}"]`);
+        if (source) source.style.display = '';
+    }
+
+    function createDropWord(box, source) {
+        if (!box || !source || source.style.display === 'none') return;
+        const dropZone = box.querySelector('.drop-zone');
+        if (!dropZone) return;
+        const word = document.createElement('span');
+        word.className = 'word-drop';
+        word.draggable = true;
+        word.dataset.word = source.dataset.word || source.textContent.trim();
+        word.dataset.token = source.dataset.token;
+        word.innerHTML = `${word.dataset.word}<button type="button" class="delete-btn" title="Xóa">×</button>`;
+        word.querySelector('.delete-btn').addEventListener('click', event => {
+            event.stopPropagation();
+            restoreSourceWord(box, word.dataset.token);
+            word.remove();
+            updateArrangeDisplay(box);
+        });
+        word.addEventListener('dragstart', event => {
+            event.dataTransfer.setData('text/x-arrange-token', word.dataset.token || '');
+            event.dataTransfer.setData('text/x-arrange-origin', 'drop');
+            word.classList.add('dragging');
+        });
+        word.addEventListener('dragend', () => word.classList.remove('dragging'));
+        dropZone.appendChild(word);
+        source.style.display = 'none';
+        updateArrangeDisplay(box);
+    }
+
+    function initDragAndDrop() {
+        document.querySelectorAll('.arrange-box').forEach(box => {
+            const sourceWords = [...box.querySelectorAll('.word-source')];
+            sourceWords.forEach((source, index) => {
+                if (!source.dataset.token) source.dataset.token = `${box.id}-word-${index}`;
+                source.addEventListener('click', () => createDropWord(box, source));
+                source.addEventListener('dragstart', event => {
+                    event.dataTransfer.setData('text/x-arrange-token', source.dataset.token);
+                    event.dataTransfer.setData('text/x-arrange-origin', 'source');
+                });
+            });
+
+            const dropZone = box.querySelector('.drop-zone');
+            if (!dropZone) return;
+            dropZone.addEventListener('dragover', event => {
+                event.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+            dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+            dropZone.addEventListener('drop', event => {
+                event.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const token = event.dataTransfer.getData('text/x-arrange-token');
+                const origin = event.dataTransfer.getData('text/x-arrange-origin');
+                if (!token) return;
+                if (origin === 'source') {
+                    const source = box.querySelector(`.word-source[data-token="${token}"]`);
+                    if (source) createDropWord(box, source);
+                } else {
+                    const dragging = box.querySelector(`.word-drop[data-token="${token}"]`);
+                    if (dragging) dropZone.appendChild(dragging);
+                    updateArrangeDisplay(box);
+                }
+            });
+        });
+    }
+
+    function checkArrange(boxId, resultId) {
+        const box = document.getElementById(boxId);
+        if (!box) return;
+        const actual = [...box.querySelectorAll('.drop-zone .word-drop')]
+            .map(el => el.dataset.word || '')
+            .join('');
+        const expected = box.dataset.answer || '';
+        if (!actual) {
+            setResultMessage(resultId, false, 'Hãy sắp xếp các từ trước khi kiểm tra.');
+            return;
+        }
+        const isCorrect = normalizeArrangeText(actual) === normalizeArrangeText(expected);
+        setResultMessage(resultId, isCorrect, isCorrect ? 'Chính xác!' : 'Thứ tự chưa đúng, hãy thử lại.');
+    }
+
+    function resetArrange(boxId) {
+        const box = document.getElementById(boxId);
+        if (!box) return;
+        box.querySelectorAll('.word-source').forEach(source => source.style.display = '');
+        const dropZone = box.querySelector('.drop-zone');
+        if (dropZone) dropZone.innerHTML = '';
+        updateArrangeDisplay(box);
+        const result = box.querySelector('.result-message');
+        if (result) {
+            result.textContent = '';
+            result.classList.remove('show', 'correct', 'incorrect');
+        }
+    }
+
+    function checkCharacter(inputId, expected, resultId) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        const actual = input.value.trim();
+        if (!actual) {
+            setResultMessage(resultId, false, 'Vui lòng nhập chữ Hán.');
+            return;
+        }
+        const isCorrect = actual === expected;
+        setResultMessage(resultId, isCorrect, isCorrect ? 'Chính xác!' : `Chưa đúng. Đáp án: ${expected}`);
+    }
+
+    function resetExercises() {
+        document.querySelectorAll('#grammar input[type="radio"], #grammar input[type="checkbox"], #exercises input[type="radio"], #exercises input[type="checkbox"]')
+            .forEach(input => input.checked = false);
+        document.querySelectorAll('#exercises .char-input').forEach(input => input.value = '');
+        document.querySelectorAll('#grammar .result-message, #exercises .result-message').forEach(result => {
+            result.textContent = '';
+            result.classList.remove('show', 'correct', 'incorrect');
+        });
+        document.querySelectorAll('.arrange-box').forEach(box => resetArrange(box.id));
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         renderVocabulary('all');
         initDragAndDrop();
-        
-        localStorage.removeItem('hsk3_audio_speed');
+
+        try { localStorage.removeItem('hsk3_audio_speed'); } catch (e) {}
         audioSpeed = 1.0;
-        document.getElementById('audio-speed').value = '1.0';
+        const speedSelect = document.getElementById('audio-speed');
+        if (speedSelect) speedSelect.value = '1.0';
     });
 
     function toggleFeature(feature, btn, className, iconShow, iconHide) {
@@ -1867,14 +2066,65 @@ function speakAllText(textId) {
 
 </script>
 
+
+<div id="note-editor-overlay" aria-hidden="true">
+    <div id="note-editor-container" role="dialog" aria-modal="true" aria-label="Bảng ghi chú">
+        <div id="note-editor-header">
+            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú</h3>
+            <button type="button" class="editor-tool-btn" onclick="closeNoteEditor()">Đóng</button>
+        </div>
+        <div id="note-editor-toolbar">
+            <button type="button" class="editor-tool-btn" onclick="formatDoc('bold')"><b>B</b></button>
+            <button type="button" class="editor-tool-btn" onclick="formatDoc('italic')"><i>I</i></button>
+            <button type="button" class="editor-tool-btn" onclick="formatDoc('underline')"><u>U</u></button>
+            <button type="button" class="editor-tool-btn" onclick="clearEditor()">Xóa nội dung</button>
+        </div>
+        <div id="rich-editor" contenteditable="true">Ghi chú bài học tại đây...</div>
+        <div id="note-editor-footer">
+            <button type="button" class="editor-btn editor-btn-close" onclick="closeNoteEditor()">Đóng</button>
+            <button type="button" class="editor-btn editor-btn-save" onclick="saveNoteEditor()">Lưu ghi chú</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function openNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'block'; document.getElementById('rich-editor').focus(); }
-    function closeNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'none'; }
-    function saveNoteEditor() { alert('Ghi chú đã được lưu tạm thời!'); closeNoteEditor(); }
-    function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
-    function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
-    
-    document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
+    function openNoteEditor() {
+        const overlay = document.getElementById('note-editor-overlay');
+        const editor = document.getElementById('rich-editor');
+        if (!overlay || !editor) return;
+        try {
+            const saved = localStorage.getItem('hsk3_lesson3_notes');
+            if (saved !== null) editor.innerHTML = saved;
+        } catch (e) {}
+        overlay.style.display = 'block';
+        overlay.setAttribute('aria-hidden', 'false');
+        editor.focus();
+    }
+    function closeNoteEditor() {
+        const overlay = document.getElementById('note-editor-overlay');
+        if (!overlay) return;
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+    function saveNoteEditor() {
+        const editor = document.getElementById('rich-editor');
+        if (!editor) return;
+        try { localStorage.setItem('hsk3_lesson3_notes', editor.innerHTML); } catch (e) {}
+        alert('Ghi chú đã được lưu!');
+        closeNoteEditor();
+    }
+    function formatDoc(cmd) {
+        document.execCommand(cmd, false, null);
+        const editor = document.getElementById('rich-editor');
+        if (editor) editor.focus();
+    }
+    function clearEditor() {
+        const editor = document.getElementById('rich-editor');
+        if (editor && confirm('Xóa tất cả?')) editor.innerHTML = '';
+    }
+
+    const noteOverlay = document.getElementById('note-editor-overlay');
+    if (noteOverlay) noteOverlay.addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
 </script>
 </body>
 </html>
