@@ -5,40 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bài 1: Chào hỏi, Cảm ơn, Xin lỗi - 汉语速成</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, "Helvetica Neue", sans-serif; background: #f5f5f5; min-height: 100vh; color: #333333; }
-        .chinese-text { color: #000000 !important; font-family: "SimSun", "STSong", "Songti", serif; font-size: 20px; }
-        .pinyin-text { font-family: Arial, sans-serif; font-style: normal; font-size: 18px; color: #4472c4; }
+        body { font-family: Arial, "Helvetica Neue", sans-serif; background: #f5f5f5; min-height: 100vh; color: #333; }
+        .chinese-text { color: #000 !important; font-family: "SimSun", "STSong", serif; font-size: 20px; }
+        .pinyin-text { font-family: Arial, sans-serif; font-size: 18px; color: #4472c4; }
+        body.hide-pinyin .phrase-pinyin, body.hide-pinyin .dialogue-pinyin, body.hide-pinyin .vocab-pinyin { display: none !important; }
+        body.hide-vietnamese .phrase-vietnamese, body.hide-vietnamese .dialogue-vietnamese { display: none !important; }
         .header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #4472c4; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .logo { display: flex; align-items: center; gap: 15px; }
-        .logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+        .logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; display: flex; align-items: center; justify-content: center; }
         .logo-img img { width: 100%; height: 100%; object-fit: contain; }
         .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
         .logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
         .main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
         .sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
         .nav-section { border-bottom: 1px solid #e0e0e0; }
-        .nav-title { padding: 15px; color: #333333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #4472c4; font-family: Arial, sans-serif; }
-        .nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666666; font-size: 13px; transition: background 0.1s ease, color 0.1s ease; font-family: Arial, sans-serif; }
+        .nav-title { padding: 15px; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #4472c4; font-family: Arial, sans-serif; }
+        .nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666; font-size: 13px; transition: background 0.1s, color 0.1s; font-family: Arial, sans-serif; text-decoration: none; }
         .nav-item:hover { background: #e3f2fd; color: #4472c4; }
         .nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; }
         .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+        .tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+        .tool-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .tool-card:last-child { margin-bottom: 0; }
+        .tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; }
+        .tool-btn { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; cursor: pointer; font-size: 12px; color: #666; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; transition: all 0.2s; font-family: Arial, sans-serif; }
+        .tool-btn:hover { background: #e3f2fd; border-color: #4472c4; color: #4472c4; }
+        .tool-btn.active-toggle { background: #e3f2fd; border-color: #4472c4; color: #4472c4; font-weight: 600; }
+        .tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+        .tool-btn.primary:hover { background: #d35400; }
         .content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #e3f2fd); padding: 20px; border-bottom: 2px solid #4472c4; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-        .section-title { font-size: 20px; color: #333333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+        .section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
         .section-badge { background: #4472c4; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
         .content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
         .section-content { display: none; animation: fadeIn 0.4s ease; }
         .section-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .part-box { background: white; border-radius: 8px; padding: 25px; margin-bottom: 20px; border: 1px solid #e0e0e0; }
         .part-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #4472c4; font-family: Arial, sans-serif; }
         .part-subtitle { font-size: 16px; font-weight: bold; color: #ed7d31; margin: 20px 0 12px 0; font-family: Arial, sans-serif; }
         .part-desc { font-size: 15px; color: #555; margin-bottom: 15px; line-height: 1.6; font-family: Arial, sans-serif; }
         .formula-box { background: #fff3e0; border: 1px solid #ffe082; border-radius: 8px; padding: 12px 18px; margin-bottom: 15px; font-size: 16px; color: #333; font-family: Arial, sans-serif; }
-
         .phrase-line { display: flex; align-items: flex-start; gap: 15px; padding: 12px 15px; margin-bottom: 10px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; transition: all 0.2s; cursor: pointer; }
         .phrase-line:hover { background: #e3f2fd; border-color: #4472c4; transform: translateX(3px); }
         .phrase-bullet { color: #4472c4; font-size: 20px; line-height: 1; margin-top: 2px; }
@@ -46,7 +56,6 @@
         .phrase-chinese { font-size: 20px; font-weight: bold; color: #000; font-family: "SimSun", "STSong", serif; margin-bottom: 4px; }
         .phrase-pinyin { font-size: 16px; color: #4472c4; margin-bottom: 4px; }
         .phrase-vietnamese { font-size: 15px; color: #555; font-family: Arial, sans-serif; }
-
         .vocab-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .vocab-table th { background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; padding: 14px; text-align: left; font-weight: 600; font-size: 14px; }
         .vocab-table td { padding: 12px 14px; border-bottom: 1px solid #e9ecef; font-size: 15px; }
@@ -54,14 +63,12 @@
         .vocab-table tr:hover td { background: #f8f9ff; }
         .vocab-hanzi { font-size: 22px; font-weight: bold; font-family: "SimSun", "STSong", serif; }
         .vocab-pinyin-td { color: #4472c4; font-style: italic; }
-
         .grammar-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .grammar-table th { background: linear-gradient(135deg, #6c757d, #495057); color: white; padding: 14px; text-align: left; font-weight: 600; font-size: 14px; }
         .grammar-table td { padding: 14px; border-bottom: 1px solid #e9ecef; vertical-align: top; font-size: 15px; }
         .grammar-table tr:hover td { background: #f8f9ff; }
         .grammar-word { font-size: 20px; font-weight: bold; color: #4472c4; font-family: "SimSun", "STSong", serif; }
         .grammar-pinyin { color: #666; font-style: italic; }
-
         .dialogue-container { background: white; border-radius: 8px; padding: 25px; border: 1px solid #e0e0e0; }
         .dialogue-line { display: flex; gap: 15px; margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s; }
         .dialogue-line:hover { background: #e3f2fd; border-color: #4472c4; transform: translateX(5px); }
@@ -70,16 +77,61 @@
         .dialogue-chinese { font-size: 20px; font-weight: bold; color: #000; margin-bottom: 4px; font-family: "SimSun", "STSong", serif; }
         .dialogue-pinyin { font-size: 16px; color: #4472c4; margin-bottom: 4px; }
         .dialogue-vietnamese { font-size: 15px; color: #555; font-family: Arial, sans-serif; }
-
         .note-box { background: #fff3e0; border: 1px solid #ffe082; border-radius: 8px; padding: 15px; margin: 20px 0; }
         .note-title { font-size: 15px; font-weight: bold; color: #e65100; margin-bottom: 8px; font-family: Arial, sans-serif; }
         .note-text { font-size: 14px; color: #555; line-height: 1.8; font-family: Arial, sans-serif; }
-
         .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; } .main-container { flex-direction: column; padding-top: 70px; } }
+        #note-editor-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; }
+        #note-editor-container { background: white; width: 85%; height: 85%; margin: 5% auto; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; }
+        #note-editor-header { background: #4472c4; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3467a8; }
+        #note-editor-header h3 { font-family: Arial, sans-serif; font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px; }
+        #note-editor-toolbar { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .editor-tool-btn { padding: 6px 12px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; transition: all 0.2s; }
+        .editor-tool-btn:hover { background: #e3f2fd; border-color: #4472c4; }
+        #rich-editor { flex: 1; padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; font-family: Arial, sans-serif; background: #fff; }
+        #rich-editor:focus { outline: none; }
+        #note-editor-footer { background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; }
+        .editor-btn { padding: 8px 20px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; font-weight: 600; transition: all 0.2s; }
+        .editor-btn-close { background: #f5f5f5; border: 1px solid #ddd; color: #666; }
+        .editor-btn-close:hover { background: #e0e0e0; }
+        .editor-btn-save { background: #4472c4; border: 1px solid #4472c4; color: white; }
+        .editor-btn-save:hover { background: #3467a8; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 20px; }
+        .vocab-card { background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #4472c4; display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+        .vocab-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(68,114,196,0.15); border-color: #4472c4; border-style: solid; }
+        .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .vocab-number { width: 45px; height: 45px; background: #4472c4; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(68,114,196,0.3); font-family: Arial, sans-serif; }
+        .vocab-content { flex: 1; }
+        .vocab-chinese { font-size: 32px; font-weight: bold; color: #000 !important; margin-bottom: 6px; letter-spacing: 2px; font-family: "SimSun", "STSong", serif; }
+        .vocab-pinyin { font-size: 20px; color: #4472c4; margin-bottom: 6px; font-weight: 500; }
+        .vocab-meaning { font-size: 20px; color: #333; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
+        .vocab-example { font-size: 16px; color: #888; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; }
+        .vocab-animation { width: 140px; height: 140px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .stroke-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .stroke-inline { display: flex; gap: 5px; }
+        .stroke-inline > div { border: 1px solid #e0e0e0; border-radius: 4px; background: #fafafa; }
+        .replay-btn { width: 32px; height: 32px; border: 1px solid #4472c4; background: #e3f2fd; color: #4472c4; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .replay-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
+        .audio-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #e3f2fd; color: #4472c4; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .audio-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
+        @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; } .main-container { flex-direction: column; padding-top: 70px; } .vocab-grid { grid-template-columns: 1fr; } .vocab-card { flex-direction: column; align-items: flex-start; gap: 12px; } }
     </style>
+
+<style id="tts-home-patch">
+.home-fixed-btn{
+  position:fixed;right:18px;bottom:18px;z-index:99999;
+  background:#2e7d32;color:#fff;text-decoration:none;
+  padding:11px 16px;border-radius:24px;font-weight:700;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);font-family:Arial,sans-serif
+}
+.home-fixed-btn:hover{background:#1b5e20}
+.tts-ready{cursor:pointer}
+.tts-ready:hover{filter:brightness(.92)}
+</style>
+
 </head>
 <body>
+<a class="home-fixed-btn" href="https://giasuhoangu.com/" target="_self" title="Về trang chủ"><i class="bi bi-house-door-fill"></i> Trang chủ</a>
 
 <div class="header">
     <div class="logo">
@@ -100,7 +152,7 @@
     <div class="sidebar-left">
         <div class="nav-section">
             <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung</span></div>
-            <a href="TIENG TRUNG CAP TOC.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self">
+            <a href="HSK02-3.0.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self">
                 <i class="bi bi-house-door"></i><span>Về trang chủ</span>
             </a>
             <div class="nav-item active" onclick="showSection('chao-hoi', this)"><i class="bi bi-hand-thumbs-up"></i><span>I. Chào hỏi</span></div>
@@ -110,6 +162,21 @@
             <div class="nav-item" onclick="showSection('tu-vung', this)"><i class="bi bi-journal-bookmark"></i><span>IV. Từ vựng</span></div>
             <div class="nav-item" onclick="showSection('giai-thich', this)"><i class="bi bi-lightbulb"></i><span>V. Giải thích từ</span></div>
             <div class="nav-item" onclick="showSection('hoi-thoai', this)"><i class="bi bi-people-fill"></i><span>VI. Hội thoại</span></div>
+        </div>
+
+        <div class="tools-section">
+            <div class="tool-card">
+                <div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+                <button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+                    <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+                </button>
+                <button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+                    <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+                </button>
+                <button class="tool-btn primary" onclick="openNoteEditor()">
+                    <i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -127,7 +194,6 @@
             <div id="chao-hoi" class="section-content active">
                 <div class="part-box">
                     <div class="part-title">I. CHÀO HỎI</div>
-
                     <div class="part-subtitle">1. Cách chào hỏi thông thường</div>
                     <div class="part-desc">Khi gặp nhau lần đầu có thể chào một cách đơn giản và thông dụng.</div>
                     <div class="formula-box">A + 好 (A là đại từ, danh từ chỉ người)</div>
@@ -139,7 +205,6 @@
                             <div class="phrase-vietnamese">Chào anh(chị, bạn).</div>
                         </div>
                     </div>
-
                     <div class="part-subtitle">2. Cách chào hỏi theo buổi</div>
                     <div class="phrase-line" onclick="speak('先生，早安！')">
                         <div class="phrase-bullet">•</div>
@@ -165,7 +230,6 @@
                             <div class="phrase-vietnamese">Chào ông, chúc ngủ ngon!</div>
                         </div>
                     </div>
-
                     <div class="part-subtitle">3. Cách chào hỏi khi mới gặp lần đầu</div>
                     <div class="phrase-line" onclick="speak('认识你，我很高兴。')">
                         <div class="phrase-bullet">•</div>
@@ -183,7 +247,6 @@
                             <div class="phrase-vietnamese">Quen biết anh, tôi cũng rất vui.</div>
                         </div>
                     </div>
-
                     <div class="part-subtitle">4. Một vài cách chào hỏi thường dùng khác</div>
                     <div class="phrase-line" onclick="speak('你吃了吗？')">
                         <div class="phrase-bullet">•</div>
@@ -217,7 +280,6 @@
                             <div class="phrase-vietnamese">Tôi đi ra ngoài.</div>
                         </div>
                     </div>
-
                     <div class="part-subtitle">5. Chào tạm biệt</div>
                     <div class="phrase-line" onclick="speak('再见。')">
                         <div class="phrase-bullet">•</div>
@@ -243,7 +305,6 @@
                 <div class="part-box">
                     <div class="part-title">II. CÁCH HỎI THĂM SỨC KHỎE</div>
                     <div class="formula-box">A + 好吗? &nbsp;&nbsp;→&nbsp;&nbsp; A + có khỏe không?</div>
-
                     <div class="phrase-line" onclick="speak('你好吗？')">
                         <div class="phrase-bullet">•</div>
                         <div class="phrase-content">
@@ -396,10 +457,10 @@
                                 <div class="phrase-vietnamese">Xin nói chậm một chút.</div>
                             </div>
                         </div>
-                        <div class="phrase-line" onclick="speak('请再说一边。')">
+                        <div class="phrase-line" onclick="speak('请再说一遍。')">
                             <div class="phrase-bullet">•</div>
                             <div class="phrase-content">
-                                <div class="phrase-chinese">请再说一边。</div>
+                                <div class="phrase-chinese">请再说一遍。</div>
                                 <div class="phrase-pinyin">Qǐng zài shuō yí biàn.</div>
                                 <div class="phrase-vietnamese">Xin nhắc lại lần nữa.</div>
                             </div>
@@ -581,26 +642,7 @@
             <div id="tu-vung" class="section-content">
                 <div class="part-box">
                     <div class="part-title">IV. TỪ VỰNG</div>
-                    <table class="vocab-table">
-                        <thead>
-                            <tr><th style="width:60px">STT</th><th style="width:100px">Hán tự</th><th style="width:120px">Phiên âm</th><th>Nghĩa tiếng Việt</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr onclick="speak('我')" style="cursor:pointer;"><td>1</td><td class="vocab-hanzi">我</td><td class="vocab-pinyin-td">wǒ</td><td>tôi, tao, ta</td></tr>
-                            <tr onclick="speak('你')" style="cursor:pointer;"><td>2</td><td class="vocab-hanzi">你</td><td class="vocab-pinyin-td">nǐ</td><td>anh, chị, mày</td></tr>
-                            <tr onclick="speak('他')" style="cursor:pointer;"><td>3</td><td class="vocab-hanzi">他/她</td><td class="vocab-pinyin-td">tā</td><td>anh ta, nó, cô ấy</td></tr>
-                            <tr onclick="speak('先生')" style="cursor:pointer;"><td>4</td><td class="vocab-hanzi">先生</td><td class="vocab-pinyin-td">xiān sheng</td><td>ngài, ông</td></tr>
-                            <tr onclick="speak('认识')" style="cursor:pointer;"><td>5</td><td class="vocab-hanzi">认识</td><td class="vocab-pinyin-td">rèn shi</td><td>quen biết</td></tr>
-                            <tr onclick="speak('很')" style="cursor:pointer;"><td>6</td><td class="vocab-hanzi">很</td><td class="vocab-pinyin-td">hěn</td><td>rất</td></tr>
-                            <tr onclick="speak('好')" style="cursor:pointer;"><td>7</td><td class="vocab-hanzi">好</td><td class="vocab-pinyin-td">hǎo</td><td>tốt, khỏe</td></tr>
-                            <tr onclick="speak('经理')" style="cursor:pointer;"><td>8</td><td class="vocab-hanzi">经理</td><td class="vocab-pinyin-td">jīng lǐ</td><td>giám đốc</td></tr>
-                            <tr onclick="speak('高兴')" style="cursor:pointer;"><td>9</td><td class="vocab-hanzi">高兴</td><td class="vocab-pinyin-td">gāo xìng</td><td>vui mừng</td></tr>
-                            <tr onclick="speak('也')" style="cursor:pointer;"><td>10</td><td class="vocab-hanzi">也</td><td class="vocab-pinyin-td">yě</td><td>cũng</td></tr>
-                            <tr onclick="speak('身体')" style="cursor:pointer;"><td>11</td><td class="vocab-hanzi">身体</td><td class="vocab-pinyin-td">shēn tǐ</td><td>thân thể</td></tr>
-                            <tr onclick="speak('吃')" style="cursor:pointer;"><td>12</td><td class="vocab-hanzi">吃</td><td class="vocab-pinyin-td">chī</td><td>ăn</td></tr>
-                            <tr onclick="speak('饱')" style="cursor:pointer;"><td>13</td><td class="vocab-hanzi">饱</td><td class="vocab-pinyin-td">bǎo</td><td>no</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="vocab-grid" id="vocab-grid"></div>
                 </div>
             </div>
 
@@ -666,12 +708,10 @@
             <div id="hoi-thoai" class="section-content">
                 <div class="part-box">
                     <div class="part-title">VI. HỘI THOẠI TỔNG HỢP</div>
-
                     <div class="note-box">
                         <div class="note-title"><i class="bi bi-info-circle"></i> Ghi nhớ</div>
                         <div class="note-text">Người Trung Quốc hay người Đài Loan đều gọi nhau bằng họ + đại từ (anh, chị, ông, bà...) hoặc gọi họ + chức vụ (danh từ).<br>Ví dụ: <strong>李经理</strong> → Giám đốc Lý.</div>
                     </div>
-
                     <div class="dialogue-container">
                         <div class="dialogue-line" onclick="speak('你好。你好吗？')">
                             <div class="dialogue-speaker">A</div>
@@ -784,32 +824,212 @@
     </div>
 </div>
 
+<div id="note-editor-overlay">
+    <div id="note-editor-container">
+        <div id="note-editor-header">
+            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>
+            <button class="editor-tool-btn" onclick="closeNoteEditor()" style="border:none; background:rgba(255,255,255,0.2); color:white;"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div id="note-editor-toolbar">
+            <button class="editor-tool-btn" onclick="formatDoc('bold')"><i class="bi bi-type-bold"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('italic')"><i class="bi bi-type-italic"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('underline')"><i class="bi bi-type-underline"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('insertUnorderedList')"><i class="bi bi-list-ul"></i></button>
+            <button class="editor-tool-btn" onclick="clearEditor()" style="color:#4472c4;"><i class="bi bi-trash"></i></button>
+        </div>
+        <div id="rich-editor" contenteditable="true" spellcheck="false"></div>
+        <div id="note-editor-footer">
+            <span style="font-size:12px; color:#666; font-family:Arial;">Hỗ trợ paste trực tiếp từ Word</span>
+            <div>
+                <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()">Đóng</button>
+                <button class="editor-btn editor-btn-save" onclick="saveNoteEditor()"><i class="bi bi-check-lg"></i> Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    const sections = ['chao-hoi','hoi-tham','thuong-dung','cam-on','tu-vung','giai-thich','hoi-thoai'];
+    const sectionTitles = ['I. CHÀO HỎI','II. CÁCH HỎI THĂM SỨC KHỎE','III. NHỮNG CÂU NÓI THƯỜNG DÙNG','CẢM ƠN & XIN LỖI','IV. TỪ VỰNG','V. GIẢI THÍCH TỪ','VI. HỘI THOẠI TỔNG HỢP'];
+    const sectionIcons = ['bi-hand-thumbs-up','bi-heart-pulse','bi-chat-quote','bi-emoji-smile','bi-journal-bookmark','bi-lightbulb','bi-people-fill'];
+    const toggleStates = { pinyin: false, vietnamese: false };
+    const vocabulary = [
+        { id: 1, chinese: '我', pinyin: 'wǒ', meaning: 'tôi, tao, ta', example: '我叫王一雪。' },
+        { id: 2, chinese: '你', pinyin: 'nǐ', meaning: 'anh, chị, mày', example: '你好吗？' },
+        { id: 3, chinese: '他', pinyin: 'tā', meaning: 'anh ta, nó', example: '他是经理。' },
+        { id: 4, chinese: '她', pinyin: 'tā', meaning: 'cô ấy, nó', example: '她很高兴。' },
+        { id: 5, chinese: '先生', pinyin: 'xiānsheng', meaning: 'ngài, ông', example: '先生，早安！' },
+        { id: 6, chinese: '认识', pinyin: 'rènshi', meaning: 'quen biết', example: '认识你，我很高兴。' },
+        { id: 7, chinese: '很', pinyin: 'hěn', meaning: 'rất', example: '我很好。' },
+        { id: 8, chinese: '好', pinyin: 'hǎo', meaning: 'tốt, khỏe', example: '你好！' },
+        { id: 9, chinese: '经理', pinyin: 'jīnglǐ', meaning: 'giám đốc', example: '李经理，中午好！' },
+        { id: 10, chinese: '高兴', pinyin: 'gāoxìng', meaning: 'vui mừng', example: '我很高兴。' },
+        { id: 11, chinese: '也', pinyin: 'yě', meaning: 'cũng', example: '我也很好。' },
+        { id: 12, chinese: '身体', pinyin: 'shēntǐ', meaning: 'thân thể', example: '你身体好吗？' },
+        { id: 13, chinese: '吃', pinyin: 'chī', meaning: 'ăn', example: '我吃了。' },
+        { id: 14, chinese: '饱', pinyin: 'bǎo', meaning: 'no', example: '我吃饱了。' }
+    ];
+    const writers = {};
+    let strokesInitialized = false;
+
     function speak(text) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = 'zh-CN';
-            utter.rate = 1.0;
-            utter.pitch = 1;
+            var utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'zh-CN'; utter.rate = 1.0; utter.pitch = 1;
             window.speechSynthesis.speak(utter);
         }
     }
 
-    const sections = ['chao-hoi', 'hoi-tham', 'thuong-dung', 'cam-on', 'tu-vung', 'giai-thich', 'hoi-thoai'];
-    const sectionTitles = ['I. CHÀO HỎI', 'II. CÁCH HỎI THĂM SỨC KHỎE', 'III. NHỮNG CÂU NÓI THƯỜNG DÙNG', 'CẢM ƠN & XIN LỖI', 'IV. TỪ VỰNG', 'V. GIẢI THÍCH TỪ', 'VI. HỘI THOẠI TỔNG HỢP'];
-    const sectionIcons = ['bi-hand-thumbs-up', 'bi-heart-pulse', 'bi-chat-quote', 'bi-emoji-smile', 'bi-journal-bookmark', 'bi-lightbulb', 'bi-people-fill'];
-
     function showSection(sectionId, navItem) {
-        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.section-content').forEach(function(s) { s.classList.remove('active'); });
         document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(function(i) { i.classList.remove('active'); });
         if (navItem) navItem.classList.add('active');
-        const idx = sections.indexOf(sectionId);
+        var idx = sections.indexOf(sectionId);
         document.getElementById('section-title-text').textContent = sectionTitles[idx];
         document.getElementById('current-icon').innerHTML = '<i class="bi ' + sectionIcons[idx] + '"></i>';
         document.getElementById('section-badge').textContent = 'Phần ' + (idx + 1) + '/7';
+        if (sectionId === 'tu-vung') { strokesInitialized = false; renderVocabulary(); }
     }
+
+    function toggleFeature(feature, btn, className, iconShow, iconHide) {
+        toggleStates[feature] = !toggleStates[feature];
+        document.body.classList.toggle(className, toggleStates[feature]);
+        btn.classList.toggle('active-toggle', toggleStates[feature]);
+        btn.querySelector('i').className = toggleStates[feature] ? iconShow : iconHide;
+    }
+    function togglePinyin(btn) { toggleFeature('pinyin', btn, 'hide-pinyin', 'bi bi-eye', 'bi bi-eye-slash'); }
+    function toggleVietnamese(btn) { toggleFeature('vietnamese', btn, 'hide-vietnamese', 'bi bi-eye', 'bi bi-eye-slash'); }
+
+    function openNoteEditor() {
+        document.getElementById('note-editor-overlay').style.display = 'block';
+        document.getElementById('rich-editor').focus();
+    }
+    function closeNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'none'; }
+    function saveNoteEditor() {
+        localStorage.setItem('hanyu_sucheng_bai1_notes', document.getElementById('rich-editor').innerHTML);
+        alert('Đã lưu ghi chú!'); closeNoteEditor();
+    }
+    function loadNoteEditor() {
+        var c = localStorage.getItem('hanyu_sucheng_bai1_notes');
+        if (c) document.getElementById('rich-editor').innerHTML = c;
+    }
+    function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
+    function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
+
+    function renderVocabulary() {
+        var grid = document.getElementById('vocab-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        vocabulary.forEach(function(item) {
+            var card = document.createElement('div');
+            card.className = 'vocab-card';
+            card.dataset.char = item.chinese;
+            var html = '<div class="vocab-info"><div class="vocab-number">' + item.id + '</div>';
+            html += '<div class="vocab-content"><div class="vocab-chinese">' + item.chinese + '</div>';
+            html += '<div class="vocab-pinyin">' + item.pinyin + '</div>';
+            html += '<div class="vocab-meaning">' + item.meaning + '</div>';
+            if (item.example) html += '<div class="vocab-example">"' + item.example + '"</div>';
+            html += '</div><button class="audio-btn" onclick="speak(\'' + item.chinese + '\');event.stopPropagation();">';
+            html += '<i class="bi bi-volume-up"></i></button></div>';
+            html += '<div class="stroke-wrapper"><div class="stroke-inline" id="stroke-' + item.chinese + '"></div>';
+            html += '<button class="replay-btn" onclick="event.stopPropagation(); replayStroke(\'' + item.chinese + '\')">↺</button></div>';
+            card.innerHTML = html;
+            grid.appendChild(card);
+        });
+        setTimeout(initVocabStrokes, 100);
+    }
+
+    function replayStroke(char) {
+        if (writers[char] && Array.isArray(writers[char])) {
+            writers[char].forEach(function(writer) { writer.animateCharacter(); });
+        }
+    }
+
+    function initVocabStrokes() {
+        if (strokesInitialized || !window.HanziWriter) return;
+        document.querySelectorAll('.vocab-card[data-char]').forEach(function(card) {
+            var char = card.dataset.char;
+            var container = card.querySelector('.stroke-inline');
+            if (!container) return;
+            container.innerHTML = '';
+            var chars = char.split('');
+            writers[char] = [];
+            chars.forEach(function(c, index) {
+                var div = document.createElement('div');
+                div.id = 'stroke-' + char + '-' + index;
+                div.style.display = 'inline-block';
+                container.appendChild(div);
+                var writer = HanziWriter.create(div.id, c, {
+                    width: 60, height: 60, padding: 3,
+                    strokeColor: '#4472c4', radicalColor: '#4472c4',
+                    delayBetweenStrokes: 300, strokeAnimationSpeed: 1.5, showCharacter: false
+                });
+                writers[char].push(writer);
+                writer.animateCharacter();
+            });
+        });
+        strokesInitialized = true;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadNoteEditor();
+        var overlay = document.getElementById('note-editor-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', function(e) {
+                if (e.target.id === 'note-editor-overlay') closeNoteEditor();
+            });
+        }
+        if (document.getElementById('tu-vung').classList.contains('active')) {
+            renderVocabulary();
+        }
+    });
 </script>
+
+
+<script id="tts-home-patch-js">
+(function(){
+  function containsChinese(s){ return /[\u3400-\u9FFF]/.test(s || ""); }
+  function cleanChinese(s){
+    return (s || "").replace(/[^\u3400-\u9FFF，。！？；：、“”‘’（）《》〈〉…—\s]/g," ").replace(/\s+/g," ").trim();
+  }
+  window.speakChinese = window.speakChinese || function(text){
+    if(!("speechSynthesis" in window)) return;
+    var t = cleanChinese(text);
+    if(!t) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t);
+    u.lang = "zh-CN";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  };
+  document.addEventListener("DOMContentLoaded", function(){
+    // Ensure all vocabulary/table Hanzi can be clicked to hear pronunciation.
+    document.querySelectorAll("table td, table th").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        el.title = (el.title ? el.title + " | " : "") + "Bấm để nghe tiếng Trung";
+        el.addEventListener("click", function(ev){
+          if(ev.target.closest("a,button,input,select,textarea")) return;
+          speakChinese(txt);
+        });
+      }
+    });
+    // Also support common vocabulary blocks even when they are not tables.
+    document.querySelectorAll(".vocab-item,.vocab-chinese,.word-chinese,.phrase-chinese,.chinese-text").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        if(!el.getAttribute("onclick")){
+          el.addEventListener("click", function(){ speakChinese(txt); });
+        }
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>

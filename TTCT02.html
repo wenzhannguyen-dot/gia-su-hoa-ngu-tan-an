@@ -116,8 +116,22 @@
         .audio-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
         @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; } .main-container { flex-direction: column; padding-top: 70px; } .vocab-grid { grid-template-columns: 1fr; } .vocab-card { flex-direction: column; align-items: flex-start; gap: 12px; } }
     </style>
+
+<style id="tts-home-patch">
+.home-fixed-btn{
+  position:fixed;right:18px;bottom:18px;z-index:99999;
+  background:#2e7d32;color:#fff;text-decoration:none;
+  padding:11px 16px;border-radius:24px;font-weight:700;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);font-family:Arial,sans-serif
+}
+.home-fixed-btn:hover{background:#1b5e20}
+.tts-ready{cursor:pointer}
+.tts-ready:hover{filter:brightness(.92)}
+</style>
+
 </head>
 <body>
+<a class="home-fixed-btn" href="https://giasuhoangu.com/" target="_self" title="Về trang chủ"><i class="bi bi-house-door-fill"></i> Trang chủ</a>
 
 <div class="header">
     <div class="logo">
@@ -138,7 +152,7 @@
     <div class="sidebar-left">
         <div class="nav-section">
             <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung</span></div>
-            <a href="TIENG TRUNG CAP TOC.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self">
+            <a href="HSK02-3.0.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self">
                 <i class="bi bi-house-door"></i><span>Về trang chủ</span>
             </a>
             <div class="nav-item active" onclick="showSection('so-dem', this)"><i class="bi bi-123"></i><span>I. Số đếm</span></div>
@@ -712,6 +726,50 @@
             renderVocabulary();
         }
     });
+</script>
+
+
+<script id="tts-home-patch-js">
+(function(){
+  function containsChinese(s){ return /[\u3400-\u9FFF]/.test(s || ""); }
+  function cleanChinese(s){
+    return (s || "").replace(/[^\u3400-\u9FFF，。！？；：、“”‘’（）《》〈〉…—\s]/g," ").replace(/\s+/g," ").trim();
+  }
+  window.speakChinese = window.speakChinese || function(text){
+    if(!("speechSynthesis" in window)) return;
+    var t = cleanChinese(text);
+    if(!t) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t);
+    u.lang = "zh-CN";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  };
+  document.addEventListener("DOMContentLoaded", function(){
+    // Ensure all vocabulary/table Hanzi can be clicked to hear pronunciation.
+    document.querySelectorAll("table td, table th").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        el.title = (el.title ? el.title + " | " : "") + "Bấm để nghe tiếng Trung";
+        el.addEventListener("click", function(ev){
+          if(ev.target.closest("a,button,input,select,textarea")) return;
+          speakChinese(txt);
+        });
+      }
+    });
+    // Also support common vocabulary blocks even when they are not tables.
+    document.querySelectorAll(".vocab-item,.vocab-chinese,.word-chinese,.phrase-chinese,.chinese-text").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        if(!el.getAttribute("onclick")){
+          el.addEventListener("click", function(){ speakChinese(txt); });
+        }
+      }
+    });
+  });
+})();
 </script>
 
 </body>

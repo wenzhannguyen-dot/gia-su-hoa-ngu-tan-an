@@ -109,8 +109,22 @@ body.hide-vietnamese .phrase-vietnamese, body.hide-vietnamese .dialogue-vietname
     .header-lesson-title { display:none; }
 }
 </style>
+
+<style id="tts-home-patch">
+.home-fixed-btn{
+  position:fixed;right:18px;bottom:18px;z-index:99999;
+  background:#2e7d32;color:#fff;text-decoration:none;
+  padding:11px 16px;border-radius:24px;font-weight:700;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);font-family:Arial,sans-serif
+}
+.home-fixed-btn:hover{background:#1b5e20}
+.tts-ready{cursor:pointer}
+.tts-ready:hover{filter:brightness(.92)}
+</style>
+
 </head>
 <body>
+<a class="home-fixed-btn" href="https://giasuhoangu.com/" target="_self" title="Về trang chủ"><i class="bi bi-house-door-fill"></i> Trang chủ</a>
 <div class="header">
   <div class="logo-text">
     <h1>汉语速成</h1>
@@ -1567,5 +1581,49 @@ document.addEventListener('DOMContentLoaded', () => {
   initWriters();
 });
 </script>
+
+<script id="tts-home-patch-js">
+(function(){
+  function containsChinese(s){ return /[\u3400-\u9FFF]/.test(s || ""); }
+  function cleanChinese(s){
+    return (s || "").replace(/[^\u3400-\u9FFF，。！？；：、“”‘’（）《》〈〉…—\s]/g," ").replace(/\s+/g," ").trim();
+  }
+  window.speakChinese = window.speakChinese || function(text){
+    if(!("speechSynthesis" in window)) return;
+    var t = cleanChinese(text);
+    if(!t) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t);
+    u.lang = "zh-CN";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  };
+  document.addEventListener("DOMContentLoaded", function(){
+    // Ensure all vocabulary/table Hanzi can be clicked to hear pronunciation.
+    document.querySelectorAll("table td, table th").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        el.title = (el.title ? el.title + " | " : "") + "Bấm để nghe tiếng Trung";
+        el.addEventListener("click", function(ev){
+          if(ev.target.closest("a,button,input,select,textarea")) return;
+          speakChinese(txt);
+        });
+      }
+    });
+    // Also support common vocabulary blocks even when they are not tables.
+    document.querySelectorAll(".vocab-item,.vocab-chinese,.word-chinese,.phrase-chinese,.chinese-text").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        if(!el.getAttribute("onclick")){
+          el.addEventListener("click", function(){ speakChinese(txt); });
+        }
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>

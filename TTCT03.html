@@ -117,7 +117,7 @@
         @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; } .main-container { flex-direction: column; padding-top: 70px; } .vocab-grid { grid-template-columns: 1fr; } .vocab-card { flex-direction: column; align-items: flex-start; gap: 12px; } }
     
         .header-lesson-title { flex: 1; text-align: center; font-size: 16px; font-weight: 600; color: white; font-family: Arial, sans-serif; padding: 0 12px; }
-        .nav-toggle-header { min-width: 42px; width: 42px; height: 40px; border: 1px solid rgba(255,255,255,0.75); border-radius: 7px; background: rgba(255,255,255,0.14); color: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; font-size: 20px; transition: background 0.2s, transform 0.2s; }
+        .nav-toggle-header { min-width: 138px; height: 40px; border: 1px solid rgba(255,255,255,0.75); border-radius: 7px; background: rgba(255,255,255,0.14); color: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; font-family: Arial, sans-serif; transition: background 0.2s, transform 0.2s; }
         .nav-toggle-header:hover { background: rgba(255,255,255,0.26); transform: translateY(-1px); }
         body.nav-hidden .sidebar-left { display: none !important; }
         body.nav-hidden .main-container { gap: 0; }
@@ -137,13 +137,27 @@
             .header-lesson-title { font-size: 11px; padding: 0 6px; }
         }
 </style>
+
+<style id="tts-home-patch">
+.home-fixed-btn{
+  position:fixed;right:18px;bottom:18px;z-index:99999;
+  background:#2e7d32;color:#fff;text-decoration:none;
+  padding:11px 16px;border-radius:24px;font-weight:700;
+  box-shadow:0 4px 14px rgba(0,0,0,.22);font-family:Arial,sans-serif
+}
+.home-fixed-btn:hover{background:#1b5e20}
+.tts-ready{cursor:pointer}
+.tts-ready:hover{filter:brightness(.92)}
+</style>
+
 </head>
 <body>
+<a class="home-fixed-btn" href="https://giasuhoangu.com/" target="_self" title="Về trang chủ"><i class="bi bi-house-door-fill"></i> Trang chủ</a>
 <div class="header">
     <div class="logo"><div class="logo-img"><img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An"></div>
     <div class="logo-text"><h1>GIA SƯ HOA NGỮ TÂN AN</h1><p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p></div></div>
     <div class="header-lesson-title">汉语速成 — Bài 3: Thời gian</div>
-    <button id="nav-toggle-btn" class="nav-toggle-header" type="button" onclick="toggleNavigation()" aria-controls="lesson-sidebar" aria-expanded="true" aria-label="Ẩn điều hướng" title="Ẩn điều hướng"><i class="bi bi-layout-sidebar-inset-reverse"></i></button>
+    <button id="nav-toggle-btn" class="nav-toggle-header" type="button" onclick="toggleNavigation()" aria-controls="lesson-sidebar" aria-expanded="true" title="Ẩn điều hướng"><i class="bi bi-layout-sidebar-inset-reverse"></i><span>Ẩn điều hướng</span></button>
 </div>
 <div class="main-container">
     <div class="sidebar-left" id="lesson-sidebar">
@@ -1211,12 +1225,10 @@
         var btn = document.getElementById('nav-toggle-btn');
         if (!btn) return;
         btn.setAttribute('aria-expanded', String(!hidden));
-        var label = hidden ? 'Hiện điều hướng' : 'Ẩn điều hướng';
-        btn.title = label;
-        btn.setAttribute('aria-label', label);
+        btn.title = hidden ? 'Hiện điều hướng' : 'Ẩn điều hướng';
         btn.innerHTML = hidden
-            ? '<i class="bi bi-layout-sidebar-inset"></i>'
-            : '<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+            ? '<i class="bi bi-layout-sidebar-inset"></i><span>Hiện điều hướng</span>'
+            : '<i class="bi bi-layout-sidebar-inset-reverse"></i><span>Ẩn điều hướng</span>';
     }
     function toggleNavigation() {
         var hidden = !document.body.classList.contains('nav-hidden');
@@ -1300,5 +1312,49 @@
         if (overlay) overlay.addEventListener('click', function(e) { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
     });
 </script>
+
+<script id="tts-home-patch-js">
+(function(){
+  function containsChinese(s){ return /[\u3400-\u9FFF]/.test(s || ""); }
+  function cleanChinese(s){
+    return (s || "").replace(/[^\u3400-\u9FFF，。！？；：、“”‘’（）《》〈〉…—\s]/g," ").replace(/\s+/g," ").trim();
+  }
+  window.speakChinese = window.speakChinese || function(text){
+    if(!("speechSynthesis" in window)) return;
+    var t = cleanChinese(text);
+    if(!t) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t);
+    u.lang = "zh-CN";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  };
+  document.addEventListener("DOMContentLoaded", function(){
+    // Ensure all vocabulary/table Hanzi can be clicked to hear pronunciation.
+    document.querySelectorAll("table td, table th").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        el.title = (el.title ? el.title + " | " : "") + "Bấm để nghe tiếng Trung";
+        el.addEventListener("click", function(ev){
+          if(ev.target.closest("a,button,input,select,textarea")) return;
+          speakChinese(txt);
+        });
+      }
+    });
+    // Also support common vocabulary blocks even when they are not tables.
+    document.querySelectorAll(".vocab-item,.vocab-chinese,.word-chinese,.phrase-chinese,.chinese-text").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        if(!el.getAttribute("onclick")){
+          el.addEventListener("click", function(){ speakChinese(txt); });
+        }
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
