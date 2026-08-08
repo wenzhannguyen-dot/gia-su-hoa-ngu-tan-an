@@ -217,6 +217,83 @@ body.nav-hidden .sidebar-left{display:none!important}
 .uniform-note-action.save{background:#4472c4;color:#fff;border-color:#4472c4}
 </style>
 
+
+<style id="uniform-vocab-layout-patch">
+/* Đồng nhất bảng từ vựng và căn icon loa thẳng hàng */
+.vocab-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.vocab-table th,
+.vocab-table td{
+  vertical-align:middle;
+  box-sizing:border-box;
+}
+.vocab-table th:first-child,
+.vocab-table td:first-child{
+  width:46px!important;
+  min-width:46px!important;
+  max-width:46px!important;
+  text-align:center!important;
+  padding-left:6px!important;
+  padding-right:6px!important;
+  white-space:nowrap;
+}
+.vocab-table th:nth-child(2),
+.vocab-table td:nth-child(2){
+  width:30%;
+}
+.vocab-table th:nth-child(3),
+.vocab-table td:nth-child(3){
+  width:28%;
+}
+.vocab-table th:nth-child(4),
+.vocab-table td:nth-child(4){
+  width:auto;
+}
+.vocab-hanzi{
+  position:relative;
+  padding-left:36px!important;
+  line-height:1.55;
+}
+.vocab-hanzi .speaker-hint{
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  margin:0!important;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  font-size:15px;
+}
+.vocab-hanzi .speaker-inline{
+  display:block!important;
+  width:100%;
+}
+.vocab-pinyin-td{
+  line-height:1.55;
+}
+@media(max-width:700px){
+  .vocab-table th:first-child,
+  .vocab-table td:first-child{
+    width:42px!important;
+    min-width:42px!important;
+    max-width:42px!important;
+  }
+  .vocab-hanzi{
+    padding-left:32px!important;
+  }
+  .vocab-hanzi .speaker-hint{
+    left:8px;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="header">
@@ -989,6 +1066,40 @@ var wrap = document.createElement('span');
         '</div>';
       document.body.appendChild(overlay);
     }
+  });
+})();
+</script>
+
+
+<script id="uniform-vocab-layout-patch-js">
+(function(){
+  document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('.vocab-table tbody tr').forEach(function(tr){
+      var cells=tr.querySelectorAll('td');
+      if(cells.length<2)return;
+      var hanzi=cells[1];
+      hanzi.classList.add('vocab-hanzi');
+
+      var icon=hanzi.querySelector('.speaker-hint');
+      if(!icon){
+        icon=document.createElement('i');
+        icon.className='bi bi-volume-up-fill speaker-hint';
+        icon.setAttribute('aria-hidden','true');
+        hanzi.insertBefore(icon,hanzi.firstChild);
+      }
+
+      var wrap=hanzi.querySelector('.speaker-inline');
+      if(!wrap){
+        wrap=document.createElement('span');
+        wrap.className='speaker-inline';
+        var nodes=[];
+        hanzi.childNodes.forEach(function(n){
+          if(n!==icon)nodes.push(n);
+        });
+        nodes.forEach(function(n){wrap.appendChild(n);});
+        hanzi.appendChild(wrap);
+      }
+    });
   });
 })();
 </script>
