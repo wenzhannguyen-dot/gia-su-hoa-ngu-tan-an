@@ -79,6 +79,89 @@ body.hide-vietnamese .phrase-vietnamese{display:none!important}
 }
 </style>
 
+
+<style id="speaker-icon-vocab-patch">
+.speaker-hint{
+  color:#4472c4;
+  margin-right:8px;
+  font-size:15px;
+  vertical-align:middle;
+}
+.speaker-inline{
+  display:inline-flex;
+  align-items:center;
+}
+</style>
+
+
+<style id="compact-stt-column-patch">
+
+table th:first-child,
+table td:first-child{
+  width:1%;
+  min-width:42px;
+  max-width:52px;
+  white-space:nowrap;
+  text-align:center;
+  padding-left:6px !important;
+  padding-right:6px !important;
+}
+table th:first-child{
+  width:42px;
+}
+</style>
+
+
+<style id="uniform-nav-note-patch">
+.nav-toggle-header{
+  width:42px;height:40px;border:1px solid rgba(255,255,255,.8);
+  border-radius:7px;background:rgba(255,255,255,.15);color:#fff;
+  font-size:20px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex:0 0 42px;
+}
+body.nav-hidden .sidebar-left{display:none!important}
+#note-editor-overlay{display:none!important}
+.uniform-note-btn{
+  width:100%;padding:8px;margin-bottom:6px;border:1px solid #ddd;
+  border-radius:5px;background:#4472c4;color:#fff;cursor:pointer;
+  font-family:Arial,sans-serif;font-weight:600;
+}
+#uniform-note-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:10000;padding:4vh 4vw;
+}
+#uniform-note-container{
+  width:min(980px,92vw);height:88vh;margin:0 auto;background:#fff;
+  border-radius:12px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+#uniform-note-header{
+  background:#4472c4;color:#fff;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#uniform-note-header h3{margin:0;font:700 16px Arial,sans-serif;display:flex;gap:8px;align-items:center}
+#uniform-note-toolbar{
+  padding:10px 14px;background:#f8f9fa;border-bottom:1px solid #ddd;
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.uniform-note-tool{
+  padding:7px 11px;border:1px solid #ddd;background:#fff;border-radius:5px;
+  cursor:pointer;font-size:14px;
+}
+#uniform-note-editor{
+  flex:1;padding:18px;overflow:auto;outline:none;font:14px/1.7 Arial,sans-serif;
+}
+#uniform-note-footer{
+  padding:11px 16px;background:#f8f9fa;border-top:1px solid #ddd;
+  display:flex;justify-content:flex-end;gap:8px;
+}
+.uniform-note-action{
+  padding:8px 18px;border-radius:5px;border:1px solid #ccc;
+  background:#fff;cursor:pointer;font-weight:600;
+}
+.uniform-note-action.save{background:#4472c4;color:#fff;border-color:#4472c4}
+</style>
+
 </head>
 <body>
 <div class="header">
@@ -95,7 +178,8 @@ body.hide-vietnamese .phrase-vietnamese{display:none!important}
   <button id="nav-toggle-btn" class="nav-toggle-header" type="button" onclick="toggleNavigation()" aria-label="Ẩn/Hiện điều hướng" title="Ẩn/Hiện điều hướng"><i class="bi bi-layout-sidebar-inset-reverse"></i></button>
 </div>
 <div class="main-container"><aside class="sidebar-left"><div class="nav-title"><i class="bi bi-list-ul"></i> Điều hướng bài học</div>
-            <a href="TIENG TRUNG CAP TOC.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self"><i class="bi bi-house-door"></i><span>Về trang chủ</span></a><a class="nav-item active" onclick="showSection(0)"><i class="bi bi-chat-square-text"></i> I. Mẫu câu</a><a class="nav-item" onclick="showSection(1)"><i class="bi bi-journal-bookmark"></i> II. Từ vựng</a><a class="nav-item" onclick="showSection(2)"><i class="bi bi-people-fill"></i> III. Hội thoại</a>
+            <a href="TIENG TRUNG CAP TOC.html" class="nav-item" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self"><i class="bi bi-house-door"></i><span>Về trang chủ</span></a>
+<a class="nav-item active" onclick="showSection(0)"><i class="bi bi-chat-square-text"></i> I. Mẫu câu</a><a class="nav-item" onclick="showSection(1)"><i class="bi bi-journal-bookmark"></i> II. Từ vựng</a><a class="nav-item" onclick="showSection(2)"><i class="bi bi-people-fill"></i> III. Hội thoại</a>
 
 
 
@@ -161,19 +245,16 @@ function toggleNavigation(){
     speechSynthesis.speak(u);
   };
   document.addEventListener("DOMContentLoaded", function(){
-    // Ensure all vocabulary/table Hanzi can be clicked to hear pronunciation.
     document.querySelectorAll("table td, table th").forEach(function(el){
       var txt=(el.innerText||"").trim();
       if(containsChinese(txt)){
         el.classList.add("tts-ready");
-        el.title = (el.title ? el.title + " | " : "") + "Bấm để nghe tiếng Trung";
-        el.addEventListener("click", function(ev){
+el.addEventListener("click", function(ev){
           if(ev.target.closest("a,button,input,select,textarea")) return;
           speakChinese(txt);
         });
       }
     });
-    // Also support common vocabulary blocks even when they are not tables.
     document.querySelectorAll(".vocab-item,.vocab-chinese,.word-chinese,.phrase-chinese,.chinese-text").forEach(function(el){
       var txt=(el.innerText||"").trim();
       if(containsChinese(txt)){
@@ -183,6 +264,148 @@ function toggleNavigation(){
         }
       }
     });
+  });
+})();
+</script>
+
+
+<script id="speaker-icon-vocab-patch-js">
+(function(){
+  function hasChinese(s){ return /[\u3400-\u9FFF]/.test(s || ""); }
+
+  function addIcon(el){
+    if(!el) return;
+    if(el.querySelector('.speaker-hint')) return;
+    var text = (el.innerText || "").trim();
+    if(!hasChinese(text)) return;
+    var icon = document.createElement('i');
+    icon.className = 'bi bi-volume-up-fill speaker-hint';
+    icon.setAttribute('aria-hidden', 'true');
+var wrap = document.createElement('span');
+    wrap.className = 'speaker-inline';
+    while(el.firstChild){
+      wrap.appendChild(el.firstChild);
+    }
+    el.appendChild(icon);
+    el.appendChild(wrap);
+    el.style.cursor = 'pointer';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.vocab-table tbody tr').forEach(function(tr){
+      var cells = Array.from(tr.querySelectorAll('td'));
+      if(!cells.length) return;
+      var target = cells.find(td => td.classList.contains('vocab-hanzi'));
+      if(!target){
+        target = cells.find(td => hasChinese((td.innerText || '').trim()));
+      }
+      if(target) addIcon(target);
+    });
+
+    document.querySelectorAll('.vocab-hanzi, .vocab-chinese, .word-chinese, .vocab-item .chinese').forEach(addIcon);
+});
+})();
+</script>
+
+
+<script id="uniform-nav-note-patch-js">
+(function(){
+  window.toggleNavigation=function(){
+    document.body.classList.toggle('nav-hidden');
+    var hidden=document.body.classList.contains('nav-hidden');
+    var b=document.getElementById('nav-toggle-btn');
+    if(!b)return;
+    var label=hidden?'Hiện điều hướng':'Ẩn điều hướng';
+    b.title=label;
+    b.setAttribute('aria-label',label);
+    b.innerHTML=hidden?'<i class="bi bi-layout-sidebar-inset"></i>':'<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+  };
+
+  function noteKey(){
+    var n=(location.pathname.split('/').pop()||'TTCT').replace(/\.html?$/i,'');
+    return 'ttct_note_'+n;
+  }
+  window.openUniformNote=function(){
+    var o=document.getElementById('uniform-note-overlay');
+    var e=document.getElementById('uniform-note-editor');
+    if(!o||!e)return;
+    e.innerHTML=localStorage.getItem(noteKey())||'';
+    o.style.display='block';
+    e.focus();
+  };
+  window.closeUniformNote=function(){
+    var o=document.getElementById('uniform-note-overlay');
+    if(o)o.style.display='none';
+  };
+  window.saveUniformNote=function(){
+    var e=document.getElementById('uniform-note-editor');
+    if(e)localStorage.setItem(noteKey(),e.innerHTML);
+    closeUniformNote();
+  };
+  window.formatUniformNote=function(cmd){
+    document.execCommand(cmd,false,null);
+    var e=document.getElementById('uniform-note-editor');
+    if(e)e.focus();
+  };
+  window.clearUniformNote=function(){
+    var e=document.getElementById('uniform-note-editor');
+    if(e)e.innerHTML='';
+  };
+
+  document.addEventListener('DOMContentLoaded',function(){
+    var toggle=document.getElementById('nav-toggle-btn');
+    if(toggle){
+      toggle.setAttribute('onclick','toggleNavigation()');
+      toggle.setAttribute('type','button');
+      toggle.setAttribute('aria-label','Ẩn điều hướng');
+      toggle.setAttribute('title','Ẩn điều hướng');
+      toggle.innerHTML='<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+    }
+
+    document.querySelectorAll('button,a').forEach(function(el){
+      var t=(el.textContent||'').trim().toLowerCase();
+      var oc=(el.getAttribute('onclick')||'').toLowerCase();
+      if(t==='bảng ghi chú'||t==='mở sổ ghi chú'||oc.indexOf('opennoteeditor')>=0){
+        el.remove();
+      }
+    });
+
+    var tools=document.querySelector('.tools-section');
+    if(tools&&!document.getElementById('uniform-note-btn')){
+      var host=tools.querySelector('.tool-card')||tools;
+      var btn=document.createElement('button');
+      btn.id='uniform-note-btn';
+      btn.className='uniform-note-btn';
+      btn.type='button';
+      btn.setAttribute('onclick','openUniformNote()');
+      btn.innerHTML='<i class="bi bi-journal-text"></i> Bảng ghi chú';
+      host.appendChild(btn);
+    }
+
+    if(!document.getElementById('uniform-note-overlay')){
+      var overlay=document.createElement('div');
+      overlay.id='uniform-note-overlay';
+      overlay.innerHTML=
+        '<div id="uniform-note-container">'+
+          '<div id="uniform-note-header">'+
+            '<h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>'+
+            '<button class="uniform-note-tool" type="button" onclick="closeUniformNote()"><i class="bi bi-x-lg"></i></button>'+
+          '</div>'+
+          '<div id="uniform-note-toolbar">'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'bold\')"><i class="bi bi-type-bold"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'italic\')"><i class="bi bi-type-italic"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'underline\')"><i class="bi bi-type-underline"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'insertUnorderedList\')"><i class="bi bi-list-ul"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="clearUniformNote()"><i class="bi bi-trash"></i></button>'+
+          '</div>'+
+          '<div id="uniform-note-editor" contenteditable="true" spellcheck="false"></div>'+
+          '<div id="uniform-note-footer">'+
+            '<button class="uniform-note-action" type="button" onclick="closeUniformNote()">Đóng</button>'+
+            '<button class="uniform-note-action save" type="button" onclick="saveUniformNote()"><i class="bi bi-check-lg"></i> Lưu</button>'+
+          '</div>'+
+        '</div>';
+      document.body.appendChild(overlay);
+    }
   });
 })();
 </script>
