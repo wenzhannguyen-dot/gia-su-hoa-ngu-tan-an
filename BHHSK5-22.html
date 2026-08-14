@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài 22: 阅读与思考 - HSK5</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, "Helvetica Neue", sans-serif; background: #f5f5f5; min-height: 100vh; color: #333; }
+    .chinese-text, .question-chinese, .dialogue-chinese, .text-chinese, .example-chinese, .grammar-structure { color: #000 !important; font-family: "Microsoft YaHei", "SimHei", serif; font-size: 20px; }
+    .vocab-chinese { color: #000 !important; font-family: "DFKai-SB", "KaiTi", "楷体", "STKaiti", serif; font-size: 32px; }
+    .pinyin-text, .vocab-pinyin, .question-pinyin, .dialogue-pinyin, .text-pinyin, .example-pinyin { font-family: Arial, sans-serif; font-style: normal; font-size: 18px; color: #39456f; }
+    body.hide-pinyin .dialogue-pinyin, body.hide-pinyin .vocab-pinyin, body.hide-pinyin .example-pinyin, body.hide-pinyin .pinyin-text { display: none !important; }
+    body.hide-vietnamese .dialogue-vietnamese, body.hide-vietnamese .example-vietnamese, body.hide-vietnamese .prose-vietnamese { display: none !important; }
+    .tool-btn.active-toggle { background: #e8ecf4; border-color: #39456f; color: #39456f; font-weight: 600; }
+
+    .header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: #39456f; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .logo { display: flex; align-items: center; gap: 15px; }
+    .logo-img { width: 50px; height: 50px; background: white; border-radius: 8px; padding: 3px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+    .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+    .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
+    .logo-text p { font-size: 12px; opacity: 0.9; font-family: Arial, sans-serif; }
+
+    .main-container { display: flex; min-height: 100vh; padding: 90px 15px 15px 15px; gap: 15px; }
+
+    .sidebar-left { width: 220px; background: white; border: 1px solid #d0d0d0; border-radius: 8px; overflow: hidden; flex-shrink: 0; position: sticky; top: 90px; height: fit-content; max-height: calc(100vh - 105px); overflow-y: auto; display: flex; flex-direction: column; }
+    .nav-section { border-bottom: 1px solid #e0e0e0; }
+    .nav-title { padding: 15px; color: #333; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; background: #f8f9fa; border-bottom: 2px solid #39456f; font-family: Arial, sans-serif; }
+    .nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #666; font-size: 13px; transition: background 0.1s ease, color 0.1s ease; font-family: Arial, sans-serif; }
+    .nav-item:hover { background: #e8ecf4; color: #39456f; }
+    .nav-item.active { background: #e8f5e9; color: #2e7d32; font-weight: 600; }
+    .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+
+    .tools-section { padding: 15px; background: #fafafa; border-top: 1px solid #e0e0e0; margin-top: auto; }
+    .tool-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .tool-card:last-child { margin-bottom: 0; }
+    .tool-title { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif; }
+    .tool-btn { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 5px; background: #f8f9fa; cursor: pointer; font-size: 12px; color: #666; margin-bottom: 6px; display: flex; align-items: center; justify-content: flex-start; gap: 8px; transition: all 0.1s; font-family: Arial, sans-serif; }
+    .tool-btn:hover { background: #e8ecf4; border-color: #39456f; color: #39456f; }
+    .tool-btn.primary { background: #ed7d31; color: white; border-color: #ed7d31; font-weight: 600; }
+    .tool-btn.primary:hover { background: #d35400; }
+    .tool-btn.success { background: #4caf50; color: white; border-color: #4caf50; font-weight: 600; }
+    .tool-btn.success:hover { background: #388e3c; }
+
+    .content-area { flex: 1; background: white; border: 1px solid #d0d0d0; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; min-width: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .content-header { position: sticky; top: 0; background: linear-gradient(135deg, #f8f9fa, #e8ecf4); padding: 20px; border-bottom: 2px solid #39456f; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+    .section-title { font-size: 20px; color: #333; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: Arial, sans-serif; }
+    .section-badge { background: #39456f; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; font-family: Arial, sans-serif; }
+    .content-body { flex: 1; padding: 25px; overflow-y: auto; background: #fafafa; }
+
+    .section-content { display: none; animation: fadeIn 0.4s ease; }
+    .section-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .objective-card { background: linear-gradient(to right, #e8ecf4, #f8f9fa); border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .objective-card i { font-size: 24px; color: #39456f; margin-bottom: 10px; }
+    .objective-card h3 { font-size: 16px; color: #333; margin-bottom: 8px; font-family: Arial, sans-serif; }
+    .objective-card p { font-size: 14px; color: #666; line-height: 1.6; font-family: Arial, sans-serif; }
+
+    .vocab-container { background: white; border-radius: 8px; padding: 20px; }
+    .vocab-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; flex-wrap: wrap; }
+    .vocab-tab { padding: 8px 16px; background: #f5f5f5; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; color: #666; transition: all 0.2s; font-family: Arial, sans-serif; }
+    .vocab-tab:hover { background: #e0e0e0; }
+    .vocab-tab.active { background: #39456f; color: white; font-weight: 600; }
+
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 20px; }
+    .vocab-card { background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #39456f; display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+    .vocab-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(68,114,196,0.15); border-color: #39456f; border-style: solid; }
+    .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+    .vocab-number { width: 45px; height: 45px; background: #4caf50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(76,175,80,0.3); font-family: Arial, sans-serif; }
+    .vocab-content { flex: 1; }
+    .vocab-pinyin { font-size: 20px; color: #39456f; margin-bottom: 6px; font-weight: 500; }
+    .vocab-meaning { font-size: 20px; color: #2e7d32; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
+    .vocab-example { font-size: 16px; color: #888; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; }
+    .vocab-pos { display: inline-block; background: #eef1f7; color: #e65100; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; font-family: Arial, sans-serif; margin-top: 4px; border: 1px solid #c5d1e3; }
+    .vocab-animation { min-width: 140px; min-height: 100px; background: transparent; border: none; border-radius: 8px; display: flex; flex-direction: row; align-items: center; justify-content: center; padding: 10px; gap: 12px; }
+    .writer-container { width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; }
+    .animation-controls { display: flex; gap: 8px; align-items: center; }
+    .anim-btn { width: 28px; height: 28px; border: none; background: #e8ecf4; color: #39456f; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s; }
+    .anim-btn:hover { background: #39456f; color: white; transform: scale(1.05); }
+    .audio-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #e8ecf4; color: #39456f; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .audio-btn:hover { background: #39456f; color: white; transform: scale(1.05); }
+
+    .text-container { background: white; border-radius: 8px; padding: 30px; line-height: 1.8; }
+    .text-title { font-size: 22px; font-weight: bold; color: #333; margin-bottom: 20px; text-align: center; padding-bottom: 15px; border-bottom: 2px solid #39456f; font-family: Arial, sans-serif; }
+    .text-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .text-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif; }
+    .text-tab.active { background: #e8ecf4; border-color: #39456f; color: #39456f; }
+    .text-content { display: none; }
+    .text-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+    .dialogue-container { margin-bottom: 30px; }
+    .dialogue-header { background: #ed7d31; color: white; padding: 10px 15px; border-radius: 8px 8px 0 0; font-weight: bold; display: flex; align-items: center; justify-content: space-between; font-family: Arial, sans-serif; }
+    .dialogue-header-left { display: flex; align-items: center; gap: 10px; }
+    .dialogue-audio-all { background: #fff; color: #ed7d31; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; transition: all 0.2s; }
+    .dialogue-audio-all:hover { background: #f5f5f5; transform: scale(1.05); }
+    .dialogue-content { background: #fafafa; padding: 20px; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px; }
+    .dialogue-line { margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.2s; position: relative; }
+    .dialogue-line:hover { background: #e8ecf4; border-color: #39456f; transform: translateX(5px); }
+    .dialogue-speaker { font-weight: bold; color: #39456f; margin-bottom: 8px; font-size: 14px; font-family: Arial, sans-serif; }
+    .dialogue-chinese { font-size: 20px; color: #000 !important; margin-bottom: 6px; line-height: 1.6; text-align: justify; }
+    .dialogue-pinyin { font-size: 18px; color: #39456f; margin-bottom: 6px; text-align: justify; }
+    .dialogue-vietnamese { font-size: 18px; color: #666; font-family: Arial, sans-serif; text-align: justify; }
+
+    .prose-box { background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+    .prose-chinese { font-size: 20px; color: #000 !important; line-height: 1.8; margin-bottom: 15px; text-indent: 2em; }
+    .prose-pinyin { font-size: 18px; color: #39456f; line-height: 1.8; margin-bottom: 15px; text-indent: 1em; }
+    .prose-vietnamese { font-size: 18px; color: #666; font-family: Arial, sans-serif; line-height: 1.8; }
+
+    .grammar-container { background: white; border-radius: 8px; padding: 25px; }
+    .grammar-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .grammar-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif; display: flex; align-items: center; gap: 8px; }
+    .grammar-tab:hover { background: #e8ecf4; border-color: #39456f; color: #39456f; }
+    .grammar-tab.active { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+    .grammar-panel { display: none; animation: fadeIn 0.35s ease; }
+    .grammar-panel.active { display: block; }
+    .grammar-item { margin-bottom: 30px; border-bottom: 1px solid #e0e0e0; padding-bottom: 25px; }
+    .grammar-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .grammar-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+    .grammar-number { width: 40px; height: 40px; background: #ed7d31; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; font-family: Arial, sans-serif; }
+    .grammar-title { font-size: 18px; font-weight: bold; color: #333; font-family: Arial, sans-serif; }
+    .grammar-structure { background: #eef1f7; padding: 15px; border-radius: 8px; font-size: 20px; color: #000; margin-bottom: 15px; border: 1px solid #ed7d31; }
+    .grammar-explanation { font-size: 16px; color: #666; line-height: 1.8; margin-bottom: 15px; font-family: Arial, sans-serif; }
+    .grammar-example { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e0e0e0; }
+    .example-chinese { font-size: 20px; color: #000 !important; margin-bottom: 6px; }
+    .example-pinyin { font-size: 18px; color: #39456f; margin-bottom: 6px; }
+    .example-vietnamese { font-size: 18px; color: #666; font-family: Arial, sans-serif; }
+    .grammar-practice { margin-top: 20px; padding: 20px; background: #eef1f7; border-radius: 8px; border: 1px solid #c5d1e3; }
+    .practice-title { font-size: 16px; font-weight: bold; color: #e65100; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-family: Arial, sans-serif; }
+    .practice-question { margin-bottom: 20px; padding: 15px; background: white; border-radius: 5px; border: 1px solid #e0e0e0; }
+    .practice-sentence { font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; line-height: 1.8; margin-bottom: 15px; }
+    .practice-options { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 10px; }
+    .practice-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 18px; font-family: "Microsoft YaHei", "SimSun", serif; transition: all 0.2s; }
+    .practice-option:hover { color: #39456f; }
+    .practice-option input[type="radio"], .practice-option input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #39456f; }
+
+    .exercise-container { background: white; border-radius: 8px; padding: 25px; }
+    .exercise-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; flex-wrap: wrap; }
+    .exercise-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666; font-weight: 500; font-family: Arial, sans-serif; display: flex; align-items: center; gap: 8px; }
+    .exercise-tab.active { background: #e8ecf4; border-color: #39456f; color: #39456f; }
+    .exercise-content { display: none; }
+    .exercise-content.active { display: block; animation: fadeIn 0.3s ease; }
+    .section-header-exercise { background-color: #39456f; color: white; padding: 15px 20px; margin: 0 0 20px 0; border-radius: 5px; font-weight: bold; font-size: 22px; font-family: Arial, sans-serif; }
+    .part-header { background-color: #ed7d31; color: white; padding: 10px 15px; margin: 20px 0 15px 0; border-radius: 3px; font-weight: bold; font-family: Arial, sans-serif; }
+    .question-container { background-color: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e0e0; }
+    .question-text { margin-bottom: 15px; font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; line-height: 1.6; }
+    .choice-group { display: flex; flex-direction: row; gap: 15px 25px; margin-top: 10px; flex-wrap: wrap; }
+    .choice-item { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 18px; font-family: "Microsoft YaHei", "SimSun", serif; transition: all 0.2s; }
+    .choice-item:hover { color: #39456f; }
+    .choice-item input[type="radio"], .choice-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #39456f; }
+    .fill-sentence { margin-bottom: 15px; line-height: 2; font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; }
+    .passage-box { background-color: #eef1f7; border: 1px solid #c5d1e3; padding: 20px; margin-bottom: 20px; border-radius: 5px; line-height: 1.8; }
+    .writing-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+    .arrange-box { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid #e0e0e0; }
+    .word-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; padding: 15px; background: #f0f0f0; border-radius: 6px; border: 1px solid #ddd; }
+    .word-source { padding: 8px 16px; background: #e8e8e8; border: 1px solid #ccc; border-radius: 4px; font-family: "Microsoft YaHei", "SimSun", serif; font-size: 18px; cursor: grab; transition: all 0.2s; user-select: none; color: #666; }
+    .word-source:hover:not(.used) { background: #d0d0d0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .word-source.used { opacity: 0.4; cursor: not-allowed; pointer-events: none; background: #e0e0e0; border-color: #bbb; }
+    .drop-zone { display: flex; flex-wrap: wrap; gap: 10px; min-height: 60px; padding: 15px; background: white; border-radius: 6px; border: 2px dashed #ccc; margin-bottom: 20px; align-items: center; transition: all 0.2s; }
+    .drop-zone.drag-over { background: #e8ecf4; border-color: #39456f; }
+    .word-drop { padding: 8px 16px; background: white; border: 1px solid #999; border-radius: 4px; font-family: "Microsoft YaHei", "SimSun", serif; font-size: 18px; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s; }
+    .word-drop:hover { background: #e8ecf4; border-color: #39456f; }
+    .word-drop.dragging { opacity: 0.5; }
+    .result-area { padding: 15px; background: white; border-radius: 6px; border: 1px solid #ddd; font-family: "Microsoft YaHei", "SimSun", serif; font-size: 20px; color: #333; min-height: 50px; line-height: 1.6; }
+    .result-area.empty { color: #999; font-style: italic; }
+    .char-writing-box { text-align: left; padding: 20px; background: #f8f9fa; border-radius: 8px; margin: 15px 0; }
+    .char-input { width: 60px; height: 40px; font-size: 20px; text-align: center; border: 2px solid #39456f; border-radius: 4px; font-family: "Microsoft YaHei", "SimSun", serif; margin: 10px 0; display: inline-block; vertical-align: middle; }
+    .char-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(68,114,196,0.2); }
+    .check-btn { background: #4caf50; color: white; border: none; padding: 10px 25px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 15px; display: inline-flex; align-items: center; gap: 8px; font-family: Arial, sans-serif; transition: all 0.2s; }
+    .check-btn:hover { background: #388e3c; transform: translateY(-1px); }
+    .result-message { margin-top: 15px; padding: 12px; border-radius: 6px; font-weight: 500; display: none; font-family: Arial, sans-serif; font-size: 14px; }
+    .result-message.show { display: block; }
+    .result-message.correct { background: #c8e6c9; color: #2e7d32; border: 1px solid #4caf50; }
+    .result-message.incorrect { background: #d0d8e8; color: #39456f; border: 1px solid #8a9abf; }
+    .stroke-wrapper { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .stroke-inline { display: flex; gap: 5px; }
+    .stroke-inline > div { border: 1px solid #e0e0e0; border-radius: 4px; background: #fafafa; }
+    .replay-btn { width: 32px; height: 32px; border: 1px solid #39456f; background: #e8ecf4; color: #39456f; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .replay-btn:hover { background: #39456f; color: white; transform: scale(1.05); }
+    .compare-box { background: #e8ecf4; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #8a9abf; }
+    .compare-title { font-weight: bold; color: #2a3352; margin-bottom: 10px; font-family: Arial, sans-serif; }
+    .char-sentence { font-size: 20px; font-family: "Microsoft YaHei", "SimSun", serif; margin-bottom: 10px; line-height: 1.6; }
+    .char-pinyin-inline { color: #39456f; font-weight: bold; }
+    .char-label { font-family: Arial, sans-serif; font-size: 16px; margin-bottom: 8px; color: #333; }
+    .vocab-box { background-color: #e8ecf4; padding: 15px; margin-bottom: 20px; border-radius: 5px; display: flex; flex-wrap: wrap; gap: 20px; }
+    .vocab-item { display: inline-flex; align-items: center; gap: 8px; font-size: 18px; font-family: "Microsoft YaHei", "SimSun", serif; }
+
+    #note-editor-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; animation: fadeIn 0.3s ease; }
+    #note-editor-container { background: white; width: 85%; height: 85%; margin: 5% auto; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; overflow: hidden; }
+    #note-editor-header { background: #39456f; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2a3352; }
+    #note-editor-header h3 { font-family: Arial, sans-serif; font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px; }
+    #note-editor-toolbar { background: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 10px; flex-wrap: wrap; }
+    .editor-tool-btn { padding: 6px 12px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; transition: all 0.2s; }
+    .editor-tool-btn:hover { background: #e8ecf4; border-color: #39456f; }
+    #rich-editor { flex: 1; padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; font-family: Arial, sans-serif; background: #fff; }
+    #rich-editor:focus { outline: none; }
+    #note-editor-footer { background: #f8f9fa; padding: 12px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; }
+    .editor-btn { padding: 8px 20px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: Arial, sans-serif; font-weight: 600; transition: all 0.2s; }
+    .editor-btn-close { background: #f5f5f5; border: 1px solid #ddd; color: #666; }
+    .editor-btn-close:hover { background: #e0e0e0; }
+    .editor-btn-save { background: #39456f; border: 1px solid #39456f; color: white; }
+    .editor-btn-save:hover { background: #2a3352; }
+
+    @media (max-width: 1024px) {
+      .sidebar-left { width: 60px; }
+      .sidebar-left .tools-section { display: none; }
+      .nav-item span { display: none; }
+      .nav-item { justify-content: center; padding: 15px 10px; }
+      .vocab-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .main-container { flex-direction: column; padding-top: 70px; }
+      .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; display: flex; overflow-x: auto; flex-direction: row; }
+      .nav-section { display: flex; border-bottom: none; flex: 1; }
+      .nav-item { white-space: nowrap; }
+      .tools-section { display: none; }
+      .choice-group { flex-direction: column; gap: 12px; }
+      .practice-options { flex-direction: column; gap: 12px; }
+      #note-editor-container { width: 95%; height: auto; margin: 2.5% auto; }
+      .word-bank, .drop-zone { gap: 8px; }
+    }
+  body.hide-examples .vocab-example { display: none !important; }
+
+    .prose-pinyin, .example-pinyin, .dialogue-pinyin, .question-pinyin { font-size: 18px !important; line-height: 1.8; }
+    .prose-vietnamese, .example-vietnamese, .dialogue-vietnamese, .question-vietnamese { font-size: 18px !important; line-height: 1.8; }
+    .choice-hint { font-size: 16px; color:#666; margin-top:6px; line-height:1.6; }
+  </style>
+<base target="_blank">
+</head>
+<body class="hide-examples">
+
+<div class="header">
+  <div class="logo">
+    <div class="logo-img">
+      <img id="logo-image" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+    </div>
+    <div class="logo-text">
+      <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+      <p>109 Nguyễn Văn Tiếp, P.Long An, T Tây Ninh | Zalo: 0839.889.772</p>
+    </div>
+  </div>
+  <div class="lesson-title" style="flex: 1; text-align: center; font-size: 18px; font-weight: 600; color: white; font-family: Arial, sans-serif; padding: 0 20px;">
+    Bài 22: 阅读与思考 Đọc và suy nghĩ - HSK5
+  </div>
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <span style="font-size: 13px; font-family: Arial, sans-serif;">Tốc độ:</span>
+    <select id="audio-speed" onchange="setAudioSpeed(this.value)" style="padding: 5px 10px; border-radius: 4px; border: none; font-size: 13px; font-family: Arial, sans-serif; cursor: pointer; background: white; color: #39456f; font-weight: 600; outline: none;">
+      <option value="0.5">0.5x</option>
+      <option value="0.7">0.7x</option>
+      <option value="0.8" selected>0.8x</option>
+      <option value="1.0">1.0x</option>
+      <option value="1.2">1.2x</option>
+      <option value="1.5">1.5x</option>
+    </select>
+  </div>
+  <button onclick="goToHome()" title="Trang chủ" style="display: flex; align-items: center; gap: 6px; background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-family: Arial, sans-serif; cursor: pointer; transition: background 0.2s, border-color 0.2s; margin-left: 10px;" onmouseover="this.style.background='rgba(255,255,255,0.18)'; this.style.borderColor='rgba(255,255,255,0.85)';" onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(255,255,255,0.5)';">
+    <i class="bi bi-house-door"></i><span>Trang chủ</span>
+  </button>
+</div>
+
+<div class="main-container">
+  <div class="sidebar-left">
+    <div class="nav-section">
+      <div class="nav-title"><i class="bi bi-list-ul"></i><span>Nội dung bài học</span></div>
+      <div class="nav-item active" onclick="showSection('objectives', this)">
+        <i class="bi bi-bullseye"></i><span>Mục tiêu</span>
+      </div>
+      <div class="nav-item" onclick="showSection('vocabulary', this)">
+        <i class="bi bi-alphabet"></i><span>Từ vựng</span>
+      </div>
+      <div class="nav-item" onclick="showSection('text', this)">
+        <i class="bi bi-book"></i><span>Bài khóa</span>
+      </div>
+      <div class="nav-item" onclick="showSection('grammar', this)">
+        <i class="bi bi-diagram-3"></i><span>Ngữ pháp</span>
+      </div>
+      <div class="nav-item" onclick="showSection('exercises', this)">
+        <i class="bi bi-pencil-square"></i><span>Bài tập</span>
+      </div>
+      <div class="nav-item" onclick="showSection('activity', this)">
+        <i class="bi bi-people"></i><span>Vận dụng</span>
+      </div>
+    </div>
+
+    <div class="tools-section">
+      <div class="tool-card">
+        <div class="tool-title"><i class="bi bi-tools"></i>Công cụ học tập</div>
+        <button class="tool-btn" id="btn-pinyin" onclick="togglePinyin(this)">
+          <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Pinyin</span>
+        </button>
+        <button class="tool-btn" id="btn-vietnamese" onclick="toggleVietnamese(this)">
+          <i class="bi bi-eye-slash"></i><span>Ẩn/Hiện Nghĩa</span>
+        </button>
+        <button class="tool-btn active-toggle" id="btn-examples" onclick="toggleExamples(this)">
+          <i class="bi bi-eye"></i><span>Ẩn/Hiện Ví dụ</span>
+        </button>
+        <button class="tool-btn primary" onclick="openNoteEditor()">
+          <i class="bi bi-journal-text"></i><span>Bảng ghi chú</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-area">
+    <div class="content-header">
+      <div class="section-title">
+        <span id="current-icon"><i class="bi bi-bullseye"></i></span>
+        <span id="section-title-text">Mục tiêu bài học</span>
+        <span class="section-badge" id="section-badge">Phần 1/6</span>
+      </div>
+    </div>
+
+    <div class="content-body">
+
+
+      <!-- MỤC TIÊU -->
+      <div id="objectives" class="section-content active">
+        <div class="objectives-grid">
+          <div class="objective-card"><i class="bi bi-palette"></i><h3>Phần khởi động 1</h3><p><span class="chinese-text">请看下面的图片并说说你知道的颜色。</span><br>Quan sát hình và nói những màu sắc bạn biết.</p><p style="margin-top:8px;color:#2e7d32;"><strong>颜色:</strong> 红、黄、绿、蓝、灰、白...</p></div>
+          <div class="objective-card"><i class="bi bi-chat-dots"></i><h3>Phần khởi động 2</h3><p><span class="chinese-text">你喜欢写作文吗？你觉得有哪些提高写作水平的好方法？请给老师和同学们介绍一下。</span><br>Bạn có thích viết văn không? Bạn nghĩ có những phương pháp tốt nào để nâng cao trình độ viết? Hãy giới thiệu với giáo viên và các bạn.</p></div>
+          <div class="objective-card"><i class="bi bi-book"></i><h3>Bài khóa</h3><p>Chủ đề: <strong>阅读与思考</strong> — đọc sách không chỉ là tiếp nhận, mà còn cần trao đổi và suy nghĩ.</p></div>
+          <div class="objective-card"><i class="bi bi-alphabet"></i><h3>Từ vựng</h3><p>Nắm 34 sinh từ và 2 danh từ riêng: 过分, 强调, 作文, 观点, 客观, 全面, 转变, 观念, 火柴, 灰, 一旦, 王宫, 王子, 属于, 对待, 交换, 拥有, 巨大, 承认, 人性, 完美, 难免, 疼爱, 平等, 自私, 倾向, 理由, 道德, 自从, 童话, 价值, 单纯, 主张, 知感...</p></div>
+          <div class="objective-card"><i class="bi bi-diagram-3"></i><h3>Ngữ pháp</h3><p>Nắm các điểm: 一旦, 难免, 自从, bảng 词语搭配, phân biệt 平等 / 公平.</p></div>
+          <div class="objective-card"><i class="bi bi-pencil-square"></i><h3>Bài tập</h3><p>Luyện tập các dạng: chọn từ điền chỗ trống, chọn đáp án đúng, nối từ, 复述课文, mở rộng và vận dụng.</p></div>
+        </div>
+      </div>
+      <!-- TỪ VỰNG -->
+      <div id="vocabulary" class="section-content">
+        <div class="vocab-container">
+          <div class="vocab-tabs">
+            <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (36)</button>
+            <button class="vocab-tab" onclick="filterVocab('group1', this)">Nhóm 1: 过分~王子 (13)</button>
+            <button class="vocab-tab" onclick="filterVocab('group2', this)">Nhóm 2: 属于~自私 (12)</button>
+            <button class="vocab-tab" onclick="filterVocab('group3', this)">Nhóm 3: 倾向~知感 (9)</button>
+            <button class="vocab-tab" onclick="filterVocab('group4', this)">专有名词 (2)</button>
+          </div>
+          <div class="vocab-grid" id="vocab-grid"></div>
+        </div>
+      </div>
+      <!-- BÀI KHÓA -->
+      <div id="text" class="section-content">
+        <div class="text-container">
+          <div class="text-tabs"><button class="text-tab active" onclick="showText('text1', this)"><i class="bi bi-book"></i> 课文 - 阅读与思考 (Đọc và suy nghĩ)</button></div>
+          <div id="text1" class="text-content active"><div class="dialogue-container">
+            <div class="dialogue-header"><div class="dialogue-header-left"><i class="bi bi-book"></i> 课文 - 阅读与思考（578字）(22-1)</div><button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button></div>
+            <div class="dialogue-content"><div class="prose-box" onclick="speak(&quot;很多家长可能过分强调阅读的作用，觉得多读书就能够把作文写得特别好。这个观点是不客观、不全面的，我们需要转变自己的观念。&quot;)" style="cursor:pointer;">
+  <div class="prose-chinese chinese-text">很多家长可能过分强调阅读的作用，觉得多读书就能够把作文写得特别好。这个观点是不客观、不全面的，我们需要转变自己的观念。</div>
+  <div class="prose-pinyin pinyin-text">Hěn duō jiāzhǎng kěnéng guòfèn qiángdiào yuèdú de zuòyòng, juéde duō dú shū jiù nénggòu bǎ zuòwén xiě de tèbié hǎo. Zhège guāndiǎn shì bù kèguān, bù quánmiàn de, wǒmen xūyào zhuǎnbiàn zìjǐ de guānniàn.</div>
+  <div class="prose-vietnamese">Nhiều phụ huynh có thể quá nhấn mạnh tác dụng của việc đọc, cho rằng đọc nhiều sách thì có thể viết văn đặc biệt tốt. Quan điểm này không khách quan, không toàn diện; chúng ta cần thay đổi quan niệm của mình.</div>
+</div><div class="prose-box" onclick="speak(&quot;我曾经听一位美国的小学老师说，他们十分重视和学生一起讨论问题。比如，他们讨论过《卖火柴的小女孩》是写给谁看的，还讨论过灰姑娘的故事。老师讲完故事之后，问同学们：灰姑娘一旦进了这个王宫，成为王子的心上人，她的梦想实现了，一切幸福都属于她之后，这时她应该怎样对待她的继母，应该怎样对待她的两个姐姐？&quot;)" style="cursor:pointer;">
+  <div class="prose-chinese chinese-text">我曾经听一位美国的小学老师说，他们十分重视和学生一起讨论问题。比如，他们讨论过《卖火柴的小女孩》是写给谁看的，还讨论过灰姑娘的故事。老师讲完故事之后，问同学们：灰姑娘一旦进了这个王宫，成为王子的心上人，她的梦想实现了，一切幸福都属于她之后，这时她应该怎样对待她的继母，应该怎样对待她的两个姐姐？</div>
+  <div class="prose-pinyin pinyin-text">Wǒ céngjīng tīng yí wèi Měiguó de xiǎoxué lǎoshī shuō, tāmen shífēn zhòngshì hé xuésheng yìqǐ tǎolùn wèntí. Bǐrú, tāmen tǎolùn guò 《Mài Huǒchái de Xiǎo Nǚhái》 shì xiě gěi shéi kàn de, hái tǎolùn guò Huīgūniang de gùshi. Lǎoshī jiǎng wán gùshi zhīhòu, wèn tóngxuémen: Huīgūniang yídàn jìn le zhège wánggōng, chéngwéi wángzǐ de xīnshàngrén, tā de mèngxiǎng shíxiàn le, yíqiè xìngfú dōu shǔyú tā zhīhòu, zhè shí tā yīnggāi zěnyàng duìdài tā de jìmǔ, yīnggāi zěnyàng duìdài tā de liǎng gè jiějie?</div>
+  <div class="prose-vietnamese">Tôi từng nghe một giáo viên tiểu học người Mỹ nói rằng họ rất coi trọng việc cùng học sinh thảo luận vấn đề. Ví dụ, họ từng thảo luận “Cô bé bán diêm” được viết cho ai đọc, và cũng từng thảo luận câu chuyện Cô bé Lọ Lem. Sau khi kể xong câu chuyện, giáo viên hỏi học sinh: một khi Lọ Lem bước vào hoàng cung, trở thành người trong lòng hoàng tử, ước mơ của cô ấy thành hiện thực, mọi hạnh phúc đều thuộc về cô ấy, lúc đó cô ấy nên đối xử với mẹ kế như thế nào, nên đối xử với hai chị gái của mình như thế nào?</div>
+</div><div class="prose-box" onclick="speak(&quot;为什么要讨论这个问题呢？因为这是一种情感交换。老师和学生通过讨论得出的结论是：一个已经拥有巨大幸福的人，应该原谅和理解那些伤害过自己的人。另外还要承认人性中一些先天的不完美，就是说作为一个母亲，在自己的亲生女儿和不是亲生的灰姑娘之间，难免会更疼爱自己亲生的女儿，很难完全平等地对待她们。可能你觉得继母很自私，但这种行为有自然倾向的理由，与道德没有必然的关系。&quot;)" style="cursor:pointer;">
+  <div class="prose-chinese chinese-text">为什么要讨论这个问题呢？因为这是一种情感交换。老师和学生通过讨论得出的结论是：一个已经拥有巨大幸福的人，应该原谅和理解那些伤害过自己的人。另外还要承认人性中一些先天的不完美，就是说作为一个母亲，在自己的亲生女儿和不是亲生的灰姑娘之间，难免会更疼爱自己亲生的女儿，很难完全平等地对待她们。可能你觉得继母很自私，但这种行为有自然倾向的理由，与道德没有必然的关系。</div>
+  <div class="prose-pinyin pinyin-text">Wèishénme yào tǎolùn zhège wèntí ne? Yīnwèi zhè shì yì zhǒng qínggǎn jiāohuàn. Lǎoshī hé xuésheng tōngguò tǎolùn déchū de jiélùn shì: yí gè yǐjīng yōngyǒu jùdà xìngfú de rén, yīnggāi yuánliàng hé lǐjiě nàxiē shānghài guò zìjǐ de rén. Lìngwài hái yào chéngrèn rénxìng zhōng yìxiē xiāntiān de bù wánměi, jiù shì shuō zuòwéi yí gè mǔqīn, zài zìjǐ de qīnshēng nǚ’ér hé bú shì qīnshēng de Huīgūniang zhījiān, nánmiǎn huì gèng téng’ài zìjǐ qīnshēng de nǚ’ér, hěn nán wánquán píngděng de duìdài tāmen. Kěnéng nǐ juéde jìmǔ hěn zìsī, dàn zhè zhǒng xíngwéi yǒu zìrán qīngxiàng de lǐyóu, yǔ dàodé méiyǒu bìrán de guānxi.</div>
+  <div class="prose-vietnamese">Tại sao phải thảo luận vấn đề này? Vì đây là một kiểu trao đổi tình cảm. Kết luận mà giáo viên và học sinh rút ra qua thảo luận là: một người đã có được hạnh phúc lớn lao thì nên tha thứ và thấu hiểu những người từng làm tổn thương mình. Ngoài ra còn phải thừa nhận một số điều không hoàn hảo bẩm sinh trong bản tính con người; tức là với tư cách một người mẹ, giữa con gái ruột của mình và Lọ Lem không phải con ruột, khó tránh khỏi việc bà yêu thương con gái ruột hơn, rất khó đối xử hoàn toàn bình đẳng với họ. Có thể bạn cho rằng mẹ kế rất ích kỷ, nhưng hành vi này có lý do thuộc khuynh hướng tự nhiên, không nhất thiết liên quan đến đạo đức.</div>
+</div><div class="prose-box" onclick="speak(&quot;自从我听说了这件事，就开始思考应该如何阅读，除了阅读还应该做什么。你看这个老师在讲童话的时候，已经在有意识地把这种情感影响，甚至把人性的价值判断，都给了孩子们。如果只是单纯地主张阅读而不强调思考，那是片面的。&quot;)" style="cursor:pointer;">
+  <div class="prose-chinese chinese-text">自从我听说了这件事，就开始思考应该如何阅读，除了阅读还应该做什么。你看这个老师在讲童话的时候，已经在有意识地把这种情感影响，甚至把人性的价值判断，都给了孩子们。如果只是单纯地主张阅读而不强调思考，那是片面的。</div>
+  <div class="prose-pinyin pinyin-text">Zìcóng wǒ tīngshuō le zhè jiàn shì, jiù kāishǐ sīkǎo yīnggāi rúhé yuèdú, chúle yuèdú hái yīnggāi zuò shénme. Nǐ kàn zhège lǎoshī zài jiǎng tónghuà de shíhou, yǐjīng zài yǒu yìshí de bǎ zhè zhǒng qínggǎn yǐngxiǎng, shènzhì bǎ rénxìng de jiàzhí pànduàn, dōu gěi le háizimen. Rúguǒ zhǐshì dānchún de zhǔzhāng yuèdú ér bù qiángdiào sīkǎo, nà shì piànmiàn de.</div>
+  <div class="prose-vietnamese">Từ khi nghe câu chuyện này, tôi bắt đầu suy nghĩ nên đọc như thế nào, ngoài đọc ra còn nên làm gì. Bạn thấy đấy, khi người giáo viên này kể chuyện cổ tích, ông ấy đã có ý thức truyền cho bọn trẻ ảnh hưởng tình cảm ấy, thậm chí cả phán đoán giá trị về bản tính con người. Nếu chỉ đơn thuần chủ trương đọc mà không nhấn mạnh suy nghĩ, thì đó là phiến diện.</div>
+</div><div class="prose-box" onclick="speak(&quot;“知识”两个字我始终认为它是要分开来读的，“知”就是知感，“识”就是认识。所谓“知感”就是别人告诉你、说给你听、要求你记住的那一部分。但是只有这一部分是不够的，还要有认识、思考。&quot;)" style="cursor:pointer;">
+  <div class="prose-chinese chinese-text">“知识”两个字我始终认为它是要分开来读的，“知”就是知感，“识”就是认识。所谓“知感”就是别人告诉你、说给你听、要求你记住的那一部分。但是只有这一部分是不够的，还要有认识、思考。</div>
+  <div class="prose-pinyin pinyin-text">“Zhīshi” liǎng gè zì wǒ shǐzhōng rènwéi tā shì yào fēnkāi lái dú de, “zhī” jiù shì zhīgǎn, “shí” jiù shì rènshi. Suǒwèi “zhīgǎn” jiù shì biérén gàosu nǐ, shuō gěi nǐ tīng, yāoqiú nǐ jìzhù de nà yí bùfen. Dànshì zhǐyǒu zhè yí bùfen shì bù gòu de, hái yào yǒu rènshi, sīkǎo.</div>
+  <div class="prose-vietnamese">Hai chữ “tri thức”, tôi luôn cho rằng phải tách ra để đọc: “tri” là tri giác, “thức” là nhận thức. Cái gọi là “tri giác” là phần người khác nói cho bạn biết, kể cho bạn nghe, yêu cầu bạn ghi nhớ. Nhưng chỉ có phần này là chưa đủ, còn phải có nhận thức và suy nghĩ.</div>
+</div><div class="prose-box" onclick="speak(&quot;改编自《北京青年报》，作者：梁晓声。&quot;)" style="cursor:pointer;">
+  <div class="prose-chinese chinese-text">改编自《北京青年报》，作者：梁晓声。</div>
+  <div class="prose-pinyin pinyin-text">Gǎibiān zì 《Běijīng Qīngnián Bào》, zuòzhě: Liáng Xiǎoshēng.</div>
+  <div class="prose-vietnamese">Cải biên từ “Báo Thanh niên Bắc Kinh”, tác giả: Lương Hiểu Thanh.</div>
+</div></div>
+          </div></div>
+        </div>
+      </div>
+      <!-- NGỮ PHÁP -->
+      <div id="grammar" class="section-content">
+        <div class="grammar-container">
+          <div class="grammar-tabs">
+            <button class="grammar-tab active" onclick="showGrammar(0, this)"><i class="bi bi-1-circle"></i> 一旦</button>
+            <button class="grammar-tab" onclick="showGrammar(1, this)"><i class="bi bi-2-circle"></i> 难免</button>
+            <button class="grammar-tab" onclick="showGrammar(2, this)"><i class="bi bi-3-circle"></i> 自从</button>
+            <button class="grammar-tab" onclick="showGrammar(3, this)"><i class="bi bi-link-45deg"></i> 词语搭配</button>
+            <button class="grammar-tab" onclick="showGrammar(4, this)"><i class="bi bi-arrow-left-right"></i> 平等 vs 公平</button>
+          </div>
+          <div id="grammar-panel-0" class="grammar-panel active"><div class="grammar-item"><div class="grammar-header"><div class="grammar-number">1</div><div class="grammar-title">一旦</div></div><div class="grammar-structure">“一旦”，副词，表示不确定的时间、突然到来的一天或者假如有这么一天。</div><div class="grammar-explanation">“一旦” là phó từ, biểu thị một thời điểm chưa xác định, một ngày bất ngờ đến, hoặc giả như có một ngày như vậy.</div><div class="grammar-example" onclick="speak(&quot;长大后，我终于明白了这个道理：女人一旦做了母亲，就变得万般了。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">长大后，我终于明白了这个道理：女人一旦做了母亲，就变得万般了。</div>
+  <div class="example-pinyin pinyin-text">Zhǎngdà hòu, wǒ zhōngyú míngbai le zhège dàolǐ: nǚrén yídàn zuò le mǔqīn, jiù biàn de wànbān le.</div>
+  <div class="example-vietnamese">Sau khi lớn lên, cuối cùng tôi đã hiểu đạo lý này: một khi người phụ nữ làm mẹ thì sẽ thay đổi rất nhiều.</div>
+</div><div class="grammar-example" onclick="speak(&quot;灰姑娘一旦进了这个王宫，应该怎样对待她的继母，应该怎样对待她的两个姐姐？&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">灰姑娘一旦进了这个王宫，应该怎样对待她的继母，应该怎样对待她的两个姐姐？</div>
+  <div class="example-pinyin pinyin-text">Huīgūniang yídàn jìn le zhège wánggōng, yīnggāi zěnyàng duìdài tā de jìmǔ, yīnggāi zěnyàng duìdài tā de liǎng gè jiějie?</div>
+  <div class="example-vietnamese">Một khi Lọ Lem bước vào hoàng cung này, cô ấy nên đối xử với mẹ kế và hai chị gái như thế nào?</div>
+</div><div class="grammar-example" onclick="speak(&quot;所谓私人空间，是指我们身体周围的一定的空间，一旦有人闯入这个空间，我们就会感觉不舒服、不自在。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">所谓私人空间，是指我们身体周围的一定的空间，一旦有人闯入这个空间，我们就会感觉不舒服、不自在。</div>
+  <div class="example-pinyin pinyin-text">Suǒwèi sīrén kōngjiān, shì zhǐ wǒmen shēntǐ zhōuwéi de yídìng de kōngjiān, yídàn yǒurén chuǎngrù zhège kōngjiān, wǒmen jiù huì gǎnjué bù shūfu, bú zìzai.</div>
+  <div class="example-vietnamese">Không gian riêng tư là một khoảng không gian nhất định quanh cơ thể chúng ta; một khi có người xâm nhập vào không gian đó, chúng ta sẽ cảm thấy khó chịu, không thoải mái.</div>
+</div><div class="grammar-practice"><div class="practice-title"><i class="bi bi-pencil"></i> 练一练：完成句子或对话</div><div class="question-container">
+  <div class="question-text"><strong>（1）</strong> <span class="chinese-text">A: 明年就要毕业了，你有什么计划？<br>B: ________。</span> <span style="color:#666;">（一旦）</span></div>
+  <div class="question-pinyin pinyin-text">A: Míngnián jiù yào bìyè le, nǐ yǒu shénme jìhuà?<br>B: ________.</div>
+  <div class="question-vietnamese">A: Năm sau sắp tốt nghiệp rồi, bạn có kế hoạch gì?<br>B: ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>（2）</strong> <span class="chinese-text">A: 我每天都听中文广播，但感觉听力水平还是没有提高。<br>B: ________。</span> <span style="color:#666;">（一旦）</span></div>
+  <div class="question-pinyin pinyin-text">A: Wǒ měi tiān dōu tīng Zhōngwén guǎngbō, dàn gǎnjué tīnglì shuǐpíng háishi méiyǒu tígāo.<br>B: ________.</div>
+  <div class="question-vietnamese">A: Tôi ngày nào cũng nghe phát thanh tiếng Trung, nhưng cảm thấy trình độ nghe vẫn chưa nâng cao.<br>B: ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>（3）</strong> <span class="chinese-text">天冷了，多穿点儿，________。</span> <span style="color:#666;">（一旦）</span></div>
+  <div class="question-pinyin pinyin-text">Tiān lěng le, duō chuān diǎnr, ________.</div>
+  <div class="question-vietnamese">Trời lạnh rồi, mặc thêm chút đi, ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div></div></div></div>
+          <div id="grammar-panel-1" class="grammar-panel"><div class="grammar-item"><div class="grammar-header"><div class="grammar-number">2</div><div class="grammar-title">难免</div></div><div class="grammar-structure">“难免”，形容词，不容易避免的，避免不了的。</div><div class="grammar-explanation">“难免” là tính từ, nghĩa là khó tránh khỏi, không thể tránh được.</div><div class="grammar-example" onclick="speak(&quot;刚开始工作，这样的错误是难免的。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">刚开始工作，这样的错误是难免的。</div>
+  <div class="example-pinyin pinyin-text">Gāng kāishǐ gōngzuò, zhèyàng de cuòwù shì nánmiǎn de.</div>
+  <div class="example-vietnamese">Mới bắt đầu làm việc thì sai sót như vậy là khó tránh khỏi.</div>
+</div><div class="grammar-example" onclick="speak(&quot;朋友间难免会产生矛盾，误会甚至是伤害。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">朋友间难免会产生矛盾，误会甚至是伤害。</div>
+  <div class="example-pinyin pinyin-text">Péngyou jiān nánmiǎn huì chǎnshēng máodùn, wùhuì shènzhì shì shānghài.</div>
+  <div class="example-vietnamese">Giữa bạn bè khó tránh khỏi nảy sinh mâu thuẫn, hiểu lầm, thậm chí tổn thương.</div>
+</div><div class="grammar-example" onclick="speak(&quot;作为一个母亲，在自己的亲生女儿和不是亲生的灰姑娘之间，难免会更疼爱自己亲生的女儿。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">作为一个母亲，在自己的亲生女儿和不是亲生的灰姑娘之间，难免会更疼爱自己亲生的女儿。</div>
+  <div class="example-pinyin pinyin-text">Zuòwéi yí gè mǔqīn, zài zìjǐ de qīnshēng nǚ’ér hé bú shì qīnshēng de Huīgūniang zhījiān, nánmiǎn huì gèng téng’ài zìjǐ qīnshēng de nǚ’ér.</div>
+  <div class="example-vietnamese">Với tư cách một người mẹ, giữa con gái ruột và Lọ Lem không phải con ruột, khó tránh khỏi việc bà yêu thương con ruột hơn.</div>
+</div><div class="grammar-practice"><div class="practice-title"><i class="bi bi-pencil"></i> 练一练：完成句子或对话</div><div class="question-container">
+  <div class="question-text"><strong>（1）</strong> <span class="chinese-text">A: 这孩子真是太淘气了！<br>B: ________。</span> <span style="color:#666;">（难免）</span></div>
+  <div class="question-pinyin pinyin-text">A: Zhè háizi zhēn shì tài táoqì le!<br>B: ________.</div>
+  <div class="question-vietnamese">A: Đứa trẻ này thật nghịch quá!<br>B: ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>（2）</strong> <span class="chinese-text">刚刚退休的老人，________。</span> <span style="color:#666;">（难免）</span></div>
+  <div class="question-pinyin pinyin-text">Gānggāng tuìxiū de lǎorén, ________.</div>
+  <div class="question-vietnamese">Người già vừa mới nghỉ hưu, ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>（3）</strong> <span class="chinese-text">A: 马上就要考试了，我觉得很紧张。<br>B: ________。</span> <span style="color:#666;">（难免）</span></div>
+  <div class="question-pinyin pinyin-text">A: Mǎshàng jiù yào kǎoshì le, wǒ juéde hěn jǐnzhāng.<br>B: ________.</div>
+  <div class="question-vietnamese">A: Sắp thi rồi, tôi thấy rất căng thẳng.<br>B: ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div></div></div></div>
+          <div id="grammar-panel-2" class="grammar-panel"><div class="grammar-item"><div class="grammar-header"><div class="grammar-number">3</div><div class="grammar-title">自从</div></div><div class="grammar-structure">“自从”，介词，表示从过去某个时间开始。</div><div class="grammar-explanation">“自从” là giới từ, biểu thị từ một thời điểm nào đó trong quá khứ bắt đầu.</div><div class="grammar-example" onclick="speak(&quot;自从城市出现后，它就成为人类生活的中心。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">自从城市出现后，它就成为人类生活的中心。</div>
+  <div class="example-pinyin pinyin-text">Zìcóng chéngshì chūxiàn hòu, tā jiù chéngwéi rénlèi shēnghuó de zhōngxīn.</div>
+  <div class="example-vietnamese">Từ sau khi thành phố xuất hiện, nó trở thành trung tâm đời sống của con người.</div>
+</div><div class="grammar-example" onclick="speak(&quot;自从有了长大后成为作家这个理想之后，他每天都坚持写作。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">自从有了长大后成为作家这个理想之后，他每天都坚持写作。</div>
+  <div class="example-pinyin pinyin-text">Zìcóng yǒu le zhǎngdà hòu chéngwéi zuòjiā zhège lǐxiǎng zhīhòu, tā měi tiān dōu jiānchí xiězuò.</div>
+  <div class="example-vietnamese">Từ khi có lý tưởng lớn lên trở thành nhà văn, anh ấy ngày nào cũng kiên trì viết.</div>
+</div><div class="grammar-example" onclick="speak(&quot;自从我听说了这件事，就开始思考应该如何阅读，除了阅读还应该做什么。&quot;)" style="cursor:pointer;">
+  <div class="example-chinese chinese-text">自从我听说了这件事，就开始思考应该如何阅读，除了阅读还应该做什么。</div>
+  <div class="example-pinyin pinyin-text">Zìcóng wǒ tīngshuō le zhè jiàn shì, jiù kāishǐ sīkǎo yīnggāi rúhé yuèdú, chúle yuèdú hái yīnggāi zuò shénme.</div>
+  <div class="example-vietnamese">Từ khi nghe chuyện này, tôi bắt đầu suy nghĩ nên đọc như thế nào, ngoài đọc ra còn nên làm gì.</div>
+</div><div class="grammar-practice"><div class="practice-title"><i class="bi bi-pencil"></i> 练一练：完成句子或对话</div><div class="question-container">
+  <div class="question-text"><strong>（1）</strong> <span class="chinese-text">自从我来中国以后，________。</span> <span style="color:#666;">（自从）</span></div>
+  <div class="question-pinyin pinyin-text">Zìcóng wǒ lái Zhōngguó yǐhòu, ________.</div>
+  <div class="question-vietnamese">Từ sau khi tôi đến Trung Quốc, ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>（2）</strong> <span class="chinese-text">________，我的观念就转变了。</span> <span style="color:#666;">（自从）</span></div>
+  <div class="question-pinyin pinyin-text">________, wǒ de guānniàn jiù zhuǎnbiàn le.</div>
+  <div class="question-vietnamese">________, quan niệm của tôi đã thay đổi.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>（3）</strong> <span class="chinese-text">A: 你跟你同屋现在的关系怎么样？<br>B: ________。</span> <span style="color:#666;">（自从）</span></div>
+  <div class="question-pinyin pinyin-text">A: Nǐ gēn nǐ tóngwū xiànzài de guānxi zěnmeyàng?<br>B: ________.</div>
+  <div class="question-vietnamese">A: Quan hệ hiện nay giữa bạn và bạn cùng phòng thế nào?<br>B: ________.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div></div></div></div>
+          <div id="grammar-panel-3" class="grammar-panel"><div class="grammar-item"><div class="grammar-header"><div class="grammar-number">4</div><div class="grammar-title">词语搭配</div></div>
+          <div class="grammar-structure">词语搭配</div><div class="grammar-explanation">Kết hợp từ thường dùng trong bài.</div>
+          <div class="passage-box"><table style="width:100%;border-collapse:collapse;background:white;"><tr><th style="border:1px solid #ddd;padding:8px;">动词</th><th style="border:1px solid #ddd;padding:8px;">宾语</th></tr><tr><td style="border:1px solid #ddd;padding:8px;">承认</td><td style="border:1px solid #ddd;padding:8px;">事实 / 错误</td></tr><tr><td style="border:1px solid #ddd;padding:8px;">转变</td><td style="border:1px solid #ddd;padding:8px;">方法 / 方式 / 观念 / 思路 / 态度</td></tr><tr><td style="border:1px solid #ddd;padding:8px;">交换</td><td style="border:1px solid #ddd;padding:8px;">物品 / 位置 / 意见</td></tr><tr><td style="border:1px solid #ddd;padding:8px;">有 / 坚持</td><td style="border:1px solid #ddd;padding:8px;">主张</td></tr></table><br><table style="width:100%;border-collapse:collapse;background:white;"><tr><th style="border:1px solid #ddd;padding:8px;">定语</th><th style="border:1px solid #ddd;padding:8px;">中心语</th></tr><tr><td style="border:1px solid #ddd;padding:8px;">完美的</td><td style="border:1px solid #ddd;padding:8px;">人 / 世界 / 生活 / 婚姻 / 计划</td></tr><tr><td style="border:1px solid #ddd;padding:8px;">平等的</td><td style="border:1px solid #ddd;padding:8px;">地位 / 待遇 / 权利</td></tr><tr><td style="border:1px solid #ddd;padding:8px;">自私的</td><td style="border:1px solid #ddd;padding:8px;">人 / 想法 / 行为</td></tr></table><br><table style="width:100%;border-collapse:collapse;background:white;"><tr><th style="border:1px solid #ddd;padding:8px;">状语</th><th style="border:1px solid #ddd;padding:8px;">中心语</th></tr><tr><td style="border:1px solid #ddd;padding:8px;">过分（地）</td><td style="border:1px solid #ddd;padding:8px;">强调 / 追求</td></tr><tr><td style="border:1px solid #ddd;padding:8px;">全面（地）</td><td style="border:1px solid #ddd;padding:8px;">看 / 了解 / 思考 / 发展</td></tr><tr><td style="border:1px solid #ddd;padding:8px;">认真 / 正确 / 冷静 / 客观 / 公平（地）</td><td style="border:1px solid #ddd;padding:8px;">对待</td></tr></table></div></div></div>
+          <div id="grammar-panel-4" class="grammar-panel"><div class="grammar-item"><div class="grammar-header"><div class="grammar-number">5</div><div class="grammar-title">平等 / 公平</div></div><div class="grammar-structure">词语辨析：平等 — 公平</div><div class="grammar-explanation">Phân biệt cách dùng 平等 và 公平 trong câu.</div>
+<table style="width:100%;border-collapse:collapse;background:white;margin:15px 0;">
+<tr><th style="border:1px solid #ccc;padding:10px;width:12%;">项目</th><th style="border:1px solid #ccc;padding:10px;">平等</th><th style="border:1px solid #ccc;padding:10px;">公平</th></tr>
+<tr><td style="border:1px solid #ccc;padding:10px;">共同点<br><span class="pinyin-text">Gòngtóngdiǎn</span></td><td colspan="2" style="border:1px solid #ccc;padding:10px;"><div class="example-chinese">都是形容词，意思相近，有时可换用。</div><div class="example-pinyin pinyin-text">Dōu shì xíngróngcí, yìsi xiāngjìn, yǒushí kě huànyòng.</div><div class="example-vietnamese">Đều là tính từ, nghĩa gần nhau, đôi khi có thể thay thế cho nhau.</div><div class="example-chinese" style="margin-top:8px;">作为一个母亲，在自己的亲生女儿和不是亲生的灰姑娘之间，难免会更疼爱自己亲生的女儿，很难完全平等/公平地对待她们。</div><div class="example-pinyin pinyin-text">Zuòwéi yí gè mǔqīn, zài zìjǐ de qīnshēng nǚ’ér hé bú shì qīnshēng de Huīgūniang zhījiān, nánmiǎn huì gèng téng’ài zìjǐ qīnshēng de nǚ’ér, hěn nán wánquán píngděng/gōngpíng de duìdài tāmen.</div><div class="example-vietnamese">Với tư cách một người mẹ, giữa con ruột và Lọ Lem không phải con ruột, khó tránh khỏi việc yêu thương con ruột hơn, rất khó đối xử hoàn toàn bình đẳng/công bằng với họ.</div></td></tr>
+<tr><td rowspan="2" style="border:1px solid #ccc;padding:10px;">不同点<br><span class="pinyin-text">Bùtóngdiǎn</span></td><td style="border:1px solid #ccc;padding:10px;"><div class="example-chinese">1. 强调人和人在社会上得到的权利或待遇一样。</div><div class="example-pinyin pinyin-text">Qiángdiào rén hé rén zài shèhuì shàng dédào de quánlì huò dàiyù yíyàng.</div><div class="example-vietnamese">Nhấn mạnh quyền lợi hoặc đãi ngộ con người nhận được trong xã hội là như nhau.</div><div class="example-chinese">如：现代社会中，女人与男人有时并不平等。</div><div class="example-pinyin pinyin-text">Xiàndài shèhuì zhōng, nǚrén yǔ nánrén yǒushí bìng bù píngděng.</div><div class="example-vietnamese">Trong xã hội hiện đại, phụ nữ và nam giới đôi khi không bình đẳng.</div></td><td style="border:1px solid #ccc;padding:10px;"><div class="example-chinese">1. 强调处理事情合情合理，不偏向于一方。</div><div class="example-pinyin pinyin-text">Qiángdiào chǔlǐ shìqing héqíng hélǐ, bù piānxiàng yú yì fāng.</div><div class="example-vietnamese">Nhấn mạnh xử lý sự việc hợp tình hợp lý, không thiên vị một bên.</div><div class="example-chinese">如：我们应当公平竞争。</div><div class="example-pinyin pinyin-text">Wǒmen yīngdāng gōngpíng jìngzhēng.</div><div class="example-vietnamese">Chúng ta nên cạnh tranh công bằng.</div></td></tr>
+<tr><td style="border:1px solid #ccc;padding:10px;"><div class="example-chinese">2. 多用于普遍性的、一般的情况。</div><div class="example-pinyin pinyin-text">Duō yòng yú pǔbiàn xìng de, yìbān de qíngkuàng.</div><div class="example-vietnamese">Thường dùng cho tình huống phổ biến, mang tính chung.</div><div class="example-chinese">如：现代社会中，女人与男人有时并不平等。</div><div class="example-pinyin pinyin-text">Xiàndài shèhuì zhōng, nǚrén yǔ nánrén yǒushí bìng bù píngděng.</div><div class="example-vietnamese">Trong xã hội hiện đại, phụ nữ và nam giới đôi khi không bình đẳng.</div></td><td style="border:1px solid #ccc;padding:10px;"><div class="example-chinese">2. 可用于具体的人或事。</div><div class="example-pinyin pinyin-text">Kě yòng yú jùtǐ de rén huò shì.</div><div class="example-vietnamese">Có thể dùng với con người hoặc sự việc cụ thể.</div><div class="example-chinese">如：我认为公司对这次事情的处理不够公平。</div><div class="example-pinyin pinyin-text">Wǒ rènwéi gōngsī duì zhè cì shìqing de chǔlǐ bú gòu gōngpíng.</div><div class="example-vietnamese">Tôi cho rằng cách công ty xử lý việc lần này chưa đủ công bằng.</div></td></tr>
+</table><div class="grammar-practice"><div class="practice-title"><i class="bi bi-check2-square"></i> 做一做：选词填空</div>
+<table style="width:100%;border-collapse:collapse;background:white;">
+<tr><th style="border:1px solid #ddd;padding:8px;">句子</th><th style="border:1px solid #ddd;padding:8px;">平等</th><th style="border:1px solid #ddd;padding:8px;">公平</th></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><div class="question-text">（1）机会对每个人来说都是____的。</div><div class="question-pinyin pinyin-text">Jīhuì duì měi gè rén lái shuō dōu shì ____ de.</div><div class="question-vietnamese">Cơ hội đối với mỗi người đều là ____.</div></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp1" value="平等"></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp1" value="公平"></td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><div class="question-text">（2）这次比赛很____，没有什么问题。</div><div class="question-pinyin pinyin-text">Zhè cì bǐsài hěn ____ , méiyǒu shénme wèntí.</div><div class="question-vietnamese">Cuộc thi lần này rất ____, không có vấn đề gì.</div></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp2" value="平等"></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp2" value="公平"></td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><div class="question-text">（3）作为法官，你做事应该____。</div><div class="question-pinyin pinyin-text">Zuòwéi fǎguān, nǐ zuòshì yīnggāi ____.</div><div class="question-vietnamese">Là thẩm phán, bạn làm việc nên ____.</div></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp3" value="平等"></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp3" value="公平"></td></tr>
+<tr><td style="border:1px solid #ddd;padding:8px;"><div class="question-text">（4）人生来是____的，人人都有权追求自由和幸福。</div><div class="question-pinyin pinyin-text">Rén shēnglái shì ____ de, rénrén dōu yǒu quán zhuīqiú zìyóu hé xìngfú.</div><div class="question-vietnamese">Con người sinh ra là ____, ai cũng có quyền theo đuổi tự do và hạnh phúc.</div></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp4" value="平等"></td><td style="text-align:center;border:1px solid #ddd;"><input type="checkbox" name="cmp4" value="公平"></td></tr>
+</table>
+<button class="check-btn" onclick="checkCompareWords()"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+<div id="compare-result" class="result-message"></div>
+</div></div></div>
+        </div>
+      </div>
+      <!-- BÀI TẬP -->
+      <div id="exercises" class="section-content"><div class="exercise-container">
+        <div class="exercise-tabs"><button class="exercise-tab active" onclick="showExercise('ex1', this)"><i class="bi bi-list-check"></i> 练习 1</button><button class="exercise-tab" onclick="showExercise('ex2', this)"><i class="bi bi-ui-checks"></i> 练习 2</button><button class="exercise-tab" onclick="showExercise('ex3', this)"><i class="bi bi-diagram-2"></i> 练习 3</button><button class="exercise-tab" onclick="showExercise('ex4', this)"><i class="bi bi-card-text"></i> 练习 4 / 扩展</button></div>
+        <div id="ex1" class="exercise-content active"><div class="section-header-exercise">练习 1：选择合适的词语填空</div><div class="vocab-box"><span class="vocab-item">承认</span><span class="vocab-item">过分</span><span class="vocab-item">价值</span><span class="vocab-item">客观</span><span class="vocab-item">理由</span><span class="vocab-item">主张</span></div><div class="question-container">
+    <div class="fill-sentence"><strong>1</strong> <span class="chinese-text">虽然这次的错误有点儿严重，但你应该勇敢地____。</span></div>
+    <div class="choice-hint pinyin-text">Suīrán zhè cì de cuòwù yǒudiǎnr yánzhòng, dàn nǐ yīnggāi yǒnggǎn de ____.</div>
+    <div class="choice-hint">Tuy lỗi lần này hơi nghiêm trọng, nhưng bạn nên dũng cảm thừa nhận.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ex1_1" value="承认"> 承认 承认</label><label class="choice-item"><input type="radio" name="ex1_1" value="过分"> 过分 过分</label><label class="choice-item"><input type="radio" name="ex1_1" value="价值"> 价值 价值</label><label class="choice-item"><input type="radio" name="ex1_1" value="客观"> 客观 客观</label><label class="choice-item"><input type="radio" name="ex1_1" value="理由"> 理由 理由</label><label class="choice-item"><input type="radio" name="ex1_1" value="主张"> 主张 主张</label></div>
+    <button class="check-btn" onclick="checkAnswer('ex1_1','承认','ex1_1-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ex1_1-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>2</strong> <span class="chinese-text">人都是有感情甚至自私的，很难做到任何时候都很____。</span></div>
+    <div class="choice-hint pinyin-text">Rén dōu shì yǒu gǎnqíng shènzhì zìsī de, hěn nán zuòdào rènhé shíhou dōu hěn ____.</div>
+    <div class="choice-hint">Con người đều có tình cảm, thậm chí ích kỷ, rất khó lúc nào cũng thật khách quan.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ex1_2" value="承认"> 承认 承认</label><label class="choice-item"><input type="radio" name="ex1_2" value="过分"> 过分 过分</label><label class="choice-item"><input type="radio" name="ex1_2" value="价值"> 价值 价值</label><label class="choice-item"><input type="radio" name="ex1_2" value="客观"> 客观 客观</label><label class="choice-item"><input type="radio" name="ex1_2" value="理由"> 理由 理由</label><label class="choice-item"><input type="radio" name="ex1_2" value="主张"> 主张 主张</label></div>
+    <button class="check-btn" onclick="checkAnswer('ex1_2','客观','ex1_2-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ex1_2-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>3</strong> <span class="chinese-text">你的这个建议很有____，我马上告诉总裁。</span></div>
+    <div class="choice-hint pinyin-text">Nǐ de zhège jiànyì hěn yǒu ____ , wǒ mǎshàng gàosu zǒngcái.</div>
+    <div class="choice-hint">Đề xuất này của bạn rất có giá trị, tôi sẽ báo ngay cho tổng giám đốc.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ex1_3" value="承认"> 承认 承认</label><label class="choice-item"><input type="radio" name="ex1_3" value="过分"> 过分 过分</label><label class="choice-item"><input type="radio" name="ex1_3" value="价值"> 价值 价值</label><label class="choice-item"><input type="radio" name="ex1_3" value="客观"> 客观 客观</label><label class="choice-item"><input type="radio" name="ex1_3" value="理由"> 理由 理由</label><label class="choice-item"><input type="radio" name="ex1_3" value="主张"> 主张 主张</label></div>
+    <button class="check-btn" onclick="checkAnswer('ex1_3','价值','ex1_3-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ex1_3-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>4</strong> <span class="chinese-text">他____将会议地点改在上海，因为这次的合作伙伴对我们来说非常重要。</span></div>
+    <div class="choice-hint pinyin-text">Tā ____ jiāng huìyì dìdiǎn gǎi zài Shànghǎi, yīnwèi zhè cì de hézuò huǒbàn duì wǒmen lái shuō fēicháng zhòngyào.</div>
+    <div class="choice-hint">Anh ấy chủ trương đổi địa điểm họp sang Thượng Hải, vì đối tác lần này rất quan trọng với chúng ta.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ex1_4" value="承认"> 承认 承认</label><label class="choice-item"><input type="radio" name="ex1_4" value="过分"> 过分 过分</label><label class="choice-item"><input type="radio" name="ex1_4" value="价值"> 价值 价值</label><label class="choice-item"><input type="radio" name="ex1_4" value="客观"> 客观 客观</label><label class="choice-item"><input type="radio" name="ex1_4" value="理由"> 理由 理由</label><label class="choice-item"><input type="radio" name="ex1_4" value="主张"> 主张 主张</label></div>
+    <button class="check-btn" onclick="checkAnswer('ex1_4','主张','ex1_4-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ex1_4-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>5</strong> <span class="chinese-text">你这种做法太____了，我不能接受！</span></div>
+    <div class="choice-hint pinyin-text">Nǐ zhè zhǒng zuòfǎ tài ____ le, wǒ bù néng jiēshòu!</div>
+    <div class="choice-hint">Cách làm này của bạn quá đáng quá, tôi không thể chấp nhận!</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ex1_5" value="承认"> 承认 承认</label><label class="choice-item"><input type="radio" name="ex1_5" value="过分"> 过分 过分</label><label class="choice-item"><input type="radio" name="ex1_5" value="价值"> 价值 价值</label><label class="choice-item"><input type="radio" name="ex1_5" value="客观"> 客观 客观</label><label class="choice-item"><input type="radio" name="ex1_5" value="理由"> 理由 理由</label><label class="choice-item"><input type="radio" name="ex1_5" value="主张"> 主张 主张</label></div>
+    <button class="check-btn" onclick="checkAnswer('ex1_5','过分','ex1_5-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ex1_5-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>6</strong> <span class="chinese-text">希望你能给我一个好的____，解释清楚你为什么这么做。</span></div>
+    <div class="choice-hint pinyin-text">Xīwàng nǐ néng gěi wǒ yí gè hǎo de ____ , jiěshì qīngchu nǐ wèishénme zhème zuò.</div>
+    <div class="choice-hint">Hy vọng bạn có thể cho tôi một lý do hợp lý, giải thích rõ vì sao bạn làm như vậy.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ex1_6" value="承认"> 承认 承认</label><label class="choice-item"><input type="radio" name="ex1_6" value="过分"> 过分 过分</label><label class="choice-item"><input type="radio" name="ex1_6" value="价值"> 价值 价值</label><label class="choice-item"><input type="radio" name="ex1_6" value="客观"> 客观 客观</label><label class="choice-item"><input type="radio" name="ex1_6" value="理由"> 理由 理由</label><label class="choice-item"><input type="radio" name="ex1_6" value="主张"> 主张 主张</label></div>
+    <button class="check-btn" onclick="checkAnswer('ex1_6','理由','ex1_6-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ex1_6-r" class="result-message"></div>
+  </div></div>
+        <div id="ex2" class="exercise-content"><div class="section-header-exercise">练习 2：选择正确答案</div><div class="question-container">
+    <div class="fill-sentence"><strong>1</strong> <span class="chinese-text">你可以试着____一下思路，可能会快一点解决问题。</span></div>
+    <div class="choice-hint pinyin-text">Nǐ kěyǐ shìzhe ____ yíxià sīlù, kěnéng huì kuài yìdiǎn jiějué wèntí.</div>
+    <div class="choice-hint">Bạn có thể thử thay đổi mạch suy nghĩ một chút, có lẽ sẽ giải quyết vấn đề nhanh hơn.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="q2_1" value="A"> A 变化</label><label class="choice-item"><input type="radio" name="q2_1" value="B"> B 转变</label></div>
+    <button class="check-btn" onclick="checkAnswer('q2_1','B','q2_1-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="q2_1-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>2</strong> <span class="chinese-text">我不同意你的____，我觉得这部电影很不错。</span></div>
+    <div class="choice-hint pinyin-text">Wǒ bù tóngyì nǐ de ____ , wǒ juéde zhè bù diànyǐng hěn búcuò.</div>
+    <div class="choice-hint">Tôi không đồng ý quan điểm của bạn, tôi thấy bộ phim này rất hay.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="q2_2" value="A"> A 观点</label><label class="choice-item"><input type="radio" name="q2_2" value="B"> B 观念</label></div>
+    <button class="check-btn" onclick="checkAnswer('q2_2','A','q2_2-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="q2_2-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>3</strong> <span class="chinese-text">这次新产品销售得不好的____是宣传推广做得不够。</span></div>
+    <div class="choice-hint pinyin-text">Zhè cì xīn chǎnpǐn xiāoshòu de bù hǎo de ____ shì xuānchuán tuīguǎng zuò de bú gòu.</div>
+    <div class="choice-hint">Nguyên nhân sản phẩm mới lần này bán không tốt là quảng bá chưa đủ.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="q2_3" value="A"> A 原因</label><label class="choice-item"><input type="radio" name="q2_3" value="B"> B 理由</label></div>
+    <button class="check-btn" onclick="checkAnswer('q2_3','A','q2_3-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="q2_3-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>4</strong> <span class="chinese-text">他太____了，这样很容易被人骗。</span></div>
+    <div class="choice-hint pinyin-text">Tā tài ____ le, zhèyàng hěn róngyì bèi rén piàn.</div>
+    <div class="choice-hint">Anh ấy quá đơn thuần, như vậy rất dễ bị người khác lừa.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="q2_4" value="A"> A 单调</label><label class="choice-item"><input type="radio" name="q2_4" value="B"> B 单纯</label></div>
+    <button class="check-btn" onclick="checkAnswer('q2_4','B','q2_4-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="q2_4-r" class="result-message"></div>
+  </div></div>
+        <div id="ex3" class="exercise-content"><div class="section-header-exercise">练习 3：画线连接可以搭配的词语</div><div class="question-container"><div class="question-text"><strong>（1）</strong> 交换—意见；转变—观念；属于—我们；承认—错误。</div><div class="question-pinyin pinyin-text">Jiāohuàn—yìjiàn; zhuǎnbiàn—guānniàn; shǔyú—wǒmen; chéngrèn—cuòwù.</div><div class="question-vietnamese">trao đổi ý kiến; thay đổi quan niệm; thuộc về chúng tôi; thừa nhận lỗi sai.</div></div><div class="question-container"><div class="question-text"><strong>（2）</strong> 完美的—计划；自私的—行为；全面地—了解；平等地—对待。</div><div class="question-pinyin pinyin-text">Wánměi de—jìhuà; zìsī de—xíngwéi; quánmiàn de—liǎojiě; píngděng de—duìdài.</div><div class="question-vietnamese">kế hoạch hoàn hảo; hành vi ích kỷ; hiểu toàn diện; đối xử bình đẳng.</div></div></div>
+        <div id="ex4" class="exercise-content"><div class="section-header-exercise">练习 4：根据下面的提示词复述课文内容</div><div class="question-container"><table style="width:100%;border-collapse:collapse;background:white;"><tr><th style="border:1px solid #ddd;padding:8px;">内容提示</th><th style="border:1px solid #ddd;padding:8px;">重点词语</th><th style="border:1px solid #ddd;padding:8px;">课文复述</th></tr><tr><td style="border:1px solid #ddd;padding:8px;">一些家长的观念<br><span class="pinyin-text">Yìxiē jiāzhǎng de guānniàn</span><br>Quan niệm của một số phụ huynh</td><td style="border:1px solid #ddd;padding:8px;">过分、作文、客观、转变</td><td style="border:1px solid #ddd;padding:8px;"><textarea rows="3" style="width:100%;"></textarea></td></tr><tr><td style="border:1px solid #ddd;padding:8px;">关于《灰姑娘》的讨论<br><span class="pinyin-text">Guānyú 《Huīgūniang》 de tǎolùn</span><br>Thảo luận về “Cô bé Lọ Lem”</td><td style="border:1px solid #ddd;padding:8px;">一旦、对待、交换、承认、难免、平等、理由</td><td style="border:1px solid #ddd;padding:8px;"><textarea rows="3" style="width:100%;"></textarea></td></tr><tr><td style="border:1px solid #ddd;padding:8px;">作者的思考<br><span class="pinyin-text">Zuòzhě de sīkǎo</span><br>Suy nghĩ của tác giả</td><td style="border:1px solid #ddd;padding:8px;">自从、价值、单纯</td><td style="border:1px solid #ddd;padding:8px;"><textarea rows="3" style="width:100%;"></textarea></td></tr></table></div><div class="section-header-exercise">扩展：写作表达</div><div class="vocab-box"><span class="vocab-item">作文 zuòwén - bài văn</span><span class="vocab-item">论文 lùnwén - luận văn</span><span class="vocab-item">主题 zhǔtí - chủ đề</span><span class="vocab-item">题目 tímù - đề mục</span><span class="vocab-item">话题 huàtí - chủ đề nói chuyện</span><span class="vocab-item">目录 mùlù - mục lục</span><span class="vocab-item">提纲 tígāng - đề cương</span><span class="vocab-item">标点 biāodiǎn - dấu câu</span><span class="vocab-item">废话 fèihuà - lời thừa</span><span class="vocab-item">胡说 húshuō - nói bậy</span></div><div class="question-container">
+    <div class="fill-sentence"><strong>1</strong> <span class="chinese-text">买书的时候我一般会先看看前面的____，这样可以了解书的大概内容。</span></div>
+    <div class="choice-hint pinyin-text">Mǎi shū de shíhou wǒ yìbān huì xiān kànkan qiánmiàn de ____ , zhèyàng kěyǐ liǎojiě shū de dàgài nèiróng.</div>
+    <div class="choice-hint">Khi mua sách tôi thường xem phần mục lục phía trước trước, như vậy có thể hiểu nội dung đại khái của sách.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ext1" value="A"> A 目录</label><label class="choice-item"><input type="radio" name="ext1" value="B"> B 作文</label><label class="choice-item"><input type="radio" name="ext1" value="C"> C 主题</label><label class="choice-item"><input type="radio" name="ext1" value="D"> D 标点</label></div>
+    <button class="check-btn" onclick="checkAnswer('ext1','A','ext1-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ext1-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>2</strong> <span class="chinese-text">这不是一篇研究型的文章，算不上是一篇____。</span></div>
+    <div class="choice-hint pinyin-text">Zhè bú shì yì piān yánjiū xíng de wénzhāng, suàn bú shàng shì yì piān ____.</div>
+    <div class="choice-hint">Đây không phải là một bài viết mang tính nghiên cứu, không thể xem là một bài luận văn.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ext2" value="A"> A 作文</label><label class="choice-item"><input type="radio" name="ext2" value="B"> B 论文</label><label class="choice-item"><input type="radio" name="ext2" value="C"> C 题目</label><label class="choice-item"><input type="radio" name="ext2" value="D"> D 话题</label></div>
+    <button class="check-btn" onclick="checkAnswer('ext2','B','ext2-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ext2-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>3</strong> <span class="chinese-text">这个地方的____用错了，这是书的名字，应该用书名号。</span></div>
+    <div class="choice-hint pinyin-text">Zhège dìfang de ____ yòng cuò le, zhè shì shū de míngzi, yīnggāi yòng shūmínghào.</div>
+    <div class="choice-hint">Dấu câu ở chỗ này dùng sai rồi, đây là tên sách, nên dùng dấu tên sách.</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ext3" value="A"> A 提纲</label><label class="choice-item"><input type="radio" name="ext3" value="B"> B 主题</label><label class="choice-item"><input type="radio" name="ext3" value="C"> C 标点</label><label class="choice-item"><input type="radio" name="ext3" value="D"> D 目录</label></div>
+    <button class="check-btn" onclick="checkAnswer('ext3','C','ext3-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ext3-r" class="result-message"></div>
+  </div><div class="question-container">
+    <div class="fill-sentence"><strong>4</strong> <span class="chinese-text">你现在完全是在说____，解决不了问题！</span></div>
+    <div class="choice-hint pinyin-text">Nǐ xiànzài wánquán shì zài shuō ____ , jiějué bùliǎo wèntí!</div>
+    <div class="choice-hint">Bây giờ bạn hoàn toàn đang nói lời thừa, không giải quyết được vấn đề!</div>
+    <div class="choice-group"><label class="choice-item"><input type="radio" name="ext4" value="A"> A 废话</label><label class="choice-item"><input type="radio" name="ext4" value="B"> B 作文</label><label class="choice-item"><input type="radio" name="ext4" value="C"> C 论文</label><label class="choice-item"><input type="radio" name="ext4" value="D"> D 题目</label></div>
+    <button class="check-btn" onclick="checkAnswer('ext4','A','ext4-r')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+    <div id="ext4-r" class="result-message"></div>
+  </div></div>
+      </div></div>
+      <!-- VẬN DỤNG -->
+      <div id="activity" class="section-content"><div class="section-header-exercise">运用 - Phần vận dụng</div><div class="part-header"><i class="bi bi-info-circle"></i> 背景分析 - Phân tích bối cảnh</div><div class="passage-box"><div class="prose-chinese chinese-text" style="text-indent:2em;">《灰姑娘》是众所周知的童话。它原来是欧洲很多国家都在讲述的民间故事，后来由法国作家夏尔·佩罗（Charles Perrault）和德国的格林兄弟（Jacob and Wilhelm Grimm）采集编写而成。目前大家熟知的有两个版本，并被翻译成多种文字，在全世界流传。“灰”这个词，在汉语中既可以指尘土，也可以指颜色，形象地描写出了灰姑娘生活的环境。</div><div class="prose-pinyin pinyin-text" style="text-indent:1em;">《Huīgūniang》 shì zhòng suǒ zhōu zhī de tónghuà. Tā yuánlái shì Ōuzhōu hěn duō guójiā dōu zài jiǎngshù de mínjiān gùshi, hòulái yóu Fǎguó zuòjiā Xià’ěr Pèiluó hé Déguó de Gélín xiōngdì cǎijí biānxiě ér chéng. Mùqián dàjiā shúzhī de yǒu liǎng gè bǎnběn, bìng bèi fānyì chéng duō zhǒng wénzì, zài quán shìjiè liúchuán. “Huī” zhège cí, zài Hànyǔ zhōng jì kěyǐ zhǐ chéntǔ, yě kěyǐ zhǐ yánsè, xíngxiàng de miáoxiě chū le Huīgūniang shēnghuó de huánjìng.</div><div class="prose-vietnamese">“Cô bé Lọ Lem” là truyện cổ tích ai cũng biết. Ban đầu đây là câu chuyện dân gian được kể ở nhiều nước châu Âu, sau đó được nhà văn Pháp Charles Perrault và anh em Grimm của Đức sưu tầm, biên soạn. Hiện nay có hai phiên bản quen thuộc và đã được dịch sang nhiều thứ tiếng, lưu truyền khắp thế giới. Từ “灰” trong tiếng Hán vừa có thể chỉ bụi đất, vừa có thể chỉ màu sắc, miêu tả rất hình tượng môi trường sống của Cô bé Lọ Lem.</div></div><div class="part-header"><i class="bi bi-chat-dots"></i> 话题讨论 - Thảo luận chủ đề: 灰姑娘应该怎么做</div><div class="question-container">
+  <div class="question-text"><strong>1.</strong> <span class="chinese-text">你读过《灰姑娘》这篇童话吗？简单地讲讲这个故事。</span></div>
+  <div class="question-pinyin pinyin-text">Nǐ dú guò 《Huīgūniang》 zhè piān tónghuà ma? Jiǎndān de jiǎngjiang zhège gùshi.</div>
+  <div class="question-vietnamese">Bạn đã đọc truyện cổ tích “Cô bé Lọ Lem” chưa? Hãy kể ngắn gọn câu chuyện này.</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>2.</strong> <span class="chinese-text">如果你是灰姑娘，成为王子的心上人并进入王宫以后，你会怎么对待继母和姐姐？</span></div>
+  <div class="question-pinyin pinyin-text">Rúguǒ nǐ shì Huīgūniang, chéngwéi wángzǐ de xīnshàngrén bìng jìnrù wánggōng yǐhòu, nǐ huì zěnme duìdài jìmǔ hé jiějie?</div>
+  <div class="question-vietnamese">Nếu bạn là Lọ Lem, sau khi trở thành người trong lòng hoàng tử và vào hoàng cung, bạn sẽ đối xử với mẹ kế và chị gái như thế nào?</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="question-container">
+  <div class="question-text"><strong>3.</strong> <span class="chinese-text">作者认为应该承认人性中一些先天的不完美，你同意他的看法吗？</span></div>
+  <div class="question-pinyin pinyin-text">Zuòzhě rènwéi yīnggāi chéngrèn rénxìng zhōng yìxiē xiāntiān de bù wánměi, nǐ tóngyì tā de kànfǎ ma?</div>
+  <div class="question-vietnamese">Tác giả cho rằng nên thừa nhận một số điều không hoàn hảo bẩm sinh trong bản tính con người. Bạn có đồng ý với quan điểm đó không?</div>
+  <textarea rows="3" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="Viết câu trả lời..."></textarea>
+</div><div class="part-header"><i class="bi bi-pencil-fill"></i> 命题写作 - Viết theo đề bài</div><div style="margin-bottom:20px;padding:15px;background:#eef1f7;border-radius:8px;border:1px solid #c5d1e3;"><strong>题目:</strong> 请以“假如我是灰姑娘”为题，谈一谈你的看法。尽量用上本课所学的生词，字数不少于100字。<br><em>Đề bài: Hãy viết với chủ đề “Nếu tôi là Lọ Lem”, nói về cách nhìn của bạn. Cố gắng dùng từ mới trong bài, không dưới 100 chữ.</em></div><div class="question-container"><textarea id="activity-write" rows="8" style="width:100%;padding:10px;border:2px solid #39456f;border-radius:8px;font-size:16px;resize:vertical;font-family:Arial,sans-serif;" placeholder="请以&#10;假如我是灰姑娘&#10;为题写一段话（不少于100字）..."></textarea></div></div>
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ===== VOCABULARY DATA =====
+const vocabData = [
+  {
+    "id": 1,
+    "chinese": "过分",
+    "pinyin": "guòfèn",
+    "meaning": "quá đáng, quá mức",
+    "pos": "tt.",
+    "example": "过分强调",
+    "examplePinyin": "Guòfèn qiángdiào.",
+    "exampleVietnamese": "Nhấn mạnh quá mức.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 2,
+    "chinese": "强调",
+    "pinyin": "qiángdiào",
+    "meaning": "nhấn mạnh",
+    "pos": "đgt.",
+    "example": "强调思考",
+    "examplePinyin": "Qiángdiào sīkǎo.",
+    "exampleVietnamese": "Nhấn mạnh suy nghĩ.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 3,
+    "chinese": "作文",
+    "pinyin": "zuòwén",
+    "meaning": "bài làm văn",
+    "pos": "dt.",
+    "example": "写作文",
+    "examplePinyin": "Xiě zuòwén.",
+    "exampleVietnamese": "Viết văn.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 4,
+    "chinese": "观点",
+    "pinyin": "guāndiǎn",
+    "meaning": "quan điểm",
+    "pos": "dt.",
+    "example": "这个观点",
+    "examplePinyin": "Zhège guāndiǎn.",
+    "exampleVietnamese": "Quan điểm này.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 5,
+    "chinese": "客观",
+    "pinyin": "kèguān",
+    "meaning": "khách quan",
+    "pos": "tt.",
+    "example": "不客观",
+    "examplePinyin": "Bù kèguān.",
+    "exampleVietnamese": "Không khách quan.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 6,
+    "chinese": "全面",
+    "pinyin": "quánmiàn",
+    "meaning": "toàn diện, mọi mặt",
+    "pos": "tt.",
+    "example": "全面地看问题",
+    "examplePinyin": "Quánmiàn de kàn wèntí.",
+    "exampleVietnamese": "Nhìn vấn đề toàn diện.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 7,
+    "chinese": "转变",
+    "pinyin": "zhuǎnbiàn",
+    "meaning": "thay đổi, chuyển biến",
+    "pos": "đgt.",
+    "example": "转变观念",
+    "examplePinyin": "Zhuǎnbiàn guānniàn.",
+    "exampleVietnamese": "Thay đổi quan niệm.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 8,
+    "chinese": "观念",
+    "pinyin": "guānniàn",
+    "meaning": "quan niệm, tư tưởng",
+    "pos": "dt.",
+    "example": "自己的观念",
+    "examplePinyin": "Zìjǐ de guānniàn.",
+    "exampleVietnamese": "Quan niệm của mình.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 9,
+    "chinese": "火柴",
+    "pinyin": "huǒchái",
+    "meaning": "diêm quẹt",
+    "pos": "dt.",
+    "example": "卖火柴的小女孩",
+    "examplePinyin": "Mài huǒchái de xiǎo nǚhái.",
+    "exampleVietnamese": "Cô bé bán diêm.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 10,
+    "chinese": "灰",
+    "pinyin": "huī",
+    "meaning": "tro; xám",
+    "pos": "dt./tt.",
+    "example": "灰姑娘",
+    "examplePinyin": "Huīgūniang.",
+    "exampleVietnamese": "Cô bé Lọ Lem.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 11,
+    "chinese": "一旦",
+    "pinyin": "yídàn",
+    "meaning": "một khi",
+    "pos": "phó.",
+    "example": "一旦进了王宫",
+    "examplePinyin": "Yídàn jìn le wánggōng.",
+    "exampleVietnamese": "Một khi vào hoàng cung.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 12,
+    "chinese": "王宫",
+    "pinyin": "wánggōng",
+    "meaning": "hoàng cung",
+    "pos": "dt.",
+    "example": "进入王宫",
+    "examplePinyin": "Jìnrù wánggōng.",
+    "exampleVietnamese": "Vào hoàng cung.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 13,
+    "chinese": "王子",
+    "pinyin": "wángzǐ",
+    "meaning": "hoàng tử",
+    "pos": "dt.",
+    "example": "成为王子的心上人",
+    "examplePinyin": "Chéngwéi wángzǐ de xīnshàngrén.",
+    "exampleVietnamese": "Trở thành người trong lòng hoàng tử.",
+    "category": "text1,group1"
+  },
+  {
+    "id": 14,
+    "chinese": "属于",
+    "pinyin": "shǔyú",
+    "meaning": "thuộc về",
+    "pos": "đgt.",
+    "example": "属于她",
+    "examplePinyin": "Shǔyú tā.",
+    "exampleVietnamese": "Thuộc về cô ấy.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 15,
+    "chinese": "对待",
+    "pinyin": "duìdài",
+    "meaning": "đối xử",
+    "pos": "đgt.",
+    "example": "平等地对待",
+    "examplePinyin": "Píngděng de duìdài.",
+    "exampleVietnamese": "Đối xử bình đẳng.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 16,
+    "chinese": "交换",
+    "pinyin": "jiāohuàn",
+    "meaning": "trao đổi",
+    "pos": "đgt.",
+    "example": "情感交换",
+    "examplePinyin": "Qínggǎn jiāohuàn.",
+    "exampleVietnamese": "Trao đổi tình cảm.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 17,
+    "chinese": "拥有",
+    "pinyin": "yōngyǒu",
+    "meaning": "có, sở hữu",
+    "pos": "đgt.",
+    "example": "拥有幸福",
+    "examplePinyin": "Yōngyǒu xìngfú.",
+    "exampleVietnamese": "Có hạnh phúc.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 18,
+    "chinese": "巨大",
+    "pinyin": "jùdà",
+    "meaning": "to lớn",
+    "pos": "tt.",
+    "example": "巨大幸福",
+    "examplePinyin": "Jùdà xìngfú.",
+    "exampleVietnamese": "Hạnh phúc lớn lao.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 19,
+    "chinese": "承认",
+    "pinyin": "chéngrèn",
+    "meaning": "thừa nhận, chấp nhận",
+    "pos": "đgt.",
+    "example": "承认错误",
+    "examplePinyin": "Chéngrèn cuòwù.",
+    "exampleVietnamese": "Thừa nhận lỗi sai.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 20,
+    "chinese": "人性",
+    "pinyin": "rénxìng",
+    "meaning": "bản tính con người",
+    "pos": "dt.",
+    "example": "人性的价值判断",
+    "examplePinyin": "Rénxìng de jiàzhí pànduàn.",
+    "exampleVietnamese": "Phán đoán giá trị về bản tính con người.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 21,
+    "chinese": "完美",
+    "pinyin": "wánměi",
+    "meaning": "hoàn hảo",
+    "pos": "tt.",
+    "example": "不完美",
+    "examplePinyin": "Bù wánměi.",
+    "exampleVietnamese": "Không hoàn hảo.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 22,
+    "chinese": "难免",
+    "pinyin": "nánmiǎn",
+    "meaning": "khó tránh khỏi",
+    "pos": "tt.",
+    "example": "难免会更疼爱",
+    "examplePinyin": "Nánmiǎn huì gèng téng’ài.",
+    "exampleVietnamese": "Khó tránh khỏi sẽ thương yêu hơn.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 23,
+    "chinese": "疼爱",
+    "pinyin": "téng’ài",
+    "meaning": "thương yêu",
+    "pos": "đgt.",
+    "example": "疼爱女儿",
+    "examplePinyin": "Téng’ài nǚ’ér.",
+    "exampleVietnamese": "Thương yêu con gái.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 24,
+    "chinese": "平等",
+    "pinyin": "píngděng",
+    "meaning": "bình đẳng, công bằng",
+    "pos": "tt.",
+    "example": "平等地对待",
+    "examplePinyin": "Píngděng de duìdài.",
+    "exampleVietnamese": "Đối xử bình đẳng.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 25,
+    "chinese": "自私",
+    "pinyin": "zìsī",
+    "meaning": "ích kỷ",
+    "pos": "tt.",
+    "example": "继母很自私",
+    "examplePinyin": "Jìmǔ hěn zìsī.",
+    "exampleVietnamese": "Mẹ kế rất ích kỷ.",
+    "category": "text1,group2"
+  },
+  {
+    "id": 26,
+    "chinese": "倾向",
+    "pinyin": "qīngxiàng",
+    "meaning": "nghiêng về; khuynh hướng",
+    "pos": "đgt./dt.",
+    "example": "自然倾向",
+    "examplePinyin": "Zìrán qīngxiàng.",
+    "exampleVietnamese": "Khuynh hướng tự nhiên.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 27,
+    "chinese": "理由",
+    "pinyin": "lǐyóu",
+    "meaning": "lý do",
+    "pos": "dt.",
+    "example": "有理由",
+    "examplePinyin": "Yǒu lǐyóu.",
+    "exampleVietnamese": "Có lý do.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 28,
+    "chinese": "道德",
+    "pinyin": "dàodé",
+    "meaning": "đạo đức",
+    "pos": "dt.",
+    "example": "与道德有关",
+    "examplePinyin": "Yǔ dàodé yǒuguān.",
+    "exampleVietnamese": "Có liên quan đến đạo đức.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 29,
+    "chinese": "自从",
+    "pinyin": "zìcóng",
+    "meaning": "từ lúc, từ khi",
+    "pos": "giới.",
+    "example": "自从我听说了这件事",
+    "examplePinyin": "Zìcóng wǒ tīngshuō le zhè jiàn shì.",
+    "exampleVietnamese": "Từ khi tôi nghe chuyện này.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 30,
+    "chinese": "童话",
+    "pinyin": "tónghuà",
+    "meaning": "truyện cổ tích",
+    "pos": "dt.",
+    "example": "讲童话",
+    "examplePinyin": "Jiǎng tónghuà.",
+    "exampleVietnamese": "Kể truyện cổ tích.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 31,
+    "chinese": "价值",
+    "pinyin": "jiàzhí",
+    "meaning": "giá trị",
+    "pos": "dt.",
+    "example": "价值判断",
+    "examplePinyin": "Jiàzhí pànduàn.",
+    "exampleVietnamese": "Phán đoán giá trị.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 32,
+    "chinese": "单纯",
+    "pinyin": "dānchún",
+    "meaning": "đơn thuần, đơn giản",
+    "pos": "tt.",
+    "example": "单纯地主张阅读",
+    "examplePinyin": "Dānchún de zhǔzhāng yuèdú.",
+    "exampleVietnamese": "Đơn thuần chủ trương đọc.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 33,
+    "chinese": "主张",
+    "pinyin": "zhǔzhāng",
+    "meaning": "cho là, tán thành; chủ trương",
+    "pos": "đgt./dt.",
+    "example": "主张阅读",
+    "examplePinyin": "Zhǔzhāng yuèdú.",
+    "exampleVietnamese": "Chủ trương đọc.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 34,
+    "chinese": "知感",
+    "pinyin": "zhīgǎn",
+    "meaning": "tri giác",
+    "pos": "dt.",
+    "example": "所谓知感",
+    "examplePinyin": "Suǒwèi zhīgǎn.",
+    "exampleVietnamese": "Cái gọi là tri giác.",
+    "category": "text1,group3"
+  },
+  {
+    "id": 35,
+    "chinese": "《卖火柴的小女孩》",
+    "pinyin": "Mài Huǒchái de Xiǎo Nǚhái",
+    "meaning": "“Cô bé bán diêm”",
+    "pos": "专名",
+    "example": "讨论《卖火柴的小女孩》",
+    "examplePinyin": "Tǎolùn 《Mài Huǒchái de Xiǎo Nǚhái》.",
+    "exampleVietnamese": "Thảo luận “Cô bé bán diêm”.",
+    "category": "text1,group4"
+  },
+  {
+    "id": 36,
+    "chinese": "灰姑娘",
+    "pinyin": "Huīgūniang",
+    "meaning": "Cô bé Lọ Lem",
+    "pos": "专名",
+    "example": "灰姑娘的故事",
+    "examplePinyin": "Huīgūniang de gùshi.",
+    "exampleVietnamese": "Câu chuyện Cô bé Lọ Lem.",
+    "category": "text1,group4"
+  }
+];
+
+
+const SECTION_TITLES = {
+  objectives: { text: 'Mục tiêu bài học', icon: '<i class="bi bi-bullseye"></i>', badge: 'Phần 1/6' },
+  vocabulary: { text: 'Từ vựng bài học', icon: '<i class="bi bi-alphabet"></i>', badge: '41 từ + 3 danh từ riêng' },
+  text: { text: 'Bài khóa', icon: '<i class="bi bi-book"></i>', badge: '1 bài' },
+  grammar: { text: 'Ngữ pháp', icon: '<i class="bi bi-diagram-3"></i>', badge: '5 điểm' },
+  exercises: { text: 'Bài tập', icon: '<i class="bi bi-pencil-square"></i>', badge: '5 phần' },
+  activity: { text: 'Phần vận dụng', icon: '<i class="bi bi-people"></i>', badge: 'Hoạt động' }
+};
+
+function showSection(sectionId, navItem) {
+  const target = document.getElementById(sectionId);
+  if (!target) return;
+
+  document.querySelectorAll('.section-content').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.remove('active');
+  });
+
+  target.classList.add('active');
+  if (navItem) navItem.classList.add('active');
+
+  const meta = SECTION_TITLES[sectionId];
+  const titleText = document.getElementById('section-title-text');
+  const currentIcon = document.getElementById('current-icon');
+  const sectionBadge = document.getElementById('section-badge');
+  if (meta && titleText && currentIcon && sectionBadge) {
+    titleText.textContent = meta.text;
+    currentIcon.innerHTML = meta.icon;
+    sectionBadge.textContent = meta.badge;
+  }
+
+  if (sectionId === 'vocabulary') renderVocab('all');
+}
+
+// ===== VOCABULARY RENDERING =====
+const WRITER_VOCAB_CONFIG = { width: 90, height: 90, padding: 5, showOutline: true, strokeAnimationSpeed: 1, strokeColor: '#333', radicalColor: '#333', highlightColor: '#39456f' };
+const GROUP_FILTERS = ['group1', 'group2', 'group3', 'group4', 'group5'];
+const POS_FILTERS = ['n', 'v', 'adj', 'adv', 'pron', 'prep', 'conj', 'multi'];
+
+function renderVocab(filter) {
+  const grid = document.getElementById('vocab-grid');
+  if (!grid) return;
+  let data = vocabData;
+  if (filter !== 'all') {
+    if (GROUP_FILTERS.includes(filter)) {
+      data = vocabData.filter(v => v.category.includes(filter));
+    } else if (POS_FILTERS.includes(filter)) {
+      data = filter === 'multi' ? vocabData.filter(v => v.pos.includes('/')) : vocabData.filter(v => v.category.split(',').includes(filter));
+    } else {
+      data = vocabData.filter(v => v.category.includes(filter));
+    }
+  }
+  grid.innerHTML = data.map(word => {
+    const chars = word.chinese.split('');
+    const writersHtml = chars.map((c, i) => '<div class="writer-container" id="writer-vocab-' + word.id + '-' + i + '" style="border:1px solid #ddd;border-radius:6px;background:white;"></div>').join('');
+    return '<div class="vocab-card"><div class="vocab-info"><div class="vocab-number">' + word.id + '</div><div class="vocab-content"><div class="vocab-chinese chinese-text">' + word.chinese + '</div><div class="vocab-pinyin pinyin-text">' + word.pinyin + '</div><div class="vocab-meaning">' + word.meaning + '</div><span class="vocab-pos">' + word.pos + '</span><div class="vocab-example"><span class="chinese-text">' + word.example + '</span><br><span class="pinyin-text">' + word.examplePinyin + '</span><br><span style="color: #666; font-style: italic;">' + word.exampleVietnamese + '</span></div></div><button class="audio-btn" onclick="speak(' + JSON.stringify(word.chinese) + ')" title="Phát âm"><i class="bi bi-volume-up"></i></button></div><div class="vocab-animation"><div style="display: grid; grid-template-columns: repeat(2, 90px); gap: 8px; justify-items: center;">' + writersHtml + '</div><div class="animation-controls"><button class="anim-btn" onclick="replayVocabWriter(' + word.id + ', ' + JSON.stringify(word.chinese) + ')" title="Viết lại"><i class="bi bi-arrow-repeat"></i></button></div></div></div>';
+  }).join('');
+  requestAnimationFrame(() => {
+    if (typeof HanziWriter === 'undefined') return;
+    data.forEach(word => {
+      word.chinese.split('').forEach((char, i) => {
+        const container = document.getElementById('writer-vocab-' + word.id + '-' + i);
+        if (container) {
+          try {
+            HanziWriter.create(container, char, WRITER_VOCAB_CONFIG).loopCharacterAnimation();
+          } catch (e) { container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:14px;color:#ccc;">N/A</div>'; }
+        }
+      });
+    });
+  });
+}
+
+function filterVocab(category, btn) {
+  if (!btn) return;
+  document.querySelectorAll('.vocab-tab').forEach(t => t && t.classList.remove('active'));
+  btn.classList.add('active');
+  renderVocab(category);
+}
+
+const REPLAY_CONFIG = { width: 60, height: 60, padding: 2, showOutline: true, strokeAnimationSpeed: 1, strokeColor: '#333', radicalColor: '#333', highlightColor: '#39456f' };
+
+function replayVocabWriter(id, chinese) {
+  if (typeof HanziWriter === 'undefined' || !chinese) return;
+  const chars = chinese.split('');
+  chars.forEach((char, i) => {
+    const container = document.getElementById('writer-vocab-' + id + '-' + i);
+    if (container) {
+      container.innerHTML = '';
+      try {
+        HanziWriter.create(container, char, REPLAY_CONFIG).loopCharacterAnimation();
+      } catch (e) {}
+    }
+  });
+}
+
+// ===== TEXT/LESSON TABS =====
+function showText(textId, btn) {
+  const el = document.getElementById(textId);
+  if (!el) return;
+  document.querySelectorAll('.text-content').forEach(t => t && t.classList.remove('active'));
+  document.querySelectorAll('.text-tab').forEach(t => t && t.classList.remove('active'));
+  el.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ===== GRAMMAR TABS =====
+function showGrammar(index, btn) {
+  const panel = document.getElementById('grammar-panel-' + index);
+  if (!panel) return;
+  document.querySelectorAll('.grammar-panel').forEach(p => p && p.classList.remove('active'));
+  document.querySelectorAll('.grammar-tab').forEach(t => t && t.classList.remove('active'));
+  panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ===== EXERCISE TABS =====
+function showExercise(exId, btn) {
+  const el = document.getElementById(exId);
+  if (!el) return;
+  document.querySelectorAll('.exercise-content').forEach(e => e && e.classList.remove('active'));
+  document.querySelectorAll('.exercise-tab').forEach(t => t && t.classList.remove('active'));
+  el.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ===== TTS =====
+let audioSpeed = 0.8;
+function setAudioSpeed(speed) { audioSpeed = parseFloat(speed); }
+function goToHome() { var path = window.location.pathname; var dir = path.substring(0, path.lastIndexOf('/')); window.location.href = dir + '/BHHSK5.html'; }
+
+function speak(text) {
+  if (!text || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'zh-CN'; utter.rate = audioSpeed || 0.8; utter.pitch = 1;
+  window.speechSynthesis.speak(utter);
+}
+
+function speakAllText(textId) {
+  const container = document.getElementById(textId);
+  if (!container || !('speechSynthesis' in window)) return;
+  const lines = container.querySelectorAll('.dialogue-chinese, .prose-chinese');
+  if (!lines.length) return;
+  let index = 0;
+  function speakNext() {
+    if (index >= lines.length) return;
+    const text = lines[index]?.textContent?.trim();
+    if (!text) { index++; speakNext(); return; }
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'zh-CN'; utter.rate = audioSpeed || 0.8; utter.pitch = 1;
+    utter.onend = () => { index++; speakNext(); };
+    window.speechSynthesis.speak(utter);
+  }
+  window.speechSynthesis.cancel();
+  speakNext();
+}
+
+// ===== TOGGLE PINYIN/VIETNAMESE/EXAMPLES =====
+let pinyinHidden = false;
+function togglePinyin(btn) {
+  if (!btn) return;
+  pinyinHidden = !pinyinHidden;
+  document.body?.classList.toggle('hide-pinyin', pinyinHidden);
+  btn.classList.toggle('active-toggle', pinyinHidden);
+  const icon = btn.querySelector('i');
+  if (icon) icon.className = pinyinHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+
+let vietnameseHidden = false;
+function toggleVietnamese(btn) {
+  if (!btn) return;
+  vietnameseHidden = !vietnameseHidden;
+  document.body?.classList.toggle('hide-vietnamese', vietnameseHidden);
+  btn.classList.toggle('active-toggle', vietnameseHidden);
+  const icon = btn.querySelector('i');
+  if (icon) icon.className = vietnameseHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+
+let examplesHidden = true;
+function toggleExamples(btn) {
+  if (!btn) return;
+  examplesHidden = !examplesHidden;
+  document.body?.classList.toggle('hide-examples', examplesHidden);
+  btn.classList.toggle('active-toggle', examplesHidden);
+  const icon = btn.querySelector('i');
+  if (icon) icon.className = examplesHidden ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+
+// ===== ANSWER CHECKING =====
+const ANSWER_EXPLANATIONS = {
+  "ex1_1-r": "承认错误 = thừa nhận lỗi sai.",
+  "ex1_2-r": "客观 = khách quan.",
+  "ex1_3-r": "有价值 = có giá trị.",
+  "ex1_4-r": "主张将会议地点改在上海 = chủ trương đổi địa điểm họp sang Thượng Hải.",
+  "ex1_5-r": "太过分了 = quá đáng rồi.",
+  "ex1_6-r": "理由 = lý do.",
+  "q2_1-r": "转变思路 = thay đổi mạch suy nghĩ.",
+  "q2_2-r": "观点 = quan điểm cụ thể về một việc.",
+  "q2_3-r": "原因 = nguyên nhân dẫn đến kết quả.",
+  "q2_4-r": "单纯 = đơn thuần, dễ tin người.",
+  "ext1-r": "目录 = mục lục.",
+  "ext2-r": "论文 = luận văn/bài nghiên cứu.",
+  "ext3-r": "标点 = dấu câu.",
+  "ext4-r": "说废话 = nói lời thừa, vô ích."
+};
+
+function _formatResult(selected, correct, explanation) {
+  const answerLine = 'Đáp án đúng: ' + correct.join(', ');
+  return answerLine + (explanation ? '。' + explanation : '。');
+}
+
+function checkAnswer(name, correctValue, resultId) {
+  if (!name || !resultId) return;
+  const inputs = document.getElementsByName(name);
+  if (!inputs?.length) return;
+  let selected = null;
+  for (let r of inputs) { if (r?.checked) { selected = r.value; break; } }
+  const el = document.getElementById(resultId);
+  if (!el) return;
+  const explanation = ANSWER_EXPLANATIONS[resultId] || '';
+  if (!selected) {
+    el.textContent = 'Vui lòng chọn đáp án trước khi kiểm tra.';
+    el.className = 'result-message show incorrect';
+    return;
+  }
+  if (selected === correctValue) {
+    el.textContent = 'Chính xác! ' + (explanation || ('Đáp án đúng: ' + correctValue + '.'));
+    el.className = 'result-message show correct';
+  } else {
+    el.textContent = 'Chưa chính xác. ' + _formatResult([selected], [correctValue], explanation);
+    el.className = 'result-message show incorrect';
+  }
+}
+
+function checkMultiAnswer(name, correctValues, resultId) {
+  if (!name || !resultId) return;
+  const inputs = Array.from(document.getElementsByName(name));
+  const el = document.getElementById(resultId);
+  if (!inputs.length || !el) return;
+  const selected = inputs.filter(i => i.checked).map(i => i.value).sort();
+  const correct = [...correctValues].sort();
+  const explanation = ANSWER_EXPLANATIONS[resultId] || '';
+  if (!selected.length) {
+    el.textContent = 'Vui lòng chọn ít nhất một đáp án trước khi kiểm tra.';
+    el.className = 'result-message show incorrect';
+    return;
+  }
+  const ok = selected.length === correct.length && correct.every(v => selected.includes(v));
+  if (ok) {
+    el.textContent = 'Chính xác! ' + (explanation || ('Đáp án đúng: ' + correct.join(', ') + '.'));
+    el.className = 'result-message show correct';
+  } else {
+    el.textContent = 'Chưa chính xác. ' + _formatResult(selected, correct, explanation);
+    el.className = 'result-message show incorrect';
+  }
+}
+
+function checkCompareWords() {
+  const answers = {
+    cmp1: ['平等'],
+    cmp2: ['公平'],
+    cmp3: ['公平'],
+    cmp4: ['平等']
+  };
+  const explanations = {
+    cmp1: '（1）平等 — 机会对每个人来说都是平等的。',
+    cmp2: '（2）公平 — 比赛很公平，强调没有偏向。',
+    cmp3: '（3）公平 — 法官做事应该公平，强调处理事情合情合理。',
+    cmp4: '（4）平等 — 人生来是平等的，强调权利和地位。'
+  };
+  let ok = true;
+  let missing = false;
+  Object.keys(answers).forEach(name => {
+    const selected = Array.from(document.getElementsByName(name)).filter(i => i.checked).map(i => i.value).sort();
+    const correct = answers[name].slice().sort();
+    if (!selected.length) missing = true;
+    if (selected.length !== correct.length || !correct.every(v => selected.includes(v))) ok = false;
+  });
+  const el = document.getElementById('compare-result');
+  if (!el) return;
+  if (missing) {
+    el.innerHTML = 'Vui lòng chọn đáp án cho đủ 4 câu trước khi kiểm tra.';
+    el.className = 'result-message show incorrect';
+    return;
+  }
+  el.innerHTML = (ok ? '<strong>Chính xác!</strong><br>' : '<strong>Chưa chính xác. Đáp án đúng:</strong><br>') + Object.values(explanations).join('<br>');
+  el.className = 'result-message show ' + (ok ? 'correct' : 'incorrect');
+}
+
+function checkCharInput(inputId, correctAnswer, resultId) {
+  if (!inputId || !resultId) return;
+  const input = document.getElementById(inputId);
+  const el = document.getElementById(resultId);
+  if (!input || !el) return;
+  const val = input.value?.trim();
+  if (!val) { el.textContent = 'Vui lòng nhập câu trả lời.'; el.className = 'result-message show incorrect'; return; }
+  if (val === correctAnswer) {
+    el.textContent = 'Chính xác! Rất tốt!';
+    el.className = 'result-message show correct';
+  } else {
+    el.textContent = 'Chưa chính xác. Đáp án đúng là: ' + correctAnswer;
+    el.className = 'result-message show incorrect';
+  }
+}
+
+function checkFreeAnswer(inputId, keyword, resultId) {
+  if (!inputId || !resultId) return;
+  const input = document.getElementById(inputId);
+  const el = document.getElementById(resultId);
+  if (!input || !el) return;
+  const val = input.value?.trim();
+  if (!val) { el.textContent = 'Vui lòng nhập câu trả lời.'; el.className = 'result-message show incorrect'; return; }
+  if (keyword && val.includes(keyword)) {
+    el.textContent = 'Câu trả lời hợp lý! (Đáp án tham khảo đã được chấp nhận)';
+    el.className = 'result-message show correct';
+  } else {
+    el.textContent = 'Câu trả lời của bạn đã được ghi nhận. Hãy tham khảo đáp án trong sách giáo khoa để đối chiếu.';
+    el.className = 'result-message show';
+    el.style.cssText = 'display:block;background:#e8ecf4;color:#2a3352;border:1px solid #8a9abf;';
+  }
+}
+
+// ===== NOTE EDITOR =====
+function openNoteEditor() {
+  const overlay = document.getElementById('note-editor-overlay');
+  const editor = document.getElementById('rich-editor');
+  if (overlay && editor) {
+    editor.innerHTML = localStorage.getItem('hsk5_bai22_notes') || '<p><b>Bảng ghi chú - Bài 22: 阅读与思考</b></p><p><br></p><p><i>Ghi chép những điểm quan trọng ở đây...</i></p>';
+    overlay.style.display = 'block';
+  }
+}
+
+function closeNoteEditor() {
+  const overlay = document.getElementById('note-editor-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function closeNoteEditorOnBg(event) {
+  if (event.target === document.getElementById('note-editor-overlay')) closeNoteEditor();
+}
+
+function execCmd(command, value) {
+  const editor = document.getElementById('rich-editor');
+  if (!editor) return;
+  document.execCommand(command, false, value);
+  editor.focus();
+}
+
+function saveNotes() {
+  const editor = document.getElementById('rich-editor');
+  if (editor) {
+    localStorage.setItem('hsk5_bai22_notes', editor.innerHTML);
+    const status = document.getElementById('save-status');
+    if (status) { status.textContent = 'Đã lưu thành công!'; setTimeout(() => status.textContent = 'Tự động lưu khi bạn gõ', 2000); }
+  }
+}
+
+// ===== RESET & EXPORT =====
+function resetExercises() {
+  if (!confirm('Bạn có chắc muốn làm lại tất cả bài tập không?')) return;
+  try {
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(r => { if (r) r.checked = false; });
+    document.querySelectorAll('input[type="text"]').forEach(i => { if (i) i.value = ''; });
+    document.querySelectorAll('textarea').forEach(t => { if (t) t.value = ''; });
+    document.querySelectorAll('.result-message').forEach(r => { if (r) { r.className = 'result-message'; r.textContent = ''; r.style.cssText = ''; } });
+    localStorage.removeItem('hsk5_bai22_notes');
+    alert('Đã xóa tất cả bài tập!');
+  } catch (e) { console.error('Reset error:', e); }
+}
+
+function exportHTML() {
+  const content = document.documentElement.outerHTML;
+  const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'BHHSK5-21-MASTER-10-10.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ===== XÁO TRỘN (cố định theo seed -> ổn định qua mỗi lần mở/in) =====
+function _hashStr(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function _mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function _seededShuffle(arr, seed) {
+  const rnd = _mulberry32(seed >>> 0);
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function shuffleAllExercises() {
+  const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  document.querySelectorAll('button').forEach(btn => {
+    const oc = btn.getAttribute('onclick');
+    if (!oc) return;
+    const m = oc.match(/checkAnswer\('([^']+)',\s*'([^']+)',\s*'([^']+)'\)/);
+    if (!m) return;
+    const name = m[1], oldCorrect = m[2], resultId = m[3];
+    const inputs = Array.from(document.querySelectorAll('input[type="radio"][name="' + name + ']"'));
+    if (inputs.length < 2) return;
+    const labels = inputs.map(inp => inp.closest('label'));
+    if (labels.some(l => !l)) return;
+    const items = labels.map((lab, i) => ({
+      content: lab.textContent.trim().replace(/^[A-Z]\s*/, ''),
+      correct: inputs[i].value === oldCorrect
+    }));
+    const correctIdx = items.findIndex(it => it.correct);
+    if (correctIdx === -1) return;
+    const correctContent = items[correctIdx].content;
+    const contents = _seededShuffle(items.map(it => it.content), _hashStr(name));
+    labels.forEach((lab, i) => {
+      const inp = inputs[i];
+      inp.value = LETTERS[i];
+      inp.checked = false;
+      Array.from(lab.childNodes).forEach(n => { if (n !== inp) lab.removeChild(n); });
+      lab.appendChild(document.createTextNode(' ' + LETTERS[i] + ' ' + contents[i]));
+    });
+    const newCorrect = LETTERS[contents.indexOf(correctContent)];
+    btn.setAttribute('onclick', "checkAnswer('" + name + "', '" + newCorrect + "', '" + resultId + "')");
+  });
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeNoteEditor();
+});
+
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    renderVocab('all');
+  } catch (e) { console.error('Init error:', e); }
+});
+</script>
+
+<!-- ===== NOTE EDITOR OVERLAY ===== -->
+<div id="note-editor-overlay" onclick="closeNoteEditorOnBg(event)">
+  <div id="note-editor-container">
+    <div id="note-editor-header">
+      <h3><i class="bi bi-journal-text"></i> Bảng ghi chú</h3>
+      <button onclick="closeNoteEditor()" style="background:transparent; border:none; color:white; font-size:20px; cursor:pointer;"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div id="note-editor-toolbar">
+      <button class="editor-tool-btn" onclick="execCmd('bold')"><i class="bi bi-type-bold"></i> Đậm</button>
+      <button class="editor-tool-btn" onclick="execCmd('italic')"><i class="bi bi-type-italic"></i> Nghiêng</button>
+      <button class="editor-tool-btn" onclick="execCmd('underline')"><i class="bi bi-type-underline"></i> Gạch chân</button>
+      <button class="editor-tool-btn" onclick="execCmd('foreColor', '#39456f')"><i class="bi bi-palette"></i> Xanh đậm</button>
+      <button class="editor-tool-btn" onclick="execCmd('foreColor', '#2e7d32')"><i class="bi bi-palette"></i> Xanh</button>
+      <button class="editor-tool-btn" onclick="execCmd('insertUnorderedList')"><i class="bi bi-list-ul"></i> Danh sách</button>
+      <button class="editor-tool-btn" onclick="execCmd('removeFormat')"><i class="bi bi-eraser"></i> Xóa định dạng</button>
+    </div>
+    <div id="rich-editor" contenteditable="true" spellcheck="false"><p><b>Bảng ghi chú - Bài 22: 阅读与思考</b></p><p><br></p><p><i>Ghi chép những điểm quan trọng ở đây...</i></p></div>
+    <div id="note-editor-footer">
+      <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()"><i class="bi bi-x-circle"></i> Đóng</button>
+      <div id="save-status" style="font-size: 13px; color: #666; font-style: italic;">Tự động lưu khi bạn gõ</div>
+      <button class="editor-btn editor-btn-save" onclick="saveNotes()"><i class="bi bi-check-circle"></i> Lưu & Đóng</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
