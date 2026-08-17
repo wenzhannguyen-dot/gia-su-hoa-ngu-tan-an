@@ -1,1769 +1,332 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BÀI 01: 你好 | Gia Sư Hoa Ngữ Tân An</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --purple: #7c3aed;
-            --purple-dark: #6d28d9;
-            --purple-light: #8b5cf6;
-            --orange: #f59e0b;
-            --orange-dark: #d97706;
-            --green: #10b981;
-            --green-dark: #059669;
-            --green-light: #d1fae5;
-            --gray: #6b7280;
-            --gray-light: #e5e7eb;
-            --gray-dark: #374151;
-            --white: #ffffff;
-            --cream: #fef3c7;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--gray-light);
-            color: var(--purple-dark);
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .app-container {
-            display: grid;
-            grid-template-columns: 220px 1fr;
-            height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            background: var(--purple);
-            border-right: 1px solid rgba(255,255,255,0.2);
-            color: var(--white);
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-        }
-
-        .brand-header {
-            text-align: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-            margin-bottom: 15px;
-        }
-
-        .logo-img {
-            width: 90px;
-            height: 90px;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 12px;
-            margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--white);
-            overflow: hidden;
-            padding: 5px;
-        }
-
-        .logo-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .brand-name {
-            font-size: 13px;
-            font-weight: bold;
-            color: var(--cream);
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .brand-contact {
-            font-size: 11px;
-            color: rgba(255,255,255,0.9);
-            line-height: 1.6;
-        }
-
-        .nav-menu {
-            list-style: none;
-            flex: 1;
-        }
-
-        .nav-item {
-            margin-bottom: 8px;
-        }
-
-        .nav-btn {
-            width: 100%;
-            padding: 10px 12px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: var(--white);
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .nav-btn.active {
-            background: var(--green);
-            border-color: var(--green);
-            font-weight: bold;
-        }
-
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 220px;
-            right: 0;
-            background: var(--purple);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding: 12px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 90;
-            height: 70px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .header h2 {
-            color: var(--cream);
-            font-size: 20px;
-        }
-
-        .progress-bar {
-            width: 140px;
-            height: 8px;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 4px;
-            overflow: hidden;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--green);
-        }
-
-        .progress-text {
-            font-size: 13px;
-            color: var(--cream);
-            margin-left: 10px;
-            font-weight: 600;
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 90px 25px 30px 25px;
-            height: 100vh;
-        }
-
-        /* ===== SLIDE CONTAINER ===== */
-        .slide-container {
-            max-width: 900px;
-            margin: 0 auto 30px;
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 25px 30px;
-            height: calc(100vh - 130px);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background-image: url('https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/NEN.png');
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        /* Nội dung có thể scroll - nền trong suốt hoàn toàn */
-        .slide-content {
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
-            z-index: 1;
-            background: transparent;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .slide-content::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .slide-content::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-        }
-
-        .slide-content::-webkit-scrollbar-thumb {
-            background: var(--purple-light);
-            border-radius: 3px;
-        }
-
-        .slide-title {
-            font-size: 22px;
-            color: var(--white);
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            background: rgba(124, 58, 237, 0.85);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-            border: 1px solid rgba(255,255,255,0.3);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .slide-number {
-            background: var(--purple-light);
-            border: 1px solid rgba(255,255,255,0.5);
-            color: var(--white);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        /* Nút điều hướng ở giữa */
-        .slide-nav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: auto;
-            padding-top: 15px;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-            gap: 20px;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 10px 20px;
-            border: 1px solid;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-orange {
-            background: var(--orange);
-            border-color: var(--orange);
-            color: var(--white);
-        }
-
-        .btn-success {
-            background: var(--green);
-            border-color: var(--green);
-            color: var(--white);
-        }
-
-        .btn-check {
-            background: linear-gradient(135deg, var(--orange) 0%, var(--green) 100%);
-            border: none;
-            color: var(--white);
-            padding: 12px 28px;
-            font-weight: 700;
-        }
-
-        .btn-nav {
-            padding: 12px 28px;
-            font-size: 15px;
-            min-width: 130px;
-            justify-content: center;
-        }
-
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .btn-answer {
-            padding: 6px 12px;
-            border: 1px solid;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-left: auto;
-        }
-
-        .btn-show-answer {
-            background: var(--orange);
-            border-color: var(--white);
-            color: var(--white);
-        }
-
-        .btn-hide-answer {
-            background: var(--green);
-            border-color: var(--white);
-            color: var(--white);
-        }
-
-        /* ===== CÁC KHUNG BÀI TẬP - NỀN TRONG SUỐT, VIỀN XÁM ===== */
-        .consonant-exercise {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .consonant-group {
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(2px);
-        }
-
-        .group-header {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--purple);
-            margin-bottom: 12px;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .consonant-inputs {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .char-input {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 20px;
-            font-weight: bold;
-            text-transform: lowercase;
-            background: rgba(255,255,255,0.9);
-            color: var(--purple-dark);
-        }
-
-        .char-input:focus {
-            border-color: var(--green);
-            outline: none;
-        }
-
-        .char-input.correct {
-            border-color: var(--green);
-            background: #d1fae5;
-            color: var(--green-dark);
-        }
-
-        .char-input.incorrect {
-            border-color: #ef4444;
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .answer-reveal {
-            font-size: 12px;
-            color: var(--green);
-            font-weight: bold;
-            margin-top: 5px;
-            display: none;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.9);
-        }
-
-        .answer-reveal.show {
-            display: block;
-        }
-
-        .input-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .quiz-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .quiz-item {
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 15px;
-            backdrop-filter: blur(2px);
-        }
-
-        .quiz-question {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--purple);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .quiz-number {
-            background: var(--purple-light);
-            color: var(--white);
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background: rgba(255,255,255,0.9);
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            color: var(--purple-dark);
-        }
-
-        .option input[type="radio"] {
-            margin-right: 8px;
-            accent-color: var(--purple);
-        }
-
-        .option.correct {
-            border-color: var(--green);
-            background: #d1fae5;
-            color: var(--green-dark);
-        }
-
-        .option.incorrect {
-            border-color: #ef4444;
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .option.selected {
-            border-color: var(--purple);
-            background: #ede9fe;
-        }
-
-        .option.correct-answer {
-            border-color: var(--green);
-            background: #d1fae5;
-            position: relative;
-        }
-
-        .option.correct-answer::after {
-            content: "✓";
-            position: absolute;
-            right: 10px;
-            font-size: 12px;
-            color: var(--green);
-            font-weight: bold;
-        }
-
-        .tone-exercise {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-
-        .tone-item {
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            backdrop-filter: blur(2px);
-        }
-
-        .tone-item.selected {
-            border-color: var(--purple);
-            background: rgba(237, 233, 254, 0.6);
-        }
-
-        .tone-item.correct {
-            border-color: var(--green);
-            background: rgba(209, 250, 229, 0.6);
-        }
-
-        .tone-item.incorrect {
-            border-color: #ef4444;
-            background: rgba(254, 226, 226, 0.6);
-        }
-
-        .tone-item.correct-answer {
-            border: 2px solid var(--green);
-            background: rgba(209, 250, 229, 0.8);
-        }
-
-        .pinyin-text {
-            font-size: 16px;
-            color: var(--purple-dark);
-            font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .tone-pair {
-            font-size: 22px;
-            color: var(--purple);
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .check-icon {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .correct .check-icon {
-            display: flex;
-            background: var(--green);
-        }
-
-        .incorrect .check-icon {
-            display: flex;
-            background: #ef4444;
-        }
-
-        .pinyin-select-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        .pinyin-select-card {
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(2px);
-        }
-
-        .pinyin-select-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .pinyin-hanzi {
-            font-size: 40px;
-            color: var(--purple);
-            font-family: "SimHei", serif;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .pinyin-dropdown {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-            background: rgba(255,255,255,0.9);
-            color: var(--purple-dark);
-            cursor: pointer;
-        }
-
-        .pinyin-dropdown:focus {
-            border-color: var(--green);
-            outline: none;
-        }
-
-        .pinyin-dropdown.correct {
-            border-color: var(--green);
-            background: #d1fae5;
-            color: var(--green-dark);
-        }
-
-        .pinyin-dropdown.incorrect {
-            border-color: #ef4444;
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .dialogue-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .dialogue-item {
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 15px;
-            backdrop-filter: blur(2px);
-        }
-
-        .dialogue-speaker {
-            font-weight: bold;
-            color: var(--green-dark);
-            margin-bottom: 8px;
-            font-size: 16px;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .dialogue-text {
-            font-size: 16px;
-            line-height: 1.5;
-            color: var(--gray-dark);
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .blank-select {
-            padding: 6px 10px;
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            font-size: 15px;
-            min-width: 100px;
-            background: rgba(255,255,255,0.9);
-            color: var(--gray-dark);
-            cursor: pointer;
-        }
-
-        .blank-select:focus {
-            border-color: var(--green);
-            outline: none;
-        }
-
-        .blank-select.correct-answer {
-            border-color: var(--green);
-            background: #d1fae5;
-            color: var(--green-dark);
-            font-weight: bold;
-        }
-
-        .writing-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-        }
-
-        .writing-card {
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(2px);
-        }
-
-        .writing-number {
-            display: inline-block;
-            background: var(--purple-light);
-            color: var(--white);
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            line-height: 20px;
-            margin-bottom: 8px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .writing-pinyin {
-            font-size: 16px;
-            color: var(--orange-dark);
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .hanzi-input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--gray);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 22px;
-            font-family: "SimHei", sans-serif;
-            margin-top: 8px;
-            background: rgba(255,255,255,0.9);
-            color: var(--purple-dark);
-        }
-
-        .hanzi-input:focus {
-            border-color: var(--green);
-            outline: none;
-        }
-
-        .correct-answer-display {
-            margin-top: 8px;
-            padding: 6px;
-            border: 1px solid var(--green);
-            border-radius: 8px;
-            color: var(--green);
-            font-weight: bold;
-            display: none;
-            font-size: 20px;
-            background: rgba(236, 253, 245, 0.9);
-        }
-
-        .correct-answer-display.show {
-            display: block;
-        }
-
-        .char-structure {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            padding: 30px;
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 16px;
-            flex-wrap: wrap;
-            backdrop-filter: blur(2px);
-        }
-
-        .char-box {
-            text-align: center;
-            padding: 20px;
-            background: rgba(255,255,255,0.9);
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            min-width: 100px;
-        }
-
-        .char-display {
-            font-size: 48px;
-            color: var(--green-dark);
-            margin-bottom: 8px;
-            font-family: "SimHei", serif;
-            font-weight: bold;
-        }
-
-        .char-pinyin {
-            font-size: 16px;
-            color: var(--gray);
-            font-weight: 600;
-        }
-
-        .arrow {
-            font-size: 32px;
-            color: var(--gray);
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .translation-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .translation-item {
-            background: transparent;
-            border: 1px solid var(--gray);
-            border-radius: 12px;
-            padding: 15px;
-            backdrop-filter: blur(2px);
-        }
-
-        .translation-vi {
-            font-size: 16px;
-            color: var(--gray-dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .translation-cn {
-            font-size: 20px;
-            color: var(--green-dark);
-            font-family: "SimHei", sans-serif;
-            padding-top: 10px;
-            border-top: 1px dashed var(--gray);
-            display: none;
-            margin-top: 8px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-        }
-
-        .translation-item.revealed .translation-cn {
-            display: block;
-        }
-
-        .translation-item.revealed {
-            border-color: var(--green);
-            background: rgba(240, 253, 244, 0.5);
-        }
-
-        .result-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(124, 58, 237, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .result-card {
-            background: var(--white);
-            border: 1px solid var(--purple-light);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 400px;
-        }
-
-        .score-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 1px solid var(--purple-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 15px auto;
-            background: conic-gradient(var(--green) calc(var(--score) * 1%), var(--gray-light) calc(var(--score) * 1%));
-            position: relative;
-        }
-
-        .score-circle::before {
-            content: '';
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            background: var(--white);
-            border-radius: 50%;
-        }
-
-        .score-text {
-            position: relative;
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--purple);
-        }
-
-        .question-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .app-container {
-                grid-template-columns: 1fr;
-            }
-            .sidebar {
-                display: none;
-            }
-            .header {
-                left: 0;
-                height: 60px;
-            }
-            .slide-container {
-                height: calc(100vh - 110px);
-                padding: 15px;
-            }
-            .quiz-grid, .pinyin-select-grid, .writing-grid {
-                grid-template-columns: 1fr;
-            }
-            .tone-exercise {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .consonant-exercise {
-                grid-template-columns: 1fr;
-            }
-            .slide-nav {
-                gap: 10px;
-            }
-            .btn-nav {
-                padding: 10px 20px;
-                font-size: 14px;
-                min-width: 100px;
-            }
-        }
-    </style>
-<base target="_blank">
-<base target="_blank">
-<base target="_blank">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BÀI 01: 你好 | Gia Sư Hoa Ngữ Tân An</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:"Segoe UI",Arial,sans-serif;background:#f3f5f7;color:#222}button,input,textarea{font:inherit}
+:root{--green:#4caf50;--green-dark:#2e7d32;--orange:#ed7d31;--line:#d9dee3;--soft:#f7f9fa;--red:#c62828;--blue:#1976d2}
+.top-header{position:fixed;top:0;left:0;right:0;height:60px;background:#4472c4;color:#fff;padding:8px 18px;display:flex;align-items:center;justify-content:space-between;z-index:1000;box-shadow:0 2px 4px rgba(0,0,0,.12)}
+.top-brand{display:flex;align-items:center;gap:11px;min-width:0}.top-logo{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:4px;padding:2px;flex:0 0 auto}.top-brand-text{min-width:0}.top-brand-name{font-size:17px;font-weight:800;line-height:1.15}.top-contact{font-size:11px;opacity:.95;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.home-btn{display:inline-flex;align-items:center;gap:7px;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.65);border-radius:4px;padding:8px 12px;font-size:12px;font-weight:700;background:rgba(255,255,255,.08);flex:0 0 auto}.home-btn:hover{background:rgba(255,255,255,.18)}
+.exam-shell{height:calc(100vh - 60px);margin-top:60px;display:grid;grid-template-columns:220px minmax(0,1fr) 220px;overflow:hidden}
+.sidebar-left,.sidebar-right{background:#fff;overflow:auto;border-color:var(--line);border-style:solid}
+.sidebar-left{margin:15px;border:1px solid #d0d0d0;border-radius:6px;padding-top:0;align-self:start;height:fit-content;max-height:calc(100vh - 90px);overflow-y:auto}.sidebar-right{border-width:0 0 0 1px;padding:14px}
+.brand{padding:14px;border-bottom:1px solid var(--line);text-align:center}.brand img{width:70px;height:70px;object-fit:contain}.brand-name{font-weight:800;color:var(--green-dark);font-size:14px;margin-top:6px}.brand-contact{font-size:11px;line-height:1.55;color:#666;margin-top:6px}
+.nav-section-title{padding:12px 14px 7px;font-size:12px;color:#777;font-weight:700;text-transform:uppercase}.section-nav{padding:0}
+.nav-item{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;margin:0;border-radius:0;cursor:pointer;border-left:3px solid transparent;border-bottom:1px solid #e0e0e0;background:#fff;font-size:13px}.nav-item:last-child{border-bottom:0}.nav-item:hover{background:#f1f7f1}.nav-item.active{background:#e8f5e9;border-left-color:var(--green);color:var(--green-dark);font-weight:700}.nav-count{font-size:11px;color:#777}
+.main{min-width:0;overflow:auto;background:#f3f5f7}.content-header{position:sticky;top:0;z-index:20;height:68px;background:#f5f5f5;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;padding:10px 22px}.question-title{display:flex;align-items:center;gap:10px;font-size:17px;margin:0}.title-badge{background:var(--green);color:#fff;border-radius:4px;padding:7px 10px;font-size:14px}.timer{text-align:right}.timer-text{color:var(--orange);font-size:13px;font-weight:700}.timer-bar{margin-top:5px;width:130px;height:6px;background:#e6e6e6;border-radius:3px;overflow:hidden}.timer-progress{height:100%;background:var(--green);width:0}
+.content-body{max-width:950px;margin:0 auto;padding:22px 24px 90px}.section-instruction{background:#fff;border:1px solid var(--line);border-radius:7px;padding:14px 16px;margin-bottom:15px;font-size:15px;line-height:1.6}.section-instruction strong{color:var(--green-dark)}
+.question-card{background:#fff;border:1px solid var(--line);border-radius:7px;padding:16px 18px;margin-bottom:14px;position:relative}.question-card.checked.correct{border-color:#9ccc65}.question-card.checked.wrong{border-color:#ef9a9a}.qhead{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}.qnum{width:34px;height:34px;flex:0 0 34px;border:1px solid #bfc6cc;border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#444;background:#fff}.qtext{font-size:17px;line-height:1.7;min-width:0}.hanzi-big{font-family:SimHei,"Noto Sans CJK SC",sans-serif;font-size:38px;color:#222}
+.options-list{display:flex;flex-direction:column;gap:9px;margin-top:10px}.options-horizontal{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:10px}.option{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:5px 2px;line-height:1.5}.option input[type=radio]{width:18px;height:18px;margin:2px 0 0;accent-color:var(--green);cursor:pointer}.letter{font-weight:700;min-width:20px}.option-text{font-size:16px}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.word-chip{border:1px solid #bcc7cf;border-radius:4px;background:#fff;padding:5px 10px;font-size:15px}.passage{font-family:SimHei,"Noto Sans CJK SC",sans-serif;font-size:20px;line-height:2.2;background:#fafafa;border:1px solid #e3e6e8;padding:15px;border-radius:5px;margin-top:10px}.blankmark{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:28px;border-bottom:2px solid var(--green);color:var(--green-dark);font-size:13px;font-family:"Segoe UI",Arial}
+.answer-area{min-height:43px;border:1px solid #cbd2d8;border-radius:5px;background:#fff;padding:9px 10px;margin:8px 0;line-height:1.6}.token-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.token{border:1px solid #aeb7bf;background:#fff;border-radius:4px;padding:7px 11px;cursor:grab;user-select:none}.token:active{cursor:grabbing}.token.used{opacity:.35;text-decoration:line-through}
+/* Bài 3 - kéo thả thật */
+.arrange-answer-zone,.arrange-bank-zone{display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;min-height:64px;border:1px dashed #9aa7b2;border-radius:6px;padding:10px;background:#fafbfc;transition:.15s ease}
+.arrange-answer-zone{margin:8px 0 12px;background:#fff;border-color:#7fae82}
+.arrange-answer-zone:empty::before{content:""}
+.arrange-answer-zone.drag-over{background:#eef8ef;border-color:#4caf50;box-shadow:inset 0 0 0 1px #4caf50}
+.arrange-bank-zone.drag-over{background:#f3f6f8;border-color:#607d8b}
+.arrange-token{min-width:42px;min-height:38px;display:inline-flex;align-items:center;justify-content:center;font-family:SimHei,"Noto Sans CJK SC",sans-serif;font-size:18px;box-shadow:0 1px 2px rgba(0,0,0,.06);touch-action:none}
+.arrange-token.answer-token{border-color:#66a96b;background:#f3fbf3;color:#1f5f28}
+.arrange-token.dragging{opacity:.35}
+.arrange-drag-ghost{position:fixed!important;z-index:5000!important;pointer-events:none!important;opacity:.92!important;box-shadow:0 8px 22px rgba(0,0,0,.22)!important;transform:translate(-50%,-50%) scale(1.03);margin:0!important}
+.arrange-separator{height:1px;background:#edf0f2;margin:4px 0 10px}
+.input-text,.input-area{width:100%;border:1px solid #bcc4cb;border-radius:5px;padding:9px 10px;background:#fff}.input-area{min-height:84px;resize:vertical}
+.check-row{display:flex;gap:8px;align-items:center;margin-top:11px;flex-wrap:wrap}.check-btn{border:1px solid var(--green);background:#fff;color:var(--green-dark);border-radius:4px;padding:7px 13px;font-weight:700;cursor:pointer}.check-btn:hover{background:#e8f5e9}.clear-btn{border:1px solid #aaa;background:#fff;color:#555;border-radius:4px;padding:7px 11px;cursor:pointer}
+.feedback{display:none;margin-top:11px;border-top:1px dashed #d5d9dd;padding-top:10px;font-size:14px;line-height:1.6}.feedback.show{display:block}.feedback .status{font-weight:800;margin-bottom:5px}.feedback.correct .status{color:var(--green-dark)}.feedback.wrong .status{color:var(--red)}.feedback.sample .status{color:#a85b00}.correct-answer{font-family:SimHei,"Noto Sans CJK SC",sans-serif;font-size:16px;font-weight:700;color:var(--green-dark)}
+.navigation-buttons{display:flex;justify-content:space-between;margin-top:18px}.nav-btn{min-width:120px;border:1px solid #aab2b9;background:#fff;padding:9px 18px;border-radius:4px;cursor:pointer}.nav-btn.next{background:var(--green);color:#fff;border-color:var(--green)}
+.user-card{background:#4caf50;color:#fff;padding:15px;border-radius:6px;margin-bottom:12px}.user-header{padding:0 0 11px;display:flex;gap:9px;align-items:center;border-bottom:1px solid rgba(255,255,255,.35)}.avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center}.user-name{font-weight:800;font-size:12px;color:#fff}.user-role{font-size:11px;color:rgba(255,255,255,.9)}.user-info{padding:9px 0 0;font-size:11px;line-height:1.7;color:#fff}.action-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.action-btn{width:100%;padding:10px 8px;border:1px solid #d0d0d0;background:#f5f5f5;border-radius:4px;cursor:pointer;font-weight:600;color:#000}.action-btn.primary{background:#ed7d31;border-color:#ed7d31;color:#fff;grid-column:span 2}.progress-box{margin-top:12px;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:12px}.progress-line{display:flex;justify-content:space-between;margin-bottom:6px}.progress-track{height:7px;background:#e5e7e9;border-radius:4px;overflow:hidden}.progress-fill{height:100%;background:var(--green);width:0}
+/* ===== BẢNG GHI CHÚ - đồng bộ các file HSK ===== */
+.action-btn.note-action{grid-column:span 2;background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32}
+.action-btn.note-action:hover{background:#dff1e2;border-color:#81c784}
+#note-editor-overlay{display:none;position:fixed;inset:0;z-index:3000;padding:4vh 4vw;place-items:center;background:rgba(0,0,0,.62)}
+#note-editor-overlay.show{display:grid}
+#note-editor-container{width:min(980px,100%);height:min(820px,92vh);display:flex;flex-direction:column;overflow:hidden;border-radius:11px;background:#fff;box-shadow:0 12px 45px rgba(0,0,0,.35)}
+#note-editor-header{padding:13px 17px;display:flex;align-items:center;justify-content:space-between;color:#fff;background:#4472c4}
+#note-editor-header h3{margin:0;font-size:16px;display:flex;align-items:center;gap:7px}
+.note-close-btn{width:34px;height:34px;display:grid;place-items:center;color:#fff;border:0;border-radius:50%;background:transparent;font-size:22px;cursor:pointer}
+.note-close-btn:hover{background:rgba(255,255,255,.16)}
+#note-editor-toolbar{padding:9px 13px;display:flex;flex-wrap:wrap;gap:7px;border-bottom:1px solid var(--line);background:#f5f5f5}
+.editor-tool-btn{padding:7px 11px;border:1px solid #d2d2d2;border-radius:4px;background:#fff;cursor:pointer;font-weight:600;color:#333}
+.editor-tool-btn:hover{border-color:#4472c4;background:#eef3fb}
+#rich-editor{min-height:0;flex:1;padding:18px;overflow-y:auto;line-height:1.65;font-size:16px;background:#fff}
+#rich-editor:focus{outline:none}
+#note-editor-footer{padding:10px 16px;display:flex;align-items:center;justify-content:flex-end;gap:10px;border-top:1px solid var(--line);background:#f5f5f5}
+.editor-btn{padding:9px 17px;border-radius:5px;font-weight:700;cursor:pointer;border:1px solid #c8c8c8;background:#fff}
+.editor-btn-save{background:#4caf50;border-color:#4caf50;color:#fff}
+.editor-btn-save:hover{background:#43a047}
+body.note-open{overflow:hidden}
+@media(max-width:700px){#note-editor-overlay{padding:10px}#note-editor-container{height:94vh}#note-editor-toolbar{gap:5px}.editor-tool-btn{padding:7px 9px;font-size:12px}}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{width:min(680px,96vw);max-height:88vh;overflow:auto;background:#fff;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.modal-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-body{padding:18px}.close{border:0;background:transparent;font-size:22px;cursor:pointer}.answer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.answer-cell{border:1px solid var(--line);border-radius:5px;padding:9px;font-size:12px;cursor:pointer}.answer-cell.done{background:#e8f5e9;border-color:#a5d6a7}.result-score{font-size:34px;font-weight:900;color:var(--green-dark);text-align:center;margin:8px 0}.muted{color:#777;font-size:12px}
+body.font-large .qtext,body.font-large .option-text{font-size:20px}body.font-large .passage{font-size:23px}
+@media(max-width:1000px){.exam-shell{grid-template-columns:190px minmax(0,1fr)}.sidebar-right{display:none}}
+@media(max-width:720px){.top-header{height:58px;padding:7px 10px}.top-logo{width:40px;height:40px}.top-brand-name{font-size:14px}.top-contact{font-size:9px;max-width:230px}.home-btn{padding:7px 9px;font-size:11px}.exam-shell{height:auto;min-height:calc(100vh - 58px);margin-top:58px}}
+@media(max-width:720px){.exam-shell{display:block;overflow:auto}.sidebar-left{display:none}.main{overflow:visible}.content-header{padding:8px 12px;height:auto;min-height:60px}.content-body{padding:14px 10px 80px}.timer-bar{width:90px}.answer-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== BAI 01: thao tác đặc thù theo đúng nguồn ===== */
+.initial-group{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:22px;font-family:"Microsoft YaHei","SimSun",sans-serif}
+.initial-fixed{min-width:34px;padding:8px 12px;border:1px solid #b9b9b9;border-radius:5px;background:#f7f7f7;text-align:center;font-weight:700}
+.initial-input{width:72px;padding:9px 8px;border:1px solid #aaa;border-radius:5px;font-size:20px;text-align:center;background:#fff}
+.initial-input:focus{outline:none;border-color:#4472c4;box-shadow:0 0 0 2px rgba(68,114,196,.14)}
+.tone-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+.syllable-chip{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:80px;padding:10px 16px;border:1px solid #bbb;border-radius:5px;background:#fff;font-size:20px;font-family:"Segoe UI",sans-serif;cursor:pointer;user-select:none}
+.syllable-chip input{position:absolute;opacity:0;pointer-events:none}
+.syllable-chip.selected{border-color:#4472c4;background:#eef3fb;color:#234a86;text-decoration:underline 3px #4472c4;text-underline-offset:5px;font-weight:700}
+.radical-pair{display:grid;grid-template-columns:minmax(130px,1fr) minmax(130px,1fr);gap:10px;margin-top:12px}
+.radical-label{font-size:12px;color:#666;margin-bottom:5px}
+@media(max-width:640px){.radical-pair{grid-template-columns:1fr}.initial-input{width:64px}.syllable-chip{min-width:70px}}
+
+</style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="brand-header">
-                <div class="logo-img">
-                    <img src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An" id="sidebar-logo">
-                </div>
-                <div class="brand-name">GIA SƯ HOA NGỮ TÂN AN</div>
-                <div class="brand-contact">
-                    📍 9/1 Bạch Văn Tư<br>
-                    Tân An, Long An<br>
-                    💬 Zalo: 0839.889.772
-                </div>
-            </div>
-            
-            <ul class="nav-menu">
-                <li class="nav-item"><button class="nav-btn active" onclick="window.location.href='BAI TAP 301.html'"><span>Trang chủ</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(1)"><span>Bài 1</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(2)"><span>Bài 2</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(3)"><span>Bài 3</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(4)"><span>Bài 4</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(5)"><span>Bài 5</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(6)"><span>Bài 6</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(7)"><span>Bài 7</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(8)"><span>Bài 8</span></button></li>
-                <li class="nav-item"><button class="nav-btn" onclick="goToSlide(9)"><span>Bài 9</span></button></li>
-            </ul>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="header">
-                <div class="header-left">
-                    <h2 id="header-title">BÀI 01: 你好</h2>
-                    <div style="display: flex; align-items: center;">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-bar" style="width: 0%"></div>
-                        </div>
-                        <span class="progress-text" id="progress-text">0/9</span>
-                    </div>
-                </div>
-                
-                <div class="header-controls">
-                    <button class="btn btn-orange" onclick="resetCurrent()">↺ Làm lại</button>
-                    <button class="btn btn-check" onclick="checkAndShowAnswers()">✓ Kiểm tra</button>
-                </div>
-            </header>
-
-            <div class="content-area" id="content-area">
-                <!-- Content loaded here -->
-            </div>
-        </main>
+<header class="top-header">
+  <div class="top-brand">
+    <img class="top-logo" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png" alt="Gia Sư Hoa Ngữ Tân An">
+    <div class="top-brand-text"><div class="top-brand-name">GIA SƯ HOA NGỮ TÂN AN</div><div class="top-contact">109 Nguyễn Văn Tiếp, P.Long An, tỉnh Tây Ninh · Zalo: 0839.889.772</div></div>
+  </div>
+  <a class="home-btn" href="BAI TAP 301.html" target="_self">⌂ Về trang chủ</a>
+</header>
+<div class="exam-shell">
+<aside class="sidebar-left">
+  <div class="section-nav" id="sectionNav"></div>
+</aside>
+<main class="main">
+  <div class="content-header"><h2 class="question-title"><span class="title-badge" id="sectionBadge">Bài 1</span><span id="sectionTitle">Phiên âm</span></h2><div class="timer"><div class="timer-text" id="timerText">Thời gian 00:00</div><div class="timer-bar"><div class="timer-progress" id="timerProgress"></div></div></div></div>
+  <div class="content-body" id="contentBody"></div>
+</main>
+<aside class="sidebar-right">
+  <div class="user-card"><div class="user-header"><div class="avatar">👤</div><div><div class="user-name">GIA SƯ HOA NGỮ TÂN AN</div><div class="user-role">Học viên</div></div></div><div class="user-info">考试类型：练习<br>课程：301 汉语会话<br>课文：第一课 你好<br>模式：HSK 机考式操作</div></div>
+  <div class="action-buttons"><button class="action-btn" onclick="openAnswerCard()">答题卡</button><button class="action-btn" onclick="toggleFont()">字体大小</button><button class="action-btn note-action" onclick="openNoteEditor()">📝 笔记</button><button class="action-btn" onclick="restoreProgress(true)">恢复答题</button><button class="action-btn" onclick="restartExam()">重新答题</button><button class="action-btn primary" onclick="submitExam()">提交</button></div>
+  <div class="progress-box"><div class="progress-line"><b>Tiến độ</b><span id="progressText">0/0</span></div><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+</aside>
+</div>
+<div class="modal-overlay" id="answerModal" onclick="if(event.target===this)closeModal('answerModal')"><div class="modal"><div class="modal-head"><b>答题卡</b><button class="close" onclick="closeModal('answerModal')">×</button></div><div class="modal-body"><div class="answer-grid" id="answerGrid"></div></div></div></div>
+<div class="modal-overlay" id="resultModal" onclick="if(event.target===this)closeModal('resultModal')"><div class="modal"><div class="modal-head"><b>Kết quả</b><button class="close" onclick="closeModal('resultModal')">×</button></div><div class="modal-body" id="resultBody"></div></div></div>
+<div id="note-editor-overlay" role="dialog" aria-modal="true" aria-labelledby="note-dialog-title" onclick="if(event.target===this)closeNoteEditor()">
+  <div id="note-editor-container">
+    <div id="note-editor-header">
+      <h3 id="note-dialog-title">📝 笔记</h3>
+      <button type="button" class="note-close-btn" onclick="closeNoteEditor()" aria-label="Đóng">×</button>
     </div>
-
-    <!-- Result Modal -->
-    <div class="result-overlay" id="result-modal" onclick="closeModal(event)">
-        <div class="result-card">
-            <h3 style="color: var(--purple); margin-bottom: 15px; font-size: 24px;">Kết quả bài làm</h3>
-            <div class="score-circle" id="score-circle" style="--score: 0">
-                <span class="score-text" id="score-text">0/0</span>
-            </div>
-            <p id="score-message" style="font-size: 16px; margin-top: 15px; color: var(--purple-dark); font-weight: 500;">Hãy cố gắng hơn nhé!</p>
-            <button class="btn btn-success" onclick="closeModal()" style="width: 100%; margin-top: 20px;">Tiếp tục học →</button>
-        </div>
+    <div id="note-editor-toolbar">
+      <button type="button" class="editor-tool-btn" onclick="noteCommand('bold')"><b>B</b> Đậm</button>
+      <button type="button" class="editor-tool-btn" onclick="noteCommand('italic')"><i>I</i> Nghiêng</button>
+      <button type="button" class="editor-tool-btn" onclick="noteCommand('underline')"><u>U</u> Gạch chân</button>
+      <button type="button" class="editor-tool-btn" onclick="noteCommand('foreColor','#c62828')">Đỏ</button>
+      <button type="button" class="editor-tool-btn" onclick="noteCommand('foreColor','#2e7d32')">Xanh</button>
+      <button type="button" class="editor-tool-btn" onclick="noteCommand('insertUnorderedList')">• Danh sách</button>
+      <button type="button" class="editor-tool-btn" onclick="noteCommand('removeFormat')">Xóa định dạng</button>
+      <button type="button" class="editor-tool-btn" onclick="clearNoteEditor()">Xóa nội dung</button>
     </div>
-
-    <script>
-        // Hàm xáo trộn mảng (Shuffle)
-        function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-            }
-            return newArray;
-        }
-
-        // Dữ liệu bài tập - CẬP NHẬT ĐẦY ĐỦ THEO PDF
-        const exercises = [
-            {
-                type: 'intro',
-                title: 'BÀI 01 - 你好',
-                content: `
-                    <div class="text-center" style="padding: 40px 20px;">
-                        <div style="font-size: 60px; color: var(--purple); margin-bottom: 20px; font-family: SimHei; font-weight: bold; text-shadow: 2px 2px 4px rgba(255,255,255,0.9);">你好</div>
-                        <h1 style="font-size: 28px; margin-bottom: 15px; color: var(--purple-dark); text-shadow: 1px 1px 2px rgba(255,255,255,0.9);">BÀI 01: CHÀO BẠN</h1>
-                        <p style="font-size: 16px; color: var(--gray-dark); max-width: 500px; margin: 0 auto; line-height: 1.8; text-shadow: 1px 1px 2px rgba(255,255,255,0.9);">
-                            GIA SƯ HOA NGỮ TÂN AN<br>
-                            <span style="color: var(--orange); font-weight: bold;">Hãy chọn bài tập từ menu bên trái để bắt đầu.</span>
-                        </p>
-                        <button class="btn btn-success" onclick="nextSlide()" style="margin-top: 30px; padding: 12px 30px; font-size: 16px;">Bắt đầu học →</button>
-                    </div>
-                `
-            },
-            {
-                type: 'fill-consonants',
-                title: 'Bổ sung hoàn chỉnh ba nhóm phụ âm',
-                data: [
-                    { group: 'b', answers: ['p', 'm', 'f'] },
-                    { group: 'd', answers: ['t', 'n', 'l'] },
-                    { group: 'g', answers: ['k', 'h'] }
-                ]
-            },
-            {
-                type: 'multiple-choice',
-                title: 'Chọn âm đọc chính xác',
-                data: [
-                    { q: '我们', options: ['Wǒmen', 'Wòmen'], correct: 0 },
-                    { q: '他们', options: ['tàmen', 'tāmen'], correct: 1 },
-                    { q: '都', options: ['dòu', 'dōu'], correct: 1 },
-                    { q: '来', options: ['lán', 'lái'], correct: 1 },
-                    { q: '妈妈', options: ['māma', 'máma'], correct: 0 },
-                    { q: '爸爸', options: ['bǎba', 'bàba'], correct: 1 }
-                ]
-            },
-            {
-                type: 'tone-select-2',
-                title: 'Tìm âm tiết có thanh 3 biến thành thanh 2',
-                data: [
-                    { pair: 'nǐhǎo', syllable: 'nǐ', correct: true },
-                    { pair: 'dàmǐ', syllable: 'dà', correct: false },
-                    { pair: 'lǎolao', syllable: 'lǎo', correct: false },
-                    { pair: 'tǔfāng', syllable: 'tǔ', correct: false },
-                    { pair: 'gǎnmào', syllable: 'gǎn', correct: false },
-                    { pair: 'wǔdǎo', syllable: 'wǔ', correct: true },
-                    { pair: 'bǎnběn', syllable: 'bǎn', correct: true },
-                    { pair: 'pàotǎ', syllable: 'pào', correct: false }
-                ]
-            },
-            {
-                type: 'tone-select-2',
-                title: 'Tìm âm tiết có thanh 3 biến thành nửa thanh 3',
-                data: [
-                    { pair: 'nǐbāng', syllable: 'nǐ', correct: true },
-                    { pair: 'niúnǎi', syllable: 'niú', correct: false },
-                    { pair: 'bǎoliú', syllable: 'bǎo', correct: true },
-                    { pair: 'dānbǎo', syllable: 'dān', correct: false },
-                    { pair: 'fǎlǜ', syllable: 'fǎ', correct: true },
-                    { pair: 'dàkǎo', syllable: 'dà', correct: false },
-                    { pair: 'mǎhu', syllable: 'mǎ', correct: true },
-                    { pair: 'mángguǒ', syllable: 'máng', correct: false }
-                ]
-            },
-            {
-                type: 'pinyin-select',
-                title: 'Phiên âm cho những từ dưới đây',
-                data: [
-                    { hanzi: '好', answer: 'hǎo', options: ['hǎo', 'hào', 'hāo', 'háo'] },
-                    { hanzi: '来', answer: 'lái', options: ['lái', 'lǎi', 'lāi', 'lài'] },
-                    { hanzi: '吗', answer: 'ma', options: ['ma', 'mā', 'má', 'mǎ'] },
-                    { hanzi: '很', answer: 'hěn', options: ['hěn', 'hèn', 'hén', 'hēn'] },
-                    { hanzi: '也', answer: 'yě', options: ['yě', 'yè', 'yē', 'yé'] },
-                    { hanzi: '都', answer: 'dōu', options: ['dōu', 'dòu', 'dǒu', 'dóu'] },
-                    { hanzi: '他', answer: 'tā', options: ['tā', 'tà', 'tǎ', 'tá'] },
-                    { hanzi: '她', answer: 'tā', options: ['tā', 'tà', 'tǎ', 'tá'] },
-                    { hanzi: '我们', answer: 'wǒmen', options: ['wǒmen', 'wòmen', 'wōmen', 'wómen'] },
-                    { hanzi: '你们', answer: 'nǐmen', options: ['nǐmen', 'nìmen', 'nīmen', 'nímen'] },
-                    { hanzi: '爸爸', answer: 'bàba', options: ['bàba', 'bǎba', 'bāba', 'bába'] },
-                    { hanzi: '妈妈', answer: 'māma', options: ['māma', 'mǎma', 'màma', 'máma'] }
-                ]
-            },
-            {
-                type: 'dialogue',
-                title: 'Hoàn thành đối thoại',
-                data: [
-                    { speaker: 'A', text: '________!', answer: '你好', options: ['你好', '你们', '好'] },
-                    { speaker: 'B', text: '你好!' },
-                    { speaker: 'A', text: '你的爸爸________?', answer: '来吗', options: ['好吗', '来吗', '都来'] },
-                    { speaker: 'B', text: '他来。' },
-                    { speaker: 'A', text: '你的妈妈________?', answer: '好吗', options: ['好吗', '来吗', '很好'] },
-                    { speaker: 'B', text: '她很好。' },
-                    { speaker: 'A', text: '你爸爸、妈妈________?', answer: '都好吗', options: ['都好吗', '好吗', '来吗'] },
-                    { speaker: 'B', text: '他们都很好。' }
-                ]
-            },
-            {
-                type: 'hanzi-write',
-                title: 'Viết chữ Hán dựa theo phiên âm',
-                data: [
-                    { pinyin: 'bàba', hanzi: '爸爸' },
-                    { pinyin: 'tāmen', hanzi: '他们' },
-                    { pinyin: 'māma', hanzi: '妈妈' },
-                    { pinyin: 'yě', hanzi: '也' },
-                    { pinyin: 'hěn', hanzi: '很' },
-                    { pinyin: 'dōu', hanzi: '都' },
-                    { pinyin: 'wǒ', hanzi: '我' },
-                    { pinyin: 'lái', hanzi: '来' },
-                    { pinyin: 'ma', hanzi: '吗' },
-                    { pinyin: 'hǎo', hanzi: '好' }
-                ]
-            },
-            {
-                type: 'char-structure',
-                title: 'Viết và phiên âm chữ Hán có thiên bàng 也',
-                content: 'structure-display'
-            },
-            {
-                type: 'translation',
-                title: 'Luyện dịch Việt - Hoa',
-                data: [
-                    { vi: 'Chào các bạn!', cn: '你们好！' },
-                    { vi: 'Chào Lưu Kinh!', cn: '刘京好！' },
-                    { vi: 'Các bạn khỏe không?', cn: '你们好吗？' },
-                    { vi: 'Chúng tôi đều rất khỏe. Bạn khỏe không, Lưu Kinh?', cn: '我们都很好。你好吗，刘京？' },
-                    { vi: 'Tôi cũng khỏe. Cảm ơn!', cn: '我也好。谢谢！' },
-                    { vi: 'Vương Lan, David đến không?', cn: '王兰、大卫来吗？' },
-                    { vi: 'Bọn nó đều đến.', cn: '他们都来。' }
-                ]
-            }
-        ];
-
-        let currentSlide = 0;
-        let checkedAnswers = {};
-
-        // Khởi tạo
-        function init() {
-            renderSlide(currentSlide);
-            updateProgress();
-        }
-
-        function renderSlide(index) {
-            currentSlide = index;
-            const exercise = exercises[index];
-            const container = document.getElementById('content-area');
-            
-            document.getElementById('header-title').textContent = 
-                index === 0 ? 'BÀI 01: 你好' : `Bài ${index}: ${exercise.title}`;
-            
-            document.querySelectorAll('.nav-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === index);
-                if (checkedAnswers[i] && i > 0) {
-                    btn.classList.add('completed');
-                }
-            });
-
-            let html = '<div class="slide-container">';
-            
-            html += '<div class="slide-content">';
-            
-            html += `<h3 class="slide-title"><span class="slide-number">${index}</span>${exercise.title}</h3>`;
-            
-            switch(exercise.type) {
-                case 'intro':
-                    html += exercise.content;
-                    break;
-                case 'fill-consonants':
-                    html += renderConsonantExercise(exercise.data, index);
-                    break;
-                case 'multiple-choice':
-                    html += renderMultipleChoice(exercise.data, index);
-                    break;
-                case 'tone-select-2':
-                    html += renderToneSelect2(exercise.data, index);
-                    break;
-                case 'pinyin-select':
-                    html += renderPinyinSelect(exercise.data, index);
-                    break;
-                case 'dialogue':
-                    html += renderDialogue(exercise.data, index);
-                    break;
-                case 'hanzi-write':
-                    html += renderHanziWrite(exercise.data, index);
-                    break;
-                case 'char-structure':
-                    html += renderCharStructure();
-                    break;
-                case 'translation':
-                    html += renderTranslation(exercise.data, index);
-                    break;
-            }
-            
-            html += '</div>';
-            
-            html += `<div class="slide-nav">`;
-            html += `<button class="btn btn-orange btn-nav" onclick="prevSlide()" ${index === 0 ? 'disabled' : ''}>
-                ← Bài trước
-            </button>`;
-            html += `<button class="btn btn-success btn-nav" onclick="nextSlide()" ${index === exercises.length - 1 ? 'disabled' : ''}>
-                Bài sau →
-            </button>`;
-            html += `</div>`;
-            
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
-        function nextSlide() {
-            if (currentSlide < exercises.length - 1) {
-                renderSlide(currentSlide + 1);
-            }
-        }
-
-        function prevSlide() {
-            if (currentSlide > 0) {
-                renderSlide(currentSlide - 1);
-            }
-        }
-
-        function renderConsonantExercise(data, slideIndex) {
-            let html = '<div class="consonant-exercise">';
-            data.forEach((group, gIdx) => {
-                html += `
-                    <div class="consonant-group">
-                        <div class="group-header">${group.group}</div>
-                        <div class="consonant-inputs">
-                            ${group.answers.map((ans, aIdx) => `
-                                <div class="input-wrapper">
-                                    <input type="text" 
-                                        class="char-input" 
-                                        data-slide="${slideIndex}"
-                                        data-group="${gIdx}"
-                                        data-index="${aIdx}"
-                                        data-answer="${ans}"
-                                        maxlength="2"
-                                        placeholder="?">
-                                    <div class="answer-reveal" id="reveal-${slideIndex}-${gIdx}-${aIdx}">
-                                        ${ans}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderMultipleChoice(data, slideIndex) {
-            let html = '<div class="quiz-grid">';
-            data.forEach((item, idx) => {
-                // Xáo trộn options và lưu lại đáp án đúng
-                const shuffledOptions = shuffleArray(item.options);
-                const correctAnswer = item.options[item.correct];
-                
-                html += `
-                    <div class="quiz-item" data-question="${idx}" data-correct="${correctAnswer}">
-                        <div class="question-header">
-                            <div class="quiz-question">
-                                <span class="quiz-number">${idx + 1}</span>
-                                ${item.q}
-                            </div>
-                            <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this, 'mc', ${slideIndex}, ${idx})">
-                                Hiện đáp án
-                            </button>
-                        </div>
-                        <div class="options" id="options-${slideIndex}-${idx}">
-                            ${shuffledOptions.map((opt, oIdx) => `
-                                <label class="option" data-slide="${slideIndex}" data-question="${idx}" data-option="${opt}">
-                                    <input type="radio" name="q-${slideIndex}-${idx}" value="${opt}">
-                                    <span>${opt}</span>
-                                </label>
-                            `).join('')}
-                        </div>
-                        <div class="correct-answer-display" id="mc-answer-${slideIndex}-${idx}" style="margin-top: 10px;">
-                            Đáp án đúng: ${correctAnswer}
-                        </div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderToneSelect2(data, slideIndex) {
-            let html = '<div class="tone-exercise">';
-            data.forEach((item, idx) => {
-                html += `
-                    <div class="tone-item ${item.correct ? 'is-correct-answer' : ''}" 
-                         data-slide="${slideIndex}" 
-                         data-question="${idx}"
-                         data-correct="${item.correct}"
-                         onclick="toggleTone2Selection(this)">
-                        <div class="check-icon">✓</div>
-                        <div class="tone-pair">${item.pair}</div>
-                        <div class="pinyin-text">(${item.syllable})</div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            html += `
-                <div style="text-align: center; margin-top: 15px;">
-                    <button class="btn-answer btn-show-answer" onclick="toggleToneAnswer(this, ${slideIndex})">
-                        Hiện đáp án
-                    </button>
-                </div>
-            `;
-            return html;
-        }
-
-        function renderPinyinSelect(data, slideIndex) {
-            let html = '<div class="pinyin-select-grid">';
-            data.forEach((item, idx) => {
-                // Xáo trộn options
-                const shuffledOptions = shuffleArray(item.options);
-                
-                html += `
-                    <div class="pinyin-select-card">
-                        <div class="pinyin-select-header">
-                            <div class="pinyin-hanzi">${item.hanzi}</div>
-                            <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this, 'pinyin-select', ${slideIndex}, ${idx})">
-                                Hiện đáp án
-                            </button>
-                        </div>
-                        <select class="pinyin-dropdown" 
-                                data-slide="${slideIndex}" 
-                                data-index="${idx}"
-                                data-answer="${item.answer}"
-                                id="pinyin-select-${slideIndex}-${idx}">
-                            <option value="">-- Chọn phiên âm --</option>
-                            ${shuffledOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                        </select>
-                        <div class="correct-answer-display" id="pinyin-select-answer-${slideIndex}-${idx}">
-                            Đáp án đúng: ${item.answer}
-                        </div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderDialogue(data, slideIndex) {
-            let html = '<div class="dialogue-container">';
-            data.forEach((item, idx) => {
-                if (item.options) {
-                    // Xáo trộn options cho đối thoại
-                    const shuffledOptions = shuffleArray(item.options);
-                    
-                    html += `
-                        <div class="dialogue-item">
-                            <div class="question-header">
-                                <div class="dialogue-speaker">${item.speaker}:</div>
-                                <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this, 'dialogue', ${slideIndex}, ${idx})">
-                                    Hiện đáp án
-                                </button>
-                            </div>
-                            <div class="dialogue-text">
-                                ${item.text.replace('________', `
-                                    <select class="blank-select" 
-                                            data-slide="${slideIndex}" 
-                                            data-index="${idx}"
-                                            data-answer="${item.answer}"
-                                            id="dialogue-${slideIndex}-${idx}">
-                                        <option value="">-- Chọn --</option>
-                                        ${shuffledOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                                    </select>
-                                `)}
-                            </div>
-                            <div class="correct-answer-display" id="dialogue-answer-${slideIndex}-${idx}" style="margin-top: 10px;">
-                                Đáp án đúng: ${item.answer}
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="dialogue-item">
-                            <div class="dialogue-speaker">${item.speaker}:</div>
-                            <div class="dialogue-text">${item.text}</div>
-                        </div>
-                    `;
-                }
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderHanziWrite(data, slideIndex) {
-            let html = '<div class="writing-grid">';
-            data.forEach((item, idx) => {
-                html += `
-                    <div class="writing-card">
-                        <div class="question-header" style="justify-content: flex-start;">
-                            <div class="writing-number">${idx + 1}</div>
-                            <button class="btn-answer btn-show-answer" onclick="toggleAnswer(this, 'hanzi', ${slideIndex}, ${idx})">
-                                Hiện đáp án
-                            </button>
-                        </div>
-                        <div class="writing-pinyin">${item.pinyin}</div>
-                        <input type="text" 
-                               class="hanzi-input" 
-                               data-slide="${slideIndex}"
-                               data-index="${idx}"
-                               data-answer="${item.hanzi}"
-                               placeholder="Viết chữ Hán..."
-                               style="font-family: SimHei, serif; font-size: 24px;"
-                               id="hanzi-input-${slideIndex}-${idx}">
-                        <div class="correct-answer-display" id="hanzi-answer-${slideIndex}-${idx}" style="font-size:22px; color:var(--purple);">
-                            ${item.hanzi}
-                        </div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function renderCharStructure() {
-            return `
-                <div class="char-structure">
-                    <div class="char-box">
-                        <div style="font-size: 14px; color: var(--gray); margin-bottom: 8px; font-weight: 600;">Chữ gốc</div>
-                        <div class="char-display">也</div>
-                        <div class="char-pinyin">yě</div>
-                    </div>
-                    <div class="arrow">→</div>
-                    <div class="char-box">
-                        <div style="font-size: 14px; color: var(--gray); margin-bottom: 8px; font-weight: 600;">+ Nhân đối 亻</div>
-                        <div class="char-display">他</div>
-                        <div class="char-pinyin">tā</div>
-                    </div>
-                    <div class="arrow">→</div>
-                    <div class="char-box">
-                        <div style="font-size: 14px; color: var(--gray); margin-bottom: 8px; font-weight: 600;">+ Nữ 女</div>
-                        <div class="char-display">她</div>
-                        <div class="char-pinyin">tā</div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 20px; padding: 15px; border: 1px solid var(--gray); border-radius: 12px; font-size: 14px; background: rgba(240, 253, 244, 0.7); backdrop-filter: blur(2px);">
-                    <strong style="color: var(--green-dark);">Ghi chú:</strong> <span style="color: var(--gray-dark);">Chữ 也 là bộ phận cấu thành của các chữ 他 và 她.</span>
-                </div>
-            `;
-        }
-
-        function renderTranslation(data, slideIndex) {
-            let html = '<div class="translation-list">';
-            data.forEach((item, idx) => {
-                html += `
-                    <div class="translation-item" id="trans-${slideIndex}-${idx}" data-slide="${slideIndex}" data-index="${idx}">
-                        <div class="question-header">
-                            <div class="translation-vi">
-                                <span style="color: var(--green); font-weight: bold;">${idx + 1}.</span> ${item.vi}
-                            </div>
-                            <button class="btn-answer btn-show-answer" onclick="toggleTranslationAnswer(this, ${slideIndex}, ${idx})">
-                                Hiện đáp án
-                            </button>
-                        </div>
-                        <div class="translation-cn" data-answer="${item.cn}">${item.cn}</div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            return html;
-        }
-
-        function toggleAnswer(btn, type, slideIndex, idx) {
-            const isShowing = btn.textContent === 'Ẩn';
-            btn.textContent = isShowing ? 'Hiện đáp án' : 'Ẩn';
-            btn.className = isShowing ? 'btn-answer btn-show-answer' : 'btn-answer btn-hide-answer';
-            
-            let answerEl;
-            switch(type) {
-                case 'mc':
-                    answerEl = document.getElementById(`mc-answer-${slideIndex}-${idx}`);
-                    if (!isShowing) {
-                        const options = document.querySelectorAll(`#options-${slideIndex}-${idx} .option`);
-                        const correctVal = document.querySelector(`#options-${slideIndex}-${idx}`).parentElement.dataset.correct;
-                        options.forEach((opt) => {
-                            if (opt.dataset.option === correctVal) opt.classList.add('correct-answer');
-                        });
-                    } else {
-                        const options = document.querySelectorAll(`#options-${slideIndex}-${idx} .option`);
-                        options.forEach(opt => opt.classList.remove('correct-answer'));
-                    }
-                    break;
-                case 'pinyin-select':
-                    answerEl = document.getElementById(`pinyin-select-answer-${slideIndex}-${idx}`);
-                    break;
-                case 'dialogue':
-                    answerEl = document.getElementById(`dialogue-answer-${slideIndex}-${idx}`);
-                    break;
-                case 'hanzi':
-                    answerEl = document.getElementById(`hanzi-answer-${slideIndex}-${idx}`);
-                    break;
-            }
-            if (answerEl) {
-                answerEl.classList.toggle('show', !isShowing);
-            }
-        }
-
-        function toggleToneAnswer(btn, slideIndex) {
-            const isShowing = btn.textContent === 'Ẩn';
-            btn.textContent = isShowing ? 'Hiện đáp án' : 'Ẩn';
-            btn.className = isShowing ? 'btn-answer btn-show-answer' : 'btn-answer btn-hide-answer';
-            
-            document.querySelectorAll('.tone-item').forEach((item) => {
-                const isCorrect = item.dataset.correct === 'true';
-                if (!isShowing && isCorrect) {
-                    item.classList.add('correct-answer');
-                } else {
-                    item.classList.remove('correct-answer');
-                }
-            });
-        }
-
-        function toggleTranslationAnswer(btn, slideIndex, idx) {
-            const isShowing = btn.textContent === 'Ẩn';
-            btn.textContent = isShowing ? 'Hiện đáp án' : 'Ẩn';
-            btn.className = isShowing ? 'btn-answer btn-show-answer' : 'btn-answer btn-hide-answer';
-            
-            const item = document.getElementById(`trans-${slideIndex}-${idx}`);
-            item.classList.toggle('revealed', !isShowing);
-        }
-
-        function toggleTone2Selection(element) {
-            element.classList.toggle('selected');
-        }
-
-        function checkAndShowAnswers() {
-            const exercise = exercises[currentSlide];
-            if (exercise.type === 'intro' || exercise.type === 'char-structure') {
-                showResult(1, 1);
-                return;
-            }
-            
-            let correct = 0;
-            let total = 0;
-            
-            switch(exercise.type) {
-                case 'fill-consonants':
-                    document.querySelectorAll('.char-input').forEach(input => {
-                        const userVal = input.value.toLowerCase().trim();
-                        const correctVal = input.dataset.answer.toLowerCase();
-                        const isCorrect = userVal === correctVal;
-                        
-                        input.classList.toggle('correct', isCorrect);
-                        input.classList.toggle('incorrect', !isCorrect && userVal);
-                        
-                        const revealId = input.nextElementSibling.id;
-                        const revealEl = document.getElementById(revealId);
-                        if (revealEl && !isCorrect) revealEl.classList.add('show');
-                        
-                        if (isCorrect) correct++;
-                        total++;
-                    });
-                    break;
-                    
-                case 'multiple-choice':
-                    document.querySelectorAll('.quiz-item').forEach((item) => {
-                        const selected = item.querySelector('input[type="radio"]:checked');
-                        const correctVal = item.dataset.correct;
-                        const options = item.querySelectorAll('.option');
-                        
-                        options.forEach((opt) => {
-                            opt.classList.remove('correct', 'incorrect', 'selected', 'correct-answer');
-                            if (opt.dataset.option === correctVal) opt.classList.add('correct-answer');
-                        });
-                        
-                        if (selected) {
-                            const selectedOption = selected.closest('.option');
-                            selectedOption.classList.add('selected');
-                            if (selected.value === correctVal) {
-                                correct++;
-                                selectedOption.classList.add('correct');
-                            } else {
-                                selectedOption.classList.add('incorrect');
-                            }
-                        }
-                        total++;
-                    });
-                    break;
-                    
-                case 'tone-select-2':
-                    document.querySelectorAll('.tone-item').forEach((item) => {
-                        const isSelected = item.classList.contains('selected');
-                        const shouldSelect = item.dataset.correct === 'true';
-                        
-                        item.classList.remove('correct', 'incorrect');
-                        if (shouldSelect) item.classList.add('correct-answer');
-                        
-                        if (isSelected && shouldSelect) {
-                            item.classList.add('correct');
-                            correct++;
-                        } else if (isSelected && !shouldSelect) {
-                            item.classList.add('incorrect');
-                        }
-                        if (shouldSelect) total++;
-                    });
-                    break;
-                    
-                case 'pinyin-select':
-                    document.querySelectorAll('.pinyin-dropdown').forEach(select => {
-                        const isCorrect = select.value === select.dataset.answer;
-                        
-                        select.classList.toggle('correct', isCorrect);
-                        select.classList.toggle('incorrect', !isCorrect && select.value);
-                        
-                        const answerId = select.nextElementSibling.id;
-                        const answerEl = document.getElementById(answerId);
-                        if (answerEl && !isCorrect) answerEl.classList.add('show');
-                        
-                        if (isCorrect) correct++;
-                        total++;
-                    });
-                    break;
-                    
-                case 'dialogue':
-                    document.querySelectorAll('.blank-select').forEach(select => {
-                        const isCorrect = select.value === select.dataset.answer;
-                        
-                        select.classList.toggle('correct-answer', isCorrect);
-                        select.style.borderColor = isCorrect ? 'var(--green)' : '#ef4444';
-                        
-                        if (!isCorrect) {
-                            const answerSpan = select.nextElementSibling;
-                            if (answerSpan) answerSpan.style.display = 'inline';
-                        }
-                        
-                        if (isCorrect) correct++;
-                        total++;
-                    });
-                    break;
-                    
-                case 'hanzi-write':
-                    document.querySelectorAll('.hanzi-input').forEach(input => {
-                        const isCorrect = input.value.trim() === input.dataset.answer;
-                        
-                        input.classList.toggle('correct', isCorrect);
-                        input.classList.toggle('incorrect', !isCorrect && input.value);
-                        
-                        const answerId = input.nextElementSibling.id;
-                        const answerEl = document.getElementById(answerId);
-                        if (answerEl && !isCorrect) answerEl.classList.add('show');
-                        
-                        if (isCorrect) correct++;
-                        total++;
-                    });
-                    break;
-                    
-                case 'translation':
-                    document.querySelectorAll('.translation-item').forEach(item => {
-                        if (!item.classList.contains('revealed')) {
-                            item.classList.add('revealed');
-                            const btn = item.querySelector('.btn-answer');
-                            if (btn) {
-                                btn.textContent = 'Ẩn';
-                                btn.className = 'btn-answer btn-hide-answer';
-                            }
-                        }
-                        total++;
-                        correct++;
-                    });
-                    break;
-            }
-            
-            checkedAnswers[currentSlide] = true;
-            showResult(correct, total);
-            updateProgress();
-        }
-
-        function showResult(correct, total) {
-            const modal = document.getElementById('result-modal');
-            const circle = document.getElementById('score-circle');
-            const text = document.getElementById('score-text');
-            const msg = document.getElementById('score-message');
-            const percentage = total > 0 ? (correct / total) * 100 : 0;
-            
-            circle.style.setProperty('--score', percentage);
-            text.textContent = `${correct}/${total}`;
-            
-            if (percentage === 100) {
-                msg.textContent = '🎉 Xuất sắc! Bạn đã làm đúng hết!';
-                msg.style.color = 'var(--green)';
-            } else if (percentage >= 80) {
-                msg.textContent = '👏 Rất tốt! Cố gắng thêm!';
-                msg.style.color = 'var(--green)';
-            } else if (percentage >= 60) {
-                msg.textContent = '👍 Khá đấy! Ôn lại phần sai nhé!';
-                msg.style.color = 'var(--orange-dark)';
-            } else {
-                msg.textContent = '💪 Cần cố gắng thêm! Đã hiện đáp án đúng.';
-                msg.style.color = '#dc2626';
-            }
-            
-            modal.style.display = 'flex';
-        }
-
-        function closeModal(e) {
-            if (!e || e.target.id === 'result-modal') {
-                document.getElementById('result-modal').style.display = 'none';
-            }
-        }
-
-        function goToSlide(index) {
-            renderSlide(index);
-        }
-
-        function resetCurrent() {
-            delete checkedAnswers[currentSlide];
-            renderSlide(currentSlide);
-        }
-
-        function updateProgress() {
-            const completed = Object.keys(checkedAnswers).length;
-            const total = exercises.length - 1;
-            const percentage = (completed / total) * 100;
-            document.getElementById('progress-bar').style.width = percentage + '%';
-            document.getElementById('progress-text').textContent = `${completed}/${total}`;
-        }
-
-        window.addEventListener('load', () => {
-            init();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'ArrowLeft') prevSlide();
-        });
-    </script>
-</body>
-</html>
+    <div id="rich-editor" contenteditable="true" spellcheck="true"></div>
+    <div id="note-editor-footer">
+      <button type="button" class="editor-btn" onclick="closeNoteEditor()">Đóng</button>
+      <button type="button" class="editor-btn editor-btn-save" onclick="saveNotes(true)">Lưu ghi chú</button>
+    </div>
+  </div>
+</div>
+<script>
+const exercises=[
+ null,
+ {type:'initial-fill',title:'Bổ sung hoàn chỉnh ba nhóm phụ âm dưới đây',groups:[
+   {fixed:'b',answers:['p','m','f']},{fixed:'d',answers:['t','n','l']},{fixed:'g',answers:['k','h']}
+ ]},
+ {type:'pronunciation',title:'Chọn âm chính xác',data:[
+   {word:'我们',answer:'Wǒmen',options:['Wǒmen','Wòmen']},
+   {word:'他们',answer:'Tāmen',options:['Tàmen','Tāmen']},
+   {word:'都',answer:'Dōu',options:['Dõu','Dōu']},
+   {word:'来',answer:'Lái',options:['Lán','Lái']},
+   {word:'妈妈',answer:'Māma',options:['Māma','Máma']},
+   {word:'爸爸',answer:'Bàba',options:['Bãba','Bàba']}
+ ]},
+ {type:'tone-select',title:'Tìm những âm tiết có thanh 3 biến thành thanh 2',data:[
+   {text:'Nǐ hǎo',syllables:['Nǐ','hǎo'],answer:['Nǐ']},
+   {text:'Dàmǐ',syllables:['Dà','mǐ'],answer:[]},
+   {text:'Lǎolao',syllables:['Lǎo','lao'],answer:[]},
+   {text:'Tǔfāng',syllables:['Tǔ','fāng'],answer:[]},
+   {text:'Gǎnmào',syllables:['Gǎn','mào'],answer:[]},
+   {text:'Wǔdǎo',syllables:['Wǔ','dǎo'],answer:['Wǔ']},
+   {text:'Bǎnběn',syllables:['Bǎn','běn'],answer:['Bǎn']},
+   {text:'Pàotǎ',syllables:['Pào','tǎ'],answer:[]}
+ ]},
+ {type:'tone-select',title:'Tìm những âm tiết biến thành nửa thanh 3',data:[
+   {text:'Nǐ bāng',syllables:['Nǐ','bāng'],answer:['Nǐ']},
+   {text:'Niúnǎi',syllables:['Niú','nǎi'],answer:[]},
+   {text:'Bǎoliú',syllables:['Bǎo','liú'],answer:['Bǎo']},
+   {text:'Dānbǎo',syllables:['Dān','bǎo'],answer:[]},
+   {text:'Fǎlǜ',syllables:['Fǎ','lǜ'],answer:['Fǎ']},
+   {text:'Dàkǎo',syllables:['Dà','kǎo'],answer:[]},
+   {text:'Mǎhu',syllables:['Mǎ','hu'],answer:['Mǎ']},
+   {text:'Mángguǒ',syllables:['Máng','guǒ'],answer:[]}
+ ]},
+ {type:'pinyin',title:'Phiên âm cho những từ dưới đây',data:[
+   {hanzi:'好',answer:'Hǎo',options:['Hǎo','Háo','Hào','Hāo']},
+   {hanzi:'来',answer:'Lái',options:['Lái','Lǎi','Lài','Lāi']},
+   {hanzi:'吗',answer:'Ma',options:['Ma','Má','Mǎ','Mà']},
+   {hanzi:'很',answer:'Hěn',options:['Hěn','Hén','Hèn','Hēn']},
+   {hanzi:'也',answer:'Yě',options:['Yě','Yé','Yè','Yē']},
+   {hanzi:'都',answer:'Dōu',options:['Dōu','Dóu','Dǒu','Dòu']},
+   {hanzi:'他',answer:'Tā',options:['Tā','Tá','Tǎ','Tà']},
+   {hanzi:'她',answer:'Tā',options:['Tā','Tá','Tǎ','Tà']},
+   {hanzi:'我们',answer:'Wǒmen',options:['Wǒmen','Wómen','Wòmen','Wōmen']},
+   {hanzi:'你们',answer:'Nǐmen',options:['Nǐmen','Nímen','Nìmen','Nīmen']},
+   {hanzi:'爸爸',answer:'Bàba',options:['Bàba','Bába','Bǎba','Bāba']},
+   {hanzi:'妈妈',answer:'Māma',options:['Māma','Máma','Mǎma','Màma']}
+ ]},
+ {type:'dialogue-input',title:'Hoàn thành đối thoại',data:[
+   {before:'A: ',after:'！',context:'B: 你好！',answer:'你好',accepted:['你好','你好！']},
+   {before:'A: 你的爸爸 ',after:'？',context:'B: 他来。',answer:'来吗',accepted:['来吗','来吗？']},
+   {before:'A: 你的妈妈 ',after:'？',context:'B: 她很好。',answer:'好吗',accepted:['好吗','身体好吗','好吗？','身体好吗？']},
+   {before:'A: 你爸爸，妈妈 ',after:'？',context:'B: 他们都很好。',answer:'都好吗',accepted:['都好吗','好吗','身体好吗','都好吗？','好吗？','身体好吗？']}
+ ]},
+ {type:'hanzi',title:'Viết chữ Hán dựa theo phiên âm',data:[
+   {pinyin:'Bàba',hanzi:'爸爸'},{pinyin:'Tāmen',hanzi:'他们',accepted:['他们','她们']},{pinyin:'Māmā',hanzi:'妈妈'},{pinyin:'Yě',hanzi:'也'},{pinyin:'Hěn',hanzi:'很'},{pinyin:'Dōu',hanzi:'都'},{pinyin:'Wǒ',hanzi:'我'},{pinyin:'Lái',hanzi:'来'},{pinyin:'Ma',hanzi:'吗'},{pinyin:'Hǎo',hanzi:'好'}
+ ]},
+ {type:'radical-ye',title:'Viết và phiên âm hai chữ Hán có chứa thành phần “也”',data:[
+   {answer:'他',pinyin:'tā'},{answer:'她',pinyin:'tā'}
+ ]},
+ {type:'translation',title:'Luyện dịch Việt → Hoa',data:[
+   {vi:'Chào các bạn!',cn:'你们好！',accepted:['你们好','大家好']},
+   {vi:'Chào Lưu Kinh.',cn:'刘京，你好！',accepted:['刘京你好']},
+   {vi:'Các bạn có khỏe không?',cn:'你们好吗？',accepted:['你们好吗','你们身体好吗']},
+   {vi:'Chúng tôi đều rất khỏe. Bạn khỏe không, Lưu Kinh?',cn:'我们都很好。刘京，你好吗？',accepted:['我们都很好刘京你好吗','我们身体都很好刘京你身体好吗']},
+   {vi:'Tôi cũng rất khỏe. Cảm ơn.',cn:'我也很好，谢谢。',accepted:['我也很好谢谢']},
+   {vi:'Vương Lan, David có đến không?',cn:'王兰，大卫来吗？',accepted:['王兰大卫来吗','王兰和大卫来吗']},
+   {vi:'Bọn họ đều đến.',cn:'他们都来。',accepted:['他们都来']}
+ ]}
+];
+const explanations={
+1:[
+ 'Nhóm âm môi theo thứ tự chuẩn là b – p – m – f.', 'Nhóm âm đầu lưỡi theo thứ tự chuẩn là d – t – n – l.', 'Nhóm âm gốc lưỡi theo thứ tự chuẩn là g – k – h.'
+],
+2:[
+ '我们 đọc Wǒmen: 我 mang thanh 3, 们 đọc nhẹ.', '他们 đọc Tāmen: 他 là tā, thanh 1.', '都 trong bài đọc dōu, thanh 1.', '来 đọc lái, thanh 2.', '妈妈 đọc māma: âm đầu mā mang thanh 1, âm sau thường đọc nhẹ.', '爸爸 đọc bàba: âm đầu bà mang thanh 4, âm sau thường đọc nhẹ.'
+],
+3:[
+ 'Hai thanh 3 đứng liền nhau: thanh 3 thứ nhất đổi thành thanh 2, nên Nǐ hǎo được đọc gần như Ní hǎo.',
+ 'Dà là thanh 4, mǐ là thanh 3; không có chuỗi thanh 3 + thanh 3 nên không có âm tiết đổi sang thanh 2.',
+ 'Lǎo đứng trước âm nhẹ lao, không phải hai thanh 3 liên tiếp.',
+ 'Tǔ đứng trước fāng thanh 1; đây là trường hợp nửa thanh 3, không đổi thành thanh 2.',
+ 'Gǎn đứng trước mào thanh 4; đây là nửa thanh 3, không đổi thành thanh 2.',
+ 'Wǔ + dǎo đều là thanh 3, nên Wǔ đổi thành thanh 2 khi đọc.',
+ 'Bǎn + běn đều là thanh 3, nên Bǎn đổi thành thanh 2 khi đọc.',
+ 'Pào là thanh 4, tǎ là thanh 3; không có hai thanh 3 liên tiếp.'
+],
+4:[
+ 'Thanh 3 đứng trước thanh 1 thường đọc nửa thanh 3, nên Nǐ trong Nǐ bāng hạ xuống nhưng không bật lên đầy đủ.',
+ 'nǎi đứng cuối cụm nên giữ thanh 3 đầy đủ trong bài tập này.',
+ 'Bǎo đứng trước liú thanh 2 nên đọc nửa thanh 3.',
+ 'bǎo đứng cuối cụm nên giữ thanh 3 đầy đủ.',
+ 'Fǎ đứng trước lǜ thanh 4 nên đọc nửa thanh 3.',
+ 'kǎo đứng cuối cụm nên giữ thanh 3 đầy đủ.',
+ 'Mǎ đứng trước âm nhẹ hu nên đọc dạng nửa thanh 3.',
+ 'guǒ đứng cuối cụm nên giữ thanh 3 đầy đủ.'
+],
+5:[
+ '好 đọc hǎo, thanh 3.','来 đọc lái, thanh 2.','吗 trong câu hỏi thường đọc ma, thanh nhẹ.','很 đọc hěn, thanh 3.','也 đọc yě, thanh 3.','都 đọc dōu, thanh 1.','他 đọc tā, thanh 1.','她 cũng đọc tā, thanh 1.','我们 đọc wǒmen.','你们 đọc nǐmen.','爸爸 đọc bàba.','妈妈 đọc māma.'
+],
+6:[
+ 'B đáp “你好”, nên lời chào tương ứng của A là “你好！”.',
+ 'B đáp “他来” nên câu hỏi phù hợp là “你的爸爸来吗？”. 吗 biến câu trần thuật thành câu hỏi yes/no.',
+ 'B đáp tình trạng “她很好”, nên hỏi “你的妈妈好吗？” hoặc “身体好吗？”.',
+ 'B đáp “他们都很好”, nên có thể hỏi “你爸爸、妈妈都好吗？”; 都 dùng khi hỏi chung cả hai người.'
+],
+7:['Bàba ↔ 爸爸.','Tāmen ↔ 他们.','Māmā ↔ 妈妈.','Yě ↔ 也.','Hěn ↔ 很.','Dōu ↔ 都.','Wǒ ↔ 我.','Lái ↔ 来.','Ma ↔ 吗.','Hǎo ↔ 好.'],
+8:['他 có thành phần 也 ở bên phải và đọc tā.','她 có thành phần 也 ở bên phải và đọc tā.'],
+9:[
+ '你们好 là cách chào nhiều người.',
+ 'Tên riêng có thể đặt trước lời chào: 刘京，你好！',
+ '吗 đặt cuối câu để tạo câu hỏi yes/no: 你们好吗？',
+ '都 biểu thị “đều”; câu sau dùng 你好吗 để hỏi trực tiếp Lưu Kinh.',
+ '也 biểu thị “cũng”; 谢谢 là “cảm ơn”.',
+ 'Câu hỏi “có đến không” dùng 来吗；大卫 là David.',
+ '他们 là “họ/bọn họ”, 都来 là “đều đến”.'
+]};
+const STORE='BAI_TAP_301_01_FINAL_V1';
+const NOTE_STORE='BAI301_BAI01_NOTES_V1';
+const state={section:1,answers:{},checked:{},startAt:Date.now(),fontLarge:false};
+const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function norm(s){return String(s??'').trim().toLowerCase().replace(/[\s，。！？、；：,.!?;:]/g,'')}
+function key(sec,item){return sec+'-'+item}
+function explain(sec,item){return (explanations[sec]&&explanations[sec][item])||''}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){}updateProgress()}
+function restoreProgress(show=false){try{const x=JSON.parse(localStorage.getItem(STORE)||'null');if(x){Object.assign(state,x);renderAll();if(show)alert('已恢复答题。')}else if(show)alert('没有已保存的答题记录。')}catch(e){if(show)alert('无法恢复答题记录。')}}
+function sectionNames(){return ['','Bổ sung thanh mẫu','Chọn cách đọc','Thanh 3 → thanh 2','Nửa thanh 3','Phiên âm','Hoàn thành đối thoại','Viết chữ Hán','Chữ có 也','Dịch Việt → Hoa']}
+function itemCount(sec){if(sec===1)return exercises[1].groups.length;return exercises[sec].data.length}
+function initialGroupAnswered(gi){return groupRange(gi).every(i=>String(state.answers[key(1,i)]||'').trim()!=='')}
+function isAnswered(sec,i){if(sec===1)return initialGroupAnswered(i);if(sec===3||sec===4)return !!state.checked[key(sec,i)]||String(state.answers[key(sec,i)]||'').trim()!=='';if(sec===8){return String(state.answers[key(sec,i)+'-h']||'').trim()!==''||String(state.answers[key(sec,i)+'-p']||'').trim()!==''}return String(state.answers[key(sec,i)]??'').trim()!==''}
+function answeredCount(sec){let n=0;for(let i=0;i<itemCount(sec);i++)if(isAnswered(sec,i))n++;return n}
+function totalCount(){let n=0;for(let s=1;s<=9;s++)n+=itemCount(s);return n}
+function totalAnswered(){let n=0;for(let s=1;s<=9;s++)n+=answeredCount(s);return n}
+function renderNav(){let h='';for(let s=1;s<=9;s++)h+=`<div class="nav-item ${state.section===s?'active':''}" onclick="goSection(${s})"><span>Bài ${s}</span></div>`;document.getElementById('sectionNav').innerHTML=h}
+function goSection(s){state.section=s;save();renderSection();renderNav()}
+function renderAll(){renderNav();renderSection();updateProgress();document.body.classList.toggle('font-large',!!state.fontLarge)}
+function stableShuffle(arr,seed){const a=[...arr];let x=(seed+1)*2654435761>>>0;for(let i=a.length-1;i>0;i--){x=(x*1664525+1013904223)>>>0;const j=x%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function setAnswer(sec,i,v){state.answers[key(sec,i)]=v;delete state.checked[key(sec,i)];save();renderNav()}
+function setSpecial(k,v){state.answers[k]=v;save();renderNav()}
+function same(sec,i,ans){return norm(state.answers[key(sec,i)]||'')===norm(ans)}
+function checkOne(sec,i){state.checked[key(sec,i)]=true;save();renderSection();renderNav()}
+function feedback(sec,i,ans,customOk=null){if(!state.checked[key(sec,i)])return '<div class="feedback"></div>';const ok=customOk===null?same(sec,i,ans):customOk;return `<div class="feedback show ${ok?'correct':'wrong'}"><div class="status">${ok?'✓ Đúng':'✗ Chưa đúng'}</div>${ok?'':`<div>Đáp án mục tiêu: <span class="correct-answer">${esc(ans)}</span></div>`}<div><b>Giải thích:</b> ${esc(explain(sec,i))}</div></div>`}
+function cardClass(sec,i,okfn){if(!state.checked[key(sec,i)])return 'question-card';const ok=okfn();return 'question-card checked '+(ok?'correct':'wrong')}
+function radioOptions(sec,i,options){const selected=state.answers[key(sec,i)]||'';return '<div class="options-list">'+options.map((o,j)=>`<label class="option"><input type="radio" name="q-${sec}-${i}" value="${esc(o)}" ${selected===o?'checked':''} onchange="setAnswer(${sec},${i},this.value)"><span class="letter">${letters[j]}.</span><span class="option-text">${esc(o)}</span></label>`).join('')+'</div>'}
+function renderInitial(ex){let h=`<div class="section-instruction"><strong>Bổ sung hoàn chỉnh ba nhóm phụ âm dưới đây.</strong></div>`;let flat=0;ex.groups.forEach((g,gi)=>{h+=`<div class="question-card"><div class="qhead"><div class="qnum">${gi+1}</div><div class="qtext"><div class="initial-group"><span class="initial-fixed">${g.fixed}</span>`;g.answers.forEach((a,j)=>{const idx=flat++,v=state.answers[key(1,idx)]||'';h+=`<span>;</span><input class="initial-input" maxlength="2" value="${esc(v)}" oninput="setAnswer(1,${idx},this.value)">`});h+=`</div></div></div><div class="check-row"><button class="check-btn" onclick="checkInitialGroup(${gi})">Kiểm tra câu</button></div>${initialFeedback(gi)}</div>`});return h}
+function groupRange(gi){return gi===0?[0,1,2]:gi===1?[3,4,5]:[6,7]}
+function checkInitialGroup(gi){groupRange(gi).forEach(i=>state.checked[key(1,i)]=true);save();renderSection();renderNav()}
+function initialFeedback(gi){const ids=groupRange(gi),checked=ids.every(i=>state.checked[key(1,i)]);if(!checked)return '<div class="feedback"></div>';const targets=exercises[1].groups[gi].answers,ok=ids.every((id,k)=>norm(state.answers[key(1,id)]||'')===norm(targets[k]));return `<div class="feedback show ${ok?'correct':'wrong'}"><div class="status">${ok?'✓ Đúng':'✗ Chưa đúng'}</div>${ok?'':`<div>Đáp án: <span class="correct-answer">${exercises[1].groups[gi].fixed} – ${targets.join(' – ')}</span></div>`}<div><b>Giải thích:</b> ${esc(explain(1,gi))}</div></div>`}
+function renderPronunciation(ex){let h=`<div class="section-instruction"><strong>Chọn âm chính xác.</strong></div>`;ex.data.forEach((it,i)=>{const ok=()=>same(2,i,it.answer);h+=`<div class="${cardClass(2,i,ok)}"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext chinese">${it.word}</div></div>${radioOptions(2,i,it.options)}<div class="check-row"><button class="check-btn" onclick="checkOne(2,${i})">Kiểm tra câu</button></div>${feedback(2,i,it.answer)}</div>`});return h}
+function toneSelected(sec,i){return String(state.answers[key(sec,i)]||'').split('|||').filter(Boolean)}
+function toggleTone(sec,i,sy){let a=toneSelected(sec,i),p=a.indexOf(sy);if(p>=0)a.splice(p,1);else a.push(sy);state.answers[key(sec,i)]=a.join('|||');delete state.checked[key(sec,i)];save();renderSection();renderNav()}
+function toneOk(sec,i){const a=toneSelected(sec,i).slice().sort(),b=exercises[sec].data[i].answer.slice().sort();return a.length===b.length&&a.every((x,k)=>x===b[k])}
+function renderTone(ex,sec){let h=`<div class="section-instruction"><strong>${esc(ex.title)}.</strong></div>`;ex.data.forEach((it,i)=>{const selected=toneSelected(sec,i);h+=`<div class="${cardClass(sec,i,()=>toneOk(sec,i))}"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext">${esc(it.text)}</div></div><div class="tone-row">${it.syllables.map(s=>`<label class="syllable-chip ${selected.includes(s)?'selected':''}"><input type="checkbox" ${selected.includes(s)?'checked':''} onchange="toggleTone(${sec},${i},'${esc(s)}')">${esc(s)}</label>`).join('')}</div><div class="check-row"><button class="check-btn" onclick="checkOne(${sec},${i})">Kiểm tra câu</button></div>${toneFeedback(sec,i)}</div>`});return h}
+function toneFeedback(sec,i){if(!state.checked[key(sec,i)])return '<div class="feedback"></div>';const ok=toneOk(sec,i),ans=exercises[sec].data[i].answer;return `<div class="feedback show ${ok?'correct':'wrong'}"><div class="status">${ok?'✓ Đúng':'✗ Chưa đúng'}</div>${ok?'':`<div>Âm tiết cần chọn: <span class="correct-answer">${ans.length?esc(ans.join(', ')):'Không có'}</span></div>`}<div><b>Giải thích:</b> ${esc(explain(sec,i))}</div></div>`}
+function renderPinyin(ex){let h=`<div class="section-instruction"><strong>Phiên âm cho những từ dưới đây.</strong></div>`;ex.data.forEach((it,i)=>{const v=state.answers[key(5,i)]||'';h+=`<div class="${cardClass(5,i,()=>same(5,i,it.answer))}"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext chinese">${esc(it.hanzi)}</div></div><input class="input-text" value="${esc(v)}" oninput="setAnswer(5,${i},this.value)"><div class="check-row"><button class="check-btn" onclick="checkOne(5,${i})">Kiểm tra câu</button></div>${feedback(5,i,it.answer)}</div>`});return h}
+function dialogueOk(i){const it=exercises[6].data[i],v=norm(state.answers[key(6,i)]||'');return it.accepted.some(a=>norm(a)===v)}
+function renderDialogue(ex){let h=`<div class="section-instruction"><strong>Hoàn thành đối thoại.</strong></div>`;ex.data.forEach((it,i)=>{const v=state.answers[key(6,i)]||'';h+=`<div class="${cardClass(6,i,()=>dialogueOk(i))}"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext chinese">${esc(it.before)}<input class="input-text" style="max-width:300px;display:inline-block" value="${esc(v)}" oninput="setAnswer(6,${i},this.value)">${esc(it.after)}<div style="margin-top:10px;color:#555">${esc(it.context)}</div></div></div><div class="check-row"><button class="check-btn" onclick="checkOne(6,${i})">Kiểm tra câu</button></div>${dialogueFeedback(i)}</div>`});return h}
+function dialogueFeedback(i){if(!state.checked[key(6,i)])return '<div class="feedback"></div>';const ok=dialogueOk(i),it=exercises[6].data[i];return `<div class="feedback show ${ok?'correct':'wrong'}"><div class="status">${ok?'✓ Đúng':'✗ Chưa đúng'}</div>${ok?'':`<div>Đáp án tham khảo: <span class="correct-answer">${esc(it.answer)}</span></div>`}<div><b>Giải thích:</b> ${esc(explain(6,i))}</div></div>`}
+function hanziOk(i){const it=exercises[7].data[i],v=state.answers[key(7,i)]||'';return (it.accepted||[it.hanzi]).some(a=>norm(a)===norm(v))}
+function hanziFeedback(i){if(!state.checked[key(7,i)])return '<div class="feedback"></div>';const it=exercises[7].data[i],ok=hanziOk(i);return `<div class="feedback show ${ok?'correct':'sample'}"><div class="status">${ok?'✓ Đúng':'△ Chưa khớp đáp án tham khảo'}</div><div>Đáp án tham khảo: <span class="correct-answer">${esc(it.hanzi)}</span></div><div><b>Giải thích:</b> ${esc(explain(7,i))}</div></div>`}
+function renderHanzi(ex){let h=`<div class="section-instruction"><strong>Viết chữ Hán dựa theo phiên âm.</strong></div>`;ex.data.forEach((it,i)=>{const v=state.answers[key(7,i)]||'';h+=`<div class="${cardClass(7,i,()=>hanziOk(i))}"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext"><b>${it.pinyin}</b></div></div><input class="input-text" value="${esc(v)}" oninput="setAnswer(7,${i},this.value)"><div class="check-row"><button class="check-btn" onclick="checkOne(7,${i})">Kiểm tra câu</button></div>${hanziFeedback(i)}</div>`});return h}
+const radicalYeValid={'他':['tā'],'她':['tā'],'地':['dì','de'],'池':['chí'],'驰':['chí'],'弛':['chǐ']};
+function radicalOk(i){const raw=(state.answers[key(8,i)+'-h']||'').trim(),p=norm(state.answers[key(8,i)+'-p']||''),other=i===0?1:0,otherRaw=(state.answers[key(8,other)+'-h']||'').trim();const pys=radicalYeValid[raw]||[];return !!raw&&raw!==otherRaw&&pys.some(x=>norm(x)===p)}
+function renderRadical(ex){let h=`<div class="section-instruction"><strong>Viết và phiên âm hai chữ Hán có chứa thành phần “也”.</strong></div>`;ex.data.forEach((it,i)=>{const hv=state.answers[key(8,i)+'-h']||'',pv=state.answers[key(8,i)+'-p']||'';h+=`<div class="${cardClass(8,i,()=>radicalOk(i))}"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext">也</div></div><div class="radical-pair"><div><div class="radical-label">汉字</div><input class="input-text" maxlength="1" value="${esc(hv)}" oninput="setSpecial('${key(8,i)}-h',this.value)"></div><div><div class="radical-label">Pinyin</div><input class="input-text" value="${esc(pv)}" oninput="setSpecial('${key(8,i)}-p',this.value)"></div></div><div class="check-row"><button class="check-btn" onclick="checkOne(8,${i})">Kiểm tra câu</button></div>${radicalFeedback(i)}</div>`});return h}
+function radicalFeedback(i){if(!state.checked[key(8,i)])return '<div class="feedback"></div>';const ok=radicalOk(i);return `<div class="feedback show ${ok?'correct':'wrong'}"><div class="status">${ok?'✓ Đúng':'✗ Chưa đúng'}</div>${ok?'':`<div>Đáp án tham khảo: <span class="correct-answer">他 tā / 她 tā</span></div>`}<div><b>Giải thích:</b> ${esc(explain(8,i))}</div></div>`}
+function translationOk(i){const it=exercises[9].data[i],v=state.answers[key(9,i)]||'';return (it.accepted||[it.cn]).some(a=>norm(a)===norm(v))}
+function renderTranslation(ex){let h=`<div class="section-instruction"><strong>Luyện dịch Việt → Hoa.</strong></div>`;ex.data.forEach((it,i)=>{const v=state.answers[key(9,i)]||'',c=state.checked[key(9,i)],ok=translationOk(i);h+=`<div class="question-card ${c?'checked '+(ok?'correct':'wrong'):''}"><div class="qhead"><div class="qnum">${i+1}</div><div class="qtext">${esc(it.vi)}</div></div><textarea class="input-area" oninput="setAnswer(9,${i},this.value)">${esc(v)}</textarea><div class="check-row"><button class="check-btn" onclick="checkOne(9,${i})">Đối chiếu đáp án</button></div>${translationFeedback(i)}</div>`});return h}
+function translationFeedback(i){if(!state.checked[key(9,i)])return '<div class="feedback"></div>';const it=exercises[9].data[i],ok=translationOk(i);return `<div class="feedback show ${ok?'correct':'sample'}"><div class="status">${ok?'✓ Khớp đáp án tham khảo':'△ Chưa khớp đáp án tham khảo'}</div><div>Đáp án tham khảo: <span class="correct-answer">${esc(it.cn)}</span></div><div><b>Giải thích:</b> ${esc(explain(9,i))}</div></div>`}
+function renderSection(){const sec=state.section,ex=exercises[sec];document.getElementById('sectionBadge').textContent='Bài '+sec;document.getElementById('sectionTitle').textContent=sectionNames()[sec];let h='';if(sec===1)h=renderInitial(ex);else if(sec===2)h=renderPronunciation(ex);else if(sec===3||sec===4)h=renderTone(ex,sec);else if(sec===5)h=renderPinyin(ex);else if(sec===6)h=renderDialogue(ex);else if(sec===7)h=renderHanzi(ex);else if(sec===8)h=renderRadical(ex);else if(sec===9)h=renderTranslation(ex);h+=`<div class="navigation-buttons"><button class="nav-btn" onclick="goSection(${Math.max(1,sec-1)})" ${sec===1?'disabled':''}>上一题 · Bài trước</button><button class="nav-btn next" onclick="goSection(${Math.min(9,sec+1)})" ${sec===9?'disabled':''}>下一题 · Bài sau</button></div>`;document.getElementById('contentBody').innerHTML=h;window.scrollTo(0,0)}
+function updateProgress(){const a=totalAnswered(),t=totalCount(),p=t?Math.round(a/t*100):0;document.getElementById('progressText').textContent=`${a}/${t}`;document.getElementById('progressFill').style.width=p+'%'}
+function openAnswerCard(){let h='';for(let s=1;s<=9;s++){const a=answeredCount(s),t=itemCount(s);h+=`<div class="answer-cell ${a===t&&t?'done':''}" onclick="closeModal('answerModal');goSection(${s})"><b>Bài ${s}</b><br><span class="muted">${a}/${t} đã làm</span></div>`}document.getElementById('answerGrid').innerHTML=h;document.getElementById('answerModal').classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function toggleFont(){state.fontLarge=!state.fontLarge;document.body.classList.toggle('font-large',state.fontLarge);save()}
+function restartExam(){if(!confirm('重新答题？'))return;try{localStorage.removeItem(STORE)}catch(e){}state.section=1;state.answers={};state.checked={};state.startAt=Date.now();state.fontLarge=false;renderAll()}
+function objectiveScore(){let correct=0,total=0;
+ // 1: each blank
+ const targets=['p','m','f','t','n','l','k','h'];targets.forEach((a,i)=>{total++;if(norm(state.answers[key(1,i)]||'')===a)correct++});
+ // 2
+ exercises[2].data.forEach((it,i)=>{total++;if(same(2,i,it.answer))correct++});
+ // 3,4 rows
+ [3,4].forEach(sec=>exercises[sec].data.forEach((it,i)=>{total++;if(toneOk(sec,i))correct++}));
+ //5
+ exercises[5].data.forEach((it,i)=>{total++;if(same(5,i,it.answer))correct++});
+ //6
+ exercises[6].data.forEach((it,i)=>{total++;if(dialogueOk(i))correct++});
+ //7
+ exercises[7].data.forEach((it,i)=>{total++;if(hanziOk(i))correct++});
+ //8
+ exercises[8].data.forEach((it,i)=>{total++;if(radicalOk(i))correct++});
+ return {correct,total};}
+function submitExam(){const sc=objectiveScore(),pct=sc.total?Math.round(sc.correct/sc.total*100):0;document.getElementById('resultBody').innerHTML=`<div class="result-score">${sc.correct}/${sc.total}</div><div style="text-align:center;font-weight:700">Kết quả: ${pct}%</div><div style="margin-top:15px;line-height:1.7"><b>Tiến độ toàn bài:</b> ${totalAnswered()}/${totalCount()} mục đã làm.<br><b>Bài 9:</b> đối chiếu riêng với đáp án tham khảo vì câu dịch có thể có nhiều cách diễn đạt đúng.</div>`;document.getElementById('resultModal').classList.add('show')}
+function tick(){const e=Math.floor((Date.now()-(state.startAt||Date.now()))/1000),m=Math.floor(e/60),ss=e%60;document.getElementById('timerText').textContent=`Thời gian ${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;document.getElementById('timerProgress').style.width=Math.min(100,(e%3600)/36)+'%'}
+let noteSaveTimer=null;
+function openNoteEditor(){const overlay=document.getElementById('note-editor-overlay'),editor=document.getElementById('rich-editor');if(!overlay||!editor)return;try{const saved=localStorage.getItem(NOTE_STORE);if(saved!==null)editor.innerHTML=saved}catch(e){}overlay.classList.add('show');document.body.classList.add('note-open');editor.focus()}
+function closeNoteEditor(){const overlay=document.getElementById('note-editor-overlay');if(overlay)overlay.classList.remove('show');document.body.classList.remove('note-open')}
+function noteCommand(cmd,val=null){document.execCommand(cmd,false,val);document.getElementById('rich-editor')?.focus();scheduleNoteAutosave()}
+function scheduleNoteAutosave(){clearTimeout(noteSaveTimer);noteSaveTimer=setTimeout(()=>saveNotes(false,true),400)}
+function saveNotes(closeAfter=false,silent=false){const editor=document.getElementById('rich-editor');if(!editor)return;try{localStorage.setItem(NOTE_STORE,editor.innerHTML)}catch(e){}if(closeAfter)closeNoteEditor()}
+function clearNoteEditor(){if(confirm('Xóa tất cả ghi chú?')){document.getElementById('rich-editor').innerHTML='';saveNotes(false,true)}}
+document.getElementById('rich-editor')?.addEventListener('input',scheduleNoteAutosave);
+window.addEventListener('load',()=>{restoreProgress(false);renderAll();setInterval(tick,1000);tick()});
+</script>
+</body></html>
