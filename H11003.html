@@ -4487,28 +4487,48 @@ const REAL_EXAMPLE_STAGE_AUDIO={"1":[0,108.54],"2":[197.08,229.38],"3":[367.18,4
 // "现在开始第..." được tách riêng và chỉ phát khi thực sự bước vào câu đầu của phần.
 const REAL_START_AUDIO={"1":[108.54,113.92],"2":[229.38,235.24],"3":[406.74,413.12],"4":[645.68,651.96]};
 
-// Các mốc thô cũ nằm giữa hai lượt đọc của cùng một câu: nếu dùng trực tiếp,
-// giao diện sẽ đổi chậm một lượt (câu kế tiếp đã đọc lượt 1 mới đổi số câu).
-const RAW_QUESTION_AUDIO={"1":[113.92,123.60000000000001],"2":[129.3,143.89999999999998],"3":[147.46,158.61999999999998],"4":[163.74,174.74],"5":[180.18,186.7],"6":[235.24,247.2],"7":[258.7,285.06],"8":[287.42,308.54],"9":[313.86,336.34000000000003],"10":[340.92,351.88],"11":[413.12,451.48],"12":[448.26,484.26],"13":[482.48,523.48],"14":[519.18,565.5400000000001],"15":[558.66,580.24],"16":[651.96,699],"17":[691.76,753.1600000000001],"18":[738.56,782.0800000000002],"19":[776.62,829.4999999999999],"20":[819.14,844.18]};
-// Dịch ranh giới lên trước một lượt đọc. Với câu giữa phần, đoạn đúng chạy từ
-// giữa mốc trước tới giữa mốc hiện tại; câu đầu đã có lượt 1 trong START_AUDIO,
-// còn câu cuối giữ tới hết phần để không mất lời kết.
+// Mốc âm thanh của từng câu được lấy trực tiếp từ MP3 gốc.
+// KHÔNG dùng trung điểm giữa câu trước/câu sau: cách đó làm câu hiện tại dính lượt đọc
+// của câu khác và khiến màn hình đổi câu trễ.
+const RAW_QUESTION_AUDIO={"1":[113.92,123.60],"2":[129.30,143.90],"3":[147.46,158.62],"4":[163.74,174.74],"5":[180.18,186.70],"6":[235.24,247.20],"7":[258.70,285.06],"8":[287.42,308.54],"9":[313.86,336.34],"10":[340.92,351.88],"11":[413.12,451.48],"12":[448.26,484.26],"13":[482.48,523.48],"14":[519.18,565.54],"15":[558.66,580.24],"16":[651.96,699.00],"17":[691.76,753.16],"18":[738.56,782.08],"19":[776.62,829.50],"20":[819.14,844.18]};
+
+// Ranh giới dùng khi phát: bắt đầu đúng ở mốc câu hiện tại; nếu mốc cuối thô lấn sang
+// câu kế tiếp thì chặn trước câu kế tiếp 0,12 giây để tuyệt đối không nghe dư đầu câu sau.
 const REAL_QUESTION_AUDIO={};
+const AUDIO_BOUNDARY_GUARD=0.12;
 for(const p of PARTS.filter(x=>x.section==='listening')){
   const [first,last]=p.range.split('-').map(Number);
   for(let n=first;n<=last;n++){
-    const cur=RAW_QUESTION_AUDIO[n];
-    const curMid=(cur[0]+cur[1])/2;
-    const start=n===first?cur[0]:(RAW_QUESTION_AUDIO[n-1][0]+RAW_QUESTION_AUDIO[n-1][1])/2;
-    const end=n===last?cur[1]:curMid;
-    REAL_QUESTION_AUDIO[n]=[start,end];
+    const raw=RAW_QUESTION_AUDIO[n];
+    let end=raw[1];
+    if(n<last){
+      const nextStart=RAW_QUESTION_AUDIO[n+1][0];
+      end=Math.min(end,nextStart-AUDIO_BOUNDARY_GUARD);
+    }
+    REAL_QUESTION_AUDIO[n]=[raw[0],Math.max(raw[0]+0.20,end)];
   }
 }
+
 const REAL_LISTENING_END_AUDIO=[844.18,861.58];
 
-// Khoảng chờ SAU LẦN ĐỌC THỨ HAI, lấy theo khoảng lặng thực trước câu kế tiếp trong MP3.
-// Không ép tối thiểu 3 giây vì như vậy sẽ làm sai nhịp thi thật; học viên có thể trả lời ngay trong lúc audio đang phát.
-const REAL_QUESTION_WAIT={"1":10.54,"2":10.86,"3":10.7,"4":10.94,"5":3,"6":17.48,"7":15.54,"8":15.88,"9":15.82,"10":3,"11":15.96,"12":16.22,"13":16.2,"14":16.3,"15":3,"16":16.28,"17":16.1,"18":16.3,"19":16.08,"20":3};
+// Giữ đúng nhịp của file gốc: thời gian chờ chính là khoảng từ cuối câu đã cắt
+// đến mốc bắt đầu nội dung tiếp theo. Nhờ vậy câu sau không bị chuyển trễ 15–17 giây.
+const REAL_QUESTION_WAIT={};
+for(const p of PARTS.filter(x=>x.section==='listening')){
+  const [first,last]=p.range.split('-').map(Number);
+  for(let n=first;n<=last;n++){
+    if(n===20){ REAL_QUESTION_WAIT[n]=0; continue; }
+    const end=REAL_QUESTION_AUDIO[n][1];
+    let nextStart;
+    if(n<last){
+      nextStart=REAL_QUESTION_AUDIO[n+1][0];
+    }else{
+      const nextPart=p.id+1;
+      nextStart=REAL_EXAMPLE_STAGE_AUDIO[nextPart]?.[0];
+    }
+    REAL_QUESTION_WAIT[n]=nextStart==null?0.35:Math.max(0.35,nextStart-end);
+  }
+}
 const EXAMPLE_WAIT_SECONDS=5;
 const READING_SECONDS=17*60;
 let currentQ=1,userAnswers={},bookmarks={},candidate='',candidateEmail='',candidateGender='男',candidateCountry='越南',timeLeft=READING_SECONDS,timer=null,examStarted=false,examSubmitted=false,fontScale=1,audioUsed={},speaking=false,audioSession=0,readingStarted=false,readingAnnouncementUsed=false;
@@ -4907,15 +4927,23 @@ function ensureRealAudio(){
 function playRealAudioSegment(range,done,sessionId,preRoll=0){
   if(!range||range.length!==2){ if(done)done(); return; }
   const a=ensureRealAudio();
-  /* Đoạn câu hỏi được lùi nhẹ vào khoảng lặng để MP3 seek không cắt âm đầu. */
   const start=Math.max(0,Number(range[0])-Math.max(0,Number(preRoll)||0));
   const end=Number(range[1]);
-  realAudioEnd=end;
-  let finished=false;
+  // Dừng sớm rất nhẹ và kiểm tra mỗi frame; timeupdate của <audio> quá thưa nên có thể
+  // chạy dư 0,1–0,3 giây sang đầu câu kế tiếp.
+  const stopAt=Math.max(start+0.05,end-0.025);
+  realAudioEnd=stopAt;
+  let finished=false, rafId=0, hardTimer=0;
+
+  const clearGuards=()=>{
+    if(rafId){cancelAnimationFrame(rafId);rafId=0;}
+    if(hardTimer){clearTimeout(hardTimer);hardTimer=0;}
+  };
 
   const finish=()=>{
     if(finished)return;
     finished=true;
+    clearGuards();
     if(sessionId!==audioSession)return;
     try{a.pause();}catch(e){}
     a.ontimeupdate=null;
@@ -4926,6 +4954,7 @@ function playRealAudioSegment(range,done,sessionId,preRoll=0){
   };
 
   const fail=()=>{
+    clearGuards();
     if(sessionId!==audioSession)return;
     speaking=false;
     try{a.pause();}catch(e){}
@@ -4933,9 +4962,17 @@ function playRealAudioSegment(range,done,sessionId,preRoll=0){
     if(currentQ)render();
   };
 
+  const watch=()=>{
+    if(finished)return;
+    if(sessionId!==audioSession){try{a.pause();}catch(e){};clearGuards();return;}
+    if(a.currentTime>=stopAt){finish();return;}
+    rafId=requestAnimationFrame(watch);
+  };
+
+  // Fallback cho tab nền/trình duyệt giảm tần số RAF.
   a.ontimeupdate=()=>{
     if(sessionId!==audioSession){try{a.pause();}catch(e){};return;}
-    if(a.currentTime>=end-0.035)finish();
+    if(a.currentTime>=stopAt)finish();
   };
   a.onended=finish;
   a.onerror=fail;
@@ -4946,6 +4983,8 @@ function playRealAudioSegment(range,done,sessionId,preRoll=0){
     try{a.currentTime=start;}catch(e){}
     const p=a.play();
     if(p&&typeof p.catch==='function')p.catch(fail);
+    rafId=requestAnimationFrame(watch);
+    hardTimer=setTimeout(finish,Math.max(80,(stopAt-start)*1000+100));
   };
 
   if(a.readyState>=1) seekAndPlay();
@@ -4988,7 +5027,7 @@ function playQuestion(num,auto=false){
   const playQuestionRange=()=>{
     if(sessionId!==audioSession||currentQ!==num||examSubmitted)return;
     const range=REAL_QUESTION_AUDIO[num];
-    playRealAudioSegment(range,playEndIfNeeded,sessionId,0.12);
+    playRealAudioSegment(range,playEndIfNeeded,sessionId,0.05);
   };
 
   const partId=q.part;
