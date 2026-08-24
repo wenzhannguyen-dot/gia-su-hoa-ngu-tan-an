@@ -4482,34 +4482,23 @@ const REAL_AUDIO_FILE='H11003.mp3';
 // Các mốc được phân tích trực tiếp từ MP3 gốc.
 // CÂU VÍ DỤ được tách thành một "màn hình" riêng tại tiêu đề phần (▼第一部分...)
 // và dùng đúng đoạn âm thanh thật của phần đó, KHÔNG trộn với câu số 1/6/11/16.
-const REAL_EXAMPLE_STAGE_AUDIO={"1":[0,108.54],"2":[197.08,229.38],"3":[367.18,406.74],"4":[595.64,645.68]};
+const REAL_EXAMPLE_STAGE_AUDIO={"1":[0,108.529796],"2":[197.096508,229.363084],"3":[367.186213,406.702132],"4":[595.648345,645.690522]};
 
 // "现在开始第..." được tách riêng và chỉ phát khi thực sự bước vào câu đầu của phần.
-const REAL_START_AUDIO={"1":[108.54,113.92],"2":[229.38,235.24],"3":[406.74,413.12],"4":[645.68,651.96]};
+const REAL_START_AUDIO={"1":[108.529796,113.898594],"2":[229.363084,235.240726],"3":[406.702132,413.120000],"4":[645.690522,651.960091]};
 
 // Mốc âm thanh của từng câu được lấy trực tiếp từ MP3 gốc.
 // KHÔNG dùng trung điểm giữa câu trước/câu sau: cách đó làm câu hiện tại dính lượt đọc
 // của câu khác và khiến màn hình đổi câu trễ.
-const RAW_QUESTION_AUDIO={"1":[113.92,123.60],"2":[129.30,143.90],"3":[147.46,158.62],"4":[163.74,174.74],"5":[180.18,186.70],"6":[235.24,247.20],"7":[258.70,285.06],"8":[287.42,308.54],"9":[313.86,336.34],"10":[340.92,351.88],"11":[413.12,451.48],"12":[448.26,484.26],"13":[482.48,523.48],"14":[519.18,565.54],"15":[558.66,580.24],"16":[651.96,699.00],"17":[691.76,753.16],"18":[738.56,782.08],"19":[776.62,829.50],"20":[819.14,844.18]};
+const RAW_QUESTION_AUDIO={"1":[113.838594,118.834830],"2":[128.912517,136.663220],"3":[147.062812,153.110476],"4":[163.426893,169.318639],"5":[179.553696,186.809977],"6":[235.180726,243.079819],"7":[258.263356,271.941497],"8":[287.071519,298.045624],"9":[313.287664,325.163356],"10":[340.319773,351.956100],"11":[413.060000,432.376145],"12":[447.530748,466.332245],"13":[481.612834,503.045986],"14":[518.282222,542.444898],"15":[557.662358,580.326531],"16":[651.900091,675.545125],"17":[690.830340,722.532154],"18":[737.815737,760.394558],"19":[775.610839,803.140045],"20":[818.307347,844.255873]};
 
-// Ranh giới dùng khi phát: bắt đầu đúng ở mốc câu hiện tại; nếu mốc cuối thô lấn sang
-// câu kế tiếp thì chặn trước câu kế tiếp 0,12 giây để tuyệt đối không nghe dư đầu câu sau.
-const REAL_QUESTION_AUDIO={};
-const AUDIO_BOUNDARY_GUARD=0.12;
-for(const p of PARTS.filter(x=>x.section==='listening')){
-  const [first,last]=p.range.split('-').map(Number);
-  for(let n=first;n<=last;n++){
-    const raw=RAW_QUESTION_AUDIO[n];
-    let end=raw[1];
-    if(n<last){
-      const nextStart=RAW_QUESTION_AUDIO[n+1][0];
-      end=Math.min(end,nextStart-AUDIO_BOUNDARY_GUARD);
-    }
-    REAL_QUESTION_AUDIO[n]=[raw[0],Math.max(raw[0]+0.20,end)];
-  }
-}
+// Mốc phát chính xác đo trực tiếp từ H11003.mp3 đã cung cấp.
+// Mỗi câu bắt đầu ngay trước âm đầu khoảng 0,06 giây và kết thúc trong khoảng lặng sau câu khoảng 0,08 giây.
+// Không dùng trung điểm, không lấn sang câu kế tiếp.
+const REAL_QUESTION_AUDIO={...RAW_QUESTION_AUDIO};
 
-const REAL_LISTENING_END_AUDIO=[844.18,861.58];
+// Sau câu 20 còn câu thông báo kết thúc phần Nghe; mốc cũ 861.58 cắt mất phần cuối.
+const REAL_LISTENING_END_AUDIO=[844.175873,862.952562];
 
 // Giữ đúng nhịp của file gốc: thời gian chờ chính là khoảng từ cuối câu đã cắt
 // đến mốc bắt đầu nội dung tiếp theo. Nhờ vậy câu sau không bị chuyển trễ 15–17 giây.
@@ -4533,7 +4522,8 @@ const EXAMPLE_WAIT_SECONDS=5;
 const READING_SECONDS=17*60;
 let currentQ=1,userAnswers={},bookmarks={},candidate='',candidateEmail='',candidateGender='男',candidateCountry='越南',timeLeft=READING_SECONDS,timer=null,examStarted=false,examSubmitted=false,fontScale=1,audioUsed={},speaking=false,audioSession=0,readingStarted=false,readingAnnouncementUsed=false;
 let screenMode='question',currentExamplePart=0,exampleReady=false,examplePlayed={},questionAudioFinished={};
-let exampleAutoTimer=null,questionAutoTimer=null;
+let exampleAutoTimer=null,questionAutoTimer=null,questionStartDelayTimer=null;
+const QUESTION_AUDIO_START_DELAY_MS=1000;
 let realAudio=null,realAudioEnd=0,realAudioDone=null;
 let portalReady=false, portalLoadTimer=null;
 let lastResults=null;
@@ -4678,6 +4668,7 @@ function partByQ(n){return PARTS.find(p=>{const [a,b]=p.range.split('-').map(Num
 function clearSequenceTimers(){
   if(exampleAutoTimer){clearTimeout(exampleAutoTimer);exampleAutoTimer=null;}
   if(questionAutoTimer){clearTimeout(questionAutoTimer);questionAutoTimer=null;}
+  if(questionStartDelayTimer){clearTimeout(questionStartDelayTimer);questionStartDelayTimer=null;}
 }
 function stopActiveSpeech(){
   audioSession++;
@@ -4931,7 +4922,7 @@ function playRealAudioSegment(range,done,sessionId,preRoll=0){
   const end=Number(range[1]);
   // Dừng sớm rất nhẹ và kiểm tra mỗi frame; timeupdate của <audio> quá thưa nên có thể
   // chạy dư 0,1–0,3 giây sang đầu câu kế tiếp.
-  const stopAt=Math.max(start+0.05,end-0.025);
+  const stopAt=Math.max(start+0.05,end);
   realAudioEnd=stopAt;
   let finished=false, rafId=0, hardTimer=0;
 
@@ -5027,17 +5018,24 @@ function playQuestion(num,auto=false){
   const playQuestionRange=()=>{
     if(sessionId!==audioSession||currentQ!==num||examSubmitted)return;
     const range=REAL_QUESTION_AUDIO[num];
-    playRealAudioSegment(range,playEndIfNeeded,sessionId,0.05);
+    playRealAudioSegment(range,playEndIfNeeded,sessionId,0);
   };
 
   const partId=q.part;
   const firstQ=PART_FIRST_Q[partId];
   const startRange=REAL_START_AUDIO[partId];
-  if(num===firstQ&&startRange){
-    playRealAudioSegment(startRange,playQuestionRange,sessionId);
-  }else{
-    playQuestionRange();
-  }
+
+  // Hiện câu hỏi trước, chờ đúng 1 giây rồi mới bắt đầu phát âm thanh.
+  // Không đổi tốc độ giọng đọc và không thay đổi các mốc cắt MP3.
+  questionStartDelayTimer=setTimeout(()=>{
+    questionStartDelayTimer=null;
+    if(sessionId!==audioSession||currentQ!==num||examSubmitted||screenMode!=='question')return;
+    if(num===firstQ&&startRange){
+      playRealAudioSegment(startRange,playQuestionRange,sessionId);
+    }else{
+      playQuestionRange();
+    }
+  },QUESTION_AUDIO_START_DELAY_MS);
 }
 function selectedClass(q,label){
  const ua=userAnswers[q.num],sel=ua===label; if(!examSubmitted)return sel?'selected':''; if(label===q.answer)return 'correct-answer'; if(sel&&label!==q.answer)return 'wrong'; return '';
