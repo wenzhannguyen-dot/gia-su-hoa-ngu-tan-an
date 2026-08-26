@@ -3951,7 +3951,7 @@ body.listening-locked #contentBody .navigation-buttons button{pointer-events:non
 </div>
 <header class="header">
 <div class="logo"><img alt="Gia Sư Hoa Ngữ Tân An" class="logo-image" id="headerLogo" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png"/><div class="logo-text"><h1>GIA SƯ HOA NGỮ TÂN AN</h1><p>109 Nguyễn Văn Tiếp, P.Long An, tỉnh Tây Ninh</p></div></div>
-<a class="home-button" href="#">⌂ Trở về trang chủ</a>
+<a class="home-button" href="DE_THI_HSK4.html">⌂ Trở về danh sách đề HSK4</a>
 </header>
 <div class="main-container">
   <aside class="sidebar-left"></aside>
@@ -4105,6 +4105,9 @@ const HSK4App = (() => {
   const exampleOptions = (values,answer,bare=false) => `<div class="options-list h31327-options ${bare?'':'h31327-text-options'}">${values.map((x,i)=>`<label class="option-plain h31327-option ${bare?'':'text-option-plain'} ${i===answer?'selected':''}"><input class="answer-radio" type="radio" ${i===answer?'checked':''} disabled><span class="option-label-text"><strong>${bare?esc(x):'ABCD'[i]}</strong>${bare?'':`<span class="text-option-hanzi">${esc(x)}</span>`}</span></label>`).join('')}</div>`;
   const exampleCard = inner => `<div class="question-answer-container example-stage hsk4-example-stage"><div class="question-header"><div class="question-number-box question-number-ribbon question-number-example">例如</div></div><div class="question-inner-scroll">${inner}</div></div>`;
   const exampleStarts = new Set([1,11,26,46,51,56,66,86,96]);
+  // Audio examples use their own route identifiers. The Part 2 example is
+  // never treated as question 11 by the listening timeline.
+  const exampleRoutes = Object.freeze({part2:11});
   const navAttr = target => exampleStarts.has(target)?`data-example="${target}"`:`data-nav="${target}"`;
   const frame = (n,inner) => `<div class="question-panel-outer"><div class="question-answer-container"><div class="question-header"><div class="question-number-box question-number-ribbon">${n}</div></div><div class="question-inner-scroll">${inner}${reviewBlock(n)}</div></div><div class="navigation-buttons nav-outside"><button class="btn btn-prev" ${exampleStarts.has(n)?`data-example="${n}"`:`data-nav="${n-1}"`} ${n===1?'disabled':''}>上一题</button><button class="btn btn-next" ${n===100?'data-finish-exam':navAttr(n+1)}>${n===100?'结束考试':'下一题'}</button></div></div>`;
   const audioPlan = Object.freeze({
@@ -4123,7 +4126,7 @@ const HSK4App = (() => {
     {key:'q8',start:326.448,end:353.715,type:'question',target:8},
     {key:'q9',start:353.715,end:386.153,type:'question',target:9},
     {key:'q10',start:386.153,end:418.187,type:'question',target:10},
-    {key:'ex2',start:418.187,end:492.87,type:'example',target:11},
+    {key:'ex2',start:418.187,end:492.87,type:'example',target:'part2'},
     {key:'q11',start:492.87,end:524.631,type:'question',target:11},
     {key:'q12',start:524.631,end:561.904,type:'question',target:12},
     {key:'q13',start:561.904,end:595.523,type:'question',target:13},
@@ -4363,13 +4366,14 @@ const HSK4App = (() => {
   }
   function show(n,forced=false){if(n<1||n>100||(listeningLocked&&!forced))return;const grouped=groupOf(n);const current=grouped?grouped.a:n;currentQuestion=current;const part=partOf(current);const label=grouped?`${grouped.a}-${grouped.b}`:String(current);renderSidebar(current);one('#qBadge').textContent=`第 ${label} 题`;one('#qTypeText').textContent=`第${part.start}-${part.end}题　${part.instruction}`;updateProgress();one('#contentBody').innerHTML=question(current);one('#contentBody').scrollTop=0;}
   function showExample(start,forced=false){
-    if(!exampleStarts.has(start)||(listeningLocked&&!forced))return;
-    const part=partOf(start);
-    renderSidebar(start,true);
+    const questionStart=typeof start==='string'?exampleRoutes[start]:start;
+    if(!exampleStarts.has(questionStart)||(listeningLocked&&!forced))return;
+    const part=partOf(questionStart);
+    renderSidebar(questionStart,true);
     one('#qBadge').textContent='例如';
     one('#qTypeText').textContent=`第${part.start}-${part.end}题　${part.instruction}`;
     updateProgress();
-    one('#contentBody').innerHTML=`<div class="question-panel-outer example-only">${exampleFor(start)}<div class="navigation-buttons nav-outside"><button class="btn btn-prev" data-nav="${start-1}" ${start===1?'disabled':''}>上一题</button><button class="btn btn-next" data-nav="${start}">下一题</button></div></div>`;
+    one('#contentBody').innerHTML=`<div class="question-panel-outer example-only">${exampleFor(questionStart)}<div class="navigation-buttons nav-outside"><button class="btn btn-prev" data-nav="${questionStart-1}" ${questionStart===1?'disabled':''}>上一题</button><button class="btn btn-next" data-nav="${questionStart}">下一题</button></div></div>`;
     one('#contentBody').scrollTop=0;
   }
   const EXAM_DURATION_SECONDS=105*60;
@@ -4389,7 +4393,9 @@ const HSK4App = (() => {
       if(remainingSeconds===0){stopTimer();HSK4Portal.showTimeoutEnd();}
     },250);
   }
-  const LISTENING_DISPLAY_LEAD_SECONDS=.75;
+  // The screen changes on the exact cue boundary.  Advancing it early makes
+  // the next question appear while its number is still being read aloud.
+  const LISTENING_DISPLAY_LEAD_SECONDS=0;
   let listeningSyncHandle=null;
   const stageAtTime = time => {
     const displayTime=Math.max(0,Number(time||0)+LISTENING_DISPLAY_LEAD_SECONDS);
