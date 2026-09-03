@@ -402,21 +402,55 @@
 </div>
 </div>
 <script>
+// From bài 6 trở đi yêu cầu mật khẩu trước khi chuyển hướng
+var PROTECTED_PASSWORD = 'thaychien12';
+
+function askPasswordAndGo(url) {
+    var pwd = prompt('Vui lòng nhập mật khẩu để tiếp tục:');
+    if (pwd === PROTECTED_PASSWORD) {
+        window.location.href = url;
+    } else if (pwd !== null) {
+        alert('Mật khẩu không đúng.');
+    }
+}
+
 document.querySelectorAll('.lesson-card:not(.coming-soon)[data-lesson]').forEach(function(card) {
     var link = card.querySelector('.lesson-link');
+    var lessonNum = parseInt(card.getAttribute('data-lesson'), 10) || 0;
+    var requiresPassword = lessonNum >= 6; // từ bài 6 trở đi
+
+    function go() {
+        window.location.href = link.href;
+    }
 
     card.addEventListener('click', function(event) {
         if (!event.target.closest('a')) {
-            window.location.href = link.href;
+            if (requiresPassword) {
+                askPasswordAndGo(link.href);
+            } else {
+                go();
+            }
         }
     });
 
     card.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            window.location.href = link.href;
+            if (requiresPassword) {
+                askPasswordAndGo(link.href);
+            } else {
+                go();
+            }
         }
     });
+
+    // Ngăn việc click trực tiếp vào <a> cho các bài được bảo vệ, để vẫn yêu cầu mật khẩu
+    if (requiresPassword && link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            askPasswordAndGo(link.href);
+        });
+    }
 });
 </script>
 </body>
