@@ -4,6 +4,32 @@ let screen='01', questionIndex=0, answers={}, marks=new Set(), submitted=false;
 const deadlines={};
 const sound=new Audio(ORIGINAL.audio['01']);
 let micRecorder, micStream, recordedSound;
+// Listening synchronization cues measured from the embedded HSK4 listening audio.
+// Multi-question passages share one saved question page (20-21, 22-23, ...).
+const LISTENING_CUES=[
+ [0,1],
+ [107.563667,2],[139.780958,3],[171.499500,4],[204.948625,5],
+ [237.986750,6],[270.015750,7],[305.444833,8],[341.909667,9],
+ [382.854250,10],[420.399875,11],[457.367000,12],[499.741958,13],[533.521667,14],
+ [576.594583,15],[631.111458,16],[669.180167,17],[710.666542,18],[748.157375,19],
+ [788.640750,20],[858.951625,22],[929.925167,24],[995.546833,26],[1064.938292,28],[1137.240833,30]
+];
+let listeningActive=false;
+function listeningQuestionIndex(t){
+ let id=1;
+ for(const cue of LISTENING_CUES){if(t+0.03>=cue[0])id=cue[1];else break}
+ return ORIGINAL.questions.findIndex(q=>q.ids.includes(id));
+}
+function syncListeningQuestion(){
+ if(!listeningActive||screen!=='08')return;
+ const idx=listeningQuestionIndex(sound.currentTime);
+ if(idx<0||idx===questionIndex)return;
+ questionIndex=idx;
+ const d=frame.contentDocument;
+ if(d&&d.querySelector('#frmContent'))loadQuestion(d);
+}
+sound.addEventListener('timeupdate',syncListeningQuestion);
+sound.addEventListener('seeking',syncListeningQuestion);
 function fit(){const scale=Math.min(innerWidth/1875,innerHeight/927);frame.style.transform=`scale(${scale})`;frame.style.left=(innerWidth-1875*scale)/2+'px';frame.style.top=(innerHeight-927*scale)/2+'px'}
 addEventListener('resize',fit);fit();
 function bind(doc,selector,fn){doc.querySelectorAll(selector).forEach(el=>{el.style.cursor='pointer';el.setAttribute('tabindex','0');el.onclick=e=>{e.preventDefault();fn(e,el)};el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}}})}
@@ -34,7 +60,11 @@ function wire(d,name){
  if(name==='05'){bind(d,'#btnok',()=>show(submitted?'result':'06'));return}
  if(name==='06'){setTimeout(()=>{if(screen==='06')show('07')},700);return}
  if(name==='07'){
-  bind(d,'#btnNext',()=>{sound.onended=()=>{if(screen==='08'){questionIndex=ORIGINAL.questions.findIndex(q=>q.ids[0]>=33);loadQuestion(frame.contentDocument)}};sound.src=ORIGINAL.audio['08'];play();show('08')});return;
+  bind(d,'#btnNext',()=>{
+   listeningActive=true;questionIndex=0;sound.src=ORIGINAL.audio['08'];sound.currentTime=0;
+   sound.onended=()=>{listeningActive=false;if(screen==='08'){questionIndex=ORIGINAL.questions.findIndex(q=>q.ids[0]>=33);loadQuestion(frame.contentDocument)}};
+   play();show('08')
+  });return;
  }
  if(name==='result'){d.querySelectorAll('#result tr').forEach(tr=>{const cells=tr.querySelectorAll('td');if(cells.length>2)cells[2].textContent='—'});bind(d,'#btnok',()=>show('over'));bind(d,'#btnShowInfo',()=>{show('05')});return}
  if(name==='over'){sound.pause();return}
@@ -55,6 +85,7 @@ function wire(d,name){
  }
 }
 function loadQuestion(d){
+ if(listeningActive){const synced=listeningQuestionIndex(sound.currentTime);if(synced>=0)questionIndex=synced}
  const q=ORIGINAL.questions[questionIndex],inner=d.querySelector('#frmContent');
  inner.onload=()=>{
   const doc=inner.contentDocument;
@@ -72,7 +103,7 @@ function loadQuestion(d){
  d.querySelector('#btnNextQuestion').style.display=questionIndex<ORIGINAL.questions.length-1?'inline-block':'none';
  d.querySelectorAll('#navQuestion .nav').forEach(el=>{const current=q.ids.includes(parseInt(el.id,10));el.classList.toggle('exam_listbox_Selected',current);el.classList.toggle('questionItemexam_listbox-2',!current)});
  const current=Array.from(d.querySelectorAll('#navQuestion .nav')).find(el=>parseInt(el.id,10)===q.ids[0]);if(current){let p=current.parentElement;while(p&&p.id!=='navQuestion'){p.style.display='block';p=p.parentElement}current.scrollIntoView({block:'nearest'})}
- if(q.ids[0]>32)sound.pause();
+ if(q.ids[0]>32&&!listeningActive)sound.pause();
  const part=q.ids[0]<=32?'listening':q.ids[0]<=64?'reading':'writing';
  if(part!=='listening'&&!deadlines[part])deadlines[part]=Date.now()+(part==='reading'?30:25)*60000;
  status(d);clock();
