@@ -242,11 +242,70 @@
   const audio = new AudioController(ORIGINAL.audio);
   const scoring = new ScoringEngine(CONFIG.answerKey, questions);
 
+  function isMobileDisplay() { return innerWidth < 900 || innerHeight < 500; }
+  function isExamDisplayScreen() { return state.screen === '08' || state.screen === 'CUOI' || state.screen === 'KET THUC 2'; }
   function fitFrame() {
+    if (isExamDisplayScreen() && !isMobileDisplay()) {
+      frame.style.width = innerWidth + 'px';
+      frame.style.height = innerHeight + 'px';
+      frame.style.transform = 'none';
+      frame.style.left = '0px';
+      frame.style.top = '0px';
+      return;
+    }
     const scale = Math.min(innerWidth / CONFIG.designWidth, innerHeight / CONFIG.designHeight);
+    frame.style.width = CONFIG.designWidth + 'px';
+    frame.style.height = CONFIG.designHeight + 'px';
     frame.style.transform = `scale(${scale})`;
     frame.style.left = (innerWidth - CONFIG.designWidth * scale) / 2 + 'px';
     frame.style.top = (innerHeight - CONFIG.designHeight * scale) / 2 + 'px';
+  }
+
+  function layoutMainAdaptive(doc) {
+    if (!doc || isMobileDisplay()) return;
+    const w = doc.documentElement.clientWidth || doc.body.clientWidth;
+    const h = doc.documentElement.clientHeight || doc.body.clientHeight;
+    const logo = doc.querySelector('.nlogo');
+    const copy = doc.querySelector('.copyright');
+    const box = doc.getElementById('ncontent');
+    const nav = doc.getElementById('navQuestion');
+    const right = doc.getElementById('mainright');
+    const photo = doc.getElementById('photoright');
+    const clock = doc.getElementById('divClock');
+    if (!box || !nav || !right) return;
+    const lh = logo ? logo.clientHeight : 0;
+    const ch = copy ? copy.clientHeight : 0;
+    box.style.width = (w * 0.6) + 'px';
+    box.style.height = Math.max(0, h - lh - ch - 160) + 'px';
+    box.style.left = ((w - box.offsetWidth) / 2) + 'px';
+    box.style.top = (lh + 50) + 'px';
+    nav.style.width = (w * 0.15) + 'px';
+    doc.querySelectorAll('.navbar-width').forEach(x => x.style.width = nav.style.width);
+    nav.style.height = (h * 0.7) + 'px';
+    nav.style.left = ((w - box.offsetWidth) / 2 - nav.offsetWidth - 20) + 'px';
+    nav.style.top = box.offsetTop + 'px';
+    if (photo) {
+      photo.style.top = (box.offsetTop - 20) + 'px';
+      if (photo.style.display === 'none' || doc.defaultView.getComputedStyle(photo).display === 'none') photo.style.height = '1px';
+    }
+    right.style.width = (w * 0.15) + 'px';
+    right.style.right = ((w - box.offsetWidth) / 2 - right.offsetWidth - 20) + 'px';
+    right.style.top = ((photo ? photo.offsetTop + photo.offsetHeight : box.offsetTop) + 20) + 'px';
+    if (clock) {
+      clock.style.top = (box.offsetTop + 5) + 'px';
+      clock.style.right = (w - right.offsetLeft + 40) + 'px';
+      const bar = clock.nextElementSibling;
+      if (bar) {
+        bar.style.top = (box.offsetTop + 28) + 'px';
+        bar.style.left = (right.offsetLeft - bar.offsetWidth - 40) + 'px';
+      }
+    }
+  }
+
+  function relayoutDisplay() {
+    const doc = frame.contentDocument;
+    if (!doc || !isExamDisplayScreen()) return;
+    layoutMainAdaptive(doc);
   }
 
   function bind(doc, selector, handler) {
@@ -268,8 +327,10 @@
 
   function show(screenName) {
     state.screen = screenName;
+    fitFrame();
     frame.onload = () => {
       wireScreen(frame.contentDocument, screenName);
+      relayoutDisplay();
       updateDisplayClock();
     };
     frame.srcdoc = ORIGINAL.pages[screenName];
@@ -850,7 +911,7 @@
     }
   });
 
-  addEventListener('resize', fitFrame);
+  addEventListener('resize', () => { fitFrame(); relayoutDisplay(); });
   setInterval(updateDisplayClock, 1000);
   fitFrame();
   show('01');
