@@ -646,9 +646,8 @@
       bind(doc, '.marktag', (event, el) => {
         event.stopPropagation();
         const key = el.id.replace(/^_img/, '');
-        const marked = state.toggleMark(key);
-        el.classList.toggle('unmarked', !marked);
-        el.classList.toggle('marked', marked);
+        state.toggleMark(key);
+        updateMarkStatus(doc, doc.querySelector('#frmContent')?.contentDocument);
       });
 
       bind(doc, '#btnShowAnswerCard', () => {
@@ -666,6 +665,41 @@
 
       loadQuestion(doc);
     }
+  }
+
+  function markKeyForItem(item) {
+    if (!item?.ids?.length) return '';
+    const first = item.ids[0];
+    const last = item.ids[item.ids.length - 1];
+    return item.ids.length === 1 ? String(first) : `${first}-${last}`;
+  }
+
+  function updateMarkStatus(doc, questionDoc = null) {
+    if (!doc) return;
+
+    doc.querySelectorAll('#navQuestion .marktag').forEach(el => {
+      const key = el.id.replace(/^_img/, '');
+      const marked = state.marks.has(key);
+      el.classList.toggle('unmarked', !marked);
+      el.classList.toggle('marked', marked);
+    });
+
+    const item = questions.at(state.questionIndex);
+    const innerDoc = questionDoc || doc.querySelector('#frmContent')?.contentDocument;
+    const questionMark = innerDoc?.getElementById('questionMark');
+    if (!item || !questionMark) return;
+
+    const key = markKeyForItem(item);
+    const marked = state.marks.has(key);
+    questionMark.classList.toggle('question-mark-n', !marked);
+    questionMark.classList.toggle('question-mark-y', marked);
+
+    questionMark.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      state.toggleMark(key);
+      updateMarkStatus(doc, innerDoc);
+    };
   }
 
   function restoreAnswerControls(questionDoc) {
@@ -715,7 +749,10 @@
     const inner = doc.querySelector('#frmContent');
     if (!item || !inner) return;
 
-    inner.onload = () => restoreAnswerControls(inner.contentDocument);
+    inner.onload = () => {
+      restoreAnswerControls(inner.contentDocument);
+      updateMarkStatus(doc, inner.contentDocument);
+    };
     inner.srcdoc = item.html;
 
     updatePagingButtons(doc);
@@ -739,6 +776,7 @@
     }
 
     updateNavigationStatus(doc);
+    updateMarkStatus(doc);
     updateClock();
   }
 
