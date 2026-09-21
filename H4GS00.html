@@ -10,7 +10,8 @@
     storageKey: 'hsk-simulator-submission-v1',
     readingMinutes: 30,
     writingMinutes: 25,
-    downloadDelayMs: 1800,
+    downloadDurationMs: 6500,
+    preExamCountdownMinutes: 5,
     objectiveLastQuestion: 64,
     writingFirstQuestion: 65,
     listeningLastQuestion: 32,
@@ -38,6 +39,9 @@
       this.listeningCueIndex = -1;
       this.deadlines = Object.create(null);
       this.fontSize = 14;
+      this.candidateName = '';
+      this.candidateEmail = '';
+      this.preExamDeadline = null;
     }
 
     setAnswer(id, value) {
@@ -72,6 +76,8 @@
           answers: this.answers,
           marks: Array.from(this.marks),
           submitted: this.submitted,
+          candidateName: this.candidateName,
+          candidateEmail: this.candidateEmail,
           ...extra
         }));
       } catch (_) {}
@@ -262,8 +268,161 @@
 
   function show(screenName) {
     state.screen = screenName;
-    frame.onload = () => wireScreen(frame.contentDocument, screenName);
+    frame.onload = () => {
+      wireScreen(frame.contentDocument, screenName);
+      updateDisplayClock();
+    };
     frame.srcdoc = ORIGINAL.pages[screenName];
+  }
+
+  function pad2(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  function formatLocalDateTime(date) {
+    return date.getFullYear() + '-' + pad2(date.getMonth() + 1) + '-' + pad2(date.getDate()) +
+      ' ' + pad2(date.getHours()) + ':' + pad2(date.getMinutes()) + ':' + pad2(date.getSeconds());
+  }
+
+  function updateDisplayClock() {
+    if (state.screen === '08') {
+      updateClock();
+      return;
+    }
+
+    const doc = frame.contentDocument;
+    const clock = doc?.getElementById('divClock');
+    if (!clock) return;
+
+    if (state.screen === '05') {
+      if (!state.preExamDeadline) {
+        state.preExamDeadline = Date.now() + CONFIG.preExamCountdownMinutes * 60_000;
+      }
+      const seconds = Math.max(0, Math.ceil((state.preExamDeadline - Date.now()) / 1000));
+      const hh = pad2(Math.floor(seconds / 3600));
+      const mm = pad2(Math.floor((seconds % 3600) / 60));
+      const ss = pad2(seconds % 60);
+      clock.innerHTML = '离考试开始还剩：<font color="red">' + hh + ':' + mm + ':' + ss + '</font>';
+    } else {
+      clock.textContent = formatLocalDateTime(new Date());
+    }
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(value || '').trim());
+  }
+
+  function styleCandidateInput(input) {
+    input.style.width = '360px';
+    input.style.height = '32px';
+    input.style.lineHeight = '32px';
+    input.style.boxSizing = 'border-box';
+    input.style.padding = '2px 8px';
+    input.style.border = '1px solid #d5ddc8';
+    input.style.borderRadius = '3px';
+    input.style.fontFamily = '"Microsoft YaHei", 微软雅黑';
+    input.style.fontSize = '15px';
+    input.style.background = '#fff';
+  }
+
+  function wireCandidateForm(doc) {
+    const nameHost = doc.getElementById('name');
+    const nameRow = nameHost?.closest('tr');
+    if (!nameHost || !nameRow) return;
+
+    const nameInput = doc.createElement('input');
+    nameInput.id = 'candidateNameInput';
+    nameInput.type = 'text';
+    nameInput.required = true;
+    nameInput.autocomplete = 'name';
+    nameInput.value = state.candidateName;
+    nameInput.placeholder = '请输入姓名';
+    styleCandidateInput(nameInput);
+    nameHost.replaceWith(nameInput);
+
+    const emailRow = doc.createElement('tr');
+    const labelCell = doc.createElement('td');
+    labelCell.textContent = '邮箱： ';
+    const valueCell = doc.createElement('td');
+    const emailInput = doc.createElement('input');
+    emailInput.id = 'candidateEmailInput';
+    emailInput.type = 'email';
+    emailInput.required = true;
+    emailInput.autocomplete = 'email';
+    emailInput.inputMode = 'email';
+    emailInput.value = state.candidateEmail;
+    emailInput.placeholder = 'name@example.com';
+    styleCandidateInput(emailInput);
+    valueCell.appendChild(emailInput);
+    emailRow.append(labelCell, valueCell);
+    nameRow.insertAdjacentElement('afterend', emailRow);
+
+    const validate = () => {
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      nameInput.setCustomValidity(name ? '' : '请输入姓名');
+      emailInput.setCustomValidity(isValidEmail(email) ? '' : '请输入正确的邮箱格式，例如 name@example.com');
+      if (!nameInput.reportValidity()) return false;
+      if (!emailInput.reportValidity()) return false;
+      state.candidateName = name;
+      state.candidateEmail = email;
+      state.persist();
+      return true;
+    };
+
+    bind(doc, '#btnok', () => {
+      if (!validate()) return;
+      show(state.submitted ? 'result' : '06');
+    });
+  }
+
+  function applyCandidateIdentity(doc) {
+    if (!doc || !state.candidateName) return;
+    const name = doc.getElementById('name');
+    if (name) name.textContent = state.candidateName;
+  }
+
+  function startExam() {
+    state.activeSection = 'listening';
+    state.listeningActive = true;
+    state.listeningCueIndex = -1;
+    state.questionIndex = questions.firstIndexForSection('listening');
+    audio.setSource('08', true);
+    audio.play();
+    show('08');
+  }
+
+  function startDownloadProgress(doc) {
+    const bar = doc.getElementById('processbar');
+    const value = doc.getElementById('processValue');
+    const status = doc.getElementById('status');
+    const next = doc.getElementById('btnNext');
+    if (!bar || !value || !status || !next) return;
+
+    next.style.display = 'none';
+    status.textContent = '正在下载';
+    let startedAt = 0;
+
+    const tick = timestamp => {
+      if (state.screen !== '06') return;
+      if (!startedAt) startedAt = timestamp;
+      const ratio = Math.max(0, Math.min(1, (timestamp - startedAt) / CONFIG.downloadDurationMs));
+      const percent = Math.min(100, Math.max(2, Math.floor(2 + ratio * 98)));
+      bar.style.width = (550 * percent / 100) + 'px';
+      value.textContent = percent + '%';
+
+      if (percent < 100) {
+        requestAnimationFrame(tick);
+        return;
+      }
+
+      bar.style.width = '550px';
+      value.textContent = '100%';
+      status.textContent = '下载完毕，请点击下一步进行考试.';
+      next.style.display = 'inline-block';
+    };
+
+    requestAnimationFrame(tick);
   }
 
   function listeningCueInfo(timeSeconds) {
@@ -417,25 +576,18 @@
     }
 
     if (name === '05') {
-      bind(doc, '#btnok', () => show(state.submitted ? 'result' : '06'));
+      wireCandidateForm(doc);
       return;
     }
 
     if (name === '06') {
-      setTimeout(() => { if (state.screen === '06') show('07'); }, CONFIG.downloadDelayMs);
+      bind(doc, '#btnNext', startExam);
+      startDownloadProgress(doc);
       return;
     }
 
     if (name === '07') {
-      bind(doc, '#btnNext', () => {
-        state.activeSection = 'listening';
-        state.listeningActive = true;
-        state.listeningCueIndex = -1;
-        state.questionIndex = questions.firstIndexForSection('listening');
-        audio.setSource('08', true);
-        audio.play();
-        show('08');
-      });
+      bind(doc, '#btnNext', startExam);
       return;
     }
 
@@ -452,6 +604,7 @@
     }
 
     if (name === '08') {
+      applyCandidateIdentity(doc);
       applySectionAccess(doc);
 
       bind(doc, '#btnLastQuestion', () => stepQuestion(doc, -1));
@@ -660,7 +813,7 @@
   });
 
   addEventListener('resize', fitFrame);
-  setInterval(updateClock, 1000);
+  setInterval(updateDisplayClock, 1000);
   fitFrame();
   show('01');
 })();
