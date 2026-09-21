@@ -16,41 +16,133 @@ const ORIGINAL={
   icons:Object.fromEntries(Object.entries(PACKED.icons||{}).map(([k,v])=>[k,restore(v)]))
 };
 
-const frame=document.getElementById('examFrame');document.documentElement.style.background='#fff';document.body.style.background='#fff';
-let screen='01',qi=0,answers={},marks=new Set(),fontSize=14,readingDeadline=0,writingDeadline=0;
+
+const frame=document.getElementById('examFrame');
+document.documentElement.style.background='#fff';
+document.body.style.background='#fff';
+
+const CONFIG=Object.freeze({
+  designWidth:1920,
+  designHeight:953,
+  listeningLast:30,
+  readingLast:60,
+  writingLast:70,
+  listeningReviewSeconds:4*60,
+  readingSeconds:30*60,
+  writingSeconds:20*60,
+  preExamSeconds:5*60,
+  downloadDurationMs:6500,
+  listeningDurationFallback:1447.864,
+  storageKey:'hsk-simulator-h3-v1',
+  answerKey:Object.freeze({})
+});
+
+const state={
+  screen:'01',
+  qi:0,
+  answers:Object.create(null),
+  marks:new Set(),
+  phase:'pre',
+  fontSize:14,
+  candidateName:'',
+  candidateEmail:'',
+  candidateSex:'男',
+  candidateNationality:'',
+  preExamDeadline:0,
+  sectionDeadline:0,
+  downloadRunId:0,
+  submitted:false
+};
+
 const sound=new Audio(ORIGINAL.audio||'');
 const testSound=new Audio(ORIGINAL.audio||'');
-let micStream=null,micRecorder=null,micChunks=[],recordedSound=null;
-const qByNav=new Map(ORIGINAL.questions.map((q,i)=>[q.nav,i]));
-const qById=new Map(); ORIGINAL.questions.forEach((q,i)=>q.ids.forEach(n=>qById.set(n,i)));
+let micStream=null,micRecorder=null,micChunks=[],recordedSound=null,recordedUrl=null;
+const qByNav=new Map(ORIGINAL.questions.map((q,i)=>[String(q.nav),i]));
+const qById=new Map();
+ORIGINAL.questions.forEach((q,i)=>q.ids.forEach(n=>qById.set(Number(n),i)));
 
 function fit(){
-  const W=1920,H=953,s=Math.min(innerWidth/W,innerHeight/H);
-  frame.style.width=W+'px'; frame.style.height=H+'px';
+  const W=CONFIG.designWidth,H=CONFIG.designHeight,s=Math.min(innerWidth/W,innerHeight/H);
+  frame.style.width=W+'px';frame.style.height=H+'px';
   frame.style.transform=`scale(${s})`;
   frame.style.left=(innerWidth-W*s)/2+'px';
   frame.style.top=(innerHeight-H*s)/2+'px';
 }
-addEventListener('resize',fit); fit();
+addEventListener('resize',fit);fit();
 
 function bind(el,fn){
   if(!el)return;
+  el.removeAttribute('onclick');
   el.style.cursor='pointer';
-  el.onclick=e=>{e.preventDefault();fn(e,el)};
+  el.onclick=e=>{e.preventDefault();e.stopPropagation();fn(e,el)};
 }
 function all(d,sel,fn){d.querySelectorAll(sel).forEach(fn)}
-function currentQ(){return ORIGINAL.questions[qi]}
+function qCurrent(){return ORIGINAL.questions[state.qi]||null}
+function qSection(q){
+  const n=Number(q?.ids?.[0]||0);
+  if(n<=CONFIG.listeningLast)return'listening';
+  if(n<=CONFIG.readingLast)return'reading';
+  return'writing';
+}
+function activeSection(){
+  if(state.phase==='listening'||state.phase==='listeningReview')return'listening';
+  if(state.phase==='reading')return'reading';
+  if(state.phase==='writing')return'writing';
+  return null;
+}
+function sectionBounds(section){
+  if(section==='listening')return[1,CONFIG.listeningLast];
+  if(section==='reading')return[CONFIG.listeningLast+1,CONFIG.readingLast];
+  return[CONFIG.readingLast+1,CONFIG.writingLast];
+}
+function allowedQuestion(q){return !!q&&qSection(q)===activeSection()}
+function firstIndexFor(section){
+  return ORIGINAL.questions.findIndex(q=>qSection(q)===section);
+}
+function lastIndexFor(section){
+  for(let i=ORIGINAL.questions.length-1;i>=0;i--)if(qSection(ORIGINAL.questions[i])===section)return i;
+  return -1;
+}
 function show(name){
-  screen=name; fit();
-  frame.onload=()=>wire(frame.contentDocument,name);
+  state.screen=name;fit();
+  frame.onload=()=>{wire(frame.contentDocument,name);updateOuterClock()};
   frame.srcdoc=ORIGINAL.pages[name]||'';
 }
-function setClockNow(d){
-  const el=d.getElementById('divClock'); if(!el)return;
-  const x=new Date(),p=n=>String(n).padStart(2,'0');
-  if(screen!=='main') el.textContent=`${x.getFullYear()}-${p(x.getMonth()+1)}-${p(x.getDate())} ${p(x.getHours())}:${p(x.getMinutes())}:${p(x.getSeconds())}`;
+function pad2(n){return String(n).padStart(2,'0')}
+function fmtDate(x){
+  return x.getFullYear()+'-'+pad2(x.getMonth()+1)+'-'+pad2(x.getDate())+' '+pad2(x.getHours())+':'+pad2(x.getMinutes())+':'+pad2(x.getSeconds());
 }
-setInterval(()=>{try{if(screen!=='main')setClockNow(frame.contentDocument);else clockMain()}catch(e){}},1000);
+function fmtMMSS(sec){
+  sec=Math.max(0,Math.ceil(sec));
+  return pad2(Math.floor(sec/60))+':'+pad2(sec%60);
+}
+function isValidEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v||'').trim())}
+function alertInFrame(d,msg){
+  try{d.defaultView.alert(msg)}catch(_){alert(msg)}
+}
+function persist(){
+  try{
+    localStorage.setItem(CONFIG.storageKey,JSON.stringify({
+      answers:state.answers,marks:Array.from(state.marks),
+      candidateName:state.candidateName,candidateEmail:state.candidateEmail,
+      candidateSex:state.candidateSex,candidateNationality:state.candidateNationality,
+      submitted:state.submitted
+    }));
+  }catch(_){}
+}
+function updateOuterClock(){
+  const d=frame.contentDocument;if(!d)return;
+  const c=d.getElementById('divClock');if(!c)return;
+  if(state.screen==='main'){updateMainClock();return}
+  if(state.screen==='05'){
+    if(!state.preExamDeadline)state.preExamDeadline=Date.now()+CONFIG.preExamSeconds*1000;
+    const left=Math.max(0,Math.ceil((state.preExamDeadline-Date.now())/1000));
+    c.innerHTML='离考试开始还剩：<font color="red">'+pad2(Math.floor(left/3600))+':'+pad2(Math.floor((left%3600)/60))+':'+pad2(left%60)+'</font>';
+    return;
+  }
+  c.textContent=fmtDate(new Date());
+}
+setInterval(()=>{try{updateOuterClock()}catch(_){}},1000);
 
 function wire(d,name){
   if(!d)return;
@@ -60,9 +152,13 @@ function wire(d,name){
   }
   if(name==='02'){
     const play=d.getElementById('btnPlay'),pause=d.getElementById('btnPause');
-    bind(play,()=>{testSound.currentTime=0;testSound.play().catch(()=>{}); if(play)play.style.display='none'; if(pause)pause.style.display='inline-block'});
-    bind(pause,()=>{testSound.pause(); if(play)play.style.display='inline-block'; if(pause)pause.style.display='none'});
-    bind(d.getElementById('btnReTest'),()=>{});
+    bind(play,()=>{
+      try{testSound.currentTime=0}catch(_){}
+      testSound.play().catch(()=>{});
+      if(play)play.style.display='none';if(pause)pause.style.display='inline-block';
+    });
+    bind(pause,()=>{testSound.pause();if(play)play.style.display='inline-block';if(pause)pause.style.display='none'});
+    bind(d.getElementById('btnReTest'),()=>{try{testSound.currentTime=0}catch(_){}});
     bind(d.getElementById('btnNext'),()=>{testSound.pause();show('03')});
     bind(d.getElementById('btncancal'),()=>{testSound.pause();show('01')});
     return;
@@ -70,22 +166,23 @@ function wire(d,name){
   if(name==='03'){
     bind(d.getElementById('btnSkip'),()=>show('04'));
     bind(d.getElementById('btnNext'),()=>show('04'));
-    bind(d.getElementById('playm_a'),()=>{testSound.currentTime=0;testSound.play().catch(()=>{});});
+    bind(d.getElementById('playm_a'),()=>{try{testSound.currentTime=0}catch(_){};testSound.play().catch(()=>{})});
     bind(d.getElementById('record_a'),async()=>{
       try{
         if(micRecorder&&micRecorder.state==='recording'){micRecorder.stop();return}
+        if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==='undefined')return;
         micStream=await navigator.mediaDevices.getUserMedia({audio:true});
         micChunks=[];
         micRecorder=new MediaRecorder(micStream);
         micRecorder.ondataavailable=e=>{if(e.data&&e.data.size)micChunks.push(e.data)};
         micRecorder.onstop=()=>{
-          const blob=new Blob(micChunks,{type:micRecorder.mimeType||'audio/webm'});
-          if(recordedSound)URL.revokeObjectURL(recordedSound.src);
-          recordedSound=new Audio(URL.createObjectURL(blob));
-          micStream?.getTracks().forEach(t=>t.stop());
+          if(recordedUrl)URL.revokeObjectURL(recordedUrl);
+          recordedUrl=URL.createObjectURL(new Blob(micChunks,{type:micRecorder.mimeType||'audio/webm'}));
+          recordedSound=new Audio(recordedUrl);
+          micStream?.getTracks().forEach(t=>t.stop());micStream=null;
         };
         micRecorder.start();
-      }catch(e){}
+      }catch(_){}
     });
     bind(d.getElementById('playf_a'),()=>recordedSound?.play().catch(()=>{}));
     return;
@@ -94,59 +191,122 @@ function wire(d,name){
     const accept=d.getElementById('cbxaccept'),label=d.getElementById('lbaccept');
     bind(label,()=>{if(accept)accept.checked=!accept.checked});
     const subj=d.getElementById('subject_sign');
-    if(subj){subj.value='H-3'; subj.dispatchEvent(new Event('change',{bubbles:true}))}
-    bind(d.getElementById('btnok'),()=>show('05'));
+    if(subj){
+      subj.value='H-3';
+      const fake=subj.parentElement?.querySelector('.layui-select-title input');
+      if(fake)fake.value='HSK三级';
+    }
+    const nameInput=d.getElementById('name'),emailInput=d.getElementById('email');
+    if(nameInput)nameInput.value=state.candidateName;
+    if(emailInput)emailInput.value=state.candidateEmail;
+    bind(d.getElementById('btnok'),()=>{
+      const nm=String(nameInput?.value||'').trim();
+      const em=String(emailInput?.value||'').trim();
+      if(accept&&!accept.checked){alertInFrame(d,'请先确认已阅读考场须知。');return}
+      if(!nm){alertInFrame(d,'请输入姓名。');nameInput?.focus();return}
+      if(!isValidEmail(em)){alertInFrame(d,'请输入正确的邮箱格式，例如 student@example.com。');emailInput?.focus();return}
+      state.candidateName=nm;
+      state.candidateEmail=em;
+      const sex=d.getElementById('sex')?.value;
+      state.candidateSex=sex==='2'?'女':'男';
+      state.candidateNationality=String(d.getElementById('nationality')?.value||'').trim();
+      persist();show('05');
+    });
     bind(d.getElementById('btncancal'),()=>show('03'));
     return;
   }
   if(name==='05'){
+    const n=d.getElementById('name'),s=d.getElementById('sex'),course=d.getElementById('examCourse');
+    if(n)n.textContent=state.candidateName||n.textContent;
+    if(s)s.textContent=state.candidateSex||s.textContent;
+    if(course)course.textContent='HSK三级';
+    if(!state.preExamDeadline)state.preExamDeadline=Date.now()+CONFIG.preExamSeconds*1000;
     bind(d.getElementById('btnok'),()=>show('download'));
     bind(d.getElementById('btnWait'),()=>{});
     return;
   }
-  if(name==='download'){
-    const bar=d.getElementById('processbar')||d.querySelector('.paper-down-progress-f');
-    const val=d.getElementById('processValue');
-    if(bar)bar.style.width='100%';
-    if(val)val.textContent='100%';
-    bind(d.getElementById('btnNext'),()=>show('main'));
-    bind(d.getElementById('btnRedownload'),()=>{});
-    return;
-  }
-  if(name==='result'){
-    bind(d.getElementById('btnShowInfo'),()=>show('main'));
-    bind(d.getElementById('btnok'),()=>show('over'));
-    return;
-  }
+  if(name==='download'){startDownload(d);return}
+  if(name==='result'){renderResult(d);return}
   if(name==='over'){sound.pause();return}
   if(name!=='main')return;
+  wireMain(d);
+}
 
-  // The visible main screen is the original saved HSK3 DOM.
+function startDownload(d){
+  const run=++state.downloadRunId;
+  const bar=d.getElementById('processbar')||d.querySelector('.paper-down-progress-f');
+  const val=d.getElementById('processValue');
+  const status=d.getElementById('status');
+  const next=d.getElementById('btnNext');
+  const redl=d.getElementById('btnRedownload');
+  if(next)next.style.display='none';
+  if(redl)redl.style.display='none';
+  if(bar)bar.style.width='11px';
+  if(val)val.textContent='2%';
+  if(status)status.textContent='试卷下载中，请稍候...';
+  const started=performance.now();
+  const tick=now=>{
+    if(run!==state.downloadRunId||state.screen!=='download')return;
+    const t=Math.min(1,(now-started)/CONFIG.downloadDurationMs);
+    const pct=Math.max(2,Math.min(100,Math.round(2+98*t)));
+    if(bar)bar.style.width=(550*pct/100)+'px';
+    if(val)val.textContent=pct+'%';
+    if(t<1){requestAnimationFrame(tick);return}
+    if(status)status.textContent='下载完毕，请点击下一步进行考试.';
+    if(next)next.style.display='inline-block';
+    bind(next,()=>beginExam());
+    bind(redl,()=>startDownload(d));
+  };
+  requestAnimationFrame(tick);
+}
+
+function beginExam(){
+  state.phase='listening';
+  state.sectionDeadline=0;
+  state.qi=Math.max(0,firstIndexFor('listening'));
+  state.submitted=false;
+  try{sound.currentTime=0}catch(_){}
+  show('main');
+}
+
+function wireMain(d){
+  injectCandidateInfo(d);
+  applySectionLocks(d);
+
   all(d,'#navQuestion .nav',el=>bind(el,()=>{
-    const i=qByNav.get(el.id);
-    if(i!==undefined){qi=i;loadQuestion(d)}
+    const i=qByNav.get(String(el.id));
+    if(i===undefined)return;
+    const q=ORIGINAL.questions[i];
+    if(!allowedQuestion(q))return;
+    state.qi=i;loadQuestion(d);
   }));
   all(d,'.marktag',el=>bind(el,(e,x)=>{
     e.stopPropagation();
-    toggleMark(x.id.replace(/^_img/,''),d);
+    const key=String(x.id||'').replace(/^_img/,'');
+    toggleMark(key,d);
   }));
-  bind(d.getElementById('btnLastQuestion'),()=>{if(qi>0){qi--;loadQuestion(d)}});
-  bind(d.getElementById('btnNextQuestion'),()=>{if(qi<ORIGINAL.questions.length-1){qi++;loadQuestion(d)}});
-  bind(d.getElementById('btnok'),()=>{sound.pause();show('result')});
+  bind(d.getElementById('btnLastQuestion'),()=>navigate(-1,d));
+  bind(d.getElementById('btnNextQuestion'),()=>navigate(1,d));
+  bind(d.getElementById('btnok'),()=>submitExam());
   bind(d.getElementById('btnShowAnswerCard'),()=>{
-    all(d,'#navQuestion [tag="bigpart"],#navQuestion [tag="smallpart"]',x=>x.style.display='block');
+    const sec=activeSection();
+    all(d,'#navQuestion [tag="bigpart"]',x=>{
+      const isSec=x.classList.contains(sec);
+      x.style.display=isSec?'block':'none';
+    });
+    all(d,`#navQuestion [tag="bigpart"].${sec} [tag="smallpart"]`,x=>x.style.display='block');
   });
   bind(d.getElementById('btnChangeFontSize'),()=>{
-    fontSize=fontSize===14?16:fontSize===16?18:14;
+    state.fontSize=state.fontSize===14?16:state.fontSize===16?18:14;
     const qd=d.getElementById('frmContent')?.contentDocument;
-    if(qd)all(qd,'body,body *',x=>x.style.fontSize=fontSize+'pt');
+    if(qd)all(qd,'body,body *',x=>x.style.fontSize=state.fontSize+'pt');
   });
 
-  // Preserve source section headers; only restore their native expand/collapse action.
   all(d,'#navQuestion .typtall_list',hdr=>bind(hdr,()=>{
-    const cls=[...hdr.classList].find(x=>['listening','reading','write'].includes(x));
-    if(!cls)return;
-    const part=d.querySelector(`#navQuestion [tag="bigpart"].${cls}`);
+    const sec=['listening','reading','write'].find(x=>hdr.classList.contains(x));
+    const normalized=sec==='write'?'writing':sec;
+    if(normalized!==activeSection())return;
+    const part=d.querySelector(`#navQuestion [tag="bigpart"].${sec}`);
     if(!part)return;
     const open=part.style.display!=='none';
     part.style.display=open?'none':'block';
@@ -154,64 +314,104 @@ function wire(d,name){
     if(img)img.src=open?ORIGINAL.icons.collapse:ORIGINAL.icons.expand;
   }));
   all(d,'#navQuestion .smallpartnav',hdr=>bind(hdr,()=>{
+    const sec=['listening','reading','write'].find(x=>hdr.classList.contains(x));
+    const normalized=sec==='write'?'writing':sec;
+    if(normalized!==activeSection())return;
     const part=hdr.nextElementSibling;
     if(!part||part.getAttribute('tag')!=='smallpart')return;
-    const open=part.style.display!=='none';
-    part.style.display=open?'none':'block';
+    part.style.display=part.style.display==='none'?'block':'none';
   }));
 
   loadQuestion(d);
-  sound.play().catch(()=>{});
+  if(state.phase==='listening'){
+    sound.play().catch(()=>{});
+  }else{
+    sound.pause();
+  }
 }
 
-function activateSection(d,navEl,q){
-  if(!navEl)return;
-  const small=navEl.closest('[tag="smallpart"]');
-  const big=navEl.closest('[tag="bigpart"]');
-  all(d,'#navQuestion [tag="bigpart"]',x=>{x.style.display=(x===big?'block':'none')});
-  if(big)big.classList.remove('disabled-div');
-  if(small){
-    big?.querySelectorAll('[tag="smallpart"]').forEach(x=>x.style.display=(x===small?'block':'none'));
-    small.classList.remove('disabled-div');
+function injectCandidateInfo(d){
+  const n=d.querySelector('#examineeinfo #name');
+  const e=d.querySelector('#examineeinfo #Email');
+  const s=d.querySelector('#examineeinfo #sex');
+  const nat=d.querySelector('#examineeinfo #Nationality');
+  const course=d.querySelector('#examineeinfo #examCourse');
+  if(n&&state.candidateName)n.textContent=state.candidateName;
+  if(e&&state.candidateEmail)e.textContent=state.candidateEmail;
+  if(s&&state.candidateSex)s.textContent=state.candidateSex;
+  if(nat&&state.candidateNationality)nat.textContent=state.candidateNationality;
+  if(course)course.textContent='HSK三级';
+}
+
+function applySectionLocks(d){
+  const active=activeSection();
+  const map={listening:'listening',reading:'reading',writing:'write'};
+  Object.entries(map).forEach(([section,cls])=>{
+    const on=section===active;
+    all(d,`#navQuestion .${cls}`,el=>{
+      if(on)el.classList.remove('disabled-div');
+      else el.classList.add('disabled-div');
+    });
+  });
+}
+
+function activateQuestionContainers(d,q){
+  const nav=d.getElementById(String(q.nav));
+  if(!nav)return;
+  const big=nav.closest('[tag="bigpart"]');
+  const small=nav.closest('[tag="smallpart"]');
+  const sec=qSection(q),cls=sec==='writing'?'write':sec;
+  all(d,'#navQuestion [tag="bigpart"]',x=>x.style.display=x===big?'block':'none');
+  if(big){
+    big.classList.remove('disabled-div');
+    big.querySelectorAll('[tag="smallpart"]').forEach(x=>x.style.display=x===small?'block':'none');
   }
-  const section=q.ids[0]<=30?'listening':q.ids[0]<=60?'reading':'write';
-  const hdr=d.querySelector(`#navQuestion .typtall_list.${section}`);
-  hdr?.classList.remove('disabled-div');
+  if(small)small.classList.remove('disabled-div');
+  const hdr=d.querySelector(`#navQuestion .typtall_list.${cls}`);
   all(d,'#navQuestion [tag="imgbigpart"]',img=>{
     const h=img.closest('.typtall_list');
-    img.src=(h===hdr)?ORIGINAL.icons.expand:ORIGINAL.icons.collapse;
+    img.src=h===hdr?ORIGINAL.icons.expand:ORIGINAL.icons.collapse;
   });
-  if(q.ids[0]>=31&&!readingDeadline)readingDeadline=Date.now()+30*60*1000;
-  if(q.ids[0]>=61&&!writingDeadline)writingDeadline=Date.now()+20*60*1000;
+}
+
+function navigate(delta,d){
+  const sec=activeSection();if(!sec)return;
+  const min=firstIndexFor(sec),max=lastIndexFor(sec);
+  const next=state.qi+delta;
+  if(next<min||next>max)return;
+  state.qi=next;loadQuestion(d);
 }
 
 function loadQuestion(d){
-  const q=currentQ(); if(!q)return;
+  const q=qCurrent();if(!q||!allowedQuestion(q)){
+    const i=firstIndexFor(activeSection());if(i>=0)state.qi=i;
+  }
+  const cur=qCurrent();if(!cur)return;
   all(d,'#navQuestion .nav',el=>{
-    const sel=el.id===q.nav;
+    const sel=String(el.id)===String(cur.nav);
     el.classList.toggle('exam_listbox_Selected',sel);
     el.classList.toggle('questionItemexam_listbox-2',!sel);
     const im=el.querySelector('[tag="imgquestion"]');
     if(im)im.src=sel?ORIGINAL.icons.green:ORIGINAL.icons.gray;
   });
-  const navEl=d.getElementById(q.nav);
-  activateSection(d,navEl,q);
-  status(d);
+  activateQuestionContainers(d,cur);
+  applySectionLocks(d);
+  renderNavStatus(d);
   const f=d.getElementById('frmContent');
   if(f){
-    f.onload=()=>wireQuestion(f.contentDocument,q,d);
-    f.srcdoc=q.html;
+    f.onload=()=>wireQuestion(f.contentDocument,cur,d);
+    f.srcdoc=cur.html;
   }
   const prev=d.getElementById('btnLastQuestion'),next=d.getElementById('btnNextQuestion');
-  if(prev)prev.style.display=qi===0?'none':'inline-block';
-  if(next)next.style.display=qi===ORIGINAL.questions.length-1?'none':'inline-block';
-  clockMain();
+  const sec=activeSection(),min=firstIndexFor(sec),max=lastIndexFor(sec);
+  if(prev)prev.style.display=state.qi<=min?'none':'inline-block';
+  if(next)next.style.display=state.qi>=max?'none':'inline-block';
+  updateMainClock();
 }
 
 function questionNoFrom(el,q){
-  const s=(el.name||el.id||'');
-  const m=s.match(/\d+/);
-  return m?Number(m[0]):q.ids[0];
+  const m=String(el.name||el.id||'').match(/\d+/);
+  return m?Number(m[0]):Number(q.ids[0]);
 }
 function wireQuestion(doc,q,mainDoc){
   if(!doc)return;
@@ -219,24 +419,24 @@ function wireQuestion(doc,q,mainDoc){
     const n=questionNoFrom(el,q);
     if(el.type==='radio'||el.type==='checkbox'){
       const tag=el.getAttribute('tag')||el.value||'';
-      if(el.type==='radio')el.checked=answers[n]===tag;
-      else el.checked=String(answers[n]||'').split('|').includes(tag);
+      if(el.type==='radio')el.checked=String(state.answers[n]||'')===String(tag);
+      else el.checked=String(state.answers[n]||'').split('|').includes(String(tag));
       el.onchange=()=>{
-        if(el.type==='radio')answers[n]=tag;
+        if(el.type==='radio')state.answers[n]=String(tag);
         else{
-          const nm=el.name;
-          answers[n]=Array.from(doc.querySelectorAll(`input[name="${CSS.escape(nm)}"]:checked`))
-            .map(x=>x.getAttribute('tag')||x.value).join('|');
+          const nm=el.name||'';
+          const escaped=(window.CSS&&CSS.escape)?CSS.escape(nm):nm.replace(/["\\]/g,'\\$&');
+          state.answers[n]=Array.from(doc.querySelectorAll(`input[name="${escaped}"]:checked`)).map(x=>x.getAttribute('tag')||x.value||'').join('|');
         }
-        status(mainDoc);syncQuestionIcons(doc,q);
+        renderNavStatus(mainDoc);syncQuestionIcons(doc,q);persist();
       };
     }else{
-      el.value=answers[n]||'';
+      el.value=state.answers[n]||'';
       el.oninput=()=>{
-        answers[n]=el.value;
-        status(mainDoc);syncQuestionIcons(doc,q);
+        state.answers[n]=el.value;
+        renderNavStatus(mainDoc);syncQuestionIcons(doc,q);persist();
         const c=doc.getElementById('divTotalWord');
-        if(c)c.textContent='字数：'+el.value.replace(/\s/g,'').length;
+        if(c)c.textContent='字数：'+String(el.value||'').replace(/\s/g,'').length;
       };
     }
   });
@@ -246,66 +446,127 @@ function wireQuestion(doc,q,mainDoc){
     if(r){r.checked=true;r.dispatchEvent(new Event('change',{bubbles:true}))}
   }});
   const qm=doc.getElementById('questionMark');
-  bind(qm,()=>toggleMark(q.nav,mainDoc));
+  bind(qm,()=>toggleMark(String(q.nav),mainDoc));
   syncQuestionIcons(doc,q);
-  if(fontSize!==14)all(doc,'body,body *',x=>x.style.fontSize=fontSize+'pt');
+  if(state.fontSize!==14)all(doc,'body,body *',x=>x.style.fontSize=state.fontSize+'pt');
 }
 function syncQuestionIcons(doc,q){
+  const marked=state.marks.has(String(q.nav));
   const mark=doc.getElementById('questionMark');
   if(mark){
-    mark.classList.toggle('question-mark-y',marks.has(q.nav));
-    mark.classList.toggle('question-mark-n',!marks.has(q.nav));
+    mark.classList.toggle('question-mark-y',marked);
+    mark.classList.toggle('question-mark-n',!marked);
   }
-  const done=q.ids.some(n=>String(answers[n]||'').trim());
+  const done=q.ids.some(n=>String(state.answers[Number(n)]||'').trim());
   let ed=doc.getElementById('questionEdited');
   if(done&&!ed){
-    ed=doc.createElement('div');
-    ed.id='questionEdited'; ed.className='question-mark-edited';
-    const qc=doc.querySelector('.question-content');
-    if(qc)qc.appendChild(ed);
+    ed=doc.createElement('div');ed.id='questionEdited';ed.className='question-mark-edited';
+    const qc=doc.querySelector('.question-content');if(qc)qc.appendChild(ed);
   }else if(ed)ed.style.display=done?'block':'none';
 }
-function toggleMark(nav,d){
-  if(marks.has(nav))marks.delete(nav);else marks.add(nav);
-  status(d);
-  const q=currentQ();
-  const fd=d.getElementById('frmContent')?.contentDocument;
-  if(q&&q.nav===nav&&fd)syncQuestionIcons(fd,q);
+function toggleMark(key,d){
+  key=String(key);
+  if(state.marks.has(key))state.marks.delete(key);else state.marks.add(key);
+  renderNavStatus(d);
+  const q=qCurrent(),fd=d.getElementById('frmContent')?.contentDocument;
+  if(q&&String(q.nav)===key&&fd)syncQuestionIcons(fd,q);
+  persist();
 }
-function status(d){
+function renderNavStatus(d){
   all(d,'#navQuestion .nav',el=>{
-    const idx=qByNav.get(el.id); if(idx===undefined)return;
-    const q=ORIGINAL.questions[idx];
-    const done=q.ids.some(n=>String(answers[n]||'').trim());
-    const ed=el.querySelector('.edited');
-    if(ed)ed.classList.toggle('hide',!done);
+    const i=qByNav.get(String(el.id));if(i===undefined)return;
+    const q=ORIGINAL.questions[i];
+    const done=q.ids.some(n=>String(state.answers[Number(n)]||'').trim());
+    const ed=el.querySelector('.edited');if(ed)ed.classList.toggle('hide',!done);
     const mk=el.querySelector('.marktag');
     if(mk){
-      mk.classList.toggle('marked',marks.has(el.id));
-      mk.classList.toggle('unmarked',!marks.has(el.id));
+      const marked=state.marks.has(String(el.id));
+      mk.classList.toggle('marked',marked);
+      mk.classList.toggle('unmarked',!marked);
     }
   });
 }
-function clockMain(){
-  if(screen!=='main')return;
-  const d=frame.contentDocument,q=currentQ();if(!d||!q)return;
-  const el=d.getElementById('divClock');if(!el)return;
-  let sec,label;
-  const first=q.ids[0];
-  if(first<=30){
-    sec=Math.max(0,Math.ceil((sound.duration||0)-sound.currentTime));
-    label='第'+q.nav+'题';
-  }else if(first<=60){
-    if(!readingDeadline)readingDeadline=Date.now()+30*60*1000;
-    sec=Math.max(0,Math.ceil((readingDeadline-Date.now())/1000));
-    label='阅读题剩余时间';
-  }else{
-    if(!writingDeadline)writingDeadline=Date.now()+20*60*1000;
-    sec=Math.max(0,Math.ceil((writingDeadline-Date.now())/1000));
-    label='写作题剩余时间';
-  }
-  el.innerHTML=label+'  <span style="color:red">'+String(Math.floor(sec/60)).padStart(2,'0')+'</span>:<span style="color:red">'+String(sec%60).padStart(2,'0')+'</span>';
+
+function listeningDuration(){
+  return Number.isFinite(sound.duration)&&sound.duration>0?sound.duration:CONFIG.listeningDurationFallback;
 }
+function updateProgress(d,fraction){
+  const bar=d?.getElementById('processbar');if(!bar)return;
+  const pct=Math.max(0,Math.min(1,fraction));
+  bar.style.width=(180*pct)+'px';
+}
+function updateMainClock(){
+  if(state.screen!=='main')return;
+  const d=frame.contentDocument,q=qCurrent();if(!d||!q)return;
+  const el=d.getElementById('divClock');if(!el)return;
+  let label='',left=0,fraction=0;
+  if(state.phase==='listening'){
+    const dur=listeningDuration(),cur=Math.max(0,sound.currentTime||0);
+    left=Math.max(0,dur-cur);
+    fraction=dur>0?cur/dur:0;
+    label='听力剩余时间';
+  }else{
+    const total=state.phase==='listeningReview'?CONFIG.listeningReviewSeconds:state.phase==='reading'?CONFIG.readingSeconds:CONFIG.writingSeconds;
+    left=Math.max(0,Math.ceil((state.sectionDeadline-Date.now())/1000));
+    fraction=total>0?1-left/total:0;
+    label=state.phase==='listeningReview'?'听力检查剩余时间':state.phase==='reading'?'阅读题剩余时间':'书写题剩余时间';
+    if(left<=0){
+      if(state.phase==='listeningReview')startReading();
+      else if(state.phase==='reading')startWriting();
+      else if(state.phase==='writing')submitExam();
+      return;
+    }
+  }
+  el.innerHTML=label+'  <span style="color:red">'+pad2(Math.floor(left/60))+'</span>:<span style="color:red">'+pad2(Math.ceil(left)%60)+'</span>';
+  updateProgress(d,fraction);
+}
+sound.addEventListener('timeupdate',()=>{if(state.phase==='listening')updateMainClock()});
+sound.addEventListener('loadedmetadata',()=>{if(state.phase==='listening')updateMainClock()});
+sound.addEventListener('ended',()=>{if(state.phase==='listening')startListeningReview()});
+
+function startListeningReview(){
+  sound.pause();
+  state.phase='listeningReview';
+  state.sectionDeadline=Date.now()+CONFIG.listeningReviewSeconds*1000;
+  const d=frame.contentDocument;if(!d)return;
+  applySectionLocks(d);
+  if(!allowedQuestion(qCurrent()))state.qi=Math.max(0,firstIndexFor('listening'));
+  loadQuestion(d);
+}
+function startReading(){
+  sound.pause();
+  state.phase='reading';
+  state.sectionDeadline=Date.now()+CONFIG.readingSeconds*1000;
+  state.qi=Math.max(0,firstIndexFor('reading'));
+  const d=frame.contentDocument;if(d){applySectionLocks(d);loadQuestion(d)}
+}
+function startWriting(){
+  state.phase='writing';
+  state.sectionDeadline=Date.now()+CONFIG.writingSeconds*1000;
+  state.qi=Math.max(0,firstIndexFor('writing'));
+  const d=frame.contentDocument;if(d){applySectionLocks(d);loadQuestion(d)}
+}
+
+function submitExam(){
+  if(state.submitted)return;
+  state.submitted=true;state.phase='submitted';
+  sound.pause();persist();show('result');
+}
+function renderResult(d){
+  const rows=d.querySelectorAll('#result tr');
+  rows.forEach((tr,i)=>{
+    if(i===0)return;
+    const cells=tr.querySelectorAll('td');
+    if(cells.length>=3)cells[2].textContent='—';
+    if(cells.length>=4)cells[3].textContent='—';
+  });
+  const note=d.getElementById('subjectiveScoreNote');
+  if(note)note.textContent='未配置标准答案，本次仅保存作答，不自动评分。';
+  all(d,'.layui-layer-shade,.layui-layer',x=>x.style.display='none');
+  bind(d.getElementById('btnShowInfo'),()=>show('05'));
+  bind(d.getElementById('btnok'),()=>show('over'));
+}
+
 show('01');
 
 })().catch(__e=>{console.error(__e);document.body.innerHTML='<pre style="white-space:pre-wrap;padding:24px;font:16px sans-serif;color:#900">Không thể mở dữ liệu HSK3: '+String(__e && (__e.stack||__e.message)||__e)+'</pre>';});</script></body></html>
