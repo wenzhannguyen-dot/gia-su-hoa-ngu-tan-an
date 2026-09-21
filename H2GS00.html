@@ -19,17 +19,64 @@ const state={
   downloadRunId:0,submitted:false
 };
 const sound=new Audio(ORIGINAL.audio||'');
+sound.preload='auto';
 const testSound=new Audio(ORIGINAL.introAudio||ORIGINAL.audio||'');
+testSound.preload='auto';
+let listeningStartToken=0;
+let listeningAudioStarted=false;
+function ensureListeningAudio(reason='retry'){
+  if(state.phase!=='listening')return Promise.resolve(false);
+  const token=++listeningStartToken;
+  try{sound.muted=false;sound.volume=1;if(sound.networkState===HTMLMediaElement.NETWORK_EMPTY)sound.load()}catch(_){}
+  let result;
+  try{result=sound.play()}catch(err){console.warn('[HSK2 audio] play threw:',reason,err);return Promise.resolve(false)}
+  return Promise.resolve(result).then(()=>{if(token===listeningStartToken){listeningAudioStarted=true}return true}).catch(err=>{console.warn('[HSK2 audio] play blocked/failed:',reason,err?.name||err);return false});
+}
+function armListeningAudioFallback(doc){
+  if(!doc)return;
+  const retry=()=>{if(state.phase==='listening'&&sound.paused)ensureListeningAudio('user-interaction')};
+  ['pointerdown','touchstart','click','keydown'].forEach(type=>doc.addEventListener(type,retry,{once:true,capture:true}));
+  const ready=()=>{if(state.phase==='listening'&&sound.paused)ensureListeningAudio('media-ready')};
+  sound.addEventListener('canplay',ready,{once:true});
+  sound.addEventListener('loadeddata',ready,{once:true});
+}
 let micRecorder=null,micStream=null,recordedSound=null,recordedUrl=null;
 const qByNav=new Map(ORIGINAL.questions.map((q,i)=>[String(q.nav),i]));
 
+function isMobileDisplay(){return innerWidth<900||innerHeight<500}
+function isExamDisplayScreen(){return state.screen==='main'}
+function displayBase(name){return ['01','02','03','04','05'].includes(name)?[1875,927]:[1264,887]}
 function fit(){
-  const intro=['01','02','03','04','05'].includes(state.screen);
-  const W=intro?1875:1264,H=intro?927:887,s=Math.min(innerWidth/W,innerHeight/H);
+  if(isExamDisplayScreen()&&!isMobileDisplay()){
+    frame.style.width=innerWidth+'px';frame.style.height=innerHeight+'px';frame.style.transform='none';frame.style.left='0px';frame.style.top='0px';return;
+  }
+  const [W,H]=displayBase(state.screen),s=Math.min(innerWidth/W,innerHeight/H);
   frame.style.width=W+'px';frame.style.height=H+'px';frame.style.transform=`scale(${s})`;
-  frame.style.left=(innerWidth-W*s)/2+'px';frame.style.top=(innerHeight-H*s)/2+'px';
+  frame.style.left=((innerWidth-W*s)/2)+'px';frame.style.top=((innerHeight-H*s)/2)+'px';
 }
-addEventListener('resize',fit);fit();
+function layoutMainAdaptive(d){
+  if(!d||isMobileDisplay())return;
+  const w=d.documentElement.clientWidth||d.body.clientWidth,h=d.documentElement.clientHeight||d.body.clientHeight;
+  const logo=d.querySelector('.nlogo'),copy=d.querySelector('.copyright'),box=d.getElementById('ncontent'),nav=d.getElementById('navQuestion'),right=d.getElementById('mainright'),photo=d.getElementById('photoright'),clock=d.getElementById('divClock');
+  if(!box||!nav||!right)return;
+  const lh=logo?logo.clientHeight:0,ch=copy?copy.clientHeight:0;
+  box.style.width=(w*0.6)+'px';
+  box.style.height=Math.max(0,h-lh-ch-160)+'px';
+  box.style.left=((w-box.offsetWidth)/2)+'px';
+  box.style.top=(lh+50)+'px';
+  nav.style.width=(w*0.15)+'px';
+  d.querySelectorAll('.navbar-width').forEach(x=>x.style.width=nav.style.width);
+  nav.style.height=(h*0.7)+'px';
+  nav.style.left=((w-box.offsetWidth)/2-nav.offsetWidth-20)+'px';
+  nav.style.top=box.offsetTop+'px';
+  if(photo){photo.style.top=(box.offsetTop-20)+'px';if(photo.style.display==='none'||d.defaultView.getComputedStyle(photo).display==='none')photo.style.height='1px'}
+  right.style.width=(w*0.15)+'px';
+  right.style.right=((w-box.offsetWidth)/2-right.offsetWidth-20)+'px';
+  right.style.top=((photo?photo.offsetTop+photo.offsetHeight:box.offsetTop)+20)+'px';
+  if(clock){clock.style.top=(box.offsetTop+5)+'px';clock.style.right=(w-right.offsetLeft+40)+'px';const bar=clock.nextElementSibling;if(bar){bar.style.top=(box.offsetTop+28)+'px';bar.style.left=(right.offsetLeft-bar.offsetWidth-40)+'px'}}
+}
+function relayoutDisplay(){const d=frame.contentDocument;if(!d)return;if(isExamDisplayScreen())layoutMainAdaptive(d)}
+addEventListener('resize',()=>{fit();relayoutDisplay()});fit();
 function bind(el,fn){if(!el)return;el.removeAttribute('onclick');el.style.cursor='pointer';el.onclick=e=>{e.preventDefault();e.stopPropagation();fn(e,el)}}
 function all(d,s,fn){d.querySelectorAll(s).forEach(fn)}
 function qCurrent(){return ORIGINAL.questions[state.qi]||null}
@@ -43,7 +90,7 @@ function fmtDate(x){return x.getFullYear()+'-'+pad2(x.getMonth()+1)+'-'+pad2(x.g
 function isValidEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(v||'').trim())}
 function alertInFrame(d,msg){try{d.defaultView.alert(msg)}catch(_){alert(msg)}}
 function persist(){try{localStorage.setItem(CONFIG.storageKey,JSON.stringify({answers:state.answers,marks:Array.from(state.marks),candidateName:state.candidateName,candidateEmail:state.candidateEmail,candidateSex:state.candidateSex,submitted:state.submitted}))}catch(_){}}
-function show(name){state.screen=name;fit();frame.onload=()=>{wire(frame.contentDocument,name);updateOuterClock()};frame.srcdoc=ORIGINAL.pages[name]||''}
+function show(name){state.screen=name;fit();frame.onload=()=>{wire(frame.contentDocument,name);relayoutDisplay();updateOuterClock()};frame.srcdoc=ORIGINAL.pages[name]||''}
 
 function updateOuterClock(){
   const d=frame.contentDocument;if(!d)return;const c=d.getElementById('divClock');if(!c)return;
@@ -116,7 +163,15 @@ function startDownload(d){
   const tick=now=>{if(run!==state.downloadRunId||state.screen!=='download')return;const t=Math.min(1,(now-started)/CONFIG.downloadDurationMs),pct=Math.max(2,Math.min(100,Math.round(2+98*t)));if(bar)bar.style.width=(550*pct/100)+'px';if(val)val.textContent=pct+'%';if(t<1){requestAnimationFrame(tick);return}if(bar)bar.style.width='550px';if(val)val.textContent='100%';if(status)status.textContent='下载完毕，请点击下一步进行考试.';if(next)next.style.display='inline-block';bind(next,()=>beginExam());if(redl){redl.style.display='none';bind(redl,()=>startDownload(d))}};
   requestAnimationFrame(tick);
 }
-function beginExam(){state.phase='listening';state.sectionDeadline=0;state.qi=Math.max(0,firstIndexFor('listening'));state.submitted=false;try{sound.currentTime=0}catch(_){};sound.play().catch(()=>{});show('main')}
+function beginExam(){
+  state.phase='listening';state.sectionDeadline=0;state.qi=Math.max(0,firstIndexFor('listening'));state.submitted=false;
+  listeningAudioStarted=false;listeningStartToken++;
+  try{sound.pause();sound.currentTime=0;sound.muted=false;sound.volume=1;sound.load()}catch(_){}
+  // Keep this play attempt inside the user's Next-button gesture. Mobile browsers
+  // may reject later autoplay once the iframe/main screen has finished loading.
+  ensureListeningAudio('download-next');
+  show('main');
+}
 
 function injectCandidateInfo(d){
   const n=d.querySelector('#examineeinfo #name'),e=d.querySelector('#examineeinfo #Email'),course=d.querySelector('#examineeinfo #examCourse');
@@ -143,7 +198,10 @@ function wireMain(d){
   all(d,'#navQuestion .smallpartnav',head=>bind(head,()=>{if(head.classList.contains('disabled-div'))return;const part=head.nextElementSibling;if(part&&part.getAttribute('tag')==='smallpart')part.style.display=part.style.display==='none'?'block':'none'}));
   all(d,'#navQuestion .typtall_list',head=>bind(head,()=>{const cls=head.classList.contains('listening')?'listening':head.classList.contains('reading')?'reading':'write';const sec=cls==='write'?'writing':cls;if(sec!==activeSection())return;const blocks=Array.from(d.querySelectorAll('#navQuestion [tag="bigpart"].'+cls));const any=blocks.some(x=>x.style.display!=='none');blocks.forEach(x=>x.style.display=any?'none':'block')}));
   loadQuestion(d);
-  if(state.phase==='listening'&&sound.paused){const tryStart=()=>sound.play().catch(()=>{});tryStart();d.addEventListener('click',tryStart,{once:true})}else sound.pause();
+  if(state.phase==='listening'){
+    armListeningAudioFallback(d);
+    if(sound.paused)ensureListeningAudio('main-loaded');
+  }else sound.pause();
 }
 function navigate(delta,d){const sec=activeSection();if(!sec)return;const min=firstIndexFor(sec),max=lastIndexFor(sec),next=state.qi+delta;if(next<min||next>max)return;state.qi=next;loadQuestion(d)}
 function loadQuestion(d){
