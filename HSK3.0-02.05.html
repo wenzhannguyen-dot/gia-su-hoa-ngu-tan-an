@@ -61,11 +61,11 @@ Lần đầu đến nhà bạn Trung Quốc</title>
         .vocab-card { background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #4472c4; display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; }
         .vocab-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(68,114,196,0.15); border-style: solid; }
         .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
-        .vocab-number { width: 45px; height: 45px; background: #4472c4; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(68,114,196,0.3); font-family: Arial, sans-serif; }
+        .vocab-number { width: 45px; height: 45px; background: #4caf50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; font-family: Arial, sans-serif; }
         .vocab-content { flex: 1; }
         .vocab-chinese { font-size: 32px; font-weight: bold; color: #000000 !important; margin-bottom: 6px; letter-spacing: 2px; }
-        .vocab-pinyin { font-size: 20px; color: #4472c4; margin-bottom: 6px; font-weight: 500; }
-        .vocab-meaning { font-size: 20px; color: #333333; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
+        .vocab-pinyin { font-size: 20px; color: #666666; margin-bottom: 6px; font-weight: 500; }
+        .vocab-meaning { font-size: 20px; color: #4472c4; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
         .vocab-example { font-size: 16px; color: #888; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; }
         .audio-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #e3f2fd; color: #4472c4; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
         .audio-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
@@ -96,7 +96,7 @@ Lần đầu đến nhà bạn Trung Quốc</title>
         .grammar-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .grammar-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666666; font-weight: 500; font-family: Arial, sans-serif; display: flex; align-items: center; gap: 8px; }
         .grammar-tab:hover { background: #e3f2fd; border-color: #4472c4; color: #4472c4; }
-        .grammar-tab.active { background: #e3f2fd; border-color: #4472c4; color: #4472c4; }
+        .grammar-tab.active { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
         .grammar-panel { display: none; animation: fadeIn 0.35s ease; }
         .grammar-panel.active { display: block; }
         .grammar-item { margin-bottom: 30px; border-bottom: 1px solid #e0e0e0; padding-bottom: 25px; }
@@ -235,6 +235,7 @@ Lần đầu đến nhà bạn Trung Quốc</title>
             <div class="tool-card">
                 <div class="tool-title"><i class="bi bi-clock-history"></i>Lịch sử</div>
                 <button class="tool-btn primary" onclick="resetExercises()"><i class="bi bi-arrow-clockwise"></i>Làm lại bài tập</button>
+                <button class="tool-btn success" onclick="exportHTML()"><i class="bi bi-download"></i><span>Xuất HTML</span></button>
             </div>
         </div>
     </div>
@@ -1103,43 +1104,103 @@ Lần đầu đến nhà bạn Trung Quốc</title>
     const GRAMMAR_TOTAL = 3;
     let currentGrammarIndex = 0;
     let draggedElement = null, draggedFrom = null;
-    // ===== TTS =====
-    function setAudioSpeed(speed) {
-        audioSpeed = parseFloat(speed);
-        localStorage.setItem('hsk2_audio_speed', audioSpeed);
+    let _audioEl = null, _ttsQueue = [];
+
+    function _getAudio() { if (!_audioEl) { _audioEl = new Audio(); _audioEl.onended = _playNextQueue; _audioEl.onerror = _playNextQueue; } return _audioEl; }
+    function _playNextQueue() { if (_ttsQueue.length > 0) { const next = _ttsQueue.shift(); setTimeout(() => _playOne(next), 350); } }
+    function _playOne(text) { const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(text); const audio = _getAudio(); audio.src = url; audio.crossOrigin = 'anonymous'; const p = audio.play(); if (p !== undefined) p.catch(() => _speakWithSynthesis(text, _playNextQueue)); }
+    function _speakWithSynthesis(text, onEnd) { if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; } speechSynthesis.cancel(); function doSpeak() { const utt = new SpeechSynthesisUtterance(text); utt.lang = 'zh-CN'; utt.rate = audioSpeed; const zhVoice = speechSynthesis.getVoices().find(v => v.lang && (v.lang.startsWith('zh') || v.lang.startsWith('cmn'))); if (zhVoice) utt.voice = zhVoice; utt.onend = onEnd || null; utt.onerror = onEnd || null; speechSynthesis.speak(utt); } speechSynthesis.getVoices().length === 0 ? (speechSynthesis.onvoiceschanged = doSpeak) : doSpeak(); }
+    function setAudioSpeed(speed) { audioSpeed = parseFloat(speed); localStorage.setItem('hsk2_audio_speed', audioSpeed); }
+    // Bài khóa dùng MP3 thật; từ vựng vẫn giữ nguyên TTS.
+    const COURSE_AUDIO_FILE = 'HSK3.0-02.05.mp3';
+    const COURSE_TEXT_SEGMENTS = {
+        text1: [0.000, 24.821],
+        text2: [24.821, 64.115],
+        text3: [64.115, 97.888],
+        text4: [97.888, 115.221]
+    };
+    const COURSE_DIALOGUE_SEGMENTS = {
+        '家月，快下来吧，第一次去中国朋友家，别晚了。': [0.000, 6.150],
+        '还有时间，你上来吧。': [7.601, 9.450],
+        '我不上去了，就在下面等你。': [10.911, 13.443],
+        '那我一会儿就下去。': [14.646, 16.083],
+        '你快点儿吧。': [17.545, 18.520],
+        '没事，一雪姐说11点前到就可以。': [20.063, 23.674],
+
+        '家月、安妮，快进来！我给你们介绍一下，这是孩子们的爷爷、奶奶。': [24.821, 32.666],
+        '你们好！': [33.843, 34.614],
+        '爸、妈，这是白家月，这是安妮。她们都是一飞的学生。': [35.677, 42.328],
+        '家月、安妮，你们好！': [43.780, 46.652],
+        '这是送你们的礼物。': [47.873, 49.401],
+        '你们太客气了，还拿这么多礼物来！': [50.423, 53.666],
+        '一雪姐，这是给孩子们准备的礼物。': [54.976, 58.195],
+        '谢谢！你们别客气，快坐吧！': [59.660, 62.859],
+
+        '都12点了，我们吃饭吧。': [64.115, 67.224],
+        '这么多好吃的，您太客气了！': [68.619, 71.201],
+        '都是我自己做的，你们多吃点儿。': [72.504, 76.430],
+        '奶茶也很好喝，是您自己做的吗？': [77.085, 80.516],
+        '不是，奶茶是爷爷买的。': [82.178, 84.453],
+        '在哪儿买的？我还没喝过这么好喝的奶茶。': [86.829, 90.617],
+        '就在前边的商场，吃完饭你们可以跟我去看看。': [92.636, 97.048],
+
+        '回国前一天，我们去一雪姐家了。到她家的时候，饭菜都做好了。刘爷爷还准备了奶茶。因为吃了太多东西，我们吃完饭是走回酒店的。': [97.888, 115.221]
+    };
+    let _courseSegmentEnd = null;
+    let _courseTimeHandler = null;
+
+    function _stopCourseGuard() {
+        if (_audioEl && _courseTimeHandler) _audioEl.removeEventListener('timeupdate', _courseTimeHandler);
+        _courseTimeHandler = null;
+        _courseSegmentEnd = null;
+    }
+
+    function _playCourseSegment(start, end) {
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+        const audio = _getAudio();
+        _stopCourseGuard();
+        audio.pause();
+        if (!audio.src || !audio.src.endsWith(COURSE_AUDIO_FILE)) audio.src = COURSE_AUDIO_FILE;
+        audio.playbackRate = audioSpeed;
+        audio.currentTime = Math.max(0, start);
+        _courseSegmentEnd = end;
+        _courseTimeHandler = function() {
+            if (_courseSegmentEnd !== null && audio.currentTime >= _courseSegmentEnd) {
+                audio.pause();
+                _stopCourseGuard();
+            }
+        };
+        audio.addEventListener('timeupdate', _courseTimeHandler);
+        const p = audio.play();
+        if (p !== undefined) p.catch(() => {});
     }
 
     function speak(text) {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = 'zh-CN';
-            utter.rate = audioSpeed;
-            utter.pitch = 1;
-            window.speechSynthesis.speak(utter);
-        }
+        if (!text) return;
+        const segment = COURSE_DIALOGUE_SEGMENTS[text];
+        if (segment) { _playCourseSegment(segment[0], segment[1]); return; }
+        _stopCourseGuard();
+        if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+        _playOne(text);
     }
 
     function speakAllText(textId) {
+        const segment = COURSE_TEXT_SEGMENTS[textId];
+        if (segment) { _playCourseSegment(segment[0], segment[1]); return; }
         const container = document.getElementById(textId);
         if (!container) return;
-        const lines = container.querySelectorAll('.dialogue-chinese');
-        let index = 0;
-        function speakNext() {
-            if (index >= lines.length) return;
-            const text = lines[index].textContent.trim();
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = 'zh-CN';
-            utter.rate = audioSpeed;
-            utter.pitch = 1;
-            utter.onend = () => { index++; speakNext(); };
-            window.speechSynthesis.speak(utter);
-        }
-        window.speechSynthesis.cancel();
-        speakNext();
+        _stopCourseGuard();
+        if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+        const texts = [...container.querySelectorAll('.dialogue-chinese')].map(l => l.textContent.trim()).filter(Boolean);
+        if (!texts.length) return;
+        _ttsQueue = texts.slice(1);
+        _playOne(texts[0]);
     }
-
-    // ==================== NGỮ PHÁP ====================
     function showGrammar(index, btn) { for (let i = 0; i < GRAMMAR_TOTAL; i++) document.getElementById('grammar-panel-' + i).classList.remove('active'); document.getElementById('grammar-panel-' + index).classList.add('active'); document.querySelectorAll('.grammar-tab').forEach(t => t.classList.remove('active')); if (btn) btn.classList.add('active'); else document.querySelectorAll('.grammar-tab')[index].classList.add('active'); currentGrammarIndex = index; }
     document.addEventListener('DOMContentLoaded', () => { renderVocabulary('all'); loadNoteEditor(); initDragAndDrop(); const savedSpeed = localStorage.getItem('hsk2_audio_speed'); if (savedSpeed) { audioSpeed = parseFloat(savedSpeed); document.getElementById('audio-speed').value = savedSpeed; } });
     function toggleFeature(feature, btn, className, iconShow, iconHide) { toggleStates[feature] = !toggleStates[feature]; document.body.classList.toggle(className, toggleStates[feature]); btn.classList.toggle('active-toggle', toggleStates[feature]); btn.querySelector('i').className = toggleStates[feature] ? iconShow : iconHide; }
@@ -1149,7 +1210,7 @@ Lần đầu đến nhà bạn Trung Quốc</title>
     function renderVocabulary(filter) { const grid = document.getElementById('vocab-grid'); Object.keys(writers).forEach(key => { if (Array.isArray(writers[key])) writers[key].forEach(w => { try { w.cancelAnimation(); } catch(e) {} }); delete writers[key]; }); grid.innerHTML = ''; const lessonLabels = { text1: '课文 1', text2: '课文 2', text3: '课文 3', text4: '课文 4' }; const filtered = filter === 'all' ? vocabulary : filter.startsWith('text') ? vocabulary.filter(v => v.lesson === filter) : vocabulary.filter(v => v.category === filter); filtered.forEach(item => { const card = document.createElement('div'); card.className = 'vocab-card'; card.dataset.char = item.chinese; card.innerHTML = `<div class="vocab-info"><div class="vocab-number">${item.id}</div><div class="vocab-content"><div class="vocab-chinese chinese-text">${item.chinese}</div><div class="vocab-pinyin pinyin-text">${item.pinyin}</div><div class="vocab-meaning">${item.meaning}</div><div style="display:flex;align-items:center;gap:8px;margin-top:4px;"><span style="font-size:11px;background:#e3f2fd;color:#4472c4;border:1px solid #4472c4;border-radius:10px;padding:2px 8px;font-family:Arial;">${lessonLabels[item.lesson]}</span></div>${item.example ? `<div class="vocab-example">"${item.example}"</div>` : ''}</div><button class="audio-btn" onclick="speak('${item.chinese}');event.stopPropagation();"><i class="bi bi-volume-up"></i></button></div><div class="stroke-wrapper"><div class="stroke-inline" id="stroke-${item.chinese.replace(/\s/g,'')}"></div><button class="replay-btn" onclick="event.stopPropagation(); replayStroke('${item.chinese}')">↺</button></div>`; grid.appendChild(card); }); }
     function filterVocab(category, btn) { document.querySelectorAll('.vocab-tab').forEach(t => t.classList.remove('active')); btn.classList.add('active'); strokesInitialized = false; renderVocabulary(category); setTimeout(initVocabStrokes, 100); }
     function replayStroke(char) { if (writers[char] && Array.isArray(writers[char])) writers[char].forEach(w => w.animateCharacter()); }
-    function initVocabStrokes() { if (strokesInitialized) return; document.querySelectorAll('.vocab-card[data-char]').forEach(card => { const char = card.dataset.char; const container = card.querySelector('.stroke-inline'); if (!container) return; container.innerHTML = ''; const chars = char.split(''); writers[char] = []; chars.forEach((c, index) => { const div = document.createElement('div'); div.id = 'stroke-' + char.replace(/\s/g,'') + '-' + index; div.style.display = 'inline-block'; container.appendChild(div); try { const writer = HanziWriter.create(div.id, c, { width: 60, height: 60, padding: 3, strokeColor: '#4472c4', radicalColor: '#4472c4', delayBetweenStrokes: 300, strokeAnimationSpeed: 1.5, showCharacter: false }); writers[char].push(writer); writer.animateCharacter(); } catch(e) {} }); }); strokesInitialized = true; }
+    function initVocabStrokes() { if (strokesInitialized) return; document.querySelectorAll('.vocab-card[data-char]').forEach(card => { const char = card.dataset.char; const container = card.querySelector('.stroke-inline'); if (!container) return; container.innerHTML = ''; const chars = char.split(''); writers[char] = []; chars.forEach((c, index) => { const div = document.createElement('div'); div.id = 'stroke-' + char.replace(/\s/g,'') + '-' + index; div.style.display = 'inline-block'; container.appendChild(div); try { const writer = HanziWriter.create(div.id, c, { width: 60, height: 60, padding: 3, strokeColor: '#C0392B', radicalColor: '#27AE60', delayBetweenStrokes: 300, strokeAnimationSpeed: 1.5, showCharacter: false }); writers[char].push(writer); writer.animateCharacter(); } catch(e) {} }); }); strokesInitialized = true; }
     function showText(textId, btn) { document.querySelectorAll('.text-content').forEach(c => c.classList.remove('active')); document.getElementById(textId).classList.add('active'); document.querySelectorAll('.text-tab').forEach(t => t.classList.remove('active')); btn.classList.add('active'); }
     function showExercise(type, btn) { document.querySelectorAll('.exercise-content').forEach(c => c.classList.remove('active')); document.getElementById(type).classList.add('active'); document.querySelectorAll('.exercise-tab').forEach(t => t.classList.remove('active')); btn.classList.add('active'); }
     function checkAnswer(questionName, correctValue, resultId) { const selected = document.querySelector(`input[name="${questionName}"]:checked`); const resultDiv = document.getElementById(resultId); if (!selected) { resultDiv.textContent = 'Vui lòng chọn một đáp án!'; resultDiv.className = 'result-message show incorrect'; return; } const isCorrect = selected.value === correctValue; resultDiv.textContent = isCorrect ? '✓ Chính xác!' : `✗ Sai rồi! Đáp án đúng là: ${correctValue}`; resultDiv.className = `result-message show ${isCorrect ? 'correct' : 'incorrect'}`; }
@@ -1173,6 +1234,7 @@ Lần đầu đến nhà bạn Trung Quốc</title>
     function loadNoteEditor() { const c = localStorage.getItem('hsk2_lesson05_notes'); if (c) document.getElementById('rich-editor').innerHTML = c; }
     function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
     function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
+    function exportHTML() { const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'HSK2_Bai05_Export.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); alert('Đã xuất file HTML thành công!'); }
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
 </script>
 </body>
