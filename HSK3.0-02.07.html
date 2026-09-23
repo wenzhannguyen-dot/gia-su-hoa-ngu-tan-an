@@ -68,11 +68,11 @@ Anh ấy chơi bóng rổ rất giỏi</title>
         .vocab-card { background: #f8f9fa; border-radius: 12px; padding: 20px; border: 2px dashed #4472c4; display: flex; align-items: center; gap: 20px; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
         .vocab-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(68,114,196,0.15); border-color: #4472c4; border-style: solid; }
         .vocab-info { display: flex; align-items: center; gap: 15px; flex: 1; }
-        .vocab-number { width: 45px; height: 45px; background: #4472c4; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(68,114,196,0.3); font-family: Arial, sans-serif; }
+        .vocab-number { width: 45px; height: 45px; background: #4caf50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(76,175,80,0.3); font-family: Arial, sans-serif; }
         .vocab-content { flex: 1; }
         .vocab-chinese { font-size: 32px; font-weight: bold; color: #000000 !important; margin-bottom: 6px; letter-spacing: 2px; }
-        .vocab-pinyin { font-size: 20px; color: #4472c4; margin-bottom: 6px; font-weight: 500; }
-        .vocab-meaning { font-size: 20px; color: #333333; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
+        .vocab-pinyin { font-size: 20px; color: #666666; margin-bottom: 6px; font-weight: 500; }
+        .vocab-meaning { font-size: 20px; color: #4472c4; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
         .vocab-example { font-size: 16px; color: #888; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; }
         .vocab-animation { width: 140px; height: 140px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); }
         .writer-container { width: 100px; height: 100px; }
@@ -106,7 +106,7 @@ Anh ấy chơi bóng rổ rất giỏi</title>
         .grammar-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
         .grammar-tab { padding: 10px 20px; background: #f5f5f5; border: 2px solid transparent; border-radius: 8px; cursor: pointer; font-size: 14px; color: #666666; font-weight: 500; font-family: Arial, sans-serif; display: flex; align-items: center; gap: 8px; }
         .grammar-tab:hover { background: #e3f2fd; border-color: #4472c4; color: #4472c4; }
-        .grammar-tab.active { background: #e3f2fd; border-color: #4472c4; color: #4472c4; }
+        .grammar-tab.active { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
         .grammar-panel { display: none; animation: fadeIn 0.35s ease; }
         .grammar-panel.active { display: block; }
         .grammar-item { margin-bottom: 30px; border-bottom: 1px solid #e0e0e0; padding-bottom: 25px; }
@@ -277,6 +277,9 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                 <button class="tool-btn primary" onclick="resetExercises()">
                     <i class="bi bi-arrow-clockwise"></i>Làm lại bài tập
                 </button>
+                <button class="tool-btn success" onclick="exportHTML()">
+                    <i class="bi bi-download"></i><span>Xuất HTML</span>
+                </button>
             </div>
         </div>
     </div>
@@ -342,34 +345,34 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-person"></i> 课文 1 - 在教室 (Tại lớp học)</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text1', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('安妮，你是什么时候从北京回来的？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 0)">
                                     <div class="dialogue-speaker">陈天中 (Trần Thiên Trung)</div>
                                     <div class="dialogue-chinese chinese-text">安妮，你是什么时候从北京回来的？</div>
                                     <div class="dialogue-pinyin pinyin-text">Ānnī, nǐ shì shénme shíhou cóng Běijīng huílai de?</div>
                                     <div class="dialogue-vietnamese">Annie, bạn là khi nào từ Bắc Kinh trở về?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('昨天下午。天中，你怎么一下课就往外跑？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 1)">
                                     <div class="dialogue-speaker">安妮 (Annie)</div>
                                     <div class="dialogue-chinese chinese-text">昨天下午。天中，你怎么一下课就往外跑？</div>
                                     <div class="dialogue-pinyin pinyin-text">Zuótiān xiàwǔ. Tiānzhōng, nǐ zěnme yī xiàkè jiù wǎng wài pǎo?</div>
                                     <div class="dialogue-vietnamese">Chiều hôm qua. Thiên Trung, sao cậu vừa tan học là chạy ra ngoài?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我跟同学说好了，一起去打篮球。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 2)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">我跟同学说好了，一起去打篮球。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ gēn tóngxué shuō hǎo le, yīqǐ qù dǎ lánqiú.</div>
                                     <div class="dialogue-vietnamese">Tôi đã nói trước với bạn học, cùng nhau đi đánh bóng rổ.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我也想跟你们一起玩。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 3)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">我也想跟你们一起玩。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ yě xiǎng gēn nǐmen yīqǐ wán.</div>
                                     <div class="dialogue-vietnamese">Tôi cũng muốn chơi cùng các cậu.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('没问题，走吧。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 4)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">没问题，走吧。</div>
                                     <div class="dialogue-pinyin pinyin-text">Méi wèntí, zǒu ba.</div>
@@ -387,40 +390,40 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-building"></i> 课文 2 - 在校园 (Trên khuôn viên trường)</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text2', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('天中，你是不是很喜欢打篮球？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 0)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">天中，你是不是很喜欢打篮球？</div>
                                     <div class="dialogue-pinyin pinyin-text">Tiānzhōng, nǐ shì bùshì hěn xǐhuan dǎ lánqiú?</div>
                                     <div class="dialogue-vietnamese">Thiên Trung, cậu có phải rất thích đánh bóng rổ không?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('没错。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 1)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">没错。</div>
                                     <div class="dialogue-pinyin pinyin-text">Méi cuò.</div>
                                     <div class="dialogue-vietnamese">Đúng vậy.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('你还喜欢什么运动？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 2)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">你还喜欢什么运动？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nǐ hái xǐhuan shénme yùndòng?</div>
                                     <div class="dialogue-vietnamese">Cậu còn thích môn thể thao nào nữa?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我还喜欢踢足球，一到星期天就跟朋友们去踢球。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 3)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">我还喜欢踢足球，一到星期天就跟朋友们去踢球。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ hái xǐhuan tī zúqiú, yī dào Xīngqītiān jiù gēn péngyoumen qù tī qiú.</div>
                                     <div class="dialogue-vietnamese">Tôi còn thích đá bóng, cứ đến chủ nhật là cùng bạn bè đi đá bóng。</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('你踢得怎么样？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 4)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">你踢得怎么样？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nǐ tī de zěnme yàng?</div>
                                     <div class="dialogue-vietnamese">Cậu đá thế nào?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我踢得还可以。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 5)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">我踢得还可以。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ tī de hái kěyǐ.</div>
@@ -434,40 +437,40 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-person-walking"></i> 课文 3 - 在校园（2）(Trên khuôn viên)</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text3', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('你篮球打得怎么样？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 0)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">你篮球打得怎么样？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nǐ lánqiú dǎ de zěnme yàng?</div>
                                     <div class="dialogue-vietnamese">Cậu đánh bóng rổ thế nào?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('打得还可以。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 1)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">打得还可以。</div>
                                     <div class="dialogue-pinyin pinyin-text">Dǎ de hái kěyǐ.</div>
                                     <div class="dialogue-vietnamese">Đánh cũng được。</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('跑步呢？你跑得快不快？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 2)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">跑步呢？你跑得快不快？</div>
                                     <div class="dialogue-pinyin pinyin-text">Pǎobù ne? Nǐ pǎo de kuài bu kuài?</div>
                                     <div class="dialogue-vietnamese">Còn chạy bộ? Cậu chạy có nhanh không?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我跑得不快，也不太喜欢跑步。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 3)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">我跑得不快，也不太喜欢跑步。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ pǎo de bù kuài, yě bú tài xǐhuan pǎobù.</div>
                                     <div class="dialogue-vietnamese">Tôi chạy không nhanh, cũng không thích chạy bộ lắm。</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('那你喜欢游泳吗？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 4)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">那你喜欢游泳吗？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nà nǐ xǐhuan yóuyǒng ma?</div>
                                     <div class="dialogue-vietnamese">Vậy cậu thích bơi không?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('喜欢，但我游泳游得不快。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 5)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">喜欢，但我游泳游得不快。</div>
                                     <div class="dialogue-pinyin pinyin-text">Xǐhuan, dàn wǒ yóuyǒng yóu de bù kuài.</div>
@@ -481,10 +484,10 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-door-open"></i> 课文 4 - 在房间 (Trong phòng - nhật ký)</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text4')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text4', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('我的爱好是运动。从上小学开始，我每天都跟爸爸去运动。现在我篮球打得很好，足球踢得不错，游泳游得也很快。我一有时间就去运动。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text4', 0)">
                                     <div class="dialogue-speaker">陈天中 (nhật ký)</div>
                                     <div class="dialogue-chinese chinese-text">我的爱好是运动。从上小学开始，我每天都跟爸爸去运动。现在我篮球打得很好，足球踢得不错，游泳游得也很快。我一有时间就去运动。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ de àihào shì yùndòng. Cóng shàng xiǎoxué kāishǐ, wǒ měitiān dū gēn bàba qù yùndòng. Xiànzài wǒ lánqiú dǎ de hěn hǎo, zúqiú tī de búcuò, yóuyǒng yóu de yě hěn kuài. Wǒ yī yǒu shíjiān jiù qù yùndòng.</div>
@@ -740,7 +743,7 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                             <i class="bi bi-headphones"></i> 第一部分 - 根据课文 1 选择正确答案 (Câu 1-2)
                         </div>
                         <div class="audio-player">
-                            <button class="play-btn" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i></button>
+                            <button class="play-btn" onclick="speakAllText('text1', this)"><i class="bi bi-play-fill"></i></button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
                             <span style="font-family: Arial, sans-serif; color: #666; font-size: 14px;">Nghe 课文 1</span>
                         </div>
@@ -769,7 +772,7 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                             <i class="bi bi-headphones"></i> 第二部分 - 根据课文 2 选择正确答案 (Câu 3-4)
                         </div>
                         <div class="audio-player">
-                            <button class="play-btn" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i></button>
+                            <button class="play-btn" onclick="speakAllText('text2', this)"><i class="bi bi-play-fill"></i></button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
                             <span style="font-family: Arial, sans-serif; color: #666; font-size: 14px;">Nghe 课文 2</span>
                         </div>
@@ -1143,40 +1146,156 @@ Anh ấy chơi bóng rổ rất giỏi</title>
     let draggedElement = null;
     let draggedFrom = null;
 
-    // ===== TTS =====
+    // ==================== AUDIO ENGINE (Mobile-compatible) ====================
+    let _audioEl = null;
+    let _ttsQueue = [];
+
+    // ==================== ÂM THANH THẬT CHO BÀI KHÓA / BÀI NGHE ====================
+    // 4 track bài khóa gốc (7-1, 7-3, 7-5, 7-7) đã được ghép vào 1 file MP3 duy nhất.
+    const COURSE_AUDIO_FILE = 'HSK3.0-02.07.mp3';
+    const COURSE_AUDIO = {
+        text1: {
+            all: [0.000000, 23.933333],
+            lines: [[0.000000, 5.160000], [5.160000, 11.880000], [11.880000, 17.080000], [17.080000, 20.720000], [20.720000, 23.880000]]
+        },
+        text2: {
+            all: [23.933333, 44.626666],
+            lines: [[23.933333, 28.253333], [28.253333, 29.813333], [29.813333, 32.573333], [32.573333, 39.653333], [39.653333, 41.613333], [41.613333, 44.573333]]
+        },
+        text3: {
+            all: [44.626666, 64.095999],
+            lines: [[44.626666, 47.506666], [47.506666, 49.626666], [49.626666, 52.986666], [52.986666, 56.786666], [56.786666, 59.626666], [59.626666, 64.026666]]
+        },
+        text4: {
+            all: [64.095999, 83.664000],
+            lines: [[64.095999, 83.615999]]
+        }
+    };
+    let _courseAudioEl = null;
+    let _courseRange = null;
+
+    function _getCourseAudio() {
+        if (!_courseAudioEl) {
+            _courseAudioEl = new Audio(COURSE_AUDIO_FILE);
+            _courseAudioEl.preload = 'auto';
+            _courseAudioEl.addEventListener('timeupdate', () => {
+                if (!_courseRange) return;
+                const { start, end, bar } = _courseRange;
+                if (bar) {
+                    const pct = Math.max(0, Math.min(100, ((_courseAudioEl.currentTime - start) / (end - start)) * 100));
+                    bar.style.width = pct + '%';
+                }
+                if (_courseAudioEl.currentTime >= end - 0.03) {
+                    _courseAudioEl.pause();
+                    if (bar) bar.style.width = '100%';
+                    _courseRange = null;
+                }
+            });
+        }
+        return _courseAudioEl;
+    }
+
+    function _stopCourseAudio() {
+        if (_courseAudioEl) _courseAudioEl.pause();
+        _courseRange = null;
+    }
+
+    function _playCourseRange(start, end, sourceBtn) {
+        if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+
+        const audio = _getCourseAudio();
+        const bar = sourceBtn && sourceBtn.closest('.audio-player')
+            ? sourceBtn.closest('.audio-player').querySelector('.audio-progress-bar')
+            : null;
+        document.querySelectorAll('.audio-progress-bar').forEach(b => { if (b !== bar) b.style.width = '0%'; });
+        if (bar) bar.style.width = '0%';
+        _courseRange = { start, end, bar };
+
+        const startPlayback = () => {
+            audio.currentTime = start;
+            audio.playbackRate = audioSpeed;
+            const p = audio.play();
+            if (p !== undefined) p.catch(() => {});
+        };
+        if (audio.readyState >= 1) startPlayback();
+        else audio.addEventListener('loadedmetadata', startPlayback, { once: true });
+    }
+
+    function playDialogueLine(textId, lineIndex) {
+        const item = COURSE_AUDIO[textId];
+        if (!item || !item.lines[lineIndex]) return;
+        const [start, end] = item.lines[lineIndex];
+        _playCourseRange(start, end, null);
+    }
+
+    function _getAudio() {
+        if (!_audioEl) {
+            _audioEl = new Audio();
+            _audioEl.onended = _playNextQueue;
+            _audioEl.onerror = _playNextQueue;
+        }
+        return _audioEl;
+    }
+
+    function _playNextQueue() {
+        if (_ttsQueue.length > 0) {
+            const next = _ttsQueue.shift();
+            setTimeout(() => _playOne(next), 350);
+        }
+    }
+
+    function _playOne(text) {
+        const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(text);
+        const audio = _getAudio();
+        audio.src = url;
+        audio.crossOrigin = 'anonymous';
+        const p = audio.play();
+        if (p !== undefined) {
+            p.catch(() => _speakWithSynthesis(text, _playNextQueue));
+        }
+    }
+
+    function _speakWithSynthesis(text, onEnd) {
+        if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+        speechSynthesis.cancel();
+        function doSpeak() {
+            const voices = speechSynthesis.getVoices();
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.lang = 'zh-CN';
+            utt.rate = audioSpeed;
+            const zhVoice = voices.find(v => v.lang && (v.lang.startsWith('zh') || v.lang.startsWith('cmn')));
+            if (zhVoice) utt.voice = zhVoice;
+            utt.onend = onEnd || null;
+            utt.onerror = onEnd || null;
+            speechSynthesis.speak(utt);
+        }
+        speechSynthesis.getVoices().length === 0
+            ? (speechSynthesis.onvoiceschanged = doSpeak)
+            : doSpeak();
+    }
+
     function setAudioSpeed(speed) {
         audioSpeed = parseFloat(speed);
+        if (_courseAudioEl) _courseAudioEl.playbackRate = audioSpeed;
         localStorage.setItem('hsk2_audio_speed', audioSpeed);
     }
 
     function speak(text) {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = 'zh-CN';
-            utter.rate = audioSpeed;
-            utter.pitch = 1;
-            window.speechSynthesis.speak(utter);
-        }
+        if (!text) return;
+        _stopCourseAudio();
+        if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+        _playOne(text);
     }
 
-    function speakAllText(textId) {
-        const container = document.getElementById(textId);
-        if (!container) return;
-        const lines = container.querySelectorAll('.dialogue-chinese');
-        let index = 0;
-        function speakNext() {
-            if (index >= lines.length) return;
-            const text = lines[index].textContent.trim();
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.lang = 'zh-CN';
-            utter.rate = audioSpeed;
-            utter.pitch = 1;
-            utter.onend = () => { index++; speakNext(); };
-            window.speechSynthesis.speak(utter);
-        }
-        window.speechSynthesis.cancel();
-        speakNext();
+    function speakAllText(textId, sourceBtn) {
+        const item = COURSE_AUDIO[textId];
+        if (!item) return;
+        const [start, end] = item.all;
+        _playCourseRange(start, end, sourceBtn || null);
     }
 
     // ==================== NGỮ PHÁP ====================
@@ -1312,8 +1431,8 @@ Anh ấy chơi bóng rổ rất giỏi</title>
                     width: 60,
                     height: 60,
                     padding: 3,
-                    strokeColor: '#4472c4',
-                    radicalColor: '#4472c4',
+                    strokeColor: '#C0392B',
+                    radicalColor: '#27AE60',
                     delayBetweenStrokes: 300,
                     strokeAnimationSpeed: 1.5,
                     showCharacter: false
@@ -1486,6 +1605,15 @@ Anh ấy chơi bóng rổ rất giỏi</title>
     function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
     function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
 
+    function exportHTML() {
+        const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'HSK2_Bai02_Export.html';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+        alert('Đã xuất file HTML thành công!');
+    }
 
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
 </script>
