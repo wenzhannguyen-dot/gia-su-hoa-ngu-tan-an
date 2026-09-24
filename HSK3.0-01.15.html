@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -70,19 +70,13 @@
         .vocab-pinyin { font-size: 20px; color: #8e44ad; margin-bottom: 6px; font-weight: 500; }
         .vocab-meaning { font-size: 20px; color: #666666; font-weight: 600; margin-bottom: 6px; font-family: Arial, sans-serif; }
         .vocab-example { font-size: 16px; color: #888; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; }
-        .vocab-animation { 
-            min-width: 140px; padding: 10px; background: transparent; 
-            position: relative; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; 
-        }
-        .writer-container { 
-            display: flex; align-items: center; justify-content: center; 
-            background: white; border: 2px solid #e0e0e0; border-radius: 8px; 
-            padding: 4px; box-shadow: inset 0 0 12px rgba(0,0,0,0.03); 
-        }
-        .writers-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; }
-        /* Tắt transition toàn cục cho nét chữ SVG để hanzi-writer chạy mượt, không giật */
-        .writer-container svg, .writer-container svg * { transition: none !important; animation: none !important; }
+        .vocab-animation { min-width: 200px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); padding: 15px; position: relative; }
+        .stroke-wrapper { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 80px; }
+        .stroke-inline { display: flex; justify-content: center; align-items: center; gap: 6px; flex: 1; flex-wrap: wrap; }
+        .stroke-inline svg { border: 1px solid #e0e0e0; border-radius: 4px; background: #fafafa; }
+        .replay-btn { width: 36px; height: 36px; border: none; background: #f3e5f5; color: #8e44ad; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s; flex-shrink: 0; }
+        .replay-btn:hover { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; transform: scale(1.1); }
+        .writer-container { width: 100px; height: 100px; }
         .animation-controls { position: absolute; bottom: 5px; display: flex; gap: 8px; }
         .anim-btn { width: 28px; height: 28px; border: none; background: #f3e5f5; color: #8e44ad; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s; }
         .anim-btn:hover { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; transform: scale(1.1); }
@@ -329,14 +323,17 @@
             <div id="vocabulary" class="section-content">
                 <div class="vocab-container">
                     <div class="vocab-tabs">
-                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (12)</button>
+                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (17)</button>
                         <button class="vocab-tab" onclick="filterVocab('v', this)">Động từ</button>
                         <button class="vocab-tab" onclick="filterVocab('n', this)">Danh từ</button>
                         <button class="vocab-tab" onclick="filterVocab('adj', this)">Tính từ</button>
                         <button class="vocab-tab" onclick="filterVocab('pron', this)">Đại từ</button>
+                        <button class="vocab-tab" onclick="filterVocab('num', this)">Số từ</button>
+                        <button class="vocab-tab" onclick="filterVocab('conj', this)">Liên từ</button>
                         <button class="vocab-tab" onclick="filterVocab('text1', this)">课文 1</button>
                         <button class="vocab-tab" onclick="filterVocab('text2', this)">课文 2</button>
                         <button class="vocab-tab" onclick="filterVocab('text3', this)">课文 3</button>
+                        <button class="vocab-tab" onclick="filterVocab('proper', this)">Tên riêng</button>
                     </div>
                     <div class="vocab-grid" id="vocab-grid"></div>
                 </div>
@@ -355,28 +352,28 @@
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-egg-fried"></i> 课文 1 - 在李文家 (Ở nhà Lý Văn)</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text1', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('你们爱吃哪个菜？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 0)">
                                     <div class="dialogue-speaker">李文</div>
                                     <div class="dialogue-chinese chinese-text">你们爱吃哪个菜？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nǐmen ài chī nǎge cài?</div>
                                     <div class="dialogue-vietnamese">Các bạn thích ăn món nào?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我喜欢这个，也喜欢那个。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 1)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">我喜欢这个，也喜欢那个。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ xǐhuan zhège, yě xǐhuan nàge.</div>
                                     <div class="dialogue-vietnamese">Tôi thích cái này, cũng thích cái kia.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('这些菜都好吃，还很好看。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 2)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">这些菜都好吃，还很好看。</div>
                                     <div class="dialogue-pinyin pinyin-text">Zhèxiē cài dōu hǎochī, hái hěn hǎokàn.</div>
                                     <div class="dialogue-vietnamese">Những món này đều ngon, còn rất đẹp mắt nữa.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我爱吃中国菜，也喜欢做。大家多吃点儿。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 3)">
                                     <div class="dialogue-speaker">李文</div>
                                     <div class="dialogue-chinese chinese-text">我爱吃中国菜，也喜欢做。大家多吃点儿。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ ài chī Zhōngguócài, yě xǐhuan zuò. Dàjiā duō chī diǎnr.</div>
@@ -394,28 +391,28 @@
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-airplane"></i> 课文 2 - 谈论假期计划 (Bàn về kế hoạch nghỉ)</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text2', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('你们都想去哪儿？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 0)">
                                     <div class="dialogue-speaker">李文</div>
                                     <div class="dialogue-chinese chinese-text">你们都想去哪儿？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nǐmen dōu xiǎng qù nǎr?</div>
                                     <div class="dialogue-vietnamese">Các bạn đều muốn đi đâu?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('去年我和男朋友去了西安，今年我想去北京。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 1)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">去年我和男朋友去了西安，今年我想去北京。</div>
                                     <div class="dialogue-pinyin pinyin-text">Qùnián wǒ hé nánpéngyou qùle Xī'ān, jīnnián wǒ xiǎng qù Běijīng.</div>
                                     <div class="dialogue-vietnamese">Năm ngoái tôi và bạn trai đã đi Tây An, năm nay tôi muốn đi Bắc Kinh.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('前几年我去了西安，非常好玩儿。今年我也想去北京。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 2)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">前几年我去了西安，非常好玩儿。今年我也想去北京。</div>
                                     <div class="dialogue-pinyin pinyin-text">Qián jǐ nián wǒ qùle Xī'ān, fēicháng hǎowánr. Jīnnián wǒ yě xiǎng qù Běijīng.</div>
                                     <div class="dialogue-vietnamese">Mấy năm trước tôi đã đi Tây An, rất thú vị. Năm nay tôi cũng muốn đi Bắc Kinh.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我和王老师都是北京人，北京非常漂亮。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 3)">
                                     <div class="dialogue-speaker">李文</div>
                                     <div class="dialogue-chinese chinese-text">我和王老师都是北京人，北京非常漂亮。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ hé Wáng lǎoshī dōu shì Běijīng rén, Běijīng fēicháng piàoliang.</div>
@@ -429,40 +426,40 @@
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-building"></i> 课文 3 - 在教室外 (Ngoài lớp học)</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text3', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('你们的飞机到北京要几个小时？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 0)">
                                     <div class="dialogue-speaker">王一飞</div>
                                     <div class="dialogue-chinese chinese-text">你们的飞机到北京要几个小时？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nǐmen de fēijī dào Běijīng yào jǐ ge xiǎoshí?</div>
                                     <div class="dialogue-vietnamese">Máy bay của các bạn đến Bắc Kinh mất mấy tiếng?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('九个小时。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 1)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">九个小时。</div>
                                     <div class="dialogue-pinyin pinyin-text">Jiǔ ge xiǎoshí.</div>
                                     <div class="dialogue-vietnamese">Chín tiếng.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我家人都在北京，星期天我姐姐也有时间，她可以去机场接你们，你们也可以住我家。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 2)">
                                     <div class="dialogue-speaker">王一飞</div>
                                     <div class="dialogue-chinese chinese-text">我家人都在北京，星期天我姐姐也有时间，她可以去机场接你们，你们也可以住我家。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ jiārén dōu zài Běijīng, Xīngqītiān wǒ jiějie yě yǒu shíjiān, tā kěyǐ qù jīchǎng jiē nǐmen, nǐmen yě kěyǐ zhù wǒ jiā.</div>
                                     <div class="dialogue-vietnamese">Gia đình tôi đều ở Bắc Kinh, Chủ nhật chị tôi cũng có thời gian, chị ấy có thể đi sân bay đón các bạn, các bạn cũng có thể ở nhà tôi.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我们星期日早上八点到大兴机场，早不早？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 3)">
                                     <div class="dialogue-speaker">安妮</div>
                                     <div class="dialogue-chinese chinese-text">我们星期日早上八点到大兴机场，早不早？</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒmen Xīngqīrì zǎoshang bā diǎn dào Dàxīng Jīchǎng, zǎo bu zǎo?</div>
                                     <div class="dialogue-vietnamese">Chúng tôi Chủ nhật sáng 8 giờ đến Sân bay Đại Hưng, có sớm không?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('不早。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 4)">
                                     <div class="dialogue-speaker">王一飞</div>
                                     <div class="dialogue-chinese chinese-text">不早。</div>
                                     <div class="dialogue-pinyin pinyin-text">Bù zǎo.</div>
                                     <div class="dialogue-vietnamese">Không sớm.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('谢谢老师！那我们和您姐姐在大兴机场见！')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 5)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">谢谢老师！那我们和您姐姐在大兴机场见！</div>
                                     <div class="dialogue-pinyin pinyin-text">Xièxie lǎoshī! Nà wǒmen hé nín jiějie zài Dàxīng Jīchǎng jiàn!</div>
@@ -1013,21 +1010,37 @@
 
 <script>
     // ==================== BIẾN TOÀN CỤC ====================
-    let audioSpeed = 1.0;
+    let audioSpeed = 0.8;
 
     const vocabulary = [
+        // 课文 1 - 生词 1-2
         { id: 1, chinese: '爱', pinyin: 'ài', meaning: 'Thích, yêu', category: 'v', lesson: 'text1', example: '你们爱吃哪个菜？' },
         { id: 2, chinese: '哪个', pinyin: 'nǎge', meaning: 'Cái nào', category: 'pron', lesson: 'text1', example: '你们爱吃哪个菜？' },
+
+        // 课文 2 - 生词 3-7
         { id: 3, chinese: '去年', pinyin: 'qùnián', meaning: 'Năm ngoái', category: 'n', lesson: 'text2', example: '去年我和男朋友去了西安。' },
         { id: 4, chinese: '男朋友', pinyin: 'nánpéngyou', meaning: 'Bạn trai', category: 'n', lesson: 'text2', example: '去年我和男朋友去了西安。' },
-        { id: 5, chinese: '几', pinyin: 'jǐ', meaning: 'Mấy, vài', category: 'pron', lesson: 'text2', example: '前几年我去了西安。' },
-        { id: 6, chinese: '好玩儿', pinyin: 'hǎowánr', meaning: 'Thú vị, vui', category: 'adj', lesson: 'text2', example: '非常好玩儿。' },
-        { id: 7, chinese: '飞机', pinyin: 'fēijī', meaning: 'Máy bay', category: 'n', lesson: 'text3', example: '你们的飞机到北京要几个小时？' },
-        { id: 8, chinese: '要', pinyin: 'yào', meaning: 'Cần, mất (thời gian)', category: 'v', lesson: 'text3', example: '要几个小时？' },
-        { id: 9, chinese: '小时', pinyin: 'xiǎoshí', meaning: 'Tiếng, giờ', category: 'n', lesson: 'text3', example: '九个小时。' },
-        { id: 10, chinese: '家人', pinyin: 'jiārén', meaning: 'Gia đình, người nhà', category: 'n', lesson: 'text3', example: '我家人都在北京。' },
-        { id: 11, chinese: '时间', pinyin: 'shíjiān', meaning: 'Thời gian', category: 'n', lesson: 'text3', example: '我姐姐也有时间。' },
-        { id: 12, chinese: '机场', pinyin: 'jīchǎng', meaning: 'Sân bay', category: 'n', lesson: 'text3', example: '大兴机场见！' }
+        { id: 5, chinese: '几', pinyin: 'jǐ', meaning: 'Mấy, vài', category: 'num', lesson: 'text2', example: '前几年我去了西安。' },
+        { id: 6, chinese: '年', pinyin: 'nián', meaning: 'Năm', category: 'n', lesson: 'text2', example: '前几年我去了西安。' },
+        { id: 7, chinese: '好玩儿', pinyin: 'hǎowánr', meaning: 'Thú vị, vui', category: 'adj', lesson: 'text2', example: '非常好玩儿。' },
+
+        // 专有名词 - Tên riêng (không tính vào 17 生词)
+        { id: 'proper-xian', displayId: '专1', chinese: '西安', pinyin: "Xī'ān", meaning: 'Tây An', category: 'proper', lesson: 'proper', example: '去年我和男朋友去了西安。' },
+        { id: 'proper-beijing', displayId: '专2', chinese: '北京', pinyin: 'Běijīng', meaning: 'Bắc Kinh', category: 'proper', lesson: 'proper', example: '今年我想去北京。' },
+
+        // 课文 3 - 生词 8-17
+        { id: 8, chinese: '飞机', pinyin: 'fēijī', meaning: 'Máy bay', category: 'n', lesson: 'text3', example: '你们的飞机到北京要几个小时？' },
+        { id: 9, chinese: '要', pinyin: 'yào', meaning: 'Cần; mất (thời gian)', category: 'v', lesson: 'text3', example: '到北京要几个小时？' },
+        { id: 10, chinese: '小时', pinyin: 'xiǎoshí', meaning: 'Tiếng, giờ', category: 'n', lesson: 'text3', example: '九个小时。' },
+        { id: 11, chinese: '家人', pinyin: 'jiārén', meaning: 'Gia đình, người nhà', category: 'n', lesson: 'text3', example: '我家人都在北京。' },
+        { id: 12, chinese: '时间', pinyin: 'shíjiān', meaning: 'Thời gian', category: 'n', lesson: 'text3', example: '星期天我姐姐也有时间。' },
+        { id: 13, chinese: '机场', pinyin: 'jīchǎng', meaning: 'Sân bay', category: 'n', lesson: 'text3', example: '她可以去机场接你们。' },
+        { id: 14, chinese: '接', pinyin: 'jiē', meaning: 'Đón; tiếp', category: 'v', lesson: 'text3', example: '她可以去机场接你们。' },
+        { id: 15, chinese: '住', pinyin: 'zhù', meaning: 'Ở; sống', category: 'v', lesson: 'text3', example: '你们也可以住我家。' },
+        { id: 16, chinese: '早', pinyin: 'zǎo', meaning: 'Sớm', category: 'adj', lesson: 'text3', example: '早不早？' },
+        { id: 17, chinese: '那', pinyin: 'nà', meaning: 'Vậy; thế thì', category: 'conj', lesson: 'text3', example: '那我们和您姐姐在大兴机场见！' },
+
+        { id: 'proper-daxing', displayId: '专3', chinese: '大兴机场', pinyin: 'Dàxīng Jīchǎng', meaning: 'Sân bay Đại Hưng', category: 'proper', lesson: 'proper', example: '我们星期日早上八点到大兴机场。' }
     ];
 
     const writers = {};
@@ -1039,33 +1052,122 @@
     let currentGrammarIndex = 0;
     const GRAMMAR_TOTAL = 3;
 
-    // ==================== AUDIO ENGINE ====================
-    // sessionId: tang len moi lan _stopAll() -> huy moi callback cu
-    function speak(text) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'zh-CN'; utter.rate = audioSpeed; utter.pitch = 1;
-        window.speechSynthesis.speak(utter);
-    }
-}
+    // ==================== REAL MP3 AUDIO: BÀI KHÓA + TỪ VỰNG ====================
+    const COURSE_AUDIO_FILE = 'HSK3.0-01.15.mp3';
+    const COURSE_AUDIO = {"text1":{"all":[0.324,15.106],"lines":[[0.324,1.795],[2.606,5.579],[6.416,9.41],[10.66,15.106]]},"text2":{"all":[21.728,41.531],"lines":[[21.728,23.183],[24.303,28.981],[29.719,36.259],[37.013,41.531]]},"text3":{"all":[61.623,91.99],"lines":[[61.623,64.631],[66.429,67.678],[69.789,79.094],[80.352,84.403],[85.423,85.914],[86.938,91.99]]}};
+    const VOCAB_AUDIO = {"1":[16.303,17.986],"2":[19.132,21.037],"3":[42.552,45.203],"4":[45.675,48.274],"5":[48.748,50.591],"6":[51.126,52.864],"7":[53.174,55.454],"proper-xian":[55.887,58.175],"proper-beijing":[58.667,60.832],"8":[93.087,95.403],"9":[96.021,97.441],"10":[97.919,100.344],"11":[100.711,102.976],"12":[103.497,105.923],"13":[106.637,109.632],"14":[110.151,111.857],"15":[112.393,114.026],"16":[114.525,116.301],"17":[116.846,118.494],"proper-daxing":[119.243,123.238]};
 
-function speakAllText(textId) {
-    const container = document.getElementById(textId);
-    if (!container) return;
-    const lines = container.querySelectorAll('.dialogue-chinese, .prose-chinese');
-    let index = 0;
-    function speakNext() {
-        if (index >= lines.length) return;
-        const text = lines[index].textContent.trim();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'zh-CN'; utter.rate = audioSpeed; utter.pitch = 1;
-        utter.onend = () => { index++; speakNext(); };
-        window.speechSynthesis.speak(utter);
+    let _audioEl = null;
+    let _ttsQueue = [];
+    let _courseAudioEl = null;
+    let _courseRange = null;
+
+    function _getAudio() {
+        if (!_audioEl) {
+            _audioEl = new Audio();
+            _audioEl.onended = _playNextQueue;
+            _audioEl.onerror = _playNextQueue;
+        }
+        return _audioEl;
     }
-    window.speechSynthesis.cancel();
-    speakNext();
-}
+
+    function _getCourseAudio() {
+        if (!_courseAudioEl) {
+            _courseAudioEl = new Audio(COURSE_AUDIO_FILE);
+            _courseAudioEl.preload = 'auto';
+            _courseAudioEl.playbackRate = audioSpeed;
+            _courseAudioEl.addEventListener('timeupdate', () => {
+                if (!_courseRange) return;
+                if (_courseAudioEl.currentTime >= _courseRange.end - 0.025) {
+                    _courseAudioEl.pause();
+                    _courseRange = null;
+                }
+            });
+        }
+        return _courseAudioEl;
+    }
+
+    function _stopAllAudio() {
+        if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if (_courseAudioEl) _courseAudioEl.pause();
+        _courseRange = null;
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+    }
+
+    function _playCourseRange(start, end) {
+        _stopAllAudio();
+        const audio = _getCourseAudio();
+        audio.playbackRate = audioSpeed;
+        _courseRange = { start, end };
+        audio.currentTime = start;
+        const p = audio.play();
+        if (p !== undefined) p.catch(() => { _courseRange = null; });
+    }
+
+    function playDialogueLine(textId, index) {
+        const cfg = COURSE_AUDIO[textId];
+        if (!cfg || !cfg.lines[index]) return;
+        _playCourseRange(cfg.lines[index][0], cfg.lines[index][1]);
+    }
+
+    function playVocabAudio(id) {
+        const range = VOCAB_AUDIO[String(id)];
+        if (!range) return;
+        _playCourseRange(range[0], range[1]);
+    }
+
+    function speakAllText(textId, sourceBtn) {
+        const cfg = COURSE_AUDIO[textId];
+        if (!cfg) return;
+        _playCourseRange(cfg.all[0], cfg.all[1]);
+    }
+
+    function _playNextQueue() {
+        if (_ttsQueue.length > 0) {
+            const next = _ttsQueue.shift();
+            setTimeout(() => _playOne(next), 350);
+        }
+    }
+
+    function _playOne(text) {
+        const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(text);
+        const audio = _getAudio();
+        audio.playbackRate = audioSpeed;
+        audio.src = url;
+        const p = audio.play();
+        if (p !== undefined) p.catch(() => _speakWithSynthesis(text, _playNextQueue));
+    }
+
+    function _speakWithSynthesis(text, onEnd) {
+        if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+        speechSynthesis.cancel();
+        function doSpeak() {
+            const voices = speechSynthesis.getVoices();
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.lang = 'zh-CN';
+            utt.rate = audioSpeed;
+            const zhVoice = voices.find(v => v.lang && (v.lang.startsWith('zh') || v.lang.startsWith('cmn')));
+            if (zhVoice) utt.voice = zhVoice;
+            utt.onend = onEnd || null;
+            utt.onerror = onEnd || null;
+            speechSynthesis.speak(utt);
+        }
+        speechSynthesis.getVoices().length === 0 ? (speechSynthesis.onvoiceschanged = doSpeak) : doSpeak();
+    }
+
+    function setAudioSpeed(speed) {
+        audioSpeed = parseFloat(speed);
+        if (_courseAudioEl) _courseAudioEl.playbackRate = audioSpeed;
+        if (_audioEl) _audioEl.playbackRate = audioSpeed;
+        localStorage.setItem('hsk1_audio_speed', audioSpeed);
+    }
+
+    function speak(text) {
+        if (!text) return;
+        _stopAllAudio();
+        _playOne(text);
+    }
 
     // ==================== NGỮ PHÁP ====================
     function showGrammar(index, btn) {
@@ -1086,9 +1188,11 @@ function speakAllText(textId) {
         renderVocabulary('all');
         loadNoteEditor();
         initDragAndDrop();
-        localStorage.removeItem('hsk1_audio_speed');
-        audioSpeed = 1.0;
-        document.getElementById('audio-speed').value = '1.0';
+        const savedSpeed = localStorage.getItem('hsk1_audio_speed');
+        if (savedSpeed) {
+            audioSpeed = parseFloat(savedSpeed);
+            document.getElementById('audio-speed').value = savedSpeed;
+        }
     });
 
     // ==================== TOGGLE & NAVIGATION ====================
@@ -1108,6 +1212,33 @@ function speakAllText(textId) {
         if (navItem) navItem.classList.add('active');
         currentSection = sections.indexOf(sectionId);
         updateHeader(currentSection);
+
+        if (sectionId === 'vocabulary') {
+            setTimeout(() => {
+                const currentFilter = document.querySelector('.vocab-tab.active');
+                if (currentFilter) {
+                    const filterText = currentFilter.textContent;
+                    const filterType = filterText.includes('Tất cả') ? 'all' :
+                                      filterText.includes('Động từ') ? 'v' :
+                                      filterText.includes('Danh từ') ? 'n' :
+                                      filterText.includes('Tính từ') ? 'adj' :
+                                      filterText.includes('Đại từ') ? 'pron' :
+                                      filterText.includes('Số từ') ? 'num' :
+                                      filterText.includes('Liên từ') ? 'conj' :
+                                      filterText.includes('Tên riêng') ? 'proper' :
+                                      filterText.includes('课文 1') ? 'text1' :
+                                      filterText.includes('课文 2') ? 'text2' :
+                                      filterText.includes('课文 3') ? 'text3' : 'all';
+                    const filtered = filterType === 'all' ? vocabulary.filter(v => v.category !== 'proper')
+                        : filterType === 'proper' ? vocabulary.filter(v => v.category === 'proper')
+                        : filterType.startsWith('text') ? vocabulary.filter(v => v.lesson === filterType && v.category !== 'proper')
+                        : vocabulary.filter(v => v.category === filterType && v.category !== 'proper');
+                    if (!strokesInitialized) {
+                        initVocabStrokes(filtered);
+                    }
+                }
+            }, 100);
+        }
     }
 
     function updateHeader(index) {
@@ -1117,20 +1248,23 @@ function speakAllText(textId) {
     }
 
     // ==================== TỪ VỰNG ====================
+    const vocabWriters = {};
+    let strokesInitialized = false;
+
     function renderVocabulary(filter) {
         const grid = document.getElementById('vocab-grid');
-        Object.keys(writers).forEach(id => { try { writers[id]?.forEach(w => w.cancelAnimation()); } catch(e) {} delete writers[id]; });
         grid.innerHTML = '';
-        const lessonLabels = { text1: '课文 1', text2: '课文 2', text3: '课文 3' };
-        const filtered = filter === 'all' ? vocabulary
-            : filter.startsWith('text') ? vocabulary.filter(v => v.lesson === filter)
-            : vocabulary.filter(v => v.category === filter);
+        const lessonLabels = { text1: '课文 1', text2: '课文 2', text3: '课文 3', proper: '专有名词' };
+        const filtered = filter === 'all' ? vocabulary.filter(v => v.category !== 'proper')
+            : filter === 'proper' ? vocabulary.filter(v => v.category === 'proper')
+            : filter.startsWith('text') ? vocabulary.filter(v => v.lesson === filter && v.category !== 'proper')
+            : vocabulary.filter(v => v.category === filter && v.category !== 'proper');
         filtered.forEach(item => {
             const card = document.createElement('div');
             card.className = 'vocab-card';
             card.innerHTML = `
                 <div class="vocab-info">
-                    <div class="vocab-number">${item.id}</div>
+                    <div class="vocab-number">${item.displayId || item.id}</div>
                     <div class="vocab-content">
                         <div class="vocab-chinese chinese-text">${item.chinese}</div>
                         <div class="vocab-pinyin pinyin-text">${item.pinyin}</div>
@@ -1140,57 +1274,83 @@ function speakAllText(textId) {
                         </div>
                         ${item.example ? `<div class="vocab-example">"${item.example}"</div>` : ''}
                     </div>
-                    <button class="audio-btn" onclick="speak('${item.chinese}');event.stopPropagation();">
+                    <button class="audio-btn" onclick='playVocabAudio(${JSON.stringify(item.id)});event.stopPropagation();'>
                         <i class="bi bi-volume-up"></i>
                     </button>
                 </div>
                 <div class="vocab-animation">
-                    <div class="writers-row">
-                        ${[...item.chinese].map((ch, i) => `<div id="writer-${item.id}-${i}" class="writer-container"></div>`).join('')}
-                    </div>
-                    <div class="animation-controls">
-                        <button class="anim-btn" onclick="replayAnimation(${item.id})" title="Viết lại"><i class="bi bi-arrow-clockwise"></i></button>
+                    <div class="stroke-wrapper">
+                        <div class="stroke-inline" id="stroke-${item.id}"></div>
+                        <button class="replay-btn" onclick='event.stopPropagation(); replayStroke(${JSON.stringify(item.id)}, ${JSON.stringify(item.chinese)})' title="Xem lại">&#x21bb;</button>
                     </div>
                 </div>
             `;
             grid.appendChild(card);
         });
-        filtered.forEach((item, index) => {
-            setTimeout(() => {
-                if (writers[item.id] || typeof HanziWriter === 'undefined') return;
-                const chars = [...item.chinese];
-                const size = 72;
-                const instances = [];
-                chars.forEach((ch, i) => {
-                    const containerId = `writer-${item.id}-${i}`;
-                    const container = document.getElementById(containerId);
-                    if (!container) return;
-                    const w = HanziWriter.create(containerId, ch, {
-                        width: size, height: size, padding: 3,
-                        strokeColor: '#333', radicalColor: '#8e44ad',
-                        strokeWidth: 3, showCharacter: false, showOutline: true,
-                        strokeAnimationSpeed: 1, delayBetweenStrokes: 50
+
+        strokesInitialized = false;
+        setTimeout(() => initVocabStrokes(filtered), 300);
+    }
+
+    function initVocabStrokes(vocabList) {
+        if (strokesInitialized) return;
+
+        vocabList.forEach((item, itemIndex) => {
+            const container = document.getElementById('stroke-' + item.id);
+            if (!container) return;
+
+            container.innerHTML = '';
+            const chars = item.chinese.split('');
+            const charWidth = chars.length === 1 ? 70 : chars.length === 2 ? 60 : 50;
+
+            vocabWriters[item.id] = [];
+
+            chars.forEach((c, index) => {
+                const div = document.createElement('div');
+                div.style.width = charWidth + 'px';
+                div.style.height = charWidth + 'px';
+                div.id = 'stroke-char-' + item.id + '-' + index;
+                container.appendChild(div);
+
+                try {
+                    const writer = HanziWriter.create('stroke-char-' + item.id + '-' + index, c, {
+                        width: charWidth,
+                        height: charWidth,
+                        padding: 3,
+                        strokeColor: '#333',
+                        radicalColor: '#8e44ad',
+                        delayBetweenStrokes: 1000,
+                        strokeAnimationSpeed: 1,
+                        showCharacter: true,
+                        showOutline: true,
+                        strokeWidth: 2
                     });
-                    instances.push(w);
-                });
-                writers[item.id] = instances;
-                animateSequence(instances);
-            }, index * 300);
+
+                    vocabWriters[item.id].push(writer);
+
+                } catch(e) {
+                    console.log('Error creating writer for:', c);
+                }
+            });
         });
+
+        strokesInitialized = true;
     }
 
-    // Vẽ lần lượt các chữ trong một từ
-    function animateSequence(instances) {
-        if (!instances || !instances.length) return;
-        let i = 0;
-        const next = () => {
-            if (i >= instances.length) return;
-            instances[i].animateCharacter({ onComplete: () => { i++; next(); } });
-        };
-        next();
+    function replayStroke(id, chinese) {
+        if (vocabWriters[id] && vocabWriters[id].length > 0) {
+            vocabWriters[id].forEach((writer, index) => {
+                setTimeout(() => {
+                    if (writer.hideCharacter) {
+                        writer.hideCharacter();
+                    }
+                    setTimeout(() => {
+                        writer.animateCharacter();
+                    }, 50);
+                }, index * 100);
+            });
+        }
     }
-
-    function replayAnimation(id) { animateSequence(writers[id]); }
 
     function filterVocab(category, btn) {
         document.querySelectorAll('.vocab-tab').forEach(t => t.classList.remove('active'));
