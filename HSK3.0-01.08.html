@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -177,14 +177,11 @@
             padding-top: 8px; border-top: 1px dashed #ddd; font-family: Arial, sans-serif; 
         }
         .vocab-animation { 
-            min-width: 140px; padding: 10px; background: transparent; 
-            position: relative; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; 
+            width: 140px; height: 140px; background: white; border: 2px solid #e0e0e0; 
+            border-radius: 8px; position: relative; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); 
         }
-        .writer-container { display: flex; align-items: center; justify-content: center; background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 4px; box-shadow: inset 0 0 12px rgba(0,0,0,0.03); }
-        .writers-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; }
-        /* Tắt transition SVG để hanzi-writer chạy mượt */
-        .writer-container svg, .writer-container svg * { transition: none !important; animation: none !important; }
+        .writer-container { width: 100px; height: 100px; }
         .animation-controls { position: absolute; bottom: 5px; display: flex; gap: 8px; }
         .anim-btn { 
             width: 28px; height: 28px; border: none; background: #f3e5f5; color: #8e44ad; 
@@ -667,11 +664,12 @@
             <div id="vocabulary" class="section-content">
                 <div class="vocab-container">
                     <div class="vocab-tabs">
-                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (23)</button>
+                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (24)</button>
                         <button class="vocab-tab" onclick="filterVocab('n', this)">Danh từ</button>
                         <button class="vocab-tab" onclick="filterVocab('v', this)">Động từ</button>
                         <button class="vocab-tab" onclick="filterVocab('adj', this)">Tính từ</button>
                         <button class="vocab-tab" onclick="filterVocab('prep', this)">Giới từ</button>
+                        <button class="vocab-tab" onclick="filterVocab('proper', this)">Tên riêng</button>
                         <button class="vocab-tab" onclick="filterVocab('text1', this)">课文 1</button>
                         <button class="vocab-tab" onclick="filterVocab('text2', this)">课文 2</button>
                         <button class="vocab-tab" onclick="filterVocab('text3', this)">课文 3</button>
@@ -693,28 +691,28 @@
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-house"></i> 课文 1 - 房间外有一只小猫</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text1', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('房间外有一只小猫。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 0)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">房间外有一只小猫。</div>
                                     <div class="dialogue-pinyin pinyin-text">Fángjiān wài yǒu yì zhī xiǎo māo.</div>
                                     <div class="dialogue-vietnamese">Ngoài phòng có một con mèo nhỏ.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我没看见，它在哪儿呢？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 1)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">我没看见，它在哪儿呢？</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ méi kànjiàn, tā zài nǎr ne?</div>
                                     <div class="dialogue-vietnamese">Tôi không thấy, nó ở đâu?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('它在桌子下呢。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 2)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">它在桌子下呢。</div>
                                     <div class="dialogue-pinyin pinyin-text">Tā zài zhuōzi xià ne.</div>
                                     <div class="dialogue-vietnamese">Nó ở dưới bàn.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('这只小猫真漂亮！')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text1', 3)">
                                     <div class="dialogue-speaker">陈天中</div>
                                     <div class="dialogue-chinese chinese-text">这只小猫真漂亮！</div>
                                     <div class="dialogue-pinyin pinyin-text">Zhè zhī xiǎo māo zhēn piàoliang!</div>
@@ -728,28 +726,28 @@
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-telephone"></i> 课文 2 - 在哪儿见呢？</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text2', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('我们在哪儿见呢？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 0)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">我们在哪儿见呢？</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒmen zài nǎr jiàn ne?</div>
                                     <div class="dialogue-vietnamese">Chúng ta gặp nhau ở đâu?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('在学校书店前见吧。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 1)">
                                     <div class="dialogue-speaker">李文</div>
                                     <div class="dialogue-chinese chinese-text">在学校书店前见吧。</div>
                                     <div class="dialogue-pinyin pinyin-text">Zài xuéxiào shūdiàn qián jiàn ba.</div>
                                     <div class="dialogue-vietnamese">Gặp ở trước hiệu sách trường học nhé.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('好的。下午两点你能到吗？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 2)">
                                     <div class="dialogue-speaker">白家月</div>
                                     <div class="dialogue-chinese chinese-text">好的。下午两点你能到吗？</div>
                                     <div class="dialogue-pinyin pinyin-text">Hǎo de. Xiàwǔ liǎng diǎn nǐ néng dào ma?</div>
                                     <div class="dialogue-vietnamese">Được. Hai giờ chiều bạn có thể đến được không?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('我能到。我在学校吃午饭。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text2', 3)">
                                     <div class="dialogue-speaker">李文</div>
                                     <div class="dialogue-chinese chinese-text">我能到。我在学校吃午饭。</div>
                                     <div class="dialogue-pinyin pinyin-text">Wǒ néng dào. Wǒ zài xuéxiào chī wǔfàn.</div>
@@ -763,40 +761,40 @@
                         <div class="dialogue-container">
                             <div class="dialogue-header">
                                 <div class="dialogue-header-left"><i class="bi bi-hospital"></i> 课文 3 - 在医院里</div>
-                                <button class="dialogue-audio-all" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i> Nghe bài</button>
+                                <button class="dialogue-audio-all" onclick="speakAllText('text3', this)"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
-                                <div class="dialogue-line" onclick="speak('小胡，还没吃饭呢？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 0)">
                                     <div class="dialogue-speaker">刘明</div>
                                     <div class="dialogue-chinese chinese-text">小胡，还没吃饭呢？</div>
                                     <div class="dialogue-pinyin pinyin-text">Xiǎo Hú, hái méi chī fàn ne?</div>
                                     <div class="dialogue-vietnamese">Tiểu Hồ, chưa ăn cơm à?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('没吃呢。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 1)">
                                     <div class="dialogue-speaker">胡医生</div>
                                     <div class="dialogue-chinese chinese-text">没吃呢。</div>
                                     <div class="dialogue-pinyin pinyin-text">Méi chī ne.</div>
                                     <div class="dialogue-vietnamese">Chưa ăn.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('大医院病人多，医生非常忙。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 2)">
                                     <div class="dialogue-speaker">刘明</div>
                                     <div class="dialogue-chinese chinese-text">大医院病人多，医生非常忙。</div>
                                     <div class="dialogue-pinyin pinyin-text">Dà yīyuàn bìngrén duō, yīshēng fēicháng máng.</div>
                                     <div class="dialogue-vietnamese">Bệnh viện lớn bệnh nhân nhiều, bác sĩ rất bận.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('是的。我爸爸也在医院工作，他也非常忙。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 3)">
                                     <div class="dialogue-speaker">胡医生</div>
                                     <div class="dialogue-chinese chinese-text">是的。我爸爸也在医院工作，他也非常忙。</div>
                                     <div class="dialogue-pinyin pinyin-text">Shì de. Wǒ bàba yě zài yīyuàn gōngzuò, tā yě fēicháng máng.</div>
                                     <div class="dialogue-vietnamese">Đúng vậy. Bố tôi cũng làm việc ở bệnh viện, ông ấy cũng rất bận.</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('你家有两个医生？')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 4)">
                                     <div class="dialogue-speaker">刘明</div>
                                     <div class="dialogue-chinese chinese-text">你家有两个医生？</div>
                                     <div class="dialogue-pinyin pinyin-text">Nǐ jiā yǒu liǎng gè yīshēng?</div>
                                     <div class="dialogue-vietnamese">Nhà bạn có hai bác sĩ?</div>
                                 </div>
-                                <div class="dialogue-line" onclick="speak('对。')">
+                                <div class="dialogue-line" onclick="playDialogueLine('text3', 5)">
                                     <div class="dialogue-speaker">胡医生</div>
                                     <div class="dialogue-chinese chinese-text">对。</div>
                                     <div class="dialogue-pinyin pinyin-text">Duì.</div>
@@ -1032,7 +1030,7 @@
                             <i class="bi bi-headphones"></i> 第一部分 - 根据课文 1 选择正确答案 (Câu 1-2)
                         </div>
                         <div class="audio-player">
-                            <button class="play-btn" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i></button>
+                            <button class="play-btn" onclick="speakAllText('text1', this)"><i class="bi bi-play-fill"></i></button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
                             <span style="font-family: Arial, sans-serif; color: #666; font-size: 14px;">房间外有一只小猫 - Nghe bài khóa 1</span>
                         </div>
@@ -1061,7 +1059,7 @@
                             <i class="bi bi-headphones"></i> 第二部分 - 根据课文 2 选择正确答案 (Câu 3-4)
                         </div>
                         <div class="audio-player">
-                            <button class="play-btn" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i></button>
+                            <button class="play-btn" onclick="speakAllText('text2', this)"><i class="bi bi-play-fill"></i></button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
                             <span style="font-family: Arial, sans-serif; color: #666; font-size: 14px;">在哪儿见呢？ - Nghe bài khóa 2</span>
                         </div>
@@ -1090,7 +1088,7 @@
                             <i class="bi bi-headphones"></i> 第三部分 - 根据课文 3 选择正确答案 (Câu 5-6)
                         </div>
                         <div class="audio-player">
-                            <button class="play-btn" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i></button>
+                            <button class="play-btn" onclick="speakAllText('text3', this)"><i class="bi bi-play-fill"></i></button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
                             <span style="font-family: Arial, sans-serif; color: #666; font-size: 14px;">在医院里 - Nghe bài khóa 3</span>
                         </div>
@@ -1347,7 +1345,40 @@
 
 <script>
     // ==================== BIẾN TOÀN CỤC ====================
-    let audioSpeed = 1.0;
+    let audioSpeed = 0.8;
+
+    const COURSE_AUDIO_FILE = 'HSK3.0-01.08.mp3';
+    const COURSE_AUDIO = {
+        text1: { all: [0.480, 10.360], lines: [[0.480, 2.320], [3.480, 6.110], [6.780, 7.910], [8.390, 10.360]] },
+        text2: { all: [38.400, 50.610], lines: [[38.400, 39.710], [40.910, 42.850], [44.030, 46.680], [47.880, 50.610]] },
+        text3: { all: [70.917, 89.727], lines: [[70.917, 73.217], [74.457, 75.217], [76.297, 79.417], [80.587, 85.497], [86.627, 88.347], [89.437, 89.727]] },
+    };
+    const VOCAB_AUDIO = {
+        1: [12.054, 14.338],
+        2: [14.843, 16.595],
+        3: [17.154, 18.855],
+        4: [19.333, 21.430],
+        5: [21.882, 23.673],
+        6: [24.326, 26.183],
+        7: [26.632, 29.008],
+        8: [29.507, 31.620],
+        9: [32.370, 34.242],
+        10: [34.716, 36.974],
+        11: [52.447, 54.279],
+        12: [54.662, 56.993],
+        13: [57.467, 59.923],
+        14: [60.428, 62.270],
+        15: [62.865, 64.619],
+        16: [65.247, 66.909],
+        17: [67.441, 69.689],
+        18: [91.469, 93.302],
+        19: [93.809, 95.450],
+        20: [95.954, 98.253],
+        21: [98.771, 100.494],
+        22: [101.004, 103.325],
+        23: [103.657, 105.974],
+        24: [106.330, 109.054],
+    };
 
     const vocabulary = [
         { id: 1, chinese: '房间', pinyin: 'fángjiān', meaning: 'Phòng', category: 'n', lesson: 'text1', example: '房间外有一只小猫。' },
@@ -1372,7 +1403,8 @@
         { id: 20, chinese: '病人', pinyin: 'bìngrén', meaning: 'Bệnh nhân', category: 'n', lesson: 'text3', example: '大医院病人多。' },
         { id: 21, chinese: '多', pinyin: 'duō', meaning: 'Nhiều', category: 'adj', lesson: 'text3', example: '病人多' },
         { id: 22, chinese: '医生', pinyin: 'yīshēng', meaning: 'Bác sĩ', category: 'n', lesson: 'text3', example: '医生非常忙。' },
-        { id: 23, chinese: '工作', pinyin: 'gōngzuò', meaning: 'Làm việc', category: 'v', lesson: 'text3', example: '我爸爸也在医院工作。' }
+        { id: 23, chinese: '工作', pinyin: 'gōngzuò', meaning: 'Làm việc', category: 'v', lesson: 'text3', example: '我爸爸也在医院工作。' },
+        { id: 24, chinese: '胡医生', pinyin: 'Hú yīshēng', meaning: 'Bác sĩ Hồ', category: 'proper', lesson: 'text3', example: '胡医生：没吃呢。' }
     ];
 
     const writers = {};
@@ -1384,33 +1416,139 @@
     let currentGrammarIndex = 0;
     const GRAMMAR_TOTAL = 3;
 
-    // ==================== AUDIO ENGINE ====================
-    // sessionId: tang len moi lan _stopAll() -> huy moi callback cu
-    function speak(text) {
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'zh-CN'; utter.rate = audioSpeed; utter.pitch = 1;
-        window.speechSynthesis.speak(utter);
-    }
-}
+    // ==================== AUDIO ENGINE (Mobile-compatible) ====================
+    let _courseAudioEl = null;
+    let _courseRange = null;
 
-function speakAllText(textId) {
-    const container = document.getElementById(textId);
-    if (!container) return;
-    const lines = container.querySelectorAll('.dialogue-chinese, .prose-chinese');
-    let index = 0;
-    function speakNext() {
-        if (index >= lines.length) return;
-        const text = lines[index].textContent.trim();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'zh-CN'; utter.rate = audioSpeed; utter.pitch = 1;
-        utter.onend = () => { index++; speakNext(); };
-        window.speechSynthesis.speak(utter);
+    function _getCourseAudio() {
+        if (!_courseAudioEl) {
+            _courseAudioEl = new Audio(COURSE_AUDIO_FILE);
+            _courseAudioEl.preload = 'auto';
+            _courseAudioEl.addEventListener('timeupdate', () => {
+                if (!_courseRange) return;
+                const { start, end, bar } = _courseRange;
+                if (bar) {
+                    const pct = Math.max(0, Math.min(100, ((_courseAudioEl.currentTime - start) / (end - start)) * 100));
+                    bar.style.width = pct + '%';
+                }
+                if (_courseAudioEl.currentTime >= end - 0.025) {
+                    _courseAudioEl.pause();
+                    if (bar) bar.style.width = '100%';
+                    _courseRange = null;
+                }
+            });
+        }
+        return _courseAudioEl;
     }
-    window.speechSynthesis.cancel();
-    speakNext();
-}
+
+    function _stopCourseAudio() {
+        if (_courseAudioEl) _courseAudioEl.pause();
+        _courseRange = null;
+    }
+
+    function _playCourseRange(start, end, sourceBtn) {
+        if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+        const audio = _getCourseAudio();
+        const bar = sourceBtn && sourceBtn.closest('.audio-player')
+            ? sourceBtn.closest('.audio-player').querySelector('.audio-progress-bar')
+            : null;
+        document.querySelectorAll('.audio-progress-bar').forEach(b => { if (b !== bar) b.style.width = '0%'; });
+        if (bar) bar.style.width = '0%';
+        _courseRange = { start, end, bar };
+        const startPlayback = () => {
+            audio.currentTime = start;
+            audio.playbackRate = audioSpeed;
+            const p = audio.play();
+            if (p !== undefined) p.catch(() => {});
+        };
+        if (audio.readyState >= 1) startPlayback();
+        else audio.addEventListener('loadedmetadata', startPlayback, { once: true });
+    }
+
+    function playDialogueLine(textId, lineIndex) {
+        const item = COURSE_AUDIO[textId];
+        if (!item || !item.lines[lineIndex]) return;
+        const [start, end] = item.lines[lineIndex];
+        _playCourseRange(start, end, null);
+    }
+
+    function playVocabAudio(id) {
+        const range = VOCAB_AUDIO[id];
+        if (!range) return;
+        _playCourseRange(range[0], range[1], null);
+    }
+
+    let _audioEl = null;
+    let _ttsQueue = [];
+
+    function _getAudio() {
+        if (!_audioEl) {
+            _audioEl = new Audio();
+            _audioEl.onended = _playNextQueue;
+            _audioEl.onerror = _playNextQueue;
+        }
+        return _audioEl;
+    }
+
+    function _playNextQueue() {
+        if (_ttsQueue.length > 0) {
+            const next = _ttsQueue.shift();
+            setTimeout(() => _playOne(next), 350);
+        }
+    }
+
+    function _playOne(text) {
+        const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(text);
+        const audio = _getAudio();
+        audio.src = url;
+        const p = audio.play();
+        if (p !== undefined) {
+            p.catch(() => _speakWithSynthesis(text, _playNextQueue));
+        }
+    }
+
+    function _speakWithSynthesis(text, onEnd) {
+        if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; }
+        speechSynthesis.cancel();
+        function doSpeak() {
+            const voices = speechSynthesis.getVoices();
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.lang = 'zh-CN';
+            utt.rate = audioSpeed;
+            const zhVoice = voices.find(v => v.lang && (v.lang.startsWith('zh') || v.lang.startsWith('cmn')));
+            if (zhVoice) utt.voice = zhVoice;
+            utt.onend = onEnd || null;
+            utt.onerror = onEnd || null;
+            speechSynthesis.speak(utt);
+        }
+        speechSynthesis.getVoices().length === 0
+            ? (speechSynthesis.onvoiceschanged = doSpeak)
+            : doSpeak();
+    }
+
+    function setAudioSpeed(speed) {
+        audioSpeed = parseFloat(speed);
+        if (_courseAudioEl) _courseAudioEl.playbackRate = audioSpeed;
+        localStorage.setItem('hsk1_audio_speed', audioSpeed);
+    }
+
+    function speak(text) {
+        if (!text) return;
+        _stopCourseAudio();
+        if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        _ttsQueue = [];
+        _playOne(text);
+    }
+
+    function speakAllText(textId, sourceBtn) {
+        const item = COURSE_AUDIO[textId];
+        if (!item) return;
+        const [start, end] = item.all;
+        _playCourseRange(start, end, sourceBtn || null);
+    }
 
     // ==================== NGỮ PHÁP ====================
     function showGrammar(index, btn) {
@@ -1428,9 +1566,11 @@ function speakAllText(textId) {
         renderVocabulary('all');
         loadNoteEditor();
         initDragAndDrop();
-        localStorage.removeItem('hsk1_audio_speed');
-        audioSpeed = 1.0;
-        document.getElementById('audio-speed').value = '1.0';
+        const savedSpeed = localStorage.getItem('hsk1_audio_speed');
+        if (savedSpeed) {
+            audioSpeed = parseFloat(savedSpeed);
+            document.getElementById('audio-speed').value = savedSpeed;
+        }
     });
 
     // ==================== TOGGLE & NAVIGATION ====================
@@ -1461,7 +1601,7 @@ function speakAllText(textId) {
     // ==================== TỪ VỰNG ====================
     function renderVocabulary(filter) {
         const grid = document.getElementById('vocab-grid');
-        Object.keys(writers).forEach(id => { try { writers[id]?.forEach(w => w.cancelAnimation()); } catch(e) {} delete writers[id]; });
+        Object.keys(writers).forEach(id => { try { writers[id]?.cancelAnimation(); } catch(e) {} delete writers[id]; });
         grid.innerHTML = '';
         const lessonLabels = { text1: '课文 1', text2: '课文 2', text3: '课文 3' };
         const filtered = filter === 'all' ? vocabulary
@@ -1482,14 +1622,12 @@ function speakAllText(textId) {
                         </div>
                         ${item.example ? `<div class="vocab-example">"${item.example}"</div>` : ''}
                     </div>
-                    <button class="audio-btn" onclick="speak('${item.chinese}');event.stopPropagation();">
+                    <button class="audio-btn" onclick="playVocabAudio(${item.id});event.stopPropagation();">
                         <i class="bi bi-volume-up"></i>
                     </button>
                 </div>
                 <div class="vocab-animation">
-                    <div class="writers-row">
-                        ${[...item.chinese].map((ch, i) => `<div id="writer-${item.id}-${i}" class="writer-container"></div>`).join('')}
-                    </div>
+                    <div id="writer-${item.id}" class="writer-container"></div>
                     <div class="animation-controls">
                         <button class="anim-btn" onclick="replayAnimation(${item.id})" title="Viết lại"><i class="bi bi-arrow-clockwise"></i></button>
                     </div>
@@ -1499,36 +1637,19 @@ function speakAllText(textId) {
         });
         filtered.forEach((item, index) => {
             setTimeout(() => {
-                if (writers[item.id] || typeof HanziWriter === 'undefined') return;
-                const chars = [...item.chinese];
-                const size = 72;
-                const instances = [];
-                chars.forEach((ch, i) => {
-                    const containerId = `writer-${item.id}-${i}`;
-                    const container = document.getElementById(containerId);
-                    if (!container) return;
-                    const w = HanziWriter.create(containerId, ch, {
-                        width: size, height: size, padding: 3,
+                const containerId = `writer-${item.id}`;
+                const container = document.getElementById(containerId);
+                if (container && !writers[item.id] && typeof HanziWriter !== 'undefined') {
+                    writers[item.id] = HanziWriter.create(containerId, item.chinese.charAt(0), {
+                        width: 100, height: 100, padding: 5,
                         strokeColor: '#333', radicalColor: '#8e44ad',
                         strokeWidth: 3, showCharacter: false, showOutline: true,
                         strokeAnimationSpeed: 1, delayBetweenStrokes: 50
                     });
-                    instances.push(w);
-                });
-                writers[item.id] = instances;
-                animateSequence(instances);
+                    writers[item.id].animateCharacter();
+                }
             }, index * 300);
         });
-    }
-
-    function animateSequence(instances) {
-        if (!instances || !instances.length) return;
-        let i = 0;
-        const next = () => {
-            if (i >= instances.length) return;
-            instances[i].animateCharacter({ onComplete: () => { i++; next(); } });
-        };
-        next();
     }
 
     function filterVocab(category, btn) {
@@ -1537,7 +1658,7 @@ function speakAllText(textId) {
         renderVocabulary(category);
     }
 
-    function replayAnimation(id) { animateSequence(writers[id]); }
+    function replayAnimation(id) { writers[id]?.animateCharacter(); }
 
     function showText(textId, btn) {
         document.querySelectorAll('.text-content').forEach(c => c.classList.remove('active'));
