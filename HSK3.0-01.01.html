@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bài 1: AI小语，你好！ - HSK1</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@2.0.0/dist/hanzi-writer.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body { 
             font-family: Arial, "Helvetica Neue", sans-serif; 
@@ -204,11 +204,6 @@
             gap: 6px;
             flex: 1;
             flex-wrap: wrap;
-        }
-        .stroke-inline svg {
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            background: #fafafa;
         }
         .replay-btn {
             width: 36px;
@@ -610,7 +605,7 @@
         </div>
         <div class="logo-text">
             <h1>GIA SƯ HOA NGỮ TÂN AN</h1>
-            <p>9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
+            <p>109 Nguyễn Văn Tiếp, P. Long An, tỉnh Tây Ninh - Zalo: 0839.889.772</p>
         </div>
     </div>
     <div class="lesson-title" style="flex: 1; text-align: center; font-size: 18px; font-weight: 600; color: white; font-family: Arial, sans-serif; padding: 0 20px;">
@@ -717,6 +712,7 @@
                         <button class="vocab-tab" onclick="filterVocab('text1', this)">课文 1</button>
                         <button class="vocab-tab" onclick="filterVocab('text2', this)">课文 2</button>
                         <button class="vocab-tab" onclick="filterVocab('text3', this)">课文 3</button>
+                        <button class="vocab-tab" onclick="filterVocab('proper', this)">Tên riêng</button>
                     </div>
                     <div class="vocab-grid" id="vocab-grid"></div>
                 </div>
@@ -1283,11 +1279,12 @@
 
     const vocabulary = [
         { id: 1, chinese: '你好', pinyin: 'nǐ hǎo', meaning: 'Xin chào', category: 'v', lesson: 'text1', example: 'AI小语，你好！' },
-        { id: 2, chinese: '老师', pinyin: 'lǎoshī', meaning: 'Thầy/cô giáo', category: 'n', lesson: 'text1', example: '王老师，你好！' },
-        { id: 3, chinese: '大家', pinyin: 'dàjiā', meaning: 'Mọi người', category: 'pron', lesson: 'text2', example: '大家好！' },
-        { id: 4, chinese: '好', pinyin: 'hǎo', meaning: 'Tốt', category: 'adj', lesson: 'text2', example: '你们好！' },
-        { id: 5, chinese: '学生', pinyin: 'xuéshēng', meaning: 'Học sinh', category: 'n', lesson: 'text2', example: '学生们' },
-        { id: 6, chinese: '们', pinyin: 'men', meaning: 'Hậu tố số nhiều', category: 'pron', lesson: 'text2', example: '你们' },
+        { id: 'proper-wang-laoshi', displayId: '专1', chinese: '王老师', pinyin: 'Wáng lǎoshī', meaning: 'Thầy/cô Vương', category: 'proper', lesson: 'proper', example: '王老师，您好！' },
+        { id: 2, chinese: '大家', pinyin: 'dàjiā', meaning: 'Mọi người', category: 'pron', lesson: 'text2', example: '大家好！' },
+        { id: 3, chinese: '好', pinyin: 'hǎo', meaning: 'Tốt', category: 'adj', lesson: 'text2', example: '你们好！' },
+        { id: 4, chinese: '学生', pinyin: 'xuéshēng', meaning: 'Học sinh', category: 'n', lesson: 'text2', example: '学生们' },
+        { id: 5, chinese: '们', pinyin: 'men', meaning: 'Hậu tố số nhiều', category: 'pron', lesson: 'text2', example: '你们' },
+        { id: 6, chinese: '老师', pinyin: 'lǎoshī', meaning: 'Thầy/cô giáo', category: 'n', lesson: 'text2', example: '老师，您好！' },
         { id: 7, chinese: '您', pinyin: 'nín', meaning: 'Bạn (kính ngữ)', category: 'pron', lesson: 'text2', example: '老师，您好！' },
         { id: 8, chinese: '你们', pinyin: 'nǐmen', meaning: 'Các bạn', category: 'pron', lesson: 'text2', example: '你们好！' },
         { id: 9, chinese: '谢谢', pinyin: 'xièxie', meaning: 'Cảm ơn', category: 'v', lesson: 'text3', example: '谢谢！' },
@@ -1316,14 +1313,15 @@
         text3: { all: [41.012, 50.521], lines: [[41.012, 42.562], [42.562, 44.550], [44.550, 47.485], [47.485, 50.521]] }
     };
 
-    // 12 từ đang hiển thị trong HTML. Audio gốc còn có mục riêng "王老师"; không thêm vào HTML.
+    // 12 từ chính và 1 tên riêng, ánh xạ theo đúng thứ tự trong audio gốc.
     const VOCAB_AUDIO = {
-        1: [6.374, 9.535],        // 你好 (1-2)
-        2: [32.781, 35.991],      // 老师 (mục 老师 trong 1-4)
-        3: [22.674, 25.237],      // 大家
-        4: [25.237, 27.513],      // 好
-        5: [27.513, 30.382],      // 学生
-        6: [30.382, 32.781],      // 们
+        1: [6.374, 9.535],                  // 你好
+        'proper-wang-laoshi': [9.535, 13.009], // 王老师
+        2: [22.674, 25.237],                // 大家
+        3: [25.237, 27.513],                // 好
+        4: [27.513, 30.382],                // 学生
+        5: [30.382, 32.781],                // 们
+        6: [32.781, 35.991],                // 老师
         7: [35.991, 38.564],      // 您
         8: [38.564, 41.012],      // 你们
         9: [50.521, 53.305],      // 谢谢
@@ -1547,16 +1545,17 @@
     function renderVocabulary(filter) {
         const grid = document.getElementById('vocab-grid');
         grid.innerHTML = '';
-        const lessonLabels = { text1: '课文 1', text2: '课文 2', text3: '课文 3' };
-        const filtered = filter === 'all' ? vocabulary
-            : filter.startsWith('text') ? vocabulary.filter(v => v.lesson === filter)
-            : vocabulary.filter(v => v.category === filter);
+        const lessonLabels = { text1: '课文 1', text2: '课文 2', text3: '课文 3', proper: '专有名词' };
+        const filtered = filter === 'all' ? vocabulary.filter(v => v.category !== 'proper')
+            : filter === 'proper' ? vocabulary.filter(v => v.category === 'proper')
+            : filter.startsWith('text') ? vocabulary.filter(v => v.lesson === filter && v.category !== 'proper')
+            : vocabulary.filter(v => v.category === filter && v.category !== 'proper');
         filtered.forEach(item => {
             const card = document.createElement('div');
             card.className = 'vocab-card';
             card.innerHTML = `
                 <div class="vocab-info">
-                    <div class="vocab-number">${item.id}</div>
+                    <div class="vocab-number">${item.displayId || item.id}</div>
                     <div class="vocab-content">
                         <div class="vocab-chinese chinese-text">${item.chinese}</div>
                         <div class="vocab-pinyin pinyin-text">${item.pinyin}</div>
@@ -1566,14 +1565,14 @@
                         </div>
                         ${item.example ? `<div class="vocab-example">"${item.example}"</div>` : ''}
                     </div>
-                    <button class="audio-btn" onclick="playVocabAudio(${item.id});event.stopPropagation();">
+                    <button class="audio-btn" onclick='playVocabAudio(${JSON.stringify(item.id)});event.stopPropagation();'>
                         <i class="bi bi-volume-up"></i>
                     </button>
                 </div>
                 <div class="vocab-animation">
                     <div class="stroke-wrapper">
                         <div class="stroke-inline" id="stroke-${item.id}"></div>
-                        <button class="replay-btn" onclick="event.stopPropagation(); replayStroke(${item.id}, '${item.chinese}')" title="Xem lại">↺</button>
+                        <button class="replay-btn" onclick='event.stopPropagation(); replayStroke(${JSON.stringify(item.id)}, ${JSON.stringify(item.chinese)})' title="Xem lại">↺</button>
                     </div>
                 </div>
             `;
@@ -1612,17 +1611,15 @@
                         padding: 3,
                         strokeColor: '#333',
                         radicalColor: '#8e44ad',
-                        delayBetweenStrokes: 1000,
-                        strokeAnimationSpeed: 1,
-                        showCharacter: true,
+                        delayBetweenStrokes: 300,
+                        strokeAnimationSpeed: 1.5,
+                        showCharacter: false,
                         showOutline: true,
                         strokeWidth: 2
                     });
                     
                     vocabWriters[item.id].push(writer);
-                    
-                    // KHÔNG auto-animate - chỉ hiển thị chữ tĩnh
-                    
+                    writer.animateCharacter();
                 } catch(e) {
                     console.log('Error creating writer for:', c);
                 }
@@ -1633,19 +1630,10 @@
     }
     
     function replayStroke(id, chinese) {
-        if (vocabWriters[id] && vocabWriters[id].length > 0) {
-            vocabWriters[id].forEach((writer, index) => {
-                // V2.0 có thể không có hideCharacter, dùng cách khác
-                setTimeout(() => {
-                    if (writer.hideCharacter) {
-                        writer.hideCharacter();
-                    }
-                    setTimeout(() => {
-                        writer.animateCharacter();
-                    }, 50);
-                }, index * 100);
-            });
-        }
+        const group = vocabWriters[id] || [];
+        group.forEach(writer => {
+            try { writer.animateCharacter(); } catch (_) {}
+        });
     }
 
     function filterVocab(category, btn) {
