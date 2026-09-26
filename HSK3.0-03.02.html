@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài 1: 我们去机场接你们 - HSK3</title>
+    <title>Bài 2: 你们想吃什么就点什么 - HSK3</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <script defer src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.3.0/dist/hanzi-writer.min.js"></script>
     <style>
@@ -52,7 +52,8 @@
         .logo { display: flex; align-items: center; gap: 15px; }
         .logo-img { 
             width: 50px; height: 50px; background: white; border-radius: 8px; 
-            padding: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;
+            padding: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
         }
         .logo-img img { width: 100%; height: 100%; object-fit: contain; }
         .logo-text h1 { font-size: 16px; font-weight: 600; margin-bottom: 2px; font-family: Arial, sans-serif; }
@@ -230,6 +231,9 @@
             transition: all 0.2s; position: relative;
         }
         .dialogue-line:hover { background: #ffebee; border-color: #dc3545; transform: translateX(5px); }
+        .dialogue-line::after {
+            display: none;
+        }
         .dialogue-speaker { font-weight: bold; color: #dc3545; margin-bottom: 8px; font-size: 14px; font-family: Arial, sans-serif; }
         .dialogue-chinese { font-size: 20px; color: #000000; margin-bottom: 6px; line-height: 1.6; text-align: justify; word-spacing: 0; letter-spacing: normal; }
         .dialogue-pinyin { font-size: 18px; color: #FF0000; margin-bottom: 6px; text-align: justify; word-spacing: 0; letter-spacing: normal; }
@@ -244,6 +248,26 @@
         }
         .grammar-tab:hover { background: #ffebee; border-color: #dc3545; color: #c62828; }
         .grammar-tab.active { background: #ffebee; border-color: #dc3545; color: #c62828; }
+
+        .grammar-nav-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 20px; padding: 12px 15px;
+            background: linear-gradient(135deg, #fff8f8, #fff3e0);
+            border-radius: 8px; border: 1px solid #f0e0d0;
+        }
+        .grammar-nav-info {
+            font-family: Arial, sans-serif; font-size: 14px; color: #666;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .grammar-nav-info strong { color: #dc3545; }
+        .grammar-nav-btns { display: flex; gap: 8px; }
+        .grammar-nav-btn {
+            padding: 7px 16px; border: none; border-radius: 6px;
+            font-size: 13px; cursor: pointer; font-weight: 600;
+            display: flex; align-items: center; gap: 6px; font-family: Arial, sans-serif;
+            transition: all 0.2s;
+        }
+        .grammar-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
 
         .grammar-panel { display: none; animation: fadeIn 0.35s ease; }
         .grammar-panel.active { display: block; }
@@ -298,6 +322,15 @@
             width: 18px; height: 18px; cursor: pointer; accent-color: #dc3545;
         }
 
+        .grammar-dots {
+            display: flex; gap: 6px; align-items: center;
+        }
+        .grammar-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #ddd; transition: all 0.2s; cursor: pointer;
+        }
+        .grammar-dot.active { background: #dc3545; transform: scale(1.3); }
+
         .exercise-container { background: white; border-radius: 8px; padding: 25px; }
         .exercise-tabs { 
             display: flex; gap: 10px; margin-bottom: 20px; 
@@ -347,6 +380,18 @@
         .question-text {
             margin-bottom: 15px; font-size: 20px; font-family: "SimSun", serif; line-height: 1.6;
         }
+
+        .script-toggle {
+            margin: 10px 0; padding: 8px 12px; background: #fff8e1; border: 1px solid #ffe082;
+            border-radius: 5px; font-size: 14px; color: #666; cursor: pointer; display: inline-flex;
+            align-items: center; gap: 5px; font-family: Arial, sans-serif;
+        }
+        .script-toggle:hover { background: #ffecb3; }
+        .script-content {
+            display: none; margin: 10px 0; padding: 15px; background: #fafafa;
+            border-left: 3px solid #dc3545; font-size: 18px; line-height: 1.6;
+        }
+        .script-content.show { display: block; }
 
         .radio-group {
             display: flex; flex-direction: row; gap: 25px; margin-top: 10px; flex-wrap: wrap;
@@ -532,7 +577,16 @@
         .result-message.correct { background: #d4edda; color: #155724; border: 1px solid #28a745; }
         .result-message.incorrect { background: #f8d7da; color: #721c24; border: 1px solid #dc3545; }
 
-        #note-editor-overlay {
+        .nav-buttons { 
+            display: flex; justify-content: space-between; margin-top: 30px; 
+            padding-top: 20px; border-top: 2px solid #e0e0e0; 
+        }
+
+
+
+
+
+#note-editor-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 9999; animation: fadeIn 0.3s ease;
         }
@@ -586,33 +640,9 @@
             .tools-section { display: none; }
             .radio-group { flex-direction: column; gap: 12px; }
             .practice-options { flex-direction: column; gap: 12px; }
+            #note-editor-container { width: 95%; height: auto; margin: 2.5% auto; }
+            .grammar-nav-bar { flex-wrap: wrap; gap: 10px; }
             .word-bank, .drop-zone { gap: 8px; }
-        }
-        @media (max-width: 480px) {
-            .main-container { padding-top: 70px; padding: 70px 10px 10px 10px; }
-            .sidebar-left { height: 60px; }
-            .nav-item { padding: 10px 8px; font-size: 12px; }
-            .nav-item i { font-size: 16px; }
-            .content-section { padding: 15px; }
-            .section-title { font-size: 18px; }
-            .vocab-card { padding: 12px; }
-            .vocab-chinese, .vocab-pinyin { font-size: 18px; }
-            .vocab-vietnamese { font-size: 14px; }
-            .dialogue-line { padding: 10px; }
-            .dialogue-chinese, .dialogue-pinyin, .dialogue-vietnamese { font-size: 16px; }
-            .tool-btn { padding: 8px 12px; font-size: 12px; }
-            .check-btn { padding: 8px 16px; font-size: 12px; }
-            .char-input { width: 100px; font-size: 16px; }
-            .word-source { padding: 6px 12px; font-size: 16px; }
-            .drop-zone { padding: 10px; min-height: 50px; }
-            #note-editor-container { width: 95%; height: 90%; margin: 5% auto; }
-            #note-editor-header { padding: 10px 15px; }
-            #note-editor-header h3 { font-size: 14px; }
-            #note-editor-toolbar { padding: 8px 10px; gap: 5px; }
-            .editor-tool-btn { padding: 5px 8px; font-size: 12px; }
-            #rich-editor { padding: 15px; font-size: 13px; }
-            #note-editor-footer { padding: 8px 15px; flex-direction: column; gap: 10px; }
-            .editor-btn { padding: 6px 15px; font-size: 12px; }
         }
     
         .char-sentence {
@@ -636,17 +666,7 @@
         .exercise-content .vocab-pinyin {
             display: none !important;
         }
-        
-        .nav-buttons { 
-            display: flex; justify-content: space-between; margin-top: 30px; 
-            padding-top: 20px; border-top: 2px solid #e0e0e0; 
-        }
-
-
-
-
-
-</style>
+    </style>
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -663,8 +683,9 @@
         </div>
     </div>
     <div class="lesson-title" style="flex: 1; text-align: center; font-size: 18px; font-weight: 600; color: white; font-family: Arial, sans-serif; padding: 0 20px;">
-        Bài 1: 我们去机场接你们 - HSK3
+        Bài 2: 你们想吃什么就点什么 - HSK3
     </div>
+    <!-- CHỨC NĂNG TỐC ĐỘ ÂM THANH -->
     <div style="display: flex; align-items: center; gap: 10px;">
         <span style="font-size: 13px; font-family: Arial, sans-serif;">Tốc độ:</span>
         <select id="audio-speed" onchange="setAudioSpeed(this.value)" style="padding: 5px 10px; border-radius: 4px; border: none; font-size: 13px; font-family: Arial, sans-serif; cursor: pointer; background: white; color: #dc3545; font-weight: 600; outline: none;">
@@ -676,6 +697,7 @@
             <option value="1.5">1.5x</option>
         </select>
     </div>
+    <!-- NÚT VỀ TRANG CHỦ -->
     <div style="display: flex; align-items: center; gap: 10px;">
         <a href="HSK03-3.0.html" style="display: inline-flex; align-items: center; gap: 8px; background: transparent; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; font-family: Arial, sans-serif; transition: all 0.2s; " onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='transparent'">
             <i class="bi bi-house-door"></i>
@@ -734,7 +756,7 @@
                 <span id="section-title-text">Mục tiêu bài học</span>
                 <span class="section-badge" id="section-badge">Phần 1/5</span>
             </div>
-            
+
         </div>
 
         <div class="content-body">
@@ -742,23 +764,23 @@
                 <div class="objectives-grid">
                     <div class="objective-card">
                         <i class="bi bi-chat-dots"></i>
-                        <h3>Định ngữ</h3>
-                        <p>Có thể hiểu và sử dụng nhiều định ngữ để miêu tả đặc điểm của người hoặc sự vật.</p>
-                    </div>
-                    <div class="objective-card">
-                        <i class="bi bi-search"></i>
-                        <h3>Vật phẩm thất lạc</h3>
-                        <p>Có thể hiểu và giải quyết vấn đề liên quan đến hành lý thất lạc, vật dụng bị mất.</p>
+                        <h3>Nhà hàng & Ẩm thực</h3>
+                        <p>Có thể hiểu và nói về các món ăn trong nhà hàng, dịch vụ và thói quen ăn uống cá nhân.</p>
                     </div>
                     <div class="objective-card">
                         <i class="bi bi-question-circle"></i>
                         <h3>Đại từ nghi vấn</h3>
-                        <p>Nắm vững cách dùng đại từ nghi vấn (哪儿, 什么, 谁, 哪) trong câu trần thuật.</p>
+                        <p>Có thể hiểu và sử dụng đại từ nghi vấn để chỉ định bất kỳ đối tượng nào (谁, 什么, 哪儿...).</p>
                     </div>
                     <div class="objective-card">
-                        <i class="bi bi-eye"></i>
-                        <h3>Cụm từ cố định</h3>
-                        <p>Sử dụng được cụm từ cố định "看上去/看起来" để miêu tả ngoại hình hoặc trạng thái.</p>
+                        <i class="bi bi-search"></i>
+                        <h3>Dụng cụ ăn uống</h3>
+                        <p>Hiểu biết về các dụng cụ ăn uống mà người Trung Quốc sử dụng khi dùng bữa (筷子, 勺子, 碗...).</p>
+                    </div>
+                    <div class="objective-card">
+                        <i class="bi bi-basket"></i>
+                        <h3>Gọi món & Giao hàng</h3>
+                        <p>Có thể gọi món ăn tại nhà hàng và đặt đồ ăn mang về (外卖).</p>
                     </div>
                 </div>
             </div>
@@ -766,12 +788,10 @@
             <div id="vocabulary" class="section-content">
                 <div class="vocab-container">
                     <div class="vocab-tabs">
-                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (27)</button>
+                        <button class="vocab-tab active" onclick="filterVocab('all', this)">Tất cả (28)</button>
                         <button class="vocab-tab" onclick="filterVocab('v', this)">Động từ</button>
                         <button class="vocab-tab" onclick="filterVocab('n', this)">Danh từ</button>
                         <button class="vocab-tab" onclick="filterVocab('adj', this)">Tính từ</button>
-                        <button class="vocab-tab" onclick="filterVocab('adv', this)">Phó từ</button>
-                        <button class="vocab-tab" onclick="filterVocab('mod', this)">Động từ năng nguyện</button>
                         <button class="vocab-tab" onclick="filterVocab('m', this)">Lượng từ</button>
                         <button class="vocab-tab" onclick="filterVocab('lesson1', this)">课文 1</button>
                         <button class="vocab-tab" onclick="filterVocab('lesson2', this)">课文 2</button>
@@ -785,60 +805,54 @@
             <div id="text" class="section-content">
                 <div class="text-container">
                     <div class="text-tabs">
-                        <button class="text-tab active" onclick="showText('text1', this)"><i class="bi bi-house"></i> 课文 1</button>
-                        <button class="text-tab" onclick="showText('text2', this)"><i class="bi bi-suitcase"></i> 课文 2</button>
-                        <button class="text-tab" onclick="showText('text3', this)"><i class="bi bi-people"></i> 课文 3</button>
+                        <button class="text-tab active" onclick="showText('text1', this)"><i class="bi bi-shop"></i> 课文 1</button>
+                        <button class="text-tab" onclick="showText('text2', this)"><i class="bi bi-person-badge"></i> 课文 2</button>
+                        <button class="text-tab" onclick="showText('text3', this)"><i class="bi bi-phone"></i> 课文 3</button>
                         <button class="text-tab" onclick="showText('text4', this)"><i class="bi bi-journal-text"></i> 课文 4</button>
                     </div>
 
                     <div id="text1" class="text-content active">
                         <div class="dialogue-container">
                             <div class="dialogue-header">
-                                <div class="dialogue-header-left"><i class="bi bi-house"></i> 课文 1 - 在家里 (7 câu)</div>
+                                <div class="dialogue-header-left"><i class="bi bi-shop"></i> 课文 1 - 在饭馆</div>
                                 <button class="dialogue-audio-all" onclick="speakAllText('text1')"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
                                 <div class="dialogue-line" onclick="playDialogueLine('text1', 0)">
-                                    <div class="dialogue-speaker">刘明</div>
-                                    <div class="dialogue-chinese chinese-text">这是杨同乐吗？他怎么跟白家月在一起？</div>
-                                    <div class="dialogue-pinyin pinyin-text">Zhè shì Yáng Tónglè ma? Tā zěnme gēn Bái Jiāyuè zài yìqǐ?</div>
-                                    <div class="dialogue-vietnamese">Đây là Dương Đồng Lạc à? Sao anh ấy lại ở cùng Bạch Gia Nguyệt?</div>
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">家月、李文，你们看看菜单，想吃点儿什么？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Jiāyuè, Lǐ Wén, nǐmen kànkan càidān, xiǎng chī diǎnr shénme?</div>
+                                    <div class="dialogue-vietnamese">Gia Nguyệt, Lý Văn, các bạn xem thực đơn, muốn ăn gì?</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text1', 1)">
-                                    <div class="dialogue-speaker">王一雪</div>
-                                    <div class="dialogue-chinese chinese-text">他不是杨同乐，他叫李文，是白家月的好朋友。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Tā bú shì Yáng Tónglè, tā jiào Lǐ Wén, shì Bái Jiāyuè de hǎo péngyou.</div>
-                                    <div class="dialogue-vietnamese">Anh ấy không phải Dương Đồng Lạc, anh ấy tên Lý Văn, là bạn tốt của Bạch Gia Nguyệt.</div>
+                                    <div class="dialogue-speaker">李文</div>
+                                    <div class="dialogue-chinese chinese-text">谢谢一雪姐，我都可以，你们点吧。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Xièxie Yìxuě jiě, wǒ dōu kěyǐ, nǐmen diǎn ba.</div>
+                                    <div class="dialogue-vietnamese">Cảm ơn chị Tuyết, tôi đều được, các bạn gọi đi.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text1', 2)">
-                                    <div class="dialogue-speaker">刘明</div>
-                                    <div class="dialogue-chinese chinese-text">我还以为是同乐呢，他们看上去有点儿像。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Wǒ hái yǐwéi shì Tónglè ne, tāmen kàn shàngqù yǒudiǎnr xiàng.</div>
-                                    <div class="dialogue-vietnamese">Tôi còn tưởng là Đồng Lạc, trông họ có vẻ hơi giống nhau.</div>
+                                    <div class="dialogue-speaker">白家月</div>
+                                    <div class="dialogue-chinese chinese-text">飞了这么远，现在还真是又饿又渴。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Fēi le zhème yuǎn, xiànzài hái zhēnshi yòu è yòu kě.</div>
+                                    <div class="dialogue-vietnamese">Bay xa như vậy, bây giờ đúng là vừa đói vừa khát.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text1', 3)">
                                     <div class="dialogue-speaker">王一雪</div>
-                                    <div class="dialogue-chinese chinese-text">是长得有点儿像，但是他比同乐高，身高有一米八。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Shì zhǎng de yǒudiǎnr xiàng, dànshì tā bǐ Tónglè gāo, shēngāo yǒu yì mǐ bā.</div>
-                                    <div class="dialogue-vietnamese">Là trông có vẻ hơi giống, nhưng anh ấy cao hơn Đồng Lạc, chiều cao có một mét tám.</div>
+                                    <div class="dialogue-chinese chinese-text">那多点点儿，别客气。你们喝什么饮料？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nà duō diǎn diǎnr, bié kèqi. Nǐmen hē shénme yǐnliào?</div>
+                                    <div class="dialogue-vietnamese">Vậy gọi nhiều một chút, đứng khách sáo. Các bạn uống gì?</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text1', 4)">
-                                    <div class="dialogue-speaker">刘明</div>
-                                    <div class="dialogue-chinese chinese-text">看起来也比同乐瘦一点儿。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Kàn qǐlái yě bǐ Tónglè shòu yìdiǎnr.</div>
-                                    <div class="dialogue-vietnamese">Trông cũng gầy hơn Đồng Lạc một chút.</div>
+                                    <div class="dialogue-speaker">白家月</div>
+                                    <div class="dialogue-chinese chinese-text">好久没喝中国茶，也好久没吃饺子了。我想喝绿茶、吃饺子，可以吗？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Hǎojiǔ méi hē Zhōngguó chá, yě hǎojiǔ méi chī jiǎozi le. Wǒ xiǎng hē lǜchá, chī jiǎozi, kěyǐ ma?</div>
+                                    <div class="dialogue-vietnamese">Lâu rồi không uống trà Trung Quốc, cũng lâu rồi không ăn sủi cảo. Tôi muốn uống trà xanh, ăn sủi cảo, được không?</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text1', 5)">
                                     <div class="dialogue-speaker">王一雪</div>
-                                    <div class="dialogue-chinese chinese-text">下个星期家月和李文要来北京，我去机场接他们。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Xià ge xīngqī Jiāyuè hé Lǐ Wén yào lái Běijīng, wǒ qù jīchǎng jiē tāmen.</div>
-                                    <div class="dialogue-vietnamese">Tuần sau Gia Nguyệt và Lý Văn sẽ đến Bắc Kinh, tôi đi sân bay đón họ.</div>
-                                </div>
-                                <div class="dialogue-line" onclick="playDialogueLine('text1', 6)">
-                                    <div class="dialogue-speaker">刘明</div>
-                                    <div class="dialogue-chinese chinese-text">他们哪天到北京？我跟你一起去机场接他们吧。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Tāmen nǎ tiān dào Běijīng? Wǒ gēn nǐ yìqǐ qù jīchǎng jiē tāmen ba.</div>
-                                    <div class="dialogue-vietnamese">Họ ngày nào đến Bắc Kinh? Tôi cùng bạn đi sân bay đón họ nhé.</div>
+                                    <div class="dialogue-chinese chinese-text">没问题。你们看看还想吃什么。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Méi wèntí. Nǐmen kànkan hái xiǎng chī shénme.</div>
+                                    <div class="dialogue-vietnamese">Không vấn đề. Các bạn xem còn muốn ăn gì.</div>
                                 </div>
                             </div>
                         </div>
@@ -847,45 +861,45 @@
                     <div id="text2" class="text-content">
                         <div class="dialogue-container">
                             <div class="dialogue-header">
-                                <div class="dialogue-header-left"><i class="bi bi-suitcase"></i> 课文 2 - 在机场 (6 câu)</div>
+                                <div class="dialogue-header-left"><i class="bi bi-person-badge"></i> 课文 2 - 服务员</div>
                                 <button class="dialogue-audio-all" onclick="speakAllText('text2')"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
                                 <div class="dialogue-line" onclick="playDialogueLine('text2', 0)">
-                                    <div class="dialogue-speaker">白家月</div>
-                                    <div class="dialogue-chinese chinese-text">我的行李怎么还没出来？是不是丢了？</div>
-                                    <div class="dialogue-pinyin pinyin-text">Wǒ de xíngli zěnme hái méi chūlái? Shì bu shì diū le?</div>
-                                    <div class="dialogue-vietnamese">Hành lý của tôi sao còn chưa ra? Có phải bị mất rồi không?</div>
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">服务员，再给我们拿一双筷子、一个勺子和一个碗。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Fúwùyuán, zài gěi wǒmen ná yì shuāng kuàizi, yí ge sháozi hé yí ge wǎn.</div>
+                                    <div class="dialogue-vietnamese">Nhân viên phục vụ, lấy cho chúng tôi thêm một đôi đũa, một cái thìa và một cái bát.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text2', 1)">
-                                    <div class="dialogue-speaker">李文</div>
-                                    <div class="dialogue-chinese chinese-text">你的行李箱是什么样的？</div>
-                                    <div class="dialogue-pinyin pinyin-text">Nǐ de xínglixiāng shì shénme yàng de?</div>
-                                    <div class="dialogue-vietnamese">Vali của bạn trông như thế nào?</div>
+                                    <div class="dialogue-speaker">服务员</div>
+                                    <div class="dialogue-chinese chinese-text">好的，请等一下，我马上去拿。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Hǎo de, qǐng děng yíxià, wǒ mǎshàng qù ná.</div>
+                                    <div class="dialogue-vietnamese">Được, xin đợi một chút, tôi đi lấy ngay.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text2', 2)">
-                                    <div class="dialogue-speaker">白家月</div>
-                                    <div class="dialogue-chinese chinese-text">是一个黑色的箱子，上面写着我的名字和电话号码。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Shì yí ge hēisè de xiāngzi, shàngmiàn xiězhe wǒ de míngzi hé diànhuà hàomǎ.</div>
-                                    <div class="dialogue-vietnamese">Là một cái vali màu đen, trên đó viết tên và số điện thoại của tôi.</div>
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">这家饭馆的服务很热情，菜也都做得很好吃。你们尝尝，看喜不喜欢这些菜。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhè jiā fànguǎn de fúwù hěn rèqíng, cài yě dōu zuò de hěn hǎochī. Nǐmen chángchang, kàn xǐ bu xǐhuan zhèxiē cài.</div>
+                                    <div class="dialogue-vietnamese">Nhà hàng này phục vụ rất nhiệt tình, đồ ăn cũng nấu rất ngon. Các bạn nếm thử, xem có thích những món này không.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text2', 3)">
-                                    <div class="dialogue-speaker">李文</div>
-                                    <div class="dialogue-chinese chinese-text">我好像在哪儿看到过这个箱子，是不是有人拿错了？</div>
-                                    <div class="dialogue-pinyin pinyin-text">Wǒ hǎoxiàng zài nǎr kàndào guò zhè ge xiāngzi, shì bu shì yǒu rén ná cuò le?</div>
-                                    <div class="dialogue-vietnamese">Tôi hình như đã thấy cái vali này ở đâu rồi, có phải có người lấy nhầm không?</div>
+                                    <div class="dialogue-speaker">白家月</div>
+                                    <div class="dialogue-chinese chinese-text">哪个菜都好吃。您点的这些菜真不错。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nǎ ge cài dōu hǎochī. Nín diǎn de zhèxiē cài zhēn búcuò.</div>
+                                    <div class="dialogue-vietnamese">Món nào cũng ngon. Những món chị gọi thật tuyệt.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text2', 4)">
-                                    <div class="dialogue-speaker">白家月</div>
-                                    <div class="dialogue-chinese chinese-text">我们快找谁问一下吧，箱子里有不少重要的东西。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Wǒmen kuài zhǎo shuí wèn yíxià ba, xiāngzi li yǒu bù shǎo zhòngyào de dōngxi.</div>
-                                    <div class="dialogue-vietnamese">Chúng ta mau tìm ai đó hỏi thử đi, trong vali có không ít đồ quan trọng.</div>
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">这里的饭菜又便宜又好吃，我们经常来，服务员都记住我们爱吃的菜了。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhèlǐ de fàncài yòu piányi yòu hǎochī, wǒmen jīngcháng lái, fúwùyuán dōu jìzhu wǒmen ài chī de cài le.</div>
+                                    <div class="dialogue-vietnamese">Cơm ở đây vừa rẻ vừa ngon, chúng tôi thường đến, nhân viên phục vụ đều nhớ món chúng tôi thích ăn.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text2', 5)">
-                                    <div class="dialogue-speaker">李文</div>
-                                    <div class="dialogue-chinese chinese-text">别着急，我们拿着护照和机票，去服务台问问吧。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Bié zháojí, wǒmen názhe hùzhào hé jīpiào, qù fúwùtái wènwen ba.</div>
-                                    <div class="dialogue-vietnamese">Đừng lo lắng, chúng ta cầm hộ chiếu và vé máy bay, đi quầy dịch vụ hỏi nhé.</div>
+                                    <div class="dialogue-speaker">服务员</div>
+                                    <div class="dialogue-chinese chinese-text">王姐，您经常来吃饭，今天送您一些水果，请慢用。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Wáng jiě, nín jīngcháng lái chīfàn, jīntiān sòng nín yìxiē shuǐguǒ, qǐng màn yòng.</div>
+                                    <div class="dialogue-vietnamese">Chị Vương, chị thường đến ăn, hôm nay tặng chị một ít hoa quả, mời chị dùng.</div>
                                 </div>
                             </div>
                         </div>
@@ -894,45 +908,45 @@
                     <div id="text3" class="text-content">
                         <div class="dialogue-container">
                             <div class="dialogue-header">
-                                <div class="dialogue-header-left"><i class="bi bi-people"></i> 课文 3 - 在机场大厅 (6 câu)</div>
+                                <div class="dialogue-header-left"><i class="bi bi-phone"></i> 课文 3 - 送外卖</div>
                                 <button class="dialogue-audio-all" onclick="speakAllText('text3')"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content">
                                 <div class="dialogue-line" onclick="playDialogueLine('text3', 0)">
-                                    <div class="dialogue-speaker">刘明</div>
-                                    <div class="dialogue-chinese chinese-text">飞机早就到了，你看见白家月他们了吗？</div>
-                                    <div class="dialogue-pinyin pinyin-text">Fēijī zǎo jiù dào le, nǐ kànjiàn Bái Jiāyuè tāmen le ma?</div>
-                                    <div class="dialogue-vietnamese">Máy bay đến từ sớm rồi, bạn thấy Bạch Gia Nguyệt và mọi người chưa?</div>
+                                    <div class="dialogue-speaker">白家月</div>
+                                    <div class="dialogue-chinese chinese-text">这个鸡肉饭太好吃了，我要再来吃一次。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhè ge jīròu fàn tài hǎochī le, wǒ yào zài lái chī yí cì.</div>
+                                    <div class="dialogue-vietnamese">Cơm thịt gà này ngon quá, tôi phải đến ăn thêm lần nữa.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text3', 1)">
-                                    <div class="dialogue-speaker">王一雪</div>
-                                    <div class="dialogue-chinese chinese-text">没有，他们应该快出来了。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Méiyǒu, tāmen yīnggāi kuài chūlái le.</div>
-                                    <div class="dialogue-vietnamese">Chưa, họ chắc sắp ra rồi.</div>
+                                    <div class="dialogue-speaker">李文</div>
+                                    <div class="dialogue-chinese chinese-text">你可以拿走这张菜单，看看下次还吃点儿什么。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nǐ kěyǐ názǒu zhè zhāng càidān, kànkan xià cì hái chī diǎnr shénme.</div>
+                                    <div class="dialogue-vietnamese">Bạn có thể lấy thực đơn này, xem lần sau còn muốn ăn gì.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text3', 2)">
-                                    <div class="dialogue-speaker">刘明</div>
-                                    <div class="dialogue-chinese chinese-text">我们站到中间去吧，这样他们好找一些。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Wǒmen zhàn dào zhōngjiān qù ba, zhèyàng tāmen hǎo zhǎo yìxiē.</div>
-                                    <div class="dialogue-vietnamese">Chúng ta đứng vào giữa đi, như vậy họ dễ tìm hơn.</div>
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">不用拿菜单，在手机上就能看到，也可以选好了让他们给你送。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Búyòng ná càidān, zài shǒujī shàng jiù néng kàndào, yě kěyǐ xuǎn hǎo le ràng tāmen gěi nǐ sòng.</div>
+                                    <div class="dialogue-vietnamese">Không cần lấy thực đơn, trên điện thoại là có thể thấy, cũng có thể chọn xong để họ giao cho bạn.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text3', 3)">
-                                    <div class="dialogue-speaker">王一雪</div>
-                                    <div class="dialogue-chinese chinese-text">你看那个高个子的人是李文吗？</div>
-                                    <div class="dialogue-pinyin pinyin-text">Nǐ kàn nà ge gāo gèzi de rén shì Lǐ Wén ma?</div>
-                                    <div class="dialogue-vietnamese">Bạn thấy người cao kia có phải Lý Văn không?</div>
+                                    <div class="dialogue-speaker">白家月</div>
+                                    <div class="dialogue-chinese chinese-text">他们家还能送外卖？</div>
+                                    <div class="dialogue-pinyin pinyin-text">Tāmen jiā hái néng sòng wàimài?</div>
+                                    <div class="dialogue-vietnamese">Nhà họ còn có thể giao đồ ăn mang về à?</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text3', 4)">
-                                    <div class="dialogue-speaker">刘明</div>
-                                    <div class="dialogue-chinese chinese-text">你说的是哪个？那个穿着黑衣服的短头发的年轻人？</div>
-                                    <div class="dialogue-pinyin pinyin-text">Nǐ shuō de shì nǎ ge? Nà ge chuān zhe hēi yīfu de duǎn tóufa de niánqīng rén?</div>
-                                    <div class="dialogue-vietnamese">Bạn nói người nào? Người trẻ mặc áo đen tóc ngắn đó à?</div>
+                                    <div class="dialogue-speaker">王一雪</div>
+                                    <div class="dialogue-chinese chinese-text">对，现在很多饭馆都能送外卖，想吃什么就点什么。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Duì, xiànzài hěn duō fànguǎn dōu néng sòng wàimài, xiǎng chī shénme jiù diǎn shénme.</div>
+                                    <div class="dialogue-vietnamese">Đúng, bây giờ nhiều nhà hàng đều có thể giao đồ ăn, muốn ăn gì thì gọi món đó.</div>
                                 </div>
                                 <div class="dialogue-line" onclick="playDialogueLine('text3', 5)">
-                                    <div class="dialogue-speaker">王一雪</div>
-                                    <div class="dialogue-chinese chinese-text">对，那个人就是李文！你看，家月在他后面呢。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Duì, nà ge rén jiùshì Lǐ Wén! Nǐ kàn, Jiāyuè zài tā hòumian ne.</div>
-                                    <div class="dialogue-vietnamese">Đúng, người đó chính là Lý Văn! Bạn xem, Gia Nguyệt ở sau anh ấy kìa.</div>
+                                    <div class="dialogue-speaker">白家月</div>
+                                    <div class="dialogue-chinese chinese-text">那真是太方便了！</div>
+                                    <div class="dialogue-pinyin pinyin-text">Nà zhēnshi tài fāngbiàn le!</div>
+                                    <div class="dialogue-vietnamese">Vậy thì quá tiện lợi rồi!</div>
                                 </div>
                             </div>
                         </div>
@@ -941,15 +955,15 @@
                     <div id="text4" class="text-content">
                         <div class="dialogue-container">
                             <div class="dialogue-header">
-                                <div class="dialogue-header-left"><i class="bi bi-journal-text"></i> 课文 4 - 在宾馆房间 (Nhật ký)</div>
+                                <div class="dialogue-header-left"><i class="bi bi-journal-text"></i> 课文 4 - 李文的日记</div>
                                 <button class="dialogue-audio-all" onclick="speakAllText('text4')"><i class="bi bi-play-fill"></i> Nghe bài</button>
                             </div>
                             <div class="dialogue-content" style="background: #fff9e6; border: 2px solid #ffd54f;">
                                 <div class="dialogue-line" onclick="playDialogueLine('text4', 0)" style="background: #fffbe6; border: 1px solid #ffcc02;">
                                     <div class="dialogue-speaker">李文写日记</div>
-                                    <div class="dialogue-chinese chinese-text">昨天我到北京了。虽然路上花了十几个小时，但是跟家月坐在一起，我觉得时间过得很快。到机场的时候，家月发现行李箱不见了，我带她去服务台，帮助她找到了行李箱。走出机场的时候，已经八点多了，我们一出来就看见了王老师的姐姐，她看起来比照片上年轻。晚上，一雪姐带我们去吃了一家很好吃的中国菜。</div>
-                                    <div class="dialogue-pinyin pinyin-text">Zuótiān wǒ dào Běijīng le. Suīrán lùshang huā le shí jǐ ge xiǎoshí, dànshì gēn Jiāyuè zuò zài yìqǐ, wǒ juéde shíjiān guò de hěn kuài. Dào jīchǎng de shíhou, Jiāyuè fāxiàn xínglixiāng bú jiàn le, wǒ dài tā qù fúwùtái, bāngzhù tā zhǎo dào le xínglixiāng. Zǒu chū jīchǎng de shíhou, yǐjīng bā diǎn duō le, wǒmen yì chūlái jiù kànjiàn le Wáng lǎoshī de jiějie, tā kàn qǐlái bǐ zhàopiàn shang niánqīng. Wǎnshang, Yìxuě jiě dài wǒmen qù chī le yì jiā hěn hǎochī de Zhōngguó cài.</div>
-                                    <div class="dialogue-vietnamese">Hôm qua tôi đã đến Bắc Kinh. Tuy trên đường đi mất hơn mười tiếng đồng hồ, nhưng ngồi cùng Gia Nguyệt, tôi cảm thấy thời gian trôi rất nhanh. Đến sân bay, Gia Nguyệt phát hiện vali không thấy, tôi đưa cô ấy đến quầy dịch vụ, giúp cô ấy tìm lại được vali. Ra khỏi sân bay đã hơn tám giờ tối, chúng tôi vừa ra đã thấy chị gái của thầy Vương, trông chị ấy trẻ hơn trong ảnh. Tối, chị Tuyết đưa chúng tôi đi ăn một nhà hàng Trung Quốc rất ngon.</div>
+                                    <div class="dialogue-chinese chinese-text">这些年在国外，我很少自己做饭。早饭我吃一个面包，有时候吃一块蛋糕，再喝一杯咖啡。午饭和晚饭也都在外面吃。快要考试的时候又忙又累，没时间出去吃饭，家里又什么吃的都没有，我可能好几天只吃方便面。现在回到中国了，每天能吃到妈妈做的饭，我真是太高兴了！有时候妈妈只做几个简单的菜，我也非常爱吃，因为什么都没有妈妈做的饭好吃。</div>
+                                    <div class="dialogue-pinyin pinyin-text">Zhèxiē nián zài guówài, wǒ hěn shǎo zìjǐ zuòfàn. Zǎofàn wǒ chī yí ge miànbāo, yǒushíhou chī yí kuài dàngāo, zài hē yì bēi kāfēi. Wǔfàn hé wǎnfàn yě dōu zài wàimiàn chī. Kuài yào kǎoshì de shíhou yòu máng yòu lèi, méi shíjiān chūqù chīfàn, jiālǐ yòu shénme chī de dōu méiyǒu, wǒ kěnéng hǎo jǐ tiān zhǐ chī fāngbiànmiàn. Xiànzài huí dào Zhōngguó le, měitiān néng chī dào māma zuò de fàn, wǒ zhēnshi tài gāoxìng le! Yǒushíhou māma zhǐ zuò jǐ ge jiǎndān de cài, wǒ yě fēicháng ài chī, yīnwèi shénme dōu méiyǒu māma zuò de fàn hǎochī.</div>
+                                    <div class="dialogue-vietnamese">Những năm này ở nước ngoài, tôi rất ít tự nấu ăn. Bữa sáng tôi ăn một cái bánh mì, đôi khi ăn một miếng bánh ngọt, uống thêm một ly cà phê. Bữa trưa và bữa tối cũng đều ăn ngoài. Sắp thi cử thì vừa bận vừa mệt, không có thời gian ra ngoài ăn, nhà lại không có gì ăn, tôi có thể mấy ngày chỉ ăn mì ăn liền. Bây giờ về Trung Quốc rồi, mỗi ngày được ăn cơm mẹ nấu, tôi quá vui mừng! Đôi khi mẹ chỉ nấu vài món đơn giản, tôi cũng rất thích ăn, vì không có gì ngon bằng cơm mẹ nấu.</div>
                                 </div>
                             </div>
                         </div>
@@ -961,74 +975,75 @@
                 <div class="grammar-container">
                     <div class="grammar-tabs">
                         <button class="grammar-tab active" onclick="showGrammar(0, this)">
-                            <i class="bi bi-eye"></i> 看上去/看起来
+                            <i class="bi bi-layers"></i> 又...又...
                         </button>
                         <button class="grammar-tab" onclick="showGrammar(1, this)">
-                            <i class="bi bi-question-circle"></i> 疑问代词
+                            <i class="bi bi-question-circle"></i> 疑问代词（2）
                         </button>
                         <button class="grammar-tab" onclick="showGrammar(2, this)">
-                            <i class="bi bi-layers"></i> 多项定语
+                            <i class="bi bi-arrow-repeat"></i> 想...就...
                         </button>
                     </div>
+
 
                     <div class="grammar-panel active" id="grammar-panel-0">
                         <div class="grammar-item">
                             <div class="grammar-header">
                                 <div class="grammar-number">1</div>
-                                <div class="grammar-title">固定短语 "看上去/看起来"</div>
+                                <div class="grammar-title">并列复句 "又……又……"</div>
                             </div>
-                            <div class="grammar-structure chinese-text">S + 看上去/看起来 + Adj/VP</div>
+                            <div class="grammar-structure chinese-text">又 + Adj₁ + 又 + Adj₂</div>
                             <div class="grammar-explanation">
-                                <strong>Cách dùng:</strong> Dùng để miêu tả ngoại hình hoặc trạng thái của người hoặc vật.<br>
+                                <strong>Cách dùng:</strong> Dùng trước tính từ để chỉ người hoặc vật đồng thời có hai đặc điểm.<br>
                                 <strong>Ví dụ:</strong>
                             </div>
                             <div class="grammar-example">
-                                <div class="example-chinese chinese-text">他们看上去有点儿像。</div>
-                                <div class="example-pinyin pinyin-text">Tāmen kàn shàngqù yǒudiǎnr xiàng.</div>
-                                <div class="example-vietnamese">Họ trông có vẻ hơi giống nhau.</div>
+                                <div class="example-chinese chinese-text">我现在还真是又饿又渴。</div>
+                                <div class="example-pinyin pinyin-text">Wǒ xiànzài hái zhēnshi yòu è yòu kě.</div>
+                                <div class="example-vietnamese">Bây giờ tôi đúng là vừa đói vừa khát.</div>
                             </div>
                             <div class="grammar-example">
-                                <div class="example-chinese chinese-text">这些菜看起来都很好吃。</div>
-                                <div class="example-pinyin pinyin-text">Zhèxiē cài kàn qǐlái dōu hěn hǎochī.</div>
-                                <div class="example-vietnamese">Mấy món này trông có vẻ ngon cả.</div>
+                                <div class="example-chinese chinese-text">这里的饭菜又便宜又好吃。</div>
+                                <div class="example-pinyin pinyin-text">Zhèlǐ de fàncài yòu piányi yòu hǎochī.</div>
+                                <div class="example-vietnamese">Cơm ở đây vừa rẻ vừa ngon.</div>
                             </div>
                             
                             <div class="grammar-practice">
                                 <div class="practice-title"><i class="bi bi-pencil-square"></i> Bài tập vận dụng (Câu 1-3)</div>
                                 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">1. 你（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）长得更像你妈妈。</div>
+                                    <div class="practice-sentence">1. 他的新家很大，也很干净（gānjìng）。<br>→ 他的新家（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq1" value="A"> A 看起来</label>
-                                        <label class="practice-option"><input type="radio" name="gq1" value="B"> B 看上去</label>
-                                        <label class="practice-option"><input type="radio" name="gq1" value="C"> C 看上来</label>
-                                        <label class="practice-option"><input type="radio" name="gq1" value="D"> D 看下去</label>
+                                        <label class="practice-option"><input type="radio" name="gq1" value="A"> A 又大又干净</label>
+                                        <label class="practice-option"><input type="radio" name="gq1" value="B"> B 又干净又大</label>
+                                        <label class="practice-option"><input type="radio" name="gq1" value="C"> C 很大又干净</label>
+                                        <label class="practice-option"><input type="radio" name="gq1" value="D"> D 又很大又干净</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq1', ['A','B'], 'gresult1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq1', 'A', 'gresult1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult1"></div>
                                 </div>
 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">2. 你（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;），好好休息一下吧。</div>
+                                    <div class="practice-sentence">2. 他写汉字写得很快，也很漂亮。<br>→ 他写汉字写得（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq2" value="A"> A 看起来很高兴</label>
-                                        <label class="practice-option"><input type="radio" name="gq2" value="B"> B 看上去很累</label>
-                                        <label class="practice-option"><input type="radio" name="gq2" value="C"> C 看起来不忙</label>
-                                        <label class="practice-option"><input type="radio" name="gq2" value="D"> D 看上去很好</label>
+                                        <label class="practice-option"><input type="radio" name="gq2" value="A"> A 又快又漂亮</label>
+                                        <label class="practice-option"><input type="radio" name="gq2" value="B"> B 又漂亮又快</label>
+                                        <label class="practice-option"><input type="radio" name="gq2" value="C"> C 很快又漂亮</label>
+                                        <label class="practice-option"><input type="radio" name="gq2" value="D"> D 又很快又漂亮</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq2', 'B', 'gresult2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq2', 'A', 'gresult2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult2"></div>
                                 </div>
 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">3. 你怎么了？今天（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
+                                    <div class="practice-sentence">3. 快要考试的时候，我很忙，也很累。<br>→ 快要考试的时候，我（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq3" value="A"> A 看起来很高兴</label>
-                                        <label class="practice-option"><input type="radio" name="gq3" value="B"> B 看上去很累</label>
-                                        <label class="practice-option"><input type="radio" name="gq3" value="C"> C 看起来不忙</label>
-                                        <label class="practice-option"><input type="radio" name="gq3" value="D"> D 看上去很好</label>
+                                        <label class="practice-option"><input type="radio" name="gq3" value="A"> A 又忙又累</label>
+                                        <label class="practice-option"><input type="radio" name="gq3" value="B"> B 又累又忙</label>
+                                        <label class="practice-option"><input type="radio" name="gq3" value="C"> C 很忙又累</label>
+                                        <label class="practice-option"><input type="radio" name="gq3" value="D"> D 又很忙又累</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq3', 'B', 'gresult3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq3', 'A', 'gresult3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult3"></div>
                                 </div>
                             </div>
@@ -1039,54 +1054,60 @@
                         <div class="grammar-item">
                             <div class="grammar-header">
                                 <div class="grammar-number">2</div>
-                                <div class="grammar-title">疑问代词的非疑问用法</div>
+                                <div class="grammar-title">疑问代词的非疑问用法（2）</div>
                             </div>
-                            <div class="grammar-structure chinese-text">哪儿 / 什么 / 谁 / 哪 (dùng trong câu trần thuật)</div>
+                            <div class="grammar-structure chinese-text">谁/什么/哪儿/怎么... + 都 + VP</div>
                             <div class="grammar-explanation">
-                                <strong>Cách dùng:</strong> Đại từ nghi vấn có thể dùng trong câu trần thuật để chỉ nơi chốn, sự vật hoặc người không xác định.
+                                <strong>Cách dùng:</strong> Đại từ nghi vấn dùng trong câu trần thuật để chỉ bất kỳ người/vật/nơi nào. Thường dùng với "都".<br>
+                                <strong>Ví dụ:</strong>
                             </div>
                             <div class="grammar-example">
-                                <div class="example-chinese chinese-text">我好像在哪儿看到过这个箱子。</div>
-                                <div class="example-pinyin pinyin-text">Wǒ hǎoxiàng zài nǎr kàndào guò zhè ge xiāngzi.</div>
-                                <div class="example-vietnamese">Tôi hình như đã thấy cái vali này ở đâu đó.</div>
+                                <div class="example-chinese chinese-text">哪个菜都好吃。</div>
+                                <div class="example-pinyin pinyin-text">Nǎ ge cài dōu hǎochī.</div>
+                                <div class="example-vietnamese">Món nào cũng ngon.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">这次旅游，我去哪儿都可以。</div>
+                                <div class="example-pinyin pinyin-text">Zhè cì lǚyóu, wǒ qù nǎr dōu kěyǐ.</div>
+                                <div class="example-vietnamese">Chuyến du lịch này, tôi đi đâu cũng được.</div>
                             </div>
                             
                             <div class="grammar-practice">
                                 <div class="practice-title"><i class="bi bi-pencil-square"></i> Bài tập vận dụng (Câu 4-6)</div>
                                 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">4. A: 我们是不是走错了？<br>B: 我也不知道，我去（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
+                                    <div class="practice-sentence">4. 我下午有时间，（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）来都没问题。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq4" value="A"> A 问问谁</label>
-                                        <label class="practice-option"><input type="radio" name="gq4" value="B"> B 问什么</label>
-                                        <label class="practice-option"><input type="radio" name="gq4" value="C"> C 问哪儿</label>
-                                        <label class="practice-option"><input type="radio" name="gq4" value="D"> D 问哪个</label>
+                                        <label class="practice-option"><input type="radio" name="gq4" value="A"> A 谁</label>
+                                        <label class="practice-option"><input type="radio" name="gq4" value="B"> B 什么</label>
+                                        <label class="practice-option"><input type="radio" name="gq4" value="C"> C 什么时候</label>
+                                        <label class="practice-option"><input type="radio" name="gq4" value="D"> D 哪儿</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq4', 'A', 'gresult4')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq4', 'C', 'gresult4')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult4"></div>
                                 </div>
 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">5. A: 你有时间了来我家，我（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）给你吃。</div>
+                                    <div class="practice-sentence">5. 我喜欢吃中国菜，也喜欢吃外国菜。<br>→ 我（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）都喜欢吃。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq5" value="A"> A 做点什么</label>
-                                        <label class="practice-option"><input type="radio" name="gq5" value="B"> B 买点儿谁</label>
-                                        <label class="practice-option"><input type="radio" name="gq5" value="C"> C 去哪儿</label>
-                                        <label class="practice-option"><input type="radio" name="gq5" value="D"> D 找哪个</label>
+                                        <label class="practice-option"><input type="radio" name="gq5" value="A"> A 谁</label>
+                                        <label class="practice-option"><input type="radio" name="gq5" value="B"> B 什么</label>
+                                        <label class="practice-option"><input type="radio" name="gq5" value="C"> C 哪儿</label>
+                                        <label class="practice-option"><input type="radio" name="gq5" value="D"> D 怎么</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq5', 'A', 'gresult5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq5', 'B', 'gresult5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult5"></div>
                                 </div>
 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">6. A: 这几天太累了，我想（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。<br>B: 那你去西安吧。</div>
+                                    <div class="practice-sentence">6. 小李很会做饭，大家都喜欢吃他做的饭。<br>→ 小李很会做饭，（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）都喜欢吃他做的饭。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq6" value="A"> A 去哪儿休息</label>
-                                        <label class="practice-option"><input type="radio" name="gq6" value="B"> B 做什么东西</label>
-                                        <label class="practice-option"><input type="radio" name="gq6" value="C"> C 找谁帮忙</label>
-                                        <label class="practice-option"><input type="radio" name="gq6" value="D"> D 买什么衣服</label>
+                                        <label class="practice-option"><input type="radio" name="gq6" value="A"> A 什么</label>
+                                        <label class="practice-option"><input type="radio" name="gq6" value="B"> B 谁</label>
+                                        <label class="practice-option"><input type="radio" name="gq6" value="C"> C 哪儿</label>
+                                        <label class="practice-option"><input type="radio" name="gq6" value="D"> D 怎么</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq6', 'A', 'gresult6')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq6', 'B', 'gresult6')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult6"></div>
                                 </div>
                             </div>
@@ -1097,54 +1118,60 @@
                         <div class="grammar-item">
                             <div class="grammar-header">
                                 <div class="grammar-number">3</div>
-                                <div class="grammar-title">多项定语</div>
+                                <div class="grammar-title">疑问代词的非疑问用法（3）</div>
                             </div>
-                            <div class="grammar-structure chinese-text">[Định ngữ 1] + [Định ngữ 2] + ... + Danh từ chính</div>
+                            <div class="grammar-structure chinese-text">疑问代词... + 就 + 疑问代词...</div>
                             <div class="grammar-explanation">
-                                <strong>Thứ tự:</strong> Thời gian/Địa điểm → Động tác/Trạng thái → Đặc điểm
+                                <strong>Cách dùng:</strong> Hai đại từ nghi vấn giống nhau đối lập, chỉ cùng một người/vật/cách thức/thời gian/địa điểm.<br>
+                                <strong>Ví dụ:</strong>
                             </div>
                             <div class="grammar-example">
-                                <div class="example-chinese chinese-text">那个穿着黑衣服的短头发的年轻人</div>
-                                <div class="example-pinyin pinyin-text">Nà ge chuān zhe hēi yīfu de duǎn tóufa de niánqīng rén</div>
-                                <div class="example-vietnamese">Người trẻ mặc áo đen tóc ngắn đó</div>
+                                <div class="example-chinese chinese-text">你们想吃什么就点什么。</div>
+                                <div class="example-pinyin pinyin-text">Nǐmen xiǎng chī shénme jiù diǎn shénme.</div>
+                                <div class="example-vietnamese">Các bạn muốn ăn gì thì gọi món đó.</div>
+                            </div>
+                            <div class="grammar-example">
+                                <div class="example-chinese chinese-text">你想去哪儿，我们就去哪儿。</div>
+                                <div class="example-pinyin pinyin-text">Nǐ xiǎng qù nǎr, wǒmen jiù qù nǎr.</div>
+                                <div class="example-vietnamese">Bạn muốn đi đâu, chúng tôi sẽ đi đó.</div>
                             </div>
                             
                             <div class="grammar-practice">
                                 <div class="practice-title"><i class="bi bi-pencil-square"></i> Bài tập vận dụng (Câu 7-9)</div>
                                 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">7. 那本（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）的书是我最喜欢的。</div>
+                                    <div class="practice-sentence">7. A: 我们怎么去电影院？<br>B: （&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）去都可以。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq7" value="A"> A 新买的中文</label>
-                                        <label class="practice-option"><input type="radio" name="gq7" value="B"> B 中文的新买</label>
-                                        <label class="practice-option"><input type="radio" name="gq7" value="C"> C 买的新中文</label>
-                                        <label class="practice-option"><input type="radio" name="gq7" value="D"> D 中文新买的</label>
+                                        <label class="practice-option"><input type="radio" name="gq7" value="A"> A 想怎么</label>
+                                        <label class="practice-option"><input type="radio" name="gq7" value="B"> B 怎么</label>
+                                        <label class="practice-option"><input type="radio" name="gq7" value="C"> C 想什么</label>
+                                        <label class="practice-option"><input type="radio" name="gq7" value="D"> D 什么</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq7', 'A', 'gresult7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq7', 'B', 'gresult7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult7"></div>
                                 </div>
 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">8. A: 哪个人是你男朋友？<br>B: （&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
+                                    <div class="practice-sentence">8. A: 你觉得哪个好看？<br>B: 你觉得（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）就买哪个。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq8" value="A"> A 那个穿黑衣服的高个子</label>
-                                        <label class="practice-option"><input type="radio" name="gq8" value="B"> B 那个高个子的穿黑衣服</label>
-                                        <label class="practice-option"><input type="radio" name="gq8" value="C"> C 穿黑衣服的那个高个子</label>
-                                        <label class="practice-option"><input type="radio" name="gq8" value="D"> D 高个子的那个穿黑衣服</label>
+                                        <label class="practice-option"><input type="radio" name="gq8" value="A"> A 怎么</label>
+                                        <label class="practice-option"><input type="radio" name="gq8" value="B"> B 哪儿</label>
+                                        <label class="practice-option"><input type="radio" name="gq8" value="C"> C 哪个</label>
+                                        <label class="practice-option"><input type="radio" name="gq8" value="D"> D 什么</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq8', 'A', 'gresult8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq8', 'C', 'gresult8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult8"></div>
                                 </div>
 
                                 <div class="practice-question">
-                                    <div class="practice-sentence">9. A: 你们上课的楼在哪儿？<br>B: 在（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）的楼后面。</div>
+                                    <div class="practice-sentence">9. A: 我什么时候去找你？<br>B: 你（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）来都行。</div>
                                     <div class="practice-options">
-                                        <label class="practice-option"><input type="radio" name="gq9" value="A"> A 那个红色的大</label>
-                                        <label class="practice-option"><input type="radio" name="gq9" value="B"> B 大的那个红色</label>
-                                        <label class="practice-option"><input type="radio" name="gq9" value="C"> C 红色的那个大</label>
-                                        <label class="practice-option"><input type="radio" name="gq9" value="D"> D 那个大的红色</label>
+                                        <label class="practice-option"><input type="radio" name="gq9" value="A"> A 想什么</label>
+                                        <label class="practice-option"><input type="radio" name="gq9" value="B"> B 什么时候</label>
+                                        <label class="practice-option"><input type="radio" name="gq9" value="C"> C 想怎么</label>
+                                        <label class="practice-option"><input type="radio" name="gq9" value="D"> D 怎么</label>
                                     </div>
-                                    <button class="check-btn" onclick="checkAnswer('gq9', 'A', 'gresult9')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" onclick="checkAnswer('gq9', 'B', 'gresult9')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                     <div class="result-message" id="gresult9"></div>
                                 </div>
                             </div>
@@ -1161,7 +1188,7 @@
                             <i class="bi bi-headphones"></i> 一、听力 (8 câu)
                         </button>
                         <button class="exercise-tab" onclick="showExercise('reading', this)">
-                            <i class="bi bi-book-open"></i> 二、阅读 (12 câu)
+                            <i class="bi bi-book-open"></i> 二、阅读 (10 câu)
                         </button>
                         <button class="exercise-tab" onclick="showExercise('writing', this)">
                             <i class="bi bi-pen"></i> 三、书写 (10 câu)
@@ -1175,28 +1202,28 @@
                         <div class="audio-player">
                             <button class="play-btn" onclick="speakAllText('text1')">▶</button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
-                            <span style="font-size: 14px; color: #666; font-family: Arial;">在家里 - Nghe bài khóa 1</span>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">在饭馆 - Nghe bài khóa 1</span>
                         </div>
                         
                         <div class="question-container">
-                            <div class="question-text">1. 刘明和王一雪在做什么？</div>
+                            <div class="question-text">1. 他们在做什么？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q1" value="A"> A 看电视</label>
-                                <label class="radio-item"><input type="radio" name="q1" value="B"> B 看手机</label>
-                                <label class="radio-item"><input type="radio" name="q1" value="C"> C 去机场</label>
+                                <label class="radio-item"><input type="radio" name="q1" value="A"> A 买东西</label>
+                                <label class="radio-item"><input type="radio" name="q1" value="B"> B 在家吃饭</label>
+                                <label class="radio-item"><input type="radio" name="q1" value="C"> C 在饭馆吃饭</label>
                             </div>
-                            <button class="check-btn" onclick="checkAnswer('q1', 'B', 'result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <button class="check-btn" onclick="checkAnswer('q1', 'C', 'result1')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result1"></div>
                         </div>
 
                         <div class="question-container">
-                            <div class="question-text">2. 刘明跟王一雪一起去机场做什么？</div>
+                            <div class="question-text">2. 白家月想吃什么中国菜？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q2" value="A"> A 坐飞机</label>
-                                <label class="radio-item"><input type="radio" name="q2" value="B"> B 找朋友</label>
-                                <label class="radio-item"><input type="radio" name="q2" value="C"> C 接白家月</label>
+                                <label class="radio-item"><input type="radio" name="q2" value="A"> A 饺子</label>
+                                <label class="radio-item"><input type="radio" name="q2" value="B"> B 包子</label>
+                                <label class="radio-item"><input type="radio" name="q2" value="C"> C 面条儿</label>
                             </div>
-                            <button class="check-btn" onclick="checkAnswer('q2', 'C', 'result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <button class="check-btn" onclick="checkAnswer('q2', 'A', 'result2')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result2"></div>
                         </div>
 
@@ -1204,26 +1231,26 @@
                         <div class="audio-player">
                             <button class="play-btn" onclick="speakAllText('text2')">▶</button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
-                            <span style="font-size: 14px; color: #666; font-family: Arial;">在机场 - Nghe bài khóa 2</span>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">服务员 - Nghe bài khóa 2</span>
                         </div>
 
                         <div class="question-container">
-                            <div class="question-text">3. 李文和白家月在机场做什么？</div>
+                            <div class="question-text">3. 王一雪让服务员拿什么？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q3" value="A"> A 等箱子</label>
-                                <label class="radio-item"><input type="radio" name="q3" value="B"> B 等同学</label>
-                                <label class="radio-item"><input type="radio" name="q3" value="C"> C 等王一雪</label>
+                                <label class="radio-item"><input type="radio" name="q3" value="A"> A 筷子和碗</label>
+                                <label class="radio-item"><input type="radio" name="q3" value="B"> B 勺子和筷子</label>
+                                <label class="radio-item"><input type="radio" name="q3" value="C"> C 勺子、筷子和碗</label>
                             </div>
-                            <button class="check-btn" onclick="checkAnswer('q3', 'A', 'result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <button class="check-btn" onclick="checkAnswer('q3', 'C', 'result3')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result3"></div>
                         </div>
 
                         <div class="question-container">
-                            <div class="question-text">4. 白家月为什么很着急？</div>
+                            <div class="question-text">4. 这家饭馆的服务怎么样？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q4" value="A"> A 护照丢了</label>
-                                <label class="radio-item"><input type="radio" name="q4" value="B"> B 行李箱丢了</label>
-                                <label class="radio-item"><input type="radio" name="q4" value="C"> C 拿错行李箱了</label>
+                                <label class="radio-item"><input type="radio" name="q4" value="A"> A 很慢</label>
+                                <label class="radio-item"><input type="radio" name="q4" value="B"> B 很热情</label>
+                                <label class="radio-item"><input type="radio" name="q4" value="C"> C 不太好</label>
                             </div>
                             <button class="check-btn" onclick="checkAnswer('q4', 'B', 'result4')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result4"></div>
@@ -1233,26 +1260,26 @@
                         <div class="audio-player">
                             <button class="play-btn" onclick="speakAllText('text3')">▶</button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
-                            <span style="font-size: 14px; color: #666; font-family: Arial;">在机场大厅 - Nghe bài khóa 3</span>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">送外卖 - Nghe bài khóa 3</span>
                         </div>
 
                         <div class="question-container">
-                            <div class="question-text">5. 刘明和王一雪在机场做什么？</div>
+                            <div class="question-text">5. 在这家饭馆，白家月喜欢吃什么？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q5" value="A"> A 接人</label>
-                                <label class="radio-item"><input type="radio" name="q5" value="B"> B 坐飞机</label>
-                                <label class="radio-item"><input type="radio" name="q5" value="C"> C 找行李箱</label>
+                                <label class="radio-item"><input type="radio" name="q5" value="A"> A 包子</label>
+                                <label class="radio-item"><input type="radio" name="q5" value="B"> B 鸡肉饭</label>
+                                <label class="radio-item"><input type="radio" name="q5" value="C"> C 面条儿</label>
                             </div>
-                            <button class="check-btn" onclick="checkAnswer('q5', 'A', 'result5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <button class="check-btn" onclick="checkAnswer('q5', 'B', 'result5')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result5"></div>
                         </div>
 
                         <div class="question-container">
-                            <div class="question-text">6. 刘明为什么要站到中间？</div>
+                            <div class="question-text">6. 王一雪为什么说"不用拿菜单"？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q6" value="A"> A 旁边人太多了</label>
-                                <label class="radio-item"><input type="radio" name="q6" value="B"> B 他看见白家月了</label>
-                                <label class="radio-item"><input type="radio" name="q6" value="C"> C 白家月好找他们</label>
+                                <label class="radio-item"><input type="radio" name="q6" value="A"> A 她有菜单</label>
+                                <label class="radio-item"><input type="radio" name="q6" value="B"> B 她不想再来</label>
+                                <label class="radio-item"><input type="radio" name="q6" value="C"> C 手机上可以看菜单</label>
                             </div>
                             <button class="check-btn" onclick="checkAnswer('q6', 'C', 'result6')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result6"></div>
@@ -1262,48 +1289,48 @@
                         <div class="audio-player">
                             <button class="play-btn" onclick="speakAllText('text4')">▶</button>
                             <div class="audio-progress"><div class="audio-progress-bar"></div></div>
-                            <span style="font-size: 14px; color: #666; font-family: Arial;">在宾馆房间 - Nghe bài khóa 4</span>
+                            <span style="font-size: 14px; color: #666; font-family: Arial;">李文的日记 - Nghe bài khóa 4</span>
                         </div>
 
                         <div class="question-container">
-                            <div class="question-text">7. 李文回北京的路上花了多长时间？</div>
+                            <div class="question-text">7. 快要考试的时候，李文怎么吃饭？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q7" value="A"> A 几个小时</label>
-                                <label class="radio-item"><input type="radio" name="q7" value="B"> B 十几个小时</label>
-                                <label class="radio-item"><input type="radio" name="q7" value="C"> C 几十个小时</label>
+                                <label class="radio-item"><input type="radio" name="q7" value="A"> A 吃方便面</label>
+                                <label class="radio-item"><input type="radio" name="q7" value="B"> B 出去吃饭</label>
+                                <label class="radio-item"><input type="radio" name="q7" value="C"> C 回妈妈家吃</label>
                             </div>
-                            <button class="check-btn" onclick="checkAnswer('q7', 'B', 'result7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <button class="check-btn" onclick="checkAnswer('q7', 'A', 'result7')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result7"></div>
                         </div>
 
                         <div class="question-container">
-                            <div class="question-text">8. 李文觉得王老师的姐姐看起来怎么样？</div>
+                            <div class="question-text">8. 回到中国了，李文为什么很高兴？</div>
                             <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q8" value="A"> A 很累</label>
-                                <label class="radio-item"><input type="radio" name="q8" value="B"> B 很年轻</label>
-                                <label class="radio-item"><input type="radio" name="q8" value="C"> C 很像王老师</label>
+                                <label class="radio-item"><input type="radio" name="q8" value="A"> A 妈妈每天做很多菜</label>
+                                <label class="radio-item"><input type="radio" name="q8" value="B"> B 可以经常去外面吃饭</label>
+                                <label class="radio-item"><input type="radio" name="q8" value="C"> C 每天能吃到妈妈做的饭</label>
                             </div>
-                            <button class="check-btn" onclick="checkAnswer('q8', 'B', 'result8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                            <button class="check-btn" onclick="checkAnswer('q8', 'C', 'result8')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                             <div class="result-message" id="result8"></div>
                         </div>
                     </div>
 
                     <div id="reading" class="exercise-content">
-                        <div class="section-header-exercise">二、阅读 (12 câu)</div>
+                        <div class="section-header-exercise">二、阅读 (10 câu)</div>
                         
-                        <div class="part-header">第一部分 - 选词填空 (Câu 9-18)</div>
+                        <div class="part-header">第一部分 - 选词填空 (Câu 9-13)</div>
                         
                         <div class="vocab-box">
-                            <div class="vocab-item">A. 带</div>
-                            <div class="vocab-item">B. 接</div>
-                            <div class="vocab-item">C. 丢</div>
-                            <div class="vocab-item">D. 重要</div>
-                            <div class="vocab-item">E. 应该</div>
+                            <div class="vocab-item">A. 尝</div>
+                            <div class="vocab-item">B. 只</div>
+                            <div class="vocab-item">C. 菜单</div>
+                            <div class="vocab-item">D. 记</div>
+                            <div class="vocab-item">E. 用</div>
                         </div>
                         
                         <div class="multi-question-container">
                             <div class="sub-question">
-                                <div class="fill-sentence">9. 服务台（ ）在前面，我们过去问问吧。</div>
+                                <div class="fill-sentence">9. 我觉得（ ）筷子吃饭更方便。</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q9" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q9" value="B"> B</label>
@@ -1315,7 +1342,7 @@
                                 <div class="result-message" id="result9"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">10. 他已经到了，我们快出去（ ）他吧。</div>
+                                <div class="fill-sentence">10. 你（ ）住那个饭馆的名字了吗？</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q10" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q10" value="B"> B</label>
@@ -1323,11 +1350,11 @@
                                     <label class="radio-item"><input type="radio" name="q10" value="D"> D</label>
                                     <label class="radio-item"><input type="radio" name="q10" value="E"> E</label>
                                 </div>
-                                <button class="check-btn" onclick="checkAnswer('q10', 'B', 'result10')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" onclick="checkAnswer('q10', 'D', 'result10')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 <div class="result-message" id="result10"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">11. 我的护照不见了，是不是在机场（ ）了？</div>
+                                <div class="fill-sentence">11. 她现在很饿，早上（ ）吃了一块蛋糕。</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q11" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q11" value="B"> B</label>
@@ -1335,11 +1362,11 @@
                                     <label class="radio-item"><input type="radio" name="q11" value="D"> D</label>
                                     <label class="radio-item"><input type="radio" name="q11" value="E"> E</label>
                                 </div>
-                                <button class="check-btn" onclick="checkAnswer('q11', 'C', 'result11')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" onclick="checkAnswer('q11', 'B', 'result11')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 <div class="result-message" id="result11"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">12. 行李票很（ ），你们出机场的时候有人看。</div>
+                                <div class="fill-sentence">12. （ ）上有好几个新菜，你看看我们吃哪个？</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q12" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q12" value="B"> B</label>
@@ -1347,11 +1374,11 @@
                                     <label class="radio-item"><input type="radio" name="q12" value="D"> D</label>
                                     <label class="radio-item"><input type="radio" name="q12" value="E"> E</label>
                                 </div>
-                                <button class="check-btn" onclick="checkAnswer('q12', 'D', 'result12')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" onclick="checkAnswer('q12', 'C', 'result12')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 <div class="result-message" id="result12"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">13. 我（ ）了两个行李箱和一个大包，所以走得非常慢。</div>
+                                <div class="fill-sentence">13. 我妈妈会做中国菜，下次你们来我家（ ）一下她做的菜。</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q13" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q13" value="B"> B</label>
@@ -1365,16 +1392,16 @@
                         </div>
 
                         <div class="vocab-box" style="margin-top: 20px;">
-                            <div class="vocab-item">A. 发现</div>
-                            <div class="vocab-item">B. 以为</div>
-                            <div class="vocab-item">C. 好像</div>
-                            <div class="vocab-item">D. 年轻</div>
-                            <div class="vocab-item">E. 帮助</div>
+                            <div class="vocab-item">A. 饿</div>
+                            <div class="vocab-item">B. 不用</div>
+                            <div class="vocab-item">C. 简单</div>
+                            <div class="vocab-item">D. 好久</div>
+                            <div class="vocab-item">E. 马上</div>
                         </div>
 
                         <div class="multi-question-container">
                             <div class="sub-question">
-                                <div class="fill-sentence">14. A: 这个头发很短的男孩儿是我弟弟。 B: 我（ ）这个是你，你们长得太像了。</div>
+                                <div class="fill-sentence">14. 有，你等一下，我（ ）给你拿。</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q14" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q14" value="B"> B</label>
@@ -1382,11 +1409,11 @@
                                     <label class="radio-item"><input type="radio" name="q14" value="D"> D</label>
                                     <label class="radio-item"><input type="radio" name="q14" value="E"> E</label>
                                 </div>
-                                <button class="check-btn" onclick="checkAnswer('q14', 'B', 'result14')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" onclick="checkAnswer('q14', 'E', 'result14')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 <div class="result-message" id="result14"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">15. A: 我（ ）坐飞机来北京的人非常多。 B: 对，很多人这个时候来北京旅游。</div>
+                                <div class="fill-sentence">15. 在手机上就可以点菜，（ ）要菜单。</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q15" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q15" value="B"> B</label>
@@ -1394,11 +1421,11 @@
                                     <label class="radio-item"><input type="radio" name="q15" value="D"> D</label>
                                     <label class="radio-item"><input type="radio" name="q15" value="E"> E</label>
                                 </div>
-                                <button class="check-btn" onclick="checkAnswer('q15', 'C', 'result15')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" onclick="checkAnswer('q15', 'B', 'result15')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 <div class="result-message" id="result15"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">16. B: 你们很像，你哥哥看起来也很（ ）。</div>
+                                <div class="fill-sentence">16. 我太（ ）了，不想做饭了，我们叫个外卖，怎么样？</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q16" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q16" value="B"> B</label>
@@ -1406,11 +1433,11 @@
                                     <label class="radio-item"><input type="radio" name="q16" value="D"> D</label>
                                     <label class="radio-item"><input type="radio" name="q16" value="E"> E</label>
                                 </div>
-                                <button class="check-btn" onclick="checkAnswer('q16', 'D', 'result16')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" onclick="checkAnswer('q16', 'A', 'result16')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 <div class="result-message" id="result16"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">17. B: 对，太好了！谢谢您的（ ）。</div>
+                                <div class="fill-sentence">17. 我（ ）没吃饺子了，去楼下的饺子馆吧。</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q17" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q17" value="B"> B</label>
@@ -1418,11 +1445,11 @@
                                     <label class="radio-item"><input type="radio" name="q17" value="D"> D</label>
                                     <label class="radio-item"><input type="radio" name="q17" value="E"> E</label>
                                 </div>
-                                <button class="check-btn" onclick="checkAnswer('q17', 'E', 'result17')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" onclick="checkAnswer('q17', 'D', 'result17')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 <div class="result-message" id="result17"></div>
                             </div>
                             <div class="sub-question">
-                                <div class="fill-sentence">18. B: （ ）是吧，我也不知道。</div>
+                                <div class="fill-sentence">18. 不做饭，我就吃碗方便面。方便面是最（ ）的晚饭。</div>
                                 <div class="radio-group">
                                     <label class="radio-item"><input type="radio" name="q18" value="A"> A</label>
                                     <label class="radio-item"><input type="radio" name="q18" value="B"> B</label>
@@ -1434,53 +1461,59 @@
                                 <div class="result-message" id="result18"></div>
                             </div>
                         </div>
-
-                        <div class="part-header" style="margin-top: 30px;">第二部分 - 读后选择 (Câu 19-20)</div>
-                        
-                        <div class="passage-box">
-                            <h3 style="margin-bottom: 15px; color: #dc3545; font-family: Arial;">李文的日记</h3>
-                            <p class="chinese-text" style="text-indent: 2em; line-height: 1.8;">
-                                昨天我到北京了。虽然路上花了十几个小时，但是跟家月坐在一起，我觉得时间过得很快。到机场的时候，家月发现行李箱不见了，我带她去服务台，帮助她找到了行李箱。走出机场的时候，已经八点多了，我们一出来就看见了王老师的姐姐，她看起来比照片上年轻。晚上，一雪姐带我们去吃了一家很好吃的中国菜。
-                            </p>
-                        </div>
-                        
-                        <div class="question-container">
-                            <div class="question-text">19. 李文为什么觉得时间过得很快？</div>
-                            <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q19" value="A"> A 因为路上很短</label>
-                                <label class="radio-item"><input type="radio" name="q19" value="B"> B 因为和家月坐在一起</label>
-                                <label class="radio-item"><input type="radio" name="q19" value="C"> C 因为很喜欢北京</label>
-                            </div>
-                            <button class="check-btn" onclick="checkAnswer('q19', 'B', 'result19')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
-                            <div class="result-message" id="result19"></div>
-                        </div>
-                        
-                        <div class="question-container">
-                            <div class="question-text">20. 到机场的时候，白家月发现了什么问题？</div>
-                            <div class="radio-group">
-                                <label class="radio-item"><input type="radio" name="q20" value="A"> A 护照不见了</label>
-                                <label class="radio-item"><input type="radio" name="q20" value="B"> B 行李箱不见了</label>
-                                <label class="radio-item"><input type="radio" name="q20" value="C"> C 飞机晚点了</label>
-                            </div>
-                            <button class="check-btn" onclick="checkAnswer('q20', 'B', 'result20')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
-                            <div class="result-message" id="result20"></div>
-                        </div>
                     </div>
 
                     <div id="writing" class="exercise-content">
                         <div class="section-header-exercise">三、书写 (10 câu)</div>
                         
-                        <div class="part-header">第一部分 - 排列词语 (Câu 21-25)</div>
+                        <div class="part-header">第一部分 - 排列词语 (Câu 19-23)</div>
                         
                         <div class="writing-container">
-                            <div class="question-text" style="margin-bottom: 15px;">21.</div>
-                            <div class="arrange-box" id="arrange-21" data-answer="我去机场接他们">
+                            <div class="question-text" style="margin-bottom: 15px;">19.</div>
+                            <div class="arrange-box" id="arrange-19" data-answer="你们想吃什么就点什么">
                                 <div class="word-bank" data-source="true">
-                                    <span class="word-source" draggable="true" data-word="机场">机场</span>
-                                    <span class="word-source" draggable="true" data-word="我">我</span>
-                                    <span class="word-source" draggable="true" data-word="他们">他们</span>
-                                    <span class="word-source" draggable="true" data-word="接">接</span>
-                                    <span class="word-source" draggable="true" data-word="去">去</span>
+                                    <span class="word-source" draggable="true" data-word="什么">什么</span>
+                                    <span class="word-source" draggable="true" data-word="你们">你们</span>
+                                    <span class="word-source" draggable="true" data-word="想">想</span>
+                                    <span class="word-source" draggable="true" data-word="吃">吃</span>
+                                    <span class="word-source" draggable="true" data-word="就点">就点</span>
+                                    <span class="word-source" draggable="true" data-word="什么">什么</span>
+                                </div>
+                                <div class="drop-zone" data-drop="true"></div>
+                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
+                                <button class="check-btn" onclick="checkArrange('arrange-19', 'result19')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-19')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
+                                <div class="result-message" id="result19"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="question-text" style="margin-bottom: 15px;">20.</div>
+                            <div class="arrange-box" id="arrange-20" data-answer="这家饭馆的服务很热情">
+                                <div class="word-bank" data-source="true">
+                                    <span class="word-source" draggable="true" data-word="服务">服务</span>
+                                    <span class="word-source" draggable="true" data-word="的">的</span>
+                                    <span class="word-source" draggable="true" data-word="很">很</span>
+                                    <span class="word-source" draggable="true" data-word="这家">这家</span>
+                                    <span class="word-source" draggable="true" data-word="饭馆">饭馆</span>
+                                    <span class="word-source" draggable="true" data-word="热情">热情</span>
+                                </div>
+                                <div class="drop-zone" data-drop="true"></div>
+                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
+                                <button class="check-btn" onclick="checkArrange('arrange-20', 'result20')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-20')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
+                                <div class="result-message" id="result20"></div>
+                            </div>
+                        </div>
+
+                        <div class="writing-container">
+                            <div class="question-text" style="margin-bottom: 15px;">21.</div>
+                            <div class="arrange-box" id="arrange-21" data-answer="哪个菜都好吃">
+                                <div class="word-bank" data-source="true">
+                                    <span class="word-source" draggable="true" data-word="哪个">哪个</span>
+                                    <span class="word-source" draggable="true" data-word="好吃">好吃</span>
+                                    <span class="word-source" draggable="true" data-word="菜">菜</span>
+                                    <span class="word-source" draggable="true" data-word="都">都</span>
                                 </div>
                                 <div class="drop-zone" data-drop="true"></div>
                                 <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
@@ -1492,14 +1525,14 @@
 
                         <div class="writing-container">
                             <div class="question-text" style="margin-bottom: 15px;">22.</div>
-                            <div class="arrange-box" id="arrange-22" data-answer="别着急我们帮你找">
+                            <div class="arrange-box" id="arrange-22" data-answer="这里的饭菜又便宜又好吃">
                                 <div class="word-bank" data-source="true">
-                                    <span class="word-source" draggable="true" data-word="着急">着急</span>
-                                    <span class="word-source" draggable="true" data-word="别">别</span>
-                                    <span class="word-source" draggable="true" data-word="找">找</span>
-                                    <span class="word-source" draggable="true" data-word="你">你</span>
-                                    <span class="word-source" draggable="true" data-word="帮">帮</span>
-                                    <span class="word-source" draggable="true" data-word="我们">我们</span>
+                                    <span class="word-source" draggable="true" data-word="饭菜">饭菜</span>
+                                    <span class="word-source" draggable="true" data-word="好吃">好吃</span>
+                                    <span class="word-source" draggable="true" data-word="又">又</span>
+                                    <span class="word-source" draggable="true" data-word="便宜">便宜</span>
+                                    <span class="word-source" draggable="true" data-word="又">又</span>
+                                    <span class="word-source" draggable="true" data-word="这里的">这里的</span>
                                 </div>
                                 <div class="drop-zone" data-drop="true"></div>
                                 <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
@@ -1511,14 +1544,13 @@
 
                         <div class="writing-container">
                             <div class="question-text" style="margin-bottom: 15px;">23.</div>
-                            <div class="arrange-box" id="arrange-23" data-answer="行李箱上面写着我的名字">
+                            <div class="arrange-box" id="arrange-23" data-answer="现在能送外卖真是太方便了">
                                 <div class="word-bank" data-source="true">
-                                    <span class="word-source" draggable="true" data-word="行李箱">行李箱</span>
-                                    <span class="word-source" draggable="true" data-word="上面">上面</span>
-                                    <span class="word-source" draggable="true" data-word="写">写</span>
-                                    <span class="word-source" draggable="true" data-word="着">着</span>
-                                    <span class="word-source" draggable="true" data-word="名字">名字</span>
-                                    <span class="word-source" draggable="true" data-word="我的">我的</span>
+                                    <span class="word-source" draggable="true" data-word="能">能</span>
+                                    <span class="word-source" draggable="true" data-word="送外卖">送外卖</span>
+                                    <span class="word-source" draggable="true" data-word="真是">真是</span>
+                                    <span class="word-source" draggable="true" data-word="太方便了">太方便了</span>
+                                    <span class="word-source" draggable="true" data-word="现在">现在</span>
                                 </div>
                                 <div class="drop-zone" data-drop="true"></div>
                                 <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
@@ -1528,51 +1560,39 @@
                             </div>
                         </div>
 
+                        <div class="part-header">第二部分 - 写汉字 (Câu 24-28)</div>
+                        
                         <div class="writing-container">
-                            <div class="question-text" style="margin-bottom: 15px;">24.</div>
-                            <div class="arrange-box" id="arrange-24" data-answer="他看起来比照片上年轻">
-                                <div class="word-bank" data-source="true">
-                                    <span class="word-source" draggable="true" data-word="年轻">年轻</span>
-                                    <span class="word-source" draggable="true" data-word="他">他</span>
-                                    <span class="word-source" draggable="true" data-word="照片上">照片上</span>
-                                    <span class="word-source" draggable="true" data-word="比">比</span>
-                                    <span class="word-source" draggable="true" data-word="看起来">看起来</span>
+                            <div class="char-writing-box">
+                                <div class="char-label">24. Pinyin: <strong>càidān</strong> (thực đơn)</div>
+                                <div class="char-sentence">你看看<span class="char-pinyin-inline">càidān</span>，想吃什么？</div>
+                                <div style="margin-top: 10px;">
+                                    <input type="text" class="char-input" id="char-24" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-24', '菜单', 'result24')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 </div>
-                                <div class="drop-zone" data-drop="true"></div>
-                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
-                                <button class="check-btn" onclick="checkArrange('arrange-24', 'result24')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
-                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-24')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
                                 <div class="result-message" id="result24"></div>
                             </div>
                         </div>
 
                         <div class="writing-container">
-                            <div class="question-text" style="margin-bottom: 15px;">25.</div>
-                            <div class="arrange-box" id="arrange-25" data-answer="我们站到中间去吧">
-                                <div class="word-bank" data-source="true">
-                                    <span class="word-source" draggable="true" data-word="吧">吧</span>
-                                    <span class="word-source" draggable="true" data-word="中间">中间</span>
-                                    <span class="word-source" draggable="true" data-word="站到">站到</span>
-                                    <span class="word-source" draggable="true" data-word="去">去</span>
-                                    <span class="word-source" draggable="true" data-word="我们">我们</span>
+                            <div class="char-writing-box">
+                                <div class="char-label">25. Pinyin: <strong>kèqi</strong> (khách sáo)</div>
+                                <div class="char-sentence">你别<span class="char-pinyin-inline">kèqi</span>，多吃点儿。</div>
+                                <div style="margin-top: 10px;">
+                                    <input type="text" class="char-input" id="char-25" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-25', '客气', 'result25')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 </div>
-                                <div class="drop-zone" data-drop="true"></div>
-                                <div class="result-area empty">Kết quả sẽ hiển thị ở đây...</div>
-                                <button class="check-btn" onclick="checkArrange('arrange-25', 'result25')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
-                                <button class="check-btn" style="background: #6c757d; margin-left: 10px;" onclick="resetArrange('arrange-25')"><i class="bi bi-arrow-counterclockwise"></i> Làm lại</button>
                                 <div class="result-message" id="result25"></div>
                             </div>
                         </div>
 
-                        <div class="part-header">第二部分 - 写汉字 (Câu 26-30)</div>
-                        
                         <div class="writing-container">
                             <div class="char-writing-box">
-                                <div class="char-label">26. Pinyin: <strong>jiē</strong> (đón)</div>
-                                <div class="char-sentence">我去机场<span class="char-pinyin-inline">jiē</span>他们。</div>
+                                <div class="char-label">26. Pinyin: <strong>kuàizi</strong> (đũa)</div>
+                                <div class="char-sentence">给我拿一双<span class="char-pinyin-inline">kuàizi</span>。</div>
                                 <div style="margin-top: 10px;">
-                                    <input type="text" class="char-input" id="char-26" maxlength="1" placeholder="?">
-                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-26', '接', 'result26')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <input type="text" class="char-input" id="char-26" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-26', '筷子', 'result26')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 </div>
                                 <div class="result-message" id="result26"></div>
                             </div>
@@ -1580,11 +1600,11 @@
 
                         <div class="writing-container">
                             <div class="char-writing-box">
-                                <div class="char-label">27. Pinyin: <strong>zháojí</strong> (lo lắng)</div>
-                                <div class="char-sentence">你别<span class="char-pinyin-inline">zháojí</span>，我们帮你找。</div>
+                                <div class="char-label">27. Pinyin: <strong>fāngbiàn</strong> (tiện lợi)</div>
+                                <div class="char-sentence">这真是太<span class="char-pinyin-inline">fāngbiàn</span>了！</div>
                                 <div style="margin-top: 10px;">
                                     <input type="text" class="char-input" id="char-27" maxlength="2" placeholder="??" style="width: 120px;">
-                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-27', '着急', 'result27')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-27', '方便', 'result27')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 </div>
                                 <div class="result-message" id="result27"></div>
                             </div>
@@ -1592,37 +1612,13 @@
 
                         <div class="writing-container">
                             <div class="char-writing-box">
-                                <div class="char-label">28. Pinyin: <strong>shòu</strong> (gầy)</div>
-                                <div class="char-sentence">他看起来比同乐<span class="char-pinyin-inline">shòu</span>一点儿。</div>
+                                <div class="char-label">28. Pinyin: <strong>wàimài</strong> (đồ ăn mang về)</div>
+                                <div class="char-sentence">现在很多饭馆都能送<span class="char-pinyin-inline">wàimài</span>。</div>
                                 <div style="margin-top: 10px;">
-                                    <input type="text" class="char-input" id="char-28" maxlength="1" placeholder="?">
-                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-28', '瘦', 'result28')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
+                                    <input type="text" class="char-input" id="char-28" maxlength="2" placeholder="??" style="width: 120px;">
+                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-28', '外卖', 'result28')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
                                 </div>
                                 <div class="result-message" id="result28"></div>
-                            </div>
-                        </div>
-
-                        <div class="writing-container">
-                            <div class="char-writing-box">
-                                <div class="char-label">29. Pinyin: <strong>bāngzhù</strong> (giúp đỡ)</div>
-                                <div class="char-sentence">谢谢你的<span class="char-pinyin-inline">bāngzhù</span>。</div>
-                                <div style="margin-top: 10px;">
-                                    <input type="text" class="char-input" id="char-29" maxlength="2" placeholder="??" style="width: 120px;">
-                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-29', '帮助', 'result29')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
-                                </div>
-                                <div class="result-message" id="result29"></div>
-                            </div>
-                        </div>
-
-                        <div class="writing-container">
-                            <div class="char-writing-box">
-                                <div class="char-label">30. Pinyin: <strong>zhàopiàn</strong> (ảnh)</div>
-                                <div class="char-sentence">她看起来比<span class="char-pinyin-inline">zhàopiàn</span>上年轻。</div>
-                                <div style="margin-top: 10px;">
-                                    <input type="text" class="char-input" id="char-30" maxlength="2" placeholder="??" style="width: 120px;">
-                                    <button class="check-btn" style="margin-left: 10px;" onclick="checkCharacter('char-30', '照片', 'result30')"><i class="bi bi-check-circle"></i> Kiểm tra</button>
-                                </div>
-                                <div class="result-message" id="result30"></div>
                             </div>
                         </div>
                     </div>
@@ -1633,37 +1629,63 @@
     </div>
 </div>
 
+<div id="note-editor-overlay">
+    <div id="note-editor-container">
+        <div id="note-editor-header">
+            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>
+            <button class="editor-tool-btn" onclick="closeNoteEditor()" style="border:none; background:rgba(255,255,255,0.2); color:white;"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div id="note-editor-toolbar">
+            <button class="editor-tool-btn" onclick="formatDoc('bold')"><i class="bi bi-type-bold"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('italic')"><i class="bi bi-type-italic"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('underline')"><i class="bi bi-type-underline"></i></button>
+            <button class="editor-tool-btn" onclick="formatDoc('insertUnorderedList')"><i class="bi bi-list-ul"></i></button>
+            <button class="editor-tool-btn" onclick="clearEditor()" style="color:#c62828;"><i class="bi bi-trash"></i></button>
+        </div>
+        <div id="rich-editor" contenteditable="true" spellcheck="false"></div>
+        <div id="note-editor-footer">
+            <span style="font-size:12px; color:#666; font-family:Arial;">Hỗ trợ paste trực tiếp từ Word</span>
+            <div>
+                <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()">Đóng</button>
+                <button class="editor-btn editor-btn-save" onclick="saveNoteEditor()"><i class="bi bi-check-lg"></i> Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    let audioSpeed = 1.0;
+    // BIẾN TỐC ĐỘ ÂM THANH TOÀN CỤC
+    let audioSpeed = 0.8;
 
     const vocabulary = [
-        { id: 1, chinese: '以为', pinyin: 'yǐwéi', meaning: 'Tưởng rằng, cho rằng', category: 'v', lesson: 'lesson1', example: '我还以为是同乐呢。' },
-        { id: 2, chinese: '像', pinyin: 'xiàng', meaning: 'Giống như', category: 'v', lesson: 'lesson1', example: '他们看上去有点儿像。' },
-        { id: 3, chinese: '长', pinyin: 'zhǎng', meaning: 'Mọc, trưởng thành', category: 'v', lesson: 'lesson1', example: '是长得有点儿像。' },
-        { id: 4, chinese: '身高', pinyin: 'shēngāo', meaning: 'Chiều cao', category: 'n', lesson: 'lesson1', example: '身高有一米八。' },
-        { id: 5, chinese: '米', pinyin: 'mǐ', meaning: 'Mét', category: 'm', lesson: 'lesson1', example: '一米八。' },
-        { id: 6, chinese: '瘦', pinyin: 'shòu', meaning: 'Gầy', category: 'adj', lesson: 'lesson1', example: '看起来比同乐瘦一点儿。' },
-        { id: 7, chinese: '接', pinyin: 'jiē', meaning: 'Đón, tiếp', category: 'v', lesson: 'lesson1', example: '我去机场接他们。' },
-        { id: 8, chinese: '行李', pinyin: 'xíngli', meaning: 'Hành lý', category: 'n', lesson: 'lesson2', example: '我的行李怎么还没出来？' },
-        { id: 9, chinese: '丢', pinyin: 'diū', meaning: 'Làm mất, đánh rơi', category: 'v', lesson: 'lesson2', example: '是不是丢了？' },
-        { id: 10, chinese: '箱子', pinyin: 'xiāngzi', meaning: 'Cái vali, cái hộp', category: 'n', lesson: 'lesson2', example: '你的行李箱是什么样的？' },
-        { id: 11, chinese: '号码', pinyin: 'hàomǎ', meaning: 'Số hiệu, số điện thoại', category: 'n', lesson: 'lesson2', example: '电话号码。' },
-        { id: 12, chinese: '好像', pinyin: 'hǎoxiàng', meaning: 'Hình như, dường như', category: 'adv', lesson: 'lesson2', example: '我好像在哪儿看到过。' },
-        { id: 13, chinese: '重要', pinyin: 'zhòngyào', meaning: 'Quan trọng', category: 'adj', lesson: 'lesson2', example: '有不少重要的东西。' },
-        { id: 14, chinese: '着急', pinyin: 'zháojí', meaning: 'Lo lắng, vội vàng', category: 'adj', lesson: 'lesson2', example: '别着急。' },
-        { id: 15, chinese: '护照', pinyin: 'hùzhào', meaning: 'Hộ chiếu', category: 'n', lesson: 'lesson2', example: '拿着护照和机票。' },
-        { id: 16, chinese: '服务台', pinyin: 'fúwùtái', meaning: 'Quầy dịch vụ', category: 'n', lesson: 'lesson2', example: '去服务台问问。' },
-        { id: 17, chinese: '应该', pinyin: 'yīnggāi', meaning: 'Nên, chắc là', category: 'mod', lesson: 'lesson3', example: '他们应该快出来了。' },
-        { id: 18, chinese: '站', pinyin: 'zhàn', meaning: 'Đứng', category: 'v', lesson: 'lesson3', example: '我们站到中间去吧。' },
-        { id: 19, chinese: '中间', pinyin: 'zhōngjiān', meaning: 'Ở giữa', category: 'n', lesson: 'lesson3', example: '站到中间去。' },
-        { id: 20, chinese: '短', pinyin: 'duǎn', meaning: 'Ngắn', category: 'adj', lesson: 'lesson3', example: '短头发。' },
-        { id: 21, chinese: '头发', pinyin: 'tóufa', meaning: 'Tóc', category: 'n', lesson: 'lesson3', example: '头发很长。' },
-        { id: 22, chinese: '年轻', pinyin: 'niánqīng', meaning: 'Trẻ tuổi', category: 'adj', lesson: 'lesson3', example: '看起来很年轻。' },
-        { id: 23, chinese: '发现', pinyin: 'fāxiàn', meaning: 'Phát hiện', category: 'v', lesson: 'lesson4', example: '发现行李箱不见了。' },
-        { id: 24, chinese: '不见', pinyin: 'bújiàn', meaning: 'Không thấy, mất', category: 'v', lesson: 'lesson4', example: '行李箱不见了。' },
-        { id: 25, chinese: '带', pinyin: 'dài', meaning: 'Mang, dẫn theo', category: 'v', lesson: 'lesson4', example: '带她去服务台。' },
-        { id: 26, chinese: '帮助', pinyin: 'bāngzhù', meaning: 'Giúp đỡ', category: 'v', lesson: 'lesson4', example: '帮助她找到了。' },
-        { id: 27, chinese: '照片', pinyin: 'zhàopiàn', meaning: 'Ảnh chụp', category: 'n', lesson: 'lesson4', example: '比照片上年轻。' }
+        { id: 1, chinese: '菜单', pinyin: 'càidān', meaning: 'Thực đơn (menu)', category: 'n', lesson: 'lesson1', example: '你们看看菜单。' },
+        { id: 2, chinese: '又', pinyin: 'yòu', meaning: 'Vừa... vừa... (adv.)', category: 'adv', lesson: 'lesson1', example: '又饿又渴。' },
+        { id: 3, chinese: '饿', pinyin: 'è', meaning: 'Đói (adj.)', category: 'adj', lesson: 'lesson1', example: '我现在很饿。' },
+        { id: 4, chinese: '渴', pinyin: 'kě', meaning: 'Khát (adj.)', category: 'adj', lesson: 'lesson1', example: '我很渴。' },
+        { id: 5, chinese: '客气', pinyin: 'kèqi', meaning: 'Khách sáo, lịch sự', category: 'adj', lesson: 'lesson1', example: '你别客气。' },
+        { id: 6, chinese: '饮料', pinyin: 'yǐnliào', meaning: 'Đồ uống', category: 'n', lesson: 'lesson1', example: '喝什么饮料？' },
+        { id: 7, chinese: '好久', pinyin: 'hǎojiǔ', meaning: 'Lâu rồi', category: 'adj', lesson: 'lesson1', example: '好久没喝中国茶。' },
+        { id: 8, chinese: '服务', pinyin: 'fúwù', meaning: 'Phục vụ', category: 'v', lesson: 'lesson2', example: '服务很热情。' },
+        { id: 9, chinese: '员', pinyin: 'yuán', meaning: 'Viên (hậu tố chỉ người)', category: 'suf', lesson: 'lesson2', example: '服务员' },
+        { id: 10, chinese: '双', pinyin: 'shuāng', meaning: 'Đôi (lượng từ)', category: 'm', lesson: 'lesson2', example: '一双筷子' },
+        { id: 11, chinese: '筷子', pinyin: 'kuàizi', meaning: 'Đũa', category: 'n', lesson: 'lesson2', example: '拿一双筷子' },
+        { id: 12, chinese: '勺子', pinyin: 'sháozi', meaning: 'Thìa', category: 'n', lesson: 'lesson2', example: '一个勺子' },
+        { id: 13, chinese: '碗', pinyin: 'wǎn', meaning: 'Bát', category: 'n', lesson: 'lesson2', example: '一个碗' },
+        { id: 14, chinese: '马上', pinyin: 'mǎshàng', meaning: 'Ngay lập tức', category: 'adv', lesson: 'lesson2', example: '我马上去拿。' },
+        { id: 15, chinese: '热情', pinyin: 'rèqíng', meaning: 'Nhiệt tình', category: 'adj', lesson: 'lesson2', example: '服务很热情。' },
+        { id: 16, chinese: '尝', pinyin: 'cháng', meaning: 'Nếm', category: 'v', lesson: 'lesson2', example: '你们尝尝。' },
+        { id: 17, chinese: '记', pinyin: 'jì', meaning: 'Nhớ', category: 'v', lesson: 'lesson2', example: '记住我们爱吃的菜' },
+        { id: 18, chinese: '用', pinyin: 'yòng', meaning: 'Dùng, sử dụng', category: 'v', lesson: 'lesson2', example: '用筷子吃饭' },
+        { id: 19, chinese: '鸡', pinyin: 'jī', meaning: 'Gà', category: 'n', lesson: 'lesson3', example: '鸡肉饭' },
+        { id: 20, chinese: '张', pinyin: 'zhāng', meaning: 'Tờ (lượng từ)', category: 'm', lesson: 'lesson3', example: '这张菜单' },
+        { id: 21, chinese: '不用', pinyin: 'búyòng', meaning: 'Không cần', category: 'adv', lesson: 'lesson3', example: '不用拿菜单' },
+        { id: 22, chinese: '选', pinyin: 'xuǎn', meaning: 'Chọn', category: 'v', lesson: 'lesson3', example: '选好了让他们送' },
+        { id: 23, chinese: '外卖', pinyin: 'wàimài', meaning: 'Đồ ăn mang về', category: 'n', lesson: 'lesson3', example: '送外卖' },
+        { id: 24, chinese: '方便', pinyin: 'fāngbiàn', meaning: 'Tiện lợi', category: 'adj', lesson: 'lesson3', example: '太方便了' },
+        { id: 25, chinese: '蛋糕', pinyin: 'dàngāo', meaning: 'Bánh ngọt', category: 'n', lesson: 'lesson4', example: '吃一块蛋糕' },
+        { id: 26, chinese: '只', pinyin: 'zhǐ', meaning: 'Chỉ (adv.)', category: 'adv', lesson: 'lesson4', example: '只吃方便面' },
+        { id: 27, chinese: '方便面', pinyin: 'fāngbiànmiàn', meaning: 'Mì ăn liền', category: 'n', lesson: 'lesson4', example: '吃方便面' },
+        { id: 28, chinese: '简单', pinyin: 'jiǎndān', meaning: 'Đơn giản', category: 'adj', lesson: 'lesson4', example: '简单的菜' }
     ];
 
     const writers = {};
@@ -1676,42 +1698,42 @@
     let currentGrammarIndex = 0;
     const GRAMMAR_TOTAL = 3;
 
-    // ==================== REAL MP3 AUDIO: PDF -> OFFICIAL MP3 -> HTML ====================
-    const COURSE_AUDIO_FILE = 'HSK3.0-03.01.mp3';
+    const COURSE_AUDIO_FILE = 'HSK3.0-03.02.mp3';
     const COURSE_AUDIO = {
-        text1: { all: [0.000, 34.351], lines: [[0.140, 4.699], [4.699, 10.222], [10.222, 14.432], [14.432, 18.383], [18.383, 22.948], [22.948, 28.206], [28.206, 34.200]] },
-        text2: { all: [51.200, 82.129], lines: [[51.530, 55.939], [55.939, 61.192], [61.192, 65.128], [65.128, 70.601], [70.601, 75.984], [75.984, 82.000]] },
-        text3: { all: [105.927, 140.174], lines: [[106.307, 111.020], [111.020, 115.415], [115.415, 121.227], [121.227, 125.747], [125.747, 133.270], [133.270, 140.027]] },
-        text4: { all: [156.238, 194.507], lines: [[156.708, 193.958]] },
+        text1: { all: [0.000, 30.798], lines: [[0.300, 5.905], [5.905, 10.096], [10.096, 14.045], [14.045, 18.777], [18.777, 26.752], [26.752, 30.600]] },
+        text2: { all: [47.699, 85.106], lines: [[48.049, 54.026], [54.026, 57.816], [57.816, 65.848], [65.848, 70.599], [70.599, 78.269], [78.269, 84.899]] },
+        text3: { all: [110.340, 140.747], lines: [[110.640, 115.444], [115.444, 120.446], [120.446, 127.613], [127.613, 130.493], [130.493, 137.162], [137.162, 140.540]] },
+        text4: { all: [154.696, 197.746], lines: [[155.096, 197.446]] },
     };
     const VOCAB_AUDIO = {
-        1: [34.695, 37.398],
-        2: [37.398, 39.434],
-        3: [39.434, 41.673],
-        4: [41.673, 44.090],
-        5: [44.090, 46.145],
-        6: [46.145, 48.274],
-        7: [48.274, 50.627],
-        8: [82.390, 84.871],
-        9: [84.871, 86.870],
-        10: [86.870, 88.988],
-        11: [88.988, 91.431],
-        12: [91.431, 93.931],
-        13: [93.931, 96.490],
-        14: [96.490, 99.172],
-        15: [99.172, 101.805],
-        16: [101.805, 105.198],
-        17: [140.462, 143.357],
-        18: [143.357, 145.434],
-        19: [145.434, 148.228],
-        20: [148.228, 150.607],
-        21: [150.607, 153.020],
-        22: [153.020, 155.831],
-        23: [194.797, 197.432],
-        24: [197.432, 200.060],
-        25: [200.060, 202.322],
-        26: [202.322, 205.203],
-        27: [205.203, 208.078],
+        1: [31.018, 33.806],
+        2: [33.806, 35.643],
+        3: [35.643, 37.408],
+        4: [37.408, 39.478],
+        5: [39.478, 41.655],
+        6: [41.655, 44.001],
+        7: [44.001, 47.074],
+        8: [85.472, 88.101],
+        9: [88.101, 89.874],
+        10: [89.874, 91.867],
+        11: [91.867, 94.300],
+        12: [94.300, 96.715],
+        13: [96.715, 98.834],
+        14: [98.834, 101.268],
+        15: [101.268, 103.844],
+        16: [103.844, 105.992],
+        17: [105.992, 107.973],
+        18: [107.973, 109.961],
+        19: [140.978, 142.968],
+        20: [142.968, 144.915],
+        21: [144.915, 147.180],
+        22: [147.180, 149.352],
+        23: [149.352, 151.894],
+        24: [151.894, 154.483],
+        25: [197.961, 200.442],
+        26: [200.442, 202.662],
+        27: [202.662, 205.868],
+        28: [205.868, 208.438],
     };
 
     let _courseAudioEl = null;
@@ -1760,30 +1782,27 @@
         _playCourseRange(range[0], range[1]);
     }
 
-
     function setAudioSpeed(speed) {
         audioSpeed = parseFloat(speed);
         localStorage.setItem('hsk3_audio_speed', audioSpeed);
         if (_courseAudioEl) _courseAudioEl.playbackRate = audioSpeed;
     }
 
-    // ==================== AUDIO ENGINE ====================
-    // sessionId: tang len moi lan _stopAll() -> huy moi callback cu
     function speak(text) {
-    _stopCourseAudio();
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'zh-CN'; utter.rate = audioSpeed; utter.pitch = 1;
-        window.speechSynthesis.speak(utter);
+        _stopCourseAudio();
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'zh-CN'; utter.rate = audioSpeed; utter.pitch = 1;
+            window.speechSynthesis.speak(utter);
+        }
     }
-}
 
-function speakAllText(textId) {
-    const item = COURSE_AUDIO[textId];
-    if (!item) return;
-    _playCourseRange(item.all[0], item.all[1]);
-}
+    function speakAllText(textId) {
+        const item = COURSE_AUDIO[textId];
+        if (!item) return;
+        _playCourseRange(item.all[0], item.all[1]);
+    }
 
 
     function showGrammar(index, btn) {
@@ -1794,6 +1813,12 @@ function speakAllText(textId) {
         document.querySelectorAll('.grammar-tab').forEach(t => t.classList.remove('active'));
         if (btn) btn.classList.add('active');
         else document.querySelectorAll('.grammar-tab')[index].classList.add('active');
+        document.querySelectorAll('.grammar-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === index);
+        });
+        document.getElementById('grammar-current-num').textContent = index + 1;
+        document.getElementById('grammar-btn-prev').disabled = index === 0;
+        document.getElementById('grammar-btn-next').disabled = index === GRAMMAR_TOTAL - 1;
         currentGrammarIndex = index;
     }
 
@@ -1839,10 +1864,8 @@ function speakAllText(textId) {
         document.getElementById('section-title-text').textContent = sectionTitles[index];
         document.getElementById('current-icon').innerHTML = `<i class="bi ${sectionIcons[index]}"></i>`;
         document.getElementById('section-badge').textContent = `Phần ${index + 1}/${sections.length}`;
-        const bPrev = document.getElementById('btn-prev');
-        const bNext = document.getElementById('btn-next');
-        if (bPrev) bPrev.disabled = index === 0;
-        if (bNext) bNext.disabled = index === sections.length - 1;
+        document.getElementById('btn-prev').disabled = index === 0;
+        document.getElementById('btn-next').disabled = index === sections.length - 1;
     }
 
     function nextSection() {
@@ -1859,9 +1882,9 @@ function speakAllText(textId) {
         }
     }
 
-
     function renderVocabulary(filter) {
         const grid = document.getElementById('vocab-grid');
+        // Hủy tất cả writer cũ trước khi xóa DOM
         Object.keys(writers).forEach(id => {
             delete writers[id];
         });
@@ -2164,39 +2187,13 @@ function speakAllText(textId) {
         document.querySelectorAll('.result-message').forEach(m => { m.classList.remove('show','correct','incorrect'); m.textContent = ''; });
         document.querySelectorAll('.arrange-box').forEach(box => resetArrange(box.id));
     }
-</script>
 
-<div id="note-editor-overlay">
-    <div id="note-editor-container">
-        <div id="note-editor-header">
-            <h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>
-            <button class="editor-tool-btn" onclick="closeNoteEditor()" style="border:none; background:rgba(255,255,255,0.2); color:white;"><i class="bi bi-x-lg"></i></button>
-        </div>
-        <div id="note-editor-toolbar">
-            <button class="editor-tool-btn" onclick="formatDoc('bold')"><i class="bi bi-type-bold"></i></button>
-            <button class="editor-tool-btn" onclick="formatDoc('italic')"><i class="bi bi-type-italic"></i></button>
-            <button class="editor-tool-btn" onclick="formatDoc('underline')"><i class="bi bi-type-underline"></i></button>
-            <button class="editor-tool-btn" onclick="formatDoc('insertUnorderedList')"><i class="bi bi-list-ul"></i></button>
-            <button class="editor-tool-btn" onclick="clearEditor()" style="color:#c62828;"><i class="bi bi-trash"></i></button>
-        </div>
-        <div id="rich-editor" contenteditable="true" spellcheck="false"></div>
-        <div id="note-editor-footer">
-            <span style="font-size:12px; color:#666; font-family:Arial;">Hỗ trợ paste trực tiếp từ Word</span>
-            <div>
-                <button class="editor-btn editor-btn-close" onclick="closeNoteEditor()">Đóng</button>
-                <button class="editor-btn editor-btn-save" onclick="saveNoteEditor()"><i class="bi bi-check-lg"></i> Lưu</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
     function openNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'block'; document.getElementById('rich-editor').focus(); }
     function closeNoteEditor() { document.getElementById('note-editor-overlay').style.display = 'none'; }
     function saveNoteEditor() { alert('Ghi chú đã được lưu tạm thời!'); closeNoteEditor(); }
     function formatDoc(cmd) { document.execCommand(cmd, false, null); document.getElementById('rich-editor').focus(); }
     function clearEditor() { if (confirm('Xóa tất cả?')) document.getElementById('rich-editor').innerHTML = ''; }
-    
+
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
 </script>
 </body>
