@@ -205,7 +205,57 @@ Cô ấy mời chúng tôi ăn vịt quay Bắc Kinh</title>
         .replay-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
     </style>
     <base target="_blank">
-    <script defer src="hsk2-vocab-audio.js"></script>
+    <script>
+// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+(function () {
+    'use strict';
+    const lessonMap = {"就":{"id":1,"file":"HSK3.0-02.01.mp3","start":99.212,"end":101.051},"给":{"id":2,"file":"HSK3.0-02.01.mp3","start":101.499,"end":103.308},"让":{"id":3,"file":"HSK3.0-02.01.mp3","start":103.753,"end":105.444},"接":{"id":4,"file":"HSK3.0-02.01.mp3","start":105.902,"end":107.683},"次":{"id":5,"file":"HSK3.0-02.01.mp3","start":109.139,"end":110.995},"旅游":{"id":6,"file":"HSK3.0-02.01.mp3","start":111.332,"end":113.54},"帮忙":{"id":7,"file":"HSK3.0-02.01.mp3","start":114.485,"end":116.881},"不好意思":{"id":8,"file":"HSK3.0-02.01.mp3","start":117.716,"end":120.623},"已经":{"id":9,"file":"HSK3.0-02.01.mp3","start":121.171,"end":123.383},"那":{"id":10,"file":"HSK3.0-02.01.mp3","start":123.967,"end":125.705},"介绍":{"id":11,"file":"HSK3.0-02.01.mp3","start":126.638,"end":128.894},"有时":{"id":12,"file":"HSK3.0-02.01.mp3","start":129.277,"end":131.756},"懂":{"id":13,"file":"HSK3.0-02.01.mp3","start":132.092,"end":134.063},"意思":{"id":14,"file":"HSK3.0-02.01.mp3","start":134.425,"end":136.459},"北京烤鸭":{"id":15,"file":"HSK3.0-02.01.mp3","start":137,"end":140.368}};
+    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
+    let vocabAudio = null;
+    let stopAt = null;
+
+    function getVocabAudio() {
+        if (!vocabAudio) {
+            vocabAudio = new Audio("HSK3.0-02.01.mp3");
+            vocabAudio.preload = 'auto';
+            vocabAudio.addEventListener('timeupdate', function () {
+                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
+                    vocabAudio.pause();
+                    stopAt = null;
+                }
+            });
+            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+        }
+        return vocabAudio;
+    }
+
+    function playMappedVocab(text) {
+        const segment = lessonMap[text];
+        if (!segment) return false;
+        if (typeof window._stopCourseAudio === 'function') window._stopCourseAudio();
+        if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        const audio = getVocabAudio();
+        stopAt = segment.end;
+        const begin = function () {
+            audio.currentTime = segment.start;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const promise = audio.play();
+            if (promise !== undefined) promise.catch(function () {});
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+        return true;
+    }
+
+    window.HSK2_VOCAB_AUDIO = { "01": lessonMap };
+    window.playHsk2Vocab = playMappedVocab;
+    window.speak = function (text) {
+        if (playMappedVocab(text)) return;
+        if (originalSpeak) return originalSpeak.apply(this, arguments);
+    };
+})();
+</script>
 </head>
 <body>
 

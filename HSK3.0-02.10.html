@@ -171,7 +171,57 @@ Sắp thi rồi</title>
         @media (max-width: 768px) { .main-container { flex-direction: column; padding-top: 70px; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; display: flex; overflow-x: auto; flex-direction: row; } .nav-section { display: flex; border-bottom: none; flex: 1; } .nav-item { white-space: nowrap; } .tools-section { display: none; } .radio-group { flex-direction: column; gap: 12px; } .practice-options { flex-direction: column; gap: 12px; } #note-editor-container { width: 95%; height: auto; margin: 2.5% auto; } .audio-btn { width: 48px; height: 48px; font-size: 20px; } .vocab-card { flex-direction: column; align-items: flex-start; gap: 12px; } .vocab-chinese { font-size: 26px; } .dialogue-chinese { font-size: 18px; } .dialogue-pinyin, .dialogue-vietnamese { font-size: 16px; } .header { padding: 8px 12px; height: 60px; } .logo-text h1 { font-size: 13px; } .logo-text p { font-size: 10px; } .lesson-title { font-size: 13px !important; } #audio-speed { font-size: 12px; } .content-body { padding: 15px; } .dialogue-line { padding: 12px; } .check-btn { padding: 12px 20px; font-size: 15px; } }
     </style>
     <base target="_blank">
-    <script defer src="hsk2-vocab-audio.js"></script>
+    <script>
+// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+(function () {
+    'use strict';
+    const lessonMap = {"开学":{"id":1,"file":"HSK3.0-02.10.mp3","start":115.898,"end":118.893},"门":{"id":2,"file":"HSK3.0-02.10.mp3","start":119.393,"end":121.135},"后面":{"id":3,"file":"HSK3.0-02.10.mp3","start":121.575,"end":123.766},"笔":{"id":4,"file":"HSK3.0-02.10.mp3","start":124.172,"end":126.233},"帮":{"id":5,"file":"HSK3.0-02.10.mp3","start":127.089,"end":128.83},"考试":{"id":6,"file":"HSK3.0-02.10.mp3","start":129.996,"end":132.495},"词":{"id":7,"file":"HSK3.0-02.10.mp3","start":132.652,"end":134.415},"本子":{"id":8,"file":"HSK3.0-02.10.mp3","start":134.818,"end":136.739},"错":{"id":9,"file":"HSK3.0-02.10.mp3","start":137.072,"end":138.776},"题":{"id":10,"file":"HSK3.0-02.10.mp3","start":138.999,"end":140.693},"还是":{"id":11,"file":"HSK3.0-02.10.mp3","start":140.975,"end":143.121},"考":{"id":12,"file":"HSK3.0-02.10.mp3","start":143.994,"end":145.951},"快要":{"id":13,"file":"HSK3.0-02.10.mp3","start":146.173,"end":148.54},"笑":{"id":14,"file":"HSK3.0-02.10.mp3","start":148.971,"end":150.994}};
+    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
+    let vocabAudio = null;
+    let stopAt = null;
+
+    function getVocabAudio() {
+        if (!vocabAudio) {
+            vocabAudio = new Audio("HSK3.0-02.10.mp3");
+            vocabAudio.preload = 'auto';
+            vocabAudio.addEventListener('timeupdate', function () {
+                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
+                    vocabAudio.pause();
+                    stopAt = null;
+                }
+            });
+            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+        }
+        return vocabAudio;
+    }
+
+    function playMappedVocab(text) {
+        const segment = lessonMap[text];
+        if (!segment) return false;
+        if (typeof window._stopCourseAudio === 'function') window._stopCourseAudio();
+        if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        const audio = getVocabAudio();
+        stopAt = segment.end;
+        const begin = function () {
+            audio.currentTime = segment.start;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const promise = audio.play();
+            if (promise !== undefined) promise.catch(function () {});
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+        return true;
+    }
+
+    window.HSK2_VOCAB_AUDIO = { "10": lessonMap };
+    window.playHsk2Vocab = playMappedVocab;
+    window.speak = function (text) {
+        if (playMappedVocab(text)) return;
+        if (originalSpeak) return originalSpeak.apply(this, arguments);
+    };
+})();
+</script>
 </head>
 <body>
 

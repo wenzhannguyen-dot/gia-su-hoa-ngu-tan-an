@@ -182,7 +182,57 @@ Bạn mặc màu đỏ trông rất đẹp</title>
         @media (max-width: 768px) { .main-container { flex-direction: column; padding-top: 70px; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; display: flex; overflow-x: auto; flex-direction: row; } .nav-section { display: flex; border-bottom: none; flex: 1; } .nav-item { white-space: nowrap; } .tools-section { display: none; } .vocab-grid { grid-template-columns: 1fr; } .radio-group { flex-direction: column; gap: 12px; } .practice-options { flex-direction: column; gap: 12px; } }
     </style>
     <base target="_blank">
-    <script defer src="hsk2-vocab-audio.js"></script>
+    <script>
+// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+(function () {
+    'use strict';
+    const lessonMap = {"过":{"id":1,"file":"HSK3.0-02.04.mp3","start":89.662,"end":91.303},"商场":{"id":2,"file":"HSK3.0-02.04.mp3","start":92.055,"end":94.817},"进去":{"id":3,"file":"HSK3.0-02.04.mp3","start":95.289,"end":97.578},"条":{"id":4,"file":"HSK3.0-02.04.mp3","start":97.858,"end":99.77},"裤子":{"id":5,"file":"HSK3.0-02.04.mp3","start":100.053,"end":102.111},"白色":{"id":6,"file":"HSK3.0-02.04.mp3","start":102.821,"end":105.279},"因为":{"id":7,"file":"HSK3.0-02.04.mp3","start":106.266,"end":108.569},"试":{"id":8,"file":"HSK3.0-02.04.mp3","start":109.124,"end":110.932},"红色":{"id":9,"file":"HSK3.0-02.04.mp3","start":111.396,"end":113.688},"所以":{"id":10,"file":"HSK3.0-02.04.mp3","start":113.942,"end":116.636},"书包":{"id":11,"file":"HSK3.0-02.04.mp3","start":118.216,"end":120.873},"过去":{"id":12,"file":"HSK3.0-02.04.mp3","start":121.133,"end":123.418},"绿色":{"id":13,"file":"HSK3.0-02.04.mp3","start":123.9,"end":126.369},"黑色":{"id":14,"file":"HSK3.0-02.04.mp3","start":126.711,"end":129.338},"更":{"id":15,"file":"HSK3.0-02.04.mp3","start":129.828,"end":131.547},"颜色":{"id":16,"file":"HSK3.0-02.04.mp3","start":132.761,"end":135.178}};
+    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
+    let vocabAudio = null;
+    let stopAt = null;
+
+    function getVocabAudio() {
+        if (!vocabAudio) {
+            vocabAudio = new Audio("HSK3.0-02.04.mp3");
+            vocabAudio.preload = 'auto';
+            vocabAudio.addEventListener('timeupdate', function () {
+                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
+                    vocabAudio.pause();
+                    stopAt = null;
+                }
+            });
+            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+        }
+        return vocabAudio;
+    }
+
+    function playMappedVocab(text) {
+        const segment = lessonMap[text];
+        if (!segment) return false;
+        if (typeof window._stopCourseAudio === 'function') window._stopCourseAudio();
+        if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        const audio = getVocabAudio();
+        stopAt = segment.end;
+        const begin = function () {
+            audio.currentTime = segment.start;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const promise = audio.play();
+            if (promise !== undefined) promise.catch(function () {});
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+        return true;
+    }
+
+    window.HSK2_VOCAB_AUDIO = { "04": lessonMap };
+    window.playHsk2Vocab = playMappedVocab;
+    window.speak = function (text) {
+        if (playMappedVocab(text)) return;
+        if (originalSpeak) return originalSpeak.apply(this, arguments);
+    };
+})();
+</script>
 </head>
 <body>
 

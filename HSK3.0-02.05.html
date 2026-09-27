@@ -182,7 +182,57 @@ Lần đầu đến nhà bạn Trung Quốc</title>
         @media (max-width: 768px) { .main-container { flex-direction: column; padding-top: 70px; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; display: flex; overflow-x: auto; flex-direction: row; } .nav-section { display: flex; border-bottom: none; flex: 1; } .nav-item { white-space: nowrap; } .tools-section { display: none; } .vocab-grid { grid-template-columns: 1fr; } .radio-group { flex-direction: column; gap: 12px; } .practice-options { flex-direction: column; gap: 12px; } }
     </style>
     <base target="_blank">
-    <script defer src="hsk2-vocab-audio.js"></script>
+    <script>
+// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+(function () {
+    'use strict';
+    const lessonMap = {"快":{"id":1,"file":"HSK3.0-02.05.mp3","start":115.947,"end":117.69},"下来":{"id":2,"file":"HSK3.0-02.05.mp3","start":118.468,"end":120.945},"上来":{"id":3,"file":"HSK3.0-02.05.mp3","start":121.228,"end":123.866},"上去":{"id":4,"file":"HSK3.0-02.05.mp3","start":124.569,"end":127.02},"下面":{"id":5,"file":"HSK3.0-02.05.mp3","start":127.567,"end":129.878},"面":{"id":6,"file":"HSK3.0-02.05.mp3","start":130.602,"end":132.339},"等":{"id":7,"file":"HSK3.0-02.05.mp3","start":133.003,"end":134.851},"一会儿":{"id":8,"file":"HSK3.0-02.05.mp3","start":135.717,"end":138.25},"下去":{"id":9,"file":"HSK3.0-02.05.mp3","start":139.014,"end":141.55},"进来":{"id":10,"file":"HSK3.0-02.05.mp3","start":142.578,"end":145.094},"爷爷":{"id":11,"file":"HSK3.0-02.05.mp3","start":145.616,"end":147.765},"奶奶":{"id":12,"file":"HSK3.0-02.05.mp3","start":148.188,"end":150.32},"礼物":{"id":13,"file":"HSK3.0-02.05.mp3","start":150.611,"end":153.011},"准备":{"id":14,"file":"HSK3.0-02.05.mp3","start":153.811,"end":156.171},"奶茶":{"id":15,"file":"HSK3.0-02.05.mp3","start":156.698,"end":159.288},"跟":{"id":16,"file":"HSK3.0-02.05.mp3","start":159.668,"end":161.316},"走":{"id":17,"file":"HSK3.0-02.05.mp3","start":162.115,"end":164.12},"酒店":{"id":18,"file":"HSK3.0-02.05.mp3","start":164.434,"end":166.874}};
+    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
+    let vocabAudio = null;
+    let stopAt = null;
+
+    function getVocabAudio() {
+        if (!vocabAudio) {
+            vocabAudio = new Audio("HSK3.0-02.05.mp3");
+            vocabAudio.preload = 'auto';
+            vocabAudio.addEventListener('timeupdate', function () {
+                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
+                    vocabAudio.pause();
+                    stopAt = null;
+                }
+            });
+            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+        }
+        return vocabAudio;
+    }
+
+    function playMappedVocab(text) {
+        const segment = lessonMap[text];
+        if (!segment) return false;
+        if (typeof window._stopCourseAudio === 'function') window._stopCourseAudio();
+        if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        const audio = getVocabAudio();
+        stopAt = segment.end;
+        const begin = function () {
+            audio.currentTime = segment.start;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const promise = audio.play();
+            if (promise !== undefined) promise.catch(function () {});
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+        return true;
+    }
+
+    window.HSK2_VOCAB_AUDIO = { "05": lessonMap };
+    window.playHsk2Vocab = playMappedVocab;
+    window.speak = function (text) {
+        if (playMappedVocab(text)) return;
+        if (originalSpeak) return originalSpeak.apply(this, arguments);
+    };
+})();
+</script>
 </head>
 <body>
 

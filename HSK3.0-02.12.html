@@ -205,7 +205,57 @@
         .replay-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
     </style>
     <base target="_blank">
-    <script defer src="hsk2-vocab-audio.js"></script>
+    <script>
+// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+(function () {
+    'use strict';
+    const lessonMap = {"事情":{"id":1,"file":"HSK3.0-02.12.mp3","start":130.343,"end":132.691},"晴":{"id":2,"file":"HSK3.0-02.12.mp3","start":133.251,"end":135.206},"正":{"id":3,"file":"HSK3.0-02.12.mp3","start":135.691,"end":137.462},"外面":{"id":4,"file":"HSK3.0-02.12.mp3","start":138.764,"end":141.401},"阴":{"id":5,"file":"HSK3.0-02.12.mp3","start":141.839,"end":143.482},"从小":{"id":6,"file":"HSK3.0-02.12.mp3","start":144.878,"end":147.787},"地铁":{"id":7,"file":"HSK3.0-02.12.mp3","start":148.066,"end":150.812},"楼":{"id":8,"file":"HSK3.0-02.12.mp3","start":151.249,"end":153.076},"站":{"id":9,"file":"HSK3.0-02.12.mp3","start":154.033,"end":155.859},"小时候":{"id":10,"file":"HSK3.0-02.12.mp3","start":156.096,"end":158.689},"好":{"id":11,"file":"HSK3.0-02.12.mp3","start":159.058,"end":160.964}};
+    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
+    let vocabAudio = null;
+    let stopAt = null;
+
+    function getVocabAudio() {
+        if (!vocabAudio) {
+            vocabAudio = new Audio("HSK3.0-02.12.mp3");
+            vocabAudio.preload = 'auto';
+            vocabAudio.addEventListener('timeupdate', function () {
+                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
+                    vocabAudio.pause();
+                    stopAt = null;
+                }
+            });
+            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+        }
+        return vocabAudio;
+    }
+
+    function playMappedVocab(text) {
+        const segment = lessonMap[text];
+        if (!segment) return false;
+        if (typeof window._stopCourseAudio === 'function') window._stopCourseAudio();
+        if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        const audio = getVocabAudio();
+        stopAt = segment.end;
+        const begin = function () {
+            audio.currentTime = segment.start;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const promise = audio.play();
+            if (promise !== undefined) promise.catch(function () {});
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+        return true;
+    }
+
+    window.HSK2_VOCAB_AUDIO = { "12": lessonMap };
+    window.playHsk2Vocab = playMappedVocab;
+    window.speak = function (text) {
+        if (playMappedVocab(text)) return;
+        if (originalSpeak) return originalSpeak.apply(this, arguments);
+    };
+})();
+</script>
 </head>
 <body>
 

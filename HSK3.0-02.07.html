@@ -205,7 +205,57 @@ Anh ấy chơi bóng rổ rất giỏi</title>
         .replay-btn:hover { background: #4472c4; color: white; transform: scale(1.05); }
     </style>
     <base target="_blank">
-    <script defer src="hsk2-vocab-audio.js"></script>
+    <script>
+// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+(function () {
+    'use strict';
+    const lessonMap = {"从":{"id":1,"file":"HSK3.0-02.07.mp3","start":84.211,"end":86.127},"往":{"id":2,"file":"HSK3.0-02.07.mp3","start":86.533,"end":88.478},"跑":{"id":3,"file":"HSK3.0-02.07.mp3","start":89.18,"end":91.192},"打":{"id":4,"file":"HSK3.0-02.07.mp3","start":91.521,"end":93.412},"篮球":{"id":5,"file":"HSK3.0-02.07.mp3","start":93.701,"end":96.176},"运动":{"id":6,"file":"HSK3.0-02.07.mp3","start":96.594,"end":99.043},"踢":{"id":7,"file":"HSK3.0-02.07.mp3","start":99.403,"end":101.147},"足球":{"id":8,"file":"HSK3.0-02.07.mp3","start":101.537,"end":104.124},"球":{"id":9,"file":"HSK3.0-02.07.mp3","start":104.471,"end":106.371},"得":{"id":10,"file":"HSK3.0-02.07.mp3","start":106.877,"end":108.109},"跑步":{"id":11,"file":"HSK3.0-02.07.mp3","start":109.586,"end":112.041},"游泳":{"id":12,"file":"HSK3.0-02.07.mp3","start":112.31,"end":115.018},"游":{"id":13,"file":"HSK3.0-02.07.mp3","start":115.43,"end":117.091},"爱好":{"id":14,"file":"HSK3.0-02.07.mp3","start":117.828,"end":120.274},"开始":{"id":15,"file":"HSK3.0-02.07.mp3","start":121.021,"end":123.948}};
+    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
+    let vocabAudio = null;
+    let stopAt = null;
+
+    function getVocabAudio() {
+        if (!vocabAudio) {
+            vocabAudio = new Audio("HSK3.0-02.07.mp3");
+            vocabAudio.preload = 'auto';
+            vocabAudio.addEventListener('timeupdate', function () {
+                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
+                    vocabAudio.pause();
+                    stopAt = null;
+                }
+            });
+            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+        }
+        return vocabAudio;
+    }
+
+    function playMappedVocab(text) {
+        const segment = lessonMap[text];
+        if (!segment) return false;
+        if (typeof window._stopCourseAudio === 'function') window._stopCourseAudio();
+        if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        const audio = getVocabAudio();
+        stopAt = segment.end;
+        const begin = function () {
+            audio.currentTime = segment.start;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const promise = audio.play();
+            if (promise !== undefined) promise.catch(function () {});
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+        return true;
+    }
+
+    window.HSK2_VOCAB_AUDIO = { "07": lessonMap };
+    window.playHsk2Vocab = playMappedVocab;
+    window.speak = function (text) {
+        if (playMappedVocab(text)) return;
+        if (originalSpeak) return originalSpeak.apply(this, arguments);
+    };
+})();
+</script>
 </head>
 <body>
 
