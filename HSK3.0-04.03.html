@@ -783,29 +783,6 @@ const SECTION_TITLES = {"objectives": {"text": "Mục tiêu bài học", "icon":
 let audioSpeed = 1;
 let currentUtterance = null;
 
-/* Official lesson audio mapping. Audio-only integration; lesson content/UI data are unchanged. */
-const COURSE_AUDIO_FILE = 'HSK3.0-04.03.mp3';
-const COURSE_TEXT_AUDIO = {"1":[0.0,43.416],"2":[64.843,108.076],"3":[145.229,195.933],"4":[221.802,269.737]};
-const COURSE_LINE_AUDIO = {"1":[[0.0,3.141],[3.141,15.595],[15.595,20.435],[20.435,34.458],[34.458,39.473],[39.473,43.416]],"2":[[64.843,76.527],[76.527,80.481],[80.481,92.147],[92.147,97.145],[97.145,104.723],[104.723,108.076]]};
-const COURSE_VOCAB_AUDIO = {"1":[43.916,48.549],"2":[48.549,51.043],"3":[51.043,53.444],"4":[53.444,56.304],"5":[56.304,59.002],"6":[59.002,61.198],"7":[61.198,64.344],"8":[108.576,111.633],"9":[111.633,114.621],"10":[114.621,117.504],"11":[117.504,120.534],"12":[120.534,123.54],"13":[123.54,126.553],"14":[126.553,129.476],"15":[129.476,132.612],"16":[132.612,135.019],"17":[135.019,138.067],"18":[196.433,199.206],"19":[199.206,201.569],"20":[201.569,203.562],"21":[203.562,205.743],"22":[205.743,208.021],"23":[208.021,210.935],"24":[210.935,213.598],"25":[213.598,216.696],"26":[216.696,218.845],"27":[218.845,221.302],"28":[270.236,273.424],"29":[273.424,276.437],"30":[276.437,279.008],"31":[279.008,281.844],"32":[281.844,284.547],"33":[284.547,287.26],"34":[287.26,290.193],"35":[290.193,293.145],"36":[293.145,296.024],"37":[296.024,298.598],"38":[298.598,301.358],"39":[301.358,304.137],"40":[304.137,307.147]};
-let currentCourseAudio = null;
-function stopCourseAudio() {
-  if(currentCourseAudio) { currentCourseAudio.pause(); currentCourseAudio.src=''; currentCourseAudio=null; }
-}
-function playCourseSegment(segment) {
-  if(!segment) return;
-  if('speechSynthesis' in window) speechSynthesis.cancel();
-  stopCourseAudio();
-  const [start,end]=segment;
-  const a=new Audio(COURSE_AUDIO_FILE);
-  currentCourseAudio=a; a.preload='auto'; a.playbackRate=audioSpeed;
-  const begin=()=>{ if(currentCourseAudio!==a) return; a.currentTime=start; const p=a.play(); if(p&&p.catch) p.catch(()=>{}); };
-  a.addEventListener('timeupdate',()=>{ if(currentCourseAudio===a && a.currentTime>=end) { a.pause(); a.currentTime=end; } });
-  a.addEventListener('ended',()=>{ if(currentCourseAudio===a) currentCourseAudio=null; });
-  if(a.readyState>=1) begin(); else a.addEventListener('loadedmetadata',begin,{once:true});
-}
-function playVocabAudio(id) { playCourseSegment(COURSE_VOCAB_AUDIO[String(id)] || COURSE_VOCAB_AUDIO[id]); }
-
 function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
 function normalizeText(s) { return String(s||'').replace(/[\s，。！？；：、,.!?;:()（）“”'"\-]/g,'').toLowerCase(); }
 function setResult(el, ok, html) { if(!el) return; el.className='result-message show '+(ok?'correct':'incorrect'); el.innerHTML=html; }
@@ -821,7 +798,7 @@ function showSection(id) {
 function renderVocab(category='all') {
   const grid=document.getElementById('vocab-grid'); if(!grid) return;
   const data=category==='all'?vocabData:vocabData.filter(v=>v.category===category);
-  grid.innerHTML=data.map(v=>`<article class="vocab-card"><div class="vocab-info"><div class="vocab-number">${v.id}</div><div class="vocab-content"><div class="vocab-chinese chinese-text">${escapeHtml(v.chinese)}</div><div class="vocab-pinyin">${escapeHtml(v.pinyin)}</div><div class="vocab-meaning">${escapeHtml(v.meaning)}</div><div class="vocab-pos">${escapeHtml(v.pos)}</div><div class="vocab-example"><div class="example-chinese">${escapeHtml(v.example)}</div><div class="example-pinyin">${escapeHtml(v.examplePinyin)}</div><div class="vocab-example-vietnamese">${escapeHtml(v.exampleVietnamese)}</div></div></div></div><div class="vocab-animation"><button class="audio-btn" type="button" data-action="play-vocab-audio" data-id="${v.id}" aria-label="Nghe ${escapeHtml(v.chinese)}"><i class="bi bi-volume-up"></i></button><button class="anim-btn" type="button" data-action="animate-word" data-text="${escapeHtml(v.chinese)}" aria-label="Xem nét chữ"><i class="bi bi-brush"></i></button></div></article>`).join('');
+  grid.innerHTML=data.map(v=>`<article class="vocab-card"><div class="vocab-info"><div class="vocab-number">${v.id}</div><div class="vocab-content"><div class="vocab-chinese chinese-text">${escapeHtml(v.chinese)}</div><div class="vocab-pinyin">${escapeHtml(v.pinyin)}</div><div class="vocab-meaning">${escapeHtml(v.meaning)}</div><div class="vocab-pos">${escapeHtml(v.pos)}</div><div class="vocab-example"><div class="example-chinese">${escapeHtml(v.example)}</div><div class="example-pinyin">${escapeHtml(v.examplePinyin)}</div><div class="vocab-example-vietnamese">${escapeHtml(v.exampleVietnamese)}</div></div></div></div><div class="vocab-animation"><button class="audio-btn" type="button" data-action="speak" data-text="${escapeHtml(v.chinese)}" aria-label="Nghe ${escapeHtml(v.chinese)}"><i class="bi bi-volume-up"></i></button><button class="anim-btn" type="button" data-action="animate-word" data-text="${escapeHtml(v.chinese)}" aria-label="Xem nét chữ"><i class="bi bi-brush"></i></button></div></article>`).join('');
 }
 
 function enforceLessonTextOrder() {
@@ -847,31 +824,8 @@ function showText(n) { document.querySelectorAll('.text-content').forEach(x=>x.c
 function showGrammar(id) { document.querySelectorAll('.grammar-panel').forEach(x=>x.classList.toggle('active',x.dataset.grammar===id)); document.querySelectorAll('.grammar-tab').forEach(x=>x.classList.toggle('active',x.dataset.grammar===id)); }
 function showExercise(id) { document.querySelectorAll('.exercise-content').forEach(x=>x.classList.toggle('active',x.dataset.exercise===id)); document.querySelectorAll('.exercise-tab').forEach(x=>x.classList.toggle('active',x.dataset.exercise===id)); }
 function toggleBodyClass(cls,btnId) { document.body.classList.toggle(cls); const b=document.getElementById(btnId); if(b)b.classList.toggle('active-toggle',!document.body.classList.contains(cls)); }
-function speak(text) { stopCourseAudio(); if(!('speechSynthesis' in window))return alert('Trình duyệt này chưa hỗ trợ đọc văn bản.'); speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='zh-CN'; u.rate=audioSpeed; currentUtterance=u; speechSynthesis.speak(u); }
-function speakTextPanel(btn) { const panel=btn.closest('.text-content'); if(!panel)return; playCourseSegment(COURSE_TEXT_AUDIO[panel.dataset.text]); }
-function playLessonUnit(textNo,index) { const units=COURSE_LINE_AUDIO[String(textNo)]||[]; playCourseSegment(units[index]); }
-function makeLessonAudioTarget(el,textNo,index) {
-  if(!el) return; el.style.cursor='pointer'; el.setAttribute('role','button'); el.setAttribute('tabindex','0'); el.setAttribute('title','Nhấp để nghe câu này');
-  el.addEventListener('click',()=>playLessonUnit(textNo,index));
-  el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playLessonUnit(textNo,index); } });
-}
-function installLessonLineAudio() {
-  ['1','2'].forEach(textNo=>{
-    const panel=document.querySelector(`.text-content[data-text="${textNo}"]`); if(!panel) return;
-    const lines=[...panel.querySelectorAll('.dialogue-content .dialogue-line')];
-    const playableLines=lines.filter(line=>{ const zh=line.querySelector('.dialogue-chinese')?.textContent.trim()||''; return !/^（.*）$/.test(zh); });
-    playableLines.forEach((line,i)=>makeLessonAudioTarget(line,textNo,i));
-  });
-  ['3','4'].forEach(textNo=>{
-    const panel=document.querySelector(`.text-content[data-text="${textNo}"]`); if(!panel) return;
-    const boxes=[...panel.querySelectorAll('.prose-box .prose-chinese')];
-    const body=boxes.length>1 ? boxes[boxes.length-1] : boxes[0];
-    if(!body) return;
-    body.style.cursor='pointer'; body.setAttribute('role','button'); body.setAttribute('tabindex','0'); body.setAttribute('title','Nhấp để nghe toàn bài');
-    body.addEventListener('click',()=>playCourseSegment(COURSE_TEXT_AUDIO[textNo]));
-    body.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playCourseSegment(COURSE_TEXT_AUDIO[textNo]); } });
-  });
-}
+function speak(text) { if(!('speechSynthesis' in window))return alert('Trình duyệt này chưa hỗ trợ đọc văn bản.'); speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='zh-CN'; u.rate=audioSpeed; currentUtterance=u; speechSynthesis.speak(u); }
+function speakTextPanel(btn) { const panel=btn.closest('.text-content'); if(!panel)return; const text=[...panel.querySelectorAll('.dialogue-chinese,.prose-chinese')].map(x=>x.textContent.trim()).filter(Boolean).join(' '); speak(text); }
 function animateWord(word) {
   if(!window.HanziWriter) { speak(word); return; }
   const overlay=document.createElement('div'); overlay.id='hanzi-temp-overlay'; overlay.style.cssText='position:fixed;inset:0;z-index:3500;background:rgba(0,0,0,.62);display:grid;place-items:center;padding:20px';
@@ -917,7 +871,6 @@ document.addEventListener('click',e=>{ const b=e.target.closest('[data-action]')
   else if(a==='toggle-vietnamese') toggleBodyClass('hide-vietnamese','btn-vietnamese');
   else if(a==='toggle-examples') toggleBodyClass('hide-examples','btn-examples');
   else if(a==='speak') speak(b.dataset.text||'');
-  else if(a==='play-vocab-audio') playVocabAudio(Number(b.dataset.id));
   else if(a==='speak-text-panel') speakTextPanel(b);
   else if(a==='animate-word') animateWord(b.dataset.text||'');
   else if(a==='check-warmup') checkWarmup();
@@ -952,7 +905,7 @@ document.addEventListener('input',e=>{
   }
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('note-editor-overlay')?.hidden)closeNotes();});
-const speed=document.querySelector('.audio-speed-select'); if(speed){speed.value='1';speed.addEventListener('change',()=>{audioSpeed=Number(speed.value)||1;if(currentCourseAudio)currentCourseAudio.playbackRate=audioSpeed;});}
+const speed=document.querySelector('.audio-speed-select'); if(speed){speed.value='1';speed.addEventListener('change',()=>audioSpeed=Number(speed.value)||1);}
 
 /* Đồng bộ chiều cao header thực tế với sidebar khi tiêu đề xuống dòng hoặc người dùng zoom. */
 const pageHeader=document.querySelector('.header');
@@ -969,7 +922,6 @@ if(pageHeader){
 }
 
 enforceLessonTextOrder(); // MASTER: nội dung trước, nghe sau
-installLessonLineAudio();
 renderVocab('all'); updateCounts(); showSection('text'); showText('1');
-</script></body>
+</script><script src="hsk4-audio.js"></script></body>
 </html>
