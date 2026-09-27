@@ -1704,5 +1704,18 @@ Tôi đi mua ly trà sữa</title>
 
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
 </script>
+<script>
+// Khóa ánh xạ MP3 sau khi hàm speak() chính của bài học đã được tạo.
+(function () {
+    'use strict';
+    const fallbackSpeak = typeof window.speak === 'function' ? window.speak : null;
+    const mappedSpeak = window.playHsk2Vocab;
+    if (typeof mappedSpeak !== 'function') return;
+    window.speak = function (text) {
+        if (mappedSpeak(text)) return;
+        if (fallbackSpeak) return fallbackSpeak.apply(this, arguments);
+    };
+})();
+</script>
 </body>
 </html>
