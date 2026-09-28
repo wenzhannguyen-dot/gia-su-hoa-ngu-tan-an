@@ -202,27 +202,49 @@
     </style>
 <base target="_blank">
     <script>
-// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+// Ánh xạ MP3 từ vựng được tích hợp trực tiếp trong HTML.
 (function () {
     'use strict';
     const lessonMap = {"新年":{"id":1,"file":"HSK3.0-02.13.mp3","start":140.481,"end":143.051},"教":{"id":2,"file":"HSK3.0-02.13.mp3","start":143.36,"end":145.091},"花":{"id":3,"file":"HSK3.0-02.13.mp3","start":145.591,"end":147.274},"希望":{"id":4,"file":"HSK3.0-02.13.mp3","start":147.601,"end":149.951},"上面":{"id":5,"file":"HSK3.0-02.13.mp3","start":151.247,"end":153.701},"洗手间":{"id":6,"file":"HSK3.0-02.13.mp3","start":153.924,"end":156.926},"里面":{"id":7,"file":"HSK3.0-02.13.mp3","start":157.307,"end":159.641},"笔":{"id":8,"file":"HSK3.0-02.13.mp3","start":160.002,"end":162.063},"可能":{"id":9,"file":"HSK3.0-02.13.mp3","start":163.205,"end":165.849},"上网":{"id":10,"file":"HSK3.0-02.13.mp3","start":166.16,"end":168.959},"那样":{"id":11,"file":"HSK3.0-02.13.mp3","start":169.193,"end":171.598},"告诉":{"id":12,"file":"HSK3.0-02.13.mp3","start":172.453,"end":174.661},"班":{"id":13,"file":"HSK3.0-02.13.mp3","start":175.221,"end":176.937}};
-    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
     let vocabAudio = null;
     let stopAt = null;
+    let stopTimer = null;
+    let stopFrame = null;
+
+    function cancelStopGuard() {
+        if (stopTimer !== null) clearTimeout(stopTimer);
+        if (stopFrame !== null) cancelAnimationFrame(stopFrame);
+        stopTimer = null;
+        stopFrame = null;
+    }
+
+    function stopVocabAudio() {
+        cancelStopGuard();
+        if (vocabAudio) vocabAudio.pause();
+        stopAt = null;
+    }
 
     function getVocabAudio() {
         if (!vocabAudio) {
             vocabAudio = new Audio("HSK3.0-02.13.mp3");
             vocabAudio.preload = 'auto';
-            vocabAudio.addEventListener('timeupdate', function () {
-                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
-                    vocabAudio.pause();
-                    stopAt = null;
-                }
-            });
-            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+            vocabAudio.addEventListener('ended', stopVocabAudio);
         }
         return vocabAudio;
+    }
+
+    function armPreciseStop(audio, start, end) {
+        cancelStopGuard();
+        stopAt = Math.max(start + 0.05, end - 0.06);
+        const rate = audio.playbackRate || 1;
+        const delay = Math.max(0, ((stopAt - start) / rate) * 1000);
+        stopTimer = setTimeout(stopVocabAudio, delay);
+        const check = function () {
+            if (stopAt === null) return;
+            if (audio.currentTime >= stopAt - 0.01) stopVocabAudio();
+            else stopFrame = requestAnimationFrame(check);
+        };
+        stopFrame = requestAnimationFrame(check);
     }
 
     function playMappedVocab(text) {
@@ -232,12 +254,16 @@
         if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         const audio = getVocabAudio();
-        stopAt = segment.end;
+        stopVocabAudio();
         const begin = function () {
             audio.currentTime = segment.start;
             audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
             const promise = audio.play();
-            if (promise !== undefined) promise.catch(function () {});
+            if (promise && typeof promise.then === 'function') {
+                promise.then(function () { armPreciseStop(audio, segment.start, segment.end); }).catch(function () {});
+            } else {
+                armPreciseStop(audio, segment.start, segment.end);
+            }
         };
         if (audio.readyState >= 1) begin();
         else audio.addEventListener('loadedmetadata', begin, { once: true });
@@ -246,10 +272,6 @@
 
     window.HSK2_VOCAB_AUDIO = { "13": lessonMap };
     window.playHsk2Vocab = playMappedVocab;
-    window.speak = function (text) {
-        if (playMappedVocab(text)) return;
-        if (originalSpeak) return originalSpeak.apply(this, arguments);
-    };
 })();
 </script>
 </head>
@@ -1079,7 +1101,8 @@
     function _playNextQueue() { if (_ttsQueue.length > 0) { const next = _ttsQueue.shift(); setTimeout(() => _playOne(next), 350); } }
     function _playOne(text) { const url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=zh-CN&q=' + encodeURIComponent(text); const audio = _getAudio(); audio.src = url; audio.playbackRate = audioSpeed; const p = audio.play(); if (p !== undefined) p.catch(() => _speakWithSynthesis(text, _playNextQueue)); }
     function _speakWithSynthesis(text, onEnd) { if (!('speechSynthesis' in window)) { if (onEnd) onEnd(); return; } speechSynthesis.cancel(); function doSpeak() { const voices = speechSynthesis.getVoices(); const utt = new SpeechSynthesisUtterance(text); utt.lang = 'zh-CN'; utt.rate = audioSpeed; const zhVoice = voices.find(v => v.lang.startsWith('zh')); if (zhVoice) utt.voice = zhVoice; utt.onend = onEnd || null; speechSynthesis.speak(utt); } if (speechSynthesis.getVoices().length > 0) doSpeak(); else { speechSynthesis.onvoiceschanged = doSpeak; } }
-    function speak(text) { _stopCourseAudio(); _ttsQueue = []; if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; } if ('speechSynthesis' in window) speechSynthesis.cancel(); _playOne(text); }
+    function speak(text) {
+        if (typeof window.playHsk2Vocab === 'function' && window.playHsk2Vocab(text)) return; _stopCourseAudio(); _ttsQueue = []; if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; } if ('speechSynthesis' in window) speechSynthesis.cancel(); _playOne(text); }
     function speakAllText(textId, sourceBtn) { const item = COURSE_AUDIO[textId]; if (!item) return; const [start, end] = item.all; _playCourseRange(start, end, sourceBtn || null); }
     function setAudioSpeed(val) { audioSpeed = parseFloat(val); if (_courseAudioEl) _courseAudioEl.playbackRate = audioSpeed; if (_audioEl) _audioEl.playbackRate = audioSpeed; }
 
@@ -1185,19 +1208,6 @@
 
     document.addEventListener('DOMContentLoaded', () => { loadNoteEditor(); initDragAndDrop(); });
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
-</script>
-<script>
-// Khóa ánh xạ MP3 sau khi hàm speak() chính của bài học đã được tạo.
-(function () {
-    'use strict';
-    const fallbackSpeak = typeof window.speak === 'function' ? window.speak : null;
-    const mappedSpeak = window.playHsk2Vocab;
-    if (typeof mappedSpeak !== 'function') return;
-    window.speak = function (text) {
-        if (mappedSpeak(text)) return;
-        if (fallbackSpeak) return fallbackSpeak.apply(this, arguments);
-    };
-})();
 </script>
 </body>
 </html>
