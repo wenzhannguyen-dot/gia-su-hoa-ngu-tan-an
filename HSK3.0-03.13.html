@@ -2244,5 +2244,94 @@ const _officialOldSetAudioSpeed = setAudioSpeed;
 window.setAudioSpeed = function(v) { _officialOldSetAudioSpeed(v); if (courseAudio) courseAudio.playbackRate = audioSpeed; };
 // ===== END OFFICIAL AUDIO MAPPING =====
 </script>
+<script id="hsk3-precise-audio-guard">
+// Bộ dừng chính xác: MP3 cùng tên, từ vựng không lấn sang mục kế tiếp.
+(function () {
+    'use strict';
+    let preciseTimer = null;
+    let preciseFrame = null;
+    let preciseAudio = null;
+    let playToken = 0;
+
+    function cancelPreciseGuard() {
+        playToken += 1;
+        if (preciseTimer !== null) clearTimeout(preciseTimer);
+        if (preciseFrame !== null) cancelAnimationFrame(preciseFrame);
+        preciseTimer = null;
+        preciseFrame = null;
+    }
+
+    function stopPreciseAudio() {
+        cancelPreciseGuard();
+        if (preciseAudio) preciseAudio.pause();
+        preciseAudio = null;
+    }
+
+    function getOfficialAudio() {
+        if (typeof _getCourseAudio === 'function') return _getCourseAudio();
+        if (typeof getCourseAudio === 'function') return getCourseAudio();
+        return null;
+    }
+
+    function stopOldPlayer() {
+        if (typeof _stopCourseAudio === 'function') _stopCourseAudio();
+        else if (typeof stopCourseAudio === 'function') stopCourseAudio();
+    }
+
+    function playPreciseRange(start, end, trimEnd) {
+        const audio = getOfficialAudio();
+        if (!audio) return;
+        stopOldPlayer();
+        cancelPreciseGuard();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        preciseAudio = audio;
+        const safeStart = Math.max(0, Number(start));
+        const safeEnd = Math.max(safeStart + 0.05, Number(end) - Math.max(0, trimEnd || 0));
+        const token = playToken;
+        const begin = function () {
+            if (token !== playToken) return;
+            audio.currentTime = safeStart;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const arm = function () {
+                if (token !== playToken) return;
+                const rate = audio.playbackRate || 1;
+                preciseTimer = setTimeout(stopPreciseAudio, Math.max(0, ((safeEnd - safeStart) / rate) * 1000));
+                const check = function () {
+                    if (token !== playToken || preciseAudio !== audio) return;
+                    if (audio.currentTime >= safeEnd - 0.01) stopPreciseAudio();
+                    else preciseFrame = requestAnimationFrame(check);
+                };
+                preciseFrame = requestAnimationFrame(check);
+            };
+            const promise = audio.play();
+            if (promise && typeof promise.then === 'function') promise.then(arm).catch(function () {});
+            else arm();
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+    }
+
+    if (typeof _playCourseRange === 'function') {
+        _playCourseRange = function (start, end) { playPreciseRange(start, end, 0.01); };
+    }
+    if (typeof playCourseSegment === 'function') {
+        playCourseSegment = function (start, end) { playPreciseRange(start, end, 0.01); };
+    }
+    if (typeof playVocabAudio === 'function') {
+        playVocabAudio = function (id) {
+            const segment = VOCAB_AUDIO[id];
+            if (segment) playPreciseRange(segment[0], segment[1], 0.06);
+        };
+    }
+    if (typeof playVocab === 'function') {
+        playVocab = function (id) {
+            const segment = VOCAB_AUDIO[String(id)] || VOCAB_AUDIO[id];
+            if (segment) playPreciseRange(segment[0], segment[1], 0.06);
+        };
+    }
+
+    window.stopHsk3OfficialAudio = stopPreciseAudio;
+})();
+</script>
 </body>
 </html>
