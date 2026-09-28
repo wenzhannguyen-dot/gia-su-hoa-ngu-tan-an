@@ -206,27 +206,49 @@ Hay là chúng ta gọi taxi đi ĐH Bắc Kinh đi</title>
     </style>
     <base target="_blank">
     <script>
-// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+// Ánh xạ MP3 từ vựng được tích hợp trực tiếp trong HTML.
 (function () {
     'use strict';
     const lessonMap = {"公交车":{"id":1,"file":"HSK3.0-02.02.mp3","start":91.685,"end":94.582},"但":{"id":2,"file":"HSK3.0-02.02.mp3","start":94.901,"end":96.428},"车站":{"id":3,"file":"HSK3.0-02.02.mp3","start":96.839,"end":99.08},"远":{"id":4,"file":"HSK3.0-02.02.mp3","start":99.452,"end":101.348},"打车":{"id":5,"file":"HSK3.0-02.02.mp3","start":101.814,"end":104.081},"还是":{"id":6,"file":"HSK3.0-02.02.mp3","start":104.765,"end":106.911},"啊":{"id":7,"file":"HSK3.0-02.02.mp3","start":111.581,"end":112.963},"万":{"id":8,"file":"HSK3.0-02.02.mp3","start":114.181,"end":115.791},"名":{"id":9,"file":"HSK3.0-02.02.mp3","start":116.478,"end":118.206},"网上":{"id":10,"file":"HSK3.0-02.02.mp3","start":118.856,"end":120.831},"外国":{"id":11,"file":"HSK3.0-02.02.mp3","start":121.532,"end":123.851},"间":{"id":12,"file":"HSK3.0-02.02.mp3","start":124.314,"end":126.016},"教室":{"id":13,"file":"HSK3.0-02.02.mp3","start":126.443,"end":128.682},"票":{"id":14,"file":"HSK3.0-02.02.mp3","start":130.4,"end":132.402},"别":{"id":15,"file":"HSK3.0-02.02.mp3","start":133.871,"end":135.668},"过来":{"id":16,"file":"HSK3.0-02.02.mp3","start":137.177,"end":139.604},"北京大学":{"id":17,"file":"HSK3.0-02.02.mp3","start":107.539,"end":110.793}};
-    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
     let vocabAudio = null;
     let stopAt = null;
+    let stopTimer = null;
+    let stopFrame = null;
+
+    function cancelStopGuard() {
+        if (stopTimer !== null) clearTimeout(stopTimer);
+        if (stopFrame !== null) cancelAnimationFrame(stopFrame);
+        stopTimer = null;
+        stopFrame = null;
+    }
+
+    function stopVocabAudio() {
+        cancelStopGuard();
+        if (vocabAudio) vocabAudio.pause();
+        stopAt = null;
+    }
 
     function getVocabAudio() {
         if (!vocabAudio) {
             vocabAudio = new Audio("HSK3.0-02.02.mp3");
             vocabAudio.preload = 'auto';
-            vocabAudio.addEventListener('timeupdate', function () {
-                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
-                    vocabAudio.pause();
-                    stopAt = null;
-                }
-            });
-            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+            vocabAudio.addEventListener('ended', stopVocabAudio);
         }
         return vocabAudio;
+    }
+
+    function armPreciseStop(audio, start, end) {
+        cancelStopGuard();
+        stopAt = Math.max(start + 0.05, end - 0.06);
+        const rate = audio.playbackRate || 1;
+        const delay = Math.max(0, ((stopAt - start) / rate) * 1000);
+        stopTimer = setTimeout(stopVocabAudio, delay);
+        const check = function () {
+            if (stopAt === null) return;
+            if (audio.currentTime >= stopAt - 0.01) stopVocabAudio();
+            else stopFrame = requestAnimationFrame(check);
+        };
+        stopFrame = requestAnimationFrame(check);
     }
 
     function playMappedVocab(text) {
@@ -236,12 +258,16 @@ Hay là chúng ta gọi taxi đi ĐH Bắc Kinh đi</title>
         if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         const audio = getVocabAudio();
-        stopAt = segment.end;
+        stopVocabAudio();
         const begin = function () {
             audio.currentTime = segment.start;
             audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
             const promise = audio.play();
-            if (promise !== undefined) promise.catch(function () {});
+            if (promise && typeof promise.then === 'function') {
+                promise.then(function () { armPreciseStop(audio, segment.start, segment.end); }).catch(function () {});
+            } else {
+                armPreciseStop(audio, segment.start, segment.end);
+            }
         };
         if (audio.readyState >= 1) begin();
         else audio.addEventListener('loadedmetadata', begin, { once: true });
@@ -250,10 +276,6 @@ Hay là chúng ta gọi taxi đi ĐH Bắc Kinh đi</title>
 
     window.HSK2_VOCAB_AUDIO = { "02": lessonMap };
     window.playHsk2Vocab = playMappedVocab;
-    window.speak = function (text) {
-        if (playMappedVocab(text)) return;
-        if (originalSpeak) return originalSpeak.apply(this, arguments);
-    };
 })();
 </script>
 </head>
@@ -1270,6 +1292,7 @@ Hay là chúng ta gọi taxi đi ĐH Bắc Kinh đi</title>
     }
 
     function speak(text) {
+        if (typeof window.playHsk2Vocab === 'function' && window.playHsk2Vocab(text)) return;
         if (!text) return;
         _stopCourseAudio();
         if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
@@ -1603,19 +1626,6 @@ Hay là chúng ta gọi taxi đi ĐH Bắc Kinh đi</title>
     }
 
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
-</script>
-<script>
-// Khóa ánh xạ MP3 sau khi hàm speak() chính của bài học đã được tạo.
-(function () {
-    'use strict';
-    const fallbackSpeak = typeof window.speak === 'function' ? window.speak : null;
-    const mappedSpeak = window.playHsk2Vocab;
-    if (typeof mappedSpeak !== 'function') return;
-    window.speak = function (text) {
-        if (mappedSpeak(text)) return;
-        if (fallbackSpeak) return fallbackSpeak.apply(this, arguments);
-    };
-})();
 </script>
 </body>
 </html>

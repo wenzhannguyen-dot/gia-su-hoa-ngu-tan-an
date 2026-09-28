@@ -172,27 +172,49 @@ Sắp thi rồi</title>
     </style>
     <base target="_blank">
     <script>
-// Ánh xạ từ vựng được nhúng trực tiếp; chỉ dùng MP3 cùng tên với HTML.
+// Ánh xạ MP3 từ vựng được tích hợp trực tiếp trong HTML.
 (function () {
     'use strict';
     const lessonMap = {"开学":{"id":1,"file":"HSK3.0-02.10.mp3","start":115.898,"end":118.893},"门":{"id":2,"file":"HSK3.0-02.10.mp3","start":119.393,"end":121.135},"后面":{"id":3,"file":"HSK3.0-02.10.mp3","start":121.575,"end":123.766},"笔":{"id":4,"file":"HSK3.0-02.10.mp3","start":124.172,"end":126.233},"帮":{"id":5,"file":"HSK3.0-02.10.mp3","start":127.089,"end":128.83},"考试":{"id":6,"file":"HSK3.0-02.10.mp3","start":129.996,"end":132.495},"词":{"id":7,"file":"HSK3.0-02.10.mp3","start":132.652,"end":134.415},"本子":{"id":8,"file":"HSK3.0-02.10.mp3","start":134.818,"end":136.739},"错":{"id":9,"file":"HSK3.0-02.10.mp3","start":137.072,"end":138.776},"题":{"id":10,"file":"HSK3.0-02.10.mp3","start":138.999,"end":140.693},"还是":{"id":11,"file":"HSK3.0-02.10.mp3","start":140.975,"end":143.121},"考":{"id":12,"file":"HSK3.0-02.10.mp3","start":143.994,"end":145.951},"快要":{"id":13,"file":"HSK3.0-02.10.mp3","start":146.173,"end":148.54},"笑":{"id":14,"file":"HSK3.0-02.10.mp3","start":148.971,"end":150.994}};
-    const originalSpeak = typeof window.speak === 'function' ? window.speak : null;
     let vocabAudio = null;
     let stopAt = null;
+    let stopTimer = null;
+    let stopFrame = null;
+
+    function cancelStopGuard() {
+        if (stopTimer !== null) clearTimeout(stopTimer);
+        if (stopFrame !== null) cancelAnimationFrame(stopFrame);
+        stopTimer = null;
+        stopFrame = null;
+    }
+
+    function stopVocabAudio() {
+        cancelStopGuard();
+        if (vocabAudio) vocabAudio.pause();
+        stopAt = null;
+    }
 
     function getVocabAudio() {
         if (!vocabAudio) {
             vocabAudio = new Audio("HSK3.0-02.10.mp3");
             vocabAudio.preload = 'auto';
-            vocabAudio.addEventListener('timeupdate', function () {
-                if (stopAt !== null && vocabAudio.currentTime >= stopAt - 0.02) {
-                    vocabAudio.pause();
-                    stopAt = null;
-                }
-            });
-            vocabAudio.addEventListener('ended', function () { stopAt = null; });
+            vocabAudio.addEventListener('ended', stopVocabAudio);
         }
         return vocabAudio;
+    }
+
+    function armPreciseStop(audio, start, end) {
+        cancelStopGuard();
+        stopAt = Math.max(start + 0.05, end - 0.06);
+        const rate = audio.playbackRate || 1;
+        const delay = Math.max(0, ((stopAt - start) / rate) * 1000);
+        stopTimer = setTimeout(stopVocabAudio, delay);
+        const check = function () {
+            if (stopAt === null) return;
+            if (audio.currentTime >= stopAt - 0.01) stopVocabAudio();
+            else stopFrame = requestAnimationFrame(check);
+        };
+        stopFrame = requestAnimationFrame(check);
     }
 
     function playMappedVocab(text) {
@@ -202,12 +224,16 @@ Sắp thi rồi</title>
         if (typeof window._stopCourseGuard === 'function') window._stopCourseGuard();
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         const audio = getVocabAudio();
-        stopAt = segment.end;
+        stopVocabAudio();
         const begin = function () {
             audio.currentTime = segment.start;
             audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
             const promise = audio.play();
-            if (promise !== undefined) promise.catch(function () {});
+            if (promise && typeof promise.then === 'function') {
+                promise.then(function () { armPreciseStop(audio, segment.start, segment.end); }).catch(function () {});
+            } else {
+                armPreciseStop(audio, segment.start, segment.end);
+            }
         };
         if (audio.readyState >= 1) begin();
         else audio.addEventListener('loadedmetadata', begin, { once: true });
@@ -216,10 +242,6 @@ Sắp thi rồi</title>
 
     window.HSK2_VOCAB_AUDIO = { "10": lessonMap };
     window.playHsk2Vocab = playMappedVocab;
-    window.speak = function (text) {
-        if (playMappedVocab(text)) return;
-        if (originalSpeak) return originalSpeak.apply(this, arguments);
-    };
 })();
 </script>
 </head>
@@ -1121,6 +1143,7 @@ Sắp thi rồi</title>
     }
 
     function speak(text) {
+        if (typeof window.playHsk2Vocab === 'function' && window.playHsk2Vocab(text)) return;
         if (!text) return;
         _stopCourseAudio();
         if (_audioEl) { _audioEl.pause(); _audioEl.src = ''; }
@@ -1330,19 +1353,6 @@ Sắp thi rồi</title>
     }
 
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
-</script>
-<script>
-// Khóa ánh xạ MP3 sau khi hàm speak() chính của bài học đã được tạo.
-(function () {
-    'use strict';
-    const fallbackSpeak = typeof window.speak === 'function' ? window.speak : null;
-    const mappedSpeak = window.playHsk2Vocab;
-    if (typeof mappedSpeak !== 'function') return;
-    window.speak = function (text) {
-        if (mappedSpeak(text)) return;
-        if (fallbackSpeak) return fallbackSpeak.apply(this, arguments);
-    };
-})();
 </script>
 </body>
 </html>
