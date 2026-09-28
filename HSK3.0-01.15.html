@@ -203,6 +203,31 @@
         @media (max-width: 1024px) { .sidebar-left { width: 60px; } .sidebar-left .tools-section { display: none; } .nav-item span { display: none; } .nav-item { justify-content: center; padding: 15px 10px; } .vocab-grid { grid-template-columns: 1fr; } }
         @media (max-width: 768px) { .main-container { flex-direction: column; padding-top: 70px; } .sidebar-left { width: 100%; position: relative; top: 0; max-height: none; display: flex; overflow-x: auto; flex-direction: row; } .nav-section { display: flex; border-bottom: none; flex: 1; } .nav-item { white-space: nowrap; } .tools-section { display: none; } .radio-group { flex-direction: column; gap: 12px; } .practice-options { flex-direction: column; gap: 12px; } #note-editor-container { width: 95%; height: auto; margin: 2.5% auto; } .word-bank, .drop-zone { gap: 8px; } .audio-btn { width: 48px; height: 48px; font-size: 20px; } .anim-btn { width: 36px; height: 36px; font-size: 14px; } .dialogue-audio-all { padding: 8px 16px; font-size: 14px; } .vocab-card { flex-direction: column; align-items: flex-start; gap: 12px; } .vocab-animation { width: 100%; height: auto; padding: 10px 0 30px; flex-direction: row; justify-content: center; } .vocab-chinese { font-size: 26px; } .vocab-pinyin, .vocab-meaning { font-size: 17px; } .dialogue-chinese { font-size: 18px; } .dialogue-pinyin, .dialogue-vietnamese { font-size: 16px; } .header { padding: 8px 12px; height: 60px; } .logo-text h1 { font-size: 13px; } .logo-text p { font-size: 10px; } .lesson-title { font-size: 13px !important; } #audio-speed { font-size: 12px; } .content-body { padding: 15px; } .dialogue-line { padding: 12px; } .check-btn { padding: 12px 20px; font-size: 15px; } }
     </style>
+
+    <style id="hsk1-direct-lock-style">
+        html.hsk1-locked body { overflow: hidden !important; }
+        html.hsk1-locked body > *:not(#hsk1-lock-overlay) { visibility: hidden !important; }
+    </style>
+    <script id="hsk1-direct-lock-bootstrap">
+    (function () {
+        try { if (sessionStorage.getItem('hsk1_lessons_06_15_unlocked') !== '1' && window.name !== 'hsk1_lessons_06_15_unlocked') document.documentElement.classList.add('hsk1-locked'); }
+        catch (e) { document.documentElement.classList.add('hsk1-locked'); }
+    })();
+    </script>
+    <style id="hsk1-lock-style">
+        .hsk1-lock-overlay { position: fixed; inset: 0; z-index: 2147483647; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(26, 16, 35, .78); backdrop-filter: blur(5px); }
+        .hsk1-lock-box { width: min(420px, 100%); padding: 28px; border-radius: 18px; background: #fff; color: #333; box-shadow: 0 20px 60px rgba(0,0,0,.35); font-family: Arial, "Helvetica Neue", sans-serif; text-align: center; }
+        .hsk1-lock-box h2 { margin: 0 0 10px; color: #8e44ad; font-size: 24px; }
+        .hsk1-lock-box p { margin: 0 0 18px; line-height: 1.5; }
+        .hsk1-lock-box input { width: 100%; padding: 12px 14px; border: 2px solid #d8c4e2; border-radius: 10px; font-size: 17px; outline: none; }
+        .hsk1-lock-box input:focus { border-color: #8e44ad; box-shadow: 0 0 0 3px rgba(142,68,173,.12); }
+        .hsk1-lock-actions { display: flex; gap: 10px; margin-top: 16px; }
+        .hsk1-lock-actions button, .hsk1-lock-actions a { flex: 1; border: 0; border-radius: 10px; padding: 11px 12px; font-weight: 700; font-size: 15px; cursor: pointer; text-decoration: none; }
+        .hsk1-lock-submit { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: #fff; }
+        .hsk1-lock-cancel { background: #eee; color: #555; }
+        .hsk1-lock-error { min-height: 22px; margin: 10px 0 0 !important; color: #c0392b; font-size: 14px; }
+        .hsk1-protected-link::after { content: "  🔒"; }
+    </style>
 </head>
 <body>
 
@@ -1609,5 +1634,45 @@
     window.stopHsk1OfficialAudio = stopPreciseAudio;
 })();
 </script>
+
+    <script id="hsk1-direct-lock">
+    (function () {
+        'use strict';
+        const expectedHash = 'bcf6c75063ac7cf814b01d91caca8a09e6e8d208f8ea5dd4af455714fdc6fdbf';
+        const unlockKey = 'hsk1_lessons_06_15_unlocked';
+
+        async function hsk1Hash(value) {
+            if (!window.crypto || !window.crypto.subtle) throw new Error('Trình duyệt không hỗ trợ kiểm tra bảo mật.');
+            const data = new TextEncoder().encode(value);
+            const digest = await window.crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(digest), function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+        }
+        if (!document.documentElement.classList.contains('hsk1-locked')) return;
+        const overlay = document.createElement('div');
+        overlay.id = 'hsk1-lock-overlay';
+        overlay.className = 'hsk1-lock-overlay';
+        overlay.innerHTML = '<form class="hsk1-lock-box"><h2>🔒 Bài học có mật khẩu</h2><p>Bài 06–15 yêu cầu mật khẩu để mở.</p><input type="password" autocomplete="current-password" aria-label="Mật khẩu" required><p class="hsk1-lock-error" role="alert"></p><div class="hsk1-lock-actions"><a class="hsk1-lock-cancel" href="HSK01-3.0.html">Về trang chủ</a><button type="submit" class="hsk1-lock-submit">Mở bài</button></div></form>';
+        document.body.appendChild(overlay);
+        const form = overlay.querySelector('form');
+        const input = overlay.querySelector('input');
+        const error = overlay.querySelector('.hsk1-lock-error');
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            error.textContent = '';
+            try {
+                if (await hsk1Hash(input.value) === expectedHash) {
+                    sessionStorage.setItem(unlockKey, '1');
+                    window.name = unlockKey;
+                    document.documentElement.classList.remove('hsk1-locked');
+                    overlay.remove();
+                } else {
+                    error.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
+                    input.select();
+                }
+            } catch (err) { error.textContent = err.message; }
+        });
+        input.focus();
+    })();
+    </script>
 </body>
 </html>
