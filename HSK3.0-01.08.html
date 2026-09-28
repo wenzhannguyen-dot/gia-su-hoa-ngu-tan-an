@@ -1860,5 +1860,88 @@
 
     document.getElementById('note-editor-overlay').addEventListener('click', e => { if (e.target.id === 'note-editor-overlay') closeNoteEditor(); });
 </script>
+<script id="hsk1-precise-audio-guard">
+// Bộ dừng chính xác: từ vựng không lấn sang từ/câu kế tiếp.
+(function () {
+    'use strict';
+    let preciseTimer = null;
+    let preciseFrame = null;
+    let preciseToken = 0;
+    let preciseBar = null;
+
+    function cancelPreciseGuard() {
+        preciseToken += 1;
+        if (preciseTimer !== null) clearTimeout(preciseTimer);
+        if (preciseFrame !== null) cancelAnimationFrame(preciseFrame);
+        preciseTimer = null;
+        preciseFrame = null;
+    }
+
+    function stopPreciseAudio() {
+        cancelPreciseGuard();
+        if (typeof _courseAudioEl !== 'undefined' && _courseAudioEl) _courseAudioEl.pause();
+        if (preciseBar) preciseBar.style.width = '100%';
+        preciseBar = null;
+        if (typeof _courseRange !== 'undefined') _courseRange = null;
+    }
+
+    function playPreciseRange(start, end, sourceBtn, trimEnd) {
+        if (typeof _stopCourseAudio === 'function') _stopCourseAudio();
+        cancelPreciseGuard();
+        if (typeof _audioEl !== 'undefined' && _audioEl) { _audioEl.pause(); _audioEl.src = ''; }
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        if (typeof _ttsQueue !== 'undefined') _ttsQueue = [];
+
+        const audio = _getCourseAudio();
+        const safeStart = Math.max(0, Number(start));
+        const safeEnd = Math.max(safeStart + 0.05, Number(end) - Math.max(0, trimEnd || 0));
+        const bar = sourceBtn && sourceBtn.closest('.audio-player')
+            ? sourceBtn.closest('.audio-player').querySelector('.audio-progress-bar')
+            : null;
+        document.querySelectorAll('.audio-progress-bar').forEach(function (item) {
+            if (item !== bar) item.style.width = '0%';
+        });
+        if (bar) bar.style.width = '0%';
+        preciseBar = bar;
+        if (typeof _courseRange !== 'undefined') _courseRange = null;
+        const token = ++preciseToken;
+
+        const begin = function () {
+            if (token !== preciseToken) return;
+            audio.currentTime = safeStart;
+            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+            const arm = function () {
+                if (token !== preciseToken) return;
+                const rate = audio.playbackRate || 1;
+                preciseTimer = setTimeout(stopPreciseAudio, Math.max(0, ((safeEnd - safeStart) / rate) * 1000));
+                const check = function () {
+                    if (token !== preciseToken) return;
+                    if (bar && safeEnd > safeStart) {
+                        const pct = Math.max(0, Math.min(100, ((audio.currentTime - safeStart) / (safeEnd - safeStart)) * 100));
+                        bar.style.width = pct + '%';
+                    }
+                    if (audio.currentTime >= safeEnd - 0.01) stopPreciseAudio();
+                    else preciseFrame = requestAnimationFrame(check);
+                };
+                preciseFrame = requestAnimationFrame(check);
+            };
+            const promise = audio.play();
+            if (promise && typeof promise.then === 'function') promise.then(arm).catch(function () {});
+            else arm();
+        };
+        if (audio.readyState >= 1) begin();
+        else audio.addEventListener('loadedmetadata', begin, { once: true });
+    }
+
+    _playCourseRange = function (start, end, sourceBtn) {
+        playPreciseRange(start, end, sourceBtn || null, 0.01);
+    };
+    playVocabAudio = function (id) {
+        const range = VOCAB_AUDIO[String(id)] || VOCAB_AUDIO[id];
+        if (range) playPreciseRange(range[0], range[1], null, 0.06);
+    };
+    window.stopHsk1OfficialAudio = stopPreciseAudio;
+})();
+</script>
 </body>
 </html>
