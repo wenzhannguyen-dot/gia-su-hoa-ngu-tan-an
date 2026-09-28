@@ -939,15 +939,47 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
     let vocabAudio = null;
     let vocabFile = '';
     let vocabStopAt = null;
+    let vocabTimer = null;
+    let vocabFrame = null;
+    let vocabToken = 0;
     let courseAudio = null;
     let courseFile = '';
     let courseStopAt = null;
+    let courseTimer = null;
+    let courseFrame = null;
+    let courseToken = 0;
+
+    function cancelVocabGuard() {
+        vocabToken += 1;
+        if (vocabTimer !== null) clearTimeout(vocabTimer);
+        if (vocabFrame !== null) cancelAnimationFrame(vocabFrame);
+        vocabTimer = null;
+        vocabFrame = null;
+    }
+
+    function cancelCourseGuard() {
+        courseToken += 1;
+        if (courseTimer !== null) clearTimeout(courseTimer);
+        if (courseFrame !== null) cancelAnimationFrame(courseFrame);
+        courseTimer = null;
+        courseFrame = null;
+    }
+
+    function stopVocabAudio() {
+        cancelVocabGuard();
+        if (vocabAudio) vocabAudio.pause();
+        vocabStopAt = null;
+    }
+
+    function stopCourseAudio() {
+        cancelCourseGuard();
+        if (courseAudio) courseAudio.pause();
+        courseStopAt = null;
+    }
 
     function stopAllAudio() {
-        if (vocabAudio) vocabAudio.pause();
-        if (courseAudio) courseAudio.pause();
-        vocabStopAt = null;
-        courseStopAt = null;
+        stopVocabAudio();
+        stopCourseAudio();
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     }
 
@@ -955,20 +987,27 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
         if (!vocabAudio) {
             vocabAudio = new Audio();
             vocabAudio.preload = 'auto';
-            vocabAudio.addEventListener('timeupdate', function () {
-                if (vocabStopAt !== null && vocabAudio.currentTime >= vocabStopAt - 0.02) {
-                    vocabAudio.pause();
-                    vocabStopAt = null;
-                }
-            });
-            vocabAudio.addEventListener('ended', function () { vocabStopAt = null; });
+            vocabAudio.addEventListener('ended', stopVocabAudio);
         }
         if (vocabFile !== file) {
-            vocabAudio.pause();
+            stopVocabAudio();
             vocabAudio.src = file;
             vocabFile = file;
         }
         return vocabAudio;
+    }
+
+    function armVocabStop(audio, start, end, token) {
+        if (token !== vocabToken) return;
+        vocabStopAt = Math.max(start + 0.05, end - 0.06);
+        const rate = audio.playbackRate || 1;
+        vocabTimer = setTimeout(stopVocabAudio, Math.max(0, ((vocabStopAt - start) / rate) * 1000));
+        const check = function () {
+            if (token !== vocabToken || vocabStopAt === null) return;
+            if (audio.currentTime >= vocabStopAt - 0.01) stopVocabAudio();
+            else vocabFrame = requestAnimationFrame(check);
+        };
+        vocabFrame = requestAnimationFrame(check);
     }
 
     function playMappedVocab(text) {
@@ -976,12 +1015,14 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
         if (!segment) return false;
         stopAllAudio();
         const audio = getVocabAudio(segment.file);
-        vocabStopAt = segment.end;
+        const token = ++vocabToken;
         const begin = function () {
+            if (token !== vocabToken) return;
             audio.currentTime = segment.start;
             audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
             const promise = audio.play();
-            if (promise !== undefined) promise.catch(function () {});
+            if (promise && typeof promise.then === 'function') promise.then(function () { armVocabStop(audio, segment.start, segment.end, token); }).catch(function () {});
+            else armVocabStop(audio, segment.start, segment.end, token);
         };
         if (audio.readyState >= 1) begin();
         else audio.addEventListener('loadedmetadata', begin, { once: true });
@@ -992,31 +1033,40 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
         if (!courseAudio) {
             courseAudio = new Audio();
             courseAudio.preload = 'auto';
-            courseAudio.addEventListener('timeupdate', function () {
-                if (courseStopAt !== null && courseAudio.currentTime >= courseStopAt - 0.02) {
-                    courseAudio.pause();
-                    courseStopAt = null;
-                }
-            });
-            courseAudio.addEventListener('ended', function () { courseStopAt = null; });
+            courseAudio.addEventListener('ended', stopCourseAudio);
         }
         if (courseFile !== file) {
-            courseAudio.pause();
+            stopCourseAudio();
             courseAudio.src = file;
             courseFile = file;
         }
         return courseAudio;
     }
 
+    function armCourseStop(audio, start, end, token) {
+        if (token !== courseToken) return;
+        courseStopAt = Math.max(start + 0.05, end - 0.01);
+        const rate = audio.playbackRate || 1;
+        courseTimer = setTimeout(stopCourseAudio, Math.max(0, ((courseStopAt - start) / rate) * 1000));
+        const check = function () {
+            if (token !== courseToken || courseStopAt === null) return;
+            if (audio.currentTime >= courseStopAt - 0.01) stopCourseAudio();
+            else courseFrame = requestAnimationFrame(check);
+        };
+        courseFrame = requestAnimationFrame(check);
+    }
+
     function playCourseRange(config) {
         stopAllAudio();
         const audio = getCourseAudio(config.file);
-        courseStopAt = config.end;
+        const token = ++courseToken;
         const begin = function () {
+            if (token !== courseToken) return;
             audio.currentTime = config.start;
             audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
             const promise = audio.play();
-            if (promise !== undefined) promise.catch(function () {});
+            if (promise && typeof promise.then === 'function') promise.then(function () { armCourseStop(audio, config.start, config.end, token); }).catch(function () {});
+            else armCourseStop(audio, config.start, config.end, token);
         };
         if (audio.readyState >= 1) begin();
         else audio.addEventListener('loadedmetadata', begin, { once: true });
