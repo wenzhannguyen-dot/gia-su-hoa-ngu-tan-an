@@ -20,6 +20,7 @@ const examStage=document.createElement('div');examStage.id='examStage';frame.par
 let screen='01', questionIndex=0, answers={}, marks=new Set(), submitted=false;
 let examStartedAt=0, scoreReport=null, gradingMode='local', submittedAnswers=null, reviewQuestionNo=1;
 let activeCueStart=null, activeCueEnd=null, activeAudioButton=null;
+let mobileQuestionNo=1, mobileFocusQuestionNo=null;
 const EXAM_SECONDS=85*60;
 const sound=new Audio(ORIGINAL.audio['01']);
 let micRecorder, micStream, recordedSound;
@@ -67,7 +68,7 @@ function bilingualConfirm(d,cn,vi){
 }
 function resetForRetake(){
  sound.pause();try{sound.currentTime=0}catch{};recordedSound?.pause();micStream?.getTracks().forEach(t=>t.stop());
- answers={};marks.clear();submitted=false;submittedAnswers=null;scoreReport=null;gradingMode='local';questionIndex=0;reviewQuestionNo=1;examStartedAt=Date.now();activeCueStart=activeCueEnd=null;activeAudioButton=null;
+ answers={};marks.clear();submitted=false;submittedAnswers=null;scoreReport=null;gradingMode='local';questionIndex=0;reviewQuestionNo=1;mobileQuestionNo=1;mobileFocusQuestionNo=null;examStartedAt=Date.now();activeCueStart=activeCueEnd=null;activeAudioButton=null;
  try{localStorage.removeItem('hsk-original-submission')}catch{}
  sound.src=ORIGINAL.audio['08'];try{sound.currentTime=0}catch{};show('08');
 }
@@ -118,6 +119,40 @@ function focusPrimaryOnPhone(d){
  if(!phoneMode()||!d)return;
  try{window.scrollTo(0,0)}catch{}
  const w=d.defaultView;try{w.scrollTo(0,0)}catch{}
+}
+function focusMobileSubquestion(doc,n){
+ if(!doc||!n)return;
+ const target=doc.querySelector(`input[name="s${n}"],textarea[name="s${n}"],input[name="question${n}"],textarea[name="question${n}"],#question${n}`);
+ if(!target)return;
+ const box=target.closest('tr')||target.closest('table')||target.parentElement||target;
+ try{box.scrollIntoView({block:'center',inline:'nearest'})}catch{}
+}
+function updateMobileQuestionGrid(d){
+ const grid=d&&d.getElementById('mobileQuestionGrid');if(!grid)return;
+ grid.querySelectorAll('[data-mobile-q]').forEach(btn=>{
+  const n=Number(btn.getAttribute('data-mobile-q'));
+  btn.classList.toggle('mq-active',n===mobileQuestionNo);
+  btn.classList.toggle('mq-answered',String(answers[n]||'').trim()!=='');
+ });
+}
+function ensureMobileQuestionGrid(d){
+ if(!d||!phoneMode())return null;
+ const nav=d.getElementById('navQuestion');if(!nav)return null;
+ let grid=d.getElementById('mobileQuestionGrid');
+ if(!grid){
+  grid=d.createElement('div');grid.id='mobileQuestionGrid';
+  for(let n=1;n<=70;n++){
+   const btn=d.createElement('a');btn.className='mobile-qbtn';btn.setAttribute('data-mobile-q',String(n));btn.textContent=String(n);btn.href='javascript:void(0)';
+   btn.onclick=e=>{
+    e.preventDefault();e.stopPropagation();
+    const index=ORIGINAL.questions.findIndex(q=>q.ids.includes(n));if(index<0)return;
+    mobileQuestionNo=n;mobileFocusQuestionNo=n;questionIndex=index;d.body.classList.remove('mobile-answer-open');loadQuestion(d,n<=32);
+   };
+   grid.appendChild(btn);
+  }
+  nav.appendChild(grid);
+ }
+ updateMobileQuestionGrid(d);return grid;
 }
 function applyPhoneUI(d,name,refresh=false){
  if(!d||!d.head)return;
@@ -183,8 +218,14 @@ function applyPhoneUI(d,name,refresh=false){
  `;
  if(name==='08')st.textContent+=`
  html,body{overflow:hidden!important;width:100%!important;height:100%!important}
- #navQuestion{display:none!important;position:absolute!important;left:${u(8)}px!important;right:${u(8)}px!important;top:${u(54)}px!important;bottom:${u(132)}px!important;width:auto!important;height:auto!important;z-index:80!important;box-shadow:0 ${u(2)}px ${u(10)}px rgba(0,0,0,.18)!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:auto;-webkit-overflow-scrolling:touch}
- body.mobile-answer-open #navQuestion{display:block!important}
+ #navQuestion{display:none!important;position:absolute!important;left:${u(8)}px!important;right:${u(8)}px!important;top:${u(54)}px!important;bottom:${u(132)}px!important;width:auto!important;height:auto!important;z-index:80!important;box-shadow:0 ${u(2)}px ${u(10)}px rgba(0,0,0,.18)!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:auto;-webkit-overflow-scrolling:touch;background:#fff!important}
+ #mobileQuestionGrid{display:none!important}
+ body.mobile-answer-open #navQuestion{display:block!important;padding:${u(8)}px!important;box-sizing:border-box!important}
+ body.mobile-answer-open #navQuestion>:not(#mobileQuestionGrid){display:none!important}
+ body.mobile-answer-open #mobileQuestionGrid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:${u(6)}px!important;align-content:start!important}
+ #mobileQuestionGrid .mobile-qbtn{display:flex!important;align-items:center!important;justify-content:center!important;height:${u(44)}px!important;min-height:${u(44)}px!important;min-width:0!important;margin:0!important;padding:0!important;box-sizing:border-box!important;border:1px solid #d9dfcf!important;border-radius:${u(5)}px!important;background:#f8faf5!important;color:#333!important;text-decoration:none!important;font-size:${u(14)}px!important;line-height:1!important;position:relative!important}
+ #mobileQuestionGrid .mobile-qbtn.mq-answered:after{content:'✎';position:absolute;left:${u(3)}px;top:${u(2)}px;font-size:${u(11)}px;color:#6ea423;line-height:1}
+ #mobileQuestionGrid .mobile-qbtn.mq-active{background:#d6eeb3!important;border-color:#9fc86c!important;font-weight:700!important}
  #navQuestion .questionItemexam_listbox-2,#navQuestion .exam_listbox_Selected,#navQuestion .exam_listbox-5,#navQuestion .typtall_list{min-height:${u(42)}px!important;height:${u(42)}px!important;line-height:${u(42)}px!important;font-size:${u(13)}px!important}
  #navQuestion .nav span,#navQuestion .smallpartnav span,#navQuestion .typtall_list span{font-size:${u(13)}px!important}
  #navQuestion .marktag,#navQuestion .edited{height:${u(42)}px!important;width:${u(24)}px!important;min-width:${u(24)}px!important}
@@ -306,7 +347,7 @@ function wire(d,name){
   })});
   bind(d,'[data-click*="showPart"]',(e,el)=>{const m=el.getAttribute('data-click').match(/showPart\(["']?(\d+)/);const part=m&&d.getElementById('part'+m[1]);if(part)part.style.display=part.style.display==='none'?'block':'none'});
   bind(d,'.marktag',(e,el)=>{e.stopPropagation();const id=el.id.replace('_img','');marks.has(id)?marks.delete(id):marks.add(id);el.classList.toggle('unmarked',!marks.has(id));el.classList.toggle('marked',marks.has(id))});
-  bind(d,'#btnShowAnswerCard',()=>{if(phoneMode()){d.body.classList.toggle('mobile-answer-open');return}d.querySelectorAll('#navQuestion [tag="bigpart"],#navQuestion [tag="smallpart"]').forEach(el=>{el.style.display='block';el.classList.remove('disabled-div')})});
+  bind(d,'#btnShowAnswerCard',()=>{if(phoneMode()){ensureMobileQuestionGrid(d);const opening=!d.body.classList.contains('mobile-answer-open');d.body.classList.toggle('mobile-answer-open');if(opening){updateMobileQuestionGrid(d);setTimeout(()=>{const cur=d.querySelector('#mobileQuestionGrid [data-mobile-q="'+mobileQuestionNo+'"]');try{cur?.scrollIntoView({block:'center',inline:'nearest'})}catch{}},0)}return}d.querySelectorAll('#navQuestion [tag="bigpart"],#navQuestion [tag="smallpart"]').forEach(el=>{el.style.display='block';el.classList.remove('disabled-div')})});
   let font=14;bind(d,'#btnChangeFontSize',()=>{font=font===14?16:font===16?18:14;d.querySelector('#frmContent').contentDocument.querySelectorAll('body,body *').forEach(el=>el.style.fontSize=font+'pt')});
   loadQuestion(d);
  }
@@ -583,12 +624,14 @@ function installStudyHelper(doc,q){
  eye.style.color=studyVisible?'#d06b1f':'#4f8d18';doc.body.appendChild(eye);doc.body.appendChild(panel);applyStudyPhoneUI(doc);
 }
 function loadQuestion(d,autoPlay=false){
- const q=ORIGINAL.questions[questionIndex],inner=d.querySelector('#frmContent');prepareQuestionAudio(q);
+ const q=ORIGINAL.questions[questionIndex],inner=d.querySelector('#frmContent');if(!q.ids.includes(mobileQuestionNo))mobileQuestionNo=q.ids[0];prepareQuestionAudio(q);
  if(autoPlay&&q.ids[0]<=32)playCurrentQuestion(true);
  inner.onload=()=>{
   const doc=inner.contentDocument;
   doc.querySelectorAll('input,textarea').forEach(el=>{const n=Number((el.name||el.id).match(/\d+/)?.[0]);if(!n)return;if(el.type==='radio'||el.type==='checkbox'){el.checked=(answers[n]||'').includes(el.getAttribute('tag'));el.onchange=()=>{answers[n]=Array.from(doc.querySelectorAll('input[name="'+el.name+'"]:checked')).map(x=>x.getAttribute('tag')).join('');status(d)}}else{el.value=answers[n]||'';el.oninput=()=>{answers[n]=el.value;status(d)}}});
   doc.querySelectorAll('tr').forEach(tr=>{tr.onclick=e=>{if(e.target.tagName==='INPUT')return;const radio=tr.querySelector('input[type=radio]');if(radio){radio.checked=true;radio.onchange()}}});applyQuestionPhoneUI(doc);installStudyHelper(doc,q);applyStudyPhoneUI(doc);
+  if(phoneMode()&&mobileFocusQuestionNo&&q.ids.includes(mobileFocusQuestionNo)){const n=mobileFocusQuestionNo;setTimeout(()=>focusMobileSubquestion(doc,n),0);mobileFocusQuestionNo=null}
+  updateMobileQuestionGrid(d);
  };
  inner.srcdoc=q.html;
  d.querySelector('#btnLastQuestion').style.display=questionIndex?'inline-block':'none';d.querySelector('#btnNextQuestion').style.display=questionIndex<ORIGINAL.questions.length-1?'inline-block':'none';
@@ -596,7 +639,7 @@ function loadQuestion(d,autoPlay=false){
  const current=Array.from(d.querySelectorAll('#navQuestion .nav')).find(el=>parseInt(el.id,10)===q.ids[0]);if(current){let p=current.parentElement;while(p&&p.id!=='navQuestion'){p.style.display='block';p.classList.remove('disabled-div');p.removeAttribute('disabled');p=p.parentElement}current.scrollIntoView({block:'nearest'})}
  status(d);clock();focusQuestionOnPhone();
 }
-function status(d){d.querySelectorAll('#navQuestion .nav').forEach(el=>{const n=parseInt(el.id,10),q=ORIGINAL.questions.find(x=>x.ids.includes(n)),done=!!(q&&q.ids.every(x=>String(answers[x]||'').trim()));el.querySelector('.edited')?.classList.toggle('hide',!done)})}
+function status(d){d.querySelectorAll('#navQuestion .nav').forEach(el=>{const n=parseInt(el.id,10),q=ORIGINAL.questions.find(x=>x.ids.includes(n)),done=!!(q&&q.ids.every(x=>String(answers[x]||'').trim()));el.querySelector('.edited')?.classList.toggle('hide',!done)});updateMobileQuestionGrid(d)}
 function clock(){
  if(screen!=='08')return;const d=frame.contentDocument,el=d.getElementById('divClock');if(!el)return;if(!examStartedAt)examStartedAt=Date.now();
  const seconds=Math.max(0,EXAM_SECONDS-Math.floor((Date.now()-examStartedAt)/1000)),mm=Math.floor(seconds/60),ss=seconds%60;
