@@ -52,6 +52,25 @@ function fit(){
 }
 addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,80));fit();
 function bind(doc,selector,fn){doc.querySelectorAll(selector).forEach(el=>{el.style.cursor='pointer';el.setAttribute('tabindex','0');el.onclick=e=>{e.preventDefault();fn(e,el)};el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}}})}
+function bilingualConfirm(d,cn,vi){
+ return new Promise(resolve=>{
+  const old=d.getElementById('bilingualConfirmOverlay');if(old)old.remove();
+  const u=phoneMode()?cssForPhysical:(x=>x);
+  const ov=d.createElement('div');ov.id='bilingualConfirmOverlay';ov.style.cssText=`position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,.38);display:flex;align-items:center;justify-content:center;padding:${u(18)}px;box-sizing:border-box`;
+  const box=d.createElement('div');box.style.cssText=`width:${u(520)}px;max-width:92%;background:#fff;border-radius:${u(8)}px;box-shadow:0 ${u(5)}px ${u(22)}px rgba(0,0,0,.28);padding:${u(24)}px ${u(28)}px;text-align:left;font-family:Arial,\"Microsoft YaHei\",sans-serif;box-sizing:border-box`;
+  box.innerHTML=`<div style="font-size:${u(19)}px;font-weight:700;line-height:1.55;color:#222">${cn}</div><div style="font-size:${u(16)}px;line-height:1.55;color:#555;margin-top:${u(10)}px">${vi}</div><div style="display:flex;justify-content:center;gap:${u(18)}px;margin-top:${u(24)}px"><button id="confirmCancel" style="width:${u(120)}px;height:${u(42)}px;border:1px solid #bbb;border-radius:${u(5)}px;background:#fff;color:#333;font-size:${u(16)}px;cursor:pointer">取消</button><button id="confirmOk" style="width:${u(120)}px;height:${u(42)}px;border:0;border-radius:${u(5)}px;background:#dc7328;color:#fff;font-size:${u(16)}px;cursor:pointer">确定</button></div>`;
+  ov.appendChild(box);d.body.appendChild(ov);
+  const done=v=>{ov.remove();resolve(v)};
+  d.getElementById('confirmCancel').onclick=()=>done(false);
+  d.getElementById('confirmOk').onclick=()=>done(true);
+ });
+}
+function resetForRetake(){
+ sound.pause();try{sound.currentTime=0}catch{};recordedSound?.pause();micStream?.getTracks().forEach(t=>t.stop());
+ answers={};marks.clear();submitted=false;submittedAnswers=null;scoreReport=null;gradingMode='local';questionIndex=0;reviewQuestionNo=1;examStartedAt=Date.now();activeCueStart=activeCueEnd=null;activeAudioButton=null;
+ try{localStorage.removeItem('hsk-original-submission')}catch{}
+ sound.src=ORIGINAL.audio['08'];try{sound.currentTime=0}catch{};show('08');
+}
 function show(name){screen=name;frame.onload=()=>wire(frame.contentDocument,name);frame.srcdoc=ORIGINAL.pages[name]}
 function play(){return sound.play().catch(()=>{})}
 function pad2(n){return String(n).padStart(2,'0')}
@@ -74,7 +93,7 @@ function addMainExamFixes(d){
  d.querySelectorAll('#navQuestion .disabled-div,#navQuestion.disabled-div').forEach(el=>el.classList.remove('disabled-div'));
  d.querySelectorAll('#navQuestion [disabled]').forEach(el=>el.removeAttribute('disabled'));
 }
-function setAudioButtonState(){if(activeAudioButton&&activeAudioButton.isConnected)activeAudioButton.textContent=sound.paused?'▶ Phát':'⏸ Dừng'}
+function setAudioButtonState(){if(activeAudioButton&&activeAudioButton.isConnected)activeAudioButton.textContent=sound.paused?'▶ 播放':'⏸ 暂停'}
 function groupCue(q){
  if(!q||!q.ids||!q.ids.length||q.ids[0]>32)return null;
  const first=LISTENING_CUES[q.ids[0]],last=LISTENING_CUES[q.ids[q.ids.length-1]];
@@ -263,14 +282,17 @@ function wire(d,name){
  if(name==='07'){
   bind(d,'#btnNext',()=>{sound.onended=null;sound.pause();sound.src=ORIGINAL.audio['08'];sound.currentTime=0;if(!examStartedAt)examStartedAt=Date.now();show('08')});return;
  }
- if(name==='result'){renderResult(d);bind(d,'#btnReview',()=>showReview(1));bind(d,'#btnok',()=>show('over'));bind(d,'#btnShowInfo',()=>show('05'));return}
+ if(name==='result'){renderResult(d);bind(d,'#btnReview',()=>showReview(1));bind(d,'#btnok',async()=>{const ok=await bilingualConfirm(d,'确认重新考试吗？当前作答和成绩将被清除。','Bạn có chắc muốn thi lại không? Bài làm và kết quả hiện tại sẽ bị xóa.');if(ok)resetForRetake()});bind(d,'#btnShowInfo',()=>show('05'));return}
  if(name==='over'){sound.pause();renderFinalScore(d);return}
  if(name==='08'){
   if(!examStartedAt)examStartedAt=Date.now();addMainExamFixes(d);
   bind(d,'#btnLastQuestion',()=>{if(questionIndex>0){questionIndex--;loadQuestion(d,true)}});
   bind(d,'#btnNextQuestion',()=>{if(questionIndex<ORIGINAL.questions.length-1){questionIndex++;loadQuestion(d,true)}});
   bind(d,'#btnok',async(e,btn)=>{
-   if(submitted)return;submitted=true;submittedAnswers={...answers};sound.pause();const old=btn.textContent;btn.textContent='评分中…';btn.style.pointerEvents='none';
+   if(submitted)return;
+   const ok=await bilingualConfirm(d,'确认提交试卷吗？提交后将无法修改答案。','Bạn có chắc muốn nộp bài không? Sau khi nộp sẽ không thể sửa đáp án.');
+   if(!ok)return;
+   submitted=true;submittedAnswers={...answers};sound.pause();const old=btn.textContent;btn.textContent='评分中…';btn.style.pointerEvents='none';
    try{scoreReport=await gradeAll()}catch{scoreReport=gradeAllLocal();gradingMode='local'}
    try{localStorage.setItem('hsk-original-submission',JSON.stringify({answers:submittedAnswers,scoreReport,gradingMode}))}catch{}
    btn.textContent=old;show('result');
@@ -538,7 +560,7 @@ function installStudyHelper(doc,q){
  .study-letter{font-weight:700;color:#222;font-size:15px}.study-opt-cn{font-size:15px;color:#151515;font-weight:500}.study-opt-py{font-size:14px;color:#b45b16}.study-opt-vi{font-size:14px;color:#555}
  @media(max-width:800px){.study-panel{width:calc(100vw - 36px);right:18px}.study-option{grid-template-columns:28px minmax(90px,.9fr) minmax(150px,1.25fr) minmax(125px,1fr);column-gap:8px}.study-cn,.study-opt-cn{font-size:14px}.study-py,.study-opt-py,.study-vi,.study-opt-vi{font-size:13px}}
  `;doc.head.appendChild(style);
- const eye=doc.createElement('button');eye.type='button';eye.className='study-eye';eye.title='Ẩn / hiện Pinyin + Tiếng Việt';eye.setAttribute('aria-label','Ẩn / hiện Pinyin + Tiếng Việt');
+ const eye=doc.createElement('button');eye.type='button';eye.className='study-eye';eye.title='显示/隐藏拼音和越南语';eye.setAttribute('aria-label','显示/隐藏拼音和越南语');
  eye.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.7"></circle></svg>';
  const panel=doc.createElement('div');panel.className='study-panel';panel.hidden=!studyVisible;addOfficialQuestionRow(doc,panel,q);
  if(data.listenCn){
@@ -704,7 +726,7 @@ function renderReviewSupport(doc,host,n){
 }
 function reviewPageHtml(){return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Xem lại bài</title><style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:Arial,"Microsoft YaHei",sans-serif;background:#f5f7f3;color:#222}body{overflow:hidden}.review-shell{height:100vh;display:grid;grid-template-columns:285px 1fr;grid-template-rows:auto 1fr}.review-top{grid-column:1/3;min-height:66px;background:#fff;border-bottom:1px solid #dbe5d1;display:flex;align-items:center;gap:18px;padding:10px 18px}.review-top strong{font-size:20px}.review-score{color:#c65e13;font-weight:700}.review-back,.review-prev,.review-next{border:1px solid #9fc871;background:#fff;border-radius:5px;min-height:38px;padding:0 15px;cursor:pointer;font-size:14px}.review-back{margin-left:auto;background:#7db916;color:#fff;border-color:#7db916}.review-side{background:#fff;border-right:1px solid #dbe5d1;padding:12px;overflow:auto}.review-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.review-qbtn{height:38px;border:1px solid #d7ddd1;background:#fff;border-radius:4px;cursor:pointer}.review-qbtn.ok{background:#e7f5d5;border-color:#8fc25d}.review-qbtn.bad{background:#fde7e4;border-color:#df8b82}.review-qbtn.empty{background:#f1f1f1;color:#777}.review-qbtn.write{background:#fff5dd;border-color:#e5ba65}.review-qbtn.active{outline:3px solid #e39a36;outline-offset:1px}.review-main{overflow:auto;padding:18px 22px}.review-toolbar{display:flex;align-items:center;gap:9px;margin-bottom:12px}.review-toolbar select{min-height:38px;font-size:14px;padding:0 8px}.review-title{font-size:20px;font-weight:700;margin-right:auto}.review-result{background:#fff;border:1px solid #dbe5d1;border-radius:7px;padding:14px 16px;margin-bottom:14px;line-height:1.7}.review-status{font-size:18px;font-weight:700}.review-status.ok{color:#568b18}.review-status.bad{color:#c74838}.review-status.write{color:#b06b0d}.review-line{margin-top:6px}.review-label{font-weight:700;color:#444}.review-analysis{margin-top:10px;padding:10px 12px;background:#f8faF5;border-left:4px solid #9fc871}.review-study{background:#fff;border:1px solid #badb89;border-radius:7px;padding:14px 16px;overflow:auto}.review-context-title{font-weight:700;font-size:16px;margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid #e5ecdD}.review-divider{height:1px;background:#d9e4cc;margin:12px 0}.study-triplet{padding:7px 4px;border-bottom:1px solid #eef1eb;line-height:1.55}.study-cn{font-size:15px;font-weight:500}.study-py{font-size:14px;color:#b45b16;margin-top:2px}.study-vi{font-size:14px;color:#555;margin-top:2px}.study-answer-qno{font-weight:700;margin:10px 0 4px}.study-options{border-top:1px solid #e1e8d8}.study-option{display:grid;grid-template-columns:30px minmax(120px,.9fr) minmax(180px,1.2fr) minmax(140px,1fr);gap:10px;padding:8px 4px;border-bottom:1px solid #eef1eb}.study-letter{font-weight:700}.study-opt-py{color:#b45b16}.study-opt-vi{color:#555}.writing-box{white-space:pre-wrap;background:#fafafa;border:1px solid #e2e2e2;border-radius:5px;padding:10px;margin-top:5px}.review-note{font-size:12px;color:#777;margin-top:8px}
-</style></head><body><div class="review-shell"><div class="review-top"><strong>Xem lại chi tiết / 答题解析</strong><span id="reviewSummary" class="review-score"></span><button id="reviewBack" class="review-back">Quay lại kết quả</button></div><aside class="review-side"><div id="reviewGrid" class="review-grid"></div></aside><main class="review-main"><div class="review-toolbar"><button id="reviewPrev" class="review-prev">Câu trước</button><select id="reviewSelect"></select><button id="reviewNext" class="review-next">Câu sau</button><span id="reviewTitle" class="review-title"></span></div><div id="reviewBody"></div></main></div></body></html>`}
+</style></head><body><div class="review-shell"><div class="review-top"><strong>答题解析</strong><span id="reviewSummary" class="review-score"></span><button id="reviewBack" class="review-back">返回成绩</button></div><aside class="review-side"><div id="reviewGrid" class="review-grid"></div></aside><main class="review-main"><div class="review-toolbar"><button id="reviewPrev" class="review-prev">上一题</button><select id="reviewSelect"></select><button id="reviewNext" class="review-next">下一题</button><span id="reviewTitle" class="review-title"></span></div><div id="reviewBody"></div></main></div></body></html>`}
 function applyReviewPhoneUI(d){
  if(!phoneMode())return;const u=cssForPhysical,st=d.createElement('style');st.id='reviewPhoneStyle';st.textContent=`html,body{overflow:hidden!important}.review-shell{display:block!important;height:100vh!important}.review-top{height:${u(62)}px!important;min-height:${u(62)}px!important;padding:${u(7)}px ${u(9)}px!important;gap:${u(7)}px!important}.review-top strong{font-size:${u(14)}px!important}.review-score{font-size:${u(12)}px!important}.review-back{min-height:${u(40)}px!important;padding:0 ${u(9)}px!important;font-size:${u(12)}px!important}.review-side{display:none!important}.review-main{height:calc(100vh - ${u(62)}px)!important;padding:${u(9)}px!important;overflow:auto!important}.review-toolbar{position:sticky;top:0;background:#f5f7f3;z-index:4;padding-bottom:${u(7)}px!important;gap:${u(6)}px!important}.review-toolbar button,.review-toolbar select{min-height:${u(42)}px!important;font-size:${u(13)}px!important}.review-title{display:none!important}.review-result,.review-study{padding:${u(11)}px!important;font-size:${u(14)}px!important}.review-status{font-size:${u(16)}px!important}.study-cn,.study-opt-cn{font-size:${u(14)}px!important}.study-py,.study-vi,.study-opt-py,.study-opt-vi{font-size:${u(13)}px!important}.study-option{grid-template-columns:${u(24)}px minmax(0,.95fr) minmax(0,1.25fr) minmax(0,1fr)!important;gap:${u(6)}px!important;overflow-wrap:anywhere}.review-context-title{font-size:${u(15)}px!important}`;d.head.appendChild(st)}
 function reviewStatusFor(n){
@@ -712,10 +734,10 @@ function reviewStatusFor(n){
 }
 function renderReviewNav(d){
  const grid=d.getElementById('reviewGrid'),sel=d.getElementById('reviewSelect');grid.innerHTML='';sel.innerHTML='';
- for(let n=1;n<=70;n++){const status=reviewStatusFor(n),b=d.createElement('button');b.type='button';b.className='review-qbtn '+status+(n===reviewQuestionNo?' active':'');b.textContent=n;b.onclick=()=>{reviewQuestionNo=n;renderReviewQuestion(d)};grid.appendChild(b);const o=d.createElement('option');o.value=n;o.textContent='Câu '+n;sel.appendChild(o)}sel.value=String(reviewQuestionNo);
+ for(let n=1;n<=70;n++){const status=reviewStatusFor(n),b=d.createElement('button');b.type='button';b.className='review-qbtn '+status+(n===reviewQuestionNo?' active':'');b.textContent=n;b.onclick=()=>{reviewQuestionNo=n;renderReviewQuestion(d)};grid.appendChild(b);const o=d.createElement('option');o.value=n;o.textContent='第 '+n+' 题';sel.appendChild(o)}sel.value=String(reviewQuestionNo);
 }
 function renderReviewQuestion(d){
- const n=Math.max(1,Math.min(70,Number(reviewQuestionNo)||1));reviewQuestionNo=n;const src=reviewAnswers(),body=d.getElementById('reviewBody');body.innerHTML='';d.getElementById('reviewTitle').textContent='Câu '+n;d.getElementById('reviewSelect').value=String(n);d.getElementById('reviewPrev').disabled=n===1;d.getElementById('reviewNext').disabled=n===70;
+ const n=Math.max(1,Math.min(70,Number(reviewQuestionNo)||1));reviewQuestionNo=n;const src=reviewAnswers(),body=d.getElementById('reviewBody');body.innerHTML='';d.getElementById('reviewTitle').textContent='第 '+n+' 题';d.getElementById('reviewSelect').value=String(n);d.getElementById('reviewPrev').disabled=n===1;d.getElementById('reviewNext').disabled=n===70;
  d.querySelectorAll('.review-qbtn').forEach((x,i)=>x.classList.toggle('active',i+1===n));
  const card=d.createElement('div');card.className='review-result';
  if(n<=64){const user=String(src[n]||'').trim().toUpperCase(),correct=ANSWER_KEY[n],parts=reviewOptionParts(n),ok=user===correct;card.innerHTML=`<div class="review-status ${ok?'ok':'bad'}">${!user?'Chưa trả lời':ok?'✓ Đúng':'✕ Sai'} — Câu ${n}</div><div class="review-line"><span class="review-label">Bạn chọn:</span> ${escHtml(reviewChoiceLine(user,parts[user]))}</div><div class="review-line"><span class="review-label">Đáp án đúng:</span> ${escHtml(reviewChoiceLine(correct,parts[correct]))}</div><div class="review-analysis"><span class="review-label">Phân tích:</span> ${escHtml(objectiveAnalysis(n,user,correct,parts))}</div>`}
@@ -729,10 +751,11 @@ function wireReview(d){
 function showReview(n=1){reviewQuestionNo=n;screen='review';sound.pause();frame.onload=()=>wireReview(frame.contentDocument);frame.srcdoc=reviewPageHtml()}
 function renderResult(d){
  if(!scoreReport)scoreReport=gradeAllLocal();
- const title=d.getElementById('span_exam_result');if(title)title.textContent='考试成绩 / Kết quả';
- const note=d.getElementById('subjectiveScoreNote');if(note)note.textContent=gradingMode==='ai'?'写作65–70：AI自动评分':'写作65–70：智能自动评分';
+ const title=d.getElementById('span_exam_result');if(title)title.textContent='考试成绩';
+ const note=d.getElementById('subjectiveScoreNote');if(note){note.textContent=gradingMode==='ai'?'写作65–70：AI自动评分':'写作65–70：智能自动评分';note.style.display='none';}
+ const retakeBtn=d.getElementById('btnok');if(retakeBtn)retakeBtn.textContent='重新考试';
  const tbody=d.getElementById('result');if(!tbody)return;
- const oldReview=d.getElementById('btnReview');if(oldReview)oldReview.remove();const wrap=d.querySelector('.button-container')||d.body;const reviewBtn=d.createElement('a');reviewBtn.id='btnReview';reviewBtn.textContent='查看详细解析 / Xem lại chi tiết';wrap.appendChild(reviewBtn);
+ const oldReview=d.getElementById('btnReview');if(oldReview)oldReview.remove();const wrap=d.querySelector('.button-container')||d.body;const reviewBtn=d.createElement('a');reviewBtn.id='btnReview';reviewBtn.textContent='查看详细解析';wrap.appendChild(reviewBtn);
  wrap.style.cssText=(wrap.style.cssText||'')+';display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:nowrap;margin-top:18px;';
  [d.getElementById('btnShowInfo'),d.getElementById('btnok'),reviewBtn].filter(Boolean).forEach((b,i)=>{b.style.cssText='cursor:pointer;display:inline-block;box-sizing:border-box;margin:0;width:190px;max-width:190px;height:40px;line-height:40px;padding:0 12px;text-align:center;color:#fff;background:'+(i===2?'#7db916':'#dc7328')+';border-radius:5px;text-decoration:none;white-space:nowrap;';});
  tbody.innerHTML=`<tr><th>部分</th><th>满分</th><th>得分</th><th>结果</th></tr>
@@ -745,8 +768,8 @@ function renderFinalScore(d){
  if(!scoreReport)scoreReport=gradeAllLocal();
  const box=d.querySelector('.over-container');if(!box)return;
  const old=d.getElementById('finalScoreBox');if(old)old.remove();
- const div=d.createElement('div');div.id='finalScoreBox';div.style.cssText='width:520px;margin:22px auto 0;padding:15px 20px;border:1px solid #badb89;border-radius:6px;background:#fbfdf8;font-size:18px;line-height:1.9;color:#333';
- div.innerHTML=`<div style="font-size:25px;font-weight:bold;color:#d57a03">${scoreReport.total} / 300</div><div>听力 ${scoreReport.listening}/100　阅读 ${scoreReport.reading}/100　写作 ${scoreReport.writing}/100</div><button id="finalReviewBtn" class="button" style="margin-top:12px;height:38px;padding:0 16px;border:0;border-radius:5px;background:#7db916;color:#fff;cursor:pointer">查看详细解析 / Xem lại chi tiết</button>`;
+ const div=d.createElement('div');div.id='finalScoreBox';div.style.cssText='margin:22px auto 0;text-align:center';
+ div.innerHTML=`<button id="finalReviewBtn" class="button" style="height:38px;padding:0 16px;border:0;border-radius:5px;background:#7db916;color:#fff;cursor:pointer">查看详细解析</button>`;
  box.appendChild(div);const rb=d.getElementById('finalReviewBtn');if(rb)rb.onclick=()=>showReview(1);
 }
 show('01');
