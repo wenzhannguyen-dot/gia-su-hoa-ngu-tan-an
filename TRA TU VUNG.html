@@ -16,7 +16,11 @@
 
     body {
       margin: 0;
+      height: 100vh;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       font-family: "Times New Roman", serif;
       color: #111;
       background:
@@ -26,6 +30,7 @@
 
     .brand-header {
       width: min(930px, calc(100% - 24px));
+      flex: 0 0 auto;
       margin: 8px auto 8px;
       display: grid;
       grid-template-columns: 112px 1fr 112px;
@@ -73,19 +78,25 @@
 
     .page {
       width: min(980px, calc(100% - 28px));
-      margin: 0 auto 8px;
-      padding: 0 0 4px;
+      margin: 0 auto;
+      padding: 0 0 104px;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     .top-area {
-      width: min(700px,100%);
+      width: min(940px,100%);
+      flex: 0 0 auto;
       margin: 0 auto 4px;
     }
 
     #characterWriters {
       display: flex;
       gap: 11px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       align-items: stretch;
       justify-content: center;
       margin-bottom: 4px;
@@ -168,14 +179,18 @@
     .meaning-box {
       min-height: 0;
       border: 1px solid transparent;
-      padding: 4px 10px 4px;
+      padding: 2px 10px 2px;
       color: #071ab8;
-      font-size: clamp(48px,5vw,58px);
-      line-height: 1.18;
+      font-size: 52px;
+      line-height: 1.14;
       font-weight: 700;
-      background: rgba(255,255,255,.14);
+      background: rgba(255,255,255,.10);
       border-radius: 10px;
       text-shadow: 0 1px 2px rgba(255,255,255,.98);
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
     }
 
     #meaningList {
@@ -184,7 +199,7 @@
     }
 
     #meaningList li {
-      margin: 3px 0;
+      margin: 1px 0;
       padding-left: 2px;
     }
 
@@ -194,8 +209,17 @@
     }
 
     .input-wrap {
-      width: min(470px,100%);
-      margin: 12px auto 0;
+      width: min(500px, calc(100% - 24px));
+      position: fixed;
+      left: 50%;
+      bottom: 7px;
+      transform: translateX(-50%);
+      margin: 0;
+      z-index: 1000;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
     }
 
     #hanziInput {
@@ -221,6 +245,11 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      padding: 7px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 7px 22px rgba(0,0,0,.14);
+      backdrop-filter: blur(4px);
     }
 
     .input-row #hanziInput {
@@ -257,49 +286,33 @@
     }
 
     #lookupStatus {
-      min-height: 18px;
-      margin-top: 5px;
-      text-align: center;
-      font: 12px/1.4 Arial,sans-serif;
-      color: rgba(70,45,40,.75);
+      display: none !important;
     }
 
     .credit {
-      margin: 5px auto 0;
+      margin: 3px auto 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
       text-align: center;
-      font: 10px/1.3 Arial,sans-serif;
-      color: rgba(40,40,40,.55);
+      font: 600 13px/1.2 Arial,sans-serif;
+      color: rgba(55,55,55,.72);
     }
 
     .credit a { color: inherit; }
 
 
-    /* Tự co phần nghĩa theo số lượng mục để không tràn màn hình. */
+    /* Cỡ ban đầu; JavaScript sẽ tự co chính xác theo chiều cao còn trống. */
     .meaning-box.meaning-count-1,
     .meaning-box.meaning-count-2,
-    .meaning-box.meaning-count-3 {
-      font-size: clamp(50px, 5.2vw, 60px);
-      line-height: 1.18;
-    }
-
-    .meaning-box.meaning-count-4 {
-      font-size: clamp(46px, 4.8vw, 54px);
-      line-height: 1.16;
-    }
-
-    .meaning-box.meaning-count-5 {
-      font-size: clamp(42px, 4.4vw, 50px);
-      line-height: 1.14;
-    }
-
-    .meaning-box.meaning-count-6 {
-      font-size: clamp(38px, 4vw, 46px);
-      line-height: 1.12;
-    }
-
+    .meaning-box.meaning-count-3,
+    .meaning-box.meaning-count-4,
+    .meaning-box.meaning-count-5,
+    .meaning-box.meaning-count-6,
     .meaning-box.meaning-count-many {
-      font-size: clamp(32px, 3.5vw, 40px);
-      line-height: 1.1;
+      font-size: 52px;
+      line-height: 1.14;
     }
 
     /* Màn hình thấp: giữ header và ô nhập nguyên font, chỉ nén khoảng trống. */
@@ -308,8 +321,8 @@
       .brand-logo { width: 82px; height: 82px; }
       .brand-balance { width: 82px; }
 
-      .writer-card { width: 148px; min-height: 138px; padding: 4px; }
-      .mini-writer { width: 134px; height: 126px; }
+      .writer-card { width: 145px; min-height: 132px; padding: 4px; }
+      .mini-writer { width: 132px; height: 120px; }
 
       .pinyin-box { min-height: 86px; padding-top: 0; padding-bottom: 0; }
       #pinyin { font-size: clamp(54px, 7vw, 82px); }
@@ -317,12 +330,22 @@
       .meaning-box { padding-top: 0; padding-bottom: 0; }
       #meaningList li { margin: 1px 0; }
 
-      .input-wrap { margin-top: 6px; }
-      #lookupStatus { min-height: 14px; margin-top: 2px; }
+      .input-wrap { bottom: 8px; }
+      #lookupStatus { display: none !important; }
       .credit { margin-top: 1px; }
     }
 
     @media (max-width: 650px) {
+
+      .input-wrap {
+        width: calc(100% - 16px);
+        bottom: 6px;
+        padding: 0;
+      }
+
+      .page {
+        padding-bottom: 104px;
+      }
       .brand-header {
         grid-template-columns: 72px 1fr;
         gap: 7px;
@@ -337,7 +360,7 @@
       .brand-contact { font-size: 11px; margin-top: 4px; }
 
       .page { width: min(100% - 16px,980px); }
-      #characterWriters { gap: 7px; }
+      #characterWriters { gap: 7px; flex-wrap: wrap; }
 
       .writer-card {
         width: calc(50% - 4px);
@@ -392,9 +415,8 @@
                 title="Xem lại cách viết">↻</button>
       </div>
       <div id="lookupStatus"></div>
+      <div class="credit">Thiết kế bài học: Nguyễn Văn Chiến</div>
     </div>
-
-    <div class="credit">Thiết kế bài học: Nguyễn Văn Chiến</div>
   </main>
 
 <script>
@@ -881,6 +903,34 @@
     }
   }
 
+
+  function fitMeaningToAvailableSpace() {
+    const meaningBox = meaningList.closest(".meaning-box");
+    const footer = document.querySelector(".input-wrap");
+    if (!meaningBox || !footer) return;
+
+    const boxTop = meaningBox.getBoundingClientRect().top;
+    const footerTop = footer.getBoundingClientRect().top;
+    const available = Math.max(90, footerTop - boxTop - 8);
+
+    meaningBox.style.maxHeight = available + "px";
+
+    const count = Math.max(1, meaningList.children.length);
+    let size = count <= 3 ? 54 : count <= 5 ? 48 : count <= 7 ? 42 : 36;
+    const minSize = window.innerWidth <= 650 ? 26 : 30;
+
+    meaningBox.style.fontSize = size + "px";
+    meaningBox.style.lineHeight = "1.13";
+
+    // Co font đến khi nội dung vừa vùng trống.
+    let guard = 40;
+    while (meaningBox.scrollHeight > available && size > minSize && guard-- > 0) {
+      size -= 1;
+      meaningBox.style.fontSize = size + "px";
+      meaningBox.style.lineHeight = size <= 36 ? "1.08" : "1.12";
+    }
+  }
+
   function renderMeanings(items, segmented = false) {
     meaningList.innerHTML = "";
 
@@ -940,6 +990,8 @@
       li.textContent = "Chưa tìm thấy nghĩa phù hợp.";
       meaningList.appendChild(li);
     }
+
+    requestAnimationFrame(fitMeaningToAvailableSpace);
   }
 
   function renderWriters(text) {
@@ -951,9 +1003,19 @@
       const card = document.createElement("div");
       card.className = "writer-card";
 
+      if (chars.length >= 4 && window.innerWidth > 650) {
+        card.style.width = "145px";
+        card.style.minHeight = "132px";
+      }
+
       const target = document.createElement("div");
       target.className = "mini-writer";
       target.id = "writer-" + index + "-" + Date.now();
+
+      if (chars.length >= 4 && window.innerWidth > 650) {
+        target.style.width = "132px";
+        target.style.height = "120px";
+      }
 
       card.appendChild(target);
       writersEl.appendChild(card);
@@ -961,13 +1023,14 @@
       if (window.HanziWriter) {
         try {
           const compactHeight = window.innerHeight <= 850 && window.innerWidth > 650;
-          const writerWidth = compactHeight ? 134 : 160;
-          const writerHeight = compactHeight ? 126 : 148;
+          const manyChars = chars.length >= 4 && window.innerWidth > 650;
+          const writerWidth = manyChars ? 132 : (compactHeight ? 132 : 160);
+          const writerHeight = manyChars ? 120 : (compactHeight ? 120 : 148);
 
           const writer = HanziWriter.create(target.id, char, {
             width: writerWidth,
             height: writerHeight,
-            padding: compactHeight ? 8 : 10,
+            padding: manyChars || compactHeight ? 8 : 10,
             showOutline: true,
             showCharacter: false,
             strokeAnimationSpeed: 1,
@@ -1014,7 +1077,7 @@
       meaningList.innerHTML = "";
     }
 
-    statusEl.textContent = dictionaryLoaded ? "" : "Đang tra từ điển…";
+
 
     try {
       await loadDictionary();
@@ -1082,11 +1145,16 @@
       } else if (local?.meanings?.length) {
         statusEl.textContent = "";
       } else {
-        statusEl.textContent = "Không tải được từ điển trực tuyến.";
+
         renderMeanings([{ meaning: "Chưa tìm thấy nghĩa phù hợp." }]);
       }
     }
   }
+
+
+  window.addEventListener("resize", () => {
+    requestAnimationFrame(fitMeaningToAvailableSpace);
+  });
 
   replayAllBtn.addEventListener("click", () => {
     for (const writer of activeWriters) {
