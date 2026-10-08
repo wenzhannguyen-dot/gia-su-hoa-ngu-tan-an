@@ -50,8 +50,8 @@ body{font-family:Arial,"Helvetica Neue",sans-serif;background:linear-gradient(13
 (function(){
 'use strict';
 const expectedHash='ab49d74452e8f442c8446817316089f4b8f7e56fbe0bbcdc37af5877ec3c3c1d';
-const unlockKey='hsk4_lessons_06_10_unlocked';
-const protectedLesson=/^HSK3\.0-04\.(?:0[6-9]|10)\.html(?:[?#].*)?$/i;
+const unlockKey='hsk4_lessons_06_20_unlocked';
+const protectedLesson=/^HSK3\.0-04\.(?:0[6-9]|1[0-9]|20)\.html(?:[?#].*)?$/i;
 
 async function hsk4Hash(value){
   if(!window.crypto||!window.crypto.subtle)throw new Error('Trình duyệt không hỗ trợ kiểm tra bảo mật.');
@@ -63,14 +63,14 @@ function closeOverlay(){const old=document.getElementById('hsk4-lock-overlay');i
 function askPassword(destination){
   closeOverlay();
   const overlay=document.createElement('div');overlay.id='hsk4-lock-overlay';overlay.className='hsk4-lock-overlay';
-  overlay.innerHTML='<form class="hsk4-lock-box"><h2>🔒 Bài học có mật khẩu</h2><p>Nhập mật khẩu để mở các bài từ 06 đến 10.</p><input type="password" autocomplete="current-password" aria-label="Mật khẩu" required><p class="hsk4-lock-error" role="alert"></p><div class="hsk4-lock-actions"><button type="button" class="hsk4-lock-cancel">Hủy</button><button type="submit" class="hsk4-lock-submit">Mở bài</button></div></form>';
+  overlay.innerHTML='<form class="hsk4-lock-box"><h2>🔒 Bài học có mật khẩu</h2><p>Nhập mật khẩu để mở các bài từ 06 đến 20.</p><input type="password" autocomplete="current-password" aria-label="Mật khẩu" required><p class="hsk4-lock-error" role="alert"></p><div class="hsk4-lock-actions"><button type="button" class="hsk4-lock-cancel">Hủy</button><button type="submit" class="hsk4-lock-submit">Mở bài</button></div></form>';
   document.body.appendChild(overlay);
   const form=overlay.querySelector('form'),input=overlay.querySelector('input'),error=overlay.querySelector('.hsk4-lock-error');
   overlay.querySelector('.hsk4-lock-cancel').addEventListener('click',closeOverlay);
-  form.addEventListener('submit',async function(event){event.preventDefault();error.textContent='';try{if(await hsk4Hash(input.value)===expectedHash){sessionStorage.setItem(unlockKey,'1');window.name=unlockKey;window.location.href=destination}else{error.textContent='Mật khẩu không đúng. Vui lòng thử lại.';input.select()}}catch(err){error.textContent=err.message}});
+  form.addEventListener('submit',async function(event){event.preventDefault();error.textContent='';try{if(await hsk4Hash(input.value)===expectedHash){sessionStorage.setItem(unlockKey,'1');window.location.href=destination}else{error.textContent='Mật khẩu không đúng. Vui lòng thử lại.';input.select()}}catch(err){error.textContent=err.message}});
   input.focus();
 }
-document.querySelectorAll('a[href]').forEach(function(link){const href=link.getAttribute('href')||'';if(!protectedLesson.test(href))return;link.classList.add('hsk4-protected-link');link.addEventListener('click',function(event){if(sessionStorage.getItem(unlockKey)==='1'||window.name===unlockKey)return;event.preventDefault();askPassword(href)})});
+document.querySelectorAll('a[href]').forEach(function(link){const href=link.getAttribute('href')||'';if(!protectedLesson.test(href))return;link.classList.add('hsk4-protected-link');link.addEventListener('click',function(event){if(sessionStorage.getItem(unlockKey)==='1')return;event.preventDefault();askPassword(href)})});
 })();
 </script>
 </body>
