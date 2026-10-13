@@ -1,0 +1,293 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phỏng vấn tiếng Trung Đài Loan</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    padding: 15px;
+    color: #263238;
+}
+
+.container {
+    max-width: 760px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #174a7e;
+    font-size: 24px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    color: white;
+    background: #1769aa;
+}
+
+.play-all {
+    background: #18864b;
+    flex: 1;
+}
+
+.stop {
+    background: #c0392b;
+}
+
+.sentence {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+.chinese {
+    font-family: "Microsoft JhengHei", "PingFang TC",
+                 "Noto Sans CJK TC", sans-serif;
+    color: #172f55;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1.6;
+    margin-bottom: 6px;
+}
+
+.pinyin {
+    color: #1769aa;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 5px;
+}
+
+.vietnamese {
+    color: #4b5563;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.play-one {
+    padding: 9px 13px;
+}
+
+#status {
+    text-align: center;
+    font-size: 13px;
+    color: #1769aa;
+    margin-bottom: 12px;
+}
+
+select {
+    padding: 7px;
+    border-radius: 6px;
+    border: 1px solid #b8c4ce;
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 21px; }
+    .chinese { font-size: 22px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🇹🇼 自我介绍｜Giới thiệu bản thân</h1>
+
+<div class="controls">
+    <button class="play-all" onclick="playAll()">▶ Đọc toàn bài</button>
+    <button class="stop" onclick="stopSpeaking()">■ Dừng</button>
+</div>
+
+<div id="status"></div>
+
+<div style="margin-bottom:15px;">
+    <label for="speed">Tốc độ:</label>
+    <select id="speed">
+        <option value="0.6">Rất chậm</option>
+        <option value="0.8" selected>Chậm</option>
+        <option value="1">Bình thường</option>
+    </select>
+</div>
+
+<div id="sentences">
+
+<div class="sentence">
+    <div class="chinese">主管，您好！</div>
+    <div class="pinyin">Zhǔguǎn, nín hǎo!</div>
+    <div class="vietnamese">Xin chào chủ quản!</div>
+    <button class="play-one" onclick="speakChinese('主管，您好！')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我叫杨氏玄陈。</div>
+    <div class="pinyin">Wǒ jiào Yáng Shì Xuán Chén.</div>
+    <div class="vietnamese">Tôi tên là Dương Thị Huyền Trần.</div>
+    <button class="play-one" onclick="speakChinese('我叫杨氏玄陈。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我今年二十六岁，来自越南。</div>
+    <div class="pinyin">Wǒ jīnnián èrshíliù suì, láizì Yuènán.</div>
+    <div class="vietnamese">Tôi năm nay 26 tuổi, đến từ Việt Nam.</div>
+    <button class="play-one" onclick="speakChinese('我今年二十六岁，来自越南。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我的身高是一米六五，体重是五十七公斤。</div>
+    <div class="pinyin">Wǒ de shēngāo shì yì mǐ liù wǔ, tǐzhòng shì wǔshíqī gōngjīn.</div>
+    <div class="vietnamese">Tôi cao 1 mét 65, nặng 57 kg.</div>
+    <button class="play-one" onclick="speakChinese('我的身高是一米六五，体重是五十七公斤。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我还没有结婚。</div>
+    <div class="pinyin">Wǒ hái méiyǒu jiéhūn.</div>
+    <div class="vietnamese">Tôi chưa kết hôn.</div>
+    <button class="play-one" onclick="speakChinese('我还没有结婚。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我以前在工厂工作过。</div>
+    <div class="pinyin">Wǒ yǐqián zài gōngchǎng gōngzuò guo.</div>
+    <div class="vietnamese">Trước đây tôi từng làm việc ở nhà máy.</div>
+    <button class="play-one" onclick="speakChinese('我以前在工厂工作过。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我来台湾工作，是为了赚钱，改善生活。</div>
+    <div class="pinyin">Wǒ lái Táiwān gōngzuò, shì wèile zhuànqián, gǎishàn shēnghuó.</div>
+    <div class="vietnamese">Tôi đến Đài Loan làm việc để kiếm tiền, cải thiện cuộc sống.</div>
+    <button class="play-one" onclick="speakChinese('我來台灣工作，是為了賺錢，改善生活。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我会认真工作，遵守公司的规定。</div>
+    <div class="pinyin">Wǒ huì rènzhēn gōngzuò, zūnshǒu gōngsī de guīdìng.</div>
+    <div class="vietnamese">Tôi sẽ nghiêm túc làm việc và tuân thủ quy định của công ty.</div>
+    <button class="play-one" onclick="speakChinese('我會認真工作，遵守公司的規定。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我可以加班。</div>
+    <div class="pinyin">Wǒ kěyǐ jiābān.</div>
+    <div class="vietnamese">Tôi có thể tăng ca.</div>
+    <button class="play-one" onclick="speakChinese('我可以加班。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">我会努力学习，认真做好主管交代的工作。</div>
+    <div class="pinyin">Wǒ huì nǔlì xuéxí, rènzhēn zuò hǎo zhǔguǎn jiāodài de gōngzuò.</div>
+    <div class="vietnamese">Tôi sẽ cố gắng học hỏi, nghiêm túc hoàn thành tốt công việc chủ quản giao.</div>
+    <button class="play-one" onclick="speakChinese('我會努力學習，認真做好主管交代的工作。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">谢谢主管！</div>
+    <div class="pinyin">Xièxie zhǔguǎn!</div>
+    <div class="vietnamese">Cảm ơn chủ quản!</div>
+    <button class="play-one" onclick="speakChinese('謝謝主管！')">▶ Nghe</button>
+</div>
+
+</div>
+</div>
+
+<script>
+let taiwanVoice = null;
+let playToken = 0;
+
+function loadTaiwanVoice() {
+    const voices = speechSynthesis.getVoices();
+
+    taiwanVoice =
+        voices.find(v => v.lang.toLowerCase() === "zh-tw") ||
+        voices.find(v => v.lang.toLowerCase() === "zh-hant-tw") ||
+        voices.find(v =>
+            /taiwan|台灣|臺灣/i.test(v.name) &&
+            /zh/i.test(v.lang)
+        ) || null;
+
+    document.getElementById("status").textContent =
+        taiwanVoice
+        ? "Giọng đọc: " + taiwanVoice.name
+        : "Ưu tiên giọng tiếng Trung Đài Loan";
+}
+
+loadTaiwanVoice();
+speechSynthesis.onvoiceschanged = loadTaiwanVoice;
+
+function createUtterance(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "zh-TW";
+    utterance.rate = Number(document.getElementById("speed").value);
+    utterance.pitch = 1;
+
+    if (taiwanVoice) utterance.voice = taiwanVoice;
+
+    return utterance;
+}
+
+function speakChinese(text) {
+    playToken++;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(createUtterance(text));
+}
+
+function playAll() {
+    speechSynthesis.cancel();
+    const token = ++playToken;
+    const sentences = [...document.querySelectorAll(".chinese")];
+    let index = 0;
+
+    function next() {
+        if (token !== playToken || index >= sentences.length) return;
+
+        const utterance = createUtterance(sentences[index].textContent.trim());
+
+        utterance.onend = () => {
+            if (token !== playToken) return;
+            index++;
+            next();
+        };
+
+        utterance.onerror = () => {
+            if (token !== playToken) return;
+            index++;
+            next();
+        };
+
+        speechSynthesis.speak(utterance);
+    }
+
+    next();
+}
+
+function stopSpeaking() {
+    playToken++;
+    speechSynthesis.cancel();
+}
+</script>
+
+</body>
+</html>
+```
