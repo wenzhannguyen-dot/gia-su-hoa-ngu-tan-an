@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiếng Trung Đài Loan – Massage và liệu trình</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    font-family: Arial, "Microsoft JhengHei", sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    padding: 15px;
+    color: #263238;
+}
+
+.container {
+    max-width: 760px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #174a7e;
+    font-size: 24px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    color: white;
+    background: #1769aa;
+}
+
+.play-all {
+    background: #18864b;
+    flex: 1;
+}
+
+.stop {
+    background: #c0392b;
+}
+
+.sentence {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+.chinese {
+    font-family: "Microsoft JhengHei", "PingFang TC",
+                 "Noto Sans CJK TC", sans-serif;
+    color: #172f55;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1.6;
+    margin-bottom: 6px;
+}
+
+.pinyin {
+    color: #1769aa;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 5px;
+}
+
+.vietnamese {
+    color: #4b5563;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.play-one {
+    padding: 9px 13px;
+}
+
+select {
+    padding: 7px;
+    border-radius: 6px;
+    border: 1px solid #b8c4ce;
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 21px; }
+    .chinese { font-size: 22px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>按摩与疗程<br>Massage và liệu trình</h1>
+
+<div class="controls">
+    <button class="play-all" onclick="playAll()">▶ Đọc toàn bài</button>
+    <button class="stop" onclick="stopSpeaking()">■ Dừng</button>
+</div>
+
+<div style="margin-bottom:15px;">
+    <label for="speed">Tốc độ:</label>
+    <select id="speed">
+        <option value="0.6">Rất chậm</option>
+        <option value="0.8" selected>Chậm</option>
+        <option value="1">Bình thường</option>
+    </select>
+</div>
+
+<div id="sentences">
+
+<div class="sentence">
+    <div class="chinese">您想去哪里？</div>
+    <div class="pinyin">Nín xiǎng qù nǎlǐ?</div>
+    <div class="vietnamese">Bạn muốn đi đâu?</div>
+    <button class="play-one" onclick="speakChinese('您想去哪里？')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">您觉得这次的疗程怎么样？</div>
+    <div class="pinyin">Nín juéde zhè cì de liáochéng zěnmeyàng?</div>
+    <div class="vietnamese">Bạn cảm thấy buổi trị liệu lần này như thế nào?</div>
+    <button class="play-one" onclick="speakChinese('您觉得这次的疗程怎么样？')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">您还想再吃一点芒果和西瓜吗？</div>
+    <div class="pinyin">Nín hái xiǎng zài chī yìdiǎn mángguǒ hé xīguā ma?</div>
+    <div class="vietnamese">Bạn có muốn dùng thêm xoài và dưa hấu không?</div>
+    <button class="play-one" onclick="speakChinese('您还想再吃一点芒果和西瓜吗？')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">服务项目</div>
+    <div class="pinyin">Fúwù xiàngmù</div>
+    <div class="vietnamese">Menu</div>
+    <button class="play-one" onclick="speakChinese('服务项目')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">精油按摩与草本疗程</div>
+    <div class="pinyin">Jīngyóu ànmó yǔ cǎoběn liáochéng</div>
+    <div class="vietnamese">Massage tinh dầu và liệu trình thảo dược</div>
+    <button class="play-one" onclick="speakChinese('精油按摩与草本疗程')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">草本疗程和精油按摩不一样。</div>
+    <div class="pinyin">Cǎoběn liáochéng hé jīngyóu ànmó bù yíyàng.</div>
+    <div class="vietnamese">Liệu trình thảo dược khác với massage tinh dầu.</div>
+    <button class="play-one" onclick="speakChinese('草本疗程和精油按摩不一样。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">草本疗程会用草本药包来热敷。</div>
+    <div class="pinyin">Cǎoběn liáochéng huì yòng cǎoběn yàobāo lái rèfū.</div>
+    <div class="vietnamese">Liệu trình thảo dược có thêm túi thảo dược để chườm ấm.</div>
+    <button class="play-one" onclick="speakChinese('草本疗程会用草本药包来热敷。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">它能帮助排出体内的寒湿。</div>
+    <div class="pinyin">Tā néng bāngzhù páichū tǐnèi de hánshī.</div>
+    <div class="vietnamese">Giúp hút hàn thấp từ bên trong cơ thể.</div>
+    <button class="play-one" onclick="speakChinese('它能帮助排出体内的寒湿。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">也会让身体觉得很舒服。</div>
+    <div class="pinyin">Yě huì ràng shēntǐ juéde hěn shūfú.</div>
+    <div class="vietnamese">Đồng thời làm cơ thể dễ chịu.</div>
+    <button class="play-one" onclick="speakChinese('也会让身体觉得很舒服。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">泰式按摩</div>
+    <div class="pinyin">Tàishì ànmó</div>
+    <div class="vietnamese">Massage Thái</div>
+    <button class="play-one" onclick="speakChinese('泰式按摩')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">泰式按摩的力道比较强。</div>
+    <div class="pinyin">Tàishì ànmó de lìdào bǐjiào qiáng.</div>
+    <div class="vietnamese">Massage Thái dùng lực mạnh hơn.</div>
+    <button class="play-one" onclick="speakChinese('泰式按摩的力道比较强。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">也会有拉伸肌肉的动作。</div>
+    <div class="pinyin">Yě huì yǒu lāshēn jīròu de dòngzuò.</div>
+    <div class="vietnamese">Có cả các động tác kéo giãn cơ.</div>
+    <button class="play-one" onclick="speakChinese('也会有拉伸肌肉的动作。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">请注意，过程中会有扳关节的手法。</div>
+    <div class="pinyin">Qǐng zhùyì, guòchéng zhōng huì yǒu bān guānjié de shǒufǎ.</div>
+    <div class="vietnamese">Lưu ý: trong quá trình thực hiện sẽ có thao tác bẻ khớp.</div>
+    <button class="play-one" onclick="speakChinese('请注意，过程中会有扳关节的手法。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">热石疗程</div>
+    <div class="pinyin">Rèshí liáochéng</div>
+    <div class="vietnamese">Liệu trình đá nóng</div>
+    <button class="play-one" onclick="speakChinese('热石疗程')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">热石疗程的做法和草本疗程有点像。</div>
+    <div class="pinyin">Rèshí liáochéng de zuòfǎ hé cǎoběn liáochéng yǒudiǎn xiàng.</div>
+    <div class="vietnamese">Cách thực hiện liệu trình đá nóng hơi giống với thảo dược.</div>
+    <button class="play-one" onclick="speakChinese('热石疗程的做法和草本疗程有点像。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">不过，石头会更烫。</div>
+    <div class="pinyin">Búguò, shítou huì gèng tàng.</div>
+    <div class="vietnamese">Nhưng đá sẽ nóng hơn.</div>
+    <button class="play-one" onclick="speakChinese('不过，石头会更烫。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">喜马拉雅盐石含有天然矿物质。</div>
+    <div class="pinyin">Xǐmǎlāyǎ yánshí hányǒu tiānrán kuàngwùzhí.</div>
+    <div class="vietnamese">Đá muối Himalaya có chứa khoáng chất tự nhiên.</div>
+    <button class="play-one" onclick="speakChinese('喜马拉雅盐石含有天然矿物质。')">▶ Nghe</button>
+</div>
+
+<div class="sentence">
+    <div class="chinese">所以对皮肤很好。</div>
+    <div class="pinyin">Suǒyǐ duì pífū hěn hǎo.</div>
+    <div class="vietnamese">Vì vậy rất tốt cho da.</div>
+    <button class="play-one" onclick="speakChinese('所以对皮肤很好。')">▶ Nghe</button>
+</div>
+
+</div>
+</div>
+
+<script>
+let taiwanVoice = null;
+let playToken = 0;
+
+function loadTaiwanVoice() {
+    const voices = speechSynthesis.getVoices();
+
+    taiwanVoice =
+        voices.find(v => v.lang.toLowerCase() === "zh-tw") ||
+        voices.find(v => v.lang.toLowerCase() === "zh-hant-tw") ||
+        voices.find(v =>
+            /taiwan|台湾|台灣/i.test(v.name) &&
+            /zh/i.test(v.lang)
+        ) || null;
+}
+
+loadTaiwanVoice();
+speechSynthesis.onvoiceschanged = loadTaiwanVoice;
+
+function createUtterance(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "zh-TW";
+    utterance.rate = Number(document.getElementById("speed").value);
+    utterance.pitch = 1;
+
+    if (taiwanVoice) utterance.voice = taiwanVoice;
+
+    return utterance;
+}
+
+function speakChinese(text) {
+    playToken++;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(createUtterance(text));
+}
+
+function playAll() {
+    speechSynthesis.cancel();
+    const token = ++playToken;
+    const sentences = [...document.querySelectorAll(".chinese")];
+    let index = 0;
+
+    function next() {
+        if (token !== playToken || index >= sentences.length) return;
+
+        const utterance = createUtterance(sentences[index].textContent.trim());
+
+        utterance.onend = () => {
+            if (token !== playToken) return;
+            index++;
+            next();
+        };
+
+        utterance.onerror = () => {
+            if (token !== playToken) return;
+            index++;
+            next();
+        };
+
+        speechSynthesis.speak(utterance);
+    }
+
+    next();
+}
+
+function stopSpeaking() {
+    playToken++;
+    speechSynthesis.cancel();
+}
+</script>
+
+</body>
+</html>
