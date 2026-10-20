@@ -708,6 +708,56 @@ img, video, canvas, svg { max-width: 100%; height: auto; }
 .hsk4-lock-actions{display:flex;gap:10px;margin-top:16px}.hsk4-lock-actions button,.hsk4-lock-actions a{flex:1;border:0;border-radius:10px;padding:11px 12px;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none}
 .hsk4-lock-submit{background:linear-gradient(135deg,#1551ad,#0c3463);color:#fff}.hsk4-lock-cancel{background:#eee;color:#555}.hsk4-lock-error{min-height:22px;margin:10px 0 0!important;color:#c0392b;font-size:14px}.hsk4-protected-link::after{content:"  🔒"}
 </style>
+<script id="hsk4-audio-preroll">
+/* Chống mất đầu âm khi bấm nghe lần đầu: lùi điểm phát 0,3 giây và tắt tiếng đoạn lùi đó,
+   để trình duyệt/loa kịp "khởi động" trước khi đến câu cần nghe. */
+(function () {
+  'use strict';
+  var PRE = 0.3;
+  var proto = window.HTMLMediaElement && HTMLMediaElement.prototype;
+  var desc = proto && Object.getOwnPropertyDescriptor(proto, 'currentTime');
+  if (!desc || !desc.set || proto.__hskPreroll) return;
+  proto.__hskPreroll = true;
+  var LESSON_MP3 = /HSK3[._]0-04[._]\d\d\.mp3/i;
+  function isLessonAudio(el) {
+    return el instanceof HTMLAudioElement && (LESSON_MP3.test(el.currentSrc || '') || LESSON_MP3.test(el.src || ''));
+  }
+  function release(el) {
+    if (el.__hskTarget == null) return;
+    el.__hskTarget = null;
+    el.muted = false;
+  }
+  Object.defineProperty(proto, 'currentTime', {
+    configurable: true,
+    enumerable: desc.enumerable,
+    get: function () { return desc.get.call(this); },
+    set: function (t) {
+      if (!isLessonAudio(this) || !(t > PRE)) {
+        release(this);
+        return desc.set.call(this, t);
+      }
+      var el = this, target = Number(t), token = (el.__hskToken || 0) + 1;
+      el.__hskToken = token;
+      el.__hskTarget = target;
+      el.muted = true;
+      desc.set.call(el, Math.max(0, target - PRE));
+      if (!el.__hskBound) {
+        el.__hskBound = true;
+        el.addEventListener('pause', function () { release(el); });
+        el.addEventListener('ended', function () { release(el); });
+      }
+      var tick = function () {
+        if (el.__hskToken !== token || el.__hskTarget == null) return;
+        if (desc.get.call(el) >= target - 0.02) { release(el); return; }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      /* Dự phòng khi tab chạy nền (requestAnimationFrame bị dừng). */
+      setTimeout(function () { if (el.__hskToken === token) release(el); }, 3000);
+    }
+  });
+})();
+</script>
 </head>
 <body class="hide-examples"><header class="header" role="banner">
 <div class="logo">
@@ -1022,8 +1072,8 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
     function armVocabStop(audio, start, end, token) {
         if (token !== vocabToken) return;
         vocabStopAt = Math.max(start + 0.05, end - 0.06);
-        const rate = audio.playbackRate || 1;
-        vocabTimer = setTimeout(stopVocabAudio, Math.max(0, ((vocabStopAt - start) / rate) * 1000));
+        // Không dừng theo đồng hồ thực: lần bấm đầu phải tải/tua file nên dễ dừng sớm.
+        vocabTimer = setInterval(function () { if (token !== vocabToken || vocabStopAt === null) return; if (audio.ended || audio.currentTime >= vocabStopAt - 0.01) stopVocabAudio(); }, 50);
         const check = function () {
             if (token !== vocabToken || vocabStopAt === null) return;
             if (audio.currentTime >= vocabStopAt - 0.01) stopVocabAudio();
@@ -1041,10 +1091,16 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
         const begin = function () {
             if (token !== vocabToken) return;
             audio.currentTime = segment.start;
-            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
-            const promise = audio.play();
-            if (promise && typeof promise.then === 'function') promise.then(function () { armVocabStop(audio, segment.start, segment.end, token); }).catch(function () {});
-            else armVocabStop(audio, segment.start, segment.end, token);
+            const startPlay = function () {
+                if (token !== vocabToken) return;
+                audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+                const promise = audio.play();
+                if (promise && typeof promise.then === 'function') promise.then(function () { armVocabStop(audio, segment.start, segment.end, token); }).catch(function () {});
+                else armVocabStop(audio, segment.start, segment.end, token);
+            };
+            // Chờ tua xong rồi mới phát để không mất đầu âm ở lần bấm đầu
+            if (audio.seeking) audio.addEventListener('seeked', startPlay, { once: true });
+            else startPlay();
         };
         if (audio.readyState >= 1) begin();
         else audio.addEventListener('loadedmetadata', begin, { once: true });
@@ -1068,8 +1124,8 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
     function armCourseStop(audio, start, end, token) {
         if (token !== courseToken) return;
         courseStopAt = Math.max(start + 0.05, end - 0.01);
-        const rate = audio.playbackRate || 1;
-        courseTimer = setTimeout(stopCourseAudio, Math.max(0, ((courseStopAt - start) / rate) * 1000));
+        // Không dừng theo đồng hồ thực: lần bấm đầu phải tải/tua file nên dễ dừng sớm.
+        courseTimer = setInterval(function () { if (token !== courseToken || courseStopAt === null) return; if (audio.ended || audio.currentTime >= courseStopAt - 0.01) stopCourseAudio(); }, 50);
         const check = function () {
             if (token !== courseToken || courseStopAt === null) return;
             if (audio.currentTime >= courseStopAt - 0.01) stopCourseAudio();
@@ -1085,10 +1141,16 @@ renderVocab('all'); updateCounts(); showSection('text'); showText('1');
         const begin = function () {
             if (token !== courseToken) return;
             audio.currentTime = config.start;
-            audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
-            const promise = audio.play();
-            if (promise && typeof promise.then === 'function') promise.then(function () { armCourseStop(audio, config.start, config.end, token); }).catch(function () {});
-            else armCourseStop(audio, config.start, config.end, token);
+            const startPlay = function () {
+                if (token !== courseToken) return;
+                audio.playbackRate = typeof audioSpeed !== 'undefined' ? audioSpeed : 1;
+                const promise = audio.play();
+                if (promise && typeof promise.then === 'function') promise.then(function () { armCourseStop(audio, config.start, config.end, token); }).catch(function () {});
+                else armCourseStop(audio, config.start, config.end, token);
+            };
+            // Chờ tua xong rồi mới phát để không mất đầu âm ở lần bấm đầu
+            if (audio.seeking) audio.addEventListener('seeked', startPlay, { once: true });
+            else startPlay();
         };
         if (audio.readyState >= 1) begin();
         else audio.addEventListener('loadedmetadata', begin, { once: true });

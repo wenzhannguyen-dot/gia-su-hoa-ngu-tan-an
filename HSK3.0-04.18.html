@@ -738,7 +738,57 @@ img, video, canvas, svg { max-width: 100%; height: auto; }
 
 
 /* MASTER RULE: Trong mỗi .text-content, nội dung bài khóa luôn đứng trước phần nghe/chọn đáp án. */
-</style></head>
+</style><script id="hsk4-audio-preroll">
+/* Chống mất đầu âm khi bấm nghe lần đầu: lùi điểm phát 0,3 giây và tắt tiếng đoạn lùi đó,
+   để trình duyệt/loa kịp "khởi động" trước khi đến câu cần nghe. */
+(function () {
+  'use strict';
+  var PRE = 0.3;
+  var proto = window.HTMLMediaElement && HTMLMediaElement.prototype;
+  var desc = proto && Object.getOwnPropertyDescriptor(proto, 'currentTime');
+  if (!desc || !desc.set || proto.__hskPreroll) return;
+  proto.__hskPreroll = true;
+  var LESSON_MP3 = /HSK3[._]0-04[._]\d\d\.mp3/i;
+  function isLessonAudio(el) {
+    return el instanceof HTMLAudioElement && (LESSON_MP3.test(el.currentSrc || '') || LESSON_MP3.test(el.src || ''));
+  }
+  function release(el) {
+    if (el.__hskTarget == null) return;
+    el.__hskTarget = null;
+    el.muted = false;
+  }
+  Object.defineProperty(proto, 'currentTime', {
+    configurable: true,
+    enumerable: desc.enumerable,
+    get: function () { return desc.get.call(this); },
+    set: function (t) {
+      if (!isLessonAudio(this) || !(t > PRE)) {
+        release(this);
+        return desc.set.call(this, t);
+      }
+      var el = this, target = Number(t), token = (el.__hskToken || 0) + 1;
+      el.__hskToken = token;
+      el.__hskTarget = target;
+      el.muted = true;
+      desc.set.call(el, Math.max(0, target - PRE));
+      if (!el.__hskBound) {
+        el.__hskBound = true;
+        el.addEventListener('pause', function () { release(el); });
+        el.addEventListener('ended', function () { release(el); });
+      }
+      var tick = function () {
+        if (el.__hskToken !== token || el.__hskTarget == null) return;
+        if (desc.get.call(el) >= target - 0.02) { release(el); return; }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      /* Dự phòng khi tab chạy nền (requestAnimationFrame bị dừng). */
+      setTimeout(function () { if (el.__hskToken === token) release(el); }, 3000);
+    }
+  });
+})();
+</script>
+</head>
 <body><header class="header" role="banner">
 <div class="logo">
 <div class="logo-img">
