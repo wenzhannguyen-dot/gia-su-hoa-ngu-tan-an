@@ -646,6 +646,58 @@
             font-family: Arial, sans-serif;
         }
     </style>
+<script id="hsk4-audio-preroll">
+/* Chống mất đầu âm khi bấm nghe lần đầu: lùi điểm phát 0,3 giây và tắt tiếng đoạn lùi đó,
+   để trình duyệt/loa kịp "khởi động" trước khi đến câu cần nghe. */
+(function () {
+  'use strict';
+  var PRE = 0.3;
+  var proto = window.HTMLMediaElement && HTMLMediaElement.prototype;
+  var desc = proto && Object.getOwnPropertyDescriptor(proto, 'currentTime');
+  if (!desc || !desc.set || proto.__hskPreroll) return;
+  proto.__hskPreroll = true;
+  var LESSON_MP3 = /HSK3[._]0-0\d[._]\d\d\.mp3/i;
+  function isLessonAudio(el) {
+    return el instanceof HTMLAudioElement && (LESSON_MP3.test(el.currentSrc || '') || LESSON_MP3.test(el.src || ''));
+  }
+  function release(el) {
+    if (el.__hskTarget == null) return;
+    el.__hskTarget = null;
+    el.muted = false;
+  }
+  Object.defineProperty(proto, 'currentTime', {
+    configurable: true,
+    enumerable: desc.enumerable,
+    get: function () { return desc.get.call(this); },
+    set: function (t) {
+      if (!isLessonAudio(this) || !(t > PRE)) {
+        release(this);
+        return desc.set.call(this, t);
+      }
+      var el = this, target = Number(t), token = (el.__hskToken || 0) + 1;
+      el.__hskToken = token;
+      el.__hskTarget = target;
+      el.muted = true;
+      desc.set.call(el, Math.max(0, target - PRE));
+      if (!el.__hskBound) {
+        el.__hskBound = true;
+        el.addEventListener('pause', function () { release(el); });
+        el.addEventListener('ended', function () { release(el); });
+        /* Dự phòng khi tab chạy nền (requestAnimationFrame bị dừng): timeupdate vẫn chạy. */
+        el.addEventListener('timeupdate', function () {
+          if (el.__hskTarget != null && desc.get.call(el) >= el.__hskTarget - 0.02) release(el);
+        });
+      }
+      var tick = function () {
+        if (el.__hskToken !== token || el.__hskTarget == null) return;
+        if (desc.get.call(el) >= target - 0.02) { release(el); return; }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+  });
+})();
+</script>
 </head>
 <body>
 
@@ -1824,7 +1876,7 @@ window.setAudioSpeed = function(v) { _officialOldSetAudioSpeed(v); if (courseAud
             const arm = function () {
                 if (token !== playToken) return;
                 const rate = audio.playbackRate || 1;
-                preciseTimer = setTimeout(stopPreciseAudio, Math.max(0, ((safeEnd - safeStart) / rate) * 1000));
+                preciseTimer = setInterval(function () { if (audio.ended || audio.currentTime >= safeEnd - 0.01) stopPreciseAudio(); }, 50); // dừng theo vị trí phát thật, không theo đồng hồ (tránh dừng sớm ở lần bấm đầu)
                 const check = function () {
                     if (token !== playToken || preciseAudio !== audio) return;
                     if (audio.currentTime >= safeEnd - 0.01) stopPreciseAudio();

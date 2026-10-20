@@ -712,7 +712,7 @@ img, video, canvas, svg { max-width: 100%; height: auto; }
   var desc = proto && Object.getOwnPropertyDescriptor(proto, 'currentTime');
   if (!desc || !desc.set || proto.__hskPreroll) return;
   proto.__hskPreroll = true;
-  var LESSON_MP3 = /HSK3[._]0-04[._]\d\d\.mp3/i;
+  var LESSON_MP3 = /HSK3[._]0-0\d[._]\d\d\.mp3/i;
   function isLessonAudio(el) {
     return el instanceof HTMLAudioElement && (LESSON_MP3.test(el.currentSrc || '') || LESSON_MP3.test(el.src || ''));
   }
@@ -739,6 +739,10 @@ img, video, canvas, svg { max-width: 100%; height: auto; }
         el.__hskBound = true;
         el.addEventListener('pause', function () { release(el); });
         el.addEventListener('ended', function () { release(el); });
+        /* Dự phòng khi tab chạy nền (requestAnimationFrame bị dừng): timeupdate vẫn chạy. */
+        el.addEventListener('timeupdate', function () {
+          if (el.__hskTarget != null && desc.get.call(el) >= el.__hskTarget - 0.02) release(el);
+        });
       }
       var tick = function () {
         if (el.__hskToken !== token || el.__hskTarget == null) return;
@@ -746,8 +750,6 @@ img, video, canvas, svg { max-width: 100%; height: auto; }
         requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
-      /* Dự phòng khi tab chạy nền (requestAnimationFrame bị dừng). */
-      setTimeout(function () { if (el.__hskToken === token) release(el); }, 3000);
     }
   });
 })();
