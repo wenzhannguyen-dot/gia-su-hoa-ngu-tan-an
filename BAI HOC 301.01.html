@@ -2131,6 +2131,7 @@
     <p class="latin">9/1 Bạch Văn Tư, Tân An, Long An | Zalo: 0839.889.772</p>
 </div>
 
+<script src="audio/ngu-am/paths.js"></script>
 <script>
     const writers = {};
     let isSpeaking = false;
@@ -2169,7 +2170,7 @@
 
     function playMP3(filename) {
         initAudioContext();
-        const audio = new Audio(filename);
+        const audio = new Audio(resolvePhoneticMP3(filename));
         audio.volume = 1;
         
         audio.onplay = function() {
@@ -2205,7 +2206,7 @@
         window.speechSynthesis.cancel();
         document.querySelectorAll('.playing').forEach(el => el.classList.remove('playing'));
         
-        const audio = new Audio(phonetic + '.mp3');
+        const audio = new Audio(resolvePhoneticMP3(phonetic));
         audio.volume = 1;
         
         audio.onplay = function() {
@@ -2219,13 +2220,13 @@
         audio.onerror = function(e) {
             console.error('Audio error:', e);
             showToast('Không thể tải file âm thanh');
-            speakSingle(phonetic);
+            showToast('Chưa có MP3 cho âm: ' + phonetic);
         };
         
         audio.play().catch(error => {
             console.error('Play error:', error);
             showToast('Không thể phát âm thanh');
-            speakSingle(phonetic);
+            showToast('Chưa có MP3 cho âm: ' + phonetic);
         });
     }
 
@@ -2512,3 +2513,4 @@
 
 </body>
 </html>
+
