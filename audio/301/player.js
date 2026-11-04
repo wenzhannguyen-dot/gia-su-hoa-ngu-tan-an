@@ -135,7 +135,12 @@ window.BOOK_301_AUDIO = {"1":{"lesson":1,"src":"audio/301/301-01.mp3","duration"
             const handler = element.getAttribute('onclick') || '';
             if (!/speakText|speakFromElement/.test(handler)) return;
             const container = element.closest('.dialogue-container') || element.closest('.card');
-            const ranges = container ? Array.from(container.querySelectorAll(selectors[key])).flatMap(el => bindings.get(el) || []) : [];
+            let ranges = container ? Array.from(container.querySelectorAll(selectors[key])).flatMap(el => bindings.get(el) || []) : [];
+            if (key === 'vocab') {
+                const explicit = element.getAttribute('data-text') || (handler.match(/speakText\(\s*(['"])(.*?)\1/) || [])[2];
+                const listed = explicit && explicit.trim().split(/\s+/).map(text => findText(text, key));
+                if (listed && listed.every(Boolean)) ranges = listed;
+            }
             bind(element, ranges);
         });
     });
