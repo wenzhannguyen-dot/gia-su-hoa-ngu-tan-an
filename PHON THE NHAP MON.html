@@ -1376,8 +1376,9 @@ pick('ㄅ',false);
 'use strict';
 const AUDIO_ROOT='audio/ngu-am/';
 const RECORDED=new Set('a ai an ang ao b c ch d e ei en eng er f g h i ia ian iang iao ie in ing iong iu j k l m mà má mā mǎ n o ong ou p q r s sh t u ua uai uan uang uen ueng ui uo x z zh ü üan üe ün'.split(' '));
+const AUDIO_ALIASES={un:'uen',iou:'iu',uei:'ui',ue:'üe'};
 const INITIALS='b p m f d t n l g k h j q x zh ch sh r z c s'.split(' ');
-const FINALS='a o e i u ü ai ei ao ou an en ang eng er ia ie iao iu ian in iang ing iong ua uo uai ui uan uen uang ueng üe üan ün ong'.split(' ');
+const FINALS='a o e er ai ei ao ou an en ang eng ong i ia iao ie iu ian in iang ing iong u ua uo uai ui uan un uang ueng ü üe üan ün'.split(' ');
 const TONES=['mā','má','mǎ','mà'];
 const originalTitle=document.title;
 let mode='tw',voice=null,playQueue=[],queueIndex=0,convert=null;
@@ -1398,11 +1399,10 @@ const switchBar=document.createElement('div');switchBar.className='dual-script-s
 switchBar.innerHTML='<strong>HỆ CHỮ / 文字版本</strong><div class="dual-script-actions"><button type="button" id="dual-mode-tw" aria-pressed="true">繁體 · 注音 (Đài Loan)</button><button type="button" id="dual-mode-cn" aria-pressed="false">简体 · 拼音 (Đại lục)</button></div><span id="dual-script-message" aria-live="polite"></span>';
 const header=document.querySelector('header');if(header)header.insertAdjacentElement('afterend',switchBar);else document.body.prepend(switchBar);
 const panel=document.createElement('div');panel.className='section-content';panel.id='dual-pinyin-panel';panel.tabIndex=-1;panel.setAttribute('role','region');
-const keys=(items)=>'<div class="dual-pinyin-grid">'+items.map(function(k){return '<button class="dual-pinyin-key" type="button" data-dual-key="'+k+'" title="Nghe âm '+k+'"><b>'+k+'</b><small>🔊 Nghe phát âm</small></button>';}).join('')+'</div>';
+const keys=(items)=>'<div class="dual-pinyin-grid">'+items.map(function(k){return '<button class="dual-pinyin-key" type="button" data-dual-key="'+k+'" title="Nghe âm '+k+'"><b>'+k+'</b></button>';}).join('')+'</div>';
 panel.innerHTML='<div class="text-title">Hanyu Pinyin · 汉语拼音</div>'+
-'<div class="prose-box"><div class="prose-vietnamese" style="display:block">Phiên âm Hanyu Pinyin sử dụng mẫu tự Latin và dấu thanh để ghi âm tiếng Trung phổ thông. Bấm vào từng âm để nghe <b>MP3 ngữ âm Đại lục</b> của giáo trình, không sử dụng ghi âm chú âm Đài Loan.</div></div>'+
 '<div class="part-header">1. Thanh mẫu (21) · 声母</div>'+keys(INITIALS)+
-'<div class="part-header">2. Vận mẫu · 韵母</div>'+keys(FINALS)+
+'<div class="part-header">2. Vận mẫu (36) · 韵母</div>'+keys(FINALS)+
 '<div class="part-header">3. Bốn thanh điệu · 声调</div>'+keys(TONES)+
 '<div class="prose-box"><div class="prose-vietnamese" style="display:block">Thanh 1: mā (ngang cao) · Thanh 2: má (đi lên) · Thanh 3: mǎ (xuống rồi lên) · Thanh 4: mà (đi xuống). Thanh nhẹ không đánh dấu. Quy tắc dấu thanh: ưu tiên a, o, e; với iu và ui, dấu thanh đặt trên chữ cái thứ hai.</div></div>'+
 '<div class="part-header">4. Kiểm tra nhanh</div><div class="dual-pinyin-quiz"><p>Chữ <b>mǎ</b> là thanh mấy?</p><label><input type="radio" name="dual-quiz" value="1">Thanh 1</label><label><input type="radio" name="dual-quiz" value="2">Thanh 2</label><label><input type="radio" name="dual-quiz" value="3">Thanh 3</label><label><input type="radio" name="dual-quiz" value="4">Thanh 4</label><button type="button" class="check-btn" id="dual-pinyin-check">Kiểm tra</button><div class="dual-pinyin-result" id="dual-pinyin-result" aria-live="polite"></div></div>';
@@ -1411,7 +1411,7 @@ if(typeof SECTION_TITLES!=='undefined')SECTION_TITLES['dual-pinyin-panel']={text
 const status=document.getElementById('dual-script-message');
 function inform(s){status.textContent=s||'';}
 function stopAudio(){playQueue=[];queueIndex=0;if(voice){voice.pause();voice.currentTime=0;voice=null;}if(typeof stopClip==='function')stopClip();}
-function normalizeKey(raw){const v=String(raw||'').trim().toLowerCase().normalize('NFC').replace(/\s+/g,'');return RECORDED.has(v)?v:null;}
+function normalizeKey(raw){const v=String(raw||'').trim().toLowerCase().normalize('NFC').replace(/\s+/g,'');const resolved=AUDIO_ALIASES[v]||v;return RECORDED.has(resolved)?resolved:null;}
 function playNext(){if(queueIndex>=playQueue.length){voice=null;return;}const k=playQueue[queueIndex++];voice=new Audio(AUDIO_ROOT+encodeURIComponent(k)+'.mp3');voice.playbackRate=typeof audioSpeed==='number'?audioSpeed:1;voice.addEventListener('ended',playNext,{once:true});voice.addEventListener('error',()=>{inform('Không đọc được tệp âm '+k+'.mp3');playNext();},{once:true});voice.play().catch(()=>inform('Trình duyệt chặn phát âm thanh; hãy bấm lại.'));}
 function playKeys(keys){const valid=keys.map(normalizeKey).filter(Boolean);stopAudio();if(!valid.length){inform('Chưa có MP3 Đại lục tương ứng; không dùng âm thanh Đài Loan để thay thế.');return;}inform('');playQueue=valid;queueIndex=0;playNext();}
 panel.addEventListener('click',event=>{const key=event.target.closest('[data-dual-key]');if(key)playKeys([key.dataset.dualKey]);});
@@ -1421,6 +1421,56 @@ function setMode(next){if(next===mode)return;
   if(next==='cn'&&!convert){inform('Chưa tải được bộ chuyển chữ OpenCC. Kiểm tra kết nối Internet rồi tải lại trang.');return;}
   const visible=document.querySelector('.section-content.active');const activeId=visible?visible.id:'';
   stopAudio();mode=next;document.body.classList.toggle('dual-script-cn',mode==='cn');
+  // Chỉ áp dụng khi ở Giản thể. Khi quay về Phồn thể, hoàn trả chính xác DOM gốc.
+  if(mode==='cn'){
+    const capture=(el)=>{if(!el||el.hasAttribute('data-cn-saved'))return;el.setAttribute('data-cn-saved','1');el.setAttribute('data-cn-text',el.textContent);el.setAttribute('data-cn-display',el.style.display);};
+    const setText=(el,value)=>{if(!el)return;capture(el);el.textContent=value;};
+    const single={a:'a',o:'o',e:'ơ',er:'ơ+r',ai:'ai',ei:'ê+y',ao:'ao',ou:'o+u',an:'an',en:'ân',ang:'ang',eng:'âng',ong:'ung',i:'i',u:'u','ü':'duya',ie:'de'};
+    document.querySelectorAll('#text .snd-grid').forEach(grid=>{
+      const heading=grid.previousElementSibling;
+      if(!heading)return;
+      const cards=Array.from(grid.querySelectorAll(':scope > .vocab-card'));
+      if(heading.textContent.includes('NGUYÊN ÂM ĐƠN (16)')){
+        cards.forEach(card=>{
+          const sym=card.querySelector('.snd-py'),meaning=card.querySelector('.vocab-meaning');
+          if(!sym||!meaning)return;
+          const key=sym.textContent.trim();
+          if(key==='ê'){setText(sym,'ong');setText(meaning,'ung');}
+          else if(single[key])setText(meaning,single[key]);
+          capture(meaning);meaning.style.display='';
+        });
+      }
+      if(heading.textContent.includes('NGUYÊN ÂM KÉP (21)')){
+        const finals=['ia',null,'ie','iao','iu','ian','in','iang','ing','ua','uo','uai','ui','uan','un','uang','ueng','üe','üan','ün','iong'];
+        const readings=['da',null,'de','dao/deo','diu','den','din','dang/deng','ding','qua','quo','quai','qui','quan','quân','quang','quâng','doe','doen','duynh','dung'];
+        const headingSpan=heading.querySelector('span');
+        if(headingSpan)setText(headingSpan,'NGUYÊN ÂM KÉP (20) · 韵母');
+        cards.forEach((card,i)=>{
+          const sym=card.querySelector('.snd-py'),meaning=card.querySelector('.vocab-meaning');
+          if(!sym)return;
+          if(!card.hasAttribute('data-cn-original-hidden'))card.setAttribute('data-cn-original-hidden',card.hidden?'1':'0');
+          if(finals[i]===null){card.hidden=true;return;}
+          setText(sym,finals[i]);
+          if(meaning){setText(meaning,readings[i]);meaning.style.display='';}
+        });
+      }
+    });
+    document.querySelectorAll('#vocabulary .snd-grid .vocab-card').forEach((card,i)=>{
+      if(i>=4)return;
+      const meaning=card.querySelector('.vocab-meaning');
+      if(meaning)setText(meaning,['bo','po','mo','fo'][i]);
+    });
+  }else{
+    document.querySelectorAll('[data-cn-saved]').forEach(el=>{
+      el.textContent=el.getAttribute('data-cn-text');
+      el.style.display=el.getAttribute('data-cn-display');
+      el.removeAttribute('data-cn-saved');el.removeAttribute('data-cn-text');el.removeAttribute('data-cn-display');
+    });
+    document.querySelectorAll('[data-cn-original-hidden]').forEach(card=>{
+      card.hidden=card.getAttribute('data-cn-original-hidden')==='1';
+      card.removeAttribute('data-cn-original-hidden');
+    });
+  }
   document.getElementById('dual-mode-cn').setAttribute('aria-pressed',String(mode==='cn'));
   document.getElementById('dual-mode-tw').setAttribute('aria-pressed',String(mode==='tw'));
   originalTexts.forEach(function(entry){const n=entry[0],src=entry[1];if(!n.isConnected)return; n.nodeValue=mode==='cn'?convert(src).replace(/Chú âm/g,'Pinyin').replace(/chú âm/g,'Pinyin'):src;});
