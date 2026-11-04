@@ -735,12 +735,19 @@ img, video, canvas, svg { max-width: 100%; height: auto; }
 .zy-hint{font-size:13px;color:var(--muted);text-align:center;font-weight:400}
 </style>
 <style>
-body.dual-script-cn #grammar .grammar-tabs{display:flex;flex-wrap:wrap;gap:8px}
-body.dual-script-cn #grammar .grammar-tab{white-space:normal}
-body.dual-script-cn .cn-sandhi-example{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:13px 16px;margin:10px 0;border:1px solid #dce7d5;border-radius:10px;background:#f7fbf4}
-body.dual-script-cn .cn-sandhi-example>b{font-size:25px;color:#235d2b}
-body.dual-script-cn .cn-sandhi-example>span{font-size:17px;font-weight:600}
-body.dual-script-cn .cn-sandhi-example>small{color:#596b59;font-size:14px}
+ #grammar .grammar-tabs{display:flex;flex-wrap:wrap;gap:8px}
+ #grammar .grammar-tab{white-space:normal}
+.cn-sandhi-example{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:13px 16px;margin:10px 0;border:1px solid #dce7d5;border-radius:10px;background:#f7fbf4}
+/* Ba tab biến điệu dùng cùng hệ font với các bài ngữ pháp hiện có. */
+.cn-sandhi-panel,.cn-sandhi-panel .grammar-title,.cn-sandhi-panel .grammar-explanation,.cn-sandhi-panel .cn-sandhi-example{font-family:Arial,"Helvetica Neue",sans-serif}
+.cn-sandhi-panel .grammar-structure{font-family:"Microsoft YaHei","SimSun",sans-serif}
+.cn-sandhi-example>b{font-family:"Microsoft YaHei","SimSun",sans-serif;font-size:20px;color:#000;font-weight:700}
+.cn-sandhi-example>span{font-family:inherit;font-size:16px;font-weight:400}
+.cn-sandhi-example>small{font-family:inherit;color:var(--muted);font-size:14px}
+</style>
+<style id="cn-phonetic-groups-style">
+body.dual-script-tw .tw-phonetic-group-title{grid-column:1/-1;order:0;font-weight:750;font-size:1rem;color:var(--primary,#247d50);padding:11px 12px 6px;border-bottom:1px solid rgba(90,150,100,.25);margin-top:5px;}
+body.dual-script-cn .cn-phonetic-group-title{grid-column:1/-1;order:0;font-weight:750;font-size:1rem;color:var(--primary,#247d50);padding:11px 12px 6px;border-bottom:1px solid rgba(90,150,100,.25);margin-top:5px;}
 </style>
 </head>
 <body><header class="header" role="banner">
@@ -1434,12 +1441,8 @@ function syncCnToneSandhiTabs(){
  const container=document.querySelector('#grammar .grammar-container');
  if(!tabs||!container)return;
  const ids=['cn-sandhi-third','cn-sandhi-bu','cn-sandhi-yi'];
- if(mode!=='cn'){
-   ids.forEach(id=>{tabs.querySelector('[data-grammar="'+id+'"]')?.remove();container.querySelector('.grammar-panel[data-grammar="'+id+'"]')?.remove();});
-   if(!tabs.querySelector('.grammar-tab.active'))showGrammar('g1');
-   return;
- }
- if(tabs.querySelector('[data-grammar="cn-sandhi-third"]'))return;
+ const selected=tabs.querySelector('.grammar-tab.active')?.dataset.grammar;
+ ids.forEach(id=>{tabs.querySelector('[data-grammar="'+id+'"]')?.remove();container.querySelector('.grammar-panel[data-grammar="'+id+'"]')?.remove();});
  const lessons=[
  ['cn-sandhi-third','Biến điệu thanh 3',`<div class="grammar-header"><div class="grammar-number">3</div><div class="grammar-title">Biến điệu thanh 3 · 第三声变调</div></div>
  <div class="grammar-structure">Khi hai âm tiết thanh 3 đứng liền nhau, thanh 3 thứ nhất thường đổi thành thanh 2 khi đọc; cách viết Pinyin vẫn giữ dấu thanh 3.</div>
@@ -1458,16 +1461,73 @@ function syncCnToneSandhiTabs(){
  <div class="cn-sandhi-example"><b>一年</b><span>yī nián → yì nián</span><small>Một năm</small></div>
  <div class="grammar-explanation">Khi đếm số hoặc đọc số thứ tự, 一 thường giữ thanh 1: 一、二、三 (yī, èr, sān); 第一 (dì yī).</div>`]
  ];
+ if(mode==='tw'){
+   const traditional={'老师':'老師','不来':'不來','一个':'一個'};
+   lessons.forEach(lesson=>{for(const [simp,trad] of Object.entries(traditional))lesson[2]=lesson[2].replaceAll(simp,trad);});
+ }
  lessons.forEach(([id,label,html])=>{
    const btn=document.createElement('button');btn.type='button';btn.className='grammar-tab';btn.dataset.action='show-grammar';btn.dataset.grammar=id;btn.textContent=label;tabs.appendChild(btn);
    const panel=document.createElement('div');panel.className='grammar-panel cn-sandhi-panel';panel.dataset.grammar=id;panel.innerHTML='<div class="grammar-item">'+html+'</div>';container.appendChild(panel);
  });
+ if(ids.includes(selected))showGrammar(selected);
 }
 
+// Phân nhóm riêng cho hệ Phồn thể: giữ nguyên ký hiệu, số thứ tự, âm thanh và nội dung thẻ.
+function clearTwPhoneticGroups(){
+  document.body.classList.remove('dual-script-tw');
+  document.querySelectorAll('.tw-phonetic-group-title').forEach(el=>el.remove());
+  document.querySelectorAll('[data-tw-group-order]').forEach(card=>{
+    card.style.order=card.getAttribute('data-tw-group-order');
+    card.removeAttribute('data-tw-group-order');
+  });
+}
+function applyTwPhoneticGroups(){
+  clearTwPhoneticGroups();
+  if(mode!=='tw')return;
+  document.body.classList.add('dual-script-tw');
+  const arrange=(grid,groups)=>{
+    if(!grid)return;
+    const cards=Array.from(grid.querySelectorAll(':scope > .vocab-card'));
+    groups.forEach(([label,indices],groupIndex)=>{
+      const heading=document.createElement('div');
+      heading.className='tw-phonetic-group-title';
+      heading.textContent=label;
+      heading.style.order=String(groupIndex*100);
+      grid.appendChild(heading);
+      indices.forEach((idx,offset)=>{
+        const card=cards[idx];if(!card)return;
+        card.setAttribute('data-tw-group-order',card.style.order);
+        card.style.order=String(groupIndex*100+offset+1);
+      });
+    });
+  };
+  arrange(document.querySelector('#vocabulary .snd-grid'),[
+    ['雙唇音、唇齒音 · ㄅ ㄆ ㄇ ㄈ',[0,1,2,3]],
+    ['舌尖音 · ㄉ ㄊ ㄋ ㄌ',[4,5,6,7]],
+    ['舌根音 · ㄍ ㄎ ㄏ',[8,9,10]],
+    ['舌面音 · ㄐ ㄑ ㄒ',[11,12,13]],
+    ['捲舌音 · ㄓ ㄔ ㄕ ㄖ',[14,15,16,17]],
+    ['舌尖前音 · ㄗ ㄘ ㄙ',[18,19,20]]
+  ]);
+  const grids=Array.from(document.querySelectorAll('#text .snd-grid'));
+  arrange(grids[0],[
+    ['單韻母 · ㄚ ㄛ ㄜ ㄝ',[0,1,2,3]],
+    ['複韻母 · ㄞ ㄟ ㄠ ㄡ',[4,5,6,7]],
+    ['鼻韻母 · ㄢ ㄣ ㄤ ㄥ',[8,9,10,11]],
+    ['特殊韻母 · ㄦ',[12]],
+    ['介音 · ㄧ ㄨ ㄩ',[13,14,15]]
+  ]);
+  arrange(grids[1],[
+    ['ㄧ 系列 · ya yo ye yao you yan yin yang ying yong',[0,1,2,3,4,5,6,7,8,20]],
+    ['ㄨ 系列 · wa wo wai wei wan wen wang weng',[9,10,11,12,13,14,15,16]],
+    ['ㄩ 系列 · yue yuan yun',[17,18,19]]
+  ]);
+}
+syncCnToneSandhiTabs();
 function setMode(next){if(next===mode)return;
   if(next==='cn'&&!convert){inform('Chưa tải được bộ chuyển chữ OpenCC. Kiểm tra kết nối Internet rồi tải lại trang.');return;}
   const visible=document.querySelector('.section-content.active');const activeId=visible?visible.id:'';
-  stopAudio();mode=next;document.body.classList.toggle('dual-script-cn',mode==='cn');
+  stopAudio();clearTwPhoneticGroups();mode=next;document.body.classList.toggle('dual-script-cn',mode==='cn');
   syncCnToneSandhiTabs();
   // Chỉ áp dụng khi ở Giản thể. Khi quay về Phồn thể, hoàn trả chính xác DOM gốc.
   if(mode==='cn'){
@@ -1508,7 +1568,54 @@ function setMode(next){if(next===mode)return;
       const meaning=card.querySelector('.vocab-meaning');
       if(meaning)setText(meaning,['bo','po','mo','fo'][i]);
     });
+    // Nhóm theo vị trí phát âm / cấu trúc vận mẫu, chỉ tồn tại trong chế độ Giản thể.
+    const arrangeCn=(grid,groups)=>{
+      if(!grid)return;
+      const cards=Array.from(grid.querySelectorAll(':scope > .vocab-card'));
+      let serial=0;
+      groups.forEach((group,groupIndex)=>{
+        const heading=document.createElement('div');
+        heading.className='cn-phonetic-group-title';
+        heading.textContent=group[0];
+        heading.style.order=String(groupIndex*100);
+        grid.appendChild(heading);
+        group[1].forEach((idx,offset)=>{
+          const card=cards[idx];if(!card)return;
+          if(!card.hasAttribute('data-cn-card-order'))card.setAttribute('data-cn-card-order',card.style.order);
+          card.style.order=String(groupIndex*100+offset+1);
+          if(card.hidden)return;
+          const number=card.querySelector('.vocab-number');
+          if(number)setText(number,String(++serial));
+        });
+      });
+    };
+    const initialGrid=document.querySelector('#vocabulary .snd-grid');
+    arrangeCn(initialGrid,[
+      ['Âm môi · b p m f',[0,1,2,3]],
+      ['Âm đầu lưỡi · d t n l',[4,5,6,7]],
+      ['Âm gốc lưỡi · g k h',[8,9,10]],
+      ['Âm mặt lưỡi · j q x',[11,12,13]],
+      ['Âm uốn lưỡi · zh ch sh r',[14,15,16,17]],
+      ['Âm đầu lưỡi trước · z c s',[18,19,20]]
+    ]);
+    const vowelGrids=Array.from(document.querySelectorAll('#text .snd-grid'));
+    arrangeCn(vowelGrids[0],[
+      ['Vận mẫu đơn · a o e i u ü',[0,1,2,13,14,15]],
+      ['Vận mẫu đôi · ai ei ao ou',[4,5,6,7]],
+      ['Vận mẫu mũi · an en ang eng ong',[8,9,10,11,3]],
+      ['Vận mẫu đặc biệt · er',[12]]
+    ]);
+    arrangeCn(vowelGrids[1],[
+      ['Nhóm i · ia iao ie iu ian in iang ing iong',[0,3,2,4,5,6,7,8,20]],
+      ['Nhóm u · ua uo uai ui uan un uang ueng',[9,10,11,12,13,14,15,16]],
+      ['Nhóm ü · üe üan ün',[17,18,19]]
+    ]);
   }else{
+    document.querySelectorAll('.cn-phonetic-group-title').forEach(el=>el.remove());
+    document.querySelectorAll('[data-cn-card-order]').forEach(card=>{
+      card.style.order=card.getAttribute('data-cn-card-order');
+      card.removeAttribute('data-cn-card-order');
+    });
     document.querySelectorAll('[data-cn-saved]').forEach(el=>{
       el.textContent=el.getAttribute('data-cn-text');
       el.style.display=el.getAttribute('data-cn-display');
@@ -1527,10 +1634,11 @@ function setMode(next){if(next===mode)return;
   if(mode==='cn'&&activeId==='zhuyin')showSection('dual-pinyin-panel');
   else if(mode==='tw'&&activeId==='dual-pinyin-panel')showSection('zhuyin');
   else if(activeId){ const title=document.getElementById('section-title-text'); if(title&&mode==='cn')title.textContent=convert(title.textContent); if(title&&mode==='tw'&&typeof SECTION_TITLES!=='undefined'&&SECTION_TITLES[activeId])title.textContent=SECTION_TITLES[activeId].text; }
+  if(mode==='tw')applyTwPhoneticGroups();
   inform('');try{localStorage.setItem('hanngu-script-mode',mode);}catch(e){}
 }
 document.getElementById('dual-mode-toggle').addEventListener('click',()=>setMode(mode==='cn'?'tw':'cn'));
-let stored='tw';try{stored=localStorage.getItem('hanngu-script-mode')||'tw';}catch(e){}if(stored==='cn')setMode('cn');
+let stored='tw';try{stored=localStorage.getItem('hanngu-script-mode')||'tw';}catch(e){}if(stored==='cn')setMode('cn');else applyTwPhoneticGroups();
 document.getElementById('dual-pinyin-check').addEventListener('click',()=>{const pick=panel.querySelector('input[name="dual-quiz"]:checked');document.getElementById('dual-pinyin-result').textContent=!pick?'Chọn một đáp án.':pick.value==='3'?'Chính xác! mǎ là thanh 3.':'Chưa đúng. mǎ là thanh 3.';});
 })();
 </script>
