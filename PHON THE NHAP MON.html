@@ -734,6 +734,14 @@ img, video, canvas, svg { max-width: 100%; height: auto; }
 #zy-pad{width:min(360px,100%);height:auto;aspect-ratio:1;background:#fff;border:2px solid var(--red);border-radius:8px;touch-action:none;cursor:crosshair}
 .zy-hint{font-size:13px;color:var(--muted);text-align:center;font-weight:400}
 </style>
+<style>
+body.dual-script-cn #grammar .grammar-tabs{display:flex;flex-wrap:wrap;gap:8px}
+body.dual-script-cn #grammar .grammar-tab{white-space:normal}
+body.dual-script-cn .cn-sandhi-example{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:13px 16px;margin:10px 0;border:1px solid #dce7d5;border-radius:10px;background:#f7fbf4}
+body.dual-script-cn .cn-sandhi-example>b{font-size:25px;color:#235d2b}
+body.dual-script-cn .cn-sandhi-example>span{font-size:17px;font-weight:600}
+body.dual-script-cn .cn-sandhi-example>small{color:#596b59;font-size:14px}
+</style>
 </head>
 <body><header class="header" role="banner">
 <div class="logo">
@@ -1420,10 +1428,47 @@ function playKeys(keys){const valid=keys.map(normalizeKey).filter(Boolean);stopA
 panel.addEventListener('click',event=>{const key=event.target.closest('[data-dual-key]');if(key)playKeys([key.dataset.dualKey]);});
 // Chặn âm thanh nhúng gốc khi đang ở chế độ giản thể, dùng MP3 theo âm đã được kiểm tra.
 document.addEventListener('click',function(e){if(mode!=='cn')return;const button=e.target.closest('[data-action="clip"]');if(!button)return;e.preventDefault();e.stopImmediatePropagation();const card=button.closest('.vocab-card');if(card){const py=card.querySelector('.snd-py');playKeys([py?py.textContent:'']);return;}const bar=button.closest('.audio-bar');if(bar){let node=bar.nextElementSibling;const clips=[];let iterations=0;while(node&&iterations++<4){node.querySelectorAll('.snd-grid .snd-py, .snd-grid>.vocab-card .snd-py').forEach(x=>clips.push(x.textContent));if(node.classList.contains('snd-grid'))node.querySelectorAll('.snd-py').forEach(x=>clips.push(x.textContent));if(clips.length)break;node=node.nextElementSibling;}playKeys([...new Set(clips)]);return;}inform('Đoạn này chưa có MP3 đối chiếu trong thư mục ngữ âm Đại lục.');},true);
+// Các tab biến điệu chỉ được tạo ở chế độ Giản thể; Phồn thể giữ DOM nguyên bản.
+function syncCnToneSandhiTabs(){
+ const tabs=document.querySelector('#grammar .grammar-tabs');
+ const container=document.querySelector('#grammar .grammar-container');
+ if(!tabs||!container)return;
+ const ids=['cn-sandhi-third','cn-sandhi-bu','cn-sandhi-yi'];
+ if(mode!=='cn'){
+   ids.forEach(id=>{tabs.querySelector('[data-grammar="'+id+'"]')?.remove();container.querySelector('.grammar-panel[data-grammar="'+id+'"]')?.remove();});
+   if(!tabs.querySelector('.grammar-tab.active'))showGrammar('g1');
+   return;
+ }
+ if(tabs.querySelector('[data-grammar="cn-sandhi-third"]'))return;
+ const lessons=[
+ ['cn-sandhi-third','Biến điệu thanh 3',`<div class="grammar-header"><div class="grammar-number">3</div><div class="grammar-title">Biến điệu thanh 3 · 第三声变调</div></div>
+ <div class="grammar-structure">Khi hai âm tiết thanh 3 đứng liền nhau, thanh 3 thứ nhất thường đổi thành thanh 2 khi đọc; cách viết Pinyin vẫn giữ dấu thanh 3.</div>
+ <div class="cn-sandhi-example"><b>你好</b><span>nǐ hǎo → ní hǎo</span><small>Xin chào</small></div>
+ <div class="grammar-explanation">Khi thanh 3 đứng trước thanh 1, 2 hoặc 4, thường đọc dạng nửa thanh 3 (đi xuống, không lên lại). Với chuỗi từ ba thanh 3 trở lên, cách biến điệu phụ thuộc vào cách chia cụm từ.</div>
+ <div class="cn-sandhi-example"><b>老师</b><span>lǎo shī → lǎo (nửa thanh 3) + shī</span><small>Giáo viên</small></div>`],
+ ['cn-sandhi-bu','Biến điệu 不 bù',`<div class="grammar-header"><div class="grammar-number">不</div><div class="grammar-title">Biến điệu 不 · bù</div></div>
+ <div class="grammar-structure">不 (bù) thường đọc thành <b>bú</b> khi đứng ngay trước một âm tiết thanh 4. Trước thanh 1, 2 hoặc 3, vẫn đọc <b>bù</b>.</div>
+ <div class="cn-sandhi-example"><b>不是</b><span>bù shì → bú shì</span><small>Không phải</small></div>
+ <div class="cn-sandhi-example"><b>不来</b><span>bù lái</span><small>Không đến</small></div>
+ <div class="grammar-explanation">Trong mẫu động từ lặp lại dạng A 不 A, 不 thường đọc nhẹ: 看不看 (kàn bu kàn).</div>`],
+ ['cn-sandhi-yi','Biến điệu 一 yī',`<div class="grammar-header"><div class="grammar-number">一</div><div class="grammar-title">Biến điệu 一 · yī</div></div>
+ <div class="grammar-structure">一 (yī) thường đổi thành <b>yí</b> trước thanh 4; đổi thành <b>yì</b> trước thanh 1, 2 hoặc 3 khi dùng trong lời nói liên tục.</div>
+ <div class="cn-sandhi-example"><b>一个</b><span>yī gè → yí gè</span><small>Một cái</small></div>
+ <div class="cn-sandhi-example"><b>一天</b><span>yī tiān → yì tiān</span><small>Một ngày</small></div>
+ <div class="cn-sandhi-example"><b>一年</b><span>yī nián → yì nián</span><small>Một năm</small></div>
+ <div class="grammar-explanation">Khi đếm số hoặc đọc số thứ tự, 一 thường giữ thanh 1: 一、二、三 (yī, èr, sān); 第一 (dì yī).</div>`]
+ ];
+ lessons.forEach(([id,label,html])=>{
+   const btn=document.createElement('button');btn.type='button';btn.className='grammar-tab';btn.dataset.action='show-grammar';btn.dataset.grammar=id;btn.textContent=label;tabs.appendChild(btn);
+   const panel=document.createElement('div');panel.className='grammar-panel cn-sandhi-panel';panel.dataset.grammar=id;panel.innerHTML='<div class="grammar-item">'+html+'</div>';container.appendChild(panel);
+ });
+}
+
 function setMode(next){if(next===mode)return;
   if(next==='cn'&&!convert){inform('Chưa tải được bộ chuyển chữ OpenCC. Kiểm tra kết nối Internet rồi tải lại trang.');return;}
   const visible=document.querySelector('.section-content.active');const activeId=visible?visible.id:'';
   stopAudio();mode=next;document.body.classList.toggle('dual-script-cn',mode==='cn');
+  syncCnToneSandhiTabs();
   // Chỉ áp dụng khi ở Giản thể. Khi quay về Phồn thể, hoàn trả chính xác DOM gốc.
   if(mode==='cn'){
     const capture=(el)=>{if(!el||el.hasAttribute('data-cn-saved'))return;el.setAttribute('data-cn-saved','1');el.setAttribute('data-cn-text',el.textContent);el.setAttribute('data-cn-display',el.style.display);};
