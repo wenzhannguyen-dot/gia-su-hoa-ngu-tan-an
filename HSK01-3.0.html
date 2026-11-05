@@ -631,61 +631,6 @@
         </div>
     </div>
 
-    <script id="hsk1-index-lock">
-    (function () {
-        'use strict';
-        const expectedHash = 'bcf6c75063ac7cf814b01d91caca8a09e6e8d208f8ea5dd4af455714fdc6fdbf';
-        const unlockKey = 'hsk1_lessons_06_15_unlocked';
-        const protectedLesson = /^HSK3\.0-01\.(?:0[6-9]|1[0-5])\.html(?:[?#].*)?$/i;
-
-        async function hsk1Hash(value) {
-            if (!window.crypto || !window.crypto.subtle) throw new Error('Trình duyệt không hỗ trợ kiểm tra bảo mật.');
-            const data = new TextEncoder().encode(value);
-            const digest = await window.crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(digest), function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-        }
-        function closeOverlay() {
-            const overlay = document.getElementById('hsk1-lock-overlay');
-            if (overlay) overlay.remove();
-        }
-        function askPassword(destination) {
-            closeOverlay();
-            const overlay = document.createElement('div');
-            overlay.id = 'hsk1-lock-overlay';
-            overlay.className = 'hsk1-lock-overlay';
-            overlay.innerHTML = '<form class="hsk1-lock-box"><h2>🔒 Bài học có mật khẩu</h2><p>Nhập mật khẩu để mở các bài từ 06 đến 15.</p><input type="password" autocomplete="current-password" aria-label="Mật khẩu" required><p class="hsk1-lock-error" role="alert"></p><div class="hsk1-lock-actions"><button type="button" class="hsk1-lock-cancel">Hủy</button><button type="submit" class="hsk1-lock-submit">Mở bài</button></div></form>';
-            document.body.appendChild(overlay);
-            const form = overlay.querySelector('form');
-            const input = overlay.querySelector('input');
-            const error = overlay.querySelector('.hsk1-lock-error');
-            overlay.querySelector('.hsk1-lock-cancel').addEventListener('click', closeOverlay);
-            form.addEventListener('submit', async function (event) {
-                event.preventDefault();
-                error.textContent = '';
-                try {
-                    if (await hsk1Hash(input.value) === expectedHash) {
-                        sessionStorage.setItem(unlockKey, '1');
-                        window.name = unlockKey;
-                        window.location.href = destination;
-                    } else {
-                        error.textContent = 'Mật khẩu không đúng. Vui lòng thử lại.';
-                        input.select();
-                    }
-                } catch (err) { error.textContent = err.message; }
-            });
-            input.focus();
-        }
-        document.querySelectorAll('a[href]').forEach(function (link) {
-            const href = link.getAttribute('href') || '';
-            if (!protectedLesson.test(href)) return;
-            link.classList.add('hsk1-protected-link');
-            link.addEventListener('click', function (event) {
-                if (sessionStorage.getItem(unlockKey) === '1') return;
-                event.preventDefault();
-                askPassword(href);
-            });
-        });
-    })();
-    </script>
-</body>
+    
+<script id="lesson-per-page-index">(function(){async function valid(v){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));return Array.from(new Uint8Array(d),x=>x.toString(16).padStart(2,'0')).join('')==='bcf6c75063ac7cf814b01d91caca8a09e6e8d208f8ea5dd4af455714fdc6fdbf';}function num(url){const m=String(url).match(/HSK3\.0-01\.(\d{2})\.html/i);return m?Number(m[1]):0}function unlock(url){const n=num(url);if(n<6||n>15){location.href=url;return}const key='hsk-lesson-01-'+String(n).padStart(2,'0');if(sessionStorage.getItem(key)==='1'){location.href=url;return}const v=prompt('🔒 Nhập mật khẩu để mở bài '+n+':');if(v===null)return;valid(v).then(ok=>{if(ok){sessionStorage.setItem(key,'1');location.href=url}else alert('Mật khẩu không đúng')}).catch(()=>alert('Không kiểm tra được mật khẩu'))}window.requirePassword=unlock;window.openPasswordDialog=unlock;document.addEventListener('click',function(e){const a=e.target.closest('a[href]');if(!a)return;const href=a.getAttribute('href');if(num(href)>=6){e.preventDefault();e.stopImmediatePropagation();unlock(href)}},true);})();</script></body>
 </html>
