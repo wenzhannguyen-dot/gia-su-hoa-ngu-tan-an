@@ -21,15 +21,21 @@ const h5StudyStyles=` .study-eye{position:fixed;right:18px;bottom:18px;z-index:2
 let studyVisible=false,studyPinyinVisible=false,studyVietVisible=false;
 const studySound=new Audio('H5GS00TT.mp3');studySound.preload='metadata';
 let studySegment=null,studyPlayButton=null,studySoundStatus=null;
-function studyStop(){studySound.pause();if(studyPlayButton&&studyPlayButton.isConnected)studyPlayButton.textContent='▶ 播放'}
+let studyAudioRequest=0;
+function studyStop(){studyAudioRequest++;studySound.pause();}
 async function studyPlay(restart){
  if(!studySegment)return;
+ const request=++studyAudioRequest;
  try{sound.pause()}catch(_){ }
  const g=studySegment;
  const go=async()=>{
-  try{if(restart||studySound.currentTime<g.start-.08||studySound.currentTime>=g.end-.08)studySound.currentTime=g.start;
-   await studySound.play();if(studySoundStatus)studySoundStatus.textContent='Đang nghe · H5GS00TT.mp3';if(studyPlayButton)studyPlayButton.textContent='⏸ 暂停';
-  }catch(e){if(studySoundStatus)studySoundStatus.textContent='Không đọc được H5GS00TT.mp3 cùng thư mục.'}
+  if(request!==studyAudioRequest)return;
+  try{
+   if(restart||studySound.currentTime<g.start-.08||studySound.currentTime>=g.end-.08)studySound.currentTime=g.start;
+   if(request!==studyAudioRequest)return;
+   await studySound.play();
+   if(request!==studyAudioRequest)studySound.pause();
+  }catch(e){console.warn('Không phát được âm thanh H5GS00TT.mp3',e)}
  };
  if(studySound.readyState<1){studySound.addEventListener('loadedmetadata',go,{once:true});studySound.load()}else go();
 }
@@ -98,13 +104,8 @@ function installH5Study(doc,q){
  setStudyVisibility(panel);
  eye.onclick=()=>{studyVisible=panel.hidden;panel.hidden=!studyVisible;eye.style.color=studyVisible?'#d06b1f':'#4f8d18';if(!studyVisible)studyStop();else{try{sound.pause()}catch(_){}}};
  eye.style.color=studyVisible?'#d06b1f':'#4f8d18';doc.body.append(eye,panel);
- if(!reading){
-  const dock=doc.createElement('div');dock.className='study-audio-dock';
-  const play=doc.createElement('button');play.type='button';play.textContent='▶ 播放';play.onclick=()=>{studySegment=group;studyPlayButton=play;if(studySound.paused)studyPlay(false);else studyStop()};
-  const restart=doc.createElement('button');restart.type='button';restart.textContent='↺ 重播';restart.onclick=()=>{studySegment=group;studyPlayButton=play;studyPlay(true)};
-  const status=doc.createElement('span');status.className='study-status';dock.append(play,restart,status);doc.body.append(dock);
-  studySegment=group;studyPlayButton=play;studySoundStatus=status;
- }
+ if(!reading){studySegment=group;}
+
 }
 
 const frame=document.getElementById('examFrame');
@@ -147,13 +148,13 @@ function wire(d,name){
  if(name==='result'){d.querySelectorAll('#result tr').forEach(tr=>{const cells=tr.querySelectorAll('td');if(cells.length>2)cells[2].textContent='—'});bind(d,'#btnok',()=>show('over'));bind(d,'#btnShowInfo',()=>{show('05')});return}
  if(name==='over'){sound.pause();return}
  if(name==='08'){
-  bind(d,'#btnLastQuestion',()=>{if(questionIndex>0){questionIndex--;loadQuestion(d)}});
-  bind(d,'#btnNextQuestion',()=>{if(questionIndex<ORIGINAL.questions.length-1){questionIndex++;loadQuestion(d)}});
+  bind(d,'#btnLastQuestion',()=>{if(questionIndex>0){questionIndex--;loadQuestion(d,true)}});
+  bind(d,'#btnNextQuestion',()=>{if(questionIndex<ORIGINAL.questions.length-1){questionIndex++;loadQuestion(d,true)}});
   bind(d,'#btnok',()=>{submitted=true;sound.pause();try{localStorage.setItem('hsk5-original-submission',JSON.stringify(answers))}catch{}show('result')});
   d.querySelectorAll('#navQuestion .nav').forEach(el=>{
    const n=parseInt(el.id,10),index=ORIGINAL.questions.findIndex(q=>q.ids.includes(n));
    if(index<0){el.style.pointerEvents='none';return}
-   bind(d,'[id="'+el.id+'"]',()=>{questionIndex=index;loadQuestion(d)});
+   bind(d,'[id="'+el.id+'"]',()=>{questionIndex=index;loadQuestion(d,true)});
   });
   bind(d,'[data-click*="showPart"]',(e,el)=>{const m=el.getAttribute('data-click').match(/showPart\(["']?(\d+)/);const part=m&&d.getElementById('part'+m[1]);if(part)part.style.display=part.style.display==='none'?'block':'none'});
   bind(d,'.marktag',(e,el)=>{e.stopPropagation();const n=parseInt(el.id.replace(/^_img/,''),10);marks.has(n)?marks.delete(n):marks.add(n);el.classList.toggle('unmarked',!marks.has(n));el.classList.toggle('marked',marks.has(n))});
@@ -162,7 +163,7 @@ function wire(d,name){
   loadQuestion(d);
  }
 }
-function loadQuestion(d){
+function loadQuestion(d,playSelected=false){
  studyStop();studySegment=null;studyPlayButton=null;studySoundStatus=null;
  const q=ORIGINAL.questions[questionIndex],inner=d.querySelector('#frmContent');
  inner.onload=()=>{
@@ -176,6 +177,7 @@ function loadQuestion(d){
   });
   doc.querySelectorAll('tr').forEach(tr=>{tr.onclick=e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;const radio=tr.querySelector('input[type=radio]');if(radio){radio.checked=true;radio.onchange()}}});
   installH5Study(doc,q);
+  if(playSelected&&q.ids[0]<=35)studyPlay(true);
  };
  inner.srcdoc=q.html;
  d.querySelector('#btnLastQuestion').style.display=questionIndex?'inline-block':'none';
