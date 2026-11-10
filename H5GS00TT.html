@@ -149,21 +149,7 @@ function installH5Study(doc,q){
  eye.onclick=()=>{studyVisible=panel.hidden;panel.hidden=!studyVisible;eye.style.color=studyVisible?'#d06b1f':'#4f8d18';if(!studyVisible)studyStop();else{try{sound.pause()}catch(_){}}};
  eye.style.color=studyVisible?'#d06b1f':'#4f8d18';doc.body.append(eye,panel);
 
- if(!reading){
-  studySegment=group;
-  const dock=doc.createElement('div');dock.className='study-audio-dock';
-  const listen=doc.createElement('button');listen.type='button';listen.textContent='▶ Nghe';
-  listen.setAttribute('aria-label','Phát hoặc tạm dừng câu nghe');
-  listen.onclick=()=>{
-   studySegment=group;studyPlayButton=listen;
-   if(studySound.paused)studyPlay(false);else studyStop();
-  };
-  const restart=doc.createElement('button');restart.type='button';restart.textContent='↺ Nghe lại';
-  restart.onclick=()=>{studySegment=group;studyPlayButton=listen;studyPlay(true)};
-  const info=doc.createElement('span');info.className='study-status';info.textContent='Bấm Nghe để phát MP3';
-  dock.append(listen,restart,info);doc.body.appendChild(dock);
-  studyPlayButton=listen;studySoundStatus=info;
- }
+
 }
 
 const frame=document.getElementById('examFrame');
@@ -438,8 +424,8 @@ function wire(d,name){
  if(name==='result'){showResult(d);bind(d,'#btnok',()=>show('over'));bind(d,'#btnShowInfo',()=>{show('05')});return}
  if(name==='over'){sound.pause();return}
  if(name==='08'){
-  bind(d,'#btnLastQuestion',()=>{if(questionIndex>0){questionIndex--;loadQuestion(d,true)}});
-  bind(d,'#btnNextQuestion',()=>{if(questionIndex<ORIGINAL.questions.length-1){questionIndex++;loadQuestion(d,true)}});
+  bind(d,'#btnLastQuestion',()=>{if(questionIndex>0){questionIndex--;loadQuestion(d)}});
+  bind(d,'#btnNextQuestion',()=>{if(questionIndex<ORIGINAL.questions.length-1){questionIndex++;loadQuestion(d)}});
   bind(d,'#btnok',()=>{submitted=true;sound.pause();try{localStorage.setItem('hsk5-original-submission',JSON.stringify(answers))}catch{}show('result')});
   d.querySelectorAll('#navQuestion .nav').forEach(el=>{
    const n=parseInt(el.id,10),index=ORIGINAL.questions.findIndex(q=>q.ids.includes(n));
@@ -467,7 +453,11 @@ function loadQuestion(d,playSelected=false){
   });
   doc.querySelectorAll('tr').forEach(tr=>{tr.onclick=e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;const radio=tr.querySelector('input[type=radio]');if(radio){radio.checked=true;radio.onchange()}}});
   installH5Study(doc,q);
-  // Không tự phát khi mở hoặc chuyển câu. Học viên bấm Nghe khi muốn phát.
+  // Chỉ phát đoạn nghe tương ứng khi học viên bấm số câu trong bảng điều hướng.
+  if(playSelected&&q.ids[0]<=35){
+   const segment=h5GroupByNumber.get(q.ids[0]);
+   if(segment){studySegment=segment;studyPlay(true)}
+  }
  };
  inner.srcdoc=q.html;
  d.querySelector('#btnLastQuestion').style.display=questionIndex?'inline-block':'none';
