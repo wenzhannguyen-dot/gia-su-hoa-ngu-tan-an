@@ -56,6 +56,18 @@ async function studyPlay(){
   }
   if(request!==studyAudioRequest||segment!==studySegment)return;
   studySound.currentTime=segment.start;
+   // Trên GitHub Pages, đợi trình duyệt hoàn tất seek (HTTP range) rồi mới phát.
+   if(studySound.seeking){
+    await new Promise((resolve,reject)=>{
+      const timeout=setTimeout(()=>{cleanup();resolve()},10000);
+      const cleanup=()=>{clearTimeout(timeout);studySound.removeEventListener('seeked',done);studySound.removeEventListener('error',fail)};
+      const done=()=>{cleanup();resolve()};
+      const fail=()=>{cleanup();reject(new Error('Không tải được đoạn âm thanh'))};
+      studySound.addEventListener('seeked',done,{once:true});
+      studySound.addEventListener('error',fail,{once:true});
+    });
+   }
+   if(request!==studyAudioRequest||segment!==studySegment)return;
   await studySound.play();
  }catch(error){
   console.warn('Không phát được MP3 cùng thư mục:',error);
@@ -475,13 +487,13 @@ function clock(){
  const d=frame.contentDocument,q=ORIGINAL.questions[questionIndex],n=q.ids[0],part=n<=35?'listening':n<=70?'reading':'writing';
  const el=d.getElementById('divClock');if(!el)return;
  const seconds=part==='listening'?
-  (listeningDeadline?Math.max(0,Math.ceil((listeningDeadline-Date.now())/1000)):1706):
+  (Math.max(0,Math.ceil((Number.isFinite(studySound.duration)?studySound.duration:1706)-(Number.isFinite(studySound.currentTime)?studySound.currentTime:0)))):
   (deadlines[part]?Math.max(0,Math.ceil((deadlines[part]-Date.now())/1000)):(part==='reading'?35:40)*60);
- const label=part==='listening'?'听力剩余时间'+(!listeningDeadline?'（未播放）':''):part==='reading'?'阅读题剩余时间':'写作题剩余时间';
+ const label=part==='listening'?'听力剩余时间'+(studySound.paused?'（暂停）':''):part==='reading'?'阅读题剩余时间':'写作题剩余时间';
  const counter=d.body.dataset.answeredCount||'0';
  el.innerHTML=label+'  <span style="color:red">'+String(Math.floor(seconds/60)).padStart(2,'0')+'</span>:<span style="color:red">'+String(seconds%60).padStart(2,'0')+'</span> <span style="color:#537c39;font-size:13px">已答 '+counter+'/72</span>';
  if(seconds!==0)return;
- if(part==='listening'&&listeningDeadline){studyStop();questionIndex=ORIGINAL.questions.findIndex(q=>q.ids[0]>=36);loadQuestion(d);return}
+ if(part==='listening'){return} // Không tự chuyển khi MP3 đang tải hoặc đang phát câu cuối
  if(part==='reading'){questionIndex=ORIGINAL.questions.findIndex(q=>q.ids[0]>=71);loadQuestion(d)}
  if(part==='writing')d.getElementById('btnok')?.click();
 }
