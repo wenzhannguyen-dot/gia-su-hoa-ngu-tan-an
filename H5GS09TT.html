@@ -24,21 +24,26 @@ const studySound=new Audio();
 studySound.preload='metadata';
 let studySegment=null,studyPlayButton=null,studySoundStatus=null;
 let studyAudioRequest=0;
-let recordingPromise=null, playbackUrl=null;
+let studyFrame=0;
 function studyStop(){
  studyAudioRequest++;
+ cancelAnimationFrame(studyFrame);
+ studyFrame=0;
  studySound.pause();
- if(playbackUrl){
-  studySound.removeAttribute('src');
-  studySound.load();
-  URL.revokeObjectURL(playbackUrl);
-  playbackUrl=null;
- }
 }
-studySound.addEventListener('timeupdate',()=>{
- if(location.protocol==='file:' && studySegment && !studySound.seeking && studySound.currentTime>=studySegment.end){
+function stopAtSegmentEnd(){
+ if(studySegment && !studySound.seeking && studySound.currentTime>=studySegment.end){
   studyStop();
  }
+}
+studySound.addEventListener('timeupdate',stopAtSegmentEnd);
+studySound.addEventListener('playing',()=>{
+ cancelAnimationFrame(studyFrame);
+ const check=()=>{
+  stopAtSegmentEnd();
+  if(!studySound.paused && !studySound.ended)studyFrame=requestAnimationFrame(check);
+ };
+ studyFrame=requestAnimationFrame(check);
 });
 async function studyPlay(){
  const segment=studySegment;
@@ -46,23 +51,8 @@ async function studyPlay(){
  const request=++studyAudioRequest;
  sound.pause();
  try{
-  if(location.protocol==='file:'){
-   if(studySound.getAttribute('src')!==AUDIO_SRC)studySound.src=AUDIO_SRC;
-   studySound.currentTime=segment.start;
-   await studySound.play();
-   return;
-  }
-  recordingPromise??=fetch(AUDIO_SRC).then(async response=>{
-   if(!response.ok)throw new Error('Không tải được MP3');
-   const file=await response.blob();
-   if(file.size!==19163053)throw new Error('Sai phiên bản MP3');
-   return file;
-  }).catch(error=>{recordingPromise=null;throw error;});
-  const file=await recordingPromise;
-  if(request!==studyAudioRequest||segment!==studySegment)return;
-  if(playbackUrl)URL.revokeObjectURL(playbackUrl);
-  playbackUrl=URL.createObjectURL(file.slice(...segment.bytes,'audio/mpeg'));
-  studySound.src=playbackUrl;
+  if(studySound.getAttribute('src')!==AUDIO_SRC)studySound.src=AUDIO_SRC;
+  studySound.currentTime=segment.start;
   await studySound.play();
  }catch(error){
   if(request!==studyAudioRequest)return;
@@ -434,6 +424,13 @@ function wire(d,name){
 function loadQuestion(d,playSelected=false){
  studyStop();studySegment=null;studyPlayButton=null;studySoundStatus=null;
  const q=ORIGINAL.questions[questionIndex],inner=d.querySelector('#frmContent');
+ if(playSelected&&q.ids[0]<=35){
+  const segment=h5GroupByNumber.get(playSelected);
+  if(segment && Number.isFinite(segment.start) && Number.isFinite(segment.end)){
+   studySegment=segment;
+   studyPlay();
+  }
+ }
  inner.onload=()=>{
   const doc=inner.contentDocument;
   doc.querySelectorAll('input,textarea').forEach(el=>{
@@ -445,11 +442,6 @@ function loadQuestion(d,playSelected=false){
   });
   doc.querySelectorAll('tr').forEach(tr=>{tr.onclick=e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;const radio=tr.querySelector('input[type=radio]');if(radio){radio.checked=true;radio.onchange()}}});
   installH5Study(doc,q);
-  // Chỉ phát đoạn nghe tương ứng khi học viên bấm số câu trong bảng điều hướng.
-  if(playSelected&&q.ids[0]<=35){
-   const segment=h5GroupByNumber.get(playSelected);
-   if(segment && Number.isFinite(segment.start)){studySegment=segment;studyPlay(true)}
-  }
  };
  inner.srcdoc=q.html;
  d.querySelector('#btnLastQuestion').style.display=questionIndex?'inline-block':'none';
