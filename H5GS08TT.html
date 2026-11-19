@@ -24,18 +24,20 @@ const studySound=new Audio();
 studySound.preload='metadata';
 let studySegment=null,studyPlayButton=null,studySoundStatus=null;
 let studyAudioRequest=0;
-// MP3 ở cùng thư mục với HTML: phát trực tiếp theo mốc thời gian.
-// Không bắt học viên tải lên/chọn MP3, kể cả khi mở file HTML trên máy.
-studySound.src=AUDIO_SRC;
-studySound.preload='auto';
+let recordingPromise=null, playbackUrl=null;
 function studyStop(){
  studyAudioRequest++;
  studySound.pause();
+ if(playbackUrl){
+  studySound.removeAttribute('src');
+  studySound.load();
+  URL.revokeObjectURL(playbackUrl);
+  playbackUrl=null;
+ }
 }
 studySound.addEventListener('timeupdate',()=>{
- if(studySegment && !studySound.paused && studySound.currentTime>=studySegment.end){
-  studySound.pause();
-  if(studyPlayButton)studyPlayButton.textContent='▶';
+ if(location.protocol==='file:' && studySegment && !studySound.seeking && studySound.currentTime>=studySegment.end){
+  studyStop();
  }
 });
 async function studyPlay(){
@@ -44,36 +46,28 @@ async function studyPlay(){
  const request=++studyAudioRequest;
  sound.pause();
  try{
-  if(studySound.readyState<1){
-   await new Promise((resolve,reject)=>{
-    const onReady=()=>{cleanup();resolve()};
-    const onError=()=>{cleanup();reject(new Error('Không tìm thấy '+AUDIO_SRC+' trong cùng thư mục HTML'))};
-    const cleanup=()=>{studySound.removeEventListener('loadedmetadata',onReady);studySound.removeEventListener('error',onError)};
-    studySound.addEventListener('loadedmetadata',onReady);
-    studySound.addEventListener('error',onError);
-    studySound.load();
-   });
+  if(location.protocol==='file:'){
+   if(studySound.getAttribute('src')!==AUDIO_SRC)studySound.src=AUDIO_SRC;
+   studySound.currentTime=segment.start;
+   await studySound.play();
+   return;
   }
+  recordingPromise??=fetch(AUDIO_SRC).then(async response=>{
+   if(!response.ok)throw new Error('Không tải được MP3');
+   const file=await response.blob();
+   if(file.size!==26039029)throw new Error('Sai phiên bản MP3');
+   return file;
+  }).catch(error=>{recordingPromise=null;throw error;});
+  const file=await recordingPromise;
   if(request!==studyAudioRequest||segment!==studySegment)return;
-  studySound.currentTime=segment.start;
-   // Trên GitHub Pages, đợi trình duyệt hoàn tất seek (HTTP range) rồi mới phát.
-   if(studySound.seeking){
-    await new Promise((resolve,reject)=>{
-      const timeout=setTimeout(()=>{cleanup();resolve()},10000);
-      const cleanup=()=>{clearTimeout(timeout);studySound.removeEventListener('seeked',done);studySound.removeEventListener('error',fail)};
-      const done=()=>{cleanup();resolve()};
-      const fail=()=>{cleanup();reject(new Error('Không tải được đoạn âm thanh'))};
-      studySound.addEventListener('seeked',done,{once:true});
-      studySound.addEventListener('error',fail,{once:true});
-    });
-   }
-   if(request!==studyAudioRequest||segment!==studySegment)return;
+  if(playbackUrl)URL.revokeObjectURL(playbackUrl);
+  playbackUrl=URL.createObjectURL(file.slice(...segment.bytes,'audio/mpeg'));
+  studySound.src=playbackUrl;
   await studySound.play();
  }catch(error){
-  console.warn('Không phát được MP3 cùng thư mục:',error);
-  if(request===studyAudioRequest && studySoundStatus){
-   studySoundStatus.textContent='Không tìm thấy '+AUDIO_SRC+' — kiểm tra tên file và thư mục.';
-  }
+  if(request!==studyAudioRequest)return;
+  console.warn('Không phát được '+AUDIO_SRC+' trong cùng thư mục HTML.',error);
+  if(studySoundStatus)studySoundStatus.textContent='Không phát được '+AUDIO_SRC+'.';
  }
 }
 function makeStudyTriplet(doc,cn,py,vi){
@@ -487,13 +481,13 @@ function clock(){
  const d=frame.contentDocument,q=ORIGINAL.questions[questionIndex],n=q.ids[0],part=n<=35?'listening':n<=70?'reading':'writing';
  const el=d.getElementById('divClock');if(!el)return;
  const seconds=part==='listening'?
-  (Math.max(0,Math.ceil((Number.isFinite(studySound.duration)?studySound.duration:1706)-(Number.isFinite(studySound.currentTime)?studySound.currentTime:0)))):
+  (listeningDeadline?Math.max(0,Math.ceil((listeningDeadline-Date.now())/1000)):1706):
   (deadlines[part]?Math.max(0,Math.ceil((deadlines[part]-Date.now())/1000)):(part==='reading'?35:40)*60);
- const label=part==='listening'?'听力剩余时间'+(studySound.paused?'（暂停）':''):part==='reading'?'阅读题剩余时间':'写作题剩余时间';
+ const label=part==='listening'?'听力剩余时间'+(!listeningDeadline?'（未播放）':''):part==='reading'?'阅读题剩余时间':'写作题剩余时间';
  const counter=d.body.dataset.answeredCount||'0';
  el.innerHTML=label+'  <span style="color:red">'+String(Math.floor(seconds/60)).padStart(2,'0')+'</span>:<span style="color:red">'+String(seconds%60).padStart(2,'0')+'</span> <span style="color:#537c39;font-size:13px">已答 '+counter+'/72</span>';
  if(seconds!==0)return;
- if(part==='listening'){return} // Không tự chuyển khi MP3 đang tải hoặc đang phát câu cuối
+ if(part==='listening'&&listeningDeadline){studyStop();questionIndex=ORIGINAL.questions.findIndex(q=>q.ids[0]>=36);loadQuestion(d);return}
  if(part==='reading'){questionIndex=ORIGINAL.questions.findIndex(q=>q.ids[0]>=71);loadQuestion(d)}
  if(part==='writing')d.getElementById('btnok')?.click();
 }
