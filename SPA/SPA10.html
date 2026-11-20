@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bài 10: Khách muốn sử dụng dịch vụ ngay - Tiếng Trung SPA</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#333}
+.header{position:fixed;top:0;left:0;right:0;height:70px;background:#4472c4;color:white;display:flex;align-items:center;gap:12px;padding:10px 20px;z-index:1000}
+.logo-text h1{font-size:16px;letter-spacing:1px}
+.logo-text p{font-size:12px;opacity:.9}
+.header-lesson-title{flex:1;text-align:center;font-weight:700;font-size:18px}
+.nav-toggle-header{width:42px;height:40px;border:1px solid rgba(255,255,255,.8);border-radius:7px;background:rgba(255,255,255,.15);color:#fff;font-size:20px;cursor:pointer}
+.main-container{display:flex;gap:15px;padding:90px 15px 15px;min-height:100vh}
+.sidebar-left{width:230px;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 105px);overflow-y:auto}
+body.nav-hidden .sidebar-left{display:none}
+.nav-title{padding:15px;background:#f8f9fa;border-bottom:2px solid #4472c4;font-weight:700}
+.nav-item{display:flex;gap:10px;padding:12px 15px;color:#666;text-decoration:none;cursor:pointer;transition:.2s}
+.nav-item:hover{background:#e3f2fd;color:#4472c4}
+.nav-item.active{background:#e8f5e9;color:#2e7d32;font-weight:700}
+.tools-section{padding:15px;background:#fafafa;border-top:1px solid #ddd}
+.tool-btn{width:100%;padding:8px;margin-bottom:6px;border:1px solid #ddd;border-radius:5px;background:#f8f9fa;cursor:pointer}
+.content-area{flex:1;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden}
+.content-header{padding:20px;background:linear-gradient(135deg,#f8f9fa,#e3f2fd);border-bottom:2px solid #4472c4;display:flex;justify-content:space-between;align-items:center}
+.section-title{font-size:20px;font-weight:700;display:flex;gap:10px;align-items:center}
+.section-badge{background:#4472c4;color:#fff;padding:5px 12px;border-radius:20px;font-size:12px}
+.content-body{padding:25px;background:#fafafa}
+.section-content{display:none}
+.section-content.active{display:block}
+.part-box{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:25px;margin-bottom:20px}
+.part-title{font-size:18px;font-weight:700;border-bottom:2px solid #4472c4;padding-bottom:10px;margin-bottom:15px;color:#222}
+.context-note{display:flex;justify-content:space-between;gap:15px;background:#eef5ff;border-left:4px solid #4472c4;padding:10px 14px;margin:12px 0;border-radius:6px;flex-wrap:wrap}
+.context-chinese{font-family:'SimSun','STSong',serif;font-size:18px;color:#222}
+.context-vietnamese{font-size:15px;color:#4472c4;font-style:italic}
+.note-block{margin-top:12px;padding:12px 14px;background:#f8f9fa;border-left:4px solid #2e7d32;border-radius:6px;line-height:1.7}
+.phrase-line{display:flex;gap:15px;padding:14px 15px;margin-bottom:10px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;transition:.2s}
+.phrase-line:hover{background:#e3f2fd;border-color:#4472c4}
+.phrase-bullet{color:#4472c4;font-size:20px;line-height:1.2}
+.phrase-content{flex:1}
+.phrase-chinese{font-family:'SimSun','STSong',serif;font-size:20px;font-weight:700;color:#000;line-height:1.4}
+.phrase-pinyin{color:#4472c4;font-size:16px;margin:4px 0;line-height:1.5}
+.phrase-vietnamese{color:#555;font-size:15px;line-height:1.5}
+.vocab-table{width:100%;border-collapse:collapse;background:#fff;margin-bottom:10px}
+.vocab-table th{background:#4472c4;color:#fff;padding:12px;text-align:left}
+.vocab-table td{padding:12px;border-bottom:1px solid #e9ecef;vertical-align:top}
+.vocab-hanzi{font-size:22px;font-weight:700;font-family:'SimSun','STSong',serif}
+.vocab-pinyin-td{color:#4472c4;font-style:italic}
+body.hide-pinyin .phrase-pinyin{display:none!important}
+body.hide-vietnamese .phrase-vietnamese{display:none!important}
+@media(max-width:768px){
+  .main-container{flex-direction:column;padding-top:78px}
+  .sidebar-left{width:100%;position:relative;top:0;max-height:none}
+  .header-lesson-title{display:none}
+  .content-header{padding:15px}
+  .content-body{padding:15px}
+  .part-box{padding:16px}
+  .phrase-chinese{font-size:18px}
+  .context-note{flex-direction:column}
+}
+</style>
+<style id="header-bai01-patch">
+.header .logo{display:flex;align-items:center;gap:15px;flex-shrink:0}
+.header .logo-img{width:50px;height:50px;background:white;border-radius:8px;padding:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.header .logo-img img{width:100%;height:100%;object-fit:contain}
+.header .logo-text h1{font-size:16px;font-weight:600;margin:0 0 2px 0;font-family:Arial,sans-serif;color:white}
+.header .logo-text p{font-size:12px;opacity:.95;margin:0;font-family:Arial,sans-serif;color:white;white-space:nowrap}
+.header .header-lesson-title{flex:1;text-align:center;font-size:16px;font-weight:600;color:white;font-family:Arial,sans-serif;padding:0 12px}
+@media(max-width:900px){
+  .header .logo-text p{white-space:normal;font-size:10px}
+  .header .logo-text h1{font-size:13px}
+  .header .logo-img{width:44px;height:44px}
+}
+</style>
+<style id="speaker-icon-vocab-patch">
+.speaker-hint{
+  color:#4472c4;
+  margin-right:8px;
+  font-size:15px;
+  vertical-align:middle;
+}
+.speaker-inline{
+  display:inline-flex;
+  align-items:center;
+}
+</style>
+<style id="compact-stt-column-patch">
+
+table th:first-child,
+table td:first-child{
+  width:1%;
+  min-width:42px;
+  max-width:52px;
+  white-space:nowrap;
+  text-align:center;
+  padding-left:6px !important;
+  padding-right:6px !important;
+}
+table th:first-child{
+  width:42px;
+}
+</style>
+<style id="uniform-nav-note-patch">
+.nav-toggle-header{
+  width:42px;height:40px;border:1px solid rgba(255,255,255,.8);
+  border-radius:7px;background:rgba(255,255,255,.15);color:#fff;
+  font-size:20px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex:0 0 42px;
+}
+body.nav-hidden .sidebar-left{display:none!important}
+#note-editor-overlay{display:none!important}
+.uniform-note-btn{
+  width:100%;padding:8px;margin-bottom:6px;border:1px solid #ddd;
+  border-radius:5px;background:#4472c4;color:#fff;cursor:pointer;
+  font-family:Arial,sans-serif;font-weight:600;
+}
+#uniform-note-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:10000;padding:4vh 4vw;
+}
+#uniform-note-container{
+  width:min(980px,92vw);height:88vh;margin:0 auto;background:#fff;
+  border-radius:12px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+#uniform-note-header{
+  background:#4472c4;color:#fff;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#uniform-note-header h3{margin:0;font:700 16px Arial,sans-serif;display:flex;gap:8px;align-items:center}
+#uniform-note-toolbar{
+  padding:10px 14px;background:#f8f9fa;border-bottom:1px solid #ddd;
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.uniform-note-tool{
+  padding:7px 11px;border:1px solid #ddd;background:#fff;border-radius:5px;
+  cursor:pointer;font-size:14px;
+}
+#uniform-note-editor{
+  flex:1;padding:18px;overflow:auto;outline:none;font:14px/1.7 Arial,sans-serif;
+}
+#uniform-note-footer{
+  padding:11px 16px;background:#f8f9fa;border-top:1px solid #ddd;
+  display:flex;justify-content:flex-end;gap:8px;
+}
+.uniform-note-action{
+  padding:8px 18px;border-radius:5px;border:1px solid #ccc;
+  background:#fff;cursor:pointer;font-weight:600;
+}
+.uniform-note-action.save{background:#4472c4;color:#fff;border-color:#4472c4}
+</style>
+<style id="uniform-vocab-layout-patch">
+/* Đồng nhất bảng từ vựng và căn icon loa thẳng hàng */
+.vocab-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.vocab-table th,
+.vocab-table td{
+  vertical-align:middle;
+  box-sizing:border-box;
+}
+.vocab-table th:first-child,
+.vocab-table td:first-child{
+  width:46px!important;
+  min-width:46px!important;
+  max-width:46px!important;
+  text-align:center!important;
+  padding-left:6px!important;
+  padding-right:6px!important;
+  white-space:nowrap;
+}
+.vocab-table th:nth-child(2),
+.vocab-table td:nth-child(2){
+  width:30%;
+}
+.vocab-table th:nth-child(3),
+.vocab-table td:nth-child(3){
+  width:28%;
+}
+.vocab-table th:nth-child(4),
+.vocab-table td:nth-child(4){
+  width:auto;
+}
+.vocab-hanzi{
+  position:relative;
+  padding-left:36px!important;
+  line-height:1.55;
+}
+.vocab-hanzi .speaker-hint{
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  margin:0!important;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  font-size:15px;
+}
+.vocab-hanzi .speaker-inline{
+  display:block!important;
+  width:100%;
+}
+.vocab-pinyin-td{
+  line-height:1.55;
+}
+@media(max-width:700px){
+  .vocab-table th:first-child,
+  .vocab-table td:first-child{
+    width:42px!important;
+    min-width:42px!important;
+    max-width:42px!important;
+  }
+  .vocab-hanzi{
+    padding-left:32px!important;
+  }
+  .vocab-hanzi .speaker-hint{
+    left:8px;
+  }
+}
+</style>
+<link href="spa-assets/spa-study.css" rel="stylesheet"/>
+<link href="spa-assets/spa-pro.css" rel="stylesheet"/>
+<style id="spa-speech-policy">.vocab-hanzi .speaker-hint{display:none!important}.phrase-line{cursor:pointer}</style><link href="spa-assets/spa-tabs.css" rel="stylesheet"/></head>
+<body>
+<div class="header">
+<div class="logo">
+<div class="logo-img">
+<img alt="Gia Sư Hoa Ngữ Tân An" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png"/>
+</div>
+<div class="logo-text">
+<h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+<p>109D Nguyễn Văn Tiếp, P.Long An, tỉnh Tây Ninh | Zalo: 0839.889.772</p>
+</div>
+</div>
+<div class="header-lesson-title">BÀI 10: KHÁCH MUỐN SỬ DỤNG DỊCH VỤ NGAY</div>
+<button aria-label="Ẩn/Hiện điều hướng" class="nav-toggle-header" id="nav-toggle-btn" onclick="toggleNavigation()" title="Ẩn/Hiện điều hướng" type="button"><i class="bi bi-layout-sidebar-inset-reverse"></i></button>
+</div>
+<div class="main-container"><aside class="sidebar-left"><div class="nav-title"><i class="bi bi-list-ul"></i> Điều hướng bài học</div>
+<a class="nav-item" href="SPA.html" style="background: linear-gradient(135deg, #4472c4, #5a80d0); color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; margin-bottom: 6px; border-radius: 6px; font-weight: 600;" target="_self"><i class="bi bi-house-door"></i><span>Về trang chủ</span></a>
+<a class="nav-item active" onclick="showSection(0)"><i class="bi bi-chat-square-text"></i> I. Mẫu câu</a>
+<a class="nav-item" onclick="showSection(1)"><i class="bi bi-journal-bookmark"></i> II. Từ vựng</a>
+<a class="nav-item" onclick="showSection(2)" style="display:none"><i class="bi bi-diagram-3"></i> III. Ngữ pháp</a>
+<a class="nav-item" onclick="showSection(3)" style="display:none"><i class="bi bi-people-fill"></i> IV. Hội thoại</a>
+<div class="tools-section"><button class="tool-btn" onclick="togglePinyin()"><i class="bi bi-eye-slash"></i> Ẩn/Hiện Pinyin</button><button class="tool-btn" onclick="toggleVietnamese()"><i class="bi bi-translate"></i> Ẩn/Hiện nghĩa Việt</button></div></aside>
+<main class="content-area"><div class="content-header"><div class="section-title"><span id="current-icon"><i class="bi bi-chat-square-text"></i></span><span id="section-title-text">I. MẪU CÂU THÔNG DỤNG</span></div><div class="section-badge">Bài 10</div></div><div class="content-body"><section class="section-content active" id="section-0"><div class="part-box"><div class="part-title">I. MẪU CÂU THÔNG DỤNG — 顾客希望立即做理疗 · Khách muốn sử dụng dịch vụ ngay</div><div class="phrase-line"><div class="phrase-bullet">•</div><div class="phrase-content"><div class="phrase-chinese">现在可以进行……（理疗项目）吗？</div><div class="phrase-pinyin">Xiànzài kěyǐ jìnxíng … (lǐliáo xiàngmù) ma?</div><div class="phrase-vietnamese">Bây giờ tôi có thể làm … (tên liệu trình) được không?</div></div></div><div class="phrase-line"><div class="phrase-bullet">•</div><div class="phrase-content"><div class="phrase-chinese">让我查一下现在是否可以，请稍等。</div><div class="phrase-pinyin">Ràng wǒ chá yíxià xiànzài shìfǒu kěyǐ, qǐng shāo děng.</div><div class="phrase-vietnamese">Anh/chị vui lòng đợi một chút để em kiểm tra xem có thể làm ngay không ạ.</div></div></div><div class="phrase-line"><div class="phrase-bullet">•</div><div class="phrase-content"><div class="phrase-chinese">先生／女士，让我帮您查一下预约簿。</div><div class="phrase-pinyin">Xiānsheng / nǚshì, ràng wǒ bāng nín chá yíxià yùyuēbù.</div><div class="phrase-vietnamese">Thưa anh/chị, để em kiểm tra sổ đặt lịch ạ.</div></div></div><div class="phrase-line"><div class="phrase-bullet">•</div><div class="phrase-content"><div class="phrase-chinese">抱歉让您久等了。</div><div class="phrase-pinyin">Bàoqiàn ràng nín jiǔ děng le.</div><div class="phrase-vietnamese">Xin lỗi đã để anh/chị đợi lâu.</div></div></div><div class="phrase-line"><div class="phrase-bullet">•</div><div class="phrase-content"><div class="phrase-chinese">现在您可以进行理疗。</div><div class="phrase-pinyin">Xiànzài nín kěyǐ jìnxíng lǐliáo.</div><div class="phrase-vietnamese">Anh/chị có thể bắt đầu liệu trình ngay bây giờ ạ.</div></div></div><div class="phrase-line"><div class="phrase-bullet">•</div><div class="phrase-content"><div class="phrase-chinese">请稍等，我将通知理疗师做好一切准备。</div><div class="phrase-pinyin">Qǐng shāo děng, wǒ jiāng tōngzhī lǐliáoshī zuòhǎo yíqiè zhǔnbèi.</div><div class="phrase-vietnamese">Anh/chị đợi một chút. Em sẽ báo kỹ thuật viên chuẩn bị mọi thứ ạ.</div></div></div><div class="phrase-line"><div class="phrase-bullet">•</div><div class="phrase-content"><div class="phrase-chinese">谢谢。</div><div class="phrase-pinyin">Xièxie.</div><div class="phrase-vietnamese">Cảm ơn.</div></div></div></div></section><section class="section-content" id="section-1"><div class="part-box"><div class="part-title">II. TỪ VỰNG THEO BÀI HỌC</div><div class="part-title">Xưng hô</div><table class="vocab-table"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Pinyin</th><th>Nghĩa tiếng Việt</th></tr></thead><tbody><tr><td>1</td><td class="vocab-hanzi">先生</td><td class="vocab-pinyin-td">xiānsheng</td><td>ông, ngài</td></tr><tr><td>2</td><td class="vocab-hanzi">女士</td><td class="vocab-pinyin-td">nǚshì</td><td>quý bà, chị</td></tr><tr><td>3</td><td class="vocab-hanzi">理疗师</td><td class="vocab-pinyin-td">lǐliáoshī</td><td>kỹ thuật viên trị liệu</td></tr></tbody></table><div class="part-title">Giao tiếp</div><table class="vocab-table"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Pinyin</th><th>Nghĩa tiếng Việt</th></tr></thead><tbody><tr><td>4</td><td class="vocab-hanzi">谢谢</td><td class="vocab-pinyin-td">xièxie</td><td>cảm ơn</td></tr><tr><td>5</td><td class="vocab-hanzi">请</td><td class="vocab-pinyin-td">qǐng</td><td>xin mời, vui lòng</td></tr><tr><td>6</td><td class="vocab-hanzi">抱歉</td><td class="vocab-pinyin-td">bàoqiàn</td><td>xin lỗi, lấy làm tiếc</td></tr><tr><td>7</td><td class="vocab-hanzi">稍等</td><td class="vocab-pinyin-td">shāoděng</td><td>chờ một chút</td></tr><tr><td>8</td><td class="vocab-hanzi">可以</td><td class="vocab-pinyin-td">kěyǐ</td><td>có thể</td></tr></tbody></table><div class="part-title">Dịch vụ SPA</div><table class="vocab-table"><thead><tr><th>STT</th><th>Chữ Hán</th><th>Pinyin</th><th>Nghĩa tiếng Việt</th></tr></thead><tbody><tr><td>9</td><td class="vocab-hanzi">理疗</td><td class="vocab-pinyin-td">lǐliáo</td><td>trị liệu</td></tr><tr><td>10</td><td class="vocab-hanzi">理疗项目</td><td class="vocab-pinyin-td">lǐliáo xiàngmù</td><td>hạng mục trị liệu</td></tr><tr><td>11</td><td class="vocab-hanzi">项目</td><td class="vocab-pinyin-td">xiàngmù</td><td>hạng mục</td></tr><tr><td>12</td><td class="vocab-hanzi">预约</td><td class="vocab-pinyin-td">yùyuē</td><td>đặt lịch hẹn</td></tr><tr><td>13</td><td class="vocab-hanzi">预约簿</td><td class="vocab-pinyin-td">yùyuē bù</td><td>sổ đặt lịch</td></tr></tbody></table></div></section><section class="section-content" data-empty="true" id="section-2"><div class="part-box"><div class="part-title">III. NGỮ PHÁP</div></div></section><section class="section-content" data-empty="true" id="section-3"><div class="part-box"><div class="part-title">IV. HỘI THOẠI TỔNG HỢP</div><div class="note-block">PDF không có đoạn hội thoại gắn nhãn người nói riêng trong bài này. Toàn bộ nội dung nằm ở mục I.</div></div></section></div></main></div><script>
+const titles = ['I. MẪU CÂU THÔNG DỤNG', 'II. TỪ VỰNG', 'III. NGỮ PHÁP', 'IV. HỘI THOẠI TỔNG HỢP'];
+const icons = ['bi-chat-square-text', 'bi-journal-bookmark', 'bi-diagram-3', 'bi-people-fill'];
+
+function showSection(i){
+  const target=document.getElementById('section-'+i); if(!target || target.dataset.empty==='true')return;
+  document.querySelectorAll('.section-content').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.querySelectorAll('.sidebar-left .nav-item[onclick^="showSection"]').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.getElementById('section-title-text').textContent = titles[i];
+  document.getElementById('current-icon').innerHTML = '<i class="bi ' + icons[i] + '"></i>';
+}
+
+function togglePinyin(){
+  document.body.classList.toggle('hide-pinyin');
+}
+
+function toggleVietnamese(){
+  document.body.classList.toggle('hide-vietnamese');
+}
+
+function speakText(text){ /* managed by spa-study.js */ }
+
+function toggleNavigation(){
+  document.body.classList.toggle('nav-hidden');
+  const hidden = document.body.classList.contains('nav-hidden');
+  const btn = document.getElementById('nav-toggle-btn');
+  const label = hidden ? 'Hiện điều hướng' : 'Ẩn điều hướng';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
+  btn.innerHTML = hidden ? '<i class="bi bi-layout-sidebar-inset"></i>' : '<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+}
+</script>
+<script id="uniform-nav-note-patch-js">
+(function(){
+  window.toggleNavigation=function(){
+    document.body.classList.toggle('nav-hidden');
+    var hidden=document.body.classList.contains('nav-hidden');
+    var b=document.getElementById('nav-toggle-btn');
+    if(!b)return;
+    var label=hidden?'Hiện điều hướng':'Ẩn điều hướng';
+    b.title=label;
+    b.setAttribute('aria-label',label);
+    b.innerHTML=hidden?'<i class="bi bi-layout-sidebar-inset"></i>':'<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+  };
+
+  function noteKey(){
+    var n=(location.pathname.split('/').pop()||'TTCT').replace(/\.html?$/i,'');
+    return 'ttct_note_'+n;
+  }
+  window.openUniformNote=function(){
+    var o=document.getElementById('uniform-note-overlay');
+    var e=document.getElementById('uniform-note-editor');
+    if(!o||!e)return;
+    e.innerHTML=localStorage.getItem(noteKey())||'';
+    o.style.display='block';
+    e.focus();
+  };
+  window.closeUniformNote=function(){
+    var o=document.getElementById('uniform-note-overlay');
+    if(o)o.style.display='none';
+  };
+  window.saveUniformNote=function(){
+    var e=document.getElementById('uniform-note-editor');
+    if(e)localStorage.setItem(noteKey(),e.innerHTML);
+    closeUniformNote();
+  };
+  window.formatUniformNote=function(cmd){
+    document.execCommand(cmd,false,null);
+    var e=document.getElementById('uniform-note-editor');
+    if(e)e.focus();
+  };
+  window.clearUniformNote=function(){
+    var e=document.getElementById('uniform-note-editor');
+    if(e)e.innerHTML='';
+  };
+
+  document.addEventListener('DOMContentLoaded',function(){
+    var toggle=document.getElementById('nav-toggle-btn');
+    if(toggle){
+      toggle.setAttribute('onclick','toggleNavigation()');
+      toggle.setAttribute('type','button');
+      toggle.setAttribute('aria-label','Ẩn điều hướng');
+      toggle.setAttribute('title','Ẩn điều hướng');
+      toggle.innerHTML='<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+    }
+
+    document.querySelectorAll('button,a').forEach(function(el){
+      var t=(el.textContent||'').trim().toLowerCase();
+      var oc=(el.getAttribute('onclick')||'').toLowerCase();
+      if(t==='bảng ghi chú'||t==='mở sổ ghi chú'||oc.indexOf('opennoteeditor')>=0){
+        el.remove();
+      }
+    });
+
+    var tools=document.querySelector('.tools-section');
+    if(tools&&!document.getElementById('uniform-note-btn')){
+      var host=tools.querySelector('.tool-card')||tools;
+      var btn=document.createElement('button');
+      btn.id='uniform-note-btn';
+      btn.className='uniform-note-btn';
+      btn.type='button';
+      btn.setAttribute('onclick','openUniformNote()');
+      btn.innerHTML='<i class="bi bi-journal-text"></i> Bảng ghi chú';
+      host.appendChild(btn);
+    }
+
+    if(!document.getElementById('uniform-note-overlay')){
+      var overlay=document.createElement('div');
+      overlay.id='uniform-note-overlay';
+      overlay.innerHTML=
+        '<div id="uniform-note-container">'+
+          '<div id="uniform-note-header">'+
+            '<h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>'+
+            '<button class="uniform-note-tool" type="button" onclick="closeUniformNote()"><i class="bi bi-x-lg"></i></button>'+
+          '</div>'+
+          '<div id="uniform-note-toolbar">'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'bold\')"><i class="bi bi-type-bold"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'italic\')"><i class="bi bi-type-italic"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'underline\')"><i class="bi bi-type-underline"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'insertUnorderedList\')"><i class="bi bi-list-ul"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="clearUniformNote()"><i class="bi bi-trash"></i></button>'+
+          '</div>'+
+          '<div id="uniform-note-editor" contenteditable="true" spellcheck="false"></div>'+
+          '<div id="uniform-note-footer">'+
+            '<button class="uniform-note-action" type="button" onclick="closeUniformNote()">Đóng</button>'+
+            '<button class="uniform-note-action save" type="button" onclick="saveUniformNote()"><i class="bi bi-check-lg"></i> Lưu</button>'+
+          '</div>'+
+        '</div>';
+      document.body.appendChild(overlay);
+    }
+  });
+})();
+</script>
+<script src="spa-assets/spa-audio-manifest.js"></script><script defer="" src="spa-assets/spa-study.js"></script><script defer="" src="spa-assets/spa-dialogue.js"></script>
+<script defer="" src="spa-assets/spa-pro.js"></script>
+<script defer="" src="spa-assets/spa-tabs.js"></script></body>
+</html>

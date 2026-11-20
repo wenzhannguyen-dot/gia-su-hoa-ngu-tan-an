@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tiếng Trung giao tiếp SPA - 35 bài</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#333}
+.header{position:fixed;top:0;left:0;right:0;height:70px;background:#4472c4;color:white;display:flex;align-items:center;gap:12px;padding:10px 20px;z-index:1000}
+.logo-text h1{font-size:16px;letter-spacing:1px}
+.logo-text p{font-size:12px;opacity:.9}
+.header-lesson-title{flex:1;text-align:center;font-weight:700;font-size:18px}
+.nav-toggle-header{width:42px;height:40px;border:1px solid rgba(255,255,255,.8);border-radius:7px;background:rgba(255,255,255,.15);color:#fff;font-size:20px;cursor:pointer}
+.main-container{display:flex;gap:15px;padding:90px 15px 15px;min-height:100vh}
+.sidebar-left{width:230px;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden;position:sticky;top:90px;height:fit-content;max-height:calc(100vh - 105px);overflow-y:auto}
+body.nav-hidden .sidebar-left{display:none}
+.nav-title{padding:15px;background:#f8f9fa;border-bottom:2px solid #4472c4;font-weight:700}
+.nav-item{display:flex;gap:10px;padding:12px 15px;color:#666;text-decoration:none;cursor:pointer;transition:.2s}
+.nav-item:hover{background:#e3f2fd;color:#4472c4}
+.nav-item.active{background:#e8f5e9;color:#2e7d32;font-weight:700}
+.tools-section{padding:15px;background:#fafafa;border-top:1px solid #ddd}
+.tool-btn{width:100%;padding:8px;margin-bottom:6px;border:1px solid #ddd;border-radius:5px;background:#f8f9fa;cursor:pointer}
+.content-area{flex:1;background:#fff;border:1px solid #d0d0d0;border-radius:8px;overflow:hidden}
+.content-header{padding:20px;background:linear-gradient(135deg,#f8f9fa,#e3f2fd);border-bottom:2px solid #4472c4;display:flex;justify-content:space-between;align-items:center}
+.section-title{font-size:20px;font-weight:700;display:flex;gap:10px;align-items:center}
+.section-badge{background:#4472c4;color:#fff;padding:5px 12px;border-radius:20px;font-size:12px}
+.content-body{padding:25px;background:#fafafa}
+.section-content{display:none}
+.section-content.active{display:block}
+.part-box{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:25px;margin-bottom:20px}
+.part-title{font-size:18px;font-weight:700;border-bottom:2px solid #4472c4;padding-bottom:10px;margin-bottom:15px;color:#222}
+.context-note{display:flex;justify-content:space-between;gap:15px;background:#eef5ff;border-left:4px solid #4472c4;padding:10px 14px;margin:12px 0;border-radius:6px;flex-wrap:wrap}
+.context-chinese{font-family:'SimSun','STSong',serif;font-size:18px;color:#222}
+.context-vietnamese{font-size:15px;color:#4472c4;font-style:italic}
+.note-block{margin-top:12px;padding:12px 14px;background:#f8f9fa;border-left:4px solid #2e7d32;border-radius:6px;line-height:1.7}
+.phrase-line{display:flex;gap:15px;padding:14px 15px;margin-bottom:10px;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;transition:.2s}
+.phrase-line:hover{background:#e3f2fd;border-color:#4472c4}
+.phrase-bullet{color:#4472c4;font-size:20px;line-height:1.2}
+.phrase-content{flex:1}
+.phrase-chinese{font-family:'SimSun','STSong',serif;font-size:20px;font-weight:700;color:#000;line-height:1.4}
+.phrase-pinyin{color:#4472c4;font-size:16px;margin:4px 0;line-height:1.5}
+.phrase-vietnamese{color:#555;font-size:15px;line-height:1.5}
+.vocab-table{width:100%;border-collapse:collapse;background:#fff;margin-bottom:10px}
+.vocab-table th{background:#4472c4;color:#fff;padding:12px;text-align:left}
+.vocab-table td{padding:12px;border-bottom:1px solid #e9ecef;vertical-align:top}
+.vocab-hanzi{font-size:22px;font-weight:700;font-family:'SimSun','STSong',serif}
+.vocab-pinyin-td{color:#4472c4;font-style:italic}
+body.hide-pinyin .phrase-pinyin{display:none!important}
+body.hide-vietnamese .phrase-vietnamese{display:none!important}
+@media(max-width:768px){
+  .main-container{flex-direction:column;padding-top:78px}
+  .sidebar-left{width:100%;position:relative;top:0;max-height:none}
+  .header-lesson-title{display:none}
+  .content-header{padding:15px}
+  .content-body{padding:15px}
+  .part-box{padding:16px}
+  .phrase-chinese{font-size:18px}
+  .context-note{flex-direction:column}
+}
+</style>
+<style id="header-bai01-patch">
+.header .logo{display:flex;align-items:center;gap:15px;flex-shrink:0}
+.header .logo-img{width:50px;height:50px;background:white;border-radius:8px;padding:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.header .logo-img img{width:100%;height:100%;object-fit:contain}
+.header .logo-text h1{font-size:16px;font-weight:600;margin:0 0 2px 0;font-family:Arial,sans-serif;color:white}
+.header .logo-text p{font-size:12px;opacity:.95;margin:0;font-family:Arial,sans-serif;color:white;white-space:nowrap}
+.header .header-lesson-title{flex:1;text-align:center;font-size:16px;font-weight:600;color:white;font-family:Arial,sans-serif;padding:0 12px}
+@media(max-width:900px){
+  .header .logo-text p{white-space:normal;font-size:10px}
+  .header .logo-text h1{font-size:13px}
+  .header .logo-img{width:44px;height:44px}
+}
+</style>
+<style id="speaker-icon-vocab-patch">
+.speaker-hint{
+  color:#4472c4;
+  margin-right:8px;
+  font-size:15px;
+  vertical-align:middle;
+}
+.speaker-inline{
+  display:inline-flex;
+  align-items:center;
+}
+</style>
+<style id="compact-stt-column-patch">
+
+table th:first-child,
+table td:first-child{
+  width:1%;
+  min-width:42px;
+  max-width:52px;
+  white-space:nowrap;
+  text-align:center;
+  padding-left:6px !important;
+  padding-right:6px !important;
+}
+table th:first-child{
+  width:42px;
+}
+</style>
+<style id="uniform-nav-note-patch">
+.nav-toggle-header{
+  width:42px;height:40px;border:1px solid rgba(255,255,255,.8);
+  border-radius:7px;background:rgba(255,255,255,.15);color:#fff;
+  font-size:20px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;flex:0 0 42px;
+}
+body.nav-hidden .sidebar-left{display:none!important}
+#note-editor-overlay{display:none!important}
+.uniform-note-btn{
+  width:100%;padding:8px;margin-bottom:6px;border:1px solid #ddd;
+  border-radius:5px;background:#4472c4;color:#fff;cursor:pointer;
+  font-family:Arial,sans-serif;font-weight:600;
+}
+#uniform-note-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:10000;padding:4vh 4vw;
+}
+#uniform-note-container{
+  width:min(980px,92vw);height:88vh;margin:0 auto;background:#fff;
+  border-radius:12px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+}
+#uniform-note-header{
+  background:#4472c4;color:#fff;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#uniform-note-header h3{margin:0;font:700 16px Arial,sans-serif;display:flex;gap:8px;align-items:center}
+#uniform-note-toolbar{
+  padding:10px 14px;background:#f8f9fa;border-bottom:1px solid #ddd;
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.uniform-note-tool{
+  padding:7px 11px;border:1px solid #ddd;background:#fff;border-radius:5px;
+  cursor:pointer;font-size:14px;
+}
+#uniform-note-editor{
+  flex:1;padding:18px;overflow:auto;outline:none;font:14px/1.7 Arial,sans-serif;
+}
+#uniform-note-footer{
+  padding:11px 16px;background:#f8f9fa;border-top:1px solid #ddd;
+  display:flex;justify-content:flex-end;gap:8px;
+}
+.uniform-note-action{
+  padding:8px 18px;border-radius:5px;border:1px solid #ccc;
+  background:#fff;cursor:pointer;font-weight:600;
+}
+.uniform-note-action.save{background:#4472c4;color:#fff;border-color:#4472c4}
+</style>
+<style id="uniform-vocab-layout-patch">
+/* Đồng nhất bảng từ vựng và căn icon loa thẳng hàng */
+.vocab-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.vocab-table th,
+.vocab-table td{
+  vertical-align:middle;
+  box-sizing:border-box;
+}
+.vocab-table th:first-child,
+.vocab-table td:first-child{
+  width:46px!important;
+  min-width:46px!important;
+  max-width:46px!important;
+  text-align:center!important;
+  padding-left:6px!important;
+  padding-right:6px!important;
+  white-space:nowrap;
+}
+.vocab-table th:nth-child(2),
+.vocab-table td:nth-child(2){
+  width:30%;
+}
+.vocab-table th:nth-child(3),
+.vocab-table td:nth-child(3){
+  width:28%;
+}
+.vocab-table th:nth-child(4),
+.vocab-table td:nth-child(4){
+  width:auto;
+}
+.vocab-hanzi{
+  position:relative;
+  padding-left:36px!important;
+  line-height:1.55;
+}
+.vocab-hanzi .speaker-hint{
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  margin:0!important;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  font-size:15px;
+}
+.vocab-hanzi .speaker-inline{
+  display:block!important;
+  width:100%;
+}
+.vocab-pinyin-td{
+  line-height:1.55;
+}
+@media(max-width:700px){
+  .vocab-table th:first-child,
+  .vocab-table td:first-child{
+    width:42px!important;
+    min-width:42px!important;
+    max-width:42px!important;
+  }
+  .vocab-hanzi{
+    padding-left:32px!important;
+  }
+  .vocab-hanzi .speaker-hint{
+    left:8px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo">
+<div class="logo-img">
+<img alt="Gia Sư Hoa Ngữ Tân An" src="https://wenzhannguyen-dot.github.io/gia-su-hoa-ngu-tan-an/Picture1.png"/>
+</div>
+<div class="logo-text">
+<h1>GIA SƯ HOA NGỮ TÂN AN</h1>
+<p>109D Nguyễn Văn Tiếp, P.Long An, tỉnh Tây Ninh | Zalo: 0839.889.772</p>
+</div>
+</div>
+<div class="header-lesson-title">TIẾNG TRUNG GIAO TIẾP SPA</div>
+<button aria-label="Ẩn/Hiện điều hướng" class="nav-toggle-header" id="nav-toggle-btn" onclick="toggleNavigation()" title="Ẩn/Hiện điều hướng" type="button"><i class="bi bi-layout-sidebar-inset-reverse"></i></button>
+</div>
+<div class="main-container"><aside class="sidebar-left"><div class="nav-title">Danh sách 35 bài SPA</div><a class="nav-item" href="SPA01.html">Bài 01 — 接待用语 Lời đón khách</a><a class="nav-item" href="SPA02.html">Bài 02 — 饮品服务 Phục vụ đồ uống</a><a class="nav-item" href="SPA03.html">Bài 03 — 了解顾客情况 Hỏi thông tin và tiền sử của khách</a><a class="nav-item" href="SPA04.html">Bài 04 — 介绍不同的身体按摩 Giới thiệu các loại massage toàn thân</a><a class="nav-item" href="SPA05.html">Bài 05 — 身体磨砂 Tẩy tế bào chết toàn thân</a><a class="nav-item" href="SPA06.html">Bài 06 — 介绍面部按摩 Giới thiệu massage mặt</a><a class="nav-item" href="SPA07.html">Bài 07 — 介绍足部反射疗法 Giới thiệu massage bấm huyệt bàn chân</a><a class="nav-item" href="SPA08.html">Bài 08 — 接待未预约的顾客 Đón khách chưa đặt lịch</a><a class="nav-item" href="SPA09.html">Bài 09 — 核对预约信息 Xác nhận thông tin đặt lịch</a><a class="nav-item" href="SPA10.html">Bài 10 — 顾客希望立即做理疗 Khách muốn sử dụng dịch vụ ngay</a><a class="nav-item" href="SPA11.html">Bài 11 — 选择香薰精油或按摩油 Chọn tinh dầu thơm hoặc dầu</a><a class="nav-item" href="SPA12.html">Bài 12 — 更换衣服 Hướng dẫn thay đồ</a><a class="nav-item" href="SPA13.html">Bài 13 — 前台将顾客交接给按摩师 Lễ tân bàn giao khách cho kỹ</a><a class="nav-item" href="SPA14.html">Bài 14 — 在服务地点接待顾客 Đón khách tại khu vực phục vụ</a><a class="nav-item" href="SPA15.html">Bài 15 — 服务过程中的沟通 Giao tiếp trong khi phục vụ</a><a class="nav-item" href="SPA16.html">Bài 16 — 指导顾客调整躺姿 Hướng dẫn khách điều chỉnh tư thế</a><a class="nav-item" href="SPA17.html">Bài 17 — 询问温度 Hỏi về nhiệt độ</a><a class="nav-item" href="SPA18.html">Bài 18 — 询问灯光亮度 Hỏi về độ sáng</a><a class="nav-item" href="SPA19.html">Bài 19 — 询问音乐音量 Hỏi về âm lượng nhạc</a><a class="nav-item" href="SPA20.html">Bài 20 — 询问按摩力度 Hỏi về lực massage</a><a class="nav-item" href="SPA21.html">Bài 21 — 美甲 Làm móng</a><a class="nav-item" href="SPA22.html">Bài 22 — 选择指甲油颜色 Chọn màu sơn móng</a><a class="nav-item" href="SPA23.html">Bài 23 — 修剪指甲 Cắt và chỉnh móng</a><a class="nav-item" href="SPA24.html">Bài 24 — 洗发 Gội đầu</a><a class="nav-item" href="SPA25.html">Bài 25 — 面部按摩或护理 Massage mặt hoặc chăm sóc da mặt</a><a class="nav-item" href="SPA26.html">Bài 26 — 唤醒顾客 Đánh thức khách</a><a class="nav-item" href="SPA27.html">Bài 27 — 服务结束后致谢 Cảm ơn sau khi phục vụ</a><a class="nav-item" href="SPA28.html">Bài 28 — 支付服务费用 Thanh toán phí dịch vụ</a><a class="nav-item" href="SPA29.html">Bài 29 — 致谢并询问再次光临或购买产品 Cảm ơn và hỏi về việc</a><a class="nav-item" href="SPA30.html">Bài 30 — 服务结束后的道别 Chào tạm biệt sau khi phục vụ</a><a class="nav-item" href="SPA31.html">Bài 31 — 道歉用语 Lời xin lỗi</a><a class="nav-item" href="SPA32.html">Bài 32 — 了解服务质量与征求建议 Hỏi về chất lượng dịch vụ và</a><a class="nav-item" href="SPA33.html">Bài 33 — 服务结束后的常用词汇 Từ vựng thường dùng sau khi</a><a class="nav-item" href="SPA34.html">Bài 34 — 应对和处理投诉 Tiếp nhận và xử lý khiếu nại</a><a class="nav-item" href="SPA35.html">Bài 35 — 常见的服务问题 Các vấn đề thường gặp khi sử dụng</a></aside>
+<main class="content-area"><div class="content-header"><div class="section-title">DANH SÁCH BÀI HỌC</div><div class="section-badge">35 bài</div></div><div class="content-body"><a class="nav-item" href="SPA01.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 01 — 接待用语 Lời đón khách</a><a class="nav-item" href="SPA02.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 02 — 饮品服务 Phục vụ đồ uống</a><a class="nav-item" href="SPA03.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 03 — 了解顾客情况 Hỏi thông tin và tiền sử của khách</a><a class="nav-item" href="SPA04.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 04 — 介绍不同的身体按摩 Giới thiệu các loại massage toàn thân</a><a class="nav-item" href="SPA05.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 05 — 身体磨砂 Tẩy tế bào chết toàn thân</a><a class="nav-item" href="SPA06.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 06 — 介绍面部按摩 Giới thiệu massage mặt</a><a class="nav-item" href="SPA07.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 07 — 介绍足部反射疗法 Giới thiệu massage bấm huyệt bàn chân</a><a class="nav-item" href="SPA08.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 08 — 接待未预约的顾客 Đón khách chưa đặt lịch</a><a class="nav-item" href="SPA09.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 09 — 核对预约信息 Xác nhận thông tin đặt lịch</a><a class="nav-item" href="SPA10.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 10 — 顾客希望立即做理疗 Khách muốn sử dụng dịch vụ ngay</a><a class="nav-item" href="SPA11.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 11 — 选择香薰精油或按摩油 Chọn tinh dầu thơm hoặc dầu</a><a class="nav-item" href="SPA12.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 12 — 更换衣服 Hướng dẫn thay đồ</a><a class="nav-item" href="SPA13.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 13 — 前台将顾客交接给按摩师 Lễ tân bàn giao khách cho kỹ</a><a class="nav-item" href="SPA14.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 14 — 在服务地点接待顾客 Đón khách tại khu vực phục vụ</a><a class="nav-item" href="SPA15.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 15 — 服务过程中的沟通 Giao tiếp trong khi phục vụ</a><a class="nav-item" href="SPA16.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 16 — 指导顾客调整躺姿 Hướng dẫn khách điều chỉnh tư thế</a><a class="nav-item" href="SPA17.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 17 — 询问温度 Hỏi về nhiệt độ</a><a class="nav-item" href="SPA18.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 18 — 询问灯光亮度 Hỏi về độ sáng</a><a class="nav-item" href="SPA19.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 19 — 询问音乐音量 Hỏi về âm lượng nhạc</a><a class="nav-item" href="SPA20.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 20 — 询问按摩力度 Hỏi về lực massage</a><a class="nav-item" href="SPA21.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 21 — 美甲 Làm móng</a><a class="nav-item" href="SPA22.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 22 — 选择指甲油颜色 Chọn màu sơn móng</a><a class="nav-item" href="SPA23.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 23 — 修剪指甲 Cắt và chỉnh móng</a><a class="nav-item" href="SPA24.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 24 — 洗发 Gội đầu</a><a class="nav-item" href="SPA25.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 25 — 面部按摩或护理 Massage mặt hoặc chăm sóc da mặt</a><a class="nav-item" href="SPA26.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 26 — 唤醒顾客 Đánh thức khách</a><a class="nav-item" href="SPA27.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 27 — 服务结束后致谢 Cảm ơn sau khi phục vụ</a><a class="nav-item" href="SPA28.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 28 — 支付服务费用 Thanh toán phí dịch vụ</a><a class="nav-item" href="SPA29.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 29 — 致谢并询问再次光临或购买产品 Cảm ơn và hỏi về việc</a><a class="nav-item" href="SPA30.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 30 — 服务结束后的道别 Chào tạm biệt sau khi phục vụ</a><a class="nav-item" href="SPA31.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 31 — 道歉用语 Lời xin lỗi</a><a class="nav-item" href="SPA32.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 32 — 了解服务质量与征求建议 Hỏi về chất lượng dịch vụ và</a><a class="nav-item" href="SPA33.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 33 — 服务结束后的常用词汇 Từ vựng thường dùng sau khi</a><a class="nav-item" href="SPA34.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 34 — 应对和处理投诉 Tiếp nhận và xử lý khiếu nại</a><a class="nav-item" href="SPA35.html" style="background:white;border:1px solid #ddd;border-radius:7px;margin:8px;padding:15px;font-weight:600"><i class="bi bi-journal-text"></i> Bài 35 — 常见的服务问题 Các vấn đề thường gặp khi sử dụng</a></div></main></div><script>
+const titles = ['I. MẪU CÂU THÔNG DỤNG', 'II. TỪ VỰNG', 'III. NGỮ PHÁP', 'IV. HỘI THOẠI TỔNG HỢP'];
+const icons = ['bi-chat-square-text', 'bi-journal-bookmark', 'bi-diagram-3', 'bi-people-fill'];
+
+function showSection(i){
+  document.querySelectorAll('.section-content').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.querySelectorAll('.nav-item').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  document.getElementById('section-title-text').textContent = titles[i];
+  document.getElementById('current-icon').innerHTML = '<i class="bi ' + icons[i] + '"></i>';
+}
+
+function togglePinyin(){
+  document.body.classList.toggle('hide-pinyin');
+}
+
+function toggleVietnamese(){
+  document.body.classList.toggle('hide-vietnamese');
+}
+
+function speakText(text){
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'zh-CN';
+  utter.rate = 0.92;
+  speechSynthesis.speak(utter);
+}
+
+function toggleNavigation(){
+  document.body.classList.toggle('nav-hidden');
+  const hidden = document.body.classList.contains('nav-hidden');
+  const btn = document.getElementById('nav-toggle-btn');
+  const label = hidden ? 'Hiện điều hướng' : 'Ẩn điều hướng';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
+  btn.innerHTML = hidden ? '<i class="bi bi-layout-sidebar-inset"></i>' : '<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+}
+</script>
+<script id="tts-home-patch-js">
+(function(){
+  function containsChinese(s){ return /[\u3400-\u9FFF]/.test(s || ""); }
+  function cleanChinese(s){
+    return (s || "").replace(/[^\u3400-\u9FFF，。！？；：、“”‘’（）《》〈〉…—\s]/g," ").replace(/\s+/g," ").trim();
+  }
+  window.speakChinese = window.speakChinese || function(text){
+    if(!("speechSynthesis" in window)) return;
+    var t = cleanChinese(text);
+    if(!t) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t);
+    u.lang = "zh-CN";
+    u.rate = 0.9;
+    speechSynthesis.speak(u);
+  };
+  document.addEventListener("DOMContentLoaded", function(){
+    document.querySelectorAll("table td, table th").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+el.addEventListener("click", function(ev){
+          if(ev.target.closest("a,button,input,select,textarea")) return;
+          speakChinese(txt);
+        });
+      }
+    });
+    document.querySelectorAll(".vocab-item,.vocab-chinese,.word-chinese,.phrase-chinese,.chinese-text").forEach(function(el){
+      var txt=(el.innerText||"").trim();
+      if(containsChinese(txt)){
+        el.classList.add("tts-ready");
+        if(!el.getAttribute("onclick")){
+          el.addEventListener("click", function(){ speakChinese(txt); });
+        }
+      }
+    });
+  });
+})();
+</script>
+<script id="speaker-icon-vocab-patch-js">
+(function(){
+  function hasChinese(s){ return /[\u3400-\u9FFF]/.test(s || ""); }
+
+  function addIcon(el){
+    if(!el) return;
+    if(el.querySelector('.speaker-hint')) return;
+    var text = (el.innerText || "").trim();
+    if(!hasChinese(text)) return;
+    var icon = document.createElement('i');
+    icon.className = 'bi bi-volume-up-fill speaker-hint';
+    icon.setAttribute('aria-hidden', 'true');
+var wrap = document.createElement('span');
+    wrap.className = 'speaker-inline';
+    while(el.firstChild){
+      wrap.appendChild(el.firstChild);
+    }
+    el.appendChild(icon);
+    el.appendChild(wrap);
+    el.style.cursor = 'pointer';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.vocab-table tbody tr').forEach(function(tr){
+      var cells = Array.from(tr.querySelectorAll('td'));
+      if(!cells.length) return;
+      var target = cells.find(td => td.classList.contains('vocab-hanzi'));
+      if(!target){
+        target = cells.find(td => hasChinese((td.innerText || '').trim()));
+      }
+      if(target) addIcon(target);
+    });
+
+    document.querySelectorAll('.vocab-hanzi, .vocab-chinese, .word-chinese, .vocab-item .chinese').forEach(addIcon);
+});
+})();
+</script>
+<script id="uniform-nav-note-patch-js">
+(function(){
+  window.toggleNavigation=function(){
+    document.body.classList.toggle('nav-hidden');
+    var hidden=document.body.classList.contains('nav-hidden');
+    var b=document.getElementById('nav-toggle-btn');
+    if(!b)return;
+    var label=hidden?'Hiện điều hướng':'Ẩn điều hướng';
+    b.title=label;
+    b.setAttribute('aria-label',label);
+    b.innerHTML=hidden?'<i class="bi bi-layout-sidebar-inset"></i>':'<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+  };
+
+  function noteKey(){
+    var n=(location.pathname.split('/').pop()||'TTCT').replace(/\.html?$/i,'');
+    return 'ttct_note_'+n;
+  }
+  window.openUniformNote=function(){
+    var o=document.getElementById('uniform-note-overlay');
+    var e=document.getElementById('uniform-note-editor');
+    if(!o||!e)return;
+    e.innerHTML=localStorage.getItem(noteKey())||'';
+    o.style.display='block';
+    e.focus();
+  };
+  window.closeUniformNote=function(){
+    var o=document.getElementById('uniform-note-overlay');
+    if(o)o.style.display='none';
+  };
+  window.saveUniformNote=function(){
+    var e=document.getElementById('uniform-note-editor');
+    if(e)localStorage.setItem(noteKey(),e.innerHTML);
+    closeUniformNote();
+  };
+  window.formatUniformNote=function(cmd){
+    document.execCommand(cmd,false,null);
+    var e=document.getElementById('uniform-note-editor');
+    if(e)e.focus();
+  };
+  window.clearUniformNote=function(){
+    var e=document.getElementById('uniform-note-editor');
+    if(e)e.innerHTML='';
+  };
+
+  document.addEventListener('DOMContentLoaded',function(){
+    var toggle=document.getElementById('nav-toggle-btn');
+    if(toggle){
+      toggle.setAttribute('onclick','toggleNavigation()');
+      toggle.setAttribute('type','button');
+      toggle.setAttribute('aria-label','Ẩn điều hướng');
+      toggle.setAttribute('title','Ẩn điều hướng');
+      toggle.innerHTML='<i class="bi bi-layout-sidebar-inset-reverse"></i>';
+    }
+
+    document.querySelectorAll('button,a').forEach(function(el){
+      var t=(el.textContent||'').trim().toLowerCase();
+      var oc=(el.getAttribute('onclick')||'').toLowerCase();
+      if(t==='bảng ghi chú'||t==='mở sổ ghi chú'||oc.indexOf('opennoteeditor')>=0){
+        el.remove();
+      }
+    });
+
+    var tools=document.querySelector('.tools-section');
+    if(tools&&!document.getElementById('uniform-note-btn')){
+      var host=tools.querySelector('.tool-card')||tools;
+      var btn=document.createElement('button');
+      btn.id='uniform-note-btn';
+      btn.className='uniform-note-btn';
+      btn.type='button';
+      btn.setAttribute('onclick','openUniformNote()');
+      btn.innerHTML='<i class="bi bi-journal-text"></i> Bảng ghi chú';
+      host.appendChild(btn);
+    }
+
+    if(!document.getElementById('uniform-note-overlay')){
+      var overlay=document.createElement('div');
+      overlay.id='uniform-note-overlay';
+      overlay.innerHTML=
+        '<div id="uniform-note-container">'+
+          '<div id="uniform-note-header">'+
+            '<h3><i class="bi bi-journal-text"></i> Bảng ghi chú bài học</h3>'+
+            '<button class="uniform-note-tool" type="button" onclick="closeUniformNote()"><i class="bi bi-x-lg"></i></button>'+
+          '</div>'+
+          '<div id="uniform-note-toolbar">'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'bold\')"><i class="bi bi-type-bold"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'italic\')"><i class="bi bi-type-italic"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'underline\')"><i class="bi bi-type-underline"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="formatUniformNote(\'insertUnorderedList\')"><i class="bi bi-list-ul"></i></button>'+
+            '<button class="uniform-note-tool" type="button" onclick="clearUniformNote()"><i class="bi bi-trash"></i></button>'+
+          '</div>'+
+          '<div id="uniform-note-editor" contenteditable="true" spellcheck="false"></div>'+
+          '<div id="uniform-note-footer">'+
+            '<button class="uniform-note-action" type="button" onclick="closeUniformNote()">Đóng</button>'+
+            '<button class="uniform-note-action save" type="button" onclick="saveUniformNote()"><i class="bi bi-check-lg"></i> Lưu</button>'+
+          '</div>'+
+        '</div>';
+      document.body.appendChild(overlay);
+    }
+  });
+})();
+</script>
+<script id="uniform-vocab-layout-patch-js">
+(function(){
+  document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('.vocab-table tbody tr').forEach(function(tr){
+      var cells=tr.querySelectorAll('td');
+      if(cells.length<2)return;
+      var hanzi=cells[1];
+      hanzi.classList.add('vocab-hanzi');
+
+      var icon=hanzi.querySelector('.speaker-hint');
+      if(!icon){
+        icon=document.createElement('i');
+        icon.className='bi bi-volume-up-fill speaker-hint';
+        icon.setAttribute('aria-hidden','true');
+        hanzi.insertBefore(icon,hanzi.firstChild);
+      }
+
+      var wrap=hanzi.querySelector('.speaker-inline');
+      if(!wrap){
+        wrap=document.createElement('span');
+        wrap.className='speaker-inline';
+        var nodes=[];
+        hanzi.childNodes.forEach(function(n){
+          if(n!==icon)nodes.push(n);
+        });
+        nodes.forEach(function(n){wrap.appendChild(n);});
+        hanzi.appendChild(wrap);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
