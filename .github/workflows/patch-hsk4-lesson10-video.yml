@@ -1,0 +1,32 @@
+name: Add lesson 10 video player
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-hsk4-lesson10-video.yml'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Insert external video player into 课文
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("HSK3.0-04.10.html")
+          data = p.read_bytes()
+          marker = '<div class="section-header-exercise"><i class="bi bi-book-half"></i> 课文 · NỘI DUNG BÀI KHÓA</div>'.encode()
+          video = '<div class="lesson-video" style="max-width:820px;margin:16px auto 22px"><video controls playsinline preload="metadata" style="display:block;width:100%;height:auto;background:#000;border-radius:9px" aria-label="Video bài 10"><source src="10.mp4" type="video/mp4">Trình duyệt không hỗ trợ video MP4.</video></div>'.encode()
+          if b'<source src="10.mp4"' in data:
+              print("Video already present"); raise SystemExit(0)
+          if data.count(marker) != 1:
+              raise RuntimeError(f"Expected one 课文 heading, got {data.count(marker)}")
+          p.write_bytes(data.replace(marker, marker + video, 1))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add HSK3.0-04.10.html
+          git diff --cached --quiet || (git commit -m "HSK4 lesson 10: embed external video player in text section" && git push)
