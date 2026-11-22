@@ -1,0 +1,49 @@
+name: Adjust HSK lesson video audio
+on:
+  push:
+    branches: [hsk-video-volume-20261122]
+    paths: ['.github/workflows/hsk-video-volume.yml']
+permissions:
+  contents: write
+jobs:
+  audio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*.mp4
+      - name: Prepare FFmpeg
+        run: command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y ffmpeg)
+      - name: Measure and adjust lesson audio
+        shell: python
+        run: |
+          import json, subprocess, pathlib, re, os, hashlib
+          files=["10.mp4","4.mp4","5.mp4","6.mp4","7.mp4","8.mp4","9.mp4","HSK01.01.mp4","HSK01.02.mp4","HSK01.04.mp4","HSK01.05.mp4","HSK01.07.mp4","HSK01.10.mp4","HSK01.13.mp4","HSK01.14.mp4","HSK02.01.mp4","HSK02.02.mp4","HSK02.03.mp4","HSK02.05.mp4","HSK02.06.mp4","HSK02.08.mp4","HSK02.09.mp4","HSK02.11.mp4","HSK02.15.mp4","HSK03.02.mp4","HSK03.03.mp4","HSK03.05.mp4","HSK03.06.mp4","HSK03.07.mp4","HSK03.08.mp4","HSK03.10.mp4","HSK03.12.mp4","HSK03.15.mp4","HSK03.16.mp4"]
+          def run(args):
+              return subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+          def measure(path):
+              logs=run(['ffmpeg','-nostdin','-nostats','-i',str(path),'-vn','-af','loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json','-f','null','-']).stderr.decode()
+              return json.loads(logs[logs.rindex('{'):logs.rindex('}')+1])
+          for name in files:
+              p=pathlib.Path(name)
+              m=measure(p)
+              before=float(m['input_i'])
+              print(name,before,flush=True)
+              if before>=-14.5: continue
+              data=json.loads(run(['ffprobe','-v','error','-select_streams','a:0','-show_streams','-of','json',name]).stdout)['streams'][0]
+              af='loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:'+':'.join(k+'='+m[v] for k,v in [('measured_I','input_i'),('measured_TP','input_tp'),('measured_LRA','input_lra'),('measured_thresh','input_thresh'),('offset','target_offset')])
+              tmp=p.with_suffix('.new.mp4')
+              run(['ffmpeg','-nostdin','-loglevel','error','-y','-i',name,'-map','0','-c','copy','-c:a:0','aac','-b:a:0',data.get('bit_rate','128000'),'-ar:a:0',data['sample_rate'],'-filter:a:0',af,'-movflags','+faststart',str(tmp)])
+              after=measure(tmp)
+              print(name,before,'=>',after['input_i'],after['input_tp'],flush=True)
+              assert float(after['input_i'])>before and float(after['input_tp'])<=0 and tmp.stat().st_size<100*1024**2
+              os.replace(tmp,p)
+      - name: Save verified videos
+        run: |
+          git add -u -- '*.mp4'
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Raise quiet HSK1–HSK4 video audio'
+            git push origin HEAD:hsk-video-volume-20261122
+          fi
