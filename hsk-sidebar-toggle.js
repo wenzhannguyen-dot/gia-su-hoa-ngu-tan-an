@@ -34,6 +34,8 @@
       'body.hsk-nav-collapsed .main-container>.sidebar-left{display:none!important}',
       'body.hsk-nav-collapsed .main-container{gap:0!important}',
       'body.hsk-nav-collapsed .main-container>:not(.sidebar-left){min-width:0;max-width:100%;flex:1 1 auto}',
+      /* 150% lesson reading view when the sidebar is hidden; topbar stays at 100%. */
+      'body.hsk-nav-collapsed .main-container>.content-area{zoom:1.5!important;flex:1 1 auto!important;min-width:0!important;max-width:100%!important}',
       '@media(max-width:1100px){.header>.logo{order:0}.header>div:not(.logo):not(.lesson-title){order:4}.header>.lesson-title{order:10!important;flex:0 0 100%!important;width:100%!important;text-align:center!important}.header .logo-text p{display:none!important}}',
       '@media(max-width:480px){.header{gap:6px!important;padding:6px 8px!important}.header>.logo{flex:1 1 140px!important}.header .logo-text h1{font-size:12px!important}.header>.lesson-title{font-size:13px!important}.header>div:not(.logo):not(.lesson-title){gap:5px!important}#hsk-nav-toggle{order:6!important}}',
       /* In extreme zoom/landscape, do not pin a tall header over the lesson. */
