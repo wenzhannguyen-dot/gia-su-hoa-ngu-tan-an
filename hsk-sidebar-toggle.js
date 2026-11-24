@@ -22,6 +22,9 @@
       '.main-container>.sidebar-left{top:calc(var(--hsk-topbar-height,70px) + 10px)!important;max-height:calc(100dvh - var(--hsk-topbar-height,70px) - 20px)}',
       /* SPA-style icon-only button: always 40px and never truncated. */
       '#hsk-nav-toggle{order:6;flex:0 0 40px!important;width:40px!important;height:40px!important;min-width:40px!important;max-width:40px!important;min-height:40px!important;padding:0!important;margin:0!important;border:1px solid rgba(255,255,255,.8);border-radius:7px;background:rgba(255,255,255,.15);color:#fff;font:20px Arial,sans-serif;cursor:pointer;display:inline-flex!important;align-items:center;justify-content:center;line-height:1;position:relative;z-index:1;box-shadow:none}',
+      '.header a.hsk-home-icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 40px!important;width:40px!important;min-width:40px!important;height:40px!important;padding:0!important;margin:0!important;gap:0!important;border-radius:7px!important;white-space:nowrap!important;line-height:1!important;text-decoration:none!important}',
+      '.header a.hsk-home-icon i{font-size:19px!important;margin:0!important;line-height:1!important}',
+      '.header select#audio-speed{flex:0 0 auto!important;min-width:68px!important;min-height:40px!important;padding:5px 6px!important;border-radius:7px!important;cursor:pointer!important}',
       '#hsk-nav-toggle:hover{background:rgba(255,255,255,.28)}',
       '#hsk-nav-toggle:focus-visible{outline:3px solid #ffcb3d;outline-offset:2px}',
       'body.hsk-nav-collapsed .main-container>.sidebar-left{display:none!important}',
@@ -56,6 +59,33 @@
       document.body.classList.toggle('hsk-nav-collapsed');
       refresh();
     });
+    /* Topbar: keep only usable controls; preserve original links and audio handler. */
+    var homeLinks = header.querySelectorAll('a[href]');
+    Array.prototype.forEach.call(homeLinks, function (link) {
+      var href = link.getAttribute('href') || '';
+      if (!/^HSK0[123]-3\\.0\\.html(?:[?#].*)?$/i.test(href)) return;
+      var iconEl = link.querySelector('i.bi-house-door, i.bi-house');
+      if (!iconEl) return;
+      Array.prototype.forEach.call(link.childNodes, function (node) {
+        if (node !== iconEl) link.removeChild(node);
+      });
+      link.classList.add('hsk-home-icon');
+      link.setAttribute('aria-label', 'Trang chủ');
+      link.title = 'Trang chủ';
+    });
+    var speedSelect = header.querySelector('select#audio-speed');
+    if (speedSelect) {
+      speedSelect.setAttribute('aria-label', 'Tốc độ phát âm thanh');
+      speedSelect.title = 'Chọn tốc độ phát âm thanh';
+      var speedContainer = speedSelect.parentElement;
+      if (speedContainer) {
+        Array.prototype.forEach.call(speedContainer.children, function (child) {
+          if (child.tagName === 'SPAN' && /^Tốc độ\\s*:?$/i.test((child.textContent || '').trim())) {
+            child.remove();
+          }
+        });
+      }
+    }
     header.appendChild(btn);
 
     /* Keep the sticky sidebar below a header that can change height on zoom. */
