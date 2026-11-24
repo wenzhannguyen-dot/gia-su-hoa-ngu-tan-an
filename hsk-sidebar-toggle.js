@@ -25,6 +25,10 @@
       '.header a.hsk-home-icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 40px!important;width:40px!important;min-width:40px!important;height:40px!important;padding:0!important;margin:0!important;gap:0!important;border-radius:7px!important;white-space:nowrap!important;line-height:1!important;text-decoration:none!important}',
       '.header a.hsk-home-icon i{font-size:19px!important;margin:0!important;line-height:1!important}',
       '.header select#audio-speed{flex:0 0 auto!important;min-width:68px!important;min-height:40px!important;padding:5px 6px!important;border-radius:7px!important;cursor:pointer!important}',
+      /* At high zoom, give the title its own full-width line outside the toolbar. */
+      '.hsk-detached-title{display:block!important;box-sizing:border-box!important;position:relative!important;z-index:0!important;flex:none!important;float:none!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:10px 14px!important;overflow:visible!important;overflow-wrap:anywhere!important;word-break:normal!important;white-space:normal!important;text-align:center!important;line-height:1.45!important;font-size:clamp(14px,2.2vw,18px)!important;color:#fff!important}',
+      '@media(max-width:480px){.header>.logo{flex:0 0 auto!important;min-width:0!important}.header .logo-text{display:none!important}.header>div:not(.logo):not(.lesson-title){flex:0 1 auto!important;max-width:100%!important} .hsk-detached-title{font-size:14px!important;padding:10px 12px!important}.header{justify-content:flex-start!important}}',
+      '@media(max-width:260px){.header{gap:4px!important;padding:6px!important}.header .logo-img{width:36px!important;height:36px!important}.header select#audio-speed{min-width:63px!important}}',
       '#hsk-nav-toggle:hover{background:rgba(255,255,255,.28)}',
       '#hsk-nav-toggle:focus-visible{outline:3px solid #ffcb3d;outline-offset:2px}',
       'body.hsk-nav-collapsed .main-container>.sidebar-left{display:none!important}',
@@ -87,6 +91,38 @@
       }
     }
     header.appendChild(btn);
+
+    /* Preserve the original title element: move it below the toolbar only when
+       available CSS viewport width is narrow, including browser zoom at 175%. */
+    var lessonTitle = header.querySelector('.lesson-title');
+    var originalTitleNext = lessonTitle ? lessonTitle.nextSibling : null;
+    var narrowLayout = window.matchMedia ? window.matchMedia('(max-width: 1100px)') : null;
+    function syncTitleLayout() {
+      if (!lessonTitle) return;
+      var narrow = narrowLayout ? narrowLayout.matches : window.innerWidth <= 1100;
+      if (narrow) {
+        lessonTitle.classList.add('hsk-detached-title');
+        if (lessonTitle.parentNode !== header.parentNode || lessonTitle.previousElementSibling !== header) {
+          header.insertAdjacentElement('afterend', lessonTitle);
+        }
+        lessonTitle.style.background = window.getComputedStyle(header).background;
+      } else {
+        lessonTitle.classList.remove('hsk-detached-title');
+        lessonTitle.style.removeProperty('background');
+        if (lessonTitle.parentNode !== header) {
+          if (originalTitleNext && originalTitleNext.parentNode === header) {
+            header.insertBefore(lessonTitle, originalTitleNext);
+          } else {
+            header.appendChild(lessonTitle);
+          }
+        }
+      }
+    }
+    syncTitleLayout();
+    if (narrowLayout && narrowLayout.addEventListener) {
+      narrowLayout.addEventListener('change', syncTitleLayout);
+    }
+    window.addEventListener('resize', syncTitleLayout, { passive: true });
 
     /* Keep the sticky sidebar below a header that can change height on zoom. */
     function syncHeaderHeight() {
