@@ -63,7 +63,7 @@
     var homeLinks = header.querySelectorAll('a[href]');
     Array.prototype.forEach.call(homeLinks, function (link) {
       var href = link.getAttribute('href') || '';
-      if (!/^HSK0[123]-3\\.0\\.html(?:[?#].*)?$/i.test(href)) return;
+      if (!/^HSK0[123]-3\.0\.html(?:[?#].*)?$/i.test(href)) return;
       var iconEl = link.querySelector('i.bi-house-door, i.bi-house');
       if (!iconEl) return;
       Array.prototype.forEach.call(link.childNodes, function (node) {
@@ -80,7 +80,7 @@
       var speedContainer = speedSelect.parentElement;
       if (speedContainer) {
         Array.prototype.forEach.call(speedContainer.children, function (child) {
-          if (child.tagName === 'SPAN' && /^Tốc độ\\s*:?$/i.test((child.textContent || '').trim())) {
+          if (child.tagName === 'SPAN' && /^Tốc độ\s*:?$/i.test((child.textContent || '').trim())) {
             child.remove();
           }
         });
