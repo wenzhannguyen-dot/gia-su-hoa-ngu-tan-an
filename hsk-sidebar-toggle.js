@@ -7,6 +7,11 @@
     var header = document.querySelector('.header');
     if (!sidebar || !header || document.getElementById('hsk-nav-toggle')) return;
 
+    var actions = header.querySelector('.header-actions');
+    var homeButton = actions && actions.querySelector('button.home-btn[data-action="go-home"]');
+    var usesGrid = Boolean(homeButton);
+    if (usesGrid) sidebar.parentElement.classList.add('hsk-grid-navigation');
+
     var css = document.createElement('style');
     css.id = 'hsk-nav-toggle-style';
     css.textContent = [
@@ -34,6 +39,9 @@
       'body.hsk-nav-collapsed .main-container>.sidebar-left{display:none!important}',
       'body.hsk-nav-collapsed .main-container{gap:0!important}',
       'body.hsk-nav-collapsed .main-container>:not(.sidebar-left){min-width:0;max-width:100%;flex:1 1 auto}',
+      'body.hsk-nav-collapsed .main-container.hsk-grid-navigation{grid-template-columns:minmax(0,1fr)}',
+      '.header .header-actions .home-btn{box-sizing:border-box;flex:0 0 40px;width:40px;height:40px;min-height:40px;padding:0}',
+      '.header .header-actions .home-label{display:none}',
       /* 150% lesson reading view when the sidebar is hidden; topbar stays at 100%. */
       'body.hsk-nav-collapsed .main-container>.content-area{zoom:1.5!important;flex:1 1 auto!important;min-width:0!important;max-width:100%!important}',
       '@media(max-width:1100px){.header>.logo{order:0}.header>div:not(.logo):not(.lesson-title){order:4}.header>.lesson-title{order:10!important;flex:0 0 100%!important;width:100%!important;text-align:center!important}.header .logo-text p{display:none!important}}',
@@ -92,7 +100,7 @@
         });
       }
     }
-    header.appendChild(btn);
+    (usesGrid ? actions : header).appendChild(btn);
 
     /* Preserve the original title element: move it below the toolbar only when
        available CSS viewport width is narrow, including browser zoom at 175%. */
