@@ -16,7 +16,7 @@
     css.id = 'hsk-nav-toggle-style';
     css.textContent = [
       /* Justify the three language lines in prose blocks and single-passage readings. */
-      ':is(.prose-box > :is(.prose-chinese,.prose-pinyin,.prose-vietnamese),.text-content .dialogue-content > .dialogue-line:only-child > :is(.dialogue-chinese,.dialogue-pinyin,.dialogue-vietnamese)){text-align:justify;text-align-last:start}',
+      ':is(.prose-chinese,.prose-pinyin,.prose-vietnamese,.text-content .dialogue-content > .dialogue-line:only-child > :is(.dialogue-chinese,.dialogue-pinyin,.dialogue-vietnamese)){text-align:justify;text-align-last:start}',
       /* Header grows in height and wraps instead of covering interactive controls. */
       '.header{position:sticky!important;top:0!important;left:auto!important;right:auto!important;height:auto!important;min-height:70px!important;width:100%!important;max-width:100%!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:8px 12px!important;box-sizing:border-box!important;overflow:visible!important}',
       '.header>.logo{flex:0 1 auto!important;min-width:0!important;max-width:100%!important}',
